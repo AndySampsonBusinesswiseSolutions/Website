@@ -7,8 +7,7 @@
 <body>
 
 <div class="container" id="main-content">
-	<h2><?php echo $PAGE_TITLE.' - INTERNAL USERS ONLY' ?></h2>
-	<p>Lets internal users with specific roles manage customer entities</p>
+	<h2><?php echo $PAGE_TITLE ?></h2>
 </div>
 
 </body>

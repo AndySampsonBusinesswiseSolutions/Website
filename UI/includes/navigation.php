@@ -1,6 +1,6 @@
 <div></div>
 <div id="centeredmenu">
-	<IMG SRC="/Website/UI/images/logo.jpg" ALT="some text" WIDTH=75 HEIGHT=75>
+	<IMG SRC="/Website/UI/images/BWSLogo.jpg" ALT="Businesswise Solutions" WIDTH=200 HEIGHT=75>
 	<ul>
 	  <li>
 	    <a href="/Website/UI/Dashboard.php">Dashboard</a>
@@ -9,9 +9,16 @@
 		<a>Financials</a>
 		<ul>
 			<li><a href="/Website/UI/Financials/ActualsVsBudget.php">Actuals v Budget</a></li>
-			<li><a href="/Website/UI/Financials/EnergyEfficiency.php">Energy Efficiency</a></li>
 			<li><a href="/Website/UI/Financials/Bills.php">Bills</a></li>
 			<li><a href="/Website/UI/Financials/Commissions.php">Commissions</a></li>
+		</ul>	
+	  </li>
+	  <li>
+		<a>Energy Efficiency</a>
+		<ul>
+			<li><a href="/Website/UI/EnergyEfficiency/ActiveOpportunities.php">Active Opportunities</a></li>
+			<li><a href="/Website/UI/EnergyEfficiency/IdentifiedOpportunities.php">Identified Opportunities</a></li>
+			<li><a href="/Website/UI/EnergyEfficiency/NewOpportunities.php">New Opportunities</a></li>
 		</ul>	
 	  </li>
 	  <li>

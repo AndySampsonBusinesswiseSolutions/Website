@@ -1,5 +1,5 @@
 <?php 
-	$PAGE_TITLE = "Bills";
+	$PAGE_TITLE = "Identified Opportunities";
 	include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/navigation.php");
 ?>

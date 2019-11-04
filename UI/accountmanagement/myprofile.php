@@ -8,13 +8,6 @@
 
 <div class="container" id="main-content">
 	<h2><?php echo $PAGE_TITLE ?></h2>
-
-	User name
-	email
-	contact number
-	role
-	account manager(s)
-	customer entities viewable
 </div>
 
 </body>
