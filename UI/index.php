@@ -1,6 +1,10 @@
+<?php 
+	include($_SERVER['DOCUMENT_ROOT']."/includes/css.php");
+?>
+
 <title><?php print "Login";?></title>
 
-<form id='login' action='login.php' method='post' accept-charset='UTF-8'>
+<form id='Dashboard' action='/Dashboard/' method='post' accept-charset='UTF-8'>
 <fieldset >
 <legend>Login</legend>
 <input type='hidden' name='submitted' id='submitted' value='1'/>
@@ -16,4 +20,4 @@
 </fieldset>
 </form>
 
-<?php include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>

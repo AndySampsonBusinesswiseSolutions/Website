@@ -3,5 +3,8 @@
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
 
-	<?php include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/css.php");?>
+	<?php 
+		if(!session_id()) session_start();
+		include($_SERVER['DOCUMENT_ROOT']."/includes/css.php");
+	?>
 </head>

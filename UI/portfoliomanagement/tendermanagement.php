@@ -1,15 +1,16 @@
 <?php 
 	$PAGE_TITLE = "Tender Management";
-	include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/header.php");
-	include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/navigation.php");
+	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
 
 <body>
 
-<div class="container" id="main-content">
-	<h2><?php echo $PAGE_TITLE ?></h2>
-</div>
+<body>
+	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
+	<div class="section-body">
+	<div>
 </body>
 
-<?php include($_SERVER['DOCUMENT_ROOT']."/Website/UI/includes/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
