@@ -1,5 +1,5 @@
-<div class="fusion-footer footer">
-    <footer role="contentinfo" class="fusion-footer-widget-area fusion-widget-area">
+<div>
+    <footer class="footer fusion-footer-widget-area fusion-widget-area">
         <div class="fusion-row">
             <div class="fusion-columns fusion-columns-3 fusion-widget-area">
                 <div class="fusion-column col-lg-4 col-md-4 col-sm-4">

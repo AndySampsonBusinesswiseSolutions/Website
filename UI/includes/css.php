@@ -9,7 +9,7 @@
 	.footer {
 		position: relative;
 		bottom: 0;
-		width: 100%;
+        width: 100%;
     }
     .section-header {
         background: #b62a51;
@@ -21,8 +21,14 @@
         font-size: 50px;
         font-weight:bold;
     }
-    .section-body {
+    .section-body, .login-body {
         background: #98a4af;
+        text-align: center;
+        padding-top: 30px;
+    }
+    .login-body {
+        padding-left: 40%;
+        padding-right: 40%;
     }
     .submenu-item {
         border-bottom:1px solid white;
