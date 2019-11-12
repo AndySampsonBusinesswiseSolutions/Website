@@ -21,16 +21,29 @@
         font-size: 50px;
         font-weight:bold;
     }
-    .section-body, .login-body {
+    .login-body {
         background: #98a4af;
         text-align: center;
         padding-top: 30px;
-    }
-    .login-body {
         padding-left: 40%;
         padding-right: 40%;
     }
     .submenu-item {
         border-bottom:1px solid white;
+    }
+    .column {
+    float: left;
+    width: 25%;
+    padding-left: 1%;
+    }
+    .finalcolumn {
+    width: 60%;
+    }
+
+    /* Clear floats after the columns */
+    .row:after {
+    content: "";
+    display: table;
+    clear: both;
     }
 </style>
