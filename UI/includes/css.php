@@ -46,4 +46,12 @@
     display: table;
     clear: both;
     }
+    .child-check{
+    margin-left: 15px;
+    display: none;
+    }
+
+    .child-check.active{
+    display: block;
+    }
 </style>
