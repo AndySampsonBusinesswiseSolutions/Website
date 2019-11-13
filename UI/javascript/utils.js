@@ -2,7 +2,7 @@
 
 var config;
 
-function initialiseTree(){
+function initialiseTree(datasets){
 	var checks = document.querySelectorAll("input[type=checkbox]");
 	var labels = document.querySelectorAll("label");
 
@@ -12,12 +12,12 @@ function initialiseTree(){
 		});
 
 		checks[i].addEventListener( 'click', function() {
-			updateChildrenChecked(this);
+			updateChildrenChecked(this, datasets);
 		});
 	}
 }
 
-function updateChildrenChecked(elm) {
+function updateChildrenChecked(elm, datasets) {
 	var pN = elm.parentNode;
 	var childCheks = pN.children;
 
@@ -28,10 +28,68 @@ function updateChildrenChecked(elm) {
 
 			for(var j = 0; j < divInputs.length; j++){
 				divInputs[j].checked = elm.checked;
-				updateGraph(divInputs[j]);
+				var dataset = getDataset(datasets, divInputs[j].id);
+
+				if(dataset != null){
+					updateGraph(divInputs[j], dataset);
+				}
 			}
 		}
 	}
+}
+
+function getDataset(datasets, elementId){
+	var dataset;
+
+	if(elementId == 0)	{
+		dataset = getClone(datasets[1][1]);
+
+		for(var i = 2; i < datasets.length; i++){
+			for(var j = 0; j < datasets[i][1].length; j++){
+				var readDateText = datasets[i][1][j][0];
+				var readDateIndex = getReadDateIndex(readDateText, dataset);
+
+				var read = getClone(datasets[i][1][j]);
+				if(readDateIndex == -1){
+					dataset.push(read);
+				}
+				else {
+					dataset[readDateIndex][1] = dataset[readDateIndex][1] + read[1];
+				}
+			}
+		}
+	}
+	else {
+		for(var i = 1; i < datasets.length; i++){
+			if(datasets[i][0] == elementId){
+				dataset = getClone(datasets[i][1]);
+				break;
+			}	
+		}
+
+		if(dataset == null){
+			console.log('Dataset could not be found for input with id ' + elementId);
+		}
+	}	
+
+	return dataset;
+}
+
+function getClone(item){
+	return JSON.parse(JSON.stringify(item));
+}
+
+function getReadDateIndex(readDateText, dataset){
+	var index = -1;
+
+	for(var k = 0; k < dataset.length; k++){
+		if(dataset[k][0] == readDateText){
+			index = k;
+			break;
+		}
+	}
+
+	return index;
 }
 
 function updateChildrenDisplay(elm) {
@@ -70,22 +128,45 @@ function initialiseGraph(window, document, datasets) {
 		}
 	}
 
-	var getDateArray = function(start, end) {
-		var arr = new Array();
-		var dt = new Date(start);
-		while (dt <= end) {
-			arr.push(convertDateToString(dt));
-			dt.setDate(dt.getDate() + 1);
-		}
-		return arr;
-	}
+	minDate.setHours(0, 0, 0);
+	maxDate.setHours(0, 0, 0);
 	
 	var dateArr = getDateArray(minDate, maxDate);
 
-	config = {
+	config = setupChartConfiguration(dateArr);
+
+	var inputs = document.getElementsByTagName('input');
+
+	for(var i = 0; i < inputs.length; i++) {
+		if(inputs[i].type.toLowerCase() == 'checkbox') {
+			inputs[i].addEventListener('click', function() {
+				var dataset = getDataset(datasets, this.id);
+
+				if(dataset != null){
+					updateGraph(this, dataset);
+				}				
+			});
+		}
+	}
+
+	inputs[0].checked = true;
+	var dataset = getDataset(datasets, inputs[0].id);
+	addGraphDataSet(inputs[0].id, inputs[0].name, dataset);
+
+	window.onload = createChart(window, document, config);
+}
+
+function createChart(window, document, config){
+	var ctx = document.getElementById('canvas').getContext('2d');
+	window.myLine = new Chart(ctx, config);
+}
+
+function setupChartConfiguration(dateArr){
+	return {
 		type: 'line',
 		data: {
-			labels: dateArr
+			labels: dateArr,
+			datasets: []
 		},
 		options: {
 			responsive: true,
@@ -107,6 +188,12 @@ function initialiseGraph(window, document, datasets) {
 					scaleLabel: {
 						display: true,
 						labelString: 'Date'
+					},
+					ticks: {
+						fontSize: 10,
+						autoSkip: false,
+                    	maxRotation: 90,
+                    	minRotation: 90
 					}
 				}],
 				yAxes: [{
@@ -114,26 +201,24 @@ function initialiseGraph(window, document, datasets) {
 					scaleLabel: {
 						display: true,
 						labelString: 'Volume (kWh)'
+					},
+					ticks: {
+						beginAtZero: true
 					}
 				}]
 			}
 		}
 	};
+}
 
-	window.onload = function() {
-		var ctx = document.getElementById('canvas').getContext('2d');
-		window.myLine = new Chart(ctx, config);
-	};
-
-	var inputs = document.getElementsByTagName('input');
-
-	for(var i = 0; i < inputs.length; i++) {
-		if(inputs[i].type.toLowerCase() == 'checkbox') {
-			inputs[i].addEventListener('click', function() {
-				updateGraph(this);
-			});
-		}
+function getDateArray(start, end) {
+	var arr = new Array();
+	var dt = new Date(start);
+	while (dt <= end) {
+		arr.push(convertDateToString(dt));
+		dt.setDate(dt.getDate() + 1);
 	}
+	return arr;
 }
 
 function convertDateToString(date){
@@ -151,12 +236,12 @@ function convertDateToString(date){
 		mm='0'+mm;
 	} 
 
-	return dd+'/'+mm+'/'+yyyy;
+	return yyyy + '-' + mm + '-' + dd;
 }
 
-function updateGraph(input){
+function updateGraph(input, dataset){
 	if(input.checked) {
-		addGraphDataSet(input.id, input.name);
+		addGraphDataSet(input.id, input.name, dataset);
 	}
 	else {
 		for(var j = 0; j < config.data.datasets.length; j++) {
@@ -170,7 +255,7 @@ function updateGraph(input){
 	window.myLine.update();
 }
 
-function addGraphDataSet(inputId, inputName){
+function addGraphDataSet(inputId, inputName, dataset){
 	var colorNames = Object.keys(window.chartColors);
 	var colorName = colorNames[inputId % colorNames.length];
 	var newColor = window.chartColors[colorName];
@@ -183,7 +268,14 @@ function addGraphDataSet(inputId, inputName){
 	} 
 
 	for (var index = 0; index < config.data.labels.length; ++index) {
-		newDataset.data.push(randomScalingFactor());
+		var readDateIndex = getReadDateIndex(config.data.labels[index], dataset);
+
+		if(readDateIndex == -1){
+			newDataset.data.push(null);
+		}
+		else {
+			newDataset.data.push(dataset[readDateIndex][1]);
+		}
 	}
 
 	config.data.datasets.push(newDataset);
@@ -221,10 +313,12 @@ function getDummyDataSets(datasets){
 		['2019-10-28', 57],
 		['2019-10-29', 58],
 		['2019-10-30', 59],
-		['2019-10-31', 60],
+		['2019-10-31', 60]
 	]];
 
 	var submeter2data = [4, [
+		['2019-10-30', 59],
+		['2019-10-31', 60],
 		['2019-11-01', 50],
 		['2019-11-02', 51],
 		['2019-11-03', 52],
@@ -254,7 +348,7 @@ function getDummyDataSets(datasets){
 		['2019-11-27', 56],
 		['2019-11-28', 57],
 		['2019-11-29', 58],
-		['2019-11-30', 59],
+		['2019-11-30', 59]
 	]];
 
 	datasets.push(submeter1data);
