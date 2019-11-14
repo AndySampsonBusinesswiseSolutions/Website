@@ -6,11 +6,19 @@
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-
 	
 	<div class="row">
 		<div class="column">
-			<span>Click on the text to show/hide meters and submeters</span>
+			<span>Click on the text to show/hide meters and submeters.</span>
+			<div></div>
+			<span>View as: </span>
+			<select id="chartType" onchange="updateChartType()" class="dropdown">
+				<option value = "line">Line Graph</option>
+				<option value = "bar">Bar Chart</option>
+				<option value = "stackedBar">Stacked Bar Chart</option>
+				<option value = "horizontalBar">Horizontal Bar Chart</option>
+				<option value = "horizontalStackedBar">Horizontal Stacked Bar Chart</option>
+			</select>
 			<div>
 				<input class="child-check-input" type="checkbox" name="Total Of All Sites" id="0"><label>Total Of All Sites</label>
 			</div>
