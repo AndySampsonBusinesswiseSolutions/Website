@@ -34,10 +34,10 @@
     .column {
     float: left;
     width: 25%;
-    padding-left: 1%;
+    padding-left: 15px;
     }
     .finalcolumn {
-    width: 60%;
+    width: 70%;
     }
 
     /* Clear floats after the columns */
@@ -45,5 +45,13 @@
     content: "";
     display: table;
     clear: both;
+    }
+    .child-check{
+    margin-left: 15px;
+    display: none;
+    }
+
+    .child-check.active{
+    display: block;
     }
 </style>
