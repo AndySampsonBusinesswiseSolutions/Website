@@ -54,4 +54,10 @@
     .child-check.active{
     display: block;
     }
+
+    .dropdown{
+        color: black;
+        border: none;
+        padding-bottom: 2px;
+    }
 </style>
