@@ -4,6 +4,8 @@
 	 include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
 
+<link rel="stylesheet" href="/css/tree.css">  
+
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
@@ -12,10 +14,10 @@
 		<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricity.php") ?>
 		<br>
 		<br>
+		<br>
 		<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gas.php") ?>
 		<br>
 	</div>
-	
 	
 	<!-- <div class="row">
 		<div class="column">
@@ -66,8 +68,10 @@
 		</div>
 	</div> -->
 </body>
+
+<script src="/javascript/utils.js"></script>
+
 <!-- 
-<SCRIPT SRC="/javascript/utils.js"></SCRIPT>
 <script>
 	var datasets = [,];
 	getDummyDataSets(datasets);

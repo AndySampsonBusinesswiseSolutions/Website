@@ -146,6 +146,18 @@ function getReadDateIndex(readDateText, dataset){
 
 	return index;
 }
+
+function updateClassOnClick(elementId, firstClass, secondClass){
+	var element = document.getElementById(elementId);
+	if(hasClass(element, firstClass)){
+		element.classList.remove(firstClass);
+		element.classList.add(secondClass);
+	}
+	else {
+		element.classList.remove(secondClass);
+		element.classList.add(firstClass);
+	}
+}
   
 function hasClass(elem, className) {
 	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
