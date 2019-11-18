@@ -1,0 +1,53 @@
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css";
+@import "https://www.businesswisesolutions.co.uk/wp-includes/css/dist/block-library/style.min.css?ver=5.2.4";
+@import "https://www.businesswisesolutions.co.uk/wp-content/plugins/cookie-law-info/public/css/cookie-law-info-public.css?ver=1.8.1";
+@import "https://www.businesswisesolutions.co.uk/wp-content/plugins/cookie-law-info/public/css/cookie-law-info-gdpr.css?ver=1.8.1";
+@import "https://www.businesswisesolutions.co.uk/wp-content/themes/Avada/assets/css/style.min.css?ver=5.7.2";
+@import "https://www.businesswisesolutions.co.uk/wp-content/uploads/fusion-styles/8dacb845e607023f62b8e8f9b9e6eeb9.min.css?ver=5.2.4";
+
+.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+.section-header {
+    background: #b62a51;
+    width: 100%;
+}
+.section-header-text {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    font-weight:bold;
+}
+.login-body {
+    background: #98a4af;
+    text-align: center;
+    padding-top: 30px;
+    padding-left: 40%;
+    padding-right: 40%;
+}
+.submenu-item {
+    border-bottom:1px solid white;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.child-check{
+    margin-left: 15px;
+    display: none;
+}
+
+.child-check.active{
+    display: block;
+}
+
+.dropdown{
+    color: black;
+    border: none;
+    padding-bottom: 2px;
+}

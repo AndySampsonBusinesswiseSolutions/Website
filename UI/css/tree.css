@@ -1,0 +1,9 @@
+.column {
+    float: left;
+    width: 25%;
+    padding-left: 15px;
+}
+
+.finalColumn {
+    width: 70%;
+}

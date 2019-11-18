@@ -2,23 +2,77 @@
 
 var config;
 var dateArr;
+var datasets = [,];
 
-function initialiseTree(datasets){
+function initialiseTree(){
 	var checks = document.querySelectorAll("input[type=checkbox]");
 	var labels = document.querySelectorAll("label");
+	var inputs = document.getElementsByClassName('child-check-input');
+
+	for(var i = 0; i < checks.length; i++){
+		checks[i].addEventListener( 'click', function() {
+			updateChildrenChecked(this);
+		});
+	}
 
 	for(var i = 0; i < labels.length; i++){
 		labels[i].addEventListener( 'click', function() {
 			updateChildrenDisplay(this);
 		});
+	}
 
-		checks[i].addEventListener( 'click', function() {
-			updateChildrenChecked(this, datasets);
+	for(var i = 0; i < inputs.length; i++) {
+		inputs[i].addEventListener('click', function() {
+			getDataSetAndUpdateGraph(datasets, this);			
 		});
+	}
+
+	inputs[0].checked = true;
+}
+
+function initialiseGraph(window, document) {
+	addDataSetToDataSets(0);
+	getDateArray(getMinimumDataSetDate(datasets), getMaximumDataSetDate(datasets));
+	config = setupChartConfiguration(dateArr, 'line', false, 'Date', 'Volume (kWh)');
+
+	createChart(window, document, config);	
+	getDataSetAndUpdateGraph(datasets, inputs[0]);
+}
+
+function addDataSetToDataSets(id){
+	var idIndex = -1;
+
+	for(var i = 0; i < datasets.length; i++){
+		if(datasets[i][0] == id){
+			idIndex = i;
+			break;
+		}
+	}
+
+	if(idIndex == -1){
+		//call api to get data
+
+		//add dataset to datasets
 	}
 }
 
-function updateChildrenChecked(elm, datasets) {
+function updateChildrenDisplay(elm) {
+	var pN = elm.parentNode;
+	var childCheks = pN.children;
+  
+	for(var i = 0; i < childCheks.length; i++){
+	  if(hasClass(childCheks[i], 'child-check')){
+		if(hasClass(childCheks[i], 'active')){
+			childCheks[i].classList.remove("active");
+		}
+		else {
+			childCheks[i].classList.add("active");
+		}
+	  }
+	}
+}
+
+function updateChildrenChecked(elm) {
 	var pN = elm.parentNode;
 	var childCheks = pN.children;
 
@@ -29,7 +83,7 @@ function updateChildrenChecked(elm, datasets) {
 
 			for(var j = 0; j < divInputs.length; j++){
 				divInputs[j].checked = elm.checked;
-				var dataset = getDataset(datasets, divInputs[j].id);
+				var dataset = getDataset(divInputs[j].id);
 
 				if(dataset != null){
 					updateGraph(divInputs[j], dataset);
@@ -39,7 +93,7 @@ function updateChildrenChecked(elm, datasets) {
 	}
 }
 
-function getDataset(datasets, elementId){
+function getDataset(elementId){
 	var dataset;
 
 	if(elementId == 0)	{
@@ -92,43 +146,9 @@ function getReadDateIndex(readDateText, dataset){
 
 	return index;
 }
-
-function updateChildrenDisplay(elm) {
-	var pN = elm.parentNode;
-	var childCheks = pN.children;
-  
-	for(var i = 0; i < childCheks.length; i++){
-	  if(hasClass(childCheks[i], 'child-check')){
-		if(hasClass(childCheks[i], 'active')){
-			childCheks[i].classList.remove("active");
-		}
-		else {
-			childCheks[i].classList.add("active");
-		}
-	  }
-	}
-}
   
 function hasClass(elem, className) {
 	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function initialiseGraph(window, document, datasets) {
-	dateArr = getDateArray(getMinimumDataSetDate(datasets), getMaximumDataSetDate(datasets));
-	config = setupChartConfiguration(dateArr, 'line', false, 'Date', 'Volume (kWh)');
-
-	var inputs = document.getElementsByClassName('child-check-input');
-
-	for(var i = 0; i < inputs.length; i++) {
-		inputs[i].addEventListener('click', function() {
-			getDataSetAndUpdateGraph(datasets, this);			
-		});
-	}
-
-	createChart(window, document, config);
-
-	inputs[0].checked = true;
-	getDataSetAndUpdateGraph(datasets, inputs[0]);
 }
 
 function getMinimumDataSetDate(datasets){
