@@ -9,14 +9,16 @@
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
-	<div id="mainDiv">
-		<br>
-		<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricity.php") ?>
-		<br>
-		<br>
-		<br>
-		<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gas.php") ?>
-		<br>
+	<div class="row">
+		<div class="tree-column">
+			<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricity.php") ?>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="tree-column">
+			<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gas.php") ?>
+		</div>
 	</div>
 	
 	<!-- <div class="row">

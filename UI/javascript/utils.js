@@ -151,10 +151,16 @@ function updateClassOnClick(elementId, firstClass, secondClass){
 	var element = document.getElementById(elementId);
 	if(hasClass(element, firstClass)){
 		element.classList.remove(firstClass);
-		element.classList.add(secondClass);
+
+		if(secondClass != ""){
+			element.classList.add(secondClass);
+		}
 	}
 	else {
-		element.classList.remove(secondClass);
+		if(secondClass != ""){
+			element.classList.remove(secondClass);
+		}
+		
 		element.classList.add(firstClass);
 	}
 }

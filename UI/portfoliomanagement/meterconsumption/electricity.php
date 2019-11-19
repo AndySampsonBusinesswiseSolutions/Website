@@ -15,15 +15,43 @@
 				</div>
 			</div>
 			<div id="electricityTreeDiv" class="tree-div">
-				Tree here
+				<div class="scrolling-wrapper">
+					<ul style="padding-left: 0; margin-left: 0;">
+						<li style="display: inline; padding-left: 15px;">
+							<div class="far fa-plus-square" id="Site1"></div>
+							<input type="checkbox"></input>
+							<i class="fas fa-map-marker-alt"></i>
+							<div style="display: inline-block;">Sulzer Pumps: Leeds</div>
+						</li>
+						<div class="listitem-hidden" id="Site1List">
+							<ul>
+								<li style="display: inline;">
+									<div class="far fa-plus-square" id="DeviceType1"></div>
+									<input type="checkbox"></input>
+									<i class="fas fa-plug"></i>
+									<div style="display: inline-block;">Mains</div>
+								</li>
+							</ul>
+						</div>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div></div>
 
 	<script type="text/javascript"> 
         document.getElementById('selectElectricityGroupByType')
-        .addEventListener('click', function (event) {
-			updateClassOnClick("electricityGroupArrow", "fa-angle-double-down", "fa-angle-double-up")
-		});
+			.addEventListener('click', function (event) {
+				updateClassOnClick("electricityGroupArrow", "fa-angle-double-down", "fa-angle-double-up")
+			});
+
+		var expanders = document.getElementsByClassName("fa-plus-square");
+		for(var i=0; i< expanders.length; i++){
+			expanders[i].addEventListener('click', function (event) {
+				updateClassOnClick(this.id, "fa-plus-square", "fa-minus-square")
+				updateClassOnClick(this.id.concat('List'), "listitem-hidden", "")
+			});
+		}
     </script> 
 </div>
