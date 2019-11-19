@@ -9,17 +9,25 @@
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
-	<div class="row">
-		<div class="tree-column">
-			<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricity.php") ?>
+	<div>
+		<div class="row">
+			<div class="tree-column">
+				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricitytree.php") ?>
+			</div>
+			<div class="fill-column"></div>
+			<div class="final-column">Chart here</div>	
+		</div>
+	</div>
+	<div>
+		<div class="row">
+			<div class="tree-column">
+				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gastree.php") ?>
+			</div>
+			<div class="fill-column"></div>
+			<div class="final-column">Chart here</div>
 		</div>
 	</div>
 	<br>
-	<div class="row">
-		<div class="tree-column">
-			<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gas.php") ?>
-		</div>
-	</div>
 	
 	<!-- <div class="row">
 		<div class="column">
@@ -72,6 +80,26 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
+
+<script type="text/javascript"> 
+	document.getElementById('selectElectricityGroupByType')
+		.addEventListener('click', function (event) {
+			updateClassOnClick("electricityGroupArrow", "fa-angle-double-down", "fa-angle-double-up")
+		});
+
+	document.getElementById('selectGasGroupByType')
+		.addEventListener('click', function (event) {
+			updateClassOnClick("gasGroupArrow", "fa-angle-double-down", "fa-angle-double-up")
+		});
+
+	var expanders = document.getElementsByClassName("fa-plus-square");
+	for(var i=0; i< expanders.length; i++){
+		expanders[i].addEventListener('click', function (event) {
+			updateClassOnClick(this.id, "fa-plus-square", "fa-minus-square")
+			updateClassOnClick(this.id.concat('List'), "listitem-hidden", "")
+		});
+	}
+</script> 
 
 <!-- 
 <script>

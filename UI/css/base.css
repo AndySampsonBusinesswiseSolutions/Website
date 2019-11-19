@@ -58,10 +58,6 @@
     white-space: nowrap;
   }
 
-  .card {
-    display: inline-block;
-  }
-
   .listitem-hidden {
     display: none;
   }
