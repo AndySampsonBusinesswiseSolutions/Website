@@ -93,6 +93,13 @@
 		});
 	}
 
+	var arrowHeaders = document.getElementsByClassName("arrow-header");
+	for(var i=0; i< arrowHeaders.length; i++){
+		arrowHeaders[i].addEventListener('click', function (event) {
+			updateClassOnClick(this.id.concat('Arrow'), "fa-angle-double-down", "fa-angle-double-up")
+		});
+	}
+
 	var expanders = document.getElementsByClassName("fa-plus-square");
 	for(var i=0; i< expanders.length; i++){
 		expanders[i].addEventListener('click', function (event) {

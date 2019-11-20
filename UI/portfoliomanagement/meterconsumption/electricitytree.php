@@ -4,8 +4,8 @@
 		<div id="electricityGroupDiv" class="group-div">
 			<div id="electricityGroupByDiv" class="group-by-div">
 				<span>Group By:</span>
-				<span class="show-pointer" id="selectElectricityGroupByType">
-					<span style="padding-left: 10px; padding-right: 50px;">Device Type</span>
+				<span class="show-pointer">
+					<span class="arrow-header" style="padding-left: 10px; padding-right: 50px;" id="selectElectricityGroupByType">Device Type</span>
 					<span class="simple-divider"></span>
 					<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="selectElectricityGroupByTypeArrow"></span>				
 				</span>

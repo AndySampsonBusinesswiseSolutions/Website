@@ -9,14 +9,14 @@
 				<span style="padding-right: 5px;" class="simple-divider"></span>
 				<span>Show By:</span>
 				<span class="show-pointer">
-					<span title="Show By" style="padding-left: 10px;">Energy</span>
-					<span class="fa fa-angle-double-down" style="padding-left: 10px;"></span>				
+					<span class="arrow-header" title="Show By" style="padding-left: 10px;" id="gasChartHeaderShowBy">Energy</span>
+					<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderShowByArrow"></span>				
 				</span>
 				<span style="padding-right: 5px;" class="simple-divider"></span>
 				<span>Period:</span>
 				<span class="show-pointer">
-					<span title="Period" style="padding-left: 10px;">Monthly</span>
-					<span class="fa fa-angle-double-down" style="padding-left: 10px;"></span>				
+					<span class="arrow-header" title="Period" style="padding-left: 10px;" id="gasChartHeaderPeriod">Monthly</span>
+					<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderPeriodArrow"></span>				
 				</span>
 				<span class="simple-divider"></span>
 				<span title="Previous Period" class="fas fa-caret-left show-pointer"></span>
