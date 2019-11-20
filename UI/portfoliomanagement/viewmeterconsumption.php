@@ -15,7 +15,9 @@
 				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricitytree.php") ?>
 			</div>
 			<div class="fill-column"></div>
-			<div class="final-column">Chart here</div>	
+			<div class="final-column">
+				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricitychart.php") ?>
+			</div>	
 		</div>
 	</div>
 	<div>
@@ -24,7 +26,9 @@
 				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gastree.php") ?>
 			</div>
 			<div class="fill-column"></div>
-			<div class="final-column">Chart here</div>
+			<div class="final-column">
+				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gaschart.php") ?>
+			</div>
 		</div>
 	</div>
 	<br>
@@ -82,15 +86,12 @@
 <script src="/javascript/utils.js"></script>
 
 <script type="text/javascript"> 
-	document.getElementById('selectElectricityGroupByType')
-		.addEventListener('click', function (event) {
-			updateClassOnClick("electricityGroupArrow", "fa-angle-double-down", "fa-angle-double-up")
+	var arrows = document.getElementsByClassName("fa-angle-double-down");
+	for(var i=0; i< arrows.length; i++){
+		arrows[i].addEventListener('click', function (event) {
+			updateClassOnClick(this.id, "fa-angle-double-down", "fa-angle-double-up")
 		});
-
-	document.getElementById('selectGasGroupByType')
-		.addEventListener('click', function (event) {
-			updateClassOnClick("gasGroupArrow", "fa-angle-double-down", "fa-angle-double-up")
-		});
+	}
 
 	var expanders = document.getElementsByClassName("fa-plus-square");
 	for(var i=0; i< expanders.length; i++){
@@ -98,6 +99,29 @@
 			updateClassOnClick(this.id, "fa-plus-square", "fa-minus-square")
 			updateClassOnClick(this.id.concat('List'), "listitem-hidden", "")
 		});
+	}
+
+	window.onload = function(){
+		resizeCharts();
+	}
+
+	window.onresize = function(){
+		resizeCharts();
+	}
+
+	function resizeCharts(){
+		var finalColumns = document.getElementsByClassName("final-column");
+		var chartWidth = window.innerWidth - 365;
+		var chartHeaderWidth = chartWidth - 705;
+		
+		for(var i=0; i<finalColumns.length; i++){
+			finalColumns[i].setAttribute("style", "width: "+chartWidth+"px;");
+		}
+
+		var chartHeaders = document.getElementsByClassName("chart-header");
+		for(var i=0; i<finalColumns.length; i++){
+			chartHeaders[i].setAttribute("style", "padding-right: "+chartHeaderWidth+"px; display: inline;");
+		}
 	}
 </script> 
 
