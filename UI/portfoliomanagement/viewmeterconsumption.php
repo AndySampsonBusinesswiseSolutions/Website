@@ -9,7 +9,11 @@
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
-	<div>
+	<div style="margin-left: 15px;">
+		<div>Select Commodity To Display</div>
+		<span>Electricity</span><span class="show-pointer">&nbsp;<i class="fas fa-angle-double-left" id="electricityGasSelector"></i>&nbsp;</span><span>Gas</span>
+	</div>
+	<div id="electricityDiv">
 		<div class="row">
 			<div class="tree-column">
 				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/electricitytree.php") ?>
@@ -20,7 +24,7 @@
 			</div>	
 		</div>
 	</div>
-	<div>
+	<div id="gasDiv" class="listitem-hidden">
 		<div class="row">
 			<div class="tree-column">
 				<?php include($_SERVER['DOCUMENT_ROOT']."/portfoliomanagement/meterconsumption/gastree.php") ?>
@@ -37,10 +41,24 @@
 <script src="/javascript/utils.js"></script>
 
 <script type="text/javascript"> 
+	var commoditySelector = document.getElementById("electricityGasSelector");
+	commoditySelector.addEventListener('click', function(event) {
+		updateClassOnClick("electricityDiv", "listitem-hidden", "")
+		updateClassOnClick("gasDiv", "listitem-hidden", "")
+	})
+
 	var arrows = document.getElementsByClassName("fa-angle-double-down");
 	for(var i=0; i< arrows.length; i++){
 		arrows[i].addEventListener('click', function (event) {
 			updateClassOnClick(this.id, "fa-angle-double-down", "fa-angle-double-up")
+			updateClassOnClick(this.id.replace("Arrow", "SubMenu"), "listitem-hidden", "")
+		});
+	}
+
+	arrows = document.getElementsByClassName("fa-angle-double-left");
+	for(var i=0; i< arrows.length; i++){
+		arrows[i].addEventListener('click', function (event) {
+			updateClassOnClick(this.id, "fa-angle-double-left", "fa-angle-double-right")
 		});
 	}
 
@@ -48,6 +66,7 @@
 	for(var i=0; i< arrowHeaders.length; i++){
 		arrowHeaders[i].addEventListener('click', function (event) {
 			updateClassOnClick(this.id.concat('Arrow'), "fa-angle-double-down", "fa-angle-double-up")
+			updateClassOnClick(this.id.concat('SubMenu'), "listitem-hidden", "")
 		});
 	}
 

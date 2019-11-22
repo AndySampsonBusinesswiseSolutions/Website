@@ -1,41 +1,52 @@
-<div id="gasDiv">
+<div>
 	<br><b style="padding-left: 15px;">Gas Meters</b>
 	<div class="tree-column">
 		<div id="gasGroupDiv" class="group-div">
 			<div id="gasGroupByDiv" class="group-by-div">
-				<span>Group By:</span>
-				<span class="show-pointer">
-					<span class="arrow-header" style="padding-left: 10px; padding-right: 50px;" id="selectGasGroupByType">Device Type</span>
+				<div style="width: 30%; display: inline-block;">
+					<span>Group By:</span>
+				</div>
+				<div style="float: right;" class="show-pointer">
+					<span class="arrow-header" style="padding-right: 5px;" id="selectGasGroupByType">Hierarchy</span>
 					<span class="simple-divider"></span>
-					<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="selectGasGroupByTypeArrow"></span>				
-				</span>
+					<span>
+						<span class="fa fa-angle-double-down" style="padding-left: 10px; padding-right: 5px;" id="selectGasGroupByTypeArrow"></span>
+						<div style="display: none;">
+							<ul>
+								<li>
+
+								</li>
+							</ul>
+						</div>
+					</span>
+				</div>
 			</div>
 		</div>
 		<div id="gasTreeDiv" class="tree-div">
 			<div class="scrolling-wrapper">
 				<ul class="format-listitem">
 					<li>
-						<div class="far fa-plus-square" id="Site3"></div>
+						<div class="far fa-plus-square" id="gasSite1"></div>
 						<input type="checkbox"></input>
 						<i class="fas fa-map-marker-alt"></i>
 						<span>Sulzer Pumps: Leeds</span>
-						<div class="listitem-hidden" id="Site3List">
+						<div class="listitem-hidden" id="gasSite1List">
 							<ul class="format-listitem">
 								<li>
-									<div class="far fa-plus-square" id="DeviceType11"></div>
+									<div class="far fa-plus-square" id="gasDeviceType1"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-burn"></i>
 									<span>Mains</span>
-									<div class="listitem-hidden" id="DeviceType11List">
+									<div class="listitem-hidden" id="gasDeviceType1List">
 										<ul class="format-listitem">
 											<li>
-												<div class="far fa-plus-square" id="DeviceSubType5"></div>
+												<div class="far fa-plus-square" id="gasDeviceSubType1"></div>
 												<input type="checkbox"></input>
 												<i class="fas fa-burn"></i>
 												<span>Mains</span>
 											</li>
 											<li>
-												<div class="far fa-plus-square" id="DeviceSubType6"></div>
+												<div class="far fa-plus-square" id="gasDeviceSubType2"></div>
 												<input type="checkbox"></input>
 												<i class="fas fa-burn"></i>
 												<span>Sub-mains</span>
@@ -44,25 +55,25 @@
 									</div>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType12"></div>
+									<div class="far fa-plus-square" id="gasDeviceType2"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-lightbulb"></i>
 									<span>Lighting</span>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType13"></div>
+									<div class="far fa-plus-square" id="gasDeviceType3"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-cogs"></i>
 									<span>Machinery</span>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType14"></div>
+									<div class="far fa-plus-square" id="gasDeviceType4"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-building"></i>
 									<span>Office Appliances</span>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType15"></div>
+									<div class="far fa-plus-square" id="gasDeviceType5"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-question-circle"></i>
 									<span>Unknown</span>
@@ -71,54 +82,54 @@
 						</div>
 					</li>
 					<li>
-						<div class="far fa-plus-square" id="Site4"></div>
+						<div class="far fa-plus-square" id="gasSite2"></div>
 						<input type="checkbox"></input>
 						<i class="fas fa-map-marker-alt"></i>
 						<span>Sulzer Pumps: Manchester</span>
-						<div class="listitem-hidden" id="Site4List">
+						<div class="listitem-hidden" id="gasSite2List">
 							<ul class="format-listitem">
 								<li>
-									<div class="far fa-plus-square" id="DeviceType16"></div>
+									<div class="far fa-plus-square" id="gasDeviceType6"></div>
 									<input type="checkbox"></input>
-									<i class="fas fa-burn"></i>
+									<i class="fas fa-plug"></i>
 									<span>Mains</span>
-									<div class="listitem-hidden" id="DeviceType16List">
+									<div class="listitem-hidden" id="gasDeviceType6List">
 										<ul class="format-listitem">
 											<li>
-												<div class="far fa-plus-square" id="DeviceSubType7"></div>
+												<div class="far fa-plus-square" id="gasDeviceSubType3"></div>
 												<input type="checkbox"></input>
-												<i class="fas fa-burn"></i>
+												<i class="fas fa-plug"></i>
 												<span>Mains</span>
 											</li>
 											<li>
-												<div class="far fa-plus-square" id="DeviceSubType8"></div>
+												<div class="far fa-plus-square" id="gasDeviceSubType4"></div>
 												<input type="checkbox"></input>
-												<i class="fas fa-burn"></i>
+												<i class="fas fa-plug"></i>
 												<span>Sub-mains</span>
 											</li>
 										</ul>
 									</div>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType17"></div>
+									<div class="far fa-plus-square" id="gasDeviceType7"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-lightbulb"></i>
 									<span>Lighting</span>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType18"></div>
+									<div class="far fa-plus-square" id="gasDeviceType8"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-cogs"></i>
 									<span>Machinery</span>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType19"></div>
+									<div class="far fa-plus-square" id="gasDeviceType9"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-building"></i>
 									<span>Office Appliances</span>
 								</li>
 								<li>
-									<div class="far fa-plus-square" id="DeviceType20"></div>
+									<div class="far fa-plus-square" id="gasDeviceType10"></div>
 									<input type="checkbox"></input>
 									<i class="fas fa-question-circle"></i>
 									<span>Unknown</span>

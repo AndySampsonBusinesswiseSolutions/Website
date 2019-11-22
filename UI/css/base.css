@@ -50,3 +50,78 @@
   .simple-divider {
     border-left: solid black 1px;
   }
+  .dropdown-border:before {
+    content:"";
+    position: absolute;
+    right: 11px;
+    top: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent black transparent;
+    z-index:9999;
+}
+.dropdown-border {
+    border: solid black 1px;
+    top: 1em;
+    z-index: 99999;
+}
+
+
+
+
+
+/*the container must be positioned relative:*/
+.qwerty-select {
+  position: relative;  
+}
+
+.qwerty-select select {
+  display: none; /*hide original SELECT element:*/
+}
+
+.select-selected {
+  background-color: transparent;
+}
+
+/*style the arrow inside the select element:*/
+.select-selected:after {
+  position: absolute;
+  content: "";  
+  border: 6px solid transparent;
+  border-color: black transparent transparent transparent;
+  margin-right: 50px;
+}
+
+/*point the arrow upwards when the select box is open (active):*/
+.select-selected.select-arrow-active:after {
+  border-color: transparent transparent black transparent;
+  
+}
+
+/*style the items (options), including the selected item:*/
+.select-items div,.select-selected {
+  color: black;  
+  border: 1px solid transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+/*style items (options):*/
+.select-items {
+  position: absolute;
+  background-color: #e9eaee;
+  border: solid black 1px;  
+  z-index: 99;
+}
+
+/*hide the items when the select box is closed:*/
+.select-hide {
+  display: none;
+}
+
+.select-items div:hover, .same-as-selected {
+  background-color: rgba(0, 0, 0, 0.1);
+}
