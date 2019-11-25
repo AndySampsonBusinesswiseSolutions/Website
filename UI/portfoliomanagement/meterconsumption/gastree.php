@@ -7,21 +7,23 @@
 					<span>Group By:</span>
 				</div>
 				<div style="float: right;" class="show-pointer">
-					<span class="arrow-header" style="padding-right: 5px;" id="selectGasGroupByType">Hierarchy</span>
-					<span class="simple-divider"></span>
-					<span>
-						<span class="fa fa-angle-double-down" style="padding-left: 10px; padding-right: 5px;" id="selectGasGroupByTypeArrow"></span>
-						<div style="display: none;">
-							<ul>
-								<li>
-
-								</li>
-							</ul>
-						</div>
+					<span title="Period" class="show-pointer">
+						<span class="arrow-header" id="gasChartHeaderPeriod">
+							<select style="z-index: 99;" class="show-pointer">
+								<option value="0">Device Type</option>
+								<option value="1">Zone>Panel</option>
+								<option value="2">Device Groups</option>
+								<option value="3">Hierarchy</option>
+								<option value="4">Alphabetically</option>
+								<option value="5">Sensor Type</option>
+							</select>
+						</span>
+						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderPeriodArrow"></span>
 					</span>
 				</div>
 			</div>
 		</div>
+		<br>
 		<div id="gasTreeDiv" class="tree-div">
 			<div class="scrolling-wrapper">
 				<ul class="format-listitem">
@@ -91,20 +93,20 @@
 								<li>
 									<div class="far fa-plus-square" id="gasDeviceType6"></div>
 									<input type="checkbox"></input>
-									<i class="fas fa-plug"></i>
+									<i class="fas fa-burn"></i>
 									<span>Mains</span>
 									<div class="listitem-hidden" id="gasDeviceType6List">
 										<ul class="format-listitem">
 											<li>
 												<div class="far fa-plus-square" id="gasDeviceSubType3"></div>
 												<input type="checkbox"></input>
-												<i class="fas fa-plug"></i>
+												<i class="fas fa-burn"></i>
 												<span>Mains</span>
 											</li>
 											<li>
 												<div class="far fa-plus-square" id="gasDeviceSubType4"></div>
 												<input type="checkbox"></input>
-												<i class="fas fa-plug"></i>
+												<i class="fas fa-burn"></i>
 												<span>Sub-mains</span>
 											</li>
 										</ul>

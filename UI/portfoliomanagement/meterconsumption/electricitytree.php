@@ -7,24 +7,23 @@
 					<span>Group By:</span>
 				</div>
 				<div style="float: right;" class="show-pointer">
-					<span class="arrow-header" style="padding-right: 5px;" id="selectElectricityGroupByType">Device Type</span>
-					<span class="simple-divider"></span>
-					<span>
-						<span class="fa fa-angle-double-down" style="padding-left: 10px; padding-right: 5px;" id="selectElectricityGroupByTypeArrow"></span>
-						<div class="listitem-hidden dropdown-border" style="position: relative;" id="selectElectricityGroupByTypeSubMenu">
-							<ul class="format-listitem" style="padding: 1px; margin-bottom: 0">
-								<li onclick="updateGroupByType('Device Type','selectElectricityGroupByType','selectElectricityGroupByTypeSubMenu')">Device Type</li>
-								<li onclick="updateGroupByType('Zone>Panel','selectElectricityGroupByType','selectElectricityGroupByTypeSubMenu')">Zone>Panel</li>
-								<li onclick="updateGroupByType('Device Groups','selectElectricityGroupByType','selectElectricityGroupByTypeSubMenu')">Device Groups</li>
-								<li onclick="updateGroupByType('Hierarchy','selectElectricityGroupByType','selectElectricityGroupByTypeSubMenu')">Hierarchy</li>
-								<li onclick="updateGroupByType('Alphabetically','selectElectricityGroupByType','selectElectricityGroupByTypeSubMenu')">Alphabetically</li>
-								<li onclick="updateGroupByType('Sensor Type','selectElectricityGroupByType','selectElectricityGroupByTypeSubMenu')">Sensor Type</li>
-							</ul>
-						</div>
+					<span title="Period" class="show-pointer">
+						<span class="arrow-header" id="electricityChartHeaderPeriod">
+							<select style="z-index: 99;" class="show-pointer">
+								<option value="0">Device Type</option>
+								<option value="1">Zone>Panel</option>
+								<option value="2">Device Groups</option>
+								<option value="3">Hierarchy</option>
+								<option value="4">Alphabetically</option>
+								<option value="5">Sensor Type</option>
+							</select>
+						</span>
+						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityChartHeaderPeriodArrow"></span>
 					</span>
 				</div>
 			</div>
 		</div>
+		<br>
 		<div id="electricityTreeDiv" class="tree-div">
 			<div class="scrolling-wrapper">
 				<ul class="format-listitem">
@@ -145,13 +144,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-	function updateGroupByType(groupBy, groupByType, groupByTypeSubMenu){
-		var groupByTypeElement = document.getElementById(groupByType);
-		groupByTypeElement.innerText = groupBy;
-
-		updateClassOnClick(groupByTypeSubMenu, "listitem-hidden", "")
-		updateClassOnClick(groupByType.concat('Arrow'), "fa-angle-double-down", "fa-angle-double-up")
-	}
-</script>

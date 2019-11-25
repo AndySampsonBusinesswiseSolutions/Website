@@ -18,9 +18,9 @@
     border-top-right-radius: 5px;
 }
 .tree-div {
-    border-right: solid black 1px;
-    border-left: solid black 1px;
-    border-bottom: solid black 1px;
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
     border-bottom-left-radius: 5px; 
     border-bottom-right-radius: 5px;
     height: 650px;
