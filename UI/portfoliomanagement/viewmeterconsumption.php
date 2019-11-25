@@ -39,6 +39,8 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
+<script src="/javascript/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script type="text/javascript"> 
 	var commoditySelector = document.getElementById("electricityGasSelector");
@@ -94,6 +96,9 @@
 			finalColumns[i].setAttribute("style", "width: "+chartWidth+"px;");
 		}
 	}
+
+	initialiseChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
+	initialiseChart("#gasChart", "There's no gas data to display. Select from the tree to the left to display");
 </script> 
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>

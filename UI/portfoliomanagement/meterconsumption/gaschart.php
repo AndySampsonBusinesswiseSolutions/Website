@@ -78,5 +78,7 @@
 	</div>
 	<br>
 	<div class="tree-div">
+		<div id="gasChart">
+		</div>
 	</div>
 </div>
