@@ -27,8 +27,8 @@
 					<span title="Period" class="show-pointer">
 						<span class="arrow-header" id="electricityChartHeaderPeriod">
 							<select class="show-pointer">
-								<option value="0">6 Hours</option>
-								<option value="1">Daily</option>
+								<option value="0">Daily</option>
+								<option value="1">6 Hours</option>
 								<option value="2">Weekly</option>
 								<option value="3">Monthly</option>
 								<option value="4">Yearly</option>
@@ -37,7 +37,7 @@
 						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityChartHeaderPeriodArrow"></span>
 					</span>
 					<span class="simple-divider" style="padding-left: 5px;"></span>
-					<input type="date" name="calendar" id="calendar" value="2019-11-25">
+					<input type="date" name="calendar" id="calendar" value="2019-11-26">
 					<span class="simple-divider"></span>
 					<span style="padding-left: 5px;">
 						<select class="show-pointer">

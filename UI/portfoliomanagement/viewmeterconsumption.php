@@ -40,9 +40,13 @@
 
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/chart.js"></script>
+<script src="/javascript/tree.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script type="text/javascript" src="/basedata/data.json"></script>
 
 <script type="text/javascript"> 
+	createTree(data, "Device Type", "electricityTreeDiv", "electricity");
+
 	var commoditySelector = document.getElementById("electricityGasSelector");
 	commoditySelector.addEventListener('click', function(event) {
 		updateClassOnClick("electricityDiv", "listitem-hidden", "")
@@ -69,14 +73,6 @@
 		arrowHeaders[i].addEventListener('click', function (event) {
 			updateClassOnClick(this.id.concat('Arrow'), "fa-angle-double-down", "fa-angle-double-up")
 			updateClassOnClick(this.id.concat('SubMenu'), "listitem-hidden", "")
-		});
-	}
-
-	var expanders = document.getElementsByClassName("fa-plus-square");
-	for(var i=0; i< expanders.length; i++){
-		expanders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, "fa-plus-square", "fa-minus-square")
-			updateClassOnClick(this.id.concat('List'), "listitem-hidden", "")
 		});
 	}
 

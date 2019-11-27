@@ -1,0 +1,29 @@
+var data = [
+    {
+        "SiteName" : "Leeds", 
+        "Meters" :
+        [
+            {
+                "Identifier" : "1234567890123",
+                "Device Type" : "Mains",
+                "Device Sub Type" : "Mains",
+                "Zone" : "Test Zone 1",
+                "Panel" : "Test Panel 1",
+                "Sensor Type" : "Test Sensor Type 1",
+                "Commodity" : "Electricity"
+            },
+            {
+                "Identifier" : "1234567890124",
+                "Device Type" : "Lighting",
+                "Device Sub Type" : "Unknown",
+                "Zone" : "Test Zone 1",
+                "Panel" : "Test Panel 1",
+                "Sensor Type" : "Test Sensor Type 1",
+                "Commodity" : "Electricity"
+            }
+        ]
+    },
+    {
+        "SiteName" : "Manchester"
+    }
+]
