@@ -9,7 +9,7 @@
 				<div style="float: right;" class="show-pointer">
 					<span title="Period" class="show-pointer">
 						<span class="arrow-header" id="electricityChartHeaderPeriod">
-							<select class="show-pointer" onchange="createTree(data, this.value, 'electricityTreeDiv', 'electricity');">
+							<select class="show-pointer" onchange="createTree(data, this.value, 'electricityTreeDiv', 'electricity'); addExpanderOnClickEvents();">
 								<option value="Device Type">Device Type</option>
 								<option value="Zone">Zone>Panel</option>
 								<option value="Hierarchy">Hierarchy</option>

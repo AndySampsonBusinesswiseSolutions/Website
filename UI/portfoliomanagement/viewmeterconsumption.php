@@ -44,38 +44,22 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="/basedata/data.json"></script>
 
+<script>
+	function addCommoditySelectorOnClickEvent() {
+		var commoditySelector = document.getElementById("electricityGasSelector");
+		commoditySelector.addEventListener('click', function(event) {
+			updateClassOnClick("electricityDiv", "listitem-hidden", "")
+			updateClassOnClick("gasDiv", "listitem-hidden", "")
+		})	
+	}
+</script>
+
 <script type="text/javascript"> 
-	createTree(data, "Device Type", "electricityTreeDiv", "electricity");
-	createTree(data, "Device Type", "gasTreeDiv", "gas");
-
-	var commoditySelector = document.getElementById("electricityGasSelector");
-	commoditySelector.addEventListener('click', function(event) {
-		updateClassOnClick("electricityDiv", "listitem-hidden", "")
-		updateClassOnClick("gasDiv", "listitem-hidden", "")
-	})
-
-	var arrows = document.getElementsByClassName("fa-angle-double-down");
-	for(var i=0; i< arrows.length; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, "fa-angle-double-down", "fa-angle-double-up")
-			updateClassOnClick(this.id.replace("Arrow", "SubMenu"), "listitem-hidden", "")
-		});
-	}
-
-	arrows = document.getElementsByClassName("fa-angle-double-left");
-	for(var i=0; i< arrows.length; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, "fa-angle-double-left", "fa-angle-double-right")
-		});
-	}
-
-	var arrowHeaders = document.getElementsByClassName("arrow-header");
-	for(var i=0; i< arrowHeaders.length; i++){
-		arrowHeaders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id.concat('Arrow'), "fa-angle-double-down", "fa-angle-double-up")
-			updateClassOnClick(this.id.concat('SubMenu'), "listitem-hidden", "")
-		});
-	}
+	createTree(data, "Device Type", "electricityTreeDiv", "electricity", "addEnergyToChart");
+	createTree(data, "Device Type", "gasTreeDiv", "gas", "addEnergyToChart");
+	addExpanderOnClickEvents();
+	addArrowOnClickEvents();
+	addCommoditySelectorOnClickEvent();	
 
 	window.onload = function(){
 		resizeCharts(365);
@@ -85,17 +69,8 @@
 		resizeCharts(365);
 	}
 
-	function resizeCharts(windowWidthReduction){
-		var finalColumns = document.getElementsByClassName("final-column");
-		var chartWidth = window.innerWidth - windowWidthReduction;
-
-		for(var i=0; i<finalColumns.length; i++){
-			finalColumns[i].setAttribute("style", "width: "+chartWidth+"px;");
-		}
-	}
-
 	initialiseChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
 	initialiseChart("#gasChart", "There's no gas data to display. Select from the tree to the left to display");
-</script> 
+</script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
