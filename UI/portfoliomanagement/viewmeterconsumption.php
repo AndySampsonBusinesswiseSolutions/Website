@@ -54,9 +54,24 @@
 	}
 </script>
 
+<script>
+	function updateChart(callingElement, chartId) {
+		while (chartId.firstChild) {
+			chartId.removeChild(chartId.firstChild);
+		}
+		
+		if(callingElement.checked) {
+			addEnergyToChart();
+		}
+		else {
+			initialiseChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
+		}
+	}
+</script>
+
 <script type="text/javascript"> 
-	createTree(data, "Device Type", "electricityTreeDiv", "electricity", "addEnergyToChart");
-	createTree(data, "Device Type", "gasTreeDiv", "gas", "addEnergyToChart");
+	createTree(data, "Device Type", "electricityTreeDiv", "electricity", "updateChart(electricityChart)");
+	createTree(data, "Device Type", "gasTreeDiv", "gas", "updateChart(gasChart)");
 	addExpanderOnClickEvents();
 	addArrowOnClickEvents();
 	addCommoditySelectorOnClickEvent();	

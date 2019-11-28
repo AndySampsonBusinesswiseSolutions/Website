@@ -86,6 +86,9 @@ function addEnergyToChart() {
         tools: {
           download: false
         }        
+      },
+      animations: {
+        enabled: false
       }
     },
     tooltip: {
@@ -118,11 +121,7 @@ function addEnergyToChart() {
     }
   };
   
-  var div = document.getElementById("electricityChart");
-
-  while (div.firstChild) {
-      div.removeChild(div.firstChild);
-  }
+  
 
   var newChart = new ApexCharts(document.querySelector("#electricityChart"), newOptions);
   

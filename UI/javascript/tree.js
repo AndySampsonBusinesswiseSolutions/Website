@@ -233,10 +233,23 @@ function createSpan(innerHTML) {
 }
 
 function createCheckbox(checkboxId, checkboxFunction) {
+    var functionArray = checkboxFunction.replace(')', '').split('(');
+    var functionName = functionArray[0];
+    var functionArguments = [];
+
     var checkBox = document.createElement("input");
     checkBox.type = "checkbox";  
     checkBox.id = checkboxId.concat("checkbox").replace(/ /g, '');
-    checkBox.addEventListener('click', window[checkboxFunction]);
+
+    functionArguments.push(checkBox.id);
+    if(functionArray.length > 1) {
+        for(var i = 0; i < functionArray[1].split(',').length; i++) {
+            functionArguments.push(functionArray[1].split(',')[i]);
+        }
+    }
+    functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
+    
+    checkBox.setAttribute('onclick', functionName);
     return checkBox;
 }
 
