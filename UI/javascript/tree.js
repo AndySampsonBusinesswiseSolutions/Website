@@ -164,7 +164,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity) {
 
         if(meters[i].hasOwnProperty("Sub Meters")) {
             var ul = createUL();
-            buildSubMeterHierarchy(meters[i]["Sub Meters"], ul);
+            buildSubMeterHierarchy(meters[i]["Sub Meters"], ul, meters[i]["Device Type"], commodity);
 
             li.appendChild(createBranchListDiv(meters[i].Identifier.concat("List"), ul));
         }        
@@ -173,10 +173,15 @@ function buildIdentifierHierarchy(meters, baseElement, commodity) {
     }
 }
 
-function buildSubMeterHierarchy(subMeters, baseElement, deviceType) {
+function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity) {
     for(var i = 0; i < subMeters.length; i++){
         var li = document.createElement("li");
 
+        var branchDiv = createBranchDiv(subMeters[i].Identifier);
+        branchDiv.removeAttribute("class", "far fa-plus-square");
+        branchDiv.setAttribute("class", "far fa-times-circle");
+
+        li.appendChild(branchDiv);
         li.appendChild(createCheckbox());
         li.appendChild(createIcon(deviceType, commodity));
         li.appendChild(createSpan(subMeters[i].Identifier));   

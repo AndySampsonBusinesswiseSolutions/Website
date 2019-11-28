@@ -10,7 +10,16 @@ var data = [
                 "Zone" : "Test Zone 1",
                 "Panel" : "Test Panel 1",
                 "Sensor Type" : "Test Sensor Type 1",
-                "Commodity" : "Electricity"
+                "Commodity" : "Electricity",
+                "Sub Meters" :
+                [
+                    {
+                        "Identifier" : "Sub Meter 1"
+                    },
+                    {
+                        "Identifier" : "Sub Meter 2"
+                    }
+                ]
             },
             {
                 "Identifier" : "1234567890124",

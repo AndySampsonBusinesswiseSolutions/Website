@@ -46,6 +46,7 @@
 
 <script type="text/javascript"> 
 	createTree(data, "Device Type", "electricityTreeDiv", "electricity");
+	createTree(data, "Device Type", "gasTreeDiv", "gas");
 
 	var commoditySelector = document.getElementById("electricityGasSelector");
 	commoditySelector.addEventListener('click', function(event) {
