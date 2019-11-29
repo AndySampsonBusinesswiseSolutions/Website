@@ -42,7 +42,7 @@ function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunc
         }        
 
         li.appendChild(createBranchDiv(commodity.concat("Site").concat(i)));
-        li.appendChild(createCheckbox(commodity.concat("Site").concat(i), checkboxFunction));
+        li.appendChild(createCheckbox(commodity.concat("Site").concat(i), checkboxFunction, "Site"));
         li.appendChild(createIcon("Site", commodity));
         li.appendChild(createSpan(commodity.concat("Site").concat(i), siteName));
         li.appendChild(createBranchListDiv(commodity.concat("Site").concat(i).concat("List"), ul));
@@ -84,7 +84,7 @@ function buildBranch(meters, groupByOption, baseElement, commodity, checkboxFunc
         buildSubBranch(matchedMeters, ul, groupBySubOption, commodity, checkboxFunction);
 
         li.appendChild(createBranchDiv(branchId.concat(branchCount)));
-        li.appendChild(createCheckbox(branchId.concat(branchCount), checkboxFunction));
+        li.appendChild(createCheckbox(branchId.concat(branchCount), checkboxFunction, groupByOption));
         li.appendChild(createIcon(branchOptions[i], commodity));
         li.appendChild(createSpan(branchId.concat(branchCount), branchOptions[i]));
         li.appendChild(createBranchListDiv(branchId.concat(branchCount).concat("List"), ul));
@@ -124,7 +124,7 @@ function buildSubBranch(meters, baseElement, groupBySubOption, commodity, checkb
         buildIdentifierHierarchy(matchedMeters, ul, commodity, checkboxFunction);
 
         li.appendChild(createBranchDiv(branchId.concat(subBranchCount)));
-        li.appendChild(createCheckbox(branchId.concat(subBranchCount), checkboxFunction));
+        li.appendChild(createCheckbox(branchId.concat(subBranchCount), checkboxFunction, groupBySubOption));
         li.appendChild(createIcon(branchOptions[i], commodity));
         li.appendChild(createSpan(branchId.concat(subBranchCount), branchOptions[i]));
         li.appendChild(createBranchListDiv(branchId.concat(subBranchCount).concat("List"), ul));
@@ -150,7 +150,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         }
 
         li.appendChild(branchDiv);
-        li.appendChild(createCheckbox(meters[i].Identifier, checkboxFunction));
+        li.appendChild(createCheckbox(meters[i].Identifier, checkboxFunction, "Meter"));
         li.appendChild(createIcon(meters[i]["Device Type"], commodity));
         li.appendChild(createSpan(meters[i].Identifier, meters[i].Identifier));
 
@@ -174,7 +174,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         branchDiv.setAttribute("class", "far fa-times-circle");
 
         li.appendChild(branchDiv);
-        li.appendChild(createCheckbox(subMeters[i].Identifier, checkboxFunction));
+        li.appendChild(createCheckbox(subMeters[i].Identifier, checkboxFunction, "SubMeter"));
         li.appendChild(createIcon(deviceType, commodity));
         li.appendChild(createSpan(subMeters[i].Identifier, subMeters[i].Identifier));   
 
@@ -233,7 +233,7 @@ function createSpan(spanId, innerHTML) {
     return span;
 }
 
-function createCheckbox(checkboxId, checkboxFunction) {
+function createCheckbox(checkboxId, checkboxFunction, branch) {
     var functionArray = checkboxFunction.replace(')', '').split('(');
     var functionName = functionArray[0];
     var functionArguments = [];
@@ -241,6 +241,7 @@ function createCheckbox(checkboxId, checkboxFunction) {
     var checkBox = document.createElement("input");
     checkBox.type = "checkbox";  
     checkBox.id = checkboxId.concat("checkbox").replace(/ /g, '');
+    checkBox.setAttribute('Branch', branch.replace(/ /g, ''));
 
     functionArguments.push(checkBox.id);
     if(functionArray.length > 1) {

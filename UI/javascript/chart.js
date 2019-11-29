@@ -136,7 +136,9 @@ function testChart(chart) {
 		];
 
 		for(var i = 0; i < checkBoxes.length; i++) {
-			if(checkBoxes[i].id.includes('Site')) {
+      var checkboxBranch = checkBoxes[i].attributes["Branch"].nodeValue;
+      
+			if(checkboxBranch == "Site") {
 				var span = document.getElementById(checkBoxes[i].id.replace('checkbox', 'span'));
 				
 				var siteCount = 0;
