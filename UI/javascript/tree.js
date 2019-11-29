@@ -44,7 +44,7 @@ function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunc
         li.appendChild(createBranchDiv(commodity.concat("Site").concat(i)));
         li.appendChild(createCheckbox(commodity.concat("Site").concat(i), checkboxFunction));
         li.appendChild(createIcon("Site", commodity));
-        li.appendChild(createSpan(siteName));
+        li.appendChild(createSpan(commodity.concat("Site").concat(i), siteName));
         li.appendChild(createBranchListDiv(commodity.concat("Site").concat(i).concat("List"), ul));
 
         baseElement.appendChild(li);        
@@ -86,7 +86,7 @@ function buildBranch(meters, groupByOption, baseElement, commodity, checkboxFunc
         li.appendChild(createBranchDiv(branchId.concat(branchCount)));
         li.appendChild(createCheckbox(branchId.concat(branchCount), checkboxFunction));
         li.appendChild(createIcon(branchOptions[i], commodity));
-        li.appendChild(createSpan(branchOptions[i]));
+        li.appendChild(createSpan(branchId.concat(branchCount), branchOptions[i]));
         li.appendChild(createBranchListDiv(branchId.concat(branchCount).concat("List"), ul));
 
         baseElement.appendChild(li);
@@ -126,7 +126,7 @@ function buildSubBranch(meters, baseElement, groupBySubOption, commodity, checkb
         li.appendChild(createBranchDiv(branchId.concat(subBranchCount)));
         li.appendChild(createCheckbox(branchId.concat(subBranchCount), checkboxFunction));
         li.appendChild(createIcon(branchOptions[i], commodity));
-        li.appendChild(createSpan(branchOptions[i]));
+        li.appendChild(createSpan(branchId.concat(subBranchCount), branchOptions[i]));
         li.appendChild(createBranchListDiv(branchId.concat(subBranchCount).concat("List"), ul));
 
         baseElement.appendChild(li);
@@ -152,7 +152,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox(meters[i].Identifier, checkboxFunction));
         li.appendChild(createIcon(meters[i]["Device Type"], commodity));
-        li.appendChild(createSpan(meters[i].Identifier));
+        li.appendChild(createSpan(meters[i].Identifier, meters[i].Identifier));
 
         if(meters[i].hasOwnProperty("Sub Meters")) {
             var ul = createUL();
@@ -176,7 +176,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox(subMeters[i].Identifier, checkboxFunction));
         li.appendChild(createIcon(deviceType, commodity));
-        li.appendChild(createSpan(subMeters[i].Identifier));   
+        li.appendChild(createSpan(subMeters[i].Identifier, subMeters[i].Identifier));   
 
         baseElement.appendChild(li); 
     }
@@ -226,8 +226,9 @@ function createIcon(branch, commodity) {
     return icon;
 }
 
-function createSpan(innerHTML) {
+function createSpan(spanId, innerHTML) {
     var span = document.createElement("span");
+    span.id = spanId.concat("span").replace(/ /g, '');
     span.innerHTML = innerHTML;
     return span;
 }
