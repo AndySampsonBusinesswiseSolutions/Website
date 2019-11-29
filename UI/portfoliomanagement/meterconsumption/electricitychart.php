@@ -13,7 +13,7 @@
 					<span>Show By:</span>
 					<span title="Show By" class="show-pointer">
 						<span class="arrow-header" id="electricityChartHeaderShowBy">
-							<select class="show-pointer">
+							<select class="show-pointer" onclick="updateChart(this, electricityChart)">
 								<option value="Energy">Energy</option>
 								<option value="Power">Power</option>
 								<option value="Current">Current</option>
