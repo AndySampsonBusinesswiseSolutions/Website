@@ -35,12 +35,13 @@ function renderChart(chartId, options) {
   chart.render();
 }
 
-function refreshChart(newSeries, newCategories, chartId) {
+function refreshChart(newSeries, newCategories, chartId, chartOptions) {
   var options = {
     chart: {
         height: '100%',
         width: '100%',
-      type: 'line',
+      type: chartOptions.chart.type,
+      stacked: chartOptions.chart.stacked,
       zoom: {
         type: 'x',
         enabled: true,
@@ -71,7 +72,7 @@ function refreshChart(newSeries, newCategories, chartId) {
     series: newSeries,
     yaxis: {
       title: {
-        text: 'Energy (MWh)'
+        text: chartOptions.yaxis.title.text
       },
       show: true
     },
@@ -115,6 +116,8 @@ function testChart(chart) {
 		}
 
     var showBySpan = document.getElementById('electricityChartHeaderShowBy');
+    var typeSpan = document.getElementById('electricityChartHeaderType');
+
     var showBy = showBySpan.children[0].value;
 		var newSeries = [];
 		var newCategories = [
@@ -186,5 +189,48 @@ function testChart(chart) {
 			}
 		}		
 
-		refreshChart(newSeries, newCategories, "#electricityChart");
+    var chartType;
+    var chartStacked = false;
+    var chartYAxisTitle;
+
+    switch(showBy) {
+      case "Energy":
+        chartYAxisTitle = 'Energy (MWh)';
+        break;
+      case "Power":
+        chartYAxisTitle = 'Power (MW)';
+        break;
+      case "Current":
+        chartYAxisTitle = 'Current (A)';
+        break;
+      case "Cost":
+        chartYAxisTitle = 'Cost (£)';
+        break;
+    }
+
+    switch(typeSpan.children[0].value){
+      case "Line":
+      case "Bar":
+      case "Area":
+        chartType = typeSpan.children[0].value.toLowerCase();
+        break;
+      case "Stacked Line":
+      case "Stacked Bar":
+        chartType = typeSpan.children[0].value.replace('Stacked ', '').toLowerCase();
+        chartStacked = true;
+        break;
+    }
+
+    var chartOptions = {
+      chart: {
+        type: chartType,
+        stacked: chartStacked
+      },
+      yaxis: {
+        title: {
+          text: chartYAxisTitle
+        }
+      }
+    };
+		refreshChart(newSeries, newCategories, "#electricityChart", chartOptions);
 }
