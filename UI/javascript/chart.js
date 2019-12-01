@@ -47,7 +47,7 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
         enabled: true,
         autoScaleYaxis: true
       },
-      dataLabels: {
+      animations: {
         enabled: false
       },
       toolbar: {
@@ -55,10 +55,10 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
         tools: {
           download: false
         }        
-      },
-      animations: {
-        enabled: false
       }
+    },
+    dataLabels: {
+      enabled: false
     },
     tooltip: {
       x: {
@@ -79,13 +79,13 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
     xaxis: {
       type: 'datetime',
       title: {
-        text: 'Date'
+        text: chartOptions.xaxis.title.text
       },
       labels: {
           format: 'HH:mm'
       },
-      min: new Date('2019-11-01').getTime(),
-      max: new Date('2019-11-02').getTime(),
+      min: chartOptions.xaxis.min,
+      max: chartOptions.xaxis.max,
       categories: newCategories
     }
   };  
@@ -115,31 +115,30 @@ function testChart(chart) {
 			return;
 		}
 
-    var showBySpan = document.getElementById('electricityChartHeaderShowBy');
-    var typeSpan = document.getElementById('electricityChartHeaderType');
+    var commodity = chart.id.replace('Chart', '').toLowerCase();
+    var showBySpan = document.getElementById(commodity.concat('ChartHeaderShowBy'));
+    var typeSpan = document.getElementById(commodity.concat('ChartHeaderType'));
+    var periodSpan = document.getElementById(commodity.concat('ChartHeaderPeriod'));
+    var chartDate = new Date(document.getElementById(commodity.concat('Calendar')).value);
 
     var showBy = showBySpan.children[0].value;
 		var newSeries = [];
-		var newCategories = [
-			"2019-11-01 00:00:00", "2019-11-01 00:30:00", "2019-11-01 01:00:00", "2019-11-01 01:30:00",
-			"2019-11-01 02:00:00", "2019-11-01 02:30:00", "2019-11-01 03:00:00", "2019-11-01 03:30:00",
-			"2019-11-01 04:00:00", "2019-11-01 04:30:00", "2019-11-01 05:00:00", "2019-11-01 05:30:00",
-			"2019-11-01 06:00:00", "2019-11-01 06:30:00", "2019-11-01 07:00:00", "2019-11-01 07:30:00",
-			"2019-11-01 08:00:00", "2019-11-01 08:30:00", "2019-11-01 09:00:00", "2019-11-01 09:30:00",
-			"2019-11-01 10:00:00", "2019-11-01 10:30:00", "2019-11-01 11:00:00", "2019-11-01 11:30:00",
-			"2019-11-01 12:00:00", "2019-11-01 12:30:00", "2019-11-01 13:00:00", "2019-11-01 13:30:00",
-			"2019-11-01 14:00:00", "2019-11-01 14:30:00", "2019-11-01 15:00:00", "2019-11-01 15:30:00",
-			"2019-11-01 16:00:00", "2019-11-01 16:30:00", "2019-11-01 17:00:00", "2019-11-01 17:30:00",
-			"2019-11-01 18:00:00", "2019-11-01 18:30:00", "2019-11-01 19:00:00", "2019-11-01 19:30:00",
-			"2019-11-01 20:00:00", "2019-11-01 20:30:00", "2019-11-01 21:00:00", "2019-11-01 21:30:00",
-			"2019-11-01 22:00:00", "2019-11-01 22:30:00", "2019-11-01 23:00:00", "2019-11-01 23:30:00"
-		];
+    var newCategories = [];
+    
+    switch(periodSpan.children[0].value) {
+      case "Daily":
+        for(var hh = 1; hh < 49; hh++) {
+          var newCategoryText = formatDate(new Date(chartDate.getTime() + hh*30*60000), "yyyy-MM-dd hh:mm:ss");
+          newCategories.push(newCategoryText);
+        }
+        break;
+    }
 
-		for(var i = 0; i < checkBoxes.length; i++) {
-      var checkboxBranch = checkBoxes[i].attributes["Branch"].nodeValue;
-      
+		for(var checkboxCount = 0; checkboxCount < checkBoxes.length; checkboxCount++) {
+      var checkboxBranch = checkBoxes[checkboxCount].attributes["Branch"].nodeValue;
+
 			if(checkboxBranch == "Site") {
-				var span = document.getElementById(checkBoxes[i].id.replace('checkbox', 'span'));
+				var span = document.getElementById(checkBoxes[checkboxCount].id.replace('checkbox', 'span'));
 				
 				var siteCount = 0;
 				for(siteCount = 0; siteCount < data.length; siteCount++) {
@@ -155,7 +154,7 @@ function testChart(chart) {
 					};
 
 				for(var meterCount = 0; meterCount < meters.length; meterCount++) {
-					if(meters[meterCount].Commodity == "Electricity") {
+					if(meters[meterCount].Commodity.toLowerCase() == commodity) {
             var meterData = meters[meterCount][showBy];
             
             if(!meterData) {
@@ -188,7 +187,98 @@ function testChart(chart) {
 				}
 
 				newSeries.push(siteSeries);
-			}
+      }
+      else if(checkboxBranch == "Meter") {
+        var meter;
+        for(var siteCount = 0; siteCount < data.length; siteCount++) {
+          if(data[siteCount].Meters) {
+            for(var meterCount = 0; meterCount < data[siteCount].Meters.length; meterCount++) {
+              if(data[siteCount].Meters[meterCount].Identifier == checkBoxes[checkboxCount].id.replace("Meter", "").replace("checkbox", "")) {
+                meter = data[siteCount].Meters[meterCount];
+                break;
+              }
+            }
+          }
+
+          if(meter) {
+            break;
+          }
+        }
+        
+        var meterSeries = {
+          name: meter.Identifier,
+          data: []
+        };
+
+        var meterData = meter[showBy];
+            
+        if(meterData) {
+          for(var i = 0; i < newCategories.length; i++) {
+            var value = null;
+
+            for(var j = 0; j < meterData.length; j++) {
+              if(meterData[j].Date == newCategories[i]) {
+                value = meterData[j].Value;
+                break;
+              }
+            }
+
+            meterSeries.data.push(value);
+          }
+        }
+
+        newSeries.push(meterSeries);
+      }
+      else if(checkboxBranch == "SubMeter") {
+        var subMeter;
+        for(var siteCount = 0; siteCount < data.length; siteCount++) {
+          if(data[siteCount].Meters) {
+            for(var meterCount = 0; meterCount < data[siteCount].Meters.length; meterCount++) {
+              if(data[siteCount].Meters[meterCount]["Sub Meters"]){
+                for(var subMeterCount = 0; subMeterCount < data[siteCount].Meters[meterCount]["Sub Meters"].length; subMeterCount++){
+                  if(data[siteCount].Meters[meterCount]["Sub Meters"][subMeterCount].Identifier.replace(/ /g, '') == checkBoxes[checkboxCount].id.replace("SubMeter", "").replace("checkbox", "")) {
+                    subMeter = data[siteCount].Meters[meterCount]["Sub Meters"][subMeterCount];
+                    break;
+                  }
+                }
+              }
+              
+              
+              if(subMeter) {
+                break;
+              }
+            }
+          }					
+
+          if(subMeter) {
+            break;
+          }
+        }
+        
+        var meterSeries = {
+          name: subMeter.Identifier,
+          data: []
+        };
+
+        var meterData = subMeter[showBy];
+            
+        if(meterData) {
+          for(var i = 0; i < newCategories.length; i++) {
+            var value = null;
+
+            for(var j = 0; j < meterData.length; j++) {
+              if(meterData[j].Date == newCategories[i]) {
+                value = meterData[j].Value;
+                break;
+              }
+            }
+
+            meterSeries.data.push(value);
+          }
+        }
+
+        newSeries.push(meterSeries);
+      }
 		}		
 
     var chartType;
@@ -232,7 +322,14 @@ function testChart(chart) {
         title: {
           text: chartYAxisTitle
         }
+      },
+      xaxis: {
+        title: {
+          text: formatDate(chartDate, "yyyy-MM-dd")
+        },
+        min: new Date(newCategories[0]).getTime(),
+        max: new Date(newCategories[newCategories.length - 1]).getTime()
       }
     };
-		refreshChart(newSeries, newCategories, "#electricityChart", chartOptions);
+		refreshChart(newSeries, newCategories, "#".concat(commodity).concat("Chart"), chartOptions);
 }

@@ -13,7 +13,7 @@
 					<span>Show By:</span>
 					<span title="Show By" class="show-pointer">
 						<span class="arrow-header" id="electricityChartHeaderShowBy">
-							<select class="show-pointer" onclick="updateChart(this, electricityChart)">
+							<select class="show-pointer" onchange="updateChart(this, electricityChart)">
 								<option value="Energy">Energy</option>
 								<option value="Power">Power</option>
 								<option value="Current">Current</option>
@@ -37,10 +37,10 @@
 						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityChartHeaderPeriodArrow"></span>
 					</span>
 					<span class="simple-divider" style="padding-left: 5px;"></span>
-					<input type="date" name="calendar" id="electricityCalendar" value="2019-11-26">
+					<input type="date" name="calendar" id="electricityCalendar" value="2019-11-26" onchange="updateChart(this, electricityChart)">
 					<span class="simple-divider"></span>
 					<span style="padding-left: 5px;" id="electricityChartHeaderType">
-						<select class="show-pointer" onclick="updateChart(this, electricityChart)">
+						<select class="show-pointer" onchange="updateChart(this, electricityChart)">
 							<option value="Line">Line</option>
 							<option value="Bar">Bar</option>
 							<option value="Stacked Line">Stacked Line</option>

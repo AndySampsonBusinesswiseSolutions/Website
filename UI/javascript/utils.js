@@ -58,3 +58,47 @@ function addArrowOnClickEvents() {
 		});
 	}
 }
+
+function formatDate(dateToBeFormatted, format) {
+	switch(format) {
+		case "yyyy-MM-dd hh:mm:ss":
+			var aaaa = dateToBeFormatted.getFullYear();
+			var gg = dateToBeFormatted.getDate();
+			var mm = (dateToBeFormatted.getMonth() + 1);
+		
+			if (gg < 10)
+				gg = "0" + gg;
+		
+			if (mm < 10)
+				mm = "0" + mm;
+		
+			var cur_day = aaaa + "-" + mm + "-" + gg;
+		
+			var hours = dateToBeFormatted.getHours()
+			var minutes = dateToBeFormatted.getMinutes()
+			var seconds = dateToBeFormatted.getSeconds();
+		
+			if (hours < 10)
+				hours = "0" + hours;
+		
+			if (minutes < 10)
+				minutes = "0" + minutes;
+		
+			if (seconds < 10)
+				seconds = "0" + seconds;
+		
+			return cur_day + " " + hours + ":" + minutes + ":" + seconds;
+		case "yyyy-MM-dd":
+			var aaaa = dateToBeFormatted.getFullYear();
+			var gg = dateToBeFormatted.getDate();
+			var mm = (dateToBeFormatted.getMonth() + 1);
+		
+			if (gg < 10)
+				gg = "0" + gg;
+		
+			if (mm < 10)
+				mm = "0" + mm;
+		
+				return aaaa + "-" + mm + "-" + gg;
+	}
+}

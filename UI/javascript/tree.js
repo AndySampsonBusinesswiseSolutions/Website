@@ -141,8 +141,9 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         }
 
         var li = document.createElement("li");
+        var branchId = "Meter".concat(meters[i].Identifier);
 
-        var branchDiv = createBranchDiv(meters[i].Identifier);
+        var branchDiv = createBranchDiv(branchId);
         
         if(!meters[i].hasOwnProperty("Sub Meters")) {
             branchDiv.removeAttribute("class", "far fa-plus-square");
@@ -150,15 +151,15 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         }
 
         li.appendChild(branchDiv);
-        li.appendChild(createCheckbox(meters[i].Identifier, checkboxFunction, "Meter"));
+        li.appendChild(createCheckbox(branchId, checkboxFunction, "Meter"));
         li.appendChild(createIcon(meters[i]["Device Type"], commodity));
-        li.appendChild(createSpan(meters[i].Identifier, meters[i].Identifier));
+        li.appendChild(createSpan(branchId, meters[i].Identifier));
 
         if(meters[i].hasOwnProperty("Sub Meters")) {
             var ul = createUL();
             buildSubMeterHierarchy(meters[i]["Sub Meters"], ul, meters[i]["Device Type"], commodity, checkboxFunction);
 
-            li.appendChild(createBranchListDiv(meters[i].Identifier.concat("List"), ul));
+            li.appendChild(createBranchListDiv(branchId.concat("List"), ul));
         }        
 
         baseElement.appendChild(li); 
@@ -174,7 +175,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         branchDiv.setAttribute("class", "far fa-times-circle");
 
         li.appendChild(branchDiv);
-        li.appendChild(createCheckbox(subMeters[i].Identifier, checkboxFunction, "SubMeter"));
+        li.appendChild(createCheckbox("SubMeter".concat(subMeters[i].Identifier), checkboxFunction, "SubMeter"));
         li.appendChild(createIcon(deviceType, commodity));
         li.appendChild(createSpan(subMeters[i].Identifier, subMeters[i].Identifier));   
 
