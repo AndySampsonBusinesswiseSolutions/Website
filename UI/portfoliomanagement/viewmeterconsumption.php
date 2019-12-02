@@ -68,8 +68,8 @@
 </script>
 
 <script type="text/javascript"> 
-	createTree(data, "Device Type", "electricityTreeDiv", "electricity", "updateChart(electricityChart)");
-	createTree(data, "Device Type", "gasTreeDiv", "gas", "updateChart(gasChart)");
+	createTree(data, "DeviceType", "electricityTreeDiv", "electricity", "updateChart(electricityChart)");
+	createTree(data, "DeviceType", "gasTreeDiv", "gas", "updateChart(gasChart)");
 	addExpanderOnClickEvents();
 	addArrowOnClickEvents();
 	addCommoditySelectorOnClickEvent();	

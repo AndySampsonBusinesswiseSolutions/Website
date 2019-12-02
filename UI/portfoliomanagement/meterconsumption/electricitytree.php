@@ -9,13 +9,13 @@
 				<div style="float: right;" class="show-pointer">
 					<span title="Period" class="show-pointer">
 						<span class="arrow-header" id="electricityTreeHeaderGroupBy">
-							<select class="show-pointer" onchange="createTree(data, this.value, 'electricityTreeDiv', 'electricity'); addExpanderOnClickEvents();">
-								<option value="Device Type">Device Type</option>
+							<select class="show-pointer" onchange="createTree(data, this.value, 'electricityTreeDiv', 'electricity', 'updateChart(electricityChart)'); addExpanderOnClickEvents(); updateChart(this, electricityChart)">
+								<option value="DeviceType">Device Type</option>
 								<option value="Zone">Zone>Panel</option>
 								<option value="Hierarchy">Hierarchy</option>
-								<option value="3Device Groups">Device Groups</option>
+								<option value="DeviceGroups">Device Groups</option>
 								<option value="Alphabetically">Alphabetically</option>
-								<option value="Sensor Type">Sensor Type</option>
+								<option value="SensorType">Sensor Type</option>
 							</select>
 						</span>
 						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityTreeHeaderGroupByArrow"></span>

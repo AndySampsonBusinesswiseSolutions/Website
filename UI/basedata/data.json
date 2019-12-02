@@ -5,13 +5,13 @@ var data = [
         [
             {
                 "Identifier" : "1234567890123",
-                "Device Type" : "Mains",
-                "Device Sub Type" : "Mains",
+                "DeviceType" : "Mains",
+                "DeviceSubType" : "Mains",
                 "Zone" : "Test Zone 1",
                 "Panel" : "Test Panel 1",
-                "Sensor Type" : "Test Sensor Type 1",
+                "SensorType" : "Test Sensor Type 1",
                 "Commodity" : "Electricity",
-                "Sub Meters" :
+                "SubMeters" :
                 [
                     {
                         "Identifier" : "Sub Meter 1",
@@ -14447,11 +14447,11 @@ var data = [
             },
             {
                 "Identifier" : "1234567890124",
-                "Device Type" : "Lighting",
-                "Device Sub Type" : "Unknown",
+                "DeviceType" : "Lighting",
+                "DeviceSubType" : "Unknown",
                 "Zone" : "Test Zone 1",
                 "Panel" : "Test Panel 1",
-                "Sensor Type" : "Test Sensor Type 1",
+                "SensorType" : "Test Sensor Type 1",
                 "Commodity" : "Electricity",
                 "Energy" : [
                     {"Date" :"2019-11-01 00:30:00", "Value" : 130},
