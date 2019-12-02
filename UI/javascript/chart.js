@@ -62,7 +62,7 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
     },
     tooltip: {
       x: {
-        format: 'dd/MM/yyyy HH:mm'
+        format: chartOptions.tooltip.x.format
       }
     },
     legend: {
@@ -82,7 +82,7 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
         text: chartOptions.xaxis.title.text
       },
       labels: {
-          format: 'HH:mm'
+          format: chartOptions.xaxis.labels.format
       },
       min: chartOptions.xaxis.min,
       max: chartOptions.xaxis.max,
@@ -124,13 +124,70 @@ function testChart(chart) {
     var showBy = showBySpan.children[0].value;
 		var newSeries = [];
     var newCategories = [];
+    var chartXAxisLabelFormat;
+    var chartTooltipXFormat;
+    var chartXAxisTitleFormat;
     
     switch(periodSpan.children[0].value) {
       case 'Daily':
-        for(var hh = 1; hh < 49; hh++) {
-          var newCategoryText = formatDate(new Date(chartDate.getTime() + hh*30*60000), 'yyyy-MM-dd hh:mm:ss');
-          newCategories.push(newCategoryText);
+        var startDate = new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate());
+        var endDate = new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate() + 1);
+
+        for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+          for(var hh = 1; hh < 49; hh++) {
+            var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), 'yyyy-MM-dd hh:mm:ss');
+            newCategories.push(newCategoryText);
+          }
         }
+
+        chartXAxisLabelFormat = 'HH:mm';
+        chartTooltipXFormat = 'dd/MM/yyyy HH:mm';
+        chartXAxisTitleFormat = 'yyyy-MM-dd';
+        break;
+      case "Weekly":
+        var startDate = getMonday(chartDate);
+        var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 7);
+
+        for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+          for(var hh = 1; hh < 49; hh++) {
+            var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), 'yyyy-MM-dd hh:mm:ss');
+            newCategories.push(newCategoryText);
+          }
+        }
+
+        chartXAxisLabelFormat = 'dd/MM/yyyy';
+        chartTooltipXFormat = 'dd/MM/yyyy HH:mm';
+        chartXAxisTitleFormat = 'yyyy-MM-dd to yyyy-MM-dd';
+        break;
+      case "Monthly":
+        var startDate = new Date(chartDate.getFullYear(), chartDate.getMonth(), 1);
+        var endDate = new Date(chartDate.getFullYear(), chartDate.getMonth() + 1, 1);
+
+        for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+          for(var hh = 1; hh < 49; hh++) {
+            var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), 'yyyy-MM-dd hh:mm:ss');
+            newCategories.push(newCategoryText);
+          }
+        }
+
+        chartXAxisLabelFormat = 'dd';
+        chartTooltipXFormat = 'dd/MM/yyyy HH:mm';
+        chartXAxisTitleFormat = 'MMM yyyy';
+        break;
+      case "Yearly":
+        var startDate = new Date(chartDate.getFullYear(), 1, 1);
+        var endDate = new Date(chartDate.getFullYear() + 1, 1, 1);
+
+        for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+          for(var hh = 1; hh < 49; hh++) {
+            var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), 'yyyy-MM-dd hh:mm:ss');
+            newCategories.push(newCategoryText);
+          }
+        }
+
+        chartXAxisLabelFormat = 'MMM';
+        chartTooltipXFormat = 'dd/MM/yyyy';
+        chartXAxisTitleFormat = 'yyyy';
         break;
     }
 
@@ -429,6 +486,11 @@ function testChart(chart) {
         type: chartType,
         stacked: chartStacked
       },
+      tooltip: {
+        x: {
+          format: chartTooltipXFormat
+        }
+      },
       yaxis: {
         title: {
           text: chartYAxisTitle
@@ -436,7 +498,10 @@ function testChart(chart) {
       },
       xaxis: {
         title: {
-          text: formatDate(chartDate, 'yyyy-MM-dd')
+          text: formatDate(chartDate, chartXAxisTitleFormat)
+        },
+        labels: {
+          format: chartXAxisLabelFormat
         },
         min: new Date(newCategories[0]).getTime(),
         max: new Date(newCategories[newCategories.length - 1]).getTime()

@@ -26,9 +26,8 @@
 					<span>Period:</span>
 					<span title="Period" class="show-pointer">
 						<span class="arrow-header" id="electricityChartHeaderPeriod">
-							<select class="show-pointer">
+							<select class="show-pointer" onchange="updateChart(this, electricityChart)">
 								<option value="Daily">Daily</option>
-								<option value="6 Hours">6 Hours</option>
 								<option value="Weekly">Weekly</option>
 								<option value="Monthly">Monthly</option>
 								<option value="Yearly">Yearly</option>

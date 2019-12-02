@@ -175,7 +175,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
-        li.appendChild(createCheckbox('SubMeter'.concat(subMeters[i].Identifier), checkboxFunction, 'SubMeter'));
+        li.appendChild(createCheckbox('SubMeter'.concat(subMeters[i].Identifier.replace(/ /g, '')), checkboxFunction, 'SubMeter'));
         li.appendChild(createIcon(deviceType, commodity));
         li.appendChild(createSpan(subMeters[i].Identifier, subMeters[i].Identifier));   
 
