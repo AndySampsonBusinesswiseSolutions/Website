@@ -14,11 +14,7 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction)
     buildTree(baseData, groupByOption, ul, commodity, checkboxFunction);
 
     var div = document.getElementById(divId);
-
-    while (div.firstChild) {
-        div.removeChild(div.firstChild);
-    }
-
+    clearElement(div);
     div.appendChild(tree);
 }
 
@@ -177,7 +173,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox('SubMeter'.concat(subMeters[i].Identifier.replace(/ /g, '')), checkboxFunction, 'SubMeter'));
         li.appendChild(createIcon(deviceType, commodity));
-        li.appendChild(createSpan(subMeters[i].Identifier, subMeters[i].Identifier));   
+        li.appendChild(createSpan('SubMeter'.concat(subMeters[i].Identifier.replace(/ /g, '')), subMeters[i].Identifier));   
 
         baseElement.appendChild(li); 
     }
@@ -262,7 +258,7 @@ function commoditySiteMatch(site, commodity) {
     }
 
     for(var i = 0; i < site.Meters.length; i++) {
-        if(site.Meters[i].Commodity.toLowerCase() == commodity.toLowerCase()) {
+        if(commodityMeterMatch(site.Meters[i], commodity)) {
             return true;
         }
     }

@@ -13,9 +13,6 @@
 								<option value="DeviceType">Device Type</option>
 								<option value="Zone">Zone>Panel</option>
 								<option value="Hierarchy">Hierarchy</option>
-								<option value="DeviceGroups">Device Groups</option>
-								<option value="Alphabetically">Alphabetically</option>
-								<option value="SensorType">Sensor Type</option>
 							</select>
 						</span>
 						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityTreeHeaderGroupByArrow"></span>

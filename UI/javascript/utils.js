@@ -61,7 +61,7 @@ function addArrowOnClickEvents() {
 
 function formatDate(dateToBeFormatted, format) {
 	switch(format) {
-		case 'yyyy-MM-dd hh:mm:ss':
+		case 'yyyy-MM-dd':
 			var aaaa = dateToBeFormatted.getFullYear();
 			var gg = dateToBeFormatted.getDate();
 			var mm = (dateToBeFormatted.getMonth() + 1);
@@ -72,10 +72,10 @@ function formatDate(dateToBeFormatted, format) {
 		
 			if (mm < 10) {
 				mm = '0' + mm;
-			}				
+			}
 		
-			var cur_day = aaaa + '-' + mm + '-' + gg;
-		
+			return aaaa + '-' + mm + '-' + gg;
+		case 'yyyy-MM-dd hh:mm:ss':
 			var hours = dateToBeFormatted.getHours()
 			var minutes = dateToBeFormatted.getMinutes()
 			var seconds = dateToBeFormatted.getSeconds();
@@ -92,21 +92,7 @@ function formatDate(dateToBeFormatted, format) {
 				seconds = '0' + seconds;
 			}			
 		
-			return cur_day + ' ' + hours + ':' + minutes + ':' + seconds;
-		case 'yyyy-MM-dd':
-			var aaaa = dateToBeFormatted.getFullYear();
-			var gg = dateToBeFormatted.getDate();
-			var mm = (dateToBeFormatted.getMonth() + 1);
-		
-			if (gg < 10) {
-				gg = '0' + gg;
-			}				
-		
-			if (mm < 10) {
-				mm = '0' + mm;
-			}
-		
-			return aaaa + '-' + mm + '-' + gg;
+			return formatDate(dateToBeFormatted, 'yyyy-MM-dd') + ' ' + hours + ':' + minutes + ':' + seconds;
 		case 'MMM yyyy':
 			var aaaa = dateToBeFormatted.getFullYear();
 			var mm = (dateToBeFormatted.getMonth() + 1);
@@ -152,32 +138,7 @@ function convertMonthIdToFullText(monthId) {
 }
 
 function convertMonthIdToShortCode(monthId) {
-	switch(monthId) {
-		case 1:
-			return 'JAN';
-		case 2:
-			return 'FEB';
-		case 3:
-			return 'MAR';
-		case 4:
-			return 'APR';
-		case 5:
-			return 'MAY';
-		case 6:
-			return 'JUN';
-		case 7:
-			return 'JUL';
-		case 8:
-			return 'AUG';
-		case 9:
-			return 'SEP';
-		case 10:
-			return 'OCT';
-		case 11:
-			return 'NOV';
-		case 12:
-			return 'DEC';
-	}
+	return convertMonthIdToFullText(monthId).slice(0, 3).toUpperCase();
 }
 
 function getMonday(date) {
@@ -189,4 +150,10 @@ function getMonday(date) {
 	}
 	
 	return mondayDate;
+}
+
+function clearElement(element) {
+	while (element.firstChild) {
+		element.removeChild(element.firstChild);
+	}
 }
