@@ -60,11 +60,13 @@ function addArrowOnClickEvents() {
 }
 
 function formatDate(dateToBeFormatted, format) {
+	var baseDate = new Date(dateToBeFormatted);
+
 	switch(format) {
 		case 'yyyy-MM-dd':
-			var aaaa = dateToBeFormatted.getFullYear();
-			var gg = dateToBeFormatted.getDate();
-			var mm = (dateToBeFormatted.getMonth() + 1);
+			var aaaa = baseDate.getFullYear();
+			var gg = baseDate.getDate();
+			var mm = (baseDate.getMonth() + 1);
 		
 			if (gg < 10) {
 				gg = '0' + gg;
@@ -76,9 +78,9 @@ function formatDate(dateToBeFormatted, format) {
 		
 			return aaaa + '-' + mm + '-' + gg;
 		case 'yyyy-MM-dd hh:mm:ss':
-			var hours = dateToBeFormatted.getHours()
-			var minutes = dateToBeFormatted.getMinutes()
-			var seconds = dateToBeFormatted.getSeconds();
+			var hours = baseDate.getHours()
+			var minutes = baseDate.getMinutes()
+			var seconds = baseDate.getSeconds();
 		
 			if (hours < 10) {
 				hours = '0' + hours;
@@ -92,16 +94,16 @@ function formatDate(dateToBeFormatted, format) {
 				seconds = '0' + seconds;
 			}			
 		
-			return formatDate(dateToBeFormatted, 'yyyy-MM-dd') + ' ' + hours + ':' + minutes + ':' + seconds;
+			return formatDate(baseDate, 'yyyy-MM-dd') + ' ' + hours + ':' + minutes + ':' + seconds;
 		case 'MMM yyyy':
-			var aaaa = dateToBeFormatted.getFullYear();
-			var mm = (dateToBeFormatted.getMonth() + 1);
+			var aaaa = baseDate.getFullYear();
+			var mm = (baseDate.getMonth() + 1);
 
 			return convertMonthIdToShortCode(mm) + ' ' + aaaa;
 		case 'yyyy':
-			return dateToBeFormatted.getFullYear();
+			return baseDate.getFullYear();
 		case 'yyyy-MM-dd to yyyy-MM-dd':
-			var startDate = getMonday(dateToBeFormatted);
+			var startDate = getMonday(baseDate);
 			var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 6);
 
 			return formatDate(startDate, 'yyyy-MM-dd') + ' to ' + formatDate(endDate, 'yyyy-MM-dd')

@@ -13,11 +13,11 @@
 					<span>Show By:</span>
 					<span title="Show By" class="show-pointer">
 						<span class="arrow-header" id="gasChartHeaderShowBy">
-							<select class="show-pointer">
-								<option value="0">Energy</option>
-								<option value="1">Power</option>
-								<option value="2">Current</option>
-								<option value="3">Cost</option>
+							<select class="show-pointer" onchange="updateChart(this, gasChart)">
+								<option value="Energy">Energy</option>
+								<option value="Power">Power</option>
+								<option value="Current">Current</option>
+								<option value="Cost">Cost</option>
 							</select>
 						</span>
 						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderShowByArrow"></span>
@@ -26,47 +26,46 @@
 					<span>Period:</span>
 					<span title="Period" class="show-pointer">
 						<span class="arrow-header" id="gasChartHeaderPeriod">
-							<select class="show-pointer">
-								<option value="0">6 Hours</option>
-								<option value="1">Daily</option>
-								<option value="2">Weekly</option>
-								<option value="3">Monthly</option>
-								<option value="4">Yearly</option>
+							<select class="show-pointer" onchange="updateChart(this, gasChart)">
+								<option value="Daily">Daily</option>
+								<option value="Weekly">Weekly</option>
+								<option value="Monthly">Monthly</option>
+								<option value="Yearly">Yearly</option>
 							</select>
 						</span>
 						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderPeriodArrow"></span>
 					</span>
 					<span class="simple-divider" style="padding-left: 5px;"></span>
-					<input type="date" name="calendar" id="calendar" value="2019-11-25">
+					<input type="date" name="calendar" id="gasCalendar" value="2019-11-26" onchange="updateChart(this, gasChart)">
 					<span class="simple-divider"></span>
-					<span style="padding-left: 5px;">
-						<select class="show-pointer">
-							<option value="0">Line</option>
-							<option value="1">Bar</option>
-							<option value="2">Stacked Line</option>
-							<option value="3">Stacked Bar</option>
-							<option value="4">Stacked %</option>
+					<span style="padding-left: 5px;" id="gasChartHeaderType">
+						<select class="show-pointer" onchange="updateChart(this, gasChart)">
+							<option value="Line">Line</option>
+							<option value="Bar">Bar</option>
+							<option value="Stacked Line">Stacked Line</option>
+							<option value="Stacked Bar">Stacked Bar</option>
+							<option value="Area">Area</option>
 						</select>
 					</span>
 					<span title="Chart Type" class="fas fa-chart-bar show-pointer"></span>
 					<span class="simple-divider"></span>
 					<span style="padding-left: 5px;">
 						<select class="show-pointer">
-							<option value="0">Outside Temp</option>
-							<option value="1">On/Off Hours</option>
-							<option value="2">Sensor Level (RSSI)</option>
-							<option value="3">Bulk</option>
-							<option value="4">Error Correction</option>
+							<option value="Outside Temp">Outside Temp</option>
+							<option value="On/Off Hours">On/Off Hours</option>
+							<option value="Sensor Level (RSSI)">Sensor Level (RSSI)</option>
+							<option value="Bulk">Bulk</option>
+							<option value="Error Correction">Error Correction</option>
 						</select>
 					</span>
 					<span title="Layers" class="fas fa-layer-group show-pointer"></span>
 					<span class="simple-divider"></span>
 					<span style="padding-left: 5px;">
 						<select class="show-pointer">
-							<option value="0">Xlsx</option>
-							<option value="1">Csv</option>
-							<option value="2">Image</option>
-							<option value="3">Pdf</option>
+							<option value="Xlsx">Xlsx</option>
+							<option value="Csv">Csv</option>
+							<option value="Image">Image</option>
+							<option value="Pdf">Pdf</option>
 						</select>
 					</span>
 					<span title="Download" class="fas fa-download show-pointer"></span>

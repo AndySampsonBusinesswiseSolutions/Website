@@ -93,56 +93,6 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
   renderChart(chartId, options);
 }
 
-function testChart(chart) {
-    var treeDiv = document.getElementById(chart.id.replace('Chart', 'TreeDiv'));
-    var inputs = treeDiv.getElementsByTagName('input');
-    var commodity = chart.id.replace('Chart', '').toLowerCase();
-    var checkBoxes = getCheckedCheckBoxes(inputs);		
-    
-    clearElement(chart);
-
-		if(checkBoxes.length == 0) {
-			createBlankChart('#' + commodity + 'Chart', 'There is no ' + commodity + ' data to display. Select from the tree to the left to display');
-			return;
-		}
-    
-    var showBySpan = document.getElementById(commodity.concat('ChartHeaderShowBy'));
-    var periodSpan = document.getElementById(commodity.concat('ChartHeaderPeriod'));
-    var chartDate = new Date(document.getElementById(commodity.concat('Calendar')).value);
-    var newCategories = getNewCategories(periodSpan.children[0].value, chartDate);   
-    var newSeries = getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity);
-    var typeSpan = document.getElementById(commodity.concat('ChartHeaderType'));
-
-    var chartOptions = {
-      chart: {
-        type: getChartType(typeSpan.children[0].value),
-        stacked: typeSpan.children[0].value.includes('Stacked')
-      },
-      tooltip: {
-        x: {
-          format: getChartTooltipXFormat(periodSpan.children[0].value)
-        }
-      },
-      yaxis: {
-        title: {
-          text: getChartYAxisTitle(showBySpan.children[0].value)
-        }
-      },
-      xaxis: {
-        title: {
-          text: formatDate(chartDate, getChartXAxisTitleFormat(periodSpan.children[0].value))
-        },
-        labels: {
-          format: getChartXAxisLabelFormat(periodSpan.children[0].value)
-        },
-        min: new Date(newCategories[0]).getTime(),
-        max: new Date(newCategories[newCategories.length - 1]).getTime()
-      }
-    };
-
-		refreshChart(newSeries, newCategories, '#'.concat(commodity).concat('Chart'), chartOptions);
-}
-
 function getCheckedCheckBoxes(inputs) {
   var checkBoxes = [];
 
@@ -157,7 +107,8 @@ function getCheckedCheckBoxes(inputs) {
   return checkBoxes;
 }
 
-function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity) {
+function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dateFormat) {
+  var meters = [];
   var newSeries = [];
 
   for(var checkboxCount = 0; checkboxCount < checkBoxes.length; checkboxCount++) {
@@ -165,30 +116,22 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity) {
     var span = document.getElementById(checkBoxes[checkboxCount].id.replace('checkbox', 'span'));
 
     if(checkboxBranch == 'Site') {				
-      var meters = getSitesByAttribute('SiteName', span.innerHTML)[0].Meters;
-
-      newSeries.push(summedMeterSeries(meters, span.innerHTML, showBySpan.children[0].value, newCategories, commodity));
+      meters = getSitesByAttribute('SiteName', span.innerHTML)[0].Meters;
     }
     else if(checkboxBranch.includes('GroupByOption')) {
-      newSeries.push(summedMeterSeries(
-        getMetersByAttribute(checkboxBranch.replace('GroupByOption|', ''), span.innerHTML), 
-        span.innerHTML, showBySpan.children[0].value, newCategories, commodity));
+      meters = getMetersByAttribute(checkboxBranch.replace('GroupByOption|', ''), span.innerHTML);
     }
     else if(checkboxBranch.includes('GroupBySubOption')) {
-      newSeries.push(summedMeterSeries(
-        getMetersByAttribute(checkboxBranch.replace('GroupBySubOption|', ''), span.innerHTML), 
-        span.innerHTML, showBySpan.children[0].value, newCategories, commodity));
+      meters = getMetersByAttribute(checkboxBranch.replace('GroupBySubOption|', ''), span.innerHTML);
     }
     else if(checkboxBranch == 'Meter') {
-      var meter = getMetersByAttribute('Identifier', span.innerHTML)[0];
-      
-      newSeries.push(newMeterSeries(meter.Identifier, meter[showBySpan.children[0].value], newCategories));
+      meters = getMetersByAttribute('Identifier', span.innerHTML);
     }
     else if(checkboxBranch == 'SubMeter') {
-      var subMeter = getSubMetersByAttribute('Identifier', span.innerHTML)[0];
-      
-      newSeries.push(newMeterSeries(subMeter.Identifier, subMeter[showBySpan.children[0].value], newCategories));
+      meters = getSubMetersByAttribute('Identifier', span.innerHTML);
     }
+
+    newSeries.push(summedMeterSeries(meters, span.innerHTML, showBySpan.children[0].value, newCategories, commodity, dateFormat));
   }
 
   return newSeries;
@@ -237,10 +180,10 @@ function getSubMetersByAttribute(attribute, value) {
   return subMeters;
 }
 
-function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity) {
+function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat) {
   var summedMeterSeries = {
     name: seriesName,
-    data: []
+    data: [0]
   };
 
   for(var meterCount = 0; meterCount < meters.length; meterCount++) {
@@ -255,23 +198,20 @@ function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity)
         var value = null;
 
         for(var j = 0; j < meterData.length; j++) {
-          if(meterData[j].Date == newCategories[i]) {
+          if(formatDate(meterData[j].Date, dateFormat) == newCategories[i]) {
             value = meterData[j].Value;
-            break;
-          }
-        }
 
-        if(!Array.isArray(summedMeterSeries.data) || summedMeterSeries.data.length == i) {
-          summedMeterSeries.data.push(value);
-        }
-        else {
-          if(value === null && summedMeterSeries.data[i] === null){
-            summedMeterSeries.data[i] = null;
+            if(!value && !summedMeterSeries.data[i]){
+              summedMeterSeries.data[i] = null;
+            }
+            else if(value && !summedMeterSeries.data[i]) {
+              summedMeterSeries.data[i] = value;
+            }
+            else if(value && summedMeterSeries.data[i]) {
+              summedMeterSeries.data[i] += value;
+            }							
           }
-          else if(value !== null) {
-            summedMeterSeries.data[i] += value;
-          }								
-        }
+        }        
       }
     }
   }
@@ -279,50 +219,41 @@ function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity)
   return summedMeterSeries;
 }
 
-function newMeterSeries(meterIdentifier, meterData, newCategories) {
-  var meterSeries = {
-    name: meterIdentifier,
-    data: []
-  };
-      
-  if(meterData) {
-    for(var i = 0; i < newCategories.length; i++) {
-      var value = null;
-
-      for(var j = 0; j < meterData.length; j++) {
-        if(meterData[j].Date == newCategories[i]) {
-          value = meterData[j].Value;
-          break;
-        }
-      }
-
-      meterSeries.data.push(value);
-    }
-  }
-
-  return meterSeries;
-}
-
 function getNewCategories(period, chartDate) {
+  var dateFormat = getPeriodDateFormat(period);
   switch(period) {
     case 'Daily':
-      return getCategoryTexts(new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate()), new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate() + 1));
+      return getCategoryTexts(new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate()), new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate() + 1), dateFormat);
     case "Weekly":
-      return getCategoryTexts(getMonday(chartDate), new Date(getMonday(chartDate).getFullYear(), getMonday(chartDate).getMonth(), getMonday(chartDate).getDate() + 7));
+      return getCategoryTexts(getMonday(chartDate), new Date(getMonday(chartDate).getFullYear(), getMonday(chartDate).getMonth(), getMonday(chartDate).getDate() + 7), dateFormat);
     case "Monthly":
-      return getCategoryTexts(new Date(chartDate.getFullYear(), chartDate.getMonth(), 1), new Date(chartDate.getFullYear(), chartDate.getMonth() + 1, 1));
+      return getCategoryTexts(new Date(chartDate.getFullYear(), chartDate.getMonth(), 1), new Date(chartDate.getFullYear(), chartDate.getMonth() + 1, 1), dateFormat);
     case "Yearly":
-      return getCategoryTexts(new Date(chartDate.getFullYear(), 1, 1), endDate = new Date(chartDate.getFullYear() + 1, 1, 1));
+      return getCategoryTexts(new Date(chartDate.getFullYear(), 0, 1), endDate = new Date(chartDate.getFullYear() + 1, 0, 1), dateFormat);
   }
 }
 
-function getCategoryTexts(startDate, endDate) {
+function getPeriodDateFormat(period) {
+  switch(period) {
+    case 'Daily':
+    case "Weekly":
+      return 'yyyy-MM-dd hh:mm:ss';
+    case "Monthly":
+    case "Yearly":
+      return 'yyyy-MM-dd';
+  }
+}
+
+function getCategoryTexts(startDate, endDate, dateFormat) {
   var newCategories = [];
 
   for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
-    for(var hh = 1; hh < 49; hh++) {
-      var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), 'yyyy-MM-dd hh:mm:ss');
-      newCategories.push(newCategoryText);
+    for(var hh = 0; hh < 48; hh++) {
+      var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
+
+      if(!newCategories.includes(newCategoryText)) {
+        newCategories.push(newCategoryText);
+      }      
     }
   }
 

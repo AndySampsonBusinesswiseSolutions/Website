@@ -8,17 +8,14 @@
 				</div>
 				<div style="float: right;" class="show-pointer">
 					<span title="Period" class="show-pointer">
-						<span class="arrow-header" id="gasChartHeaderPeriod">
-							<select style="z-index: 99;" class="show-pointer">
-								<option value="0">Device Type</option>
-								<option value="1">Zone>Panel</option>
-								<option value="2">Device Groups</option>
-								<option value="3">Hierarchy</option>
-								<option value="4">Alphabetically</option>
-								<option value="5">Sensor Type</option>
+						<span class="arrow-header" id="gasTreeHeaderGroupBy">
+							<select class="show-pointer" onchange="createTree(data, this.value, 'gasTreeDiv', 'gas', 'updateChart(gasChart)'); addExpanderOnClickEvents(); updateChart(this, gasChart)">
+								<option value="DeviceType">Device Type</option>
+								<option value="Zone">Zone>Panel</option>
+								<option value="Hierarchy">Hierarchy</option>
 							</select>
 						</span>
-						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderPeriodArrow"></span>
+						<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasTreeHeaderGroupByArrow"></span>
 					</span>
 				</div>
 			</div>
