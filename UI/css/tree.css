@@ -1,0 +1,28 @@
+.tree-column {
+    float: left;
+    width: 250px;
+    padding-left: 15px;
+}
+.fill-column {
+    width: 100px;
+}
+.group-div {
+    border: solid black 1px; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+    background-color: #e9eaee;
+}
+.group-by-div {
+    border: solid #e9eaee 1px; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+}
+.tree-div {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px;
+    height: 650px;
+    background-color: #e9eaee;
+}

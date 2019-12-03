@@ -35,6 +35,7 @@
                                     <li class="submenu-item"><a href="/PortfolioManagement/TenderManagement/"><span>Tender Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/PositionManagement/"><span>Position Management</span></a></li>
+                                    <li class="submenu-item"><a href="/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
                                 </ul>
                             </li>
                             <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Account Management</span></a>

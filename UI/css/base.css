@@ -1,0 +1,90 @@
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css";
+@import "https://www.businesswisesolutions.co.uk/wp-includes/css/dist/block-library/style.min.css?ver=5.2.4";
+@import "https://www.businesswisesolutions.co.uk/wp-content/plugins/cookie-law-info/public/css/cookie-law-info-public.css?ver=1.8.1";
+@import "https://www.businesswisesolutions.co.uk/wp-content/plugins/cookie-law-info/public/css/cookie-law-info-gdpr.css?ver=1.8.1";
+@import "https://www.businesswisesolutions.co.uk/wp-content/themes/Avada/assets/css/style.min.css?ver=5.7.2";
+@import "https://www.businesswisesolutions.co.uk/wp-content/uploads/fusion-styles/8dacb845e607023f62b8e8f9b9e6eeb9.min.css?ver=5.2.4";
+
+.footer {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+.section-header {
+    background: #b62a51;
+    width: 100%;
+}
+.section-header-text {
+    color: white;
+    text-align: center;
+    font-size: 50px;
+    font-weight:bold;
+}
+.login-body {
+    background: #98a4af;
+    text-align: center;
+    padding-top: 30px;
+    padding-left: 40%;
+    padding-right: 40%;
+}
+.submenu-item {
+    border-bottom:1px solid white;
+}
+.scrolling-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+  }
+  .listitem-hidden {
+    display: none;
+  }
+  .format-listitem {
+    list-style-type: none; 
+    padding-left: 15px;
+  }
+  .show-pointer {
+    padding-left: 5px; 
+    padding-right: 5px; 
+    cursor: pointer;
+  }
+  .simple-divider {
+    border-left: solid black 1px;
+  }
+  .dropdown-border:before {
+    content:"";
+    position: absolute;
+    right: 11px;
+    top: -10px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent black transparent;
+    z-index:9999;
+}
+.dropdown-border {
+    border: solid black 1px;
+    top: 1em;
+    z-index: 99999;
+}
+
+
+
+[type="date"] {
+  background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
+}
+[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
+}
+
+/* custom styles */
+input {
+  border: 1px solid #c4c4c4;
+  border-radius: 5px;
+  background-color: #fff;
+  padding: 3px 5px;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+}
