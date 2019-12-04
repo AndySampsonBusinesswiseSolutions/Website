@@ -162,9 +162,9 @@ function clearElement(element) {
 
 function resizeFinalColumns(windowWidthReduction){
 	var finalColumns = document.getElementsByClassName('final-column');
-	var chartWidth = window.innerWidth - windowWidthReduction;
+	var elementWidth = window.innerWidth - windowWidthReduction;
   
 	for(var i=0; i<finalColumns.length; i++){
-	  finalColumns[i].setAttribute('style', 'width: '+chartWidth+'px;');
+	  finalColumns[i].setAttribute('style', 'width: '+elementWidth+'px;');
 	}
   }
