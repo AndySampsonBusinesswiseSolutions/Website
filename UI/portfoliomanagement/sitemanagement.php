@@ -36,10 +36,10 @@
 			</div>
 			<div class="fill-column"></div>
 			<div class="final-column">
-				<br>
-				<div class="group-div">
+				<br><br>
+				<div>
 					<div class="group-by-div">
-						<div>
+						<div style="overflow-y:auto;" class="tree-div">
 							<table style = "width: 1000px;">
 								<tr style = "border-bottom: solid black 1px;">
 									<th style = "padding-right: 50px; width: 15%; border-right: solid black 1px;">Type</th>
