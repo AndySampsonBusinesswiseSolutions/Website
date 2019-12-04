@@ -159,3 +159,12 @@ function clearElement(element) {
 		element.removeChild(element.firstChild);
 	}
 }
+
+function resizeFinalColumns(windowWidthReduction){
+	var finalColumns = document.getElementsByClassName('final-column');
+	var chartWidth = window.innerWidth - windowWidthReduction;
+  
+	for(var i=0; i<finalColumns.length; i++){
+	  finalColumns[i].setAttribute('style', 'width: '+chartWidth+'px;');
+	}
+  }

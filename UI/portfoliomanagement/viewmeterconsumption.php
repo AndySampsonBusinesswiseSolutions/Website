@@ -114,11 +114,11 @@
 	addCommoditySelectorOnClickEvent();	
 
 	window.onload = function(){
-		resizeCharts(365);
+		resizeFinalColumns(365);
 	}
 
 	window.onresize = function(){
-		resizeCharts(365);
+		resizeFinalColumns(365);
 	}
 
 	createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");

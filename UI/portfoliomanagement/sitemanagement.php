@@ -40,7 +40,7 @@
 				<div>
 					<div class="group-by-div">
 						<div style="overflow-y:auto;" class="tree-div">
-							<table style = "width: 1000px;">
+							<table style = "width: 100%;">
 								<tr style = "border-bottom: solid black 1px;">
 									<th style = "padding-right: 50px; width: 15%; border-right: solid black 1px;">Type</th>
 									<th style = "padding-right: 50px; width: 15%; border-right: solid black 1px;">Identifier</th>
@@ -497,6 +497,14 @@
 	addExpanderOnClickEvents();
 	addArrowOnClickEvents();
 	addCommoditySelectorOnClickEvent();	
+
+	window.onload = function(){
+		resizeFinalColumns(365);
+	}
+
+	window.onresize = function(){
+		resizeFinalColumns(365);
+	}
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>

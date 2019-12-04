@@ -21,15 +21,6 @@ function createBlankChart(chartId, noDataText) {
       renderChart(chartId, options);
 }
 
-function resizeCharts(windowWidthReduction){
-  var finalColumns = document.getElementsByClassName('final-column');
-  var chartWidth = window.innerWidth - windowWidthReduction;
-
-  for(var i=0; i<finalColumns.length; i++){
-    finalColumns[i].setAttribute('style', 'width: '+chartWidth+'px;');
-  }
-}
-
 function renderChart(chartId, options) {
   var chart = new ApexCharts(document.querySelector(chartId), options);
   chart.render();
