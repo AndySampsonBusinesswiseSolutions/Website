@@ -6,6 +6,16 @@
 
 <link rel="stylesheet" href="/css/tree.css">
 
+<style>
+	th {
+		text-align: center;
+	}
+
+	tr:nth-child(even) {
+		background-color: #dddddd;
+	}
+</style>
+
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
@@ -26,7 +36,424 @@
 			</div>
 			<div class="fill-column"></div>
 			<div class="final-column">
-				
+				<br>
+				<div class="group-div">
+					<div class="group-by-div">
+						<div>
+							<table style = "width: 1000px;">
+								<tr style = "border-bottom: solid black 1px;">
+									<th style = "padding-right: 50px; width: 15%; border-right: solid black 1px;">Type</th>
+									<th style = "padding-right: 50px; width: 15%; border-right: solid black 1px;">Identifier</th>
+									<th style = "padding-right: 50px; width: 30%; border-right: solid black 1px;">Attribute</th>
+									<th style = "padding-right: 50px; border-right: solid black 1px;">Value</th>
+									<th style = "width: 5%;"></th>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Site</td>
+									<td style = "border-right: solid black 1px;">Leeds</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Meter</td>
+									<td style = "border-right: solid black 1px;">1234567890123</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+								<tr>
+									<td style = "border-right: solid black 1px;">Sub Meter</td>
+									<td style = "border-right: solid black 1px;">Sub Meter 1</td>
+									<td style = "border-right: solid black 1px;">Attribute</td>
+									<td style = "border-right: solid black 1px;">Value</td>
+									<td>
+										<i class="fas fa-edit"></i>
+										<i class="fas fa-trash-alt"></i>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
 			</div>	
 		</div>
 	</div>
