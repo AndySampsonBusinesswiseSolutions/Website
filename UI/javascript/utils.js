@@ -179,29 +179,11 @@ function buildDataTable(){
 	var tableRow = document.createElement('tr');
 	tableRow.setAttribute('style', 'border-bottom: solid black 1px;');
 
-	var typeTableHeader = document.createElement('th');
-	typeTableHeader.setAttribute('style', 'padding-right: 50px; width: 15%; border-right: solid black 1px;');
-	typeTableHeader.innerHTML = 'Type';
-	tableRow.appendChild(typeTableHeader);
-
-	var identifierTableHeader = document.createElement('th');
-	identifierTableHeader.setAttribute('style', 'padding-right: 50px; width: 15%; border-right: solid black 1px;');
-	identifierTableHeader.innerHTML = 'Identifier';
-	tableRow.appendChild(identifierTableHeader);
-
-	var attributeTableHeader = document.createElement('th');
-	attributeTableHeader.setAttribute('style', 'padding-right: 50px; width: 30%; border-right: solid black 1px;');
-	attributeTableHeader.innerHTML = 'Attribute';
-	tableRow.appendChild(attributeTableHeader);
-
-	var valueTableHeader = document.createElement('th');
-	valueTableHeader.setAttribute('style', 'padding-right: 50px; border-right: solid black 1px;');
-	valueTableHeader.innerHTML = 'Value';
-	tableRow.appendChild(valueTableHeader);
-
-	var actionTableHeader = document.createElement('th');
-	actionTableHeader.setAttribute('style', 'width: 5%;');
-	tableRow.appendChild(actionTableHeader);
+	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border-right: solid black 1px;', 'Type'));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border-right: solid black 1px;', 'Identifier'));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border-right: solid black 1px;', 'Attribute'));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; border-right: solid black 1px;', 'Value'));
+	tableRow.appendChild(createTableHeader('width: 5%;', ''));
 
 	table.appendChild(tableRow);
 
@@ -223,6 +205,13 @@ function buildDataTable(){
 	}
 
 	treeDiv.appendChild(table);
+}
+
+function createTableHeader(style, value) {
+	var tableHeader = document.createElement('th');
+	tableHeader.setAttribute('style', style);
+	tableHeader.innerHTML = value;
+	return tableHeader;
 }
 
 function displayAttributes(type, identifier, attributes, table) {
@@ -276,4 +265,18 @@ function displayAttributes(type, identifier, attributes, table) {
 
 		table.appendChild(tableRow);
 	}	
+}
+
+function getAttribute(attributes, attributeRequired) {
+	for (var attribute in attributes) {
+		var array = attributes[attribute];
+
+		for(var key in array) {
+			if(key == attributeRequired) {
+				return array[key];
+			}
+		}
+	}
+
+	return null;
 }

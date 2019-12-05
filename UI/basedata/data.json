@@ -1,16 +1,12 @@
 var data = [
     {
-        "SiteName" : "Leeds", 
+        "Attributes" : 
+        [
+            {"SiteName" : "Leeds"}
+        ],
         "Meters" :
         [
             {
-                "Identifier" : "987654",
-                "DeviceType" : "Mains",
-                "DeviceSubType" : "Mains",
-                "Zone" : "Test Zone 1",
-                "Panel" : "Test Panel 1",
-                "SensorType" : "Test Sensor Type 1",
-                "Commodity" : "Gas",
                 "Attributes" : 
                     [
                         {"Identifier" : "987654"},
@@ -23,18 +19,24 @@ var data = [
                     ]
             },
             {
-                "Identifier" : "1234567890123",
-                "DeviceType" : "Mains",
-                "DeviceSubType" : "Mains",
-                "Zone" : "Test Zone 1",
-                "Panel" : "Test Panel 1",
-                "SensorType" : "Test Sensor Type 1",
-                "Commodity" : "Electricity",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890123"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Electricity"}
+                    ],
                 "SubMeters" :
                 [
                     {
-                        "Identifier" : "Sub Meter 1",
-                        "Commodity" : "Electricity",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
                         "Energy" : [
                             {"Date" :"2019-11-01 00:30:00", "Value" : 38},
 {"Date" :"2019-11-01 01:00:00", "Value" : 38},
@@ -4845,8 +4847,11 @@ var data = [
                         ]
                     },
                     {
-                        "Identifier" : "Sub Meter 2",
-                        "Commodity" : "Electricity",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ],
                         "Energy" : [
                             {"Date" :"2019-11-01 00:30:00", "Value" : 10},
 {"Date" :"2019-11-01 01:00:00", "Value" : 26},
@@ -14467,13 +14472,16 @@ var data = [
                 ]
             },
             {
-                "Identifier" : "1234567890124",
-                "DeviceType" : "Lighting",
-                "DeviceSubType" : "Unknown",
-                "Zone" : "Test Zone 1",
-                "Panel" : "Test Panel 1",
-                "SensorType" : "Test Sensor Type 1",
-                "Commodity" : "Electricity",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890124"},
+                        {"DeviceType" : "Lighting"},
+                        {"DeviceSubType" : "Unknown"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Electricity"}
+                    ],
                 "Energy" : [
                     {"Date" :"2019-11-01 00:30:00", "Value" : 130},
 {"Date" :"2019-11-01 01:00:00", "Value" : 178},
