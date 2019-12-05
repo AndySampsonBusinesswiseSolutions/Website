@@ -10,7 +10,17 @@ var data = [
                 "Zone" : "Test Zone 1",
                 "Panel" : "Test Panel 1",
                 "SensorType" : "Test Sensor Type 1",
-                "Commodity" : "Gas"
+                "Commodity" : "Gas",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987654"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Gas"}
+                    ]
             },
             {
                 "Identifier" : "1234567890123",
