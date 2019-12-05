@@ -189,16 +189,16 @@ function buildDataTable(){
 
 	for(var siteCount = 0; siteCount < data.length; siteCount++) {
 		var site = data[siteCount];
-		displayAttributes('Site', site.SiteName, site.Attributes, table);
+		displayAttributes('Site', getAttribute(site.Attributes, 'SiteName'), site.Attributes, table);
 
 		for(var meterCount = 0; meterCount < site.Meters.length; meterCount++) {
 			var meter = site.Meters[meterCount];
-			displayAttributes('Meter', meter.Identifier, meter.Attributes, table);
+			displayAttributes('Meter', getAttribute(meter.Attributes, 'Identifier'), meter.Attributes, table);
 
 			if(meter.SubMeters) {
 				for(var subMeterCount = 0; subMeterCount < meter.SubMeters.length; subMeterCount++) {
 					var subMeter = meter.SubMeters[subMeterCount];
-					displayAttributes('Submeter', subMeter.Identifier, subMeter.Attributes, table);
+					displayAttributes('Submeter', getAttribute(subMeter.Attributes, 'Identifier'), subMeter.Attributes, table);
 				}
 			}
 		}
