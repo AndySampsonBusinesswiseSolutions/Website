@@ -87,7 +87,7 @@
 		},
 		yaxis: {
 			title: {
-			text: getChartYAxisTitle(showBySpan.children[0].value)
+			text: getChartYAxisTitle(showBySpan.children[0].value, commodity)
 			}
 		},
 		xaxis: {

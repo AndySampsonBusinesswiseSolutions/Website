@@ -15,8 +15,6 @@
 						<span class="arrow-header" id="gasChartHeaderShowBy">
 							<select class="show-pointer" onchange="updateChart(this, gasChart)">
 								<option value="Energy">Energy</option>
-								<option value="Power">Power</option>
-								<option value="Current">Current</option>
 								<option value="Cost">Cost</option>
 							</select>
 						</span>
@@ -27,8 +25,6 @@
 					<span title="Period" class="show-pointer">
 						<span class="arrow-header" id="gasChartHeaderPeriod">
 							<select class="show-pointer" onchange="updateChart(this, gasChart)">
-								<option value="Daily">Daily</option>
-								<option value="Weekly">Weekly</option>
 								<option value="Monthly">Monthly</option>
 								<option value="Yearly">Yearly</option>
 							</select>
