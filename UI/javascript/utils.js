@@ -280,3 +280,72 @@ function getAttribute(attributes, attributeRequired) {
 
 	return null;
 }
+
+function openTab(evt, tabName) {
+	var i, tabcontent, tablinks;
+	tabcontent = document.getElementsByClassName("tabcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+	  tabcontent[i].style.display = "none";
+	}
+	tablinks = document.getElementsByClassName("tablinks");
+	for (i = 0; i < tablinks.length; i++) {
+	  tablinks[i].className = tablinks[i].className.replace(" active", "");
+	}
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.className += " active";
+  }
+
+function createCard(checkbox){
+	var cardDiv = document.getElementById('cardDiv');
+	var tabDiv = document.getElementById('tabDiv');
+	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+
+	if(checkbox.checked){
+		cardDiv.setAttribute('style', '');
+		var button = document.createElement('button');
+		button.setAttribute('class', 'tablinks');
+		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'")');
+
+		if(checkbox.getAttribute('branch') == "SubMeter") {
+			button.innerHTML = checkbox.getAttribute('linkedsite').concat(' - ').concat(span.innerHTML);
+		}
+		else {
+			button.innerHTML = span.innerHTML;
+		}
+		
+		button.id = span.id.replace('span', 'button');
+		tabDiv.appendChild(button);
+	
+		var newDiv = document.createElement('div');
+		newDiv.setAttribute('class', 'tabcontent');
+		newDiv.id = span.id.replace('span', 'div');
+		newDiv.innerHTML = span.innerHTML.concat(' is a ').concat(checkbox.getAttribute('branch'));
+		cardDiv.appendChild(newDiv);
+
+		for(var i = 0; i < tabDiv.children.length; i++) {
+			var style = 'width: '.concat(tabDiv.clientWidth/tabDiv.children.length).concat('px; vertical-align: middle;');
+			if(i > 0) {
+				style = style.concat(' border-left: solid black 1px;');
+			}
+			tabDiv.children[i].setAttribute('style', style);
+		}
+	}
+	else {
+		tabDiv.removeChild(document.getElementById(span.id.replace('span', 'button')));
+		cardDiv.removeChild(document.getElementById(span.id.replace('span', 'div')));
+
+		if(tabDiv.children.length == 0) {
+			cardDiv.setAttribute('style', 'display: none;');
+		}
+		else {
+			for(var i = 0; i < tabDiv.children.length; i++) {
+				var style = 'width: '.concat(tabDiv.clientWidth/tabDiv.children.length).concat('px;');
+				if(i < tabDiv.children.length - 1) {
+					style = style.concat(' border-right: solid black 1px;');
+				}
+				tabDiv.children[i].setAttribute('style', style);
+			}
+		}
+	}	
+}
+

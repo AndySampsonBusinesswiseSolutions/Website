@@ -35,8 +35,9 @@
 		<div class="final-column">
 			<br>
 			<div>
-				<div class="group-by-div">
-				<div id="map-canvas" style="width: 250px; height: 250px;"></div>
+				<div class="group-by-div" id="cardDiv" style="display: none;">
+					<div class="tabDiv" id="tabDiv" style="overflow-y: auto; overflow: auto;"></div>
+				<!-- <div id="map-canvas" style="width: 250px; height: 250px;"></div> -->
 					<!-- <div style="overflow-y:auto;" class="datagrid" id="displayAttributes">
 					</div> -->
 				</div>
@@ -54,19 +55,19 @@
   type="text/javascript"></script>
 
 <script type="text/javascript"> 
-	createTree(data, "Hierarchy", "treeDiv", "", "");
+	createTree(data, "Hierarchy", "treeDiv", "", "createCard");
 	addExpanderOnClickEvents();
 	// buildDataTable();
 
 	window.onload = function(){
-		resizeFinalColumns(365);
+		resizeFinalColumns(380);
 	}
 
 	window.onresize = function(){
-		resizeFinalColumns(365);
+		resizeFinalColumns(380);
 	}
 
-	initializeMap('BB9 5SR');
+	//initializeMap('BB9 5SR');
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
