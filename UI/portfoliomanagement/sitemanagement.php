@@ -50,12 +50,13 @@
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/tree.js"></script>
 <script src="/javascript/map.js"></script>
+<script src="/javascript/tab.js"></script>
 <script type="text/javascript" src="/basedata/data.json"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"
   type="text/javascript"></script>
 
 <script type="text/javascript"> 
-	createTree(data, "Hierarchy", "treeDiv", "", "createCard");
+	createTree(data, "Hierarchy", "treeDiv", "", "createCardButton");
 	addExpanderOnClickEvents();
 	// buildDataTable();
 

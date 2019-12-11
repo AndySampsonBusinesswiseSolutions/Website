@@ -169,104 +169,6 @@ function resizeFinalColumns(windowWidthReduction){
 	}
   }
 
-function buildDataTable(){
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
-
-	var table = document.createElement('table');
-	table.setAttribute('style', 'width: 100%;');
-
-	var tableRow = document.createElement('tr');
-	tableRow.setAttribute('style', 'border-bottom: solid black 1px;');
-
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border-right: solid black 1px;', 'Type'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border-right: solid black 1px;', 'Identifier'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border-right: solid black 1px;', 'Attribute'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; border-right: solid black 1px;', 'Value'));
-	tableRow.appendChild(createTableHeader('width: 5%;', ''));
-
-	table.appendChild(tableRow);
-
-	for(var siteCount = 0; siteCount < data.length; siteCount++) {
-		var site = data[siteCount];
-		displayAttributes('Site', getAttribute(site.Attributes, 'SiteName'), site.Attributes, table);
-
-		for(var meterCount = 0; meterCount < site.Meters.length; meterCount++) {
-			var meter = site.Meters[meterCount];
-			displayAttributes('Meter', getAttribute(meter.Attributes, 'Identifier'), meter.Attributes, table);
-
-			if(meter.SubMeters) {
-				for(var subMeterCount = 0; subMeterCount < meter.SubMeters.length; subMeterCount++) {
-					var subMeter = meter.SubMeters[subMeterCount];
-					displayAttributes('Submeter', getAttribute(subMeter.Attributes, 'Identifier'), subMeter.Attributes, table);
-				}
-			}
-		}
-	}
-
-	treeDiv.appendChild(table);
-}
-
-function createTableHeader(style, value) {
-	var tableHeader = document.createElement('th');
-	tableHeader.setAttribute('style', style);
-	tableHeader.innerHTML = value;
-	return tableHeader;
-}
-
-function displayAttributes(type, identifier, attributes, table) {
-	if(!attributes) {
-		return;
-	}
-
-	for(var i = 0; i < attributes.length; i++) {
-		var tableRow = document.createElement('tr');
-
-		for(var j = 0; j < 4; j++) {
-			var tableDatacell = document.createElement('td');
-			tableDatacell.setAttribute('style', 'border-right: solid black 1px;');
-
-			switch(j) {
-				case 0:
-					tableDatacell.innerHTML = type;
-					break;	
-				case 1:
-					tableDatacell.innerHTML = identifier;
-					break;
-				case 2:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = key;
-						break;
-					}					
-					break;
-				case 3:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = attributes[i][key];
-						break;
-					}
-					break;
-			}
-
-			tableRow.appendChild(tableDatacell);
-		}
-
-		var tableDatacell = document.createElement('td');
-
-		var editIcon = document.createElement('i');
-		editIcon.setAttribute('class', 'fas fa-edit');
-
-		var deleteIcon = document.createElement('i');
-		deleteIcon.setAttribute('class', 'fas fa-trash-alt');
-
-		tableDatacell.appendChild(editIcon);
-		tableDatacell.appendChild(deleteIcon);
-
-		tableRow.appendChild(tableDatacell);
-
-		table.appendChild(tableRow);
-	}	
-}
-
 function getAttribute(attributes, attributeRequired) {
 	for (var attribute in attributes) {
 		var array = attributes[attribute];
@@ -281,71 +183,32 @@ function getAttribute(attributes, attributeRequired) {
 	return null;
 }
 
-function openTab(evt, tabName) {
-	var i, tabcontent, tablinks;
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-	  tabcontent[i].style.display = "none";
-	}
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-	  tablinks[i].className = tablinks[i].className.replace(" active", "");
-	}
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-  }
-
-function createCard(checkbox){
-	var cardDiv = document.getElementById('cardDiv');
-	var tabDiv = document.getElementById('tabDiv');
-	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
-
-	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'")');
-
-		if(checkbox.getAttribute('branch') == "SubMeter") {
-			button.innerHTML = checkbox.getAttribute('linkedsite').concat(' - ').concat(span.innerHTML);
-		}
-		else {
-			button.innerHTML = span.innerHTML;
-		}
-		
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
-	
-		var newDiv = document.createElement('div');
-		newDiv.setAttribute('class', 'tabcontent');
-		newDiv.id = span.id.replace('span', 'div');
-		newDiv.innerHTML = span.innerHTML.concat(' is a ').concat(checkbox.getAttribute('branch'));
-		cardDiv.appendChild(newDiv);
-
-		for(var i = 0; i < tabDiv.children.length; i++) {
-			var style = 'width: '.concat(tabDiv.clientWidth/tabDiv.children.length).concat('px; vertical-align: middle;');
-			if(i > 0) {
-				style = style.concat(' border-left: solid black 1px;');
+function getEntityByGUID(guid, type) {
+	for(var i = 0; i < data.length; i++) {
+		if(type == 'Site') {
+			if(data[i].GUID == guid) {
+				return data[i];
 			}
-			tabDiv.children[i].setAttribute('style', style);
 		}
-	}
-	else {
-		tabDiv.removeChild(document.getElementById(span.id.replace('span', 'button')));
-		cardDiv.removeChild(document.getElementById(span.id.replace('span', 'div')));
-
-		if(tabDiv.children.length == 0) {
-			cardDiv.setAttribute('style', 'display: none;');
-		}
-		else {
-			for(var i = 0; i < tabDiv.children.length; i++) {
-				var style = 'width: '.concat(tabDiv.clientWidth/tabDiv.children.length).concat('px;');
-				if(i < tabDiv.children.length - 1) {
-					style = style.concat(' border-right: solid black 1px;');
+        else {
+			for(var j = 0; j < data[i].Meters.length; j++) {
+				if(type = 'Meter') {
+					if(data[i].Meters[j].GUID == guid) {
+						return data[i].Meters[j];
+					}
+					else {
+						if(data[i].Meters[j].SubMeters) {
+							for(var k = 0; k < data[i].Meters[j].SubMeters.length; k++) {
+								if(data[i].Meters[j].SubMeters[k].GUID == guid) {
+									return data[i].Meters[j].SubMeters[k];
+								}
+							}
+						}
+					}
 				}
-				tabDiv.children[i].setAttribute('style', style);
 			}
 		}
-	}	
+	}
+	
+	return null;
 }
-
