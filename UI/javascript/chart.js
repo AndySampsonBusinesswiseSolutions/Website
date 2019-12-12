@@ -21,15 +21,6 @@ function createBlankChart(chartId, noDataText) {
       renderChart(chartId, options);
 }
 
-function resizeCharts(windowWidthReduction){
-  var finalColumns = document.getElementsByClassName('final-column');
-  var chartWidth = window.innerWidth - windowWidthReduction;
-
-  for(var i=0; i<finalColumns.length; i++){
-    finalColumns[i].setAttribute('style', 'width: '+chartWidth+'px;');
-  }
-}
-
 function renderChart(chartId, options) {
   var chart = new ApexCharts(document.querySelector(chartId), options);
   chart.render();
@@ -113,25 +104,30 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dat
 
   for(var checkboxCount = 0; checkboxCount < checkBoxes.length; checkboxCount++) {
     var checkboxBranch = checkBoxes[checkboxCount].attributes['Branch'].nodeValue;
+    var linkedSite = checkBoxes[checkboxCount].attributes['LinkedSite'].nodeValue;
     var span = document.getElementById(checkBoxes[checkboxCount].id.replace('checkbox', 'span'));
+    var seriesName = span.innerHTML;
 
     if(checkboxBranch == 'Site') {				
-      meters = getSitesByAttribute('SiteName', span.innerHTML)[0].Meters;
+      meters = getSitesByAttribute('SiteName', linkedSite)[0].Meters;
     }
     else if(checkboxBranch.includes('GroupByOption')) {
-      meters = getMetersByAttribute(checkboxBranch.replace('GroupByOption|', ''), span.innerHTML);
+      meters = getMetersByAttribute(checkboxBranch.replace('GroupByOption|', ''), span.innerHTML, linkedSite);
+      seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
     }
     else if(checkboxBranch.includes('GroupBySubOption')) {
-      meters = getMetersByAttribute(checkboxBranch.replace('GroupBySubOption|', ''), span.innerHTML);
+      meters = getMetersByAttribute(checkboxBranch.replace('GroupBySubOption|', ''), span.innerHTML, linkedSite);
+      seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
     }
     else if(checkboxBranch == 'Meter') {
-      meters = getMetersByAttribute('Identifier', span.innerHTML);
+      meters = getMetersByAttribute('Identifier', span.innerHTML, linkedSite);
     }
     else if(checkboxBranch == 'SubMeter') {
-      meters = getSubMetersByAttribute('Identifier', span.innerHTML);
+      meters = getSubMetersByAttribute('Identifier', span.innerHTML, linkedSite);
+      seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
     }
 
-    newSeries.push(summedMeterSeries(meters, span.innerHTML, showBySpan.children[0].value, newCategories, commodity, dateFormat));
+    newSeries.push(summedMeterSeries(meters, seriesName, showBySpan.children[0].value, newCategories, commodity, dateFormat));
   }
 
   return newSeries;
@@ -140,7 +136,7 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dat
 function getSitesByAttribute(attribute, value) {
   var sites = []
   for(var siteCount = 0; siteCount < data.length; siteCount++) {
-    if(data[siteCount][attribute] == value) {
+    if(getAttribute(data[siteCount].Attributes, attribute) == value) {
       sites.push(data[siteCount]);
     }
   }
@@ -148,13 +144,15 @@ function getSitesByAttribute(attribute, value) {
   return sites;
 }
 
-function getMetersByAttribute(attribute, value) {
+function getMetersByAttribute(attribute, value, linkedSite) {
   var meters = [];
 
   for(var siteCount = 0; siteCount < data.length; siteCount++) {
     for(var meterCount = 0; meterCount < data[siteCount].Meters.length; meterCount++) {
-      if(data[siteCount].Meters[meterCount][attribute] == value) {
-        meters.push(data[siteCount].Meters[meterCount]);
+      if(getAttribute(data[siteCount].Meters[meterCount].Attributes, attribute) == value) {
+        if(linkedSiteMatch(data[siteCount].Meters[meterCount].GUID, 'Meter', linkedSite)) {
+          meters.push(data[siteCount].Meters[meterCount]);
+        }
       }
     }
   }
@@ -162,15 +160,24 @@ function getMetersByAttribute(attribute, value) {
   return meters;
 }
 
-function getSubMetersByAttribute(attribute, value) {
+function linkedSiteMatch(identifier, meterType, linkedSite) {
+  var identifierCheckbox = document.getElementById(meterType.concat(identifier).concat('checkbox'));
+  var identifierLinkedSite = identifierCheckbox.attributes['LinkedSite'].nodeValue;
+
+  return identifierLinkedSite == linkedSite;
+}
+
+function getSubMetersByAttribute(attribute, value, linkedSite) {
   var subMeters = [];
 
   for(var siteCount = 0; siteCount < data.length; siteCount++) {
     for(var meterCount = 0; meterCount < data[siteCount].Meters.length; meterCount++) {
       if(data[siteCount].Meters[meterCount]['SubMeters']){
         for(var subMeterCount = 0; subMeterCount < data[siteCount].Meters[meterCount]['SubMeters'].length; subMeterCount++){
-          if(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount][attribute] == value) {
-            subMeters.push(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount]);
+          if(getAttribute(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount].Attributes, attribute) == value) {
+            if(linkedSiteMatch(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount].GUID, 'SubMeter', linkedSite)) {
+              subMeters.push(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount]);
+            }            
           }
         }
       }              
@@ -194,24 +201,19 @@ function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity,
         continue;
       }
 
-      for(var i = 0; i < newCategories.length; i++) {
-        var value = null;
+      for(var j = 0; j < meterData.length; j++) {
+        var i = newCategories.findIndex(n => n == formatDate(meterData[j].Date, dateFormat));
+        var value = meterData[j].Value;
 
-        for(var j = 0; j < meterData.length; j++) {
-          if(formatDate(meterData[j].Date, dateFormat) == newCategories[i]) {
-            value = meterData[j].Value;
-
-            if(!value && !summedMeterSeries.data[i]){
-              summedMeterSeries.data[i] = null;
-            }
-            else if(value && !summedMeterSeries.data[i]) {
-              summedMeterSeries.data[i] = value;
-            }
-            else if(value && summedMeterSeries.data[i]) {
-              summedMeterSeries.data[i] += value;
-            }							
-          }
-        }        
+        if(!value && !summedMeterSeries.data[i]){
+          summedMeterSeries.data[i] = null;
+        }
+        else if(value && !summedMeterSeries.data[i]) {
+          summedMeterSeries.data[i] = value;
+        }
+        else if(value && summedMeterSeries.data[i]) {
+          summedMeterSeries.data[i] += value;
+        }							     
       }
     }
   }
@@ -309,9 +311,12 @@ function getChartType(chartType) {
   }
 }
 
-function getChartYAxisTitle(showBy) {
+function getChartYAxisTitle(showBy, commodity) {
   switch(showBy) {
     case 'Energy':
+      if(commodity == 'Gas') {
+        return 'Energy (Thm)';
+      }
       return 'Energy (MWh)';
     case 'Power':
       return 'Power (MW)';

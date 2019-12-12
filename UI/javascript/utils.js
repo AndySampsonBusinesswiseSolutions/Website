@@ -159,3 +159,77 @@ function clearElement(element) {
 		element.removeChild(element.firstChild);
 	}
 }
+
+function resizeFinalColumns(windowWidthReduction){
+	var finalColumns = document.getElementsByClassName('final-column');
+	var elementWidth = window.innerWidth - windowWidthReduction;
+  
+	for(var i=0; i<finalColumns.length; i++){
+	  finalColumns[i].setAttribute('style', 'width: '+elementWidth+'px;');
+	}
+  }
+
+function getAttribute(attributes, attributeRequired) {
+	for (var attribute in attributes) {
+		var array = attributes[attribute];
+
+		for(var key in array) {
+			if(key == attributeRequired) {
+				return array[key];
+			}
+		}
+	}
+
+	return null;
+}
+
+function getEntityByGUID(guid, type) {
+	for(var i = 0; i < data.length; i++) {
+		if(type == 'Site') {
+			if(data[i].GUID == guid) {
+				return data[i];
+			}
+		}
+        else {
+			for(var j = 0; j < data[i].Meters.length; j++) {
+				if(type = 'Meter') {
+					if(data[i].Meters[j].GUID == guid) {
+						return data[i].Meters[j];
+					}
+					else {
+						if(data[i].Meters[j].SubMeters) {
+							for(var k = 0; k < data[i].Meters[j].SubMeters.length; k++) {
+								if(data[i].Meters[j].SubMeters[k].GUID == guid) {
+									return data[i].Meters[j].SubMeters[k];
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	return null;
+}
+
+function showHideIcon(iconId, style) {
+	var icon = document.getElementById(iconId);
+	icon.setAttribute('style', style);
+}
+
+function createIcon(iconId, className, style, onClickEvent) {
+	var icon = document.createElement('i');
+	icon.id = iconId;
+	icon.setAttribute('class', className);
+
+	if(style) {
+		icon.setAttribute('style', style);
+	}
+
+	if(onClickEvent) {
+		icon.setAttribute('onclick', onClickEvent);
+	}
+
+	return icon;
+}
