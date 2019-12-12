@@ -254,8 +254,6 @@ function commodityMeterMatch(meter, commodity) {
 
 function getIconByBranch(branch, commodity) {
     switch (branch) {
-        case 'Site':
-            return 'fas fa-map-marker-alt';
         case 'Mains':
             if(commodity == 'Gas') {
                 return 'fas fa-burn';
@@ -267,6 +265,8 @@ function getIconByBranch(branch, commodity) {
             return 'fas fa-lightbulb';
         case 'Unknown':
             return 'fas fa-question-circle';
+        default:
+            return 'fas fa-map-marker-alt';
     }
 }
 

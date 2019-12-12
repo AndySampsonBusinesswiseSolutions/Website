@@ -3,7 +3,15 @@ var data = [
         "GUID" : "0",
         "Attributes" : 
         [
-            {"SiteName" : "Leeds"}
+            {"SiteName" : "Leeds"},
+            {"Address Line 1" : "Manor Mill Ln"},
+            {"Address Line 2" : "Leeds"},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : "LS11 8BR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0113 270 1244"},
+            {"Sq. ft" : "100"}
         ],
         "Meters" :
         [

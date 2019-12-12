@@ -1,3 +1,14 @@
+var cardViewAttributes = [
+	"Address Line 1",
+	"Address Line 2",
+	"Address Line 3",
+	"Address Line 4",
+	"Postcode",
+	"Contact Name",
+	"Contact Telephone Number",
+	"Sq. ft"
+]
+
 function openTab(evt, tabName, guid, branch) {
 	var i, tabcontent, tablinks;
 	var cardDiv = document.getElementById('cardDiv');
@@ -57,7 +68,11 @@ function createCardButton(checkbox){
 	}
 	else {
 		tabDiv.removeChild(document.getElementById(span.id.replace('span', 'button')));
-		cardDiv.removeChild(document.getElementById(span.id.replace('span', 'div')));
+
+		var divToRemove = document.getElementById(span.id.replace('span', 'div'));
+		if(divToRemove) {
+			cardDiv.removeChild();
+		}
 
 		if(tabDiv.children.length == 0) {
 			cardDiv.setAttribute('style', 'display: none;');
@@ -79,12 +94,83 @@ function updateTabDiv() {
 function createCard(guid, divToAppendTo, type, identifier) {
     var site = getEntityByGUID(guid, type);
 
+	buildCardView(type, site, identifier, divToAppendTo);
     buildDataTable(type, site, identifier, divToAppendTo);
+}
+
+function buildCardView(type, entity, attributeRequired, divToAppendTo){
+	var div = document.createElement('div');
+	div.id = 'cardView';
+	div.setAttribute('class', 'group-div');
+
+	var table = document.createElement('table');
+	table.setAttribute('style', 'width: 100%;');
+
+	table.appendChild(createTableHeader('width: 30%', ''));
+	table.appendChild(createTableHeader('width: 30%', ''));
+	table.appendChild(createTableHeader('width: 250px', ''));
+
+	for(var i = 0; i < cardViewAttributes.length; i++) {
+		var tableRow = document.createElement('tr');
+		var tableDatacellAttribute = document.createElement('td');
+		var tableDatacellAttributeValue = document.createElement('td');
+
+		tableDatacellAttribute.innerHTML = cardViewAttributes[i];
+		tableDatacellAttributeValue.innerHTML = getAttribute(entity.Attributes, cardViewAttributes[i]) || '';
+
+		tableRow.appendChild(tableDatacellAttribute);
+		tableRow.appendChild(tableDatacellAttributeValue);
+
+		if(i == 0) {
+			var tableDatacellMap = document.createElement('td');
+			tableDatacellMap.setAttribute('rowspan', cardViewAttributes.length);
+
+			var mapDiv = document.createElement('div');
+			mapDiv.id = 'map-canvas';
+			mapDiv.setAttribute('style', 'height: 250px;')
+
+			tableDatacellMap.appendChild(mapDiv);
+			tableRow.appendChild(tableDatacellMap);
+		}
+
+		table.appendChild(tableRow);
+	}
+
+	div.appendChild(table);
+	divToAppendTo.appendChild(div);
+
+	var button = document.createElement('button');
+	button.id = 'editDetailsButton';
+	button.innerHTML = 'Edit Details';
+	button.setAttribute('onclick', 'displayDataTable()');
+	divToAppendTo.appendChild(button);	
+
+	divToAppendTo.appendChild(document.createElement('br'));
+	divToAppendTo.appendChild(document.createElement('br'));
+
+	if(getAttribute(entity.Attributes, 'Postcode')) {
+		initializeMap(getAttribute(entity.Attributes, 'Postcode'));
+	}
+}
+
+function displayDataTable() {
+	var button = document.getElementById('editDetailsButton');
+	var div = document.getElementById('displayAttributes');
+
+	if(button.innerHTML == 'Edit Details') {
+		div.setAttribute('style', '');
+		button.innerText = 'Hide Details';
+	}
+	else {
+		div.setAttribute('style', 'display: none');
+		button.innerText = 'Edit Details'
+	}
 }
 
 function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 	var div = document.createElement('div');
-    div.id = 'displayAttributes';
+	div.id = 'displayAttributes';
+	div.setAttribute('style', 'display: none');
 	divToAppendTo.appendChild(div);
 	
 	var treeDiv = document.getElementById('displayAttributes');
@@ -94,13 +180,12 @@ function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 	table.setAttribute('style', 'width: 100%;');
 
 	var tableRow = document.createElement('tr');
-	tableRow.setAttribute('style', 'border-bottom: solid black 1px;');
 
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border-right: solid black 1px;', 'Type'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border-right: solid black 1px;', 'Identifier'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border-right: solid black 1px;', 'Attribute'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; border-right: solid black 1px;', 'Value'));
-	tableRow.appendChild(createTableHeader('width: 5%;', ''));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Type'));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Identifier'));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border: solid black 1px;', 'Attribute'));
+	tableRow.appendChild(createTableHeader('padding-right: 50px; border: solid black 1px;', 'Value'));
+	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
 
     table.appendChild(tableRow);
     displayAttributes(type, getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table);
@@ -125,7 +210,7 @@ function displayAttributes(type, identifier, attributes, table) {
 
 		for(var j = 0; j < 4; j++) {
 			var tableDatacell = document.createElement('td');
-			tableDatacell.setAttribute('style', 'border-right: solid black 1px;');
+			tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
 			switch(j) {
 				case 0:
@@ -152,6 +237,7 @@ function displayAttributes(type, identifier, attributes, table) {
 		}
 
 		var tableDatacell = document.createElement('td');
+		tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
 		var editIcon = document.createElement('i');
 		editIcon.setAttribute('class', 'fas fa-edit');
