@@ -21715,7 +21715,15 @@ var data = [
         "GUID" : "6",
         "Attributes" : 
         [
-            {"SiteName" : "Manchester"}
+            {"SiteName" : "Manchester"},
+            {"Address Line 1" : "Bury"},
+            {"Address Line 2" : "Greater Manchester"},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : "BL9 6BS"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0113 270 1244"},
+            {"Sq. ft" : "100"}
         ],
         "Meters" :
         [

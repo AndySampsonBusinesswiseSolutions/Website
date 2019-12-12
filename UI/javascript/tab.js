@@ -1,4 +1,4 @@
-var cardViewAttributes = [
+var siteCardViewAttributes = [
 	"Address Line 1",
 	"Address Line 2",
 	"Address Line 3",
@@ -94,11 +94,11 @@ function updateTabDiv() {
 function createCard(guid, divToAppendTo, type, identifier) {
     var site = getEntityByGUID(guid, type);
 
-	buildCardView(type, site, identifier, divToAppendTo);
+	buildCardView(type, site, divToAppendTo);
     buildDataTable(type, site, identifier, divToAppendTo);
 }
 
-function buildCardView(type, entity, attributeRequired, divToAppendTo){
+function buildCardView(type, entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'cardView';
 	div.setAttribute('class', 'group-div');
@@ -109,6 +109,17 @@ function buildCardView(type, entity, attributeRequired, divToAppendTo){
 	table.appendChild(createTableHeader('width: 30%', ''));
 	table.appendChild(createTableHeader('width: 30%', ''));
 	table.appendChild(createTableHeader('width: 250px', ''));
+
+	var cardViewAttributes;
+	switch(type) {
+		case 'Site':
+			cardViewAttributes = siteCardViewAttributes;
+			break;
+		case 'Meter':
+			break;
+		case 'SubMeter':
+			break;
+	}
 
 	for(var i = 0; i < cardViewAttributes.length; i++) {
 		var tableRow = document.createElement('tr');
@@ -148,9 +159,28 @@ function buildCardView(type, entity, attributeRequired, divToAppendTo){
 	divToAppendTo.appendChild(document.createElement('br'));
 	divToAppendTo.appendChild(document.createElement('br'));
 
-	if(getAttribute(entity.Attributes, 'Postcode')) {
-		initializeMap(getAttribute(entity.Attributes, 'Postcode'));
+	var address = getAddress(cardViewAttributes, entity);
+
+	if(address) {
+		initializeMap(address);
 	}
+}
+
+function getAddress(cardViewAttributes, entity) {
+	var addressDetails = [];
+
+	for(var i = 0; i < cardViewAttributes.length; i++) {
+		if(cardViewAttributes[i].includes('Address Line')
+			|| cardViewAttributes[i].includes('Postcode')) {
+				var attribute = getAttribute(entity.Attributes, cardViewAttributes[i]);
+
+				if(attribute != '') {
+					addressDetails.push(attribute);
+				}				
+			}
+	}
+
+	return addressDetails.join(',');
 }
 
 function displayDataTable() {
