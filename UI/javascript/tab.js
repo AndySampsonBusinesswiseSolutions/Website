@@ -162,7 +162,7 @@ function buildCardView(type, entity, divToAppendTo){
 	var address = getAddress(cardViewAttributes, entity);
 
 	if(address) {
-		initializeMap(address);
+		//initializeMap(address);
 	}
 }
 
@@ -207,6 +207,7 @@ function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 	clearElement(treeDiv);
 
 	var table = document.createElement('table');
+	table.id = 'dataTable';
 	table.setAttribute('style', 'width: 100%;');
 
 	var tableRow = document.createElement('tr');
@@ -237,6 +238,7 @@ function displayAttributes(type, identifier, attributes, table) {
 
 	for(var i = 0; i < attributes.length; i++) {
 		var tableRow = document.createElement('tr');
+		tableRow.id = 'row' + i;
 
 		for(var j = 0; j < 4; j++) {
 			var tableDatacell = document.createElement('td');
@@ -253,13 +255,17 @@ function displayAttributes(type, identifier, attributes, table) {
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = key;
 						break;
-					}					
+					}	
+					
+					tableDatacell.id = 'attribute' + i;
 					break;
 				case 3:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = attributes[i][key];
 						break;
 					}
+
+					tableDatacell.id = 'value' + i;
 					break;
 			}
 
@@ -269,17 +275,95 @@ function displayAttributes(type, identifier, attributes, table) {
 		var tableDatacell = document.createElement('td');
 		tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
-		var editIcon = document.createElement('i');
-		editIcon.setAttribute('class', 'fas fa-edit');
-
-		var deleteIcon = document.createElement('i');
-		deleteIcon.setAttribute('class', 'fas fa-trash-alt');
+		var editIcon = createIcon('editRow' + i, 'fas fa-edit', 'cursor: pointer;', 'showDetailEditor(' + i + ')');
+		var deleteIcon = createIcon('deleteRow' + i, 'fas fa-trash-alt', 'cursor: pointer;', 'deleteRow(' + i + ')');
+		var saveChangeIcon = createIcon('saveRow' + i, 'fas fa-save', 'display: none;', 'saveRow(' + i + ')');
+		var undoChangeIcon = createIcon('undoRow' + i, 'fas fa-undo', 'display: none;', 'undoRow(' + i + ')');
+		var cancelChangeIcon = createIcon('cancelRow' + i, 'far fa-window-close', 'display: none;', 'cancelRow(' + i + ')');
 
 		tableDatacell.appendChild(editIcon);
 		tableDatacell.appendChild(deleteIcon);
+		tableDatacell.appendChild(saveChangeIcon);
+		tableDatacell.appendChild(undoChangeIcon);
+		tableDatacell.appendChild(cancelChangeIcon);
 
 		tableRow.appendChild(tableDatacell);
 
 		table.appendChild(tableRow);
 	}	
+}
+
+function showDetailEditor(row) {
+	var tableDatacell = document.getElementById('value' + row);
+	var textBoxValue = tableDatacell.innerText;
+	tableDatacell.innerText = '';
+
+	var textBox = document.createElement('input');
+	textBox.id = 'input' + row;	
+	textBox.value = textBoxValue;	
+	textBox.setAttribute('originalValue', textBoxValue);
+	textBox.setAttribute('style', 'width: 100%;');
+	tableDatacell.appendChild(textBox);
+
+	textBox.focus();
+
+	showHideIcon('editRow' + row, 'display: none;');
+	showHideIcon('deleteRow' + row, 'display: none;');
+	showHideIcon('saveRow' + row, 'cursor: pointer;');
+	showHideIcon('undoRow' + row, 'cursor: pointer;');
+	showHideIcon('cancelRow' + row, 'cursor: pointer;');
+}
+
+function deleteRow(row) {
+	var attribute = document.getElementById('attribute' + row);
+
+	xdialog.confirm('Are you sure you want to delete ' + attribute.innerText + '?', function() {
+		var table = document.getElementById('dataTable');
+		var tableRow = document.getElementById('row' + row);
+
+		table.removeChild(tableRow);
+	  }, {
+		style: 'width:420px;font-size:0.8rem;',
+		buttons: {
+			ok: {
+				text: 'Delete ' + attribute.innerText,
+				style: 'background: red;',
+			},
+			cancel: {
+				text: 'Cancel',
+				style: 'background: Green;',
+			}
+		}
+	  });
+}
+
+function saveRow(row) {
+	var textBox = document.getElementById('input' + row);
+	var tableDatacell = document.getElementById('value' + row);
+
+	tableDatacell.innerText = textBox.value;
+
+	showHideIcon('editRow' + row, 'cursor: pointer;');
+	showHideIcon('deleteRow' + row, 'cursor: pointer;');
+	showHideIcon('saveRow' + row, 'display: none;');
+	showHideIcon('undoRow' + row, 'display: none;');
+	showHideIcon('cancelRow' + row, 'display: none;');
+}
+
+function undoRow(row) {
+	var textBox = document.getElementById('input' + row);
+	textBox.value = textBox.getAttribute('originalValue');
+}
+
+function cancelRow(row) {
+	var textBox = document.getElementById('input' + row);
+	var tableDatacell = document.getElementById('value' + row);
+
+	tableDatacell.innerText = textBox.getAttribute('originalValue');
+
+	showHideIcon('editRow' + row, 'cursor: pointer;');
+	showHideIcon('deleteRow' + row, 'cursor: pointer;');
+	showHideIcon('saveRow' + row, 'display: none;');
+	showHideIcon('undoRow' + row, 'display: none;');
+	showHideIcon('cancelRow' + row, 'display: none;');
 }

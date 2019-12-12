@@ -212,3 +212,24 @@ function getEntityByGUID(guid, type) {
 	
 	return null;
 }
+
+function showHideIcon(iconId, style) {
+	var icon = document.getElementById(iconId);
+	icon.setAttribute('style', style);
+}
+
+function createIcon(iconId, className, style, onClickEvent) {
+	var icon = document.createElement('i');
+	icon.id = iconId;
+	icon.setAttribute('class', className);
+
+	if(style) {
+		icon.setAttribute('style', style);
+	}
+
+	if(onClickEvent) {
+		icon.setAttribute('onclick', onClickEvent);
+	}
+
+	return icon;
+}

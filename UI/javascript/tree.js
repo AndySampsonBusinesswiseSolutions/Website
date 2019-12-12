@@ -99,7 +99,7 @@ function buildSubBranch(meters, baseElement, groupBySubOption, commodity, checkb
 function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid) {
     li.appendChild(createBranchDiv(id));
     li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createIcon(branchOption, commodity));
+    li.appendChild(createTreeIcon(branchOption, commodity));
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
 }
@@ -123,7 +123,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
 
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meters[i].GUID));
-        li.appendChild(createIcon(getAttribute(meters[i].Attributes, 'DeviceType'), getAttribute(meters[i].Attributes, 'Commodity')));
+        li.appendChild(createTreeIcon(getAttribute(meters[i].Attributes, 'DeviceType'), getAttribute(meters[i].Attributes, 'Commodity')));
         li.appendChild(createSpan(branchId, identifier));
 
         if(meters[i].hasOwnProperty('SubMeters')) {
@@ -148,7 +148,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
 
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox('SubMeter'.concat(subMeters[i].GUID), checkboxFunction, 'SubMeter', linkedSite, subMeters[i].GUID));
-        li.appendChild(createIcon(deviceType, commodity));
+        li.appendChild(createTreeIcon(deviceType, commodity));
         li.appendChild(createSpan('SubMeter'.concat(subMeters[i].GUID), identifier));   
 
         baseElement.appendChild(li); 
@@ -191,7 +191,7 @@ function createUL() {
     return ul;
 }
 
-function createIcon(branch, commodity) {
+function createTreeIcon(branch, commodity) {
     var icon = document.createElement('i');
     icon.setAttribute('class', getIconByBranch(branch, commodity));
     icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');

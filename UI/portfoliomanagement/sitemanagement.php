@@ -42,6 +42,9 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"
   type="text/javascript"></script>
 
+<link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
+
 <script type="text/javascript"> 
 	createTree(data, "Hierarchy", "treeDiv", "", "createCardButton");
 	addExpanderOnClickEvents();
