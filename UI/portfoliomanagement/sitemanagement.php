@@ -46,7 +46,7 @@
 <script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
 
 <script type="text/javascript"> 
-	createTree(data, "Hierarchy", "treeDiv", "", "createCardButton");
+	createTree(data, "Hierarchy", "treeDiv", "", "createCardButton", true);
 	addExpanderOnClickEvents();
 
 	window.onload = function(){
