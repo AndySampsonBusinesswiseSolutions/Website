@@ -86,8 +86,9 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
 
 function getCheckedCheckBoxes(inputs) {
   var checkBoxes = [];
+  var inputLength = inputs.length;
 
-  for(var i = 0; i < inputs.length; i++) {
+  for(var i = 0; i < inputLength; i++) {
     if(inputs[i].type.toLowerCase() == 'checkbox') {
       if(inputs[i].checked) {
         checkBoxes.push(inputs[i]);
@@ -101,8 +102,9 @@ function getCheckedCheckBoxes(inputs) {
 function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dateFormat) {
   var meters = [];
   var newSeries = [];
+  var checkBoxesLength = checkBoxes.length;
 
-  for(var checkboxCount = 0; checkboxCount < checkBoxes.length; checkboxCount++) {
+  for(var checkboxCount = 0; checkboxCount < checkBoxesLength; checkboxCount++) {
     var checkboxBranch = checkBoxes[checkboxCount].attributes['Branch'].nodeValue;
     var linkedSite = checkBoxes[checkboxCount].attributes['LinkedSite'].nodeValue;
     var span = document.getElementById(checkBoxes[checkboxCount].id.replace('checkbox', 'span'));
@@ -135,9 +137,13 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dat
 
 function getSitesByAttribute(attribute, value) {
   var sites = []
-  for(var siteCount = 0; siteCount < data.length; siteCount++) {
-    if(getAttribute(data[siteCount].Attributes, attribute) == value) {
-      sites.push(data[siteCount]);
+  var dataLength = data.length;
+
+  for(var siteCount = 0; siteCount < dataLength; siteCount++) {
+    var site = data[siteCount];
+
+    if(getAttribute(site.Attributes, attribute) == value) {
+      sites.push(site);
     }
   }
 
@@ -146,12 +152,18 @@ function getSitesByAttribute(attribute, value) {
 
 function getMetersByAttribute(attribute, value, linkedSite) {
   var meters = [];
+  var dataLength = data.length;
 
-  for(var siteCount = 0; siteCount < data.length; siteCount++) {
-    for(var meterCount = 0; meterCount < data[siteCount].Meters.length; meterCount++) {
-      if(getAttribute(data[siteCount].Meters[meterCount].Attributes, attribute) == value) {
-        if(linkedSiteMatch(data[siteCount].Meters[meterCount].GUID, 'Meter', linkedSite)) {
-          meters.push(data[siteCount].Meters[meterCount]);
+  for(var siteCount = 0; siteCount < dataLength; siteCount++) {
+    var site = data[siteCount];
+    var meterLength = site.Meters.length;
+
+    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+      var meter = site.Meters[meterCount];
+
+      if(getAttribute(meter.Attributes, attribute) == value) {
+        if(linkedSiteMatch(meter.GUID, 'Meter', linkedSite)) {
+          meters.push(meter);
         }
       }
     }
@@ -169,14 +181,25 @@ function linkedSiteMatch(identifier, meterType, linkedSite) {
 
 function getSubMetersByAttribute(attribute, value, linkedSite) {
   var subMeters = [];
+  var dataLength = data.length;
 
-  for(var siteCount = 0; siteCount < data.length; siteCount++) {
-    for(var meterCount = 0; meterCount < data[siteCount].Meters.length; meterCount++) {
-      if(data[siteCount].Meters[meterCount]['SubMeters']){
-        for(var subMeterCount = 0; subMeterCount < data[siteCount].Meters[meterCount]['SubMeters'].length; subMeterCount++){
-          if(getAttribute(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount].Attributes, attribute) == value) {
-            if(linkedSiteMatch(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount].GUID, 'SubMeter', linkedSite)) {
-              subMeters.push(data[siteCount].Meters[meterCount]['SubMeters'][subMeterCount]);
+  for(var siteCount = 0; siteCount < dataLength; siteCount++) {
+    var site = data[siteCount];
+    var meterLength = site.Meters.length;
+
+    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+      var meter = site.Meters[meterCount];
+
+      if(meter['SubMeters']){
+        var meterSubMeters = meter['SubMeters'];
+        var subMeterLength = meterSubMeters.length;
+
+        for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++){
+          var subMeter = meterSubMeters[subMeterCount];
+
+          if(getAttribute(subMeter.Attributes, attribute) == value) {
+            if(linkedSiteMatch(subMeter.GUID, 'SubMeter', linkedSite)) {
+              subMeters.push(subMeter);
             }            
           }
         }
@@ -188,20 +211,24 @@ function getSubMetersByAttribute(attribute, value, linkedSite) {
 }
 
 function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat) {
+  var meterLength = meters.length;
   var summedMeterSeries = {
     name: seriesName,
     data: [0]
   };
 
-  for(var meterCount = 0; meterCount < meters.length; meterCount++) {
-    if(commodityMeterMatch(meters[meterCount], commodity)) {
-      var meterData = meters[meterCount][showBy];
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = meters[meterCount];
+
+    if(commodityMeterMatch(meter, commodity)) {
+      var meterData = meter[showBy];
       
       if(!meterData) {
         continue;
       }
 
-      for(var j = 0; j < meterData.length; j++) {
+      var meterDataLength = meterData.length;
+      for(var j = 0; j < meterDataLength; j++) {
         var i = newCategories.findIndex(n => n == formatDate(meterData[j].Date, dateFormat));
         var value = meterData[j].Value;
 
