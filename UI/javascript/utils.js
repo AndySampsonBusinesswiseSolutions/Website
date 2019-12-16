@@ -3,7 +3,21 @@ function getClone(item){
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
-	var element = document.getElementById(elementId);
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
 	if(hasClass(element, firstClass)){
 		element.classList.remove(firstClass);
 
