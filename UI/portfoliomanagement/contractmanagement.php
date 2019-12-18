@@ -54,7 +54,7 @@
 								<td>01/12/2019</td>
 								<td></td>
 								<td>Out Of Contract</td>
-								<td><i class="fas fa-search show-pointer"></i></td>
+								<td><i class="fas fa-search show-pointer" onclick="showRates(1)"></i></td>
 								<td>Yes</td>
 							</tr>
 							<tr>
@@ -75,7 +75,7 @@
 									<td>01/12/2019</td>
 									<td>31/12/2019</td>
 									<td>Out Of Contract</td>
-									<td><i class="fas fa-search show-pointer"></i></td>
+									<td><i class="fas fa-search show-pointer" onclick="showRates(1)"></i></td>
 									<td>No</td>
 								</tr>
 								<tr>
@@ -85,7 +85,7 @@
 									<td>01/12/2019</td>
 									<td>31/12/2019</td>
 									<td>Out Of Contract</td>
-									<td><i class="fas fa-search show-pointer"></i></td>
+									<td><i class="fas fa-search show-pointer" onclick="showRates(1)"></i></td>
 									<td>No</td>
 								</tr>
 							</tbody>
@@ -346,8 +346,12 @@
 
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/tree.js"></script>
+<script src="/javascript/contract.js"></script>
 <script type="text/javascript" src="/basedata/data.json"></script>
 <script type="text/javascript" src="/basedata/contract.json"></script>
+
+<link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
 
 <script type="text/javascript"> 
 	createTree(data, "Hierarchy", "treeDiv", "", "");

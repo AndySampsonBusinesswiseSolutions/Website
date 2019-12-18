@@ -237,13 +237,6 @@ function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 	treeDiv.appendChild(table);
 }
 
-function createTableHeader(style, value) {
-	var tableHeader = document.createElement('th');
-	tableHeader.setAttribute('style', style);
-	tableHeader.innerHTML = value;
-	return tableHeader;
-}
-
 function displayAttributes(type, identifier, attributes, table) {
 	if(!attributes) {
 		return;
