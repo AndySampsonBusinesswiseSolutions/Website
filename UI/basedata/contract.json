@@ -1,0 +1,21 @@
+var contract = [
+    {
+        "Supplier" : "Haven",
+        "ContractReference" : "Haven0001",
+        "MPXN" : "987654",
+        "ContractStartDate" : "01/12/2019",
+        "ContractEndDate" : "",
+        "ProductType" : "Out Of Contract",
+        "IsBusinesswiseContract" : "Yes",
+        "Rates" : [
+            {
+                "RateName" : "Unit Rate 1",
+                "Rate" : "7p/kWh"
+            },
+            {
+                "RateName" : "Standing Charge",
+                "Rate" : "£5/day"
+            }
+        ]
+    }
+]

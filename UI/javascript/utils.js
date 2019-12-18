@@ -46,6 +46,31 @@ function addExpanderOnClickEvents() {
 			updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 			updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 		});
+
+		var additionalcontrols = expanders[i].getAttribute('additionalcontrols');
+
+		if(!additionalcontrols) {
+			continue;
+		}
+
+		var listToHide = expanders[i].id.concat('List');
+		var clickEventFunction = function (event) {
+			updateClassOnClick(listToHide, 'listitem-hidden', '')
+		};
+
+		var controlArray = additionalcontrols.split(',');
+		for(var j = 0; j < controlArray.length; j++) {
+			var control = document.getElementById(controlArray[j]);	
+
+			expanders[i].addEventListener('click', function (event) {
+				if(hasClass(this, 'fa-minus-square')) {				
+					control.addEventListener('click', clickEventFunction, false);
+				}
+				else {
+					control.removeEventListener('click', clickEventFunction);
+				}
+			});
+		}		
 	}
 }
 
