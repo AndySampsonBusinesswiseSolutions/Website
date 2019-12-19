@@ -287,7 +287,11 @@ function createIcon(iconId, className, style, onClickEvent) {
 
 function createTableHeader(style, value) {
 	var tableHeader = document.createElement('th');
-	tableHeader.setAttribute('style', style);
+
+	if(style != '') {
+		tableHeader.setAttribute('style', style);
+	}
+	
 	tableHeader.innerHTML = value;
 	return tableHeader;
 }

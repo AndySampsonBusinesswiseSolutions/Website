@@ -1,21 +1,84 @@
-var contract = [
+var contracts = [
     {
         "Supplier" : "Haven",
-        "ContractReference" : "Haven0001",
-        "MPXN" : "987654",
-        "ContractStartDate" : "01/12/2019",
-        "ContractEndDate" : "",
-        "ProductType" : "Out Of Contract",
-        "IsBusinesswiseContract" : "Yes",
-        "Rates" : [
+        "Contract" : [
             {
-                "RateName" : "Unit Rate 1",
-                "Rate" : "7p/kWh"
+                "ContractReference" : "Haven0001",
+                "MPXN" : [
+                    {
+                        "Identifier" : "987654",
+                        "ContractStartDate" : "01/12/2019",
+                        "ContractEndDate" : "",
+                        "ProductType" : "Out Of Contract",
+                        "IsBusinesswiseContract" : "Yes",
+                        "Rates" : [
+                            {
+                                "RateName" : "Unit Rate 1",
+                                "Rate" : "7p/kWh"
+                            },
+                            {
+                                "RateName" : "Standing Charge",
+                                "Rate" : "£5/day"
+                            }
+                        ]
+                    }
+                ]  
             },
             {
-                "RateName" : "Standing Charge",
-                "Rate" : "£5/day"
+                "ContractReference" : "Haven0002",
+                "MPXN" : [
+                    {
+                        "Identifier" : "1234567890123",
+                        "ContractStartDate" : "02/12/2019",
+                        "ContractEndDate" : "31/12/2019",
+                        "ProductType" : "Out Of Contract",
+                        "IsBusinesswiseContract" : "No",
+                        "Rates" : [
+                            {
+                                "RateName" : "Unit Rate 1",
+                                "Rate" : "20p/kWh"
+                            },
+                            {
+                                "RateName" : "Unit Rate 2",
+                                "Rate" : "10p/kWh"
+                            },
+                            {
+                                "RateName" : "Capacity Charge",
+                                "Rate" : "5.5p/kVa/day"
+                            },
+                            {
+                                "RateName" : "Standing Charge",
+                                "Rate" : "£5/day"
+                            }
+                        ]
+                    },
+                    {
+                        "Identifier" : "1234567890124",
+                        "ContractStartDate" : "01/12/2019",
+                        "ContractEndDate" : "30/12/2019",
+                        "ProductType" : "Out Of Contract",
+                        "IsBusinesswiseContract" : "No",
+                        "Rates" : [
+                            {
+                                "RateName" : "Unit Rate 1",
+                                "Rate" : "19p/kWh"
+                            },
+                            {
+                                "RateName" : "Unit Rate 2",
+                                "Rate" : "11p/kWh"
+                            },
+                            {
+                                "RateName" : "Capacity Charge",
+                                "Rate" : "6p/kVa/day"
+                            },
+                            {
+                                "RateName" : "Standing Charge",
+                                "Rate" : "£4.5/day"
+                            }
+                        ]
+                    }
+                ]  
             }
-        ]
+        ]              
     }
 ]
