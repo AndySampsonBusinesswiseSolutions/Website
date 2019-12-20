@@ -41,37 +41,42 @@ function hasClass(elem, className) {
 function addExpanderOnClickEvents() {
 	var expanders = document.getElementsByClassName('fa-plus-square');
 	var expandersLength = expanders.length;
-	for(var i=0; i< expandersLength; i++){
-		expanders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-			updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-		});
-
-		var additionalcontrols = expanders[i].getAttribute('additionalcontrols');
-
-		if(!additionalcontrols) {
-			continue;
-		}
-
-		var listToHide = expanders[i].id.concat('List');
-		var clickEventFunction = function (event) {
-			updateClassOnClick(listToHide, 'listitem-hidden', '')
-		};
-
-		var controlArray = additionalcontrols.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var control = document.getElementById(controlArray[j]);	
-
-			expanders[i].addEventListener('click', function (event) {
-				if(hasClass(this, 'fa-minus-square')) {				
-					control.addEventListener('click', clickEventFunction, false);
-				}
-				else {
-					control.removeEventListener('click', clickEventFunction);
-				}
-			});
-		}		
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
+
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
 }
 
 function addArrowOnClickEvents() {

@@ -23,8 +23,9 @@
 		<div class="final-column">
 			<br>
 			<div>
-				<div class="group-by-div" id="outOfContract">
+				<div class="group-by-div">
 					<span>Out Of Contract Meters</span>
+					<div id="outOfContract"></div>
 				</div>
 			</div>
 		</div>
@@ -42,7 +43,7 @@
 <script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
 
 <script type="text/javascript"> 
-	createTree(data, "Hierarchy", "treeDiv", "", "");
+	createTree(data, "Hierarchy", "treeDiv", "", "filterContracts()");
 	buildContractDataGrids(contracts);
 	addExpanderOnClickEvents();	
 
