@@ -3,7 +3,21 @@ function getClone(item){
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
-	var element = document.getElementById(elementId);
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
 	if(hasClass(element, firstClass)){
 		element.classList.remove(firstClass);
 
@@ -27,12 +41,42 @@ function hasClass(elem, className) {
 function addExpanderOnClickEvents() {
 	var expanders = document.getElementsByClassName('fa-plus-square');
 	var expandersLength = expanders.length;
-	for(var i=0; i< expandersLength; i++){
-		expanders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-			updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-		});
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
+
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
 }
 
 function addArrowOnClickEvents() {
@@ -244,4 +288,15 @@ function createIcon(iconId, className, style, onClickEvent) {
 	}
 
 	return icon;
+}
+
+function createTableHeader(style, value) {
+	var tableHeader = document.createElement('th');
+
+	if(style != '') {
+		tableHeader.setAttribute('style', style);
+	}
+	
+	tableHeader.innerHTML = value;
+	return tableHeader;
 }

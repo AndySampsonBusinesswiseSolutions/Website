@@ -9,8 +9,6 @@
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 
-	
-
 	<div class="row"> -->
 		<div class="tree-column">
 			<div>
@@ -25,8 +23,9 @@
 		<div class="final-column">
 			<br>
 			<div>
-				<div class="group-by-div" style="display: none;">
-					
+				<div class="group-by-div">
+					<span>Out Of Contract Meters</span>
+					<div id="outOfContract"></div>
 				</div>
 			</div>
 		</div>
@@ -36,11 +35,17 @@
 
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/tree.js"></script>
+<script src="/javascript/contract.js"></script>
 <script type="text/javascript" src="/basedata/data.json"></script>
+<script type="text/javascript" src="/basedata/contract.json"></script>
+
+<link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
 
 <script type="text/javascript"> 
-	createTree(data, "Hierarchy", "treeDiv", "", "");
-	addExpanderOnClickEvents();
+	createTree(data, "Hierarchy", "treeDiv", "", "filterContracts()");
+	buildContractDataGrids(contracts);
+	addExpanderOnClickEvents();	
 
 	window.onload = function(){
 		resizeFinalColumns(380);

@@ -140,3 +140,7 @@ th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+tr {
+  text-align: center;
+}
