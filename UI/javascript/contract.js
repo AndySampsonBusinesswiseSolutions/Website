@@ -40,7 +40,7 @@ function showRates(contractIndex, contractDetailIndex, mpxnIndex) {
 				style: 'background: Green;'
 			}
 		},
-		title: mpxn.ProductType.concat(' For ').concat(mpxn.Identifier)
+		title: mpxn.ProductType.concat(' Rates For ').concat(mpxn.Identifier)
 	});
 }
 
@@ -65,17 +65,17 @@ function buildContractDataGrids(contracts, applyClickEvent) {
 		var contract = contracts[i];
 		var contractDetailLength = contract.Contract.length;
 		var hasMultipleContracts = contractDetailLength > 1;
-		var mpxnDatacell = getMPXNBySupplier(contract.Contract);
+		var mpxnDatacell = getAttributeBySupplier(contract.Contract, 'Identifier');
 
 		var tableRow = document.createElement('tr');
 		tableRow.appendChild(getSupplier(contract.Supplier, hasMultipleContracts, true, applyClickEvent));
 		tableRow.appendChild(getContractReferenceBySupplier(contract.Contract[0].ContractReference, hasMultipleContracts, mpxnDatacell.innerText == 'Multiple', '', applyClickEvent));
 		tableRow.appendChild(mpxnDatacell);
-		tableRow.appendChild(getContractStartDateBySupplier(contract.Contract));
-		tableRow.appendChild(getContractEndDateBySupplier(contract.Contract));
-		tableRow.appendChild(getProductType());
+		tableRow.appendChild(getAttributeBySupplier(contract.Contract, 'ContractStartDate'));
+		tableRow.appendChild(getAttributeBySupplier(contract.Contract, 'ContractEndDate'));
+		tableRow.appendChild(getAttributeByMPXN(contract.Contract[0].MPXN[0], 'ProductType'));
 		tableRow.appendChild(getRates(i, 0, 0, mpxnDatacell.innerText != 'Multiple'));
-		tableRow.appendChild(getIsBusinesswiseContractBySupplier(contract.Contract));
+		tableRow.appendChild(getAttributeBySupplier(contract.Contract, 'IsBusinesswiseContract'));
 		table.appendChild(tableRow);		
 
 		for(var j = 0; j < contractDetailLength; j++) {
@@ -87,12 +87,12 @@ function buildContractDataGrids(contracts, applyClickEvent) {
 				var tableRow = document.createElement('tr');
 				tableRow.appendChild(getSupplier('', hasMultipleMPXNs, false, applyClickEvent));
 				tableRow.appendChild(getContractReferenceByContract(contractDetail.ContractReference, hasMultipleMPXNs, true, contract.Supplier, applyClickEvent));
-				tableRow.appendChild(getMPXNByContractOrMPXN(contractDetail.MPXN[0].Identifier, hasMultipleMPXNs));
-				tableRow.appendChild(getContractStartDateByContract(contractDetail));
-				tableRow.appendChild(getContractEndDateByContract(contractDetail));
-				tableRow.appendChild(getProductType());
+				tableRow.appendChild(getAttributeByMPXN(contractDetail.MPXN[0], 'Identifier', hasMultipleMPXNs));
+				tableRow.appendChild(getAttributeByContract(contractDetail, 'ContractStartDate'));
+				tableRow.appendChild(getAttributeByContract(contractDetail, 'ContractEndDate'));
+				tableRow.appendChild(getAttributeByMPXN(contractDetail.MPXN[0], 'ProductType'));
 				tableRow.appendChild(getRates(i, j, 0, !hasMultipleMPXNs));
-				tableRow.appendChild(getIsBusinesswiseContractByContract(contractDetail));
+				tableRow.appendChild(getAttributeByContract(contractDetail, 'IsBusinesswiseContract'));
 	
 				tableRow.setAttribute('class', 'listitem-hidden '.concat('OutOfContract'.concat(contract.Supplier).concat('List')));
 				table.appendChild(tableRow);
@@ -105,12 +105,12 @@ function buildContractDataGrids(contracts, applyClickEvent) {
 					var tableRow = document.createElement('tr');
 					tableRow.appendChild(getSupplier('', false, false, applyClickEvent));
 					tableRow.appendChild(getContractReferenceByContract('', false, false, '', applyClickEvent));
-					tableRow.appendChild(getMPXNByContractOrMPXN(mpxn.Identifier, false));
-					tableRow.appendChild(getContractStartDateByMPXN(mpxn));
-					tableRow.appendChild(getContractEndDateByMPXN(mpxn));
-					tableRow.appendChild(getProductType());
+					tableRow.appendChild(getAttributeByMPXN(mpxn, 'Identifier'));
+					tableRow.appendChild(getAttributeByMPXN(mpxn, 'ContractStartDate'));
+					tableRow.appendChild(getAttributeByMPXN(mpxn, 'ContractEndDate'));
+					tableRow.appendChild(getAttributeByMPXN(mpxn, 'ProductType'));
 					tableRow.appendChild(getRates(i, j, k, true));
-					tableRow.appendChild(getIsBusinesswiseContractByMPXN(mpxn));
+					tableRow.appendChild(getAttributeByMPXN(mpxn, 'IsBusinesswiseContract'));
 					
 					tableRow.setAttribute('class', 'listitem-hidden '.concat('OutOfContract'.concat(contractDetail.ContractReference).concat('List')));
 					table.appendChild(tableRow);
@@ -128,14 +128,7 @@ function getSupplier(supplier, hasMultipleRecords, applyGroupIcon, applyClickEve
 	var tableDatacell = document.createElement('td');
 
 	if(hasMultipleRecords && applyGroupIcon) {
-		var icon = document.createElement('i');
-		icon.setAttribute('class', 'far fa-plus-square');
-		icon.setAttribute('style', 'padding-right: 10px;');
-		icon.id = 'OutOfContract'.concat(supplier)
-
-		if(applyClickEvent) {
-			addExpanderOnClickEventsByElement(icon);
-		}
+		var icon = createGroupByIcon('OutOfContract'.concat(supplier), 'far fa-plus-square', 'padding-right: 10px;', null, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 	}
@@ -148,25 +141,13 @@ function getContractReferenceBySupplier(contractReference, hasMultipleRecords, a
 	var tableDatacell = document.createElement('td');
 
 	if(!hasMultipleRecords && applyGroupIcon) {
-		var icon = document.createElement('i');
-		icon.setAttribute('class', 'far fa-plus-square');
-		icon.setAttribute('style', 'padding-right: 10px;');
-
-		if(contractSupplier) {
-			icon.setAttribute('additionalcontrols', 'OutOfContract'.concat(contractSupplier));
-		}
-		
-		icon.id = 'OutOfContract'.concat(contractReference)
-
-		if(applyClickEvent) {
-			addExpanderOnClickEventsByElement(icon);
-		}
+		var icon = createGroupByIcon('OutOfContract'.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractSupplier, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
-	}
 
-	if(!hasMultipleRecords) {
-		tableDatacell.appendChild(createSpan('', contractReference));
+		if(applyGroupIcon) {
+			tableDatacell.appendChild(createSpan('', contractReference));
+		}
 	}
 
 	return tableDatacell;
@@ -176,178 +157,37 @@ function getContractReferenceByContract(contractReference, hasMultipleRecords, a
 	var tableDatacell = document.createElement('td');
 
 	if(hasMultipleRecords && applyGroupIcon) {
-		var icon = document.createElement('i');
-		icon.setAttribute('class', 'far fa-plus-square');
-		icon.setAttribute('style', 'padding-right: 10px;');
-
-		if(contractSupplier) {
-			icon.setAttribute('additionalcontrols', 'OutOfContract'.concat(contractSupplier));
-		}
-		
-		icon.id = 'OutOfContract'.concat(contractReference);
-
-		if(applyClickEvent) {
-			addExpanderOnClickEventsByElement(icon);
-		}
+		var icon = createGroupByIcon('OutOfContract'.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractSupplier, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
+	}
+
+	if(!hasMultipleRecords || (hasMultipleRecords && applyGroupIcon)) {
 		tableDatacell.appendChild(createSpan('', contractReference));
 	}
 
-	if(!hasMultipleRecords) {
-		tableDatacell.appendChild(createSpan('', contractReference));
+	return tableDatacell;
+}
+
+function createGroupByIcon(iconId, className, style, contractSupplier, applyClickEvent) {
+	var icon = createIcon(iconId, className.concat(' show-pointer'), style);
+
+	if(contractSupplier) {
+		icon.setAttribute('additionalcontrols', 'OutOfContract'.concat(contractSupplier));
 	}
 
-	return tableDatacell;
-}
-
-function getMPXNBySupplier(contracts) {
-	var tableDatacell = document.createElement('td');
-	var mpxnIdentifier = contracts[0].MPXN[0].Identifier;
-	var contractDetailLength = contracts.length;
-
-	for(var i = 0; i < contractDetailLength; i++) {
-		var contractDetail = contracts[i];
-		var mpxnLength = contractDetail.MPXN.length;
-
-		for(var j = 0; j < mpxnLength; j++) {
-			var mpxn = contractDetail.MPXN[j];
-			if(mpxn.Identifier != mpxnIdentifier) {
-				mpxnIdentifier = 'Multiple';
-				break;
-			}
-		}
-
-		if(mpxnIdentifier == 'Multiple') {
-			break;
-		}
+	if(applyClickEvent) {
+		addExpanderOnClickEventsByElement(icon);
 	}
 
-
-	tableDatacell.innerText = mpxnIdentifier;
-	return tableDatacell;
-}
-
-function getMPXNByContractOrMPXN(mpxn, hasMultipleRecords) {
-	var tableDatacell = document.createElement('td');
-
-	if(hasMultipleRecords) {
-		tableDatacell.innerText = 'Multiple';
-	}
-	else {
-		tableDatacell.innerText = mpxn;
-	}
-
-	return tableDatacell;
-}
-
-function getContractStartDateBySupplier(contracts) {
-	var tableDatacell = document.createElement('td');
-	var contractStartDate = contracts[0].MPXN[0].ContractStartDate;
-	var contractLength = contracts.length;
-
-	for(var i = 0; i < contractLength; i++) {
-		var contract = contracts[i];
-		var mpxnLength = contract.MPXN.length;
-
-		for(var j = 0; j < mpxnLength; j++) {
-			if(contract.MPXN[j].ContractStartDate != contractStartDate) {
-				contractStartDate = 'Multiple';
-				break;
-			}
-		}
-
-		if(contractStartDate == 'Multiple') {
-			break;
-		}
-	}
-
-	tableDatacell.innerText = contractStartDate;
-	return tableDatacell;
-}
-
-function getContractStartDateByContract(contract) {
-	var tableDatacell = document.createElement('td');
-	var contractStartDate = contract.MPXN[0].ContractStartDate;
-	var mpxnLength = contract.MPXN.length;
-
-	for(var j = 0; j < mpxnLength; j++) {
-		if(contract.MPXN[j].ContractStartDate != contractStartDate) {
-			contractStartDate = 'Multiple';
-			break;
-		}
-	}
-
-	tableDatacell.innerText = contractStartDate;
-	return tableDatacell;
-}
-
-function getContractStartDateByMPXN(mpxn) {
-	var tableDatacell = document.createElement('td');
-	tableDatacell.innerText = mpxn.ContractStartDate;
-	return tableDatacell;
-}
-
-function getContractEndDateBySupplier(contracts) {
-	var tableDatacell = document.createElement('td');
-	var contractEndDate = contracts[0].MPXN[0].ContractEndDate;
-	var contractLength = contracts.length;
-
-	for(var i = 0; i < contractLength; i++) {
-		var contract = contracts[i];
-		var mpxnLength = contract.MPXN.length;
-
-		for(var j = 0; j < mpxnLength; j++) {
-			if(contract.MPXN[j].ContractEndDate != contractEndDate) {
-				contractEndDate = 'Multiple';
-				break;
-			}
-		}
-
-		if(contractEndDate == 'Multiple') {
-			break;
-		}
-	}
-
-	tableDatacell.innerText = contractEndDate;
-	return tableDatacell;
-}
-
-function getContractEndDateByContract(contract) {
-	var tableDatacell = document.createElement('td');
-	var contractEndDate = contract.MPXN[0].ContractEndDate;
-	var mpxnLength = contract.MPXN.length;
-
-	for(var j = 0; j < mpxnLength; j++) {
-		if(contract.MPXN[j].ContractEndDate != contractEndDate) {
-			contractEndDate = 'Multiple';
-			break;
-		}
-	}
-
-	tableDatacell.innerText = contractEndDate;
-	return tableDatacell;
-}
-
-function getContractEndDateByMPXN(mpxn) {
-	var tableDatacell = document.createElement('td');
-	tableDatacell.innerText = mpxn.ContractEndDate;
-	return tableDatacell;
-}
-
-function getProductType() {
-	var tableDatacell = document.createElement('td');
-	tableDatacell.innerText = 'Out Of Contract';
-	return tableDatacell;
+	return icon;
 }
 
 function getRates(contractIndex, contractDetailIndex, mpxnIndex, canShowRates) {
 	var tableDatacell = document.createElement('td');
 
 	if(canShowRates) {
-		var icon = document.createElement('i');
-		icon.setAttribute('class', 'fas fa-search show-pointer');
-		icon.setAttribute('onclick', 'showRates(' + contractIndex + ',' + contractDetailIndex + ',' + mpxnIndex + ')');
+		var icon = createIcon('', 'fas fa-search show-pointer', null, 'showRates(' + contractIndex + ',' + contractDetailIndex + ',' + mpxnIndex + ')');
 
 		tableDatacell.appendChild(icon);
 	}
@@ -355,50 +195,46 @@ function getRates(contractIndex, contractDetailIndex, mpxnIndex, canShowRates) {
 	return tableDatacell;
 }
 
-function getIsBusinesswiseContractBySupplier(contracts) {
+function getAttributeBySupplier(contracts, attribute) {
 	var tableDatacell = document.createElement('td');
-	var isBusinesswiseContract = contracts[0].MPXN[0].IsBusinesswiseContract;
+	var attributeValue = contracts[0].MPXN[0][attribute];
 	var contractLength = contracts.length;
 
 	for(var i = 0; i < contractLength; i++) {
-		var contract = contracts[i];
-		var mpxnLength = contract.MPXN.length;
+		attributeValue = getAttributeByContract(contracts[i], attribute, attributeValue).innerText;
 
-		for(var j = 0; j < mpxnLength; j++) {
-			if(contract.MPXN[j].IsBusinesswiseContract != isBusinesswiseContract) {
-				isBusinesswiseContract = 'Multiple';
-				break;
-			}
-		}
-
-		if(isBusinesswiseContract == 'Multiple') {
+		if(attributeValue == 'Multiple') {
 			break;
 		}
 	}
 
-	tableDatacell.innerText = isBusinesswiseContract;
+	tableDatacell.innerText = attributeValue;
 	return tableDatacell;
 }
 
-function getIsBusinesswiseContractByContract(contract) {
+function getAttributeByContract(contract, attribute, attributeValue) {
 	var tableDatacell = document.createElement('td');
-	var isBusinesswiseContract = contract.MPXN[0].IsBusinesswiseContract;
+
+	if(!attributeValue) {
+		attributeValue = contract.MPXN[0][attribute];
+	}
+
 	var mpxnLength = contract.MPXN.length;
 
 	for(var i = 0; i < mpxnLength; i++) {
-		if(contract.MPXN[i].IsBusinesswiseContract != isBusinesswiseContract) {
-			isBusinesswiseContract = 'Multiple';
+		if(contract.MPXN[i][attribute] != attributeValue) {
+			attributeValue = 'Multiple';
 			break;
 		}
 	}
 
-	tableDatacell.innerText = isBusinesswiseContract;
+	tableDatacell.innerText = attributeValue;
 	return tableDatacell;
 }
 
-function getIsBusinesswiseContractByMPXN(mpxn) {
+function getAttributeByMPXN(mpxn, attribute, hasMultipleRecords) {
 	var tableDatacell = document.createElement('td');
-	tableDatacell.innerText = mpxn.IsBusinesswiseContract;
+	tableDatacell.innerText = hasMultipleRecords ? 'Multiple' : mpxn[attribute];
 	return tableDatacell;
 }
 
