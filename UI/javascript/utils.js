@@ -3,7 +3,21 @@ function getClone(item){
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
-	var element = document.getElementById(elementId);
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
 	if(hasClass(element, firstClass)){
 		element.classList.remove(firstClass);
 
@@ -26,17 +40,49 @@ function hasClass(elem, className) {
 
 function addExpanderOnClickEvents() {
 	var expanders = document.getElementsByClassName('fa-plus-square');
-	for(var i=0; i< expanders.length; i++){
-		expanders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-			updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-		});
+	var expandersLength = expanders.length;
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
+
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
 }
 
 function addArrowOnClickEvents() {
 	var arrows = document.getElementsByClassName('fa-angle-double-down');
-	for(var i=0; i< arrows.length; i++){
+	var arrowsLength = arrows.length;
+	for(var i=0; i< arrowsLength; i++){
 		arrows[i].addEventListener('click', function (event) {
 			updateClassOnClick(this.id, 'fa-angle-double-down', 'fa-angle-double-up')
 			updateClassOnClick(this.id.replace('Arrow', 'SubMenu'), 'listitem-hidden', '')
@@ -44,14 +90,16 @@ function addArrowOnClickEvents() {
 	}
 
 	arrows = document.getElementsByClassName('fa-angle-double-left');
-	for(var i=0; i< arrows.length; i++){
+	arrowsLength = arrows.length;
+	for(var i=0; i< arrowsLength; i++){
 		arrows[i].addEventListener('click', function (event) {
 			updateClassOnClick(this.id, 'fa-angle-double-left', 'fa-angle-double-right')
 		});
 	}
 
 	var arrowHeaders = document.getElementsByClassName('arrow-header');
-	for(var i=0; i< arrowHeaders.length; i++){
+	var arrowHeadersLength = arrowHeaders.length;
+	for(var i=0; i< arrowHeadersLength; i++){
 		arrowHeaders[i].addEventListener('click', function (event) {
 			updateClassOnClick(this.id.concat('Arrow'), 'fa-angle-double-down', 'fa-angle-double-up')
 			updateClassOnClick(this.id.concat('SubMenu'), 'listitem-hidden', '')
@@ -162,9 +210,10 @@ function clearElement(element) {
 
 function resizeFinalColumns(windowWidthReduction){
 	var finalColumns = document.getElementsByClassName('final-column');
+	var finalColumnsLength = finalColumns.length;
 	var elementWidth = window.innerWidth - windowWidthReduction;
   
-	for(var i=0; i<finalColumns.length; i++){
+	for(var i = 0; i < finalColumnsLength; i++){
 	  finalColumns[i].setAttribute('style', 'width: '+elementWidth+'px;');
 	}
   }
@@ -184,23 +233,30 @@ function getAttribute(attributes, attributeRequired) {
 }
 
 function getEntityByGUID(guid, type) {
-	for(var i = 0; i < data.length; i++) {
+	var dataLength = data.length;
+	for(var i = 0; i < dataLength; i++) {
+		var site = data[i];
 		if(type == 'Site') {
-			if(data[i].GUID == guid) {
-				return data[i];
+			if(site.GUID == guid) {
+				return site;
 			}
 		}
         else {
-			for(var j = 0; j < data[i].Meters.length; j++) {
+			var meterLength = site.Meters.length;
+			for(var j = 0; j < meterLength; j++) {
+				var meter = site.Meters[j];
 				if(type = 'Meter') {
-					if(data[i].Meters[j].GUID == guid) {
-						return data[i].Meters[j];
+					if(meter.GUID == guid) {
+						return meter;
 					}
 					else {
-						if(data[i].Meters[j].SubMeters) {
-							for(var k = 0; k < data[i].Meters[j].SubMeters.length; k++) {
-								if(data[i].Meters[j].SubMeters[k].GUID == guid) {
-									return data[i].Meters[j].SubMeters[k];
+						var subMeters = meter.SubMeters;
+						if(subMeters) {
+							var subMetersLength = subMeters.length;
+							for(var k = 0; k < subMetersLength; k++) {
+								var subMeter = subMeters[k];
+								if(subMeter.GUID == guid) {
+									return subMeter;
 								}
 							}
 						}
@@ -232,4 +288,15 @@ function createIcon(iconId, className, style, onClickEvent) {
 	}
 
 	return icon;
+}
+
+function createTableHeader(style, value) {
+	var tableHeader = document.createElement('th');
+
+	if(style != '') {
+		tableHeader.setAttribute('style', style);
+	}
+	
+	tableHeader.innerHTML = value;
+	return tableHeader;
 }

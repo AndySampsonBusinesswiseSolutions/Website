@@ -10,16 +10,18 @@ var siteCardViewAttributes = [
 ]
 
 function openTab(evt, tabName, guid, branch) {
-	var i, tabcontent, tablinks;
 	var cardDiv = document.getElementById('cardDiv');
 
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-	  cardDiv.removeChild(tabcontent[i]);
+	var tabContent = document.getElementsByClassName("tabcontent");
+	var tabContentLength = tabContent.length;
+	for (var i = 0; i < tabContentLength; i++) {
+	  cardDiv.removeChild(tabContent[i]);
 	}
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-	  tablinks[i].className = tablinks[i].className.replace(" active", "");
+
+	var tabLinks = document.getElementsByClassName("tablinks");
+	var tabLinksLength = tabLinks.length;
+	for (var i = 0; i < tabLinksLength; i++) {
+		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
 	}
 	
 	var newDiv = document.createElement('div');
@@ -84,10 +86,13 @@ function createCardButton(checkbox){
 }
 
 function updateTabDiv() {
-    var tabDiv = document.getElementById('tabDiv');
-    tabDiv.children[0].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDiv.children.length).concat('px;'));
-    for(var i = 1; i < tabDiv.children.length; i++) {
-        tabDiv.children[i].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDiv.children.length).concat('px; border-left: solid black 1px;'));
+	var tabDiv = document.getElementById('tabDiv');
+	var tabDivChildren = tabDiv.children;
+	var tabDivChildrenLength = tabDivChildren.length;
+
+    tabDivChildren[0].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px;'));
+    for(var i = 1; i < tabDivChildrenLength; i++) {
+        tabDivChildren[i].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px; border-left: solid black 1px;'));
     }
 }
 
@@ -121,20 +126,24 @@ function buildCardView(type, entity, divToAppendTo){
 			break;
 	}
 
-	for(var i = 0; i < cardViewAttributes.length; i++) {
+	var cardViewAttributesLength = cardViewAttributes.length;
+	var entityAttributes = entity.Attributes;
+
+	for(var i = 0; i < cardViewAttributesLength; i++) {
+		var cardViewAttribute = cardViewAttributes[i];
 		var tableRow = document.createElement('tr');
 		var tableDatacellAttribute = document.createElement('td');
 		var tableDatacellAttributeValue = document.createElement('td');
 
-		tableDatacellAttribute.innerHTML = cardViewAttributes[i];
-		tableDatacellAttributeValue.innerHTML = getAttribute(entity.Attributes, cardViewAttributes[i]) || '';
+		tableDatacellAttribute.innerHTML = cardViewAttribute;
+		tableDatacellAttributeValue.innerHTML = getAttribute(entityAttributes, cardViewAttribute) || '';
 
 		tableRow.appendChild(tableDatacellAttribute);
 		tableRow.appendChild(tableDatacellAttributeValue);
 
 		if(i == 0) {
 			var tableDatacellMap = document.createElement('td');
-			tableDatacellMap.setAttribute('rowspan', cardViewAttributes.length);
+			tableDatacellMap.setAttribute('rowspan', cardViewAttributesLength);
 
 			var mapDiv = document.createElement('div');
 			mapDiv.id = 'map-canvas';
@@ -168,11 +177,15 @@ function buildCardView(type, entity, divToAppendTo){
 
 function getAddress(cardViewAttributes, entity) {
 	var addressDetails = [];
+	var cardViewAttributesLength = cardViewAttributes.length;
+	var entityAttributes = entity.Attributes;
 
-	for(var i = 0; i < cardViewAttributes.length; i++) {
-		if(cardViewAttributes[i].includes('Address Line')
-			|| cardViewAttributes[i].includes('Postcode')) {
-				var attribute = getAttribute(entity.Attributes, cardViewAttributes[i]);
+	for(var i = 0; i < cardViewAttributesLength; i++) {
+		var cardViewAttribute = cardViewAttributes[i];
+
+		if(cardViewAttribute.includes('Address Line')
+			|| cardViewAttribute.includes('Postcode')) {
+				var attribute = getAttribute(entityAttributes, cardViewAttribute);
 
 				if(attribute != '') {
 					addressDetails.push(attribute);
@@ -224,19 +237,13 @@ function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 	treeDiv.appendChild(table);
 }
 
-function createTableHeader(style, value) {
-	var tableHeader = document.createElement('th');
-	tableHeader.setAttribute('style', style);
-	tableHeader.innerHTML = value;
-	return tableHeader;
-}
-
 function displayAttributes(type, identifier, attributes, table) {
 	if(!attributes) {
 		return;
 	}
 
-	for(var i = 0; i < attributes.length; i++) {
+	var attributesLength = attributes.length;
+	for(var i = 0; i < attributesLength; i++) {
 		var tableRow = document.createElement('tr');
 		tableRow.id = 'row' + i;
 
