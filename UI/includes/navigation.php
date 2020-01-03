@@ -34,7 +34,7 @@
                                     <li class="submenu-item"><a href="/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/TenderManagement/"><span>Tender Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
-                                    <li class="submenu-item"><a href="/PortfolioManagement/PositionManagement/"><span>Position Management</span></a></li>
+                                    <li class="submenu-item"><a href="/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
                                 </ul>
                             </li>

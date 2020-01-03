@@ -45,7 +45,7 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
         autoSelected: 'zoom',
         tools: {
           download: false
-        }        
+        }
       }
     },
     dataLabels: {
@@ -58,27 +58,14 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
     },
     legend: {
       show: true,
-      position: 'right'
+      position: 'right',
+      onItemClick: {
+        toggleDataSeries: false
+      }
     },
     series: newSeries,
-    yaxis: {
-      title: {
-        text: chartOptions.yaxis.title.text
-      },
-      show: true
-    },
-    xaxis: {
-      type: 'datetime',
-      title: {
-        text: chartOptions.xaxis.title.text
-      },
-      labels: {
-          format: chartOptions.xaxis.labels.format
-      },
-      min: chartOptions.xaxis.min,
-      max: chartOptions.xaxis.max,
-      categories: newCategories
-    }
+    yaxis: chartOptions.yaxis,
+    xaxis: chartOptions.xaxis
   };  
 
   renderChart(chartId, options);
