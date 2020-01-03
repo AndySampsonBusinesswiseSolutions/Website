@@ -47,6 +47,11 @@
                                     <li class="submenu-item"><a href="/AccountManagement/Communications/"><span>Communications</span></a></li>
                                 </ul>
                             </li>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Supplier Management</span></a>
+                                <ul class="sub-menu">
+                                    <li class="submenu-item"><a href="/SupplierManagement/SupplierManagement/"><span>Supplier Management</span></a></li>
+                                </ul>
+                            </li>
                             <li><a href="/" class="fusion-flex-link fusion-bar-highlight"><span>Logout</span></a></li>
                         </ul>
                     </nav>

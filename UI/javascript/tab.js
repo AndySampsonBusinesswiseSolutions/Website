@@ -1,14 +1,3 @@
-var siteCardViewAttributes = [
-	"Address Line 1",
-	"Address Line 2",
-	"Address Line 3",
-	"Address Line 4",
-	"Postcode",
-	"Contact Name",
-	"Contact Telephone Number",
-	"Sq. ft"
-]
-
 function openTab(evt, tabName, guid, branch) {
 	var cardDiv = document.getElementById('cardDiv');
 
