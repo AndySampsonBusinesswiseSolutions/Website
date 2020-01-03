@@ -1,5 +1,5 @@
 <?php 
-	$PAGE_TITLE = "Site Management";
+	$PAGE_TITLE = "Supplier Management";
 	 include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	 include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
@@ -8,8 +8,6 @@
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-
-	
 
 	<div class="row"> -->
 		<div class="tree-column">
@@ -38,9 +36,9 @@
 <script src="/javascript/tree.js"></script>
 <script src="/javascript/map.js"></script>
 <script src="/javascript/tab.js"></script>
-<script type="text/javascript" src="/basedata/data.json"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"
-  type="text/javascript"></script>
+<script type="text/javascript" src="/basedata/supplier.json"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"
+  type="text/javascript"></script> -->
 
 <link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
@@ -54,9 +52,9 @@ var siteCardViewAttributes = [
 	"Postcode",
 	"Contact Name",
 	"Contact Telephone Number",
-	"Sq. ft"
+	"Email"
 ]
-
+	var data = supplier;
 	createTree(data, "Hierarchy", "treeDiv", "", "createCardButton", true);
 	addExpanderOnClickEvents();
 

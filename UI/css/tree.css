@@ -26,7 +26,8 @@
     background-color: #e9eaee;
 }
 .tree-div {
-    height: 650px;
+    min-height: 300px;
+    max-height: 650px;
 }
 .datagrid {
     max-height: 650px;

@@ -3,7 +3,7 @@ var data = [
         "GUID" : "0",
         "Attributes" : 
         [
-            {"SiteName" : "Leeds"},
+            {"BaseName" : "Leeds"},
             {"Address Line 1" : "Manor Mill Ln"},
             {"Address Line 2" : "Leeds"},
             {"Address Line 3" : ""},
@@ -21715,7 +21715,7 @@ var data = [
         "GUID" : "6",
         "Attributes" : 
         [
-            {"SiteName" : "Manchester"},
+            {"BaseName" : "Manchester"},
             {"Address Line 1" : "Bury"},
             {"Address Line 2" : "Greater Manchester"},
             {"Address Line 3" : ""},
