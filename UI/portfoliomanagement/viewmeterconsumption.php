@@ -85,12 +85,14 @@
 			format: getChartTooltipXFormat(periodSpan.children[0].value)
 			}
 		},
-		yaxis: {
+		yaxis: [{
 			title: {
-			text: getChartYAxisTitle(showBySpan.children[0].value, commodity)
-			}
-		},
+				text: getChartYAxisTitle(showBySpan.children[0].value, commodity)
+			},
+      		show: true
+		}],
 		xaxis: {
+			type: 'datetime',
 			title: {
 			text: formatDate(chartDate, getChartXAxisTitleFormat(periodSpan.children[0].value))
 			},
@@ -98,7 +100,8 @@
 			format: getChartXAxisLabelFormat(periodSpan.children[0].value)
 			},
 			min: new Date(newCategories[0]).getTime(),
-			max: new Date(newCategories[newCategories.length - 1]).getTime()
+			max: new Date(newCategories[newCategories.length - 1]).getTime(),
+      		categories: newCategories
 		}
 		};
 
