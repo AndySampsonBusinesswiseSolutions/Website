@@ -117,7 +117,9 @@ function createCard(guid, divToAppendTo, identifier) {
 	}
 
 	buildCardView(productEntity, divToAppendTo);
-    buildDataTable(productEntity, identifier, divToAppendTo);
+	buildProductDataTable(productEntity, identifier, divToAppendTo);
+	divToAppendTo.appendChild(document.createElement('br'));
+	buildCostElementDataTable(productEntity, identifier, divToAppendTo);
 }
 
 function buildCardView(entity, divToAppendTo){
@@ -155,14 +157,18 @@ function buildCardView(entity, divToAppendTo){
 	var button = document.createElement('button');
 	button.id = 'editDetailsButton';
 	button.innerHTML = 'Edit Details';
-	button.setAttribute('onclick', 'displayDataTable()');
+	button.setAttribute('onclick', 'displayProductDataTable()');
+	button.setAttribute('style', 'margin-top: 5px; margin-right: 5px; margin-bottom: 5px;')
 	divToAppendTo.appendChild(button);	
 
-	divToAppendTo.appendChild(document.createElement('br'));
-	divToAppendTo.appendChild(document.createElement('br'));
+	var costElementButton = document.createElement('button');
+	costElementButton.id = 'editCostElementsButton';
+	costElementButton.innerHTML = 'Edit Cost Elements';
+	costElementButton.setAttribute('onclick', 'displayCostElementDataTable()');
+	divToAppendTo.appendChild(costElementButton);	
 }
 
-function displayDataTable() {
+function displayProductDataTable() {
 	var button = document.getElementById('editDetailsButton');
 	var div = document.getElementById('displayAttributes');
 
@@ -176,7 +182,21 @@ function displayDataTable() {
 	}
 }
 
-function buildDataTable(entity, attributeRequired, divToAppendTo){
+function displayCostElementDataTable() {
+	var button = document.getElementById('editCostElementsButton');
+	var div = document.getElementById('displayCostElements');
+
+	if(button.innerHTML == 'Edit Cost Elements') {
+		div.setAttribute('style', '');
+		button.innerText = 'Hide Cost Elements';
+	}
+	else {
+		div.setAttribute('style', 'display: none');
+		button.innerText = 'Edit Cost Elements'
+	}
+}
+
+function buildProductDataTable(entity, attributeRequired, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
 	div.setAttribute('style', 'display: none');
@@ -191,14 +211,40 @@ function buildDataTable(entity, attributeRequired, divToAppendTo){
 
 	var tableRow = document.createElement('tr');
 
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Type'));
+	tableRow.appendChild(createTableHeader('width: 15%; border: solid black 1px;', 'Type'));
 	//tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Identifier'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border: solid black 1px;', 'Attribute'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; border: solid black 1px;', 'Value'));
+	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Attribute'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
 	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
 
     table.appendChild(tableRow);
 	displayAttributes(getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table, 'Product');
+
+	treeDiv.appendChild(table);
+}
+
+function buildCostElementDataTable(entity, attributeRequired, divToAppendTo){
+	var div = document.createElement('div');
+	div.id = 'displayCostElements';
+	div.setAttribute('style', 'display: none');
+	divToAppendTo.appendChild(div);
+	
+	var treeDiv = document.getElementById('displayCostElements');
+	clearElement(treeDiv);
+
+	var table = document.createElement('table');
+	table.id = 'dataTable';
+	table.setAttribute('style', 'width: 100%;');
+
+	var tableRow = document.createElement('tr');
+
+	tableRow.appendChild(createTableHeader('width: 15%; border: solid black 1px;', 'Type'));
+	//tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Identifier'));
+	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Attribute'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
+	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
+
+    table.appendChild(tableRow);
 	displayAttributes(getAttribute(entity.CostElements, attributeRequired), entity.CostElements, table, 'CostElement');
 
 	treeDiv.appendChild(table);
