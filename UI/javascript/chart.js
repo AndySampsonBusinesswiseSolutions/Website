@@ -98,7 +98,7 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dat
     var seriesName = span.innerHTML;
 
     if(checkboxBranch == 'Site') {				
-      meters = getSitesByAttribute('SiteName', linkedSite)[0].Meters;
+      meters = getSitesByAttribute('BaseName', linkedSite)[0].Meters;
     }
     else if(checkboxBranch.includes('GroupByOption')) {
       meters = getMetersByAttribute(checkboxBranch.replace('GroupByOption|', ''), span.innerHTML, linkedSite);

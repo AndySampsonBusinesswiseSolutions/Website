@@ -236,7 +236,7 @@ function getEntityByGUID(guid, type) {
 	var dataLength = data.length;
 	for(var i = 0; i < dataLength; i++) {
 		var site = data[i];
-		if(type == 'Site') {
+		if(type == 'Site' || type == 'Supplier') {
 			if(site.GUID == guid) {
 				return site;
 			}
@@ -274,7 +274,7 @@ function showHideIcon(iconId, style) {
 	icon.setAttribute('style', style);
 }
 
-function createIcon(iconId, className, style, onClickEvent) {
+function createIcon(iconId, className, style, onClickEvent, title) {
 	var icon = document.createElement('i');
 	icon.id = iconId;
 	icon.setAttribute('class', className);
@@ -285,6 +285,10 @@ function createIcon(iconId, className, style, onClickEvent) {
 
 	if(onClickEvent) {
 		icon.setAttribute('onclick', onClickEvent);
+	}
+
+	if(title) {
+		icon.setAttribute('title', title);
 	}
 
 	return icon;
