@@ -1,6 +1,5 @@
 function openTab(evt, tabName, guid, branch) {
 	var cardDiv = document.getElementById('cardDiv');
-	var pageType = document.getElementsByClassName('section-header section-header-text')[0].innerHTML;
 
 	var tabContent = document.getElementsByClassName("tabcontent");
 	var tabContentLength = tabContent.length;
@@ -18,23 +17,8 @@ function openTab(evt, tabName, guid, branch) {
 	newDiv.setAttribute('class', 'tabcontent');
 	newDiv.id = tabName;
 	cardDiv.appendChild(newDiv);
-	
-	switch(branch) {
-		case "Site":
-			if(pageType == "Supplier Management") {
-				createCard(guid, newDiv, 'Supplier', 'BaseName');
-			}
-			else {
-				createCard(guid, newDiv, 'Site', 'BaseName');
-			}			
-			break;
-		case "Meter":
-			createCard(guid, newDiv, 'Meter', 'Identifier');
-			break;
-		case "SubMeter":
-			createCard(guid, newDiv, 'SubMeter', 'Identifier');
-			break;
-	}
+
+	createCard(guid, newDiv, 'ProductName');
 
 	document.getElementById(tabName).style.display = "block";
 	evt.currentTarget.className += " active";
@@ -51,13 +35,11 @@ function createCardButton(checkbox){
 		button.setAttribute('class', 'tablinks');
 		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 
-		if(checkbox.getAttribute('branch') == "SubMeter") {
-			button.innerHTML = checkbox.parentNode.parentNode.parentNode.parentNode.children[3].innerText.concat(' - ').concat(span.innerHTML);
-		}
-		else {
-			button.innerHTML = span.innerHTML;
-		}
-		
+		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[2];
+		var commodityNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[2];
+		var supplierNode = commodityNode.parentNode.parentNode.parentNode.parentNode.children[2];
+
+		button.innerHTML = supplierNode.innerText.concat(' - ').concat(commodityNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
 		button.id = span.id.replace('span', 'button');
 		tabDiv.appendChild(button);
 	
@@ -91,14 +73,54 @@ function updateTabDiv() {
     }
 }
 
-function createCard(guid, divToAppendTo, type, identifier) {
-    var site = getEntityByGUID(guid, type);
+function createCard(guid, divToAppendTo, identifier) {
+	var productEntity;
+	
+	var supplierproductLength = supplierproduct.length;
+	for(var i = 0; i < supplierproductLength; i++) {
+		var site = data[i];
+		var commodities = site.Commodities;
+		
+		var commodityLength = commodities.length;
+		for(var j = 0; j < commodityLength; j++) {
+			var commodity = commodities[j];
+			var profileClasses = commodity.ProfileClasses;
 
-	buildCardView(type, site, divToAppendTo);
-    buildDataTable(type, site, identifier, divToAppendTo);
+			var profileClassLength = profileClasses.length;
+			for(var k = 0; k < profileClassLength; k++) {
+				var profileClass = profileClasses[k];
+				var products = profileClass.Products;
+
+				var productLength = products.length;
+				for(var l = 0; l < productLength; l++) {
+					var product = products[l];
+
+					if(product.GUID == guid) {
+						productEntity = product;
+						break;
+					}
+				}
+
+				if(productEntity) {
+					break;
+				}
+			}
+
+			if(productEntity) {
+				break;
+			}
+		}
+
+		if(productEntity) {
+			break;
+		}
+	}
+
+	buildCardView(productEntity, divToAppendTo);
+    buildDataTable(productEntity, identifier, divToAppendTo);
 }
 
-function buildCardView(type, entity, divToAppendTo){
+function buildCardView(entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'cardView';
 	div.setAttribute('class', 'group-div');
@@ -106,22 +128,10 @@ function buildCardView(type, entity, divToAppendTo){
 	var table = document.createElement('table');
 	table.setAttribute('style', 'width: 100%;');
 
-	table.appendChild(createTableHeader('width: 30%', ''));
-	table.appendChild(createTableHeader('width: 30%', ''));
-	table.appendChild(createTableHeader('width: 250px', ''));
+	table.appendChild(createTableHeader('width: 50%', ''));
+	table.appendChild(createTableHeader('width: 50%', ''));
 
-	var cardViewAttributes;
-	switch(type) {
-		case 'Site':
-		case 'Supplier':
-			cardViewAttributes = siteCardViewAttributes;
-			break;
-		case 'Meter':
-			break;
-		case 'SubMeter':
-			break;
-	}
-
+	var cardViewAttributes = siteCardViewAttributes;
 	var cardViewAttributesLength = cardViewAttributes.length;
 	var entityAttributes = entity.Attributes;
 
@@ -136,19 +146,6 @@ function buildCardView(type, entity, divToAppendTo){
 
 		tableRow.appendChild(tableDatacellAttribute);
 		tableRow.appendChild(tableDatacellAttributeValue);
-
-		if(i == 0) {
-			var tableDatacellMap = document.createElement('td');
-			tableDatacellMap.setAttribute('rowspan', cardViewAttributesLength);
-
-			var mapDiv = document.createElement('div');
-			mapDiv.id = 'map-canvas';
-			mapDiv.setAttribute('style', 'height: 250px;')
-
-			tableDatacellMap.appendChild(mapDiv);
-			tableRow.appendChild(tableDatacellMap);
-		}
-
 		table.appendChild(tableRow);
 	}
 
@@ -163,33 +160,6 @@ function buildCardView(type, entity, divToAppendTo){
 
 	divToAppendTo.appendChild(document.createElement('br'));
 	divToAppendTo.appendChild(document.createElement('br'));
-
-	var address = getAddress(cardViewAttributes, entity);
-
-	if(address) {
-		//initializeMap(address);
-	}
-}
-
-function getAddress(cardViewAttributes, entity) {
-	var addressDetails = [];
-	var cardViewAttributesLength = cardViewAttributes.length;
-	var entityAttributes = entity.Attributes;
-
-	for(var i = 0; i < cardViewAttributesLength; i++) {
-		var cardViewAttribute = cardViewAttributes[i];
-
-		if(cardViewAttribute.includes('Address Line')
-			|| cardViewAttribute.includes('Postcode')) {
-				var attribute = getAttribute(entityAttributes, cardViewAttribute);
-
-				if(attribute != '') {
-					addressDetails.push(attribute);
-				}				
-			}
-	}
-
-	return addressDetails.join(',');
 }
 
 function displayDataTable() {
@@ -206,7 +176,7 @@ function displayDataTable() {
 	}
 }
 
-function buildDataTable(type, entity, attributeRequired, divToAppendTo){
+function buildDataTable(entity, attributeRequired, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
 	div.setAttribute('style', 'display: none');
@@ -222,18 +192,19 @@ function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 	var tableRow = document.createElement('tr');
 
 	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Type'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Identifier'));
+	//tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Identifier'));
 	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border: solid black 1px;', 'Attribute'));
 	tableRow.appendChild(createTableHeader('padding-right: 50px; border: solid black 1px;', 'Value'));
 	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
 
     table.appendChild(tableRow);
-    displayAttributes(type, getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table);
+	displayAttributes(getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table, 'Product');
+	displayAttributes(getAttribute(entity.CostElements, attributeRequired), entity.CostElements, table, 'CostElement');
 
 	treeDiv.appendChild(table);
 }
 
-function displayAttributes(type, identifier, attributes, table) {
+function displayAttributes(identifier, attributes, table, type) {
 	if(!attributes) {
 		return;
 	}
@@ -241,9 +212,9 @@ function displayAttributes(type, identifier, attributes, table) {
 	var attributesLength = attributes.length;
 	for(var i = 0; i < attributesLength; i++) {
 		var tableRow = document.createElement('tr');
-		tableRow.id = 'row' + i;
+		tableRow.id = 'row'.concat(type + i);
 
-		for(var j = 0; j < 4; j++) {
+		for(var j = 0; j < 3; j++) {
 			var tableDatacell = document.createElement('td');
 			tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
@@ -252,23 +223,24 @@ function displayAttributes(type, identifier, attributes, table) {
 					tableDatacell.innerHTML = type;
 					break;	
 				case 1:
-					tableDatacell.innerHTML = identifier;
-					break;
-				case 2:
+				// 	tableDatacell.innerHTML = identifier;
+				// 	break;
+				// case 2:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = key;
 						break;
 					}	
 					
-					tableDatacell.id = 'attribute' + i;
+					tableDatacell.id = 'attribute'.concat(type + i);
 					break;
-				case 3:
+				// case 3:
+				case 2:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = attributes[i][key];
 						break;
 					}
 
-					tableDatacell.id = 'value' + i;
+					tableDatacell.id = 'value'.concat(type + i);
 					break;
 			}
 
@@ -278,14 +250,14 @@ function displayAttributes(type, identifier, attributes, table) {
 		var tableDatacell = document.createElement('td');
 		tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
-		var editIcon = createIcon('editRow' + i, 'fas fa-edit', 'cursor: pointer;', 'showDetailEditor(' + i + ')', 'Edit');
-		var deleteIcon = createIcon('deleteRow' + i, 'fas fa-trash-alt', 'cursor: pointer;', 'deleteRow(' + i + ')', 'Delete');
-		var saveChangeIcon = createIcon('saveRow' + i, 'fas fa-save', 'display: none;', 'saveRow(' + i + ')', 'Save');
-		var undoChangeIcon = createIcon('undoRow' + i, 'fas fa-undo', 'display: none;', 'undoRow(' + i + ')', 'Undo');
-		var cancelChangeIcon = createIcon('cancelRow' + i, 'far fa-window-close', 'display: none;', 'cancelRow(' + i + ')', 'Cancel');
+		var editIcon = createIcon('editRow' + type + i, 'fas fa-edit', 'cursor: pointer;', 'showDetailEditor("' + type + i + '")', 'Edit');
+		//var deleteIcon = createIcon('deleteRow' + type + i, 'fas fa-trash-alt', 'cursor: pointer;', 'deleteRow("' + type + i + '")');
+		var saveChangeIcon = createIcon('saveRow' + type + i, 'fas fa-save', 'display: none;', 'saveRow("' + type + i + '")', 'Save');
+		var undoChangeIcon = createIcon('undoRow' + type + i, 'fas fa-undo', 'display: none;', 'undoRow("' + type + i + '")', 'Undo');
+		var cancelChangeIcon = createIcon('cancelRow' + type + i, 'far fa-window-close', 'display: none;', 'cancelRow("' + type + i + '")', 'Cancel');
 
 		tableDatacell.appendChild(editIcon);
-		tableDatacell.appendChild(deleteIcon);
+		//tableDatacell.appendChild(deleteIcon);
 		tableDatacell.appendChild(saveChangeIcon);
 		tableDatacell.appendChild(undoChangeIcon);
 		tableDatacell.appendChild(cancelChangeIcon);
@@ -311,34 +283,34 @@ function showDetailEditor(row) {
 	textBox.focus();
 
 	showHideIcon('editRow' + row, 'display: none;');
-	showHideIcon('deleteRow' + row, 'display: none;');
+	//showHideIcon('deleteRow' + row, 'display: none;');
 	showHideIcon('saveRow' + row, 'cursor: pointer;');
 	showHideIcon('undoRow' + row, 'cursor: pointer;');
 	showHideIcon('cancelRow' + row, 'cursor: pointer;');
 }
 
-function deleteRow(row) {
-	var attribute = document.getElementById('attribute' + row);
+// function deleteRow(row) {
+// 	var attribute = document.getElementById('attribute' + row);
 
-	xdialog.confirm('Are you sure you want to delete ' + attribute.innerText + '?', function() {
-		var table = document.getElementById('dataTable');
-		var tableRow = document.getElementById('row' + row);
+// 	xdialog.confirm('Are you sure you want to delete ' + attribute.innerText + '?', function() {
+// 		var table = document.getElementById('dataTable');
+// 		var tableRow = document.getElementById('row' + row);
 
-		table.removeChild(tableRow);
-	  }, {
-		style: 'width:420px;font-size:0.8rem;',
-		buttons: {
-			ok: {
-				text: 'Delete ' + attribute.innerText,
-				style: 'background: red;',
-			},
-			cancel: {
-				text: 'Cancel',
-				style: 'background: Green;',
-			}
-		}
-	  });
-}
+// 		table.removeChild(tableRow);
+// 	  }, {
+// 		style: 'width:420px;font-size:0.8rem;',
+// 		buttons: {
+// 			ok: {
+// 				text: 'Delete ' + attribute.innerText,
+// 				style: 'background: red;',
+// 			},
+// 			cancel: {
+// 				text: 'Cancel',
+// 				style: 'background: Green;',
+// 			}
+// 		}
+// 	  });
+// }
 
 function saveRow(row) {
 	var textBox = document.getElementById('input' + row);
@@ -347,7 +319,7 @@ function saveRow(row) {
 	tableDatacell.innerText = textBox.value;
 
 	showHideIcon('editRow' + row, 'cursor: pointer;');
-	showHideIcon('deleteRow' + row, 'cursor: pointer;');
+	//showHideIcon('deleteRow' + row, 'cursor: pointer;');
 	showHideIcon('saveRow' + row, 'display: none;');
 	showHideIcon('undoRow' + row, 'display: none;');
 	showHideIcon('cancelRow' + row, 'display: none;');
@@ -365,7 +337,7 @@ function cancelRow(row) {
 	tableDatacell.innerText = textBox.getAttribute('originalValue');
 
 	showHideIcon('editRow' + row, 'cursor: pointer;');
-	showHideIcon('deleteRow' + row, 'cursor: pointer;');
+	//showHideIcon('deleteRow' + row, 'cursor: pointer;');
 	showHideIcon('saveRow' + row, 'display: none;');
 	showHideIcon('undoRow' + row, 'display: none;');
 	showHideIcon('cancelRow' + row, 'display: none;');

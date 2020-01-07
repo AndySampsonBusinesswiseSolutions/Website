@@ -1,0 +1,107 @@
+var supplierproduct = [
+    {
+        "GUID" : "0",
+        "Attributes" :[
+            {"BaseName" : "Haven Power Limited"}
+        ],
+        "Commodities" :[
+            {
+                "CommodityName": "Electricity",
+                "ProfileClasses":[
+                    {
+                        "ProfileClass": 0,
+                        "MeterType": "HH",
+                        "Products":[
+                            {
+                                "GUID": 0,
+                                "Attributes" :[
+                                    {"ProductName": "Two Rate Fixed"},
+                                    {"DayPeriod": "7am to 11pm"},
+                                    {"NightPeriod": "11pm to 7am"}
+                                ],
+                                "CostElements":[
+                                    {"Wholesale": "Fixed"},
+                                    {"BSUoS": "Fixed"}
+                                ]
+                            },
+                            {
+                                "GUID": 1,
+                                "Attributes" :[
+                                    {"ProductName": "Two Rate Passthrough"},
+                                    {"DayPeriod": "7am to 11pm"},
+                                    {"NightPeriod": "11pm to 7am"}
+                                ],
+                                "CostElements":[
+                                    {"Wholesale": "Passthrough"},
+                                    {"BSUoS": "Passthrough"}
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "ProfileClass": 3,
+                        "MeterType": "NHH",
+                        "Products":[
+                            {
+                                "GUID": 4,
+                                "Attributes" :[
+                                    {"ProductName": "Evening, Weekend & Night"},
+                                    {"DayPeriod": "7am to 7pm, Monday to Friday"},
+                                    {"Evening&WeekendPeriod": "7pm to 11pm, Monday to Friday <br> All Day, Saturday and Sunday"},
+                                    {"NightPeriod": "11pm to 7am, Monday to Friday"}
+                                ],
+                                "CostElements":[
+                                    {"Wholesale": "Fixed"},
+                                    {"BSUoS": "Fixed"}
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : "1",
+        "Attributes" :[
+            {"BaseName" : "Hudson Energy UK"}
+        ],
+        "Commodities" :[
+            {
+                "CommodityName": "Electricity",
+                "ProfileClasses":[
+                    {
+                        "ProfileClass": 0,
+                        "MeterType": "HH",
+                        "Products":[
+                            {
+                                "GUID": 2,
+                                "Attributes" :[
+                                    {"ProductName": "Two Rate Fixed"},
+                                    {"DayPeriod": "7am to 11pm"},
+                                    {"NightPeriod": "11pm to 7am"}
+                                ],
+                                "CostElements":[
+                                    {"Wholesale": "Fixed"},
+                                    {"BSUoS": "Fixed"}
+                                ]
+                            },
+                            {
+                                "GUID": 3,
+                                "Attributes" :[
+                                    {"ProductName": "Two Rate Passthrough"},
+                                    {"DayPeriod": "7am to 11pm"},
+                                    {"NightPeriod": "11pm to 7am"}
+                                ],
+                                "CostElements":[
+                                    {"Wholesale": "Passthrough"},
+                                    {"BSUoS": "Passthrough"}
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
