@@ -1,8 +1,10 @@
 <?php 
-	$PAGE_TITLE = "Bills";
+	$PAGE_TITLE = "View Capacity";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
+
+<body>
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>

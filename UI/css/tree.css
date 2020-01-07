@@ -17,18 +17,18 @@
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
 }
-.tree-div, .datagrid {
+.tree-div, .datagrid, .chart {
     border: solid black 1px;
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px; 
     border-bottom-right-radius: 5px;
     background-color: #e9eaee;
+    max-height: 650px;
 }
 .tree-div {
     min-height: 300px;
-    max-height: 650px;
 }
-.datagrid {
-    max-height: 650px;
+.chart {
+    min-height: 650px;
 }

@@ -16,7 +16,7 @@
 	<div id="electricityDiv" style="margin-left: 30px;">
 		<div class="row">
 			<div class="final-column">
-				<div class="tree-div" style="height: 315px;">
+				<div class="tree-div" style="height: 375px;">
 					<div id="electricityVolumeChart">
 					</div>
 				</div>
@@ -25,7 +25,7 @@
 		<br>
 		<div class="row">
 			<div class="final-column">
-				<div class="tree-div" style="height: 315px;">
+				<div class="tree-div" style="height: 375px;">
 					<div id="electricityPriceChart">
 					</div>
 				</div>
@@ -35,7 +35,7 @@
 	<div id="gasDiv" class="listitem-hidden" style="margin-left: 30px;">
 		<div class="row">
 			<div class="final-column">
-				<div class="tree-div" style="height: 315px;">
+				<div class="tree-div" style="height: 375px;">
 					<div id="gasVolumeChart">
 					</div>
 				</div>
@@ -44,7 +44,7 @@
 		<br>
 		<div class="row">
 			<div class="final-column">
-				<div class="tree-div" style="height: 315px;">
+				<div class="tree-div" style="height: 375px;">
 					<div id="gasPriceChart">
 					</div>
 				</div>
