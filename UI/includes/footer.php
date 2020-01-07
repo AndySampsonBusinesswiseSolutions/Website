@@ -12,10 +12,31 @@
 							<br> Lomeshaye Industrial Estate
 							<br> Nelson
 							<br> BB9 5SR</p>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                </div>
+                <div class="fusion-column col-lg-4 col-md-4 col-sm-4">
+                    <section id="text-2" class="fusion-footer-widget-column widget widget_text">
+                        <h4 class="widget-title" data-fontsize="13" data-lineheight="19"></h4>
+                        <div class="textwidget">
+                            <br>
 							<p>Company Reg no: 7202765
 							<br> T: 01282 611329
 							<br> F: 0844 4115047
 							<br> E: enquiries@businesswisesolutions.co.uk</p>
+                        </div>
+                        <div style="clear:both;"></div>
+                    </section>
+                </div>
+                <div class="fusion-column fusion-column-last col-lg-4 col-md-4 col-sm-4">
+					<section id="social_links-widget-2" class="fusion-footer-widget-column widget social_links"><h4 class="widget-title" data-fontsize="13" data-lineheight="19">Get Social</h4>
+		                <div class="fusion-social-networks">
+			                <div>
+                                <a href="https://www.facebook.com/businesswisesolutions" target="_blank" style="padding-right: 10px;"><i class="fab fa-facebook-f" title="Facebook"></i></a>
+								<a href="https://twitter.com/BusinesswiseSol" target="_blank" style="padding-right: 10px;"><i class="fab fa-twitter" title="Twitter"></i></a>
+								<a href="https://www.linkedin.com/company/businesswise-solutions/" target="_blank" style="padding-right: 10px;"><i class="fab fa-linkedin-in" title="LinkedIn"></i></a>
+                            </div>
                         </div>
                         <div style="clear:both;"></div>
                     </section>

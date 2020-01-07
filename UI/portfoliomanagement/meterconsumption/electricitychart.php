@@ -76,7 +76,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="tree-div">
+	<div class="chart">
 		<div id="electricityChart">
 		</div>
 	</div>

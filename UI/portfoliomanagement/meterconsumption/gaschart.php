@@ -72,7 +72,7 @@
 		</div>
 	</div>
 	<br>
-	<div class="tree-div">
+	<div class="chart">
 		<div id="gasChart">
 		</div>
 	</div>

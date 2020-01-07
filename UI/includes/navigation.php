@@ -1,6 +1,5 @@
 <header class="fusion-header-wrapper">
-    <div class="fusion-header-v1 fusion-logo-left fusion-sticky-menu-1 fusion-sticky-logo- fusion-mobile-logo-1  fusion-mobile-menu-design-modern">
-        <div class="fusion-header-sticky-height"></div>
+    <div class="fusion-header-v1 fusion-mobile-logo-1  fusion-mobile-menu-design-modern">
         <div class="fusion-header">
             <div class="fusion-row">
                 <div class="fusion-logo" data-margin-top="20px" data-margin-bottom="0px" data-margin-left="0px" data-margin-right="0px">
@@ -14,46 +13,62 @@
                 <?php if ($PAGE_TITLE != "Login") { ?>
                     <nav class="fusion-main-menu" aria-label="Main Menu">
                         <ul id="menu-main-menu" class="fusion-menu">
-                            <li><a href="/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><span>Dashboard</span></a></li>
+                            <li><a href="/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-home" title="Dashboard"></i></a></li>
                             <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Financials</span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/Financials/ActualsVsBudget/"><span>Actuals vs Budget</span></a></li>
-                                    <li class="submenu-item"><a href="/Financials/Bills/"><span>Bills</span></a></li>
+                                    <li class="submenu-item"><a href="/Financials/BillValidation/"><span>Bill Validation</span></a></li>
                                     <li class="submenu-item"><a href="/Financials/Commissions/"><span>Commissions</span></a></li>
                                 </ul>
                             </li>
-                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Energy Efficiency</span></a>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Compliance</span></a>
+                                <ul class="sub-menu">
+                                    <li class="submenu-item"><a href="/Compliance/ClimateChangeAgreements/"><span>Climate Change Agreements</span></a></li>
+                                    <li class="submenu-item"><a href="/Compliance/EnergyIntensiveIndustry/"><span>Energy Intensive Industry Exemptions</span></a></li>
+                                    <li class="submenu-item"><a href="/Compliance/MinMetExemptionScheme/"><span>Min-Met Exemption Scheme</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Energy<br>Efficiency</span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/EnergyEfficiency/ActiveOpportunities/"><span>Active Opportunities</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/IdentifiedOpportunities/"><span>Identified Opportunities</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/NewOpportunities/"><span>New Opportunities</span></a></li>
+                                    <li class="submenu-item"><a href="/EnergyEfficiency/ViewEnergyWaste/"><span>View Energy Waste</span></a></li>
                                 </ul>
                             </li>
-                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Portfolio Management</span></a>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Portfolio<br>Management</span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
-                                    <li class="submenu-item"><a href="/PortfolioManagement/TenderManagement/"><span>Tender Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
+                                    <li class="submenu-item"><a href="/PortfolioManagement/ViewCapacity/"><span>View Capacity</span></a></li>
                                 </ul>
                             </li>
-                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Account Management</span></a>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Tender<br>Management</span></a>
+                                <ul class="sub-menu">
+                                </ul>
+                            </li>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>ETRM</span></a>
+                                <ul class="sub-menu">
+                                </ul>
+                            </li>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Account<br>Management</span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/AccountManagement/MyProfile/"><span>My Profile</span></a></li>
                                     <li class="submenu-item"><a href="/AccountManagement/ManageUsers/"><span>Manage Users</span></a></li>
                                     <li class="submenu-item"><a href="/AccountManagement/ManageCustomers/"><span>Manage Customers</span></a></li>
-                                    <li class="submenu-item"><a href="/AccountManagement/MyContracts/"><span>My Contracts</span></a></li>
+                                    <li class="submenu-item"><a href="/AccountManagement/MyDocuments/"><span>My Documents</span></a></li>
                                     <li class="submenu-item"><a href="/AccountManagement/Communications/"><span>Communications</span></a></li>
                                 </ul>
                             </li>
-                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Supplier Management</span></a>
+                            <li><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><span>Supplier<br>Management</span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/SupplierManagement/SupplierManagement/"><span>Supplier Management</span></a></li>
                                     <li class="submenu-item"><a href="/SupplierManagement/SupplierProductManagement/"><span>Supplier Product Management</span></a></li>
                                 </ul>
                             </li>
-                            <li><a href="/" class="fusion-flex-link fusion-bar-highlight"><span>Logout</span></a></li>
+                            <li><a href="/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-sign-out-alt" title="Logout"></i></a></li>
                         </ul>
                     </nav>
                 <?php } ?>

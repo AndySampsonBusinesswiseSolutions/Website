@@ -1,5 +1,5 @@
 <?php 
-	$PAGE_TITLE = "My Contracts";
+	$PAGE_TITLE = "My Documents";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
