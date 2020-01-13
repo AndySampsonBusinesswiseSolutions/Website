@@ -1,0 +1,18 @@
+var dashboard = [
+    {
+        "GUID" : "0",
+        "Attributes" :[
+            {"BaseName" : "Report 1"},
+            {"Width": "90px"},
+            {"Height": "90px"}
+        ]
+    },
+    {
+        "GUID" : "1",
+        "Attributes" :[
+            {"BaseName" : "Report 2"},
+            {"Width": "180px"},
+            {"Height": "180px"}
+        ]
+    }
+]
