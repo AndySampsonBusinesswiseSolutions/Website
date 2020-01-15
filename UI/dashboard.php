@@ -32,18 +32,6 @@
 				<br>
 				<div class="chart">
 					<div id="containment-wrapper">
-						<!-- <div id="dragable1" class="dragable ui-widget-content" style="width: 90px; height: 90px;">
-							<p>I'm contained within the box</p>
-						</div>
-						<div id="dragable2" class="dragable ui-widget-content" style="width: 90px; height: 90px;">
-							<p>I'm contained within the box</p>
-						</div>
-						<div id="dragable3" class="dragable ui-widget-content" style="width: 90px; height: 90px;">
-							<p>I'm contained within the box</p>
-						</div>
-						<div id="dragable4" class="dragable ui-widget-content" style="width: 180px; height: 180px;">
-							<p>I'm contained within the box</p>
-						</div> -->
 					</div>
 				</div>
 				<br>
@@ -54,6 +42,8 @@
 
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/dashboardtree.js"></script>
+<script src="/javascript/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript" src="/basedata/dashboard.json"></script>
