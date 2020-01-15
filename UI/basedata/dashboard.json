@@ -10,9 +10,9 @@ var dashboard = [
     {
         "GUID" : "1",
         "Attributes" :[
-            {"BaseName" : "Report 2"},
-            {"Width": "180px"},
-            {"Height": "180px"}
+            {"BaseName" : "Flex Electricity Position"},
+            {"Width": "360px"},
+            {"Height": "360px"}
         ]
     }
 ]
