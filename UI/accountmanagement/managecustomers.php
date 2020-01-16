@@ -79,9 +79,9 @@ var customerCardViewAttributes = [
 		addDetailsTable.id = 'addDetailsTable';
 		addDetailsTable.setAttribute('style', 'width: 100%;');
 
-		var addRolesTable = document.createElement('table');
-		addRolesTable.id = 'addRolesTable';
-		addRolesTable.setAttribute('style', 'width: 100%;');
+		var addChildCustomersTable = document.createElement('table');
+		addChildCustomersTable.id = 'addChildCustomersTable';
+		addChildCustomersTable.setAttribute('style', 'width: 100%;');
 
 		var customerNameTableRow = document.createElement('tr');
 		customerNameTableRow.appendChild(createTableHeader('border: solid black 1px;', 'Role'));
@@ -97,53 +97,53 @@ var customerCardViewAttributes = [
 		addDetailsTable.appendChild(detailsTableRow);
 		addDetailsTable.appendChild(document.createElement('br'));
 
-		var rolesTableRow = document.createElement('tr');
-		rolesTableRow.appendChild(createTableHeader('border: solid black 1px;', 'Role'));
-		rolesTableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
-		rolesTableRow.appendChild(createTableHeader('border: solid black 1px;', ''));
-		addRolesTable.appendChild(rolesTableRow);
-		addRolesTable.appendChild(document.createElement('br'));
+		var childCustomersTableRow = document.createElement('tr');
+		childCustomersTableRow.appendChild(createTableHeader('border: solid black 1px;', 'Child Customer'));
+		childCustomersTableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
+		childCustomersTableRow.appendChild(createTableHeader('border: solid black 1px;', ''));
+		addChildCustomersTable.appendChild(childCustomersTableRow);
+		addChildCustomersTable.appendChild(document.createElement('br'));
 
 		var addCustomerNameTableRow = document.createElement('tr');
 		var addDetailsTableRow = document.createElement('tr');
-		var addRolessTableRow = document.createElement('tr');
+		var addChildCustomerssTableRow = document.createElement('tr');
 
 		for(var j = 0; j < 3; j++) {
 			var customerNameTableDatacell = document.createElement('td');
 			var detailTableDatacell = document.createElement('td');
-			var roleTableDatacell = document.createElement('td');
+			var childCustomerTableDatacell = document.createElement('td');
 
 			customerNameTableDatacell.setAttribute('style', 'border: solid black 1px;');
 			detailTableDatacell.setAttribute('style', 'border: solid black 1px;');
-			roleTableDatacell.setAttribute('style', 'border: solid black 1px;');
+			childCustomerTableDatacell.setAttribute('style', 'border: solid black 1px;');
 			
 			if(j == 0) {
 				customerNameTableDatacell.innerHTML = 'Customer Name';
 				detailTableDatacell.innerHTML = 'Select Detail Type';
-				roleTableDatacell.innerHTML = 'Select Role';
+				childCustomerTableDatacell.innerHTML = 'Select Child Customer';
 			}
 			else if(j == 1) {
 				customerNameTableDatacell.innerHTML = 'Enter Customer Name';
 				detailTableDatacell.innerHTML = 'Enter/Select Detail Value';
-				roleTableDatacell.innerHTML = 'Enter/Select Role Value';
+				childCustomerTableDatacell.innerHTML = 'Enter/Select Child Customer Value';
 			}
 			else {
 				detailTableDatacell.innerHTML = 'Add/Delete Icon';
-				roleTableDatacell.innerHTML = 'Add/Delete Icon';
+				childCustomerTableDatacell.innerHTML = 'Add/Delete Icon';
 			}
 
 			addCustomerNameTableRow.appendChild(customerNameTableDatacell);
 			addDetailsTableRow.appendChild(detailTableDatacell);
-			addRolessTableRow.appendChild(roleTableDatacell);
+			addChildCustomerssTableRow.appendChild(childCustomerTableDatacell);
 		}
 
 		customerNameTable.appendChild(addCustomerNameTableRow);
 		addDetailsTable.appendChild(addDetailsTableRow);
-		addRolesTable.appendChild(addRolessTableRow);
+		addChildCustomersTable.appendChild(addChildCustomerssTableRow);
 
 		div.appendChild(customerNameTable);
 		div.appendChild(addDetailsTable);
-		div.appendChild(addRolesTable);
+		div.appendChild(addChildCustomersTable);
 
 		xdialog.confirm(div.outerHTML, function() {}, 
 		{
