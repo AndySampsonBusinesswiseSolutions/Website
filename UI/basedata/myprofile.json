@@ -1,0 +1,30 @@
+var myprofile = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"UserName" : "User Details"}
+        ],
+        "Details": [
+            {"Address Line 1" : "32"},
+            {"Address Line 2" : "The Havens"},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : "Ipswich"},
+            {"Postcode" : "IP3 9SJ"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "01473 277556"},
+            {"Email" : "contact.us@havenpower.com"}
+        ]
+    },
+    {
+        "GUID" : "1",
+        "Attributes" : 
+        [
+            {"UserName" : "Roles"},
+        ],
+        "Details":[
+            {"Can Log In": "Yes"},
+            {"Can Amend User Details": "Yes"}
+        ]
+    }
+]
