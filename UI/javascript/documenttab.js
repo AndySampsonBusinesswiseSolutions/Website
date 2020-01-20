@@ -98,10 +98,12 @@ function buildDocumentDataTable(entity, attributeRequired, divToAppendTo){
 
 	var tableRow = document.createElement('tr');
 
-	tableRow.appendChild(createTableHeader('width: 15%; border: solid black 1px;', 'Document'));
-	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Upload Date'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Document Name'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'LOA End Date'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'LOA Signed By'));
 	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Uploaded By'));
-	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', 'Download'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Uploaded Date'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Actions'));
 
     table.appendChild(tableRow);
 	displayAttributes(getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table, 'Document');
@@ -119,26 +121,27 @@ function displayAttributes(identifier, attributes, table, type) {
 		var tableRow = document.createElement('tr');
 		tableRow.id = 'row'.concat(type + i);
 
-		for(var j = 0; j < 4; j++) {
+		for(var j = 0; j < 6; j++) {
 			var tableDatacell = document.createElement('td');
 			tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
 			switch(j) {
 				case 0:
-					tableDatacell.innerHTML = type;
+					tableDatacell.innerHTML = 'Businesswise Solutions LOA 2019';
 					break;	
 				case 1:
-					tableDatacell.innerHTML = identifier;
-					break;
+					tableDatacell.innerHTML = '31/01/2020';
+					break;	
 				case 2:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = key;
-						break;
-					}	
-					
-					tableDatacell.id = 'attribute'.concat(type + i);
+					tableDatacell.innerHTML = 'Mo Money (Finance Director)';
 					break;
 				case 3:
+					tableDatacell.innerHTML = 'Sys Tem';
+					break;	
+				case 4:
+					tableDatacell.innerHTML = '02/02/2019';
+					break;	
+				case 5:
 					tableDatacell.id = 'value'.concat(type + i);
 
 					var downloadIcon = document.createElement('i');
