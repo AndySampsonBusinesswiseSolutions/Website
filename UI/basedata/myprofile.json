@@ -26,5 +26,12 @@ var myprofile = [
             {"Can Log In": "Yes"},
             {"Can Amend User Details": "Yes"}
         ]
+    },
+    {
+        "GUID" : "2",
+        "Attributes" : 
+        [
+            {"UserName" : "Change Password"},
+        ]
     }
 ]

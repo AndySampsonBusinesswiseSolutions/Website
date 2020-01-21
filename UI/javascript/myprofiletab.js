@@ -81,7 +81,12 @@ function createCard(guid, divToAppendTo, identifier) {
 		}
 	}
 
-	buildUserDataTable(user, identifier, divToAppendTo);
+	if(getAttribute(user.Attributes, 'UserName') == 'Change Password') {
+		buildChangePasswordForm(divToAppendTo);
+	}
+	else {
+		buildUserDataTable(user, identifier, divToAppendTo);
+	}
 }
 
 function displayUserDataTable() {
@@ -96,6 +101,45 @@ function displayUserDataTable() {
 		div.setAttribute('style', 'display: none');
 		button.innerText = 'Edit Details'
 	}
+}
+
+function buildChangePasswordForm(divToAppendTo) {
+	var div = document.createElement('div');
+	div.id = 'displayAttributes';
+	divToAppendTo.appendChild(div);
+	
+	var treeDiv = document.getElementById('displayAttributes');
+	clearElement(treeDiv);
+
+	var html = 
+			'<div>'+
+				'<div>'+
+					'<span style="border: solid black 1px;">Current Password</span>'+
+					'<input></input>'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div>'+
+				'<div>'+
+					'<span style="border: solid black 1px;">New Password</span>'+
+					'<input></input>'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div>'+
+				'<div>'+
+					'<span style="border: solid black 1px;">Confirm New Password</span>'+
+					'<input></input>'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div>'+
+				'<div>'+
+					'<button>Change Password</button>'+
+				'</div>'+
+			'</div>'
+
+	treeDiv.innerHTML = html;
 }
 
 function buildUserDataTable(entity, attributeRequired, divToAppendTo){
