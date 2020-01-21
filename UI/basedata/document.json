@@ -1,0 +1,38 @@
+var documents = [
+    {
+        "GUID" : "0",
+        "Attributes" :[
+            {"BaseName" : "Letters Of Authority"},
+        ]
+    },
+    {
+        "GUID" : "1",
+        "Attributes" :[
+            {"BaseName" : "Supplier Contracts"},
+        ]
+    },
+    {
+        "GUID" : "2",
+        "Attributes" :[
+            {"BaseName" : "EMaaS Contracts"},
+        ]
+    },
+    {
+        "GUID" : "3",
+        "Attributes" :[
+            {"BaseName" : "Flex Contracts"},
+        ]
+    },
+    {
+        "GUID" : "4",
+        "Attributes" :[
+            {"BaseName" : "Invoices"},
+        ]
+    },
+    {
+        "GUID" : "5",
+        "Attributes" :[
+            {"BaseName" : "Supplier Bills"},
+        ]
+    }
+]

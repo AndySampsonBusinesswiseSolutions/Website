@@ -1,0 +1,39 @@
+var customer = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"CustomerName" : "DFS Trading"},
+            {"Address Line 1" : "32"},
+            {"Address Line 2" : "The Havens"},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : "Ipswich"},
+            {"Postcode" : "IP3 9SJ"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "01473 277556"},
+            {"Email" : "contact.us@havenpower.com"}
+        ],
+        "ChildCustomers" :[
+            {"CustomerName" : "DFS Trading - North East"},
+            {"CustomerName" : "DFS Trading - North West"}
+        ]
+    },
+    {
+        "GUID" : "1",
+        "Attributes" : 
+        [
+            {"CustomerName" : "Businesswise Solutions"},
+            {"Address Line 1" : "3rd floor"},
+            {"Address Line 2" : "Elder House"},
+            {"Address Line 3" : "586-592 Elder Gate"},
+            {"Address Line 4" : "Milton Keynes"},
+            {"Postcode" : "MK9 1LR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0330 088 2679"},
+            {"Email" : "Sales@HudsonEnergy.co.uk"}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    }
+]

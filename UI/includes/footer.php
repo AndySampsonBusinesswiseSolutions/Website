@@ -24,7 +24,7 @@
 							<p>Company Reg no: 7202765
 							<br> T: 01282 611329
 							<br> F: 0844 4115047
-							<br> E: enquiries@businesswisesolutions.co.uk</p>
+							<br> E: <a href="mailto:enquiries@businesswisesolutions.co.uk" target="_top">enquiries@businesswisesolutions.co.uk</a></p>
                         </div>
                         <div style="clear:both;"></div>
                     </section>
