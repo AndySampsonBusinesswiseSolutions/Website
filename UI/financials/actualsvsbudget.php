@@ -1,5 +1,5 @@
 <?php 
-	$PAGE_TITLE = "Actuals Vs Budget";
+	$PAGE_TITLE = "Variance Analysis";
 	 include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	 include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
@@ -41,6 +41,7 @@
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/chart.js"></script>
 <script src="/javascript/tree.js"></script>
+<script src="/javascript/actualsvbudgettab.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="/basedata/data.json"></script>
 
@@ -110,22 +111,23 @@
 </script>
 
 <script type="text/javascript"> 
-	createTree(data, "DeviceType", "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
-	createTree(data, "DeviceType", "gasTreeDiv", "gas", "updateChart(gasChart)", true);
-	addExpanderOnClickEvents();
-	addArrowOnClickEvents();
-	addCommoditySelectorOnClickEvent();	
-
 	window.onload = function(){
 		resizeFinalColumns(365);
+
+		createTree(data, "DeviceType", "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
+		createTree(data, "DeviceType", "gasTreeDiv", "gas", "updateChart(gasChart)", true);
+
+		addExpanderOnClickEvents();
+		addArrowOnClickEvents();
+		addCommoditySelectorOnClickEvent();
+		createCardButtons();
+
+		createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
 	}
 
 	window.onresize = function(){
 		resizeFinalColumns(365);
-	}
-
-	createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
-	createBlankChart("#gasChart", "There's no gas data to display. Select from the tree to the left to display");
+	}	
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
