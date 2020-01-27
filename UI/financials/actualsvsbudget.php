@@ -40,7 +40,7 @@
 
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/chart.js"></script>
-<script src="/javascript/tree.js"></script>
+<script src="/javascript/actualsvbudgettree.js"></script>
 <script src="/javascript/actualsvbudgettab.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="/basedata/data.json"></script>
@@ -114,8 +114,8 @@
 	window.onload = function(){
 		resizeFinalColumns(365);
 
-		createTree(data, "DeviceType", "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
-		createTree(data, "DeviceType", "gasTreeDiv", "gas", "updateChart(gasChart)", true);
+		createTree(data, "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
+		createTree(data, "gasTreeDiv", "gas", "updateChart(gasChart)", true);
 
 		addExpanderOnClickEvents();
 		addArrowOnClickEvents();
