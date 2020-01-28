@@ -252,6 +252,25 @@ function buildForecastForm(divToAppendTo) {
 function buildWholesaleUsageForm(divToAppendTo) {
 	var datagridDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
 
+	var html = 
+		'<div>'+
+			'<div class="chart">'+
+				'<div id="electricityChart">'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div id="datagrid" class="datagrid scrolling-wrapper">'+
+			'</div></div>';
+
+	datagridDiv.innerHTML = html;
+
+	updateWholesaleUsageDatagrid();
+}
+
+function updateWholesaleUsageDatagrid() {
+	var datagridDiv = document.getElementById('datagrid');
+	clearElement(datagridDiv);
+
 	var datagridDivWidth = datagridDiv.clientWidth;
 	var monthWidth = Math.floor(datagridDivWidth/10);
 	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6)-1;
@@ -262,13 +281,6 @@ function buildWholesaleUsageForm(divToAppendTo) {
 	var checkBoxes = getCheckedCheckBoxes(inputs);
 
 	var html = 
-		'<div>'+
-			'<div class="chart">'+
-				'<div id="electricityChart">'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div class="datagrid scrolling-wrapper">'+
 				'<table>'+
 					'<tr>'+
 						'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
@@ -304,7 +316,7 @@ function buildWholesaleUsageForm(divToAppendTo) {
 		html += htmlRow;
 	}
 	
-	html += '</table></div></div>';
+	html += '</table>';
 
 	datagridDiv.innerHTML = html;
 }

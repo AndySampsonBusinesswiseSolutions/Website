@@ -171,7 +171,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     }
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
     
-    checkBox.setAttribute('onclick', functionName);
+    checkBox.setAttribute('onclick', functionName.concat(';updateWholesaleUsageDatagrid()'));
     return checkBox;
 }
 
