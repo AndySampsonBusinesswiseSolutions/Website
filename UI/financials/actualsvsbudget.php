@@ -39,11 +39,11 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
-<script src="/javascript/chart.js"></script>
+<script src="/javascript/variancechart.js"></script>
 <script src="/javascript/actualsvbudgettree.js"></script>
 <script src="/javascript/actualsvbudgettab.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script type="text/javascript" src="/basedata/data.json"></script>
+<script type="text/javascript" src="/basedata/variance.json"></script>
 
 <script>
 	function addCommoditySelectorOnClickEvent() {
@@ -52,61 +52,6 @@
 			updateClassOnClick("electricityDiv", "listitem-hidden", "")
 			updateClassOnClick("gasDiv", "listitem-hidden", "")
 		})	
-	}
-</script>
-
-<script>
-	function updateChart(callingElement, chart) {
-		var treeDiv = document.getElementById(chart.id.replace('Chart', 'TreeDiv'));
-		var inputs = treeDiv.getElementsByTagName('input');
-		var commodity = chart.id.replace('Chart', '').toLowerCase();
-		var checkBoxes = getCheckedCheckBoxes(inputs);		
-		
-		clearElement(chart);
-
-		if(checkBoxes.length == 0) {
-			createBlankChart('#' + commodity + 'Chart', 'There is no ' + commodity + ' data to display. Select from the tree to the left to display');
-			return;
-		}
-    
-		var showBySpan = document.getElementById(commodity.concat('ChartHeaderShowBy'));
-		var periodSpan = document.getElementById(commodity.concat('ChartHeaderPeriod'));
-		var chartDate = new Date(document.getElementById(commodity.concat('Calendar')).value);
-		var newCategories = getNewCategories(periodSpan.children[0].value, chartDate);   
-		var newSeries = getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, getPeriodDateFormat(periodSpan.children[0].value));
-		var typeSpan = document.getElementById(commodity.concat('ChartHeaderType'));
-
-		var chartOptions = {
-		chart: {
-			type: getChartType(typeSpan.children[0].value),
-			stacked: typeSpan.children[0].value.includes('Stacked')
-		},
-		tooltip: {
-			x: {
-			format: getChartTooltipXFormat(periodSpan.children[0].value)
-			}
-		},
-		yaxis: [{
-			title: {
-				text: getChartYAxisTitle(showBySpan.children[0].value, commodity)
-			},
-      		show: true
-		}],
-		xaxis: {
-			type: 'datetime',
-			title: {
-			text: formatDate(chartDate, getChartXAxisTitleFormat(periodSpan.children[0].value))
-			},
-			labels: {
-			format: getChartXAxisLabelFormat(periodSpan.children[0].value)
-			},
-			min: new Date(newCategories[0]).getTime(),
-			max: new Date(newCategories[newCategories.length - 1]).getTime(),
-      		categories: newCategories
-		}
-		};
-
-		refreshChart(newSeries, newCategories, '#'.concat(commodity).concat('Chart'), chartOptions);
 	}
 </script>
 
@@ -121,8 +66,6 @@
 		addArrowOnClickEvents();
 		addCommoditySelectorOnClickEvent();
 		createCardButtons();
-
-		createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
 	}
 
 	window.onresize = function(){

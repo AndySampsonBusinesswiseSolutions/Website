@@ -34,21 +34,22 @@ function createCardButtons(){
 
 	var button = document.createElement('button');
 	button.setAttribute('class', 'tablinks');
-	button.setAttribute('onclick', 'openTab(event, "Forecast", "cardDiv")');
+	button.setAttribute('onclick', 'openTab(event, "Forecast", "cardDiv"); updateChart(event, electricityChart)');
 	button.innerHTML = 'Forecast v Invoice';
 	button.id = 'Forecast';
 	tabDiv.appendChild(button);
 
 	var button2 = document.createElement('button');
 	button2.setAttribute('class', 'tablinks');
-	button2.setAttribute('onclick', 'openTab(event, "CostElements", "cardDiv")');
+	button2.setAttribute('onclick', 'openTab(event, "CostElements", "cardDiv"); updateChart(event, electricityChart)');
 	button2.innerHTML = 'Cost Elements';
 	button2.id = 'CostElements';
 	tabDiv.appendChild(button2);
 
 	updateTabDiv(tabDiv);
-	openTab(event, "Forecast", "cardDiv");
+	openTab(event, "Forecast", "cardDiv");	
 	button.className += " active";
+	updateChart(button, electricityChart);
 }
 
 function createCostElementCardButtons(){
@@ -105,14 +106,14 @@ function createCostElementDetailCardButtons(tabName){
 
 	var usageButton = document.createElement('button');
 	usageButton.setAttribute('class', 'tablinks');
-	usageButton.setAttribute('onclick', 'openTab(event, "'+tabName+'Usage", "costElementDetailCardDiv")');
+	usageButton.setAttribute('onclick', 'openTab(event, "'+tabName+'Usage", "costElementDetailCardDiv"); updateChart(event, electricityChart)');
 	usageButton.innerHTML = 'Usage';
 	usageButton.id = tabName+'Usage';
 	tabDiv.appendChild(usageButton);
 
 	var costButton = document.createElement('button');
 	costButton.setAttribute('class', 'tablinks');
-	costButton.setAttribute('onclick', 'openTab(event, "'+tabName+'Cost", "costElementDetailCardDiv")');
+	costButton.setAttribute('onclick', 'openTab(event, "'+tabName+'Cost", "costElementDetailCardDiv"); updateChart(event, electricityChart)');
 	costButton.innerHTML = 'Cost';
 	costButton.id = tabName+'Cost';
 	tabDiv.appendChild(costButton);
@@ -141,10 +142,15 @@ function updateTabDiv(tabDiv) {
 
 function createCard(divToAppendTo, tabName) {
 	switch(tabName) {
-		case "Forecast":
 		case "WholesaleUsage":
+			buildWholesaleUsageForm(divToAppendTo);
+			break;
 		case "WholesaleCost":
+			buildWholesaleCostForm(divToAppendTo);
+			break;
 		case "WholesaleRate":
+			buildWholesaleRateForm(divToAppendTo);
+			break;
 		case "DistributionUsage":
 		case "DistributionCost":
 		case "DistributionRate":
@@ -157,6 +163,7 @@ function createCard(divToAppendTo, tabName) {
 		case "OtherUsage":
 		case "OtherCost":
 		case "OtherRate":
+		case "Forecast":
 			buildForecastForm(divToAppendTo);
 			break;
 		case "CostElements":
@@ -174,10 +181,19 @@ function createCard(divToAppendTo, tabName) {
 	}
 }
 
-function buildCostElementHeaderForm(divToAppendTo) {
+function createDisplayAttributesDiv(divToAppendTo, id) {
 	var div = document.createElement('div');
-	div.id = 'displayCostElements';
+	div.id = id;
 	divToAppendTo.appendChild(div);
+
+	var treeDiv = document.getElementById(id);
+	clearElement(treeDiv);
+
+	return treeDiv;
+}
+
+function buildCostElementHeaderForm(divToAppendTo) {
+	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayCostElements');
 
 	var html = 
 		'<div>'+
@@ -185,13 +201,11 @@ function buildCostElementHeaderForm(divToAppendTo) {
 				'<div class="tabDiv" id="costElementTabDiv" style="overflow-y: auto; overflow: auto;"></div>'+
 			'</div>'+
 		'</div>'
-	div.innerHTML = html;
+		treeDiv.innerHTML = html;
 }
 
 function buildCostElementHeaderSubForm(divToAppendTo) {
-	var div = document.createElement('div');
-	div.id = 'displayCostElementDetails';
-	divToAppendTo.appendChild(div);
+	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayCostElementDetails');
 
 	var html = 
 		'<div>'+
@@ -199,16 +213,11 @@ function buildCostElementHeaderSubForm(divToAppendTo) {
 				'<div class="tabDiv" id="costElementDetailTabDiv" style="overflow-y: auto; overflow: auto;"></div>'+
 			'</div>'+
 		'</div>'
-	div.innerHTML = html;
+	treeDiv.innerHTML = html;
 }
 
 function buildForecastForm(divToAppendTo) {
-	var div = document.createElement('div');
-	div.id = 'displayAttributes';
-	divToAppendTo.appendChild(div);
-	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
+	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
 
 	var treeDivWidth = treeDiv.clientWidth;
 	var monthWidth = Math.floor(treeDivWidth/10);
@@ -231,6 +240,138 @@ function buildForecastForm(divToAppendTo) {
 						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Cost</th>'+
 						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Cost</th>'+
 						'<th style="width: '+dataWidth+'px;">Cost Difference</th>'+
+					'</tr>'+
+					'<tr><td style="border-right: solid black 1px;">2019-01</td></tr>'+
+				'</table>'+
+			'</div>'+
+		'</div>'
+
+	treeDiv.innerHTML = html;
+}
+
+function buildWholesaleUsageForm(divToAppendTo) {
+	var datagridDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
+
+	var datagridDivWidth = datagridDiv.clientWidth;
+	var monthWidth = Math.floor(datagridDivWidth/10);
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6)-1;
+
+	var treeDiv = document.getElementById('electricityTreeDiv');
+	var inputs = treeDiv.getElementsByTagName('input');
+	var commodity = 'electricity';
+	var checkBoxes = getCheckedCheckBoxes(inputs);
+
+	var html = 
+		'<div>'+
+			'<div class="chart">'+
+				'<div id="electricityChart">'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div class="datagrid scrolling-wrapper">'+
+				'<table>'+
+					'<tr>'+
+						'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
+						'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Summary</th>'+
+						'<th style="border-bottom: solid black 1px;" colspan="3">Reason For Difference</th>'+
+					'</tr>'+
+					'<tr>'+
+						'<th style="border-right: solid black 1px;">Month</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">DUoS Reduction Project</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Waste Reduction</th>'+
+						'<th style="width: '+dataWidth+'px;">Unknown</th>'+
+					'</tr>';
+
+	var showBy = 'WholesaleUsage';
+	var newCategories = getNewCategories();   
+	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
+
+	var categoryLength = newCategories.length;
+	for(var i = 0; i < categoryLength; i++) {
+		var htmlRow = '<tr>'+
+						'<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
+						'<td style="border-right: solid black 1px;">'+newSeries[0]["data"][i]+'</td>'+
+						'<td style="border-right: solid black 1px;">'+newSeries[1]["data"][i]+'</td>'+
+						'<td style="border-right: solid black 1px;">'+newSeries[2]["data"][i]+'</td>'+
+						'<td style="border-right: solid black 1px;">'+newSeries[3]["data"][i]+'</td>'+
+						'<td style="border-right: solid black 1px;">'+newSeries[4]["data"][i]+'</td>'+
+						'<td>'+newSeries[5]["data"][i]+'</td>'+
+					  '</tr>';
+
+		html += htmlRow;
+	}
+	
+	html += '</table></div></div>';
+
+	datagridDiv.innerHTML = html;
+}
+
+function buildWholesaleCostForm(divToAppendTo) {
+	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
+
+	var treeDivWidth = treeDiv.clientWidth;
+	var monthWidth = Math.floor(treeDivWidth/10);
+	var dataWidth = Math.floor((treeDivWidth - monthWidth)/6)-1;
+
+	var html = 
+		'<div>'+
+			'<div class="chart">'+
+				'<div id="electricityChart">'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div class="datagrid scrolling-wrapper">'+
+				'<table>'+
+					'<tr>'+
+						'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
+						'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Summary</th>'+
+						'<th style="border-bottom: solid black 1px;" colspan="3">Reason For Difference</th>'+
+					'</tr>'+
+					'<tr>'+
+						'<th style="border-right: solid black 1px;">Month</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Cost</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Cost</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Cost Difference</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">DUoS Reduction Project</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Waste Reduction</th>'+
+						'<th style="width: '+dataWidth+'px;">Unknown</th>'+
+					'</tr>'+
+					'<tr><td style="border-right: solid black 1px;">2019-01</td></tr>'+
+				'</table>'+
+			'</div>'+
+		'</div>'
+
+	treeDiv.innerHTML = html;
+}
+
+function buildWholesaleRateForm(divToAppendTo) {
+	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
+
+	var treeDivWidth = treeDiv.clientWidth;
+	var monthWidth = Math.floor(treeDivWidth/10);
+	var dataWidth = Math.floor((treeDivWidth - monthWidth)/3)-1;
+
+	var html = 
+		'<div>'+
+			'<div class="chart">'+
+				'<div id="electricityChart">'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div class="datagrid scrolling-wrapper">'+
+				'<table>'+
+					'<tr>'+
+						'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
+						'<th style="border-bottom: solid black 1px;" colspan="3">Summary</th>'+
+					'</tr>'+
+					'<tr>'+
+						'<th style="border-right: solid black 1px;">Month</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Rate</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Rate</th>'+
+						'<th style="width: '+dataWidth+'px;">Rate Difference</th>'+
 					'</tr>'+
 					'<tr><td style="border-right: solid black 1px;">2019-01</td></tr>'+
 				'</table>'+
