@@ -44,7 +44,8 @@ function updateChart(callingElement, chart) {
     title: {
       text: ''
     },
-        show: true
+        show: true,
+        decimalsInFloat: 2
   }],
   xaxis: {
     type: 'category',
@@ -217,6 +218,8 @@ function getSeries(showBy) {
       return ["Latest Forecast Usage","Invoiced Usage","Usage Difference","DUoS Reduction Project","Waste Reduction","Unknown"];
     case "WholesaleCost":
       return ["Latest Forecast Cost","Invoiced Cost","Cost Difference","DUoS Reduction Project","Waste Reduction","Unknown"];
+    case "WholesaleRate":
+        return ["Latest Forecast Rate","Invoiced Rate","Rate Difference","Usage Change","DUoS Reduction Project","Waste Reduction","Unknown"];
   }
 }
 
@@ -275,10 +278,10 @@ function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity)
           summedMeterSeries.data[i] = null;
         }
         else if(value && !summedMeterSeries.data[i]) {
-          summedMeterSeries.data[i] = value;
+          summedMeterSeries.data[i] = preciseRound(value,2);
         }
         else if(value && summedMeterSeries.data[i]) {
-          summedMeterSeries.data[i] += value;
+          summedMeterSeries.data[i] += preciseRound(value,2);
         }							     
       }
     }
