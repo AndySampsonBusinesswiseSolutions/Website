@@ -60,35 +60,35 @@ function createCostElementCardButtons(){
 
 	var wholesaleButton = document.createElement('button');
 	wholesaleButton.setAttribute('class', 'tablinks');
-	wholesaleButton.setAttribute('onclick', 'openTab(event, "Wholesale", "costElementCardDiv")');
+	wholesaleButton.setAttribute('onclick', 'openTab(event, "Wholesale", "costElementCardDiv"); updateChart(event, electricityChart)');
 	wholesaleButton.innerHTML = 'Wholesale';
 	wholesaleButton.id = 'Wholesale';
 	tabDiv.appendChild(wholesaleButton);
 
 	var distributionButton = document.createElement('button');
 	distributionButton.setAttribute('class', 'tablinks');
-	distributionButton.setAttribute('onclick', 'openTab(event, "Distribution", "costElementCardDiv")');
-	distributionButton.innerHTML = 'Distribution';
+	distributionButton.setAttribute('onclick', 'openTab(event, "Distribution", "costElementCardDiv"); updateChart(event, electricityChart)');
+	distributionButton.innerHTML = 'Network';
 	distributionButton.id = 'Distribution';
 	tabDiv.appendChild(distributionButton);
 
 	var renewablesButton = document.createElement('button');
 	renewablesButton.setAttribute('class', 'tablinks');
-	renewablesButton.setAttribute('onclick', 'openTab(event, "Renewables", "costElementCardDiv")');
+	renewablesButton.setAttribute('onclick', 'openTab(event, "Renewables", "costElementCardDiv"); updateChart(event, electricityChart)');
 	renewablesButton.innerHTML = 'Renewables';
 	renewablesButton.id = 'Renewables';
 	tabDiv.appendChild(renewablesButton);
 
 	var balancingButton = document.createElement('button');
 	balancingButton.setAttribute('class', 'tablinks');
-	balancingButton.setAttribute('onclick', 'openTab(event, "Balancing", "costElementCardDiv")');
+	balancingButton.setAttribute('onclick', 'openTab(event, "Balancing", "costElementCardDiv"); updateChart(event, electricityChart)');
 	balancingButton.innerHTML = 'Balancing';
 	balancingButton.id = 'Balancing';
 	tabDiv.appendChild(balancingButton);
 
 	var otherButton = document.createElement('button');
 	otherButton.setAttribute('class', 'tablinks');
-	otherButton.setAttribute('onclick', 'openTab(event, "Other", "costElementCardDiv")');
+	otherButton.setAttribute('onclick', 'openTab(event, "Other", "costElementCardDiv"); updateChart(event, electricityChart)');
 	otherButton.innerHTML = 'Other';
 	otherButton.id = 'Other';
 	tabDiv.appendChild(otherButton);
@@ -151,10 +151,12 @@ function createCard(divToAppendTo, tabName) {
 		case "WholesaleRate":
 			buildWholesaleRateForm(divToAppendTo);
 			break;
+		case "RenewablesUsage":
+			buildRenewablesUsageForm(divToAppendTo);
+			break;
 		case "DistributionUsage":
 		case "DistributionCost":
 		case "DistributionRate":
-		case "RenewablesUsage":
 		case "RenewablesCost":
 		case "RenewablesRate":
 		case "BalancingUsage":
@@ -467,6 +469,91 @@ function updateWholesaleRateDatagrid() {
 	datagridDiv.innerHTML = html;
 }
 
+function buildRenewablesUsageForm(divToAppendTo) {
+	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
+
+	var html = 
+		'<div>'+
+			'<div class="chart">'+
+				'<div id="electricityChart">'+
+				'</div>'+
+			'</div>'+
+			'<br>'+
+			'<div id="datagrid" class="datagrid scrolling-wrapper">'+
+			'</div></div>'
+
+	treeDiv.innerHTML = html;
+
+	updateRenewablesUsageDatagrid();
+}
+
+function updateRenewablesUsageDatagrid() {
+	var datagridDiv = document.getElementById('datagrid');
+	clearElement(datagridDiv);
+
+	var datagridDivWidth = datagridDiv.clientWidth;
+	var monthWidth = Math.floor(datagridDivWidth/10);
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6)-1;
+
+	var html = 
+			'<table>'+
+				'<tr>'+
+					'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
+					'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Renewables Obligation</th>'+
+					'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Feed In Tariff</th>'+
+					'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Contracts For Difference</th>'+
+					'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Energy Intensive Industries</th>'+
+					'<th style="border-bottom: solid black 1px;" colspan="4">Reason For Difference</th>'+
+				'</tr>'+
+				'<tr>'+
+					'<th style="border-right: solid black 1px;">Month</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Change</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">DUoS Reduction Project</th>'+
+					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Waste Reduction</th>'+
+					'<th style="width: '+dataWidth+'px;">Unknown</th>'+
+				'</tr>'
+
+	for(var i = 0; i < 1; i++) {
+		var htmlRow = '<tr>'+
+						'<td style="border-right: solid black 1px;">JAN 2019</td>'+
+						'<td style="border-right: solid black 1px;">250000</td>'+
+						'<td style="border-right: solid black 1px;">200000</td>'+
+						'<td style="border-right: solid black 1px;">50000</td>'+
+						'<td style="border-right: solid black 1px;">250000</td>'+
+						'<td style="border-right: solid black 1px;">200000</td>'+
+						'<td style="border-right: solid black 1px;">50000</td>'+
+						'<td style="border-right: solid black 1px;">250000</td>'+
+						'<td style="border-right: solid black 1px;">200000</td>'+
+						'<td style="border-right: solid black 1px;">50000</td>'+
+						'<td style="border-right: solid black 1px;">250000</td>'+
+						'<td style="border-right: solid black 1px;">200000</td>'+
+						'<td style="border-right: solid black 1px;">50000</td>'+
+						'<td style="border-right: solid black 1px;">10000</td>'+
+						'<td style="border-right: solid black 1px;">25000</td>'+
+						'<td style="border-right: solid black 1px;">5000</td>'+
+						'<td>10000</td>'+
+						'</tr>';
+
+		html += htmlRow;
+	}
+	
+	html += '</table>';
+
+	datagridDiv.innerHTML = html;
+}
+
 function updateDatagrid() {
 	switch(showBy) {
 		case "WholesaleUsage":
@@ -476,12 +563,14 @@ function updateDatagrid() {
 			buildWholesaleCostDatagrid();
 			break;
 		case "WholesaleRate":
-			updateWholesaleRateDatagrid();;
+			updateWholesaleRateDatagrid();
 			break;
 		// case "DistributionUsage":
 		// case "DistributionCost":
 		// case "DistributionRate":
-		// case "RenewablesUsage":
+		case "RenewablesUsage":
+			updateRenewablesUsageDatagrid();
+			break;
 		// case "RenewablesCost":
 		// case "RenewablesRate":
 		// case "BalancingUsage":
