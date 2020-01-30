@@ -1,0 +1,1777 @@
+var data = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"BaseName" : "Leeds"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "1",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987654"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Gas"}
+                    ],
+                "WholesaleUsage" :[
+                        [
+                            {"Month" : "JAN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "FEB 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "APR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAY 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUL 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "AUG 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "SEP 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "OCT 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "NOV 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "DEC 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ]
+                    ],
+                "WholesaleCost" :[
+                        [
+                            {"Month" : "JAN 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "FEB 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "MAR 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "APR 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "MAY 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "JUN 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "JUL 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "AUG 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "SEP 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "OCT 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "NOV 2019"},
+                            {"Latest Forecast Cost" : 1000000},
+                            {"Invoiced Cost": 950000},
+                            {"Cost Difference" : 50000},
+                            {"DUoS Reduction Project": 10000},
+                            {"Waste Reduction": 15000},
+                            {"Unknown": 25000}
+                        ],
+                        [
+                            {"Month" : "DEC 2019"},
+                            {"Latest Forecast Cost" : 100000},
+                            {"Invoiced Cost": 95000},
+                            {"Cost Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ]
+                    ],
+                "WholesaleRate" :[
+                    [
+                        {"Month" : "JAN 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "FEB 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "MAR 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "APR 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "MAY 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "JUN 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "JUL 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "AUG 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "SEP 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "OCT 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "NOV 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ],
+                    [
+                        {"Month" : "DEC 2019"},
+                        {"Latest Forecast Rate" : 0.1},
+                        {"Invoiced Rate": 0.09},
+                        {"Rate Difference" : 0.01},
+                        {"Usage Change" : -0.05},
+                        {"DUoS Reduction Project": -0.01},
+                        {"Waste Reduction": -0.02},
+                        {"Unknown": 0.09}
+                    ]
+                ]
+            },
+            {
+                "GUID" : "2",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890123"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                    "WholesaleUsage" :[
+                        [
+                            {"Month" : "JAN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "FEB 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "APR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAY 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUL 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "AUG 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "SEP 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "OCT 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "NOV 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "DEC 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ]
+                    ],
+                    "WholesaleCost" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Cost" : 100000},
+                                {"Invoiced Cost": 95000},
+                                {"Cost Difference" : 5000},
+                                {"DUoS Reduction Project": 1000},
+                                {"Waste Reduction": 1500},
+                                {"Unknown": 2500}
+                            ]
+                        ],
+                        "WholesaleRate" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ]
+                        ]
+            },
+            {
+                "GUID" : "5",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890124"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                    "WholesaleUsage" :[
+                        [
+                            {"Month" : "JAN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "FEB 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "APR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAY 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUL 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "AUG 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "SEP 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "OCT 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "NOV 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "DEC 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ]
+                    ],
+                    "WholesaleCost" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Cost" : 100000},
+                                {"Invoiced Cost": 95000},
+                                {"Cost Difference" : 5000},
+                                {"DUoS Reduction Project": 1000},
+                                {"Waste Reduction": 1500},
+                                {"Unknown": 2500}
+                            ]
+                        ],
+                        "WholesaleRate" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ]
+                        ]
+            }
+        ]
+    },
+    {
+        "GUID" : "6",
+        "Attributes" : 
+        [
+            {"BaseName" : "Manchester"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "7",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987650"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Gas"}
+                    ],
+                    "WholesaleUsage" :[
+                        [
+                            {"Month" : "JAN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "FEB 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "APR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAY 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUL 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "AUG 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "SEP 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "OCT 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "NOV 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "DEC 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ]
+                    ],
+                    "WholesaleCost" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Cost" : 100000},
+                                {"Invoiced Cost": 95000},
+                                {"Cost Difference" : 5000},
+                                {"DUoS Reduction Project": 1000},
+                                {"Waste Reduction": 1500},
+                                {"Unknown": 2500}
+                            ]
+                        ],
+                        "WholesaleRate" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ]
+                        ]
+            },
+            {
+                "GUID" : "8",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890120"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                    "WholesaleUsage" :[
+                        [
+                            {"Month" : "JAN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "FEB 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "APR 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "MAY 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUN 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "JUL 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "AUG 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "SEP 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "OCT 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "NOV 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ],
+                        [
+                            {"Month" : "DEC 2019"},
+                            {"Latest Forecast Usage" : 100000},
+                            {"Invoiced Usage": 95000},
+                            {"Usage Difference" : 5000},
+                            {"DUoS Reduction Project": 1000},
+                            {"Waste Reduction": 1500},
+                            {"Unknown": 2500}
+                        ]
+                    ],
+                    "WholesaleCost" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Cost" : 1000000},
+                                {"Invoiced Cost": 950000},
+                                {"Cost Difference" : 50000},
+                                {"DUoS Reduction Project": 10000},
+                                {"Waste Reduction": 15000},
+                                {"Unknown": 25000}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Cost" : 100000},
+                                {"Invoiced Cost": 95000},
+                                {"Cost Difference" : 5000},
+                                {"DUoS Reduction Project": 1000},
+                                {"Waste Reduction": 1500},
+                                {"Unknown": 2500}
+                            ]
+                        ],
+                        "WholesaleRate" :[
+                            [
+                                {"Month" : "JAN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "FEB 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "APR 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "MAY 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUN 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "JUL 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "AUG 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "SEP 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "OCT 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "NOV 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ],
+                            [
+                                {"Month" : "DEC 2019"},
+                                {"Latest Forecast Rate" : 0.1},
+                                {"Invoiced Rate": 0.09},
+                                {"Rate Difference" : 0.01},
+                                {"Usage Change" : -0.05},
+                                {"DUoS Reduction Project": -0.01},
+                                {"Waste Reduction": -0.02},
+                                {"Unknown": 0.09}
+                            ]
+                        ]
+            }
+        ]
+    }
+]

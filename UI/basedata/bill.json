@@ -1,0 +1,20 @@
+var bill = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"UserName" : "Bill 0001 - 01/12/19 to 31/12/19"}
+        ],
+        "Details": [
+            {"Bill Number" : "0001"},
+            {"Supplier" : "Haven"},
+            {"Validation Status" : "Valid"},
+            {"Validation Process 1 Name" : "Consumption"},
+            {"Validation Process 1 Description" : "Validate that consumption listed on bill matches latest usage received from industry"},
+            {"Validation Process 1 Result" : "Bill consumption 1534kWh, Industry consumption 1534kWh, consumption valid"},
+            {"Validation Process 2 Name" : "Bill Value"},
+            {"Validation Process 2 Description" : "Validate that value listed on bill matches calculations using latest usage and contract data"},
+            {"Validation Process 2 Result" : "Bill value £1200, BWS calculation value £1199.99, bill value valid"}
+        ]
+    }
+]
