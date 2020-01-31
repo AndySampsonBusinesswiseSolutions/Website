@@ -16,9 +16,9 @@
                             <li style="padding-right: 25px;"><a href="/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-home" title="Dashboard"></i></a></li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-coins"></i><span class="fusion-caret"></span><span>Finance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/Financials/ActualsVsBudget/"><span>Actuals vs Budget</span></a></li>
                                     <li class="submenu-item"><a href="/Financials/BillValidation/"><span>Bill Validation</span></a></li>
                                     <li class="submenu-item"><a href="/Financials/Commissions/"><span>Commissions</span></a></li>
+                                    <li class="submenu-item"><a href="/Financials/ActualsVsBudget/"><span>Variance Analysis</span></a></li>
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-certificate"></i><span class="fusion-caret"></span><span>Compliance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
