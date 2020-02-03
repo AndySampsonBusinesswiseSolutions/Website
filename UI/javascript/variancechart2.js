@@ -205,6 +205,10 @@ function getNewChartSeries(checkBoxes, showBy, newCategories, commodity) {
 
   var series = getSeries(showBy);
 
+  if(!series) {
+    return newSeries;
+  }
+
   for(var i = 0; i < series.length; i++) {
     newSeries.push(summedMeterSeries(meters, series[i], showBy, newCategories, commodity));
   }
