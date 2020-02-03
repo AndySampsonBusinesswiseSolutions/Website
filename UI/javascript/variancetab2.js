@@ -165,7 +165,7 @@ function createRenewablesCostElementCardButtons(){
 	var renewablesObligationButton = document.createElement('button');
 	renewablesObligationButton.setAttribute('class', 'tablinks');
 	renewablesObligationButton.setAttribute('onclick', 'openTab(event, "RenewablesObligation", "costElementDetailCardDiv")');
-	renewablesObligationButton.innerHTML = 'RenewablesObligation';
+	renewablesObligationButton.innerHTML = 'Renewables Obligation';
 	renewablesObligationButton.id = 'RenewablesObligation';
 	tabDiv.appendChild(renewablesObligationButton);
 
@@ -604,7 +604,7 @@ function updateRenewablesUsageDatagrid() {
 						'<td style="border-right: solid black 1px;">50000</td>'+
 						'<td style="border-right: solid black 1px;">25000</td>'+
 						'<td style="border-right: solid black 1px;">5000</td>'+
-						'<td>10000</td>'+
+						'<td>20000</td>'+
 						'</tr>';
 
 		html += htmlRow;

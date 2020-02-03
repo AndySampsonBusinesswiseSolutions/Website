@@ -16,11 +16,11 @@
 	<div id="electricityDiv">
 		<div class="row">
 			<div class="tree-column">
-				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/actuals/electricitytree.php") ?>
+				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/variance/electricitytree.php") ?>
 			</div>
 			<div class="fill-column"></div>
 			<div class="final-column">
-				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/actuals/electricitychart.php") ?>
+				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/variance/electricitychart.php") ?>
 			</div>	
 		</div>
 	</div>
@@ -39,9 +39,9 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
-<script src="/javascript/variancechart.js"></script>
+<script src="/javascript/variancechart3.js"></script>
 <script src="/javascript/actualsvbudgettree.js"></script>
-<script src="/javascript/actualsvbudgettab.js"></script>
+<script src="/javascript/variancetab3.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="/basedata/variance.json"></script>
 
