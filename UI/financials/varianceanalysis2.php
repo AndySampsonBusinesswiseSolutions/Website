@@ -39,9 +39,9 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
-<script src="/javascript/variancechart.js"></script>
+<script src="/javascript/variancechart2.js"></script>
 <script src="/javascript/actualsvbudgettree.js"></script>
-<script src="/javascript/actualsvbudgettab.js"></script>
+<script src="/javascript/variancetab2.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="/basedata/variance.json"></script>
 
