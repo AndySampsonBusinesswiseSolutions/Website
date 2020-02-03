@@ -8,7 +8,7 @@
 				<ul class="format-listitem">
 					<li>
 						<div id="variance0" class="far fa-times-circle" style="padding-right: 3px;"></div>
-						<input type="radio" name="group0" id="variance0radio" guid="0"><span id="variance0span" style="padding-left: 1px;">Forecast v Invoice</span>
+						<input type="radio" name="group0" id="variance0radio" guid="0" checked><span id="variance0span" style="padding-left: 1px;">Forecast v Invoice</span>
 					</li>
 					<li>
 						<div id="variance1" class="far fa-plus-square" style="padding-right: 4px;"></div>
@@ -22,7 +22,7 @@
 										<ul class="format-listitem">
 											<li>
 												<div id="usageCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-												<input type="radio" name="group1" id="usageCostElement0radio" guid="0"><span id="usageCostElement0span" style="padding-left: 1px;">Usage</span>
+												<input type="radio" name="group1" id="usageCostElement0radio" guid="0" checked><span id="usageCostElement0span" style="padding-left: 1px;">Usage</span>
 											</li>
 											<li>
 												<div id="costCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
@@ -79,6 +79,38 @@
 											<li>
 												<div id="capacitymarketsCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
 												<input type="radio" name="group0" id="capacitymarketsCostElement0radio" guid="0"><span id="capacitymarketsCostElement0span" style="padding-left: 1px;">Capacity Markets</span>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li>
+									<div id="balancingCostElement0" style="padding-right: 4px;" class="far fa-plus-square"></div>
+									<span id="balancingCostElement0span" style="padding-left: 1px;">Balancing</span>
+									<div id="balancingCostElement0List" class="listitem-hidden">
+										<ul class="format-listitem">
+											<li>
+												<div id="bsuosCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+												<input type="radio" name="group0" id="bsuosCostElement0radio" guid="0"><span id="bsuosCostElement0span" style="padding-left: 1px;">Balancing System Use of Systems</span>
+											</li>
+											<li>
+												<div id="rcrcCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+												<input type="radio" name="group0" id="rcrcCostElement0radio" guid="0"><span id="rcrcCostElement0span" style="padding-left: 1px;">Reallocation Cashflow Residual Cashflow</span>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li>
+									<div id="otherCostElement0" style="padding-right: 4px;" class="far fa-plus-square"></div>
+									<span id="otherCostElement0span" style="padding-left: 1px;">Other</span>
+									<div id="otherCostElement0List" class="listitem-hidden">
+										<ul class="format-listitem">
+											<li>
+												<div id="managementfeeCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+												<input type="radio" name="group0" id="managementfeeCostElement0radio" guid="0"><span id="managementfeeCostElement0span" style="padding-left: 1px;">Management Fee</span>
+											</li>
+											<li>
+												<div id="aahedcCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+												<input type="radio" name="group0" id="aahedcCostElement0radio" guid="0"><span id="aahedcCostElement0span" style="padding-left: 1px;">Hydro Charge</span>
 											</li>
 										</ul>
 									</div>
