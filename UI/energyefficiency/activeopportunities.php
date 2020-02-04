@@ -55,15 +55,7 @@ a {
   color: inherit;
 }
 
-body {
-  background: var(--body);
-  font-size: 16px;
-  font-family: sans-serif;
-  padding-top: 40px;
-}
-
 .chart-wrapper {
-  max-width: 1150px;
   padding: 0 10px;
   margin: 0 auto;
 }
@@ -116,20 +108,6 @@ body {
   .chart-wrapper .chart-bars li {
     padding: 10px;
   }
-}
-
-
-/* FOOTER
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.page-footer {
-  font-size: 0.85rem;
-  padding: 10px;
-  text-align: right;
-  color: var(--black);
-}
-
-.page-footer span {
-  color: #e31b23;
 }
 </style>
 

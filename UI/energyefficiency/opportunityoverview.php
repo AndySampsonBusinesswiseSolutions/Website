@@ -188,6 +188,22 @@
 		<div class="divcolumn last"></div>
 	</div>
 	<br>
+	<div class="row">
+		<div class="divcolumn first"></div>
+		<div class="divcolumn left" style="border: solid black 1px; background-color: #e9eaee;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span>Recommended Opportunities</span>
+			</div>
+		</div>
+		<div class="divcolumn middle"></div>
+		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span>Site Ranking</span>
+			</div>
+		</div>
+		<div class="divcolumn last"></div>
+	</div>
+	<br>
 </body>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
