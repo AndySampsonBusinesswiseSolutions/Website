@@ -180,9 +180,10 @@
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
-		<div class="divcolumn right" style="border: solid black 1px;">
-			<h2>Column 3</h2>
-			<p>Some text..</p>
+		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
+		<div style="text-align: center; border-bottom: solid black 1px;">
+				<span>Opportunity Summary</span>
+			</div>
 		</div>
 		<div class="divcolumn last"></div>
 	</div>
