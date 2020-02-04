@@ -18,7 +18,9 @@
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/Financials/BillValidation/"><span>Bill Validation</span></a></li>
                                     <li class="submenu-item"><a href="/Financials/Commissions/"><span>Commissions</span></a></li>
-                                    <li class="submenu-item"><a href="/Financials/ActualsVsBudget/"><span>Variance Analysis</span></a></li>
+                                    <li class="submenu-item"><a href="/Financials/VarianceAnalysis/"><span>Variance Analysis - Option 1</span></a></li>
+                                    <li class="submenu-item"><a href="/Financials/VarianceAnalysis2/"><span>Variance Analysis - Option 2</span></a></li>
+                                    <li class="submenu-item"><a href="/Financials/VarianceAnalysis3/"><span>Variance Analysis - Option 3</span></a></li>
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-certificate"></i><span class="fusion-caret"></span><span>Compliance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
