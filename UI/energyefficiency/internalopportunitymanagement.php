@@ -1,5 +1,5 @@
 <?php 
-	$PAGE_TITLE = "Identified Opportunities";
+	$PAGE_TITLE = "Internal Opportunity Management";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
