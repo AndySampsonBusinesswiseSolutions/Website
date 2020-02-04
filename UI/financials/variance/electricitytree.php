@@ -8,7 +8,7 @@
 				<ul class="format-listitem">
 					<li>
 						<div id="variance0" class="far fa-times-circle" style="padding-right: 3px;"></div>
-						<input type="radio" name="group0" id="variance0radio" guid="0" checked><span id="variance0span" style="padding-left: 1px;">Forecast v Invoice</span>
+						<input type="radio" name="group0" id="variance0radio" guid="0" checked onclick='openTab("Forecast", "cardDiv");  updateChart(this, electricityChart);'><span id="variance0span" style="padding-left: 1px;">Forecast v Invoice</span>
 					</li>
 					<li>
 						<div id="variance1" class="far fa-plus-square" style="padding-right: 4px;"></div>
@@ -22,15 +22,15 @@
 										<ul class="format-listitem">
 											<li>
 												<div id="usageCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-												<input type="radio" name="group1" id="usageCostElement0radio" guid="0" checked><span id="usageCostElement0span" style="padding-left: 1px;">Usage</span>
+												<input type="radio" name="group1" id="usageCostElement0radio" guid="0" onclick='openTab("Usage", "cardDiv");  updateChart(this, electricityChart);'><span id="usageCostElement0span" style="padding-left: 1px;">Usage</span>
 											</li>
 											<li>
 												<div id="costCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-												<input type="radio" name="group1" id="costCostElement0radio" guid="0"><span id="costCostElement0span" style="padding-left: 1px;">Cost</span>
+												<input type="radio" name="group1" id="costCostElement0radio" guid="0" onclick='openTab("Cost", "cardDiv");  updateChart(this, electricityChart);'><span id="costCostElement0span" style="padding-left: 1px;">Cost</span>
 											</li>
 											<li>
 												<div id="rateCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-												<input type="radio" name="group1" id="rateCostElement0radio" guid="0"><span id="rateCostElement0span" style="padding-left: 1px;">Rate</span>
+												<input type="radio" name="group1" id="rateCostElement0radio" guid="0" onclick='openTab("Rate", "cardDiv");  updateChart(this, electricityChart);'><span id="rateCostElement0span" style="padding-left: 1px;">Rate</span>
 											</li>
 										</ul>
 									</div>
@@ -42,7 +42,7 @@
 										<ul class="format-listitem">
 											<li>
 												<div id="wholesaleCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-												<input type="radio" name="group0" id="wholesaleCostElement0radio" guid="0"><span id="wholesaleCostElement0span" style="padding-left: 1px;">Wholesale</span>
+												<input type="radio" name="group0" id="wholesaleCostElement0radio" guid="0" onclick='openTab("Wholesale", "cardDiv");  updateChart(this, electricityChart);'><span id="wholesaleCostElement0span" style="padding-left: 1px;">Wholesale</span>
 											</li>
 											<li>
 												<div id="distributionCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
