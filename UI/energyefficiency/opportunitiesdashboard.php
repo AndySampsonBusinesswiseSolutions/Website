@@ -1,5 +1,5 @@
 <?php 
-	$PAGE_TITLE = "Opportunity Overview";
+	$PAGE_TITLE = "Opportunities Dashboard";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
@@ -111,7 +111,7 @@
 							</thead>
 							<tbody class="scrollContent">
 								<tr>
-									<td style="width: 164px; border: solid black 1px;">01/03/2020</td>
+									<td style="width: 164px; border: solid black 1px;">???</td>
 									<td style="width: 123px; border: solid black 1px;">En Gineer</td>
 									<td style="width: 70px; border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
@@ -181,8 +181,26 @@
 		</div>
 		<div class="divcolumn middle"></div>
 		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
-		<div style="text-align: center; border-bottom: solid black 1px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Opportunity Summary</span>
+				<br>
+				<div class="divcolumn first"></div>
+				<div class="divcolumn left">
+					<span>Number of Finished Opportunities</span><br>
+					<span>Total kWh Savings of Finished Opportunities</span><br>
+					<span>Total £ Savings of Finished Opportunities</span><br>
+					<span>kWh Savings of Finished Opportunities over past 12 months</span><br>
+					<span>£ Savings of Finished Opportunities over past 12 months</span><br>
+				</div>
+				<div class="divcolumn middle"></div>
+				<div class="divcolumn right">
+					<span>5</span><br>
+					<span>300,000</span><br>
+					<span>£10,000</span><br>
+					<span>300,000</span><br>
+					<span>£10,000</span><br>
+				</div>
+				<div class="divcolumn last"></div>
 			</div>
 		</div>
 		<div class="divcolumn last"></div>
@@ -193,12 +211,62 @@
 		<div class="divcolumn left" style="border: solid black 1px; background-color: #e9eaee;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Recommended Opportunities</span>
+				<br>
+				<div class="divcolumn first"></div>
+				<div class="divcolumn left">
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Opportunity</span>
+					</div><br>
+					<span>LED Lighting Installation</span><br>
+				</div>
+				<div class="divcolumn middle">
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Notes</span>
+					</div><br>
+					<i class="fas fa-search show-pointer"></i><br>
+				</div>
+				<div class="divcolumn right">
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Approve/Reject</span>
+					</div><br>
+					<button style="width: 25%; background-color: green">Approve</button>
+					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+					<button style="width: 25%; background-color: red">Reject</button><br>
+				</div>
+				<div class="divcolumn last"></div>
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
 		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Ranking</span>
+				<br>
+				<div class="divcolumn first"></div>
+				<div class="divcolumn left">
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Site</span>
+					</div><br>
+					<span>Site X</span><br>
+					<span>Site Y</span><br>
+					<span>Site Z</span><br>
+				</div>
+				<div class="divcolumn middle">
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Rank</span>
+					</div><br>
+					<span>1</span><br>
+					<span>2</span><br>
+					<span>3</span><br>
+				</div>
+				<div class="divcolumn right">
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Notes</span>
+					</div><br>
+					<i class="fas fa-search show-pointer"></i><br>
+					<i class="fas fa-search show-pointer"></i><br>
+					<i class="fas fa-search show-pointer"></i><br>
+				</div>
+				<div class="divcolumn last"></div>
 			</div>
 		</div>
 		<div class="divcolumn last"></div>

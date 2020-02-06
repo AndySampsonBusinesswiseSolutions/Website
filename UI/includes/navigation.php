@@ -25,7 +25,7 @@
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-cog"></i><span class="fusion-caret"></span><span>Energy<br>Efficiency</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/EnergyEfficiency/OpportunityOverview/"><span>Opportunity Overview</span></a></li>
+                                    <li class="submenu-item"><a href="/EnergyEfficiency/OpportunitiesDashboard/"><span>Opportunities Dashboard</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/ActiveOpportunities/"><span>Active Opportunities</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/PendingOpportunities/"><span>Pending Opportunities</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/FinishedOpportunities/"><span>Finished Opportunities</span></a></li>
