@@ -204,6 +204,12 @@ div.tableContainer2 {
 	overflow: auto;
 }
 
+div.tableContainer3 {
+	clear: both;
+	height: 600px;
+	overflow: auto;
+}
+
 /* Reset overflow value to hidden for all non-IE browsers. */
 html>body div.tableContainer {
 	overflow: hidden;
@@ -233,6 +239,11 @@ html>body tbody.scrollContent {
 html>body tbody.scrollContent2 {
 	display: block;
 	height: 195px;
+	overflow: auto;
+}
+
+html>body tbody.scrollContent3 {
+	height: 590px;
 	overflow: auto;
 }
 
