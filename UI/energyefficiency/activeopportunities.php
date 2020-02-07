@@ -4,31 +4,49 @@
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
 
-<body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+<link rel="stylesheet" href="/css/tree.css">
 
-	<div class="chart-wrapper">
-		<ul class="chart-values">
-			<li>sun</li>
-			<li>mon</li>
-			<li>tue</li>
-			<li>wed</li>
-			<li>thu</li>
-			<li>fri</li>
-			<li>sat</li>
-		</ul>
-		<ul class="chart-bars">
-			<li data-duration="tue½-wed" data-color="#b03532">Task</li>
-			<li data-duration="wed-sat" data-color="#33a8a5">Task</li>
-			<li data-duration="sun-tue" data-color="#30997a">Task</li>
-			<li data-duration="tue½-thu" data-color="#6a478f">Task</li>
-			<li data-duration="mon-tue½" data-color="#da6f2b">Task</li>
-			<li data-duration="wed-wed" data-color="#3d8bb1">Task</li>
-			<li data-duration="thu-fri½" data-color="#e03f3f">Task</li>
-			<li data-duration="mon½-wed½" data-color="#59a627">Task</li>
-			<li data-duration="fri-sat" data-color="#4464a1">Task</li>
-		</ul>
+<body>
+  <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+  <br>
+  <div class="row">
+		<div class="tree-column">
+			<div>
+				<div class="tree-column">
+					<div id="treeDiv" class="tree-div">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="fill-column"></div>
+		<div class="final-column">
+			<div>
+        <div class="chart-wrapper">
+          <ul class="chart-values">
+            <li>01/02/2020</li>
+            <li>02/02/2020</li>
+            <li>03/02/2020</li>
+            <li>04/02/2020</li>
+            <li>05/02/2020</li>
+            <li>06/02/2020</li>
+            <li>07/02/2020</li>
+          </ul>
+          <ul class="chart-bars">
+            <li data-duration="03/02/2020½-04/02/2020" data-color="#b03532">Task</li>
+            <li data-duration="04/02/2020-07/02/2020" data-color="#33a8a5">Task</li>
+            <li data-duration="01/02/2020-03/02/2020" data-color="#30997a">Task</li>
+            <li data-duration="03/02/2020½-05/02/2020" data-color="#6a478f">Task</li>
+            <li data-duration="02/02/2020-03/02/2020½" data-color="#da6f2b">Task</li>
+            <li data-duration="04/02/2020-04/02/2020" data-color="#3d8bb1">Task</li>
+            <li data-duration="05/02/2020-06/02/2020½" data-color="#e03f3f">Task</li>
+            <li data-duration="02/02/2020½-04/02/2020½" data-color="#59a627">Task</li>
+            <li data-duration="06/02/2020-07/02/2020" data-color="#4464a1">Task</li>
+          </ul>
+        </div>
+			</div>
+		</div>
 	</div>
+	<br>
 </body>
 
 <style>
@@ -57,7 +75,7 @@ a {
 
 .chart-wrapper {
   padding: 0 10px;
-  margin: 0 auto;
+  margin: auto;
 }
 
 
@@ -95,12 +113,12 @@ a {
 .chart-wrapper .chart-bars li {
   position: relative;
   color: var(--white);
-  margin-bottom: 15px;
-  font-size: 16px;
-  border-radius: 20px;
+  margin-bottom: 5px;
+  font-size: 10px;
+  border-radius: 25px;
   padding: 10px 20px;
-  width: 0;
-  opacity: 0;
+  /* width: 0;
+  opacity: 0; */
   transition: all 0.65s linear 0.2s;
 }
 
@@ -110,6 +128,8 @@ a {
   }
 }
 </style>
+
+<script src="/javascript/utils.js"></script>
 
 <script>
 	function createChart(e) {
@@ -152,6 +172,9 @@ a {
 
 window.addEventListener("load", createChart);
 window.addEventListener("resize", createChart);
+window.addEventListener("load", resizeFinalColumns(380));
+window.addEventListener("resize", resizeFinalColumns(380));
+
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
