@@ -25,7 +25,7 @@
 		<div class="final-column">
 			<div>
 				<div id="ganttChart"></div>
-				<br/><br/>
+				<br>
 				<div id="tableContainer" class="tableContainer3">
 					<table style="width: 100%;">
 						<thead>
