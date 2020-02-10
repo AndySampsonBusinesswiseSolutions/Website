@@ -27,7 +27,6 @@
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/EnergyEfficiency/OpportunitiesDashboard/"><span>Opportunities Dashboard</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/ActiveOpportunities/"><span>Active Opportunities</span></a></li>
-                                    <li class="submenu-item"><a href="/EnergyEfficiency/ActiveOpportunities2/"><span>Active Opportunities 2</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/PendingOpportunities/"><span>Pending Opportunities</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/PendingOpportunities2/"><span>Pending Opportunities 2</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/FinishedOpportunities/"><span>Finished Opportunities</span></a></li>
