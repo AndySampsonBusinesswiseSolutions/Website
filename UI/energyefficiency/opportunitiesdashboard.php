@@ -186,7 +186,10 @@
 				<br>
 				<div class="divcolumn first"></div>
 				<div class="divcolumn left">
+					<span>Number of Active Opportunities</span><br>
+					<span>Number of Pending Opportunities</span><br>
 					<span>Number of Finished Opportunities</span><br>
+					<br>
 					<span>Total kWh Savings of Finished Opportunities</span><br>
 					<span>Total £ Savings of Finished Opportunities</span><br>
 					<span>kWh Savings of Finished Opportunities over past 12 months</span><br>
@@ -194,7 +197,10 @@
 				</div>
 				<div class="divcolumn middle"></div>
 				<div class="divcolumn right">
+					<span>2</span><br>
+					<span>10</span><br>
 					<span>5</span><br>
+					<br>
 					<span>300,000</span><br>
 					<span>£10,000</span><br>
 					<span>300,000</span><br>
