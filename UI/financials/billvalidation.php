@@ -33,7 +33,7 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
-<script src="/javascript/usertree.js"></script>
+<script src="/javascript/billtree.js"></script>
 <script src="/javascript/billvalidationtab.js"></script>
 <script type="text/javascript" src="/basedata/bill.json"></script>
 
