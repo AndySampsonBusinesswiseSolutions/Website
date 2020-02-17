@@ -1,19 +1,18 @@
 <?php 
-	$PAGE_TITLE = "Active Opportunities";
+	$PAGE_TITLE = "Pending Opportunities";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
 
 <link rel="stylesheet" href="/css/tree.css">
-
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.4.css" />
-	<link rel="stylesheet" type="text/css" href="/css/reset.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
+<link rel="stylesheet" type="text/css" href="/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
 
 <body>
-  <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-  <br>
-  <div class="row">
+	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+	<br>
+	<div class="row">
 		<div class="tree-column">
 			<div>
 				<div class="tree-column">
@@ -760,7 +759,7 @@
 <script type="text/javascript" src="/javascript/date.js"></script>
 <script type="text/javascript" src="/javascript/jquery-ui-1.8.4.js"></script>
 <script type="text/javascript" src="/javascript/jquery.ganttView.js"></script>
-<script type="text/javascript" src="/basedata/gantt.js"></script>
+<script type="text/javascript" src="/basedata/gantt2.js"></script>
 <script src="/javascript/utils.js"></script>
 
 <script>
