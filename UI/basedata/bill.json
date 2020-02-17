@@ -1,6 +1,56 @@
 var bill = [
     {
-        "GUID" : "0",
+        "GUID" : 13,
+        "Attributes" : [
+            {"Period" : "Jan 2020"}
+        ],
+        "Sites": [
+            {
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 14,
+                        "Identifier": 1234567890123,
+                        "Bills": [
+                            {
+                                "GUID": 15,
+                                "BillNumber": "???",
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Bill expected by 17th Feb 2020 but not received"}
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 16,
+                        "Identifier": 1234567890124,
+                        "Bills": [
+                            {
+                                "GUID": 17,
+                                "BillNumber": "???",
+                                "Status": "Invalid"
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 18,
+                        "Identifier": 1234567890125,
+                        "Bills": [
+                            {
+                                "GUID": 19,
+                                "BillNumber": "???",
+                                "Status": "Invalid"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 0,
         "Attributes" : [
             {"Period" : "Dec 2019"}
         ],
@@ -14,8 +64,7 @@ var bill = [
                         "Bills": [
                             {
                                 "GUID": 3,
-                                "BillNumber": "00001",
-                                "Supplier": "Haven",
+                                "BillNumber": "00004",
                                 "Status": "Valid"
                             }
                         ]
@@ -26,8 +75,7 @@ var bill = [
                         "Bills": [
                             {
                                 "GUID": 4,
-                                "BillNumber": "00002",
-                                "Supplier": "Haven",
+                                "BillNumber": "00005",
                                 "Status": "Investigation"
                             }
                         ]
@@ -38,8 +86,7 @@ var bill = [
                         "Bills": [
                             {
                                 "GUID": 5,
-                                "BillNumber": "00003",
-                                "Supplier": "Haven",
+                                "BillNumber": "00006",
                                 "Status": "Invalid"
                             }
                         ]
@@ -47,5 +94,51 @@ var bill = [
                 ]
             }
         ]
-    }
+    },
+    {
+        "GUID" : 6,
+        "Attributes" : [
+            {"Period" : "Nov 2019"}
+        ],
+        "Sites": [
+            {
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 7,
+                        "Identifier": 1234567890123,
+                        "Bills": [
+                            {
+                                "GUID": 8,
+                                "BillNumber": "00001",
+                                "Status": "Valid"
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 9,
+                        "Identifier": 1234567890124,
+                        "Bills": [
+                            {
+                                "GUID": 10,
+                                "BillNumber": "00002",
+                                "Status": "Valid"
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 11,
+                        "Identifier": 1234567890125,
+                        "Bills": [
+                            {
+                                "GUID": 12,
+                                "BillNumber": "00003",
+                                "Status": "Valid"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
 ]

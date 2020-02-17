@@ -68,7 +68,7 @@ function buildBill(bills, baseElement, checkboxFunction, linkedSite) {
         var li = document.createElement('li');
         var ul = createUL();
         var branchId = 'Bill'.concat(bill.GUID);
-        appendListItemChildren(li, branchId, checkboxFunction, 'Bill'.concat(bill.Status), bill.BillNumber, ul, linkedSite, '');
+        appendListItemChildren(li, branchId, checkboxFunction, 'Bill'.concat(bill.Status), bill.BillNumber, ul, linkedSite, bill.GUID);
 
         var branchDiv = li.children[branchId];
         branchDiv.removeAttribute('class', 'far fa-plus-square');
@@ -156,11 +156,11 @@ function getIconByBranch(branch) {
         case 'Period':
             return "far fa-calendar-alt";
         case "BillValid":
-            return "far fa-check-circle";
+            return "fas fa-check-circle";
         case "BillInvestigation":
-            return "far fa-question-circle";
+            return "fas fa-question-circle";
         case "BillInvalid":
-            return "far fa-times-circle";
+            return "fas fa-times-circle";
     }    
 }
 
