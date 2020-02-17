@@ -1,20 +1,51 @@
 var bill = [
     {
         "GUID" : "0",
-        "Attributes" : 
-        [
-            {"UserName" : "Bill 0001 - 01/12/19 to 31/12/19"}
+        "Attributes" : [
+            {"Period" : "Dec 2019"}
         ],
-        "Details": [
-            {"Bill Number" : "0001"},
-            {"Supplier" : "Haven"},
-            {"Validation Status" : "Valid"},
-            {"Validation Process 1 Name" : "Consumption"},
-            {"Validation Process 1 Description" : "Validate that consumption listed on bill matches latest usage received from industry"},
-            {"Validation Process 1 Result" : "Bill consumption 1534kWh, Industry consumption 1534kWh, consumption valid"},
-            {"Validation Process 2 Name" : "Bill Value"},
-            {"Validation Process 2 Description" : "Validate that value listed on bill matches calculations using latest usage and contract data"},
-            {"Validation Process 2 Result" : "Bill value £1200, BWS calculation value £1199.99, bill value valid"}
+        "Sites": [
+            {
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 0,
+                        "Identifier": 1234567890123,
+                        "Bills": [
+                            {
+                                "GUID": 3,
+                                "BillNumber": "00001",
+                                "Supplier": "Haven",
+                                "Status": "Valid"
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 1,
+                        "Identifier": 1234567890124,
+                        "Bills": [
+                            {
+                                "GUID": 4,
+                                "BillNumber": "00002",
+                                "Supplier": "Haven",
+                                "Status": "Investigation"
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 2,
+                        "Identifier": 1234567890125,
+                        "Bills": [
+                            {
+                                "GUID": 5,
+                                "BillNumber": "00003",
+                                "Supplier": "Haven",
+                                "Status": "Invalid"
+                            }
+                        ]
+                    }
+                ]
+            }
         ]
     }
 ]
