@@ -35,7 +35,11 @@ function createCardButton(checkbox){
 		button.setAttribute('class', 'tablinks');
 		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 
-		button.innerHTML = span.innerHTML;
+		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
+		var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
+		var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
+
+		button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
 		button.id = span.id.replace('span', 'button');
 		tabDiv.appendChild(button);
 	
