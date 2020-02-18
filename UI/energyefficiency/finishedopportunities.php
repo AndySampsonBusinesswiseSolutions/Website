@@ -98,8 +98,14 @@
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="/javascript/activeopportunitytree.js"></script>
+<script type="text/javascript" src="/basedata/activeopportunity.json"></script>
 
 <script type="text/javascript"> 
+	var data = activeopportunity;
+	createTree(data, "treeDiv", "");
+	addExpanderOnClickEvents();
+
 	window.onload = function(){
 		resizeFinalColumns(375);
 	}
