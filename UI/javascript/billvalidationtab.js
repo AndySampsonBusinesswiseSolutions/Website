@@ -1,4 +1,4 @@
-function openTab(evt, tabName, guid, branch) {
+function openTab(evt, tabName, guid) {
 	var cardDiv = document.getElementById('cardDiv');
 
 	var tabContent = document.getElementsByClassName("tabcontent");
@@ -18,7 +18,7 @@ function openTab(evt, tabName, guid, branch) {
 	newDiv.id = tabName;
 	cardDiv.appendChild(newDiv);
 
-	createCard(guid, newDiv, 'User');
+	createCard(guid, newDiv);
 
 	document.getElementById(tabName).style.display = "block";
 	evt.currentTarget.className += " active";
@@ -35,7 +35,11 @@ function createCardButton(checkbox){
 		button.setAttribute('class', 'tablinks');
 		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 
-		button.innerHTML = span.innerHTML;
+		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
+		var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
+		var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
+
+		button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
 		button.id = span.id.replace('span', 'button');
 		tabDiv.appendChild(button);
 	
@@ -69,36 +73,53 @@ function updateTabDiv() {
     }
 }
 
-function createCard(guid, divToAppendTo, identifier) {
-	var user;
+function createCard(guid, divToAppendTo) {
+	var billEntity;
 	
-	var userLength = data.length;
-	for(var i = 0; i < userLength; i++) {
-		user = data[i];
+	var dataLength = data.length;
+	for(var i = 0; i < dataLength; i++) {
+		var datum = data[i];
+		var sites = datum.Sites;
 
-		if(user.GUID == guid) {
+		var siteLength = sites.length;
+		for(var j = 0; j < siteLength; j++) {
+			var site = sites[j];
+			var meters = site.Meters;
+
+			var meterLength = meters.length;
+			for(var k = 0; k < meterLength; k++) {
+				var meter = meters[k];
+				var bills = meter.Bills;
+
+				var billLength = bills.length;
+				for(var l = 0; l < billLength; l++) {
+					var bill = bills[l];
+
+					if(bill.GUID == guid) {
+						billEntity = bill;
+						break;
+					}
+				}
+
+				if(billEntity){
+					break;
+				}
+			}
+
+			if(billEntity){
+				break;
+			}
+		}
+
+		if(billEntity){
 			break;
 		}
 	}
 
-	buildUserDataTable(user, identifier, divToAppendTo);
+	buildBillDataTable(billEntity, divToAppendTo);
 }
 
-function displayUserDataTable() {
-	var button = document.getElementById('editDetailsButton');
-	var div = document.getElementById('displayAttributes');
-
-	if(button.innerHTML == 'Edit Details') {
-		div.setAttribute('style', '');
-		button.innerText = 'Hide Details';
-	}
-	else {
-		div.setAttribute('style', 'display: none');
-		button.innerText = 'Edit Details'
-	}
-}
-
-function buildUserDataTable(entity, attributeRequired, divToAppendTo){
+function buildBillDataTable(entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
 	divToAppendTo.appendChild(div);
@@ -110,19 +131,12 @@ function buildUserDataTable(entity, attributeRequired, divToAppendTo){
 	table.id = 'dataTable';
 	table.setAttribute('style', 'width: 100%;');
 
-	var tableRow = document.createElement('tr');
-
-	tableRow.appendChild(createTableHeader('width: 15%; border: solid black 1px;', 'Type'));
-	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Attribute'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
-
-    table.appendChild(tableRow);
-	displayAttributes(entity.Details, table, 'User');
+	displayAttributes(entity.Details, table);
 
 	treeDiv.appendChild(table);
 }
 
-function displayAttributes(attributes, table, type) {
+function displayAttributes(attributes, table) {
 	if(!attributes) {
 		return;
 	}
@@ -130,35 +144,23 @@ function displayAttributes(attributes, table, type) {
 	var attributesLength = attributes.length;
 	for(var i = 0; i < attributesLength; i++) {
 		var tableRow = document.createElement('tr');
-		tableRow.id = 'row'.concat(type + i);
 
-		for(var j = 0; j < 3; j++) {
+		for(var j = 0; j < 2; j++) {
 			var tableDatacell = document.createElement('td');
 			tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
 			switch(j) {
 				case 0:
-					tableDatacell.innerHTML = type;
-					break;	
-				case 1:
-				// 	tableDatacell.innerHTML = identifier;
-				// 	break;
-				// case 2:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = key;
 						break;
 					}	
-					
-					tableDatacell.id = 'attribute'.concat(type + i);
 					break;
-				// case 3:
-				case 2:
+				case 1:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = attributes[i][key];
 						break;
 					}
-
-					tableDatacell.id = 'value'.concat(type + i);
 					break;
 			}
 
