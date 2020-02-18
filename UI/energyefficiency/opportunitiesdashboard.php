@@ -174,7 +174,7 @@
 						</table>
 					</div>
 					<br>
-					<button style="width: 100%;">Arrange Site Visit</button>
+					<button class="show-pointer"style="width: 100%;">Arrange Visit</button>
 				</div>
 				<div class="divcolumn last"></div>
 			</div>
@@ -215,15 +215,43 @@
 	<div class="row">
 		<div class="divcolumn first"></div>
 		<div class="divcolumn left" style="border: solid black 1px; background-color: #e9eaee;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Recommended Opportunities</span>
+			<div style="text-align: center;">
+				<span style="border-bottom: solid black 1px;">Recommended Opportunities</span>
 				<br>
 				<div class="divcolumn first"></div>
 				<div class="divcolumn left">
-					<div style="text-align: center; border-bottom: solid black 1px;">
-						<span>Opportunity</span>
-					</div><br>
-					<span>LED Lighting Installation</span><br>
+					<ul class="format-listitem">
+						<li>
+							<div style="text-align: center; border-bottom: solid black 1px;">
+								<span>Opportunity</span>
+							</div>
+						</li>
+						<br>
+						<li>
+							<div id="Project1" class="far fa-plus-square" additionallists="Project1ListButtons"></div>
+							<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
+							<span id="Project1span">LED Lighting Installation</span>
+							<div id="Project1List" class="listitem-hidden">
+								<ul class="format-listitem">
+									<li>
+										<div id="Site1" class="far fa-times-circle"></div>
+										<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
+										<span id="Site1span">Site X</span>
+									</li>
+									<li>
+										<div id="Site2" class="far fa-times-circle"></div>
+										<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
+										<span id="Site2span">Site Y</span>
+									</li>
+									<li>
+										<div id="Site3" class="far fa-times-circle"></div>
+										<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
+										<span id="Site2span">Site Z</span>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
 				</div>
 				<div class="divcolumn middle">
 					<div style="text-align: center; border-bottom: solid black 1px;">
@@ -232,23 +260,50 @@
 					<i class="fas fa-search show-pointer"></i><br>
 				</div>
 				<div class="divcolumn right">
-					<div style="text-align: center; border-bottom: solid black 1px;">
-						<span>Approve/Reject</span>
-					</div><br>
-					<button style="width: 25%; background-color: green">Approve</button>
-					&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-					<button style="width: 25%; background-color: red">Reject</button><br>
+					<ul class="format-listitem">
+						<li>
+							<div style="text-align: center; border-bottom: solid black 1px;">
+							<span>Approve/Reject</span>
+							</div>
+						</li>
+						<br>
+						<li>
+							<button class="show-pointer"style="width: 45%; background-color: green;">Approve Opportunity</button>
+							&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+							<button class="show-pointer"style="width: 45%; background-color: red;">Reject Opportunity</button>
+							<div id="Project1ListButtons" class="listitem-hidden">
+								<ul class="format-listitem">
+									<li>
+										<button class="show-pointer"style="width: 45%; background-color: green;">Approve Site X</button>
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										<button class="show-pointer"style="width: 45%; background-color: red;">Reject Site X</button>
+									</li>
+									<li>
+										<button class="show-pointer"style="width: 45%; background-color: green;">Approve Site Y</button>
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										<button class="show-pointer"style="width: 45%; background-color: red;">Reject Site Y</button>
+									</li>
+									<li>
+										<button class="show-pointer"style="width: 45%; background-color: green;">Approve Site Z</button>
+										&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+										<button class="show-pointer"style="width: 45%; background-color: red;">Reject Site Z</button>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
 				</div>
 				<div class="divcolumn last"></div>
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
 		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Site Ranking</span>
+			<div style="text-align: center;">
+				<span style="border-bottom: solid black 1px;">Site Ranking</span>
 				<br>
-				<div class="divcolumn first"></div>
-				<div class="divcolumn left">
+				<br>
+				<div class="first"></div>
+				<div class="left">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span>Site</span>
 					</div><br>
@@ -256,7 +311,7 @@
 					<span>Site Y</span><br>
 					<span>Site Z</span><br>
 				</div>
-				<div class="divcolumn middle">
+				<div class="middle">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span>Rank</span>
 					</div><br>
@@ -264,7 +319,7 @@
 					<span>2</span><br>
 					<span>3</span><br>
 				</div>
-				<div class="divcolumn right">
+				<div class="right">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span>Notes</span>
 					</div><br>
@@ -272,12 +327,18 @@
 					<i class="fas fa-search show-pointer"></i><br>
 					<i class="fas fa-search show-pointer"></i><br>
 				</div>
-				<div class="divcolumn last"></div>
+				<div class="last"></div>
 			</div>
 		</div>
 		<div class="divcolumn last"></div>
 	</div>
 	<br>
 </body>
+
+<script src="/javascript/utils.js"></script>
+
+<script type="text/javascript">
+	addExpanderOnClickEvents();
+</script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
