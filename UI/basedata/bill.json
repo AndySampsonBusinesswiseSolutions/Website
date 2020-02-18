@@ -30,7 +30,11 @@ var bill = [
                             {
                                 "GUID": 17,
                                 "BillNumber": "???",
-                                "Status": "Invalid"
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Bill expected by 17th Feb 2020 but not received"}
+                                ]
                             }
                         ]
                     },
@@ -41,7 +45,11 @@ var bill = [
                             {
                                 "GUID": 19,
                                 "BillNumber": "???",
-                                "Status": "Invalid"
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Bill expected by 17th Feb 2020 but not received"}
+                                ]
                             }
                         ]
                     }
@@ -65,7 +73,10 @@ var bill = [
                             {
                                 "GUID": 3,
                                 "BillNumber": "00004",
-                                "Status": "Valid"
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"}
+                                ]
                             }
                         ]
                     },
@@ -76,7 +87,11 @@ var bill = [
                             {
                                 "GUID": 4,
                                 "BillNumber": "00005",
-                                "Status": "Investigation"
+                                "Status": "Investigation",
+                                "Details": [
+                                    {"Status": "Investigation"},
+                                    {"Status Reason": "DUoS higher than expected"}
+                                ]
                             }
                         ]
                     },
@@ -87,7 +102,11 @@ var bill = [
                             {
                                 "GUID": 5,
                                 "BillNumber": "00006",
-                                "Status": "Invalid"
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Volume exceeded tolerances"}
+                                ]
                             }
                         ]
                     }
@@ -111,7 +130,10 @@ var bill = [
                             {
                                 "GUID": 8,
                                 "BillNumber": "00001",
-                                "Status": "Valid"
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"}
+                                ]
                             }
                         ]
                     },
@@ -122,7 +144,10 @@ var bill = [
                             {
                                 "GUID": 10,
                                 "BillNumber": "00002",
-                                "Status": "Valid"
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"}
+                                ]
                             }
                         ]
                     },
@@ -133,7 +158,10 @@ var bill = [
                             {
                                 "GUID": 12,
                                 "BillNumber": "00003",
-                                "Status": "Valid"
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"}
+                                ]
                             }
                         ]
                     }

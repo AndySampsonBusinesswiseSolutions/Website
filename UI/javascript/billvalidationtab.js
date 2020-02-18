@@ -131,11 +131,6 @@ function buildBillDataTable(entity, divToAppendTo){
 	table.id = 'dataTable';
 	table.setAttribute('style', 'width: 100%;');
 
-	var tableRow = document.createElement('tr');
-	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Attribute'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
-
-    table.appendChild(tableRow);
 	displayAttributes(entity.Details, table);
 
 	treeDiv.appendChild(table);
