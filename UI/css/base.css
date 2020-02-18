@@ -157,18 +157,22 @@ tr {
 }
 
 .left, .right {
+  float: left;
   width: 45%;
 }
 
 .single {
+  float: left;
   width: 96%;
 }
 
 .middle {
+  float: left;
   width: 6%;
 }
 
 .first, .last {
+  float: left;
   width: 2%;
 }
 

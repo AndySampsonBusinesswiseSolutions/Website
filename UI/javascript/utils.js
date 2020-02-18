@@ -52,6 +52,11 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
 
+	updateAdditionalControls(element);
+	expandAdditionalLists(element);
+}
+
+function updateAdditionalControls(element) {
 	var additionalcontrols = element.getAttribute('additionalcontrols');
 
 	if(!additionalcontrols) {
@@ -77,6 +82,24 @@ function addExpanderOnClickEventsByElement(element) {
 			}
 		});
 	}	
+}
+
+function expandAdditionalLists(element) {
+	var additionalLists = element.getAttribute('additionallists');
+
+	if(!additionalLists) {
+		return;
+	}
+
+	var controlArray = additionalLists.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];
+		
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			updateClass(controlElement, 'listitem-hidden', '');
+		});		
+	}
 }
 
 function addArrowOnClickEvents() {
