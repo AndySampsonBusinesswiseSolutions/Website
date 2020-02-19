@@ -202,10 +202,16 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
+<script src="/javascript/opportunitymanagementtree.js"></script>
+<script type="text/javascript" src="/basedata/opportunitymanagement.json"></script>
 <link href="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.css" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/gh/xxjapp/xdialog@3/xdialog.min.js"></script>
 
 <script type="text/javascript"> 
+	var data = customer;
+	createTree(data, "treeDiv", "");
+	addExpanderOnClickEvents();
+
 	window.onload = function(){
 		resizeFinalColumns(375);
 	}
