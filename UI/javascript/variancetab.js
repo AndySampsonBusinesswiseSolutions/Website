@@ -19,7 +19,7 @@ function openTab(tabName, cardDivName) {
 			tabName = 'WholesaleRate';
 		}
 		else {
-			tabName = 'Forecast';
+			tabName = 'WholesaleUsage';
 		}
 	}
 	else if(tabName == 'Usage') {
@@ -31,13 +31,16 @@ function openTab(tabName, cardDivName) {
 	else if(tabName == 'Rate') {
 		tabName = 'WholesaleRate';
 	}
+	else {
+		tabName = 'WholesaleUsage';
+	}
 
 	createCard(newDiv, tabName);
   }
 
 function createCardButtons(){
-	openTab("Forecast", "cardDiv");	
-	updateChart(document.getElementById('variance0radio'), electricityChart);
+	openTab("Usage", "cardDiv");	
+	updateChart(document.getElementById('wholesaleCostElement0radio'), electricityChart);
 }
 
 function createCard(divToAppendTo, tabName) {
