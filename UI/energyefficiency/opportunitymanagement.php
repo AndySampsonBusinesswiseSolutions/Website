@@ -22,7 +22,7 @@
 		<div class="final-column">
 			<div class="row">
 				<div class="divcolumn first"></div>
-				<div class="divcolumn left" style="border: solid black 1px; background-color: #e9eaee;">
+				<div class="roundborder divcolumn left" style="background-color: #e9eaee;">
 					<div class="divcolumn first"></div>
 					<div class="divcolumn" style="width: 96%;">
 						<div style="text-align: center; border-bottom: solid black 1px;">
@@ -54,7 +54,7 @@
 					<div class="divcolumn last"></div>
 				</div>
 				<div class="divcolumn middle"></div>
-				<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
+				<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
 					<div class="divcolumn first"></div>
 					<div class="divcolumn" style="width: 96%;">
 						<div style="text-align: center; border-bottom: solid black 1px;">
@@ -94,7 +94,7 @@
 			<br>
 			<div class="row">
 				<div class="divcolumn first"></div>
-				<div style="border: solid black 1px; width: 96%; background-color: #e9eaee;">
+				<div class="roundborder" style="width: 96%; background-color: #e9eaee;">
 					<div class="divcolumn first"></div>
 					<div class="divcolumn" style="width: 96%;">
 						<div style="text-align: center; border-bottom: solid black 1px;">
@@ -146,7 +146,7 @@
 			<br>
 			<div class="row">
 				<div class="divcolumn first"></div>
-				<div style="border: solid black 1px; width: 96%; background-color: #e9eaee;">
+				<div class="roundborder" style="width: 96%; background-color: #e9eaee;">
 					<div class="divcolumn first"></div>
 					<div class="divcolumn" style="width: 96%;">
 						<div style="text-align: center; border-bottom: solid black 1px;">

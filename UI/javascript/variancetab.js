@@ -6,7 +6,10 @@ function openTab(tabName, cardDivName) {
 	newDiv.setAttribute('class', 'tabcontent');
 	newDiv.id = tabName.concat('div');
 	cardDiv.appendChild(newDiv);
-	document.getElementById(newDiv.id).style.display = "block";
+
+	newDiv = document.getElementById(newDiv.id);
+	newDiv.style.display = "block";
+	newDiv.style.border = "none";
 
 	if(tabName == 'Wholesale') {
 		if(document.getElementById('usageCostElement0radio').checked) {

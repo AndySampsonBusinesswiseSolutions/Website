@@ -1,4 +1,4 @@
 <div>
-	<div class="group-by-div" id="cardDiv">
+	<div id="cardDiv">
 	</div>
 </div>

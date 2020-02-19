@@ -9,7 +9,7 @@
 	<br>
 	<div class="row">
 		<div class="divcolumn first"></div>
-		<div class="divcolumn left" style="border: solid black 1px; background-color: #e9eaee;">
+		<div class="roundborder divcolumn left" style="background-color: #e9eaee;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Visits</span>
 			</div>
@@ -180,7 +180,7 @@
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
-		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
+		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Opportunity Summary</span>
 				<br>
@@ -214,7 +214,7 @@
 	<br>
 	<div class="row">
 		<div class="divcolumn first"></div>
-		<div class="divcolumn left" style="border: solid black 1px; background-color: #e9eaee;">
+		<div class="roundborder divcolumn left" style="background-color: #e9eaee;">
 			<div style="text-align: center;">
 				<span style="border-bottom: solid black 1px;">Recommended Opportunities</span>
 				<br>
@@ -297,7 +297,7 @@
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
-		<div class="divcolumn right" style="border: solid black 1px; background-color: #e9eaee;">
+		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
 			<div style="text-align: center;">
 				<span style="border-bottom: solid black 1px;">Site Ranking</span>
 				<br>

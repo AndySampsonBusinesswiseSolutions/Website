@@ -13,6 +13,7 @@
 		<div>Select Commodity To Display</div>
 		<span>Electricity</span><span class="show-pointer">&nbsp;<i class="fas fa-angle-double-left" id="electricityGasSelector"></i>&nbsp;</span><span>Gas</span>
 	</div>
+	<br>
 	<div id="electricityDiv">
 		<div class="row">
 			<div class="tree-column">
