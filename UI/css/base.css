@@ -144,3 +144,115 @@ tr:nth-child(even) {
 tr {
   text-align: center;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+/* Create three unequal columns that floats next to each other */
+.divcolumn {
+  float: left;
+  padding: 10px;
+  height: 325px; /* Should be removed. Only for demonstration */
+}
+
+.left, .right {
+  float: left;
+  width: 45%;
+}
+
+.single {
+  float: left;
+  width: 96%;
+}
+
+.middle {
+  float: left;
+  width: 6%;
+}
+
+.first, .last {
+  float: left;
+  width: 2%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* define height and width of scrollable area. Add 16px to width for scrollbar          */
+div.tableContainer {
+	clear: both;
+	height: 175px;
+	overflow: auto;
+}
+
+div.tableContainer2 {
+	clear: both;
+	height: 225px;
+	overflow: auto;
+}
+
+div.tableContainer3 {
+	clear: both;
+	height: 600px;
+	overflow: auto;
+}
+
+/* Reset overflow value to hidden for all non-IE browsers. */
+html>body div.tableContainer {
+	overflow: hidden;
+}
+
+/* define width of table. IE browsers only                 */
+div.tableContainer table {
+	float: left;
+}
+
+/* set THEAD element to have block level attributes. All other non-IE browsers            */
+/* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
+
+/* make the TH elements pretty */
+thead.fixedHeader th {
+	font-weight: normal;
+	padding: 4px 3px;
+	text-align: center
+}
+
+html>body tbody.scrollContent {
+	display: block;
+	height: 150px;
+	overflow: auto;
+}
+
+html>body tbody.scrollContent2 {
+	display: block;
+	height: 195px;
+	overflow: auto;
+}
+
+html>body tbody.scrollContent3 {
+	height: 590px;
+	overflow: auto;
+}
+
+html>body thead.fixedHeader {
+	display: table;
+	overflow: auto;
+	width: 100%
+}
