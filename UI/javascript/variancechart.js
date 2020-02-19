@@ -8,8 +8,7 @@ function updateChart(callingElement, chart) {
 
   switch(callingElement.id) {
     case 'variance0radio':
-      createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
-      return;
+      showBy = 'WholesaleUsage';
     case 'wholesaleCostElement0radio':
       if(document.getElementById('usageCostElement0radio').checked) {
         showBy = 'WholesaleUsage';
