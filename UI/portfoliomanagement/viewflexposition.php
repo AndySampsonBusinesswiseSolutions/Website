@@ -51,7 +51,152 @@
 			</div>	
 		</div>
 	</div>
-	<br>
+  <br>
+  <div class="row roundborder" style="margin-left: 15px; margin-right: 15px;">
+    <div class="divcolumn first"></div>
+    <div class="divcolumn left">
+      <table style="width: 100%;">
+        <tr>
+          <th style="border: solid black 1px;">Month</th>
+          <th style="border: solid black 1px;">Open Vol</th>
+          <th style="border: solid black 1px;">Hedge Vol</th>
+          <th style="border: solid black 1px;">Cap Price</th>
+          <th style="border: solid black 1px;">ECP</th>
+          <th style="border: solid black 1px;">Market</th>
+          <th style="border: solid black 1px;">Day 1 Price</th>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">10 2020</td>
+          <td style="border: solid black 1px;">1.324</td>
+          <td style="border: solid black 1px;">1.426</td>
+          <td style="border: solid black 1px;">5.718</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.886</td>
+          <td style="border: solid black 1px;">5.918</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">11 2020</td>
+          <td style="border: solid black 1px;">1.324</td>
+          <td style="border: solid black 1px;">1.426</td>
+          <td style="border: solid black 1px;">5.718</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.886</td>
+          <td style="border: solid black 1px;">5.918</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">12 2020</td>
+          <td style="border: solid black 1px;">1.324</td>
+          <td style="border: solid black 1px;">1.426</td>
+          <td style="border: solid black 1px;">5.718</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.886</td>
+          <td style="border: solid black 1px;">5.918</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">01 2021</td>
+          <td style="border: solid black 1px;">1.324</td>
+          <td style="border: solid black 1px;">1.426</td>
+          <td style="border: solid black 1px;">5.718</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.886</td>
+          <td style="border: solid black 1px;">5.918</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">02 2021</td>
+          <td style="border: solid black 1px;">1.324</td>
+          <td style="border: solid black 1px;">1.426</td>
+          <td style="border: solid black 1px;">5.718</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.886</td>
+          <td style="border: solid black 1px;">5.918</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">03 2021</td>
+          <td style="border: solid black 1px;">1.324</td>
+          <td style="border: solid black 1px;">1.426</td>
+          <td style="border: solid black 1px;">5.718</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.886</td>
+          <td style="border: solid black 1px;">5.918</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">04 2021</td>
+          <td style="border: solid black 1px;">0.713</td>
+          <td style="border: solid black 1px;">1.657</td>
+          <td style="border: solid black 1px;">4.888</td>
+          <td style="border: solid black 1px;">5.030</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.444</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">05 2021</td>
+          <td style="border: solid black 1px;">0.713</td>
+          <td style="border: solid black 1px;">1.657</td>
+          <td style="border: solid black 1px;">4.888</td>
+          <td style="border: solid black 1px;">5.030</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.444</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">06 2021</td>
+          <td style="border: solid black 1px;">0.713</td>
+          <td style="border: solid black 1px;">1.657</td>
+          <td style="border: solid black 1px;">4.888</td>
+          <td style="border: solid black 1px;">5.030</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.444</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">07 2021</td>
+          <td style="border: solid black 1px;">0.713</td>
+          <td style="border: solid black 1px;">1.657</td>
+          <td style="border: solid black 1px;">4.888</td>
+          <td style="border: solid black 1px;">5.030</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.444</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">08 2021</td>
+          <td style="border: solid black 1px;">0.713</td>
+          <td style="border: solid black 1px;">1.657</td>
+          <td style="border: solid black 1px;">4.888</td>
+          <td style="border: solid black 1px;">5.030</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.444</td>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">09 2021</td>
+          <td style="border: solid black 1px;">0.713</td>
+          <td style="border: solid black 1px;">1.657</td>
+          <td style="border: solid black 1px;">4.888</td>
+          <td style="border: solid black 1px;">5.030</td>
+          <td style="border: solid black 1px;">4.990</td>
+          <td style="border: solid black 1px;">4.444</td>
+        </tr>
+      </table>
+    </div>
+    <div class="divcolumn middle"></div>
+    <div class="divcolumn right">
+      <table style="width: 100%;">
+        <tr>
+          <th style="border: solid black 1px;">Date</th>
+          <th style="border: solid black 1px;">Trade Reference</th>
+          <th style="border: solid black 1px;">Period</th>
+          <th style="border: solid black 1px;">Volume</th>
+          <th style="border: solid black 1px;">Price</th>
+        </tr>
+        <tr>
+          <td style="border: solid black 1px;">15/02/2018</td>
+          <td style="border: solid black 1px;">00001</td>
+          <td style="border: solid black 1px;">Winter 2020</td>
+          <td style="border: solid black 1px;">1MW</td>
+          <td style="border: solid black 1px;">£40/MWh</td>
+        </tr>
+      </table>
+    </div>
+    <div class="divcolumn last"></div>
+  </div>
+  <br>
 </body>
 
 <script src="/javascript/utils.js"></script>
