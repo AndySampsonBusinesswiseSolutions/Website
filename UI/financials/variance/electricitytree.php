@@ -3,29 +3,35 @@
 		<div id="electricityTreeDiv" class="tree-div">
 		</div>
 		<br>
-		<div id="electricityCostTreeDiv" class="tree-div">
+		<div id="electricityDisplayTreeDiv" class="datagrid">
+			<ul class="format-listitem">
+				<li>
+					<div id="displayCostElement0"></div>
+					<span id="displayCostElement0span">Display</span>
+					<div id="displayCostElement0List">
+						<ul class="format-listitem">
+							<li>
+								<div id="usageCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+								<input type="radio" name="group1" id="usageCostElement0radio" checked guid="0" onclick='openTab("Usage", "cardDiv");  updateChart(this, electricityChart);'><span id="usageCostElement0span" style="padding-left: 1px;">Usage</span>
+							</li>
+							<li>
+								<div id="costCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+								<input type="radio" name="group1" id="costCostElement0radio" guid="0" onclick='openTab("Cost", "cardDiv");  updateChart(this, electricityChart);'><span id="costCostElement0span" style="padding-left: 1px;">Cost</span>
+							</li>
+							<li>
+								<div id="rateCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
+								<input type="radio" name="group1" id="rateCostElement0radio" guid="0" onclick='openTab("Rate", "cardDiv");  updateChart(this, electricityChart);'><span id="rateCostElement0span" style="padding-left: 1px;">Rate</span>
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<br>
+		<div id="electricityCostTreeDiv" class="datagrid">
 			<div class="scrolling-wrapper">
 				<ul class="format-listitem">
-					<li>
-						<div id="displayCostElement0" style="padding-right: 4px;"></div>
-						<span id="displayCostElement0span" style="padding-left: 1px;">Display</span>
-						<div id="displayCostElement0List">
-							<ul class="format-listitem">
-								<li>
-									<div id="usageCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-									<input type="radio" name="group1" id="usageCostElement0radio" checked guid="0" onclick='openTab("Usage", "cardDiv");  updateChart(this, electricityChart);'><span id="usageCostElement0span" style="padding-left: 1px;">Usage</span>
-								</li>
-								<li>
-									<div id="costCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-									<input type="radio" name="group1" id="costCostElement0radio" guid="0" onclick='openTab("Cost", "cardDiv");  updateChart(this, electricityChart);'><span id="costCostElement0span" style="padding-left: 1px;">Cost</span>
-								</li>
-								<li>
-									<div id="rateCostElement0" style="padding-right: 4px;" class="far fa-times-circle"></div>
-									<input type="radio" name="group1" id="rateCostElement0radio" guid="0" onclick='openTab("Rate", "cardDiv");  updateChart(this, electricityChart);'><span id="rateCostElement0span" style="padding-left: 1px;">Rate</span>
-								</li>
-							</ul>
-						</div>
-					</li>
+					<span>Type</span>
 					<li>
 						<div id="variance0" class="far fa-times-circle" style="padding-right: 3px;"></div>
 						<input type="radio" name="group0" id="variance0radio" guid="0" checked onclick='openTab("Forecast", "cardDiv");  updateChart(this, electricityChart);'><span id="variance0span" style="padding-left: 1px;">Forecast v Invoice Summary</span>
