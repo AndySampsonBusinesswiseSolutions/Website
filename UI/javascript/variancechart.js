@@ -5,20 +5,50 @@ function updateChart(callingElement, chart) {
   var checkBoxes = getCheckedCheckBoxes(inputs);
 
   var showBy = 'Forecast';
-  var tabDiv = document.getElementById('tabDiv');
-  var buttons = tabDiv.getElementsByClassName('active');
 
-  if(buttons[0].id == 'CostElements')
-  {
-    var costElementDetailDiv = document.getElementById('costElementDetailTabDiv');
-    buttons = costElementDetailDiv.getElementsByClassName('active');
-    showBy = buttons[0].id;
+  switch(callingElement.id) {
+    case 'variance0radio':
+      createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
+      return;
+    case 'wholesaleCostElement0radio':
+      if(document.getElementById('usageCostElement0radio').checked) {
+        showBy = 'WholesaleUsage';
+      }
+      else if(document.getElementById('costCostElement0radio').checked) {
+        showBy = 'WholesaleCost';
+      }
+      else if(document.getElementById('rateCostElement0radio').checked) {
+        showBy = 'WholesaleRate';
+      }
+      else {
+        createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
+        return;
+      }
+      break;
+    case 'usageCostElement0radio':
+      showBy = 'WholesaleUsage';
+      break;
+    case 'costCostElement0radio':
+      showBy = 'WholesaleCost';
+      break;
+    case 'rateCostElement0radio':
+      showBy = 'WholesaleRate';
+      break;
+    default:
+        if(document.getElementById('usageCostElement0radio').checked) {
+          showBy = 'WholesaleUsage';
+        }
+        else if(document.getElementById('costCostElement0radio').checked) {
+          showBy = 'WholesaleCost';
+        }
+        else if(document.getElementById('rateCostElement0radio').checked) {
+          showBy = 'WholesaleRate';
+        }
+        else {
+          showBy = 'Forecast';
+        }
   }
-  else {
-    createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
-    return;
-  }
-  
+
   clearElement(chart);
   
   var newCategories = getNewCategories();   
