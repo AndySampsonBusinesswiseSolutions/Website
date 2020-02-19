@@ -25,7 +25,8 @@
 		<div class="fill-column"></div>
 		<div class="final-column">
 			<div>
-				<div id="ganttChart"></div>
+				<div id="ganttChart">
+				</div>
 				<br>
 				<div id="tableContainer" class="tableContainer3">
 					<table style="width: 100%;">
@@ -762,6 +763,22 @@
 <script type="text/javascript" src="/javascript/jquery.ganttView.js"></script>
 <script type="text/javascript" src="/basedata/gantt.js"></script>
 <script src="/javascript/utils.js"></script>
+<script src="/javascript/activeopportunitytree.js"></script>
+<script type="text/javascript" src="/basedata/activeopportunity.json"></script>
+
+<script type="text/javascript"> 
+	var data = activeopportunity;
+	createTree(data, "treeDiv", "");
+	addExpanderOnClickEvents();
+
+	window.onload = function(){
+		resizeFinalColumns(380);
+	}
+
+	window.onresize = function(){
+		resizeFinalColumns(380);
+	}
+</script>
 
 <script>
 $(function () {
