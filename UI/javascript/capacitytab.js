@@ -58,7 +58,7 @@ function updateWholesaleUsageDatagrid() {
 
 	var datagridDivWidth = datagridDiv.clientWidth;
 	var monthWidth = Math.floor(datagridDivWidth/5);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/3)-1;
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/2);
 
 	var treeDiv = document.getElementById('electricityTreeDiv');
 	var inputs = treeDiv.getElementsByTagName('input');
@@ -68,24 +68,30 @@ function updateWholesaleUsageDatagrid() {
 	var html = 
 				'<table>'+
 					'<tr>'+
-						'<th style="width: '+monthWidth+'px; border-right: solid black 1px;">Month</th>'+
+						'<th style="width: '+monthWidth+'px; border-right: solid black 1px;">Date</th>'+
 						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Meter</th>'+
-						'<th style="width: '+dataWidth+'px;">Capacity</th>'+
+						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Capacity</th>'+
+						'<th style="width: '+dataWidth+'px;">Maximum Demand</th>'+
 					'</tr>';
 
 	var showBy = 'WholesaleUsage';
-	var newCategories = getNewCategories();   
-	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
+	var newCategories = getNewCategories('Yearly', new Date(2019, 1, 1));   
+	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity, 'yyyy-MM-dd');
 
 	var categoryLength = newCategories.length;
-	for(var i = 0; i < categoryLength; i++) {
-		var htmlRow = '<tr>'+
-						'<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
-						'<td style="border-right: solid black 1px;">1234567890123</td>'+
-						'<td>'+newSeries[0]["data"][i]+'</td>'+
-					  '</tr>';
+	var newSeriesLength = newSeries.length;
 
-		html += htmlRow;
+	for(var i = 0; i < categoryLength; i++) {
+		for(var j = 0; j < newSeriesLength; j++) {
+			var htmlRow = '<tr>'+
+				'<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
+				'<td style="border-right: solid black 1px;">'+newSeries[j].name+'</td>'+
+				'<td style="border-right: solid black 1px;">'+newSeries[j]["data"][i]+'</td>'+
+				'<td>250</td>'+
+			'</tr>';
+
+			html += htmlRow;
+		}		
 	}
 	
 	html += '</table>';

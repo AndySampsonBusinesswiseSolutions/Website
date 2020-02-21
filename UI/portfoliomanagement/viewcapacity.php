@@ -8,7 +8,7 @@
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-
+	<br>
 	<div id="electricityDiv">
 		<div class="row">
 			<div class="tree-column">
@@ -24,8 +24,8 @@
 </body>
 
 <script src="/javascript/utils.js"></script>
-<script src="/javascript/capacitychart.js"></script>
 <script src="/javascript/actualsvbudgettree.js"></script>
+<script src="/javascript/capacitychart.js"></script>
 <script src="/javascript/capacitytab.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="/basedata/capacity.json"></script>
