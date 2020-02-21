@@ -55,7 +55,7 @@
 						<li>
 							<div id="Project1" class="far fa-plus-square" additionallists="Project1ListButtons,Project1ListSavings"></div>
 							<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
-							<span id="Project1span">LED Lighting Installation</span>
+							<span id="Project1span">LED Lighting Installation</span><i class="fas fa-search show-pointer"></i>
 							<div id="Project1List" class="listitem-hidden">
 								<ul class="format-listitem">
 									<li>
@@ -118,7 +118,7 @@
 					<ul class="format-listitem">
 						<li>
 							<div>
-							<span style="border-bottom: solid black 1px;">Estimated Annual Savings & Notes</span>
+							<span style="border-bottom: solid black 1px;">Estimated Annual Savings</span>
 							</div>
 						</li>
 						<br>
@@ -126,8 +126,6 @@
 							<span>kWh Savings: 10,000</span>
 							<br>
 							<span>£ Savings: £10,000</span>
-							<br>
-							<i class="fas fa-search show-pointer"></i><br>
 							<div id="Project1ListSavings" class="listitem-hidden">
 								<ul class="format-listitem">
 									<li>
