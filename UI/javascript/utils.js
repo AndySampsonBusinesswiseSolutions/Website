@@ -91,15 +91,14 @@ function expandAdditionalLists(element) {
 		return;
 	}
 
-	var controlArray = additionalLists.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];
-		
-		element.addEventListener('click', function (event) {
+	element.addEventListener('click', function (event) {
+		var controlArray = additionalLists.split(',');
+		for(var j = 0; j < controlArray.length; j++) {
+			var controlId = controlArray[j];
 			var controlElement = document.getElementById(controlId);
 			updateClass(controlElement, 'listitem-hidden', '');
-		});		
-	}
+		}
+	});		
 }
 
 function addArrowOnClickEvents() {

@@ -53,7 +53,6 @@
                                     <li class="submenu-item"><a href="/AccountManagement/ManageUsers/"><span>Manage Users</span></a></li>
                                     <li class="submenu-item"><a href="/AccountManagement/ManageCustomers/"><span>Manage Customers</span></a></li>
                                     <li class="submenu-item"><a href="/AccountManagement/MyDocuments/"><span>My Documents</span></a></li>
-                                    <li class="submenu-item"><a href="/AccountManagement/Communications/"><span>Communications</span></a></li>
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-lightbulb"></i><span class="fusion-caret"></span><span>Supplier<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>

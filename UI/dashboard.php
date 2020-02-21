@@ -51,14 +51,6 @@
 	var data = dashboard;
 	createTree(data, "treeDiv", "addDashboardItem()");
 
-	$( function() {
-		var dragables = document.getElementsByClassName('ui-widget-content');
-
-		for(var i = 0; i < dragables.length; i++) {
-			$(dragables[i]).draggable({ containment: "#containment-wrapper", scroll: false, snap: true, cursor: "move" });
-		}	
-	} );
-
   window.onload = function(){
 		resizeFinalColumns(365);
 	}
