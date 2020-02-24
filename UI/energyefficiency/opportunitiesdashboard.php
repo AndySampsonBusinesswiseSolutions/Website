@@ -4,6 +4,11 @@
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
 
+<link rel="stylesheet" href="/css/tree.css">
+
+<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.4.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
+
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 	<br>
@@ -167,75 +172,75 @@
 						<span style="border-bottom: solid black 1px;">Future Site Visits</span>
 					</div>
 					<br>
-					<div id="tableContainer" class="tableContainer">
+					<div id="tableContainer" class="tableContainer2">
 						<table style="width: 100%;">
-							<thead class="fixedHeader">
+							<thead>
 								<tr>
-									<th style="border: solid black 1px;">Date Of Visit</th>
-									<th style="border: solid black 1px;">Engineer</th>
-									<th style="border: solid black 1px;">Notes</th>
+									<th id="futureSiteVisitsth0" style="border: solid black 1px;">Date Of Visit</th>
+									<th id="futureSiteVisitsth1" style="border: solid black 1px;">Engineer</th>
+									<th id="futureSiteVisitsth2" style="border: solid black 1px;">Notes</th>
 								</tr>
 							</thead>
-							<tbody class="scrollContent">
+							<tbody>
 								<tr>
-									<td style="width: 164px; border: solid black 1px;">???</td>
-									<td style="width: 123px; border: solid black 1px;">En Gineer</td>
-									<td style="width: 70px; border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">???</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/04/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/04/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/05/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/05/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/06/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/06/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/07/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/07/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/08/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/08/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/09/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/09/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/10/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/10/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/11/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/11/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/12/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/12/2020</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/01/2021</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/01/2021</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/02/2021</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">01/02/2021</td>
+									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="futureSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 							</tbody>
 						</table>
@@ -251,73 +256,83 @@
 					<br>
 					<div id="tableContainer" class="tableContainer2">
 						<table style="width: 100%;">
-							<thead class="fixedHeader">
+							<thead>
 								<tr>
-									<th style="border: solid black 1px;">Date Of Visit</th>
-									<th style="border: solid black 1px;">Engineer</th>
-									<th style="border: solid black 1px;">Notes</th>
+									<th id="historicSiteVisitsth0" style="border: solid black 1px;">Date Of Visit</th>
+									<th id="historicSiteVisitsth1" style="border: solid black 1px;">Engineer</th>
+									<th id="historicSiteVisitsth2" style="border: solid black 1px;">Notes</th>
 								</tr>
 							</thead>
-							<tbody class="scrollContent2">
+							<tbody>
 								<tr>
-									<td style="width: 164px; border: solid black 1px;">01/02/2020</td>
-									<td style="width: 123px; border: solid black 1px;">En Gineer</td>
-									<td style="width: 70px; border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/02/2020</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/01/2020</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/01/2020</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/12/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/12/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/11/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/11/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/10/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/10/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/09/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/09/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/08/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/08/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/07/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/07/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/06/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/06/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/05/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/05/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/04/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/04/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 								<tr>
-									<td style="border: solid black 1px;">01/03/2019</td>
-									<td style="border: solid black 1px;">En Gineer</td>
-									<td style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/03/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+								</tr>
+								<tr>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/02/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
+								</tr>
+								<tr>
+									<td headers="historicSiteVisitsth0" style="border: solid black 1px;">01/01/2019</td>
+									<td headers="historicSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
+									<td headers="historicSiteVisitsth2" style="border: solid black 1px;"><i class="fas fa-search show-pointer"></i></td>
 								</tr>
 							</tbody>
 						</table>

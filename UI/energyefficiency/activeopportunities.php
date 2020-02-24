@@ -5,10 +5,8 @@
 ?>
 
 <link rel="stylesheet" href="/css/tree.css">
-
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.4.css" />
-	<link rel="stylesheet" type="text/css" href="/css/reset.css" />
-	<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
+<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
 
 <body>
   <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
