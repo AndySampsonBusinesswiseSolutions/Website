@@ -21,7 +21,7 @@
                                     <li class="submenu-item"><a href="/Financials/VarianceAnalysis/"><span>Variance Analysis</span></a></li>
                                 </ul>
                             </li>
-                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-cog"></i><span class="fusion-caret"></span><span>Energy<br>Efficiency</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
+                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-cog"></i><span class="fusion-caret"></span><span>Energy Efficiency</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/EnergyEfficiency/OpportunitiesDashboard/"><span>Opportunities Dashboard</span></a></li>
                                     <li class="submenu-item"><a href="/EnergyEfficiency/ActiveOpportunities/"><span>Active Opportunities</span></a></li>
@@ -30,7 +30,7 @@
                                     <li class="submenu-item"><a href="/EnergyEfficiency/OpportunityManagement/"><span>Opportunity Management</span></a></li>
                                 </ul>
                             </li>
-                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-list-alt"></i><span class="fusion-caret"></span><span>Portfolio<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
+                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-list-alt"></i><span class="fusion-caret"></span><span>Portfolio Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
@@ -39,15 +39,15 @@
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewCapacity/"><span>View Capacity</span></a></li>
                                 </ul>
                             </li>
-                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-pound-sign"></i><span class="fusion-caret"></span><span>Tender<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
+                            <!-- <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-pound-sign"></i><span class="fusion-caret"></span><span>Tender<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-handshake"></i><span class="fusion-caret"></span><span>ETRM</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                 </ul>
-                            </li>
-                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-user"></i><span class="fusion-caret"></span><span>Account<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
+                            </li> -->
+                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-user"></i><span class="fusion-caret"></span><span>Account Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/AccountManagement/MyProfile/"><span>My Profile</span></a></li>
                                     <li class="submenu-item"><a href="/AccountManagement/ManageUsers/"><span>Manage Users</span></a></li>
@@ -55,7 +55,7 @@
                                     <li class="submenu-item"><a href="/AccountManagement/MyDocuments/"><span>My Documents</span></a></li>
                                 </ul>
                             </li>
-                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-lightbulb"></i><span class="fusion-caret"></span><span>Supplier<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
+                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-lightbulb"></i><span class="fusion-caret"></span><span>Supplier Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/SupplierManagement/SupplierManagement/"><span>Supplier Management</span></a></li>
                                     <li class="submenu-item"><a href="/SupplierManagement/SupplierProductManagement/"><span>Supplier Product Management</span></a></li>
