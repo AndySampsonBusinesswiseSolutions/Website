@@ -69,7 +69,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         }
 
         li.appendChild(branchDiv);
-        //li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
+        li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
         li.appendChild(createTreeIcon(deviceType, meterCommodity));
         li.appendChild(createSpan(branchId, identifier));
 
