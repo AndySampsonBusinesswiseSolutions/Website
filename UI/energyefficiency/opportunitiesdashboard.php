@@ -5,7 +5,6 @@
 ?>
 
 <link rel="stylesheet" href="/css/tree.css">
-
 <link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.4.css" />
 <link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
 
