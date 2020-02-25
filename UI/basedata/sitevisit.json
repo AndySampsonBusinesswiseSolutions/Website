@@ -1,0 +1,132 @@
+var data = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"BaseName" : "Leeds"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "1",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987654"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Gas"}
+                    ],
+            },
+            {
+                "GUID" : "2",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890123"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                "SubMeters" :
+                [
+                    {
+                        "GUID" : "3",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "4",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "12",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "New Sub Meter Required"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    }
+                ],
+            },
+            {
+                "GUID" : "5",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890124"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                    "SubMeters" :
+                    [
+                        {
+                            "GUID" : "13",
+                            "Attributes" : 
+                            [
+                                {"Identifier" : "New Sub Meter Required"},
+                                {"Commodity" : "Electricity"}
+                            ],
+                        }
+                    ],
+            }
+        ]
+    },
+    {
+        "GUID" : "6",
+        "Attributes" : 
+        [
+            {"BaseName" : "Manchester"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "7",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987650"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Gas"}
+                    ],
+            },
+            {
+                "GUID" : "8",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890120"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                "SubMeters" :
+                [
+                    {
+                        "GUID" : "9",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "10",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "11",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "New Sub Meter Required"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    }
+                ],
+            }
+        ]
+    }
+]

@@ -7,11 +7,9 @@
 <link rel="stylesheet" href="/css/tree.css">
 
 <body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>	
 
-	
-
-	<div class="row"> -->
+	<div class="row">
 		<div class="tree-column">
 			<div>
 				<br>

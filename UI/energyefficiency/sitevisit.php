@@ -16,7 +16,56 @@
         <div class="divcolumn first"></div>
         <div style="border: solid black 1px; width: 96%;">
             <div style="text-align: center;">
-                <span style="border-bottom: solid black 1px;">Identified Opportunities</span>
+                <span style="border-bottom: solid black 1px;">Identified Opportunities<br></span>
+                <br>
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <td style="border: solid black 1px;">Opportunity Type</td>
+                            <td style="border: solid black 1px;">Opportunity Name</td>
+                            <td style="border: solid black 1px;">Site</td>
+                            <td style="border: solid black 1px;">Meter</td>
+                            <td style="border: solid black 1px;">Sub Meter</td>
+                            <td style="border: solid black 1px;">Month</td>
+                            <td style="border: solid black 1px;">Day Of Week</td>
+                            <td style="border: solid black 1px;">Time Period</td>
+                            <td style="border: solid black 1px;">Percentage Saving</td>
+                            <td style="border: solid black 1px;">Estimated Annual kWh Savings</td>
+                            <td style="border: solid black 1px;">Estimated Annual £ Savings</td>
+                            <td style="border: solid black 1px;"><input type="checkbox">&nbsp<i class="fas fa-trash-alt"></i></input</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: solid black 1px;">Custom</td>
+                            <td style="border: solid black 1px;">LED Lighting</td>
+                            <td style="border: solid black 1px;">Site X</td>
+                            <td style="border: solid black 1px;">12345678910125</td>
+                            <td style="border: solid black 1px;">Sub Meter 2</td>
+                            <td style="border: solid black 1px;">All Months</td>
+                            <td style="border: solid black 1px;">All Days</td>
+                            <td style="border: solid black 1px;">All Periods</td>
+                            <td style="border: solid black 1px;">10%</td>
+                            <td style="border: solid black 1px;">5,000</td>
+                            <td style="border: solid black 1px;">£1,000</td>
+                            <td style="border: solid black 1px;"><input type="checkbox">&nbsp<i class="fas fa-trash-alt"></i></input</td>
+                        </tr>
+                        <tr>
+                            <td style="border: solid black 1px;">Custom</td>
+                            <td style="border: solid black 1px;">LED Lighting</td>
+                            <td style="border: solid black 1px;">Site X</td>
+                            <td style="border: solid black 1px;">12345678910126</td>
+                            <td style="border: solid black 1px;">New Sub Meter Required</td>
+                            <td style="border: solid black 1px;">All Months</td>
+                            <td style="border: solid black 1px;">All Days</td>
+                            <td style="border: solid black 1px;">All Periods</td>
+                            <td style="border: solid black 1px;">N/A</td>
+                            <td style="border: solid black 1px;">N/A</td>
+                            <td style="border: solid black 1px;">N/A</td>
+                            <td style="border: solid black 1px;"><input type="checkbox">&nbsp<i class="fas fa-trash-alt"></i></input</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="divcolumn last"></div>
@@ -122,7 +171,7 @@
                     </div>
                 </div>
                 <div class="middle">&nbsp</div>
-                <div class="right tree-div"></div>
+                <div class="right tree-div" id="treeDiv"></div>
             </div>
             <div class="divcolumn middle"></div>
             <div class="divcolumn right" style="border: solid black 1px;">
@@ -176,7 +225,7 @@
                                 <br>
                                 <span>Number of new sub meters required: 1</span><br>
                                 <span>Estimated Annual kWh Savings on Existing Sub Meters: 10,000</span><br>
-                                <span>Estimated £ kWh Savings on Existing Sub Meters: £1,000</span><br>
+                                <span>Estimated Annual £ Savings on Existing Sub Meters: £1,000</span><br>
                                 &nbsp
                             </div>
                             <div style="border: solid black 1px; width: 50%; float: left; height: 100px;">
@@ -195,5 +244,22 @@
     </div>
     <br>
 </body>
+
+<script src="/javascript/utils.js"></script>
+<script src="/javascript/sitevisittree.js"></script>
+<script type="text/javascript" src="/basedata/sitevisit.json"></script>
+
+<script type="text/javascript"> 
+	createTree(data, "Hierarchy", "treeDiv", "", "", true);
+	addExpanderOnClickEvents();
+
+	window.onload = function(){
+		resizeFinalColumns(380);
+	}
+
+	window.onresize = function(){
+		resizeFinalColumns(380);
+	}
+</script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
