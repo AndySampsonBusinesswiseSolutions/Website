@@ -171,8 +171,8 @@
 						<span style="border-bottom: solid black 1px;">Future Site Visits</span>
 					</div>
 					<br>
-					<div id="tableContainer" class="tableContainer2">
-						<table style="width: 100%;">
+					<div id="tableContainer">
+						<table>
 							<thead>
 								<tr>
 									<th id="futureSiteVisitsth0" style="border: solid black 1px;">Date Of Visit</th>
@@ -180,7 +180,7 @@
 									<th id="futureSiteVisitsth2" style="border: solid black 1px;">Notes</th>
 								</tr>
 							</thead>
-							<tbody>
+							<tbody class="scrollContent">
 								<tr>
 									<td headers="futureSiteVisitsth0" style="border: solid black 1px;">???</td>
 									<td headers="futureSiteVisitsth1" style="border: solid black 1px;">En Gineer</td>
@@ -249,11 +249,11 @@
 				</div>
 				<div class="divcolumn middle"></div>
 				<div class="divcolumn right">
-					<div style="text-align: center;">
+					<!-- <div style="text-align: center;">
 						<span style="border-bottom: solid black 1px;">Historical Site Visits</span>
 					</div>
 					<br>
-					<div id="tableContainer" class="tableContainer2">
+					<div id="tableContainer">
 						<table style="width: 100%;">
 							<thead>
 								<tr>
@@ -335,14 +335,14 @@
 								</tr>
 							</tbody>
 						</table>
-					</div>
+					</div> -->
 				</div>
 				<div class="divcolumn last"></div>
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
 		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+			<!-- <div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Ranking</span>
 			</div>
 			<div class="row" style="text-align: center;">
@@ -372,7 +372,7 @@
 					<i class="fas fa-search show-pointer"></i><br>
 				</div>
 				<div class="last"></div>
-			</div>			
+			</div>			 -->
 		</div>
 		<div class="divcolumn last"></div>
 	</div>

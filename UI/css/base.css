@@ -153,12 +153,12 @@ tr {
 .divcolumn {
   float: left;
   padding: 10px;
-  min-height: 325px; /* Should be removed. Only for demonstration */
+  min-height: 100px; /* Should be removed. Only for demonstration */
 }
 
 .left, .right {
   float: left;
-  width: 47%;
+  width: 46%;
 }
 
 .single {
@@ -203,9 +203,8 @@ tr {
 
 /* define height and width of scrollable area. Add 16px to width for scrollbar          */
 div.tableContainer {
-	clear: both;
-	height: 175px;
-	overflow: auto;
+	height: 150px;
+	
 }
 
 div.tableContainer2 {
@@ -225,11 +224,6 @@ html>body div.tableContainer {
 	overflow: hidden;
 }
 
-/* define width of table. IE browsers only                 */
-div.tableContainer table {
-	float: left;
-}
-
 /* set THEAD element to have block level attributes. All other non-IE browsers            */
 /* this enables overflow to work on TBODY element. All other non-IE, non-Mozilla browsers */
 
@@ -243,18 +237,23 @@ thead.fixedHeader th {
 html>body tbody.scrollContent {
 	display: block;
 	height: 150px;
-	overflow: auto;
+	overflow: scroll;
 }
 
 html>body tbody.scrollContent2 {
 	display: block;
 	height: 195px;
-	overflow: auto;
+	overflow: scroll;
 }
 
 html>body tbody.scrollContent3 {
 	height: 590px;
-	overflow: auto;
+	overflow: scroll;
+}
+
+html>body tbody.scrollContent4 {
+	height: 10px;
+	overflow: scroll;
 }
 
 html>body thead.fixedHeader {
