@@ -127,11 +127,15 @@
             <div class="divcolumn middle"></div>
             <div class="divcolumn right" style="border: solid black 1px;">
                 <div style="border: solid black 1px; text-align: center">
-                    <span style="border-bottom: solid black 1px;">Asset Percentages</span>
+                    <span style="border-bottom: solid black 1px;">Asset Percentages<br></span><br>
+                    <label for="applyPercentage">Apply asset percentage</label>
+                    <input id="applyPercentage"></input>
+                    <button class="show-pointer">Apply Percentage To Selected Assets</button>
                     <br>
                     <table style="width: 100%;">
                         <thead>
                             <tr>
+                                <td style="border: solid black 1px;"><input type="checkbox" checked></input></td>
                                 <td style="border: solid black 1px;">Meter</td>
                                 <td style="border: solid black 1px;">Sub Meter</td>
                                 <td style="border: solid black 1px;">Month</td>
@@ -142,6 +146,7 @@
                         </thead>
                         <tbody>
                             <tr>
+                                <td style="border: solid black 1px;"><input type="checkbox" checked></input></td>
                                 <td style="border: solid black 1px;">1234567890123</td>
                                 <td style="border: solid black 1px;">Sub Meter 1</td>
                                 <td style="border: solid black 1px;">All Months</td>
@@ -150,6 +155,7 @@
                                 <td style="border: solid black 1px;"><input style="width: 100%;"></input></td>
                             </tr>
                             <tr>
+                                <td style="border: solid black 1px;"></td>
                                 <td style="border: solid black 1px;">1234567890124</td>
                                 <td style="border: solid black 1px;">New Sub Meter Required</td>
                                 <td style="border: solid black 1px;">All Months</td>
