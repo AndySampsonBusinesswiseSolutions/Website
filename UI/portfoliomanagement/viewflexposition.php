@@ -55,144 +55,11 @@
   <div class="row roundborder" style="margin-left: 15px; margin-right: 15px;">
     <div class="divcolumn first"></div>
     <div class="divcolumn left">
-      <table style="width: 100%;">
-        <tr>
-          <th style="border: solid black 1px;">Month</th>
-          <th style="border: solid black 1px;">Open Vol</th>
-          <th style="border: solid black 1px;">Hedge Vol</th>
-          <th style="border: solid black 1px;">Cap Price</th>
-          <th style="border: solid black 1px;">ECP</th>
-          <th style="border: solid black 1px;">Market</th>
-          <th style="border: solid black 1px;">Day 1 Price</th>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">10 2020</td>
-          <td style="border: solid black 1px;">1.324</td>
-          <td style="border: solid black 1px;">1.426</td>
-          <td style="border: solid black 1px;">5.718</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.886</td>
-          <td style="border: solid black 1px;">5.918</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">11 2020</td>
-          <td style="border: solid black 1px;">1.324</td>
-          <td style="border: solid black 1px;">1.426</td>
-          <td style="border: solid black 1px;">5.718</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.886</td>
-          <td style="border: solid black 1px;">5.918</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">12 2020</td>
-          <td style="border: solid black 1px;">1.324</td>
-          <td style="border: solid black 1px;">1.426</td>
-          <td style="border: solid black 1px;">5.718</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.886</td>
-          <td style="border: solid black 1px;">5.918</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">01 2021</td>
-          <td style="border: solid black 1px;">1.324</td>
-          <td style="border: solid black 1px;">1.426</td>
-          <td style="border: solid black 1px;">5.718</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.886</td>
-          <td style="border: solid black 1px;">5.918</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">02 2021</td>
-          <td style="border: solid black 1px;">1.324</td>
-          <td style="border: solid black 1px;">1.426</td>
-          <td style="border: solid black 1px;">5.718</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.886</td>
-          <td style="border: solid black 1px;">5.918</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">03 2021</td>
-          <td style="border: solid black 1px;">1.324</td>
-          <td style="border: solid black 1px;">1.426</td>
-          <td style="border: solid black 1px;">5.718</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.886</td>
-          <td style="border: solid black 1px;">5.918</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">04 2021</td>
-          <td style="border: solid black 1px;">0.713</td>
-          <td style="border: solid black 1px;">1.657</td>
-          <td style="border: solid black 1px;">4.888</td>
-          <td style="border: solid black 1px;">5.030</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.444</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">05 2021</td>
-          <td style="border: solid black 1px;">0.713</td>
-          <td style="border: solid black 1px;">1.657</td>
-          <td style="border: solid black 1px;">4.888</td>
-          <td style="border: solid black 1px;">5.030</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.444</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">06 2021</td>
-          <td style="border: solid black 1px;">0.713</td>
-          <td style="border: solid black 1px;">1.657</td>
-          <td style="border: solid black 1px;">4.888</td>
-          <td style="border: solid black 1px;">5.030</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.444</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">07 2021</td>
-          <td style="border: solid black 1px;">0.713</td>
-          <td style="border: solid black 1px;">1.657</td>
-          <td style="border: solid black 1px;">4.888</td>
-          <td style="border: solid black 1px;">5.030</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.444</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">08 2021</td>
-          <td style="border: solid black 1px;">0.713</td>
-          <td style="border: solid black 1px;">1.657</td>
-          <td style="border: solid black 1px;">4.888</td>
-          <td style="border: solid black 1px;">5.030</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.444</td>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">09 2021</td>
-          <td style="border: solid black 1px;">0.713</td>
-          <td style="border: solid black 1px;">1.657</td>
-          <td style="border: solid black 1px;">4.888</td>
-          <td style="border: solid black 1px;">5.030</td>
-          <td style="border: solid black 1px;">4.990</td>
-          <td style="border: solid black 1px;">4.444</td>
-        </tr>
-      </table>
+      <div id="spreadsheet3"></div>
     </div>
     <div class="divcolumn middle"></div>
     <div class="divcolumn right">
-      <table style="width: 100%;">
-        <tr>
-          <th style="border: solid black 1px;">Date</th>
-          <th style="border: solid black 1px;">Trade Reference</th>
-          <th style="border: solid black 1px;">Period</th>
-          <th style="border: solid black 1px;">Volume</th>
-          <th style="border: solid black 1px;">Price</th>
-        </tr>
-        <tr>
-          <td style="border: solid black 1px;">15/02/2018</td>
-          <td style="border: solid black 1px;">00001</td>
-          <td style="border: solid black 1px;">Winter 2020</td>
-          <td style="border: solid black 1px;">1MW</td>
-          <td style="border: solid black 1px;">£40/MWh</td>
-        </tr>
-      </table>
+      <div id="spreadsheet4"></div>
     </div>
     <div class="divcolumn last"></div>
   </div>
@@ -202,6 +69,11 @@
 <script src="/javascript/utils.js"></script>
 <script src="/javascript/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
+<link rel="stylesheet" href="https://bossanova.uk/jexcel/v3/jexcel.css" type="text/css" />
+<script src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
+<link rel="stylesheet" href="https://bossanova.uk/jsuites/v2/jsuites.css" type="text/css" />
 
 <script>
 	function addCommoditySelectorOnClickEvent() {
@@ -457,7 +329,46 @@ var gasPriceOptions = {
 	refreshChart(electricityVolumeSeries, electricityCategories, "#electricityVolumeChart", electricityVolumeOptions);
 	refreshChart(electricityPriceSeries, electricityCategories, "#electricityPriceChart", electricityPriceOptions);
 	refreshChart(gasVolumeSeries, gasCategories, "#gasVolumeChart", gasVolumeOptions);
-	refreshChart(gasPriceSeries, gasCategories, "#gasPriceChart", gasPriceOptions);
+  refreshChart(gasPriceSeries, gasCategories, "#gasPriceChart", gasPriceOptions);
+  
+  jexcel(document.getElementById('spreadsheet3'), {
+        data:[
+            {month:'10 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'11 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'12 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'01 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'02 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'03 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'04 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'05 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'06 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'07 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'08 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'09 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+        ],
+        columns: [
+            {type:'text', width:'115px', name:'month', title:'Month'},
+            {type:'text', width:'115px', name:'openvol', title:'Open Volume'},
+            {type:'text', width:'115px', name:'hedgevol', title:'Hedge Volume'},
+            {type:'text', width:'115px', name:'capprice', title:'Cap Price'},
+            {type:'text', width:'115px', name:'ecp', title:'ECP'},
+            {type:'text', width:'115px', name:'marketprice', title:'Market Price'},
+            {type:'text', width:'115px', name:'day1price', title:'Day 1 Price'},
+         ]
+    });
+
+  jexcel(document.getElementById('spreadsheet4'), {
+        data:[
+            {date:'15/02/2018',	tradereference:'00001',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+        ],
+        columns: [
+            {type:'text', width:'115px', name:'date', title:'Date'},
+            {type:'text', width:'115px', name:'tradereference', title:'Trade Reference'},
+            {type:'text', width:'115px', name:'period', title:'Period'},
+            {type:'text', width:'115px', name:'volume', title:'Volume'},
+            {type:'text', width:'115px', name:'price', title:'Price'},
+         ]
+    });
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
