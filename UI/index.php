@@ -2,7 +2,7 @@
 	if(!session_id()) session_start();
 	$PAGE_TITLE = "Login";
 	$errorMessage = "";
-	include($_SERVER['DOCUMENT_ROOT']."/includes/_navigation/navigation.php");
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
 <!DOCTYPE html>
@@ -49,4 +49,4 @@
 	<br>
 </body>
 
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/_footer/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

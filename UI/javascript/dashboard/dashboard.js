@@ -1,3 +1,7 @@
+function loadPage(){  
+	createTree(dashboard, "treeDiv", "addDashboardItem()");
+}
+
 var branchCount = 0;
 var subBranchCount = 0;
 
@@ -24,15 +28,15 @@ function buildTree(baseData, baseElement, checkboxFunction) {
         var base = baseData[i];
         var baseName = getAttribute(base.Attributes, 'BaseName');
         var li = document.createElement('li');
-        var ul = createUL();
+        createUL();
 
-        appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', baseName, ul, baseName, base.GUID);
+        appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', baseName, baseName, base.GUID);
 
         baseElement.appendChild(li);        
     }
 }
 
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
+function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, linkedSite, guid) {
     li.appendChild(createBranchDiv(id));
     li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
     li.appendChild(createSpan(id, branchOption));
@@ -74,40 +78,45 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     if(functionArrayLength > 1) {
         var functionArgumentLength = functionArray[1].split(',').length;
         for(var i = 0; i < functionArgumentLength; i++) {
-            functionArguments.push(functionArray[1].split(',')[i]);
+          var argument = functionArray[1].split(',')[i];
+
+          if(argument != '') {
+            functionArguments.push(argument);
+          }
         }
     }
+
+    var width;
+    var height;
+    var dataLength = dashboard.length;
+    for(var i = 0; i < dataLength; i++) {
+        var item = dashboard[i];
+
+        if(item.GUID == guid) {
+            width = getAttribute(item.Attributes, "Width");
+            height = getAttribute(item.Attributes, "Height");
+            break;
+        }
+    }
+    functionArguments.push('"'.concat(height).concat('"'));
+    functionArguments.push('"'.concat(width).concat('"'));
+
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
     
     checkBox.setAttribute('onclick', functionName);
     return checkBox;
 }
 
-function addDashboardItem(checkbox) {
-    var dashboard = document.getElementById('containment-wrapper');
+function addDashboardItem(checkbox, height, width) {
+    var dashboard = document.getElementById('dashboard');
     var guid = checkbox.getAttribute('guid');
     var dashboardItemId = 'dashboardItem'.concat(guid);
 
     if(checkbox.checked) {
         var newDashboardItem = document.createElement('div');
         newDashboardItem.id = dashboardItemId;
-        newDashboardItem.setAttribute('class', 'dragable ui-widget-content');
-        $(newDashboardItem).draggable({ containment: "#containment-wrapper", scroll: false, snap: true, cursor: "move" });
-
-        var width;
-        var height;
-        var dataLength = data.length;
-        for(var i = 0; i < dataLength; i++) {
-            var item = data[i];
-
-            if(item.GUID == guid) {
-                width = getAttribute(item.Attributes, "Width");
-                height = getAttribute(item.Attributes, "Height");
-                break;
-            }
-        }
-
-        newDashboardItem.setAttribute('style', 'width: ' + width + '; height: ' + height + ';');
+        newDashboardItem.setAttribute('class', 'roundborder');
+        newDashboardItem.setAttribute('style', 'float: left; width: ' + width + '; height: ' + height + ';');   
         dashboard.appendChild(newDashboardItem);
 
         var electricityVolumeSeries = [{
@@ -192,7 +201,7 @@ function addDashboardItem(checkbox) {
           },
           tooltip: {
               x: {
-              format: getChartTooltipXFormat("Yearly")
+              format: 'dd/MM/yyyy'
               }
           },
           xaxis: {
@@ -200,7 +209,7 @@ function addDashboardItem(checkbox) {
               text: ''
               },
               labels: {
-              format: getChartXAxisLabelFormat('Weekly')
+              format: 'dd/MM/yyyy'
               },
               categories: electricityCategories
           },
@@ -221,7 +230,7 @@ function addDashboardItem(checkbox) {
           },
           tooltip: {
               x: {
-              format: getChartTooltipXFormat("Yearly")
+              format: 'dd/MM/yyyy'
               }
           },
           xaxis: {
@@ -229,7 +238,7 @@ function addDashboardItem(checkbox) {
               text: ''
               },
               labels: {
-              format: getChartXAxisLabelFormat('Weekly')
+              format: 'dd/MM/yyyy'
               },
               categories: electricityCategories
           },
@@ -289,7 +298,7 @@ function addDashboardItem(checkbox) {
           },
           tooltip: {
               x: {
-              format: getChartTooltipXFormat("Yearly")
+              format: 'dd/MM/yyyy'
               }
           },
           xaxis: {
@@ -297,7 +306,7 @@ function addDashboardItem(checkbox) {
               text: ''
               },
               labels: {
-              format: getChartXAxisLabelFormat('Weekly')
+              format: 'dd/MM/yyyy'
               },
               categories: gasCategories
           },
@@ -317,7 +326,7 @@ function addDashboardItem(checkbox) {
           },
           tooltip: {
               x: {
-              format: getChartTooltipXFormat("Yearly")
+              format: 'dd/MM/yyyy'
               }
           },
           xaxis: {
@@ -325,7 +334,7 @@ function addDashboardItem(checkbox) {
               text: ''
               },
               labels: {
-              format: getChartXAxisLabelFormat('Weekly')
+              format: 'dd/MM/yyyy'
               },
               categories: gasCategories
           },
@@ -344,7 +353,7 @@ function addDashboardItem(checkbox) {
             flexElectricityPriceItem.id = 'electricityPriceChart';
 
             newDashboardItem.appendChild(flexElectricityPriceItem);
-            refreshChart(electricityPriceSeries, electricityCategories, "#electricityPriceChart", electricityPriceOptions);
+            refreshChart(electricityPriceSeries, "#electricityPriceChart", electricityPriceOptions);
         }
 
         if(guid == 1) {
@@ -352,7 +361,7 @@ function addDashboardItem(checkbox) {
             flexElectricityPositionItem.id = 'electricityVolumeChart';
 
             newDashboardItem.appendChild(flexElectricityPositionItem);
-            refreshChart(electricityVolumeSeries, electricityCategories, "#electricityVolumeChart", electricityVolumeOptions);
+            refreshChart(electricityVolumeSeries, "#electricityVolumeChart", electricityVolumeOptions);
         }
 
         if(guid == 2) {
@@ -360,7 +369,7 @@ function addDashboardItem(checkbox) {
             flexGasPriceItem.id = 'gasPriceChart';
 
             newDashboardItem.appendChild(flexGasPriceItem);
-            refreshChart(gasPriceSeries, gasCategories, "#gasPriceChart", gasPriceOptions);
+            refreshChart(gasPriceSeries, "#gasPriceChart", gasPriceOptions);
         }
 
         if(guid == 3) {
@@ -368,11 +377,81 @@ function addDashboardItem(checkbox) {
             flexGasPositionItem.id = 'gasVolumeChart';
 
             newDashboardItem.appendChild(flexGasPositionItem);
-            refreshChart(gasVolumeSeries, gasCategories, "#gasVolumeChart", gasVolumeOptions);
+            refreshChart(gasVolumeSeries, "#gasVolumeChart", gasVolumeOptions);
         }
     }
     else {
         var dashboardItem = document.getElementById(dashboardItemId);
         dashboard.removeChild(dashboardItem);
     }
+}
+
+function refreshChart(newSeries, chartId, chartOptions) {
+  var options = {
+    chart: {
+        height: '100%',
+        width: '100%',
+      type: chartOptions.chart.type,
+      stacked: chartOptions.chart.stacked,
+      zoom: {
+        type: 'x',
+        enabled: true,
+        autoScaleYaxis: true
+      },
+      animations: {
+        enabled: false
+      },
+      toolbar: {
+        autoSelected: 'zoom',
+        tools: {
+          download: false
+        }
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    tooltip: {
+      x: {
+        format: chartOptions.tooltip.x.format
+      }
+    },
+    legend: {
+      show: true,
+      position: 'right',
+      onItemClick: {
+        toggleDataSeries: false
+      }
+    },
+    series: newSeries,
+    yaxis: chartOptions.yaxis,
+    xaxis: chartOptions.xaxis
+  };  
+
+  renderChart(chartId, options);
+}
+
+function renderChart(chartId, options) {
+  var chart = new ApexCharts(document.querySelector(chartId), options);
+  chart.render();
+}
+
+function getAttribute(attributes, attributeRequired) {
+	for (var attribute in attributes) {
+		var array = attributes[attribute];
+
+		for(var key in array) {
+			if(key == attributeRequired) {
+				return array[key];
+			}
+		}
+	}
+
+	return null;
+}
+
+function clearElement(element) {
+	while (element.firstChild) {
+		element.removeChild(element.firstChild);
+	}
 }
