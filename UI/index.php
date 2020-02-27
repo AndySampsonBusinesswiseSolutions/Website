@@ -2,9 +2,19 @@
 	if(!session_id()) session_start();
 	$PAGE_TITLE = "Login";
 	$errorMessage = "";
-	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php echo $PAGE_TITLE ?></title>
+
+	<?php 
+		if(!session_id()) session_start();
+	?>
+	<link rel="stylesheet" href="/index.css">
+</head>
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
@@ -40,4 +50,7 @@
 			</table>                           
 		</form>
 	</div>
+	<br>
 </body>
+
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/_footer/footer.php");?>
