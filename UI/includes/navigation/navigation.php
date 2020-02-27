@@ -16,7 +16,7 @@
                             <li style="padding-right: 25px;"><a href="/Internal/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-home" title="Dashboard"></i></a></li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-coins"></i><span class="fusion-caret"></span><span>Finance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/Financials/BillValidation/"><span>Bill Validation</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/Finance/BillValidation/"><span>Bill Validation</span></a></li>
                                     <li class="submenu-item"><a href="/Financials/Commissions/"><span>Commissions</span></a></li>
                                     <li class="submenu-item"><a href="/Financials/VarianceAnalysis/"><span>Variance Analysis</span></a></li>
                                 </ul>

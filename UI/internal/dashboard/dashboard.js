@@ -1,5 +1,5 @@
 function loadPage(){  
-	createTree(dashboard, "treeDiv", "addDashboardItem()");
+	createTree(dashboard, "treeDiv", "addDashboardItem");
 }
 
 var branchCount = 0;

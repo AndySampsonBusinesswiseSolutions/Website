@@ -1,5 +1,4 @@
-<link rel="stylesheet" href="/css/footer.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+<link rel="stylesheet" href="/includes/footer/footer.css">
 
 <div>
     <footer class="footer fusion-footer-widget-area fusion-widget-area">

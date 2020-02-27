@@ -1,6 +1,6 @@
 <?php 
 	if(!session_id()) session_start();
-	$PAGE_TITLE = "Dashboard";
+	$PAGE_TITLE = "Bill Validation";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
@@ -9,7 +9,7 @@
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
 
-	<link rel="stylesheet" href="dashboard.css">
+	<link rel="stylesheet" href="billvalidation.css">
 </head>
 
 <body>
@@ -21,7 +21,7 @@
 				<div>
 					<br>
 					<div class="tree-column">
-						<div id="treeDiv" class="tree-div roundborder">
+						<div id="treeDiv" class="tree-div">
 						</div>
 					</div>
 				</div>
@@ -29,20 +29,18 @@
 			<div class="fill-column"></div>
 			<div class="final-column">
 				<br>
-				<div class="dashboard roundborder" id="dashboard">
+				<div class="group-by-div" id="cardDiv" style="display: none;">
+					<div class="tabDiv" id="tabDiv" style="overflow-y: auto; overflow: auto;"></div>
 				</div>
-				<br>
-			</div>	
+			</div>
 		</div>
 	</div>
+	<br>
 </body>
 
-<script src="dashboard.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" src="dashboard.json"></script>
-<script>
+<script src="billvalidation.js"></script>
+<script type="text/javascript" src="billvalidation.json"></script>
+<script type="text/javascript"> 
 	loadPage();
 </script>
 
