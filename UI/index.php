@@ -18,7 +18,7 @@
 		<?php if ($errorMessage != '') { ?>
 			<div id="login-alert" class="alert alert-danger col-sm-12"><?php echo $errorMessage; ?></div>                            
 		<?php } ?>
-		<form method="POST" action='/Dashboard/'>                                    
+		<form method="POST" action='/Internal/Dashboard/'>                                    
 			<div style="margin-bottom: 25px">
 				<input type="text" class="form-control" id="loginId" name="loginId"  value="<?php if(isset($_COOKIE["loginId"])) { echo $_COOKIE["loginId"]; } ?>" placeholder="email">                                        
 			</div>                                

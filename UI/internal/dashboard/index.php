@@ -9,7 +9,7 @@
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
 
-	<link rel="stylesheet" href="/css/dashboard/dashboard.css">
+	<link rel="stylesheet" href="/internal/dashboard/dashboard.css">
 </head>
 
 <body>
@@ -37,11 +37,11 @@
 	</div>
 </body>
 
-<script src="/javascript/dashboard/dashboard.js"></script>
+<script src="/internal/dashboard/dashboard.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript" src="/basedata/dashboard/dashboard.json"></script>
+<script type="text/javascript" src="/internal/dashboard/dashboard.json"></script>
 <script>
 	loadPage();
 </script>

@@ -13,7 +13,7 @@
                 <?php if ($PAGE_TITLE != "Login") { ?>
                     <nav class="fusion-main-menu" aria-label="Main Menu">
                         <ul id="menu-main-menu" class="fusion-menu">
-                            <li style="padding-right: 25px;"><a href="/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-home" title="Dashboard"></i></a></li>
+                            <li style="padding-right: 25px;"><a href="/Internal/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-home" title="Dashboard"></i></a></li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-coins"></i><span class="fusion-caret"></span><span>Finance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/Financials/BillValidation/"><span>Bill Validation</span></a></li>
