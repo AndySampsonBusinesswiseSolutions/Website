@@ -36,3 +36,30 @@
 .chart {
     min-height: 650px;
 }
+.show-pointer {
+    padding-left: 5px; 
+    padding-right: 5px; 
+    cursor: pointer;
+}
+.scrolling-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+.listitem-hidden {
+    display: none;
+}
+.section-header {
+    background: #b62a51;
+    width: 100%;
+}
+.section-header-text {
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    font-weight:bold;
+}
+.format-listitem {
+    list-style-type: none; 
+    padding-left: 15px;
+  }

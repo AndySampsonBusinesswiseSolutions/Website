@@ -1,10 +1,16 @@
 <?php 
+	if(!session_id()) session_start();
 	$PAGE_TITLE = "Commissions";
-	 include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
-	 include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
-<link rel="stylesheet" href="/css/tree.css">  
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php echo $PAGE_TITLE ?></title>
+
+	<link rel="stylesheet" href="commissions.css">  
+</head>
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
@@ -16,33 +22,58 @@
 	<div id="electricityDiv">
 		<div class="row">
 			<div class="tree-column">
-				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/commission/electricitytree.php") ?>
+				<div>
+					<br>
+					<div class="tree-column">
+						<div id="electricityTreeDiv" class="tree-div">
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="fill-column"></div>
 			<div class="final-column">
-				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/commission/electricitychart.php") ?>
+				<div>
+					<br>
+					<div class="chart">
+						<div id="electricityChart">
+						</div>
+					</div>
+					<br>
+					<div id="electricityDatagrid" class="datagrid scrolling-wrapper">
+					</div>
+				</div>
 			</div>	
 		</div>
 	</div>
 	<div id="gasDiv" class="listitem-hidden">
 		<div class="row">
 			<div class="tree-column">
-				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/commission/gastree.php") ?>
+				<div>
+					<br>
+					<div class="tree-column">
+						<div id="gasTreeDiv" class="tree-div">
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="fill-column"></div>
 			<div class="final-column">
-				<?php include($_SERVER['DOCUMENT_ROOT']."/financials/commission/gaschart.php") ?>
+				<div>
+					<br>
+					<div class="chart">
+						<div id="gasChart">
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 	<br>
 </body>
 
-<script src="/javascript/utils.js"></script>
-<script src="/javascript/commissionschart.js"></script>
-<script src="/javascript/commissionstree.js"></script>
+<script src="commissions.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script type="text/javascript" src="/basedata/commission.json"></script>
+<script type="text/javascript" src="commission.json"></script>
 
 <script>
 	function addCommoditySelectorOnClickEvent() {
@@ -62,13 +93,8 @@
 		addArrowOnClickEvents();
 		addCommoditySelectorOnClickEvent();
 
-		resizeFinalColumns(365);
 		updateChart(null, electricityChart);
 	}
-
-	window.onresize = function(){
-		resizeFinalColumns(365);
-	}	
 </script>
 
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>
