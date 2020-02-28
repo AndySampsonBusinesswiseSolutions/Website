@@ -1,7 +1,12 @@
+function pageLoad() {
+    createTree(data, "treeDiv", "", "", true);
+	addExpanderOnClickEvents();
+}
+
 var branchCount = 0;
 var subBranchCount = 0;
 
-function createTree(baseData, groupByOption, divId, commodity, checkboxFunction, showSubMeters) {
+function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
@@ -11,14 +16,14 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
     branchCount = 0;
     subBranchCount = 0; 
 
-    buildTree(baseData, groupByOption, ul, commodity, checkboxFunction, showSubMeters);
+    buildTree(baseData, ul, commodity, checkboxFunction, showSubMeters);
 
     var div = document.getElementById(divId);
     clearElement(div);
     div.appendChild(tree);
 }
 
-function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunction, showSubMeters) {
+function buildTree(baseData, baseElement, commodity, checkboxFunction, showSubMeters) {
     var dataLength = baseData.length;
     for(var i = 0; i < dataLength; i++){
         var base = baseData[i];
@@ -32,15 +37,14 @@ function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunc
         var ul = createUL();
 
         buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, showSubMeters);
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, true);
+        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), baseName, commodity, ul, true);
 
         baseElement.appendChild(li);        
     }
 }
 
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, childrenCreated) {
+function appendListItemChildren(li, id, branchOption, commodity, ul, childrenCreated) {
     li.appendChild(createBranchDiv(id, childrenCreated));
-    //li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
     li.appendChild(createTreeIcon(branchOption, commodity));
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));

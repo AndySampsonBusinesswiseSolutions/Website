@@ -1,13 +1,15 @@
 <?php 
-	$PAGE_TITLE = "Site Visit";
-	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
-	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
+	$PAGE_TITLE = "Create Opportunities";
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
-<link rel="stylesheet" href="/css/tree.css">
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php echo $PAGE_TITLE ?></title>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="createopportunities.css">
+</head>
 
 <body>
     <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
@@ -257,21 +259,13 @@
     <br>
 </body>
 
-<script src="/javascript/utils.js"></script>
-<script src="/javascript/sitevisittree.js"></script>
-<script type="text/javascript" src="/basedata/sitevisit.json"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="createopportunities.js"></script>
+<script type="text/javascript" src="createopportunities.json"></script>
 
 <script type="text/javascript"> 
-	createTree(data, "Hierarchy", "treeDiv", "", "", true);
-	addExpanderOnClickEvents();
-
-	window.onload = function(){
-		resizeFinalColumns(380);
-	}
-
-	window.onresize = function(){
-		resizeFinalColumns(380);
-	}
+	
 </script>
 
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

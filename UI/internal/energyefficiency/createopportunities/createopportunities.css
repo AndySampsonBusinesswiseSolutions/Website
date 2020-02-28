@@ -1,0 +1,42 @@
+.section-header {
+    background: #b62a51;
+    width: 100%;
+}
+.section-header-text {
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    font-weight:bold;
+}
+.divcolumn {
+    float: left;
+    padding: 10px;
+    min-height: 100px;
+}
+.first, .last {
+    float: left;
+    width: 2%;
+}
+.left, .right {
+    float: left;
+    width: 46%;
+}
+.middle {
+    float: left;
+    width: 2%;
+}
+.tree-div {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px;
+    background-color: #e9eaee;
+    max-height: 650px;
+    min-height: 300px;
+}
+.show-pointer {
+    padding-left: 5px; 
+    padding-right: 5px; 
+    cursor: pointer;
+}
