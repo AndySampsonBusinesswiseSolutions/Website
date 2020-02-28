@@ -31,8 +31,8 @@
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-list-alt"></i><span class="fusion-caret"></span><span>Portfolio Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
-                                    <li class="submenu-item"><a href="/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
                                     <li class="submenu-item"><a href="/PortfolioManagement/ViewCapacity/"><span>View Capacity</span></a></li>

@@ -1,0 +1,141 @@
+var data = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"BaseName" : "Leeds"},
+            {"Address Line 1" : "Manor Mill Ln"},
+            {"Address Line 2" : "Leeds"},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : "LS11 8BR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0113 270 1244"},
+            {"Sq. ft" : "100"}
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "1",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987654"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Gas"}
+                    ],
+            },
+            {
+                "GUID" : "2",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890123"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                "SubMeters" :
+                [
+                    {
+                        "GUID" : "3",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "4",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    }
+                ],
+            },
+            {
+                "GUID" : "5",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890124"},
+                        {"DeviceType" : "Lighting"},
+                        {"DeviceSubType" : "Unknown"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Electricity"}
+                    ],
+            }
+        ]
+    },
+    {
+        "GUID" : "6",
+        "Attributes" : 
+        [
+            {"BaseName" : "Manchester"},
+            {"Address Line 1" : "Bury"},
+            {"Address Line 2" : "Greater Manchester"},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : "BL9 6BS"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0113 270 1244"},
+            {"Sq. ft" : "100"}
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "7",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987650"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Gas"}
+                    ],
+            },
+            {
+                "GUID" : "8",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890120"},
+                        {"DeviceType" : "Lighting"},
+                        {"DeviceSubType" : "Security Light"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Unknown"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                "SubMeters" :
+                [
+                    {
+                        "GUID" : "9",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "10",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ]
+                    }
+                ],
+            }
+        ]
+    }
+]
