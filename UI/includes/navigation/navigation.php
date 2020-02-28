@@ -35,7 +35,6 @@
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
-                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewCapacity/"><span>View Capacity</span></a></li>
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-user"></i><span class="fusion-caret"></span><span>Account Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
