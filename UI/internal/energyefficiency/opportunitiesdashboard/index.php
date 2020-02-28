@@ -1,12 +1,15 @@
 <?php 
 	$PAGE_TITLE = "Opportunities Dashboard";
-	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
-	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
-<link rel="stylesheet" href="/css/tree.css">
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.4.css" />
-<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php echo $PAGE_TITLE ?></title>
+
+	<link rel="stylesheet" href="opportunitiesdashboard.css">
+</head>
 
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
@@ -379,10 +382,9 @@
 	<br>
 </body>
 
-<script src="/javascript/utils.js"></script>
-
+<script src="opportunitiesdashboard.js"></script>
 <script type="text/javascript">
-	addExpanderOnClickEvents();
+	pageLoad();
 </script>
 
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

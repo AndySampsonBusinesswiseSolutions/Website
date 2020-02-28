@@ -1,0 +1,102 @@
+function pageLoad() {
+	addExpanderOnClickEvents();
+}
+
+function updateClassOnClick(elementId, firstClass, secondClass){
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
+	if(hasClass(element, firstClass)){
+		element.classList.remove(firstClass);
+
+		if(secondClass != ''){
+			element.classList.add(secondClass);
+		}
+	}
+	else {
+		if(secondClass != ''){
+			element.classList.remove(secondClass);
+		}
+		
+		element.classList.add(firstClass);
+	}
+}
+  
+function hasClass(elem, className) {
+	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+
+function addExpanderOnClickEvents() {
+	var expanders = document.getElementsByClassName('fa-plus-square');
+	var expandersLength = expanders.length;
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
+	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
+
+	updateAdditionalControls(element);
+	expandAdditionalLists(element);
+}
+
+function updateAdditionalControls(element) {
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
+}
+
+function expandAdditionalLists(element) {
+	var additionalLists = element.getAttribute('additionallists');
+
+	if(!additionalLists) {
+		return;
+	}
+
+	element.addEventListener('click', function (event) {
+		var controlArray = additionalLists.split(',');
+		for(var j = 0; j < controlArray.length; j++) {
+			var controlId = controlArray[j];
+			var controlElement = document.getElementById(controlId);
+			updateClass(controlElement, 'listitem-hidden', '');
+		}
+	});		
+}
