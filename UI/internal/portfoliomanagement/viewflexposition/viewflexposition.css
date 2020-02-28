@@ -1,0 +1,50 @@
+.section-header {
+    background: #b62a51;
+    width: 100%;
+}
+.section-header-text {
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    font-weight:bold;
+}
+.final-column {
+    padding-left: 350px;
+    padding-right: 30px;
+}
+.tree-div {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px;
+    background-color: #e9eaee;
+    max-height: 650px;
+}
+.tree-div {
+    min-height: 300px;
+}
+.roundborder {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+.divcolumn {
+    float: left;
+    padding: 10px;
+    min-height: 100px;
+}
+.left, .right {
+    float: left;
+    width: 46%;
+}
+.middle {
+    float: left;
+    width: 2%;
+}
+.first, .last {
+    float: left;
+    width: 2%;
+}

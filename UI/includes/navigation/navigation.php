@@ -33,31 +33,23 @@
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
-                                    <li class="submenu-item"><a href="/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
-                                    <li class="submenu-item"><a href="/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
-                                    <li class="submenu-item"><a href="/PortfolioManagement/ViewCapacity/"><span>View Capacity</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewCapacity/"><span>View Capacity</span></a></li>
                                 </ul>
                             </li>
-                            <!-- <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-pound-sign"></i><span class="fusion-caret"></span><span>Tender<br>Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
-                                <ul class="sub-menu">
-                                </ul>
-                            </li>
-                            <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-handshake"></i><span class="fusion-caret"></span><span>ETRM</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
-                                <ul class="sub-menu">
-                                </ul>
-                            </li> -->
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-user"></i><span class="fusion-caret"></span><span>Account Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/AccountManagement/MyProfile/"><span>My Profile</span></a></li>
-                                    <li class="submenu-item"><a href="/AccountManagement/ManageUsers/"><span>Manage Users</span></a></li>
-                                    <li class="submenu-item"><a href="/AccountManagement/ManageCustomers/"><span>Manage Customers</span></a></li>
-                                    <li class="submenu-item"><a href="/AccountManagement/MyDocuments/"><span>My Documents</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/AccountManagement/MyProfile/"><span>My Profile</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/AccountManagement/ManageUsers/"><span>Manage Users</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/AccountManagement/ManageCustomers/"><span>Manage Customers</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/AccountManagement/MyDocuments/"><span>My Documents</span></a></li>
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#" class="fusion-flex-link fusion-bar-highlight" aria-haspopup="true"><i class="fas fa-lightbulb"></i><span class="fusion-caret"></span><span>Supplier Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/SupplierManagement/SupplierManagement/"><span>Supplier Management</span></a></li>
-                                    <li class="submenu-item"><a href="/SupplierManagement/SupplierProductManagement/"><span>Supplier Product Management</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/SupplierManagement/SupplierManagement/"><span>Supplier Management</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/SupplierManagement/SupplierProductManagement/"><span>Supplier Product Management</span></a></li>
                                 </ul>
                             </li>
                             <li><a href="/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-sign-out-alt" title="Logout"></i></a></li>
