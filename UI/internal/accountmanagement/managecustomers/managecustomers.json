@@ -1,4 +1,4 @@
-var customer = [
+var managecustomers = [
     {
         "GUID" : "0",
         "Attributes" : 
