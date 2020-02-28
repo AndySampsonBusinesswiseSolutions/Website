@@ -1,17 +1,20 @@
 <?php 
-	$PAGE_TITLE = "Pending Opportunities";
-	include($_SERVER['DOCUMENT_ROOT']."/includes/header.php");
-	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation.php");
+	$PAGE_TITLE = "Pending & Active Opportunities";
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
-<link rel="stylesheet" href="/css/tree.css">
-<link rel="stylesheet" type="text/css" href="/css/jquery-ui-1.8.4.css" />
-<link rel="stylesheet" type="text/css" href="/css/jquery.ganttView.css" />
+<!DOCTYPE html>
+<html>
+<head>
+	<title><?php echo $PAGE_TITLE ?></title>
+	
+	<link rel="stylesheet" href="pending&activeopportunities.css">
+</head>
 
 <body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-	<br>
-	<div class="row">
+  <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+  <br>
+  <div class="row">
 		<div class="tree-column">
 			<div>
 				<div class="tree-column">
@@ -23,7 +26,8 @@
 		<div class="fill-column"></div>
 		<div class="final-column">
 			<div>
-				<div id="ganttChart"></div>
+				<div id="ganttChart">
+				</div>
 				<br>
 				<div id="tableContainer" class="tableContainer3">
 					<table style="width: 100%;">
@@ -754,36 +758,12 @@
 	<br>
 </body>
 
-<script type="text/javascript" src="/javascript/jquery-1.4.2.js"></script>
-<script type="text/javascript" src="/javascript/date.js"></script>
-<script type="text/javascript" src="/javascript/jquery-ui-1.8.4.js"></script>
-<script type="text/javascript" src="/javascript/jquery.ganttView.js"></script>
-<script type="text/javascript" src="/basedata/gantt2.js"></script>
-<script src="/javascript/utils.js"></script>
-<script src="/javascript/activeopportunitytree.js"></script>
-<script type="text/javascript" src="/basedata/activeopportunity.json"></script>
+<script type="text/javascript" src="jquery-1.4.2.js"></script>
+<script type="text/javascript" src="pending&activeopportunities.js"></script>
+<script type="text/javascript" src="pending&activeopportunities.json"></script>
 
 <script type="text/javascript"> 
-	var data = activeopportunity;
-	createTree(data, "treeDiv", "");
-	addExpanderOnClickEvents();
-
-	window.onload = function(){
-		resizeFinalColumns(380);
-	}
-
-	window.onresize = function(){
-		resizeFinalColumns(380);
-	}
+	pageLoad();
 </script>
 
-<script>
-$(function () {
-			$("#ganttChart").ganttView({ 
-				data: ganttData,
-				slideWidth: 1300
-			});
-		});
-</script>
-
-<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer.php");?>
+<?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

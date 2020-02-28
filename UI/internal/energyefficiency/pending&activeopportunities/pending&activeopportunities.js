@@ -1,11 +1,647 @@
-/**
- * @version: 1.0 Alpha-1
- * @author: Coolite Inc. http://www.coolite.com/
- * @date: 2008-05-13
- * @copyright: Copyright (c) 2006-2008, Coolite Inc. (http://www.coolite.com/). All rights reserved.
- * @license: Licensed under The MIT License. See license.txt and http://www.datejs.com/license/. 
- * @website: http://www.datejs.com/
- */
+function pageLoad() {
+    var data = activeopportunity;
+	createTree(data, "treeDiv", "");
+    addExpanderOnClickEvents();
+    
+    $(function () {
+        $("#ganttChart").ganttView({ 
+            data: ganttData,
+            slideWidth: 1300
+        });
+    });
+}
+
+var branchCount = 0;
+var subBranchCount = 0;
+
+function createTree(baseData, divId, checkboxFunction) {
+    var tree = document.createElement('div');
+    tree.setAttribute('class', 'scrolling-wrapper');
+    
+    var ul = createUL();
+    tree.appendChild(ul);
+
+    branchCount = 0;
+    subBranchCount = 0; 
+
+    buildTree(baseData, ul, checkboxFunction);
+
+    var div = document.getElementById(divId);
+    clearElement(div);
+    div.appendChild(tree);
+}
+
+function buildTree(baseData, baseElement, checkboxFunction) {
+    var dataLength = baseData.length;
+    for(var i = 0; i < dataLength; i++){
+        var base = baseData[i];
+        var baseName = getAttribute(base.Attributes, 'ProjectName');
+        var li = document.createElement('li');
+        var ul = createUL();
+
+        buildSite(base.Sites, ul, checkboxFunction, baseName);
+        appendListItemChildren(li, 'ProjectName'.concat(base.GUID), checkboxFunction, 'ProjectName', baseName, ul, baseName, base.GUID);
+
+        baseElement.appendChild(li);        
+    }
+}
+
+function buildSite(sites, baseElement, checkboxFunction, linkedSite) {
+    var sitesLength = sites.length;
+    for(var i = 0; i < sitesLength; i++) {
+        var site = sites[i];
+        var li = document.createElement('li');
+        var ul = createUL();
+        buildMeter(site.Meters, ul, checkboxFunction, linkedSite);
+        appendListItemChildren(li, 'Site'.concat(subBranchCount), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
+
+        baseElement.appendChild(li);
+        subBranchCount++;
+    }
+}
+
+function buildMeter(meters, baseElement, checkboxFunction, linkedSite) {
+    var metersLength = meters.length;
+    for(var i = 0; i < metersLength; i++){
+        var meter = meters[i];
+        var li = document.createElement('li');
+        var ul = createUL();
+        var branchId = 'Meter'.concat(meter.GUID);
+        appendListItemChildren(li, branchId, checkboxFunction, 'Meter', meter.Identifier, ul, linkedSite, '');
+
+        var branchDiv = li.children[branchId];
+        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-times-circle');
+
+        baseElement.appendChild(li); 
+    }
+}
+
+function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
+    li.appendChild(createBranchDiv(id));
+    li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
+    li.appendChild(createTreeIcon(checkboxBranch));
+    li.appendChild(createSpan(id, branchOption));
+    li.appendChild(createBranchListDiv(id.concat('List'), ul));
+}
+
+function createBranchDiv(branchDivId) {
+    var branchDiv = document.createElement('div');
+    branchDiv.id = branchDivId;
+    branchDiv.setAttribute('class', 'far fa-plus-square');
+    branchDiv.setAttribute('style', 'padding-right: 4px;');
+    return branchDiv;
+}
+
+function createBranchListDiv(branchListDivId, ul) {
+    var branchListDiv = document.createElement('div');
+    branchListDiv.id = branchListDivId;
+    branchListDiv.setAttribute('class', 'listitem-hidden');
+    branchListDiv.appendChild(ul);
+    return branchListDiv;
+}
+
+function createUL() {
+    var ul = document.createElement('ul');
+    ul.setAttribute('class', 'format-listitem');
+    return ul;
+}
+
+function createTreeIcon(branch) {
+    var icon = document.createElement('i');
+    icon.setAttribute('class', getIconByBranch(branch));
+    icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
+    return icon;
+}
+
+function createSpan(spanId, innerHTML) {
+    var span = document.createElement('span');
+    span.id = spanId.concat('span');
+    span.innerHTML = innerHTML;
+    return span;
+}
+
+function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) {
+    var functionArray = checkboxFunction.replace(')', '').split('(');
+    var functionArrayLength = functionArray.length;
+    var functionName = functionArray[0];
+    var functionArguments = [];
+
+    var checkBox = document.createElement('input');
+    checkBox.type = 'checkbox';  
+    checkBox.id = checkboxId.concat('checkbox');
+    checkBox.setAttribute('Branch', branch);
+    checkBox.setAttribute('LinkedSite', linkedSite);
+    checkBox.setAttribute('GUID', guid);
+
+    functionArguments.push(checkBox.id);
+    if(functionArrayLength > 1) {
+        var functionArgumentLength = functionArray[1].split(',').length;
+        for(var i = 0; i < functionArgumentLength; i++) {
+            functionArguments.push(functionArray[1].split(',')[i]);
+        }
+    }
+    functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
+    
+    checkBox.setAttribute('onclick', functionName);
+    return checkBox;
+}
+
+function getIconByBranch(branch) {
+    switch(branch) {
+        case 'Period':
+            return "far fa-calendar-alt";
+        case "BillValid":
+            return "fas fa-check-circle";
+        case "BillInvestigation":
+            return "fas fa-question-circle";
+        case "BillInvalid":
+            return "fas fa-times-circle";
+    }    
+}
+
+function getAttribute(attributes, attributeRequired) {
+	for (var attribute in attributes) {
+		var array = attributes[attribute];
+
+		for(var key in array) {
+			if(key == attributeRequired) {
+				return array[key];
+			}
+		}
+	}
+
+	return null;
+}
+
+function clearElement(element) {
+	while (element.firstChild) {
+		element.removeChild(element.firstChild);
+	}
+}
+
+function updateClassOnClick(elementId, firstClass, secondClass){
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
+	if(hasClass(element, firstClass)){
+		element.classList.remove(firstClass);
+
+		if(secondClass != ''){
+			element.classList.add(secondClass);
+		}
+	}
+	else {
+		if(secondClass != ''){
+			element.classList.remove(secondClass);
+		}
+		
+		element.classList.add(firstClass);
+	}
+}
+  
+function hasClass(elem, className) {
+	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+
+function addExpanderOnClickEvents() {
+	var expanders = document.getElementsByClassName('fa-plus-square');
+	var expandersLength = expanders.length;
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
+	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
+
+	updateAdditionalControls(element);
+	expandAdditionalLists(element);
+}
+
+function updateAdditionalControls(element) {
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
+}
+
+function expandAdditionalLists(element) {
+	var additionalLists = element.getAttribute('additionallists');
+
+	if(!additionalLists) {
+		return;
+	}
+
+	element.addEventListener('click', function (event) {
+		var controlArray = additionalLists.split(',');
+		for(var j = 0; j < controlArray.length; j++) {
+			var controlId = controlArray[j];
+			var controlElement = document.getElementById(controlId);
+			updateClass(controlElement, 'listitem-hidden', '');
+		}
+	});		
+}
+
+(function (jQuery) {
+	
+    jQuery.fn.ganttView = function () {
+    	
+    	var args = Array.prototype.slice.call(arguments);
+    	
+    	if (args.length == 1 && typeof(args[0]) == "object") {
+        	build.call(this, args[0]);
+    	}
+    	
+    	if (args.length == 2 && typeof(args[0]) == "string") {
+    		handleMethod.call(this, args[0], args[1]);
+    	}
+    };
+    
+    function build(options) {
+    	
+    	var els = this;
+        var defaults = {
+            showWeekends: true,
+            cellWidth: 20,
+            cellHeight: 31,
+            slideWidth: 400,
+            vHeaderWidth: 100,
+            behavior: {
+            	clickable: true//,
+            	//draggable: true,
+            	//resizable: true
+            }
+        };
+        
+        var opts = jQuery.extend(true, defaults, options);
+
+		if (opts.data) {
+			build();
+		} else if (opts.dataUrl) {
+			jQuery.getJSON(opts.dataUrl, function (data) { opts.data = data; build(); });
+		}
+
+		function build() {
+			
+			var minDays = Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
+			var startEnd = DateUtils.getBoundaryDatesFromData(opts.data, minDays);
+			opts.start = startEnd[0];
+			opts.end = startEnd[1];
+			
+	        els.each(function () {
+
+	            var container = jQuery(this);
+	            var div = jQuery("<div>", { "class": "ganttview" });
+	            new Chart(div, opts).render();
+				container.append(div);
+				
+				var w = jQuery("div.ganttview-vtheader", container).outerWidth() +
+					jQuery("div.ganttview-slide-container", container).outerWidth();
+	            container.css("width", (w + 2) + "px");
+	            
+	            new Behavior(container, opts).apply();
+	        });
+		}
+    }
+
+	function handleMethod(method, value) {
+		
+		if (method == "setSlideWidth") {
+			var div = $("div.ganttview", this);
+			div.each(function () {
+				var vtWidth = $("div.ganttview-vtheader", div).outerWidth();
+				$(div).width(vtWidth + value + 1);
+				$("div.ganttview-slide-container", this).width(value);
+			});
+		}
+	}
+
+	var Chart = function(div, opts) {
+		
+		function render() {
+			addVtHeader(div, opts.data, opts.cellHeight);
+
+            var slideDiv = jQuery("<div>", {
+                "class": "ganttview-slide-container",
+                "css": { "width": opts.slideWidth + "px" }
+            });
+			
+            dates = getDates(opts.start, opts.end);
+            addHzHeader(slideDiv, dates, opts.cellWidth);
+            addGrid(slideDiv, opts.data, dates, opts.cellWidth, opts.showWeekends);
+            addBlockContainers(slideDiv, opts.data);
+            addBlocks(slideDiv, opts.data, opts.cellWidth, opts.start);
+            div.append(slideDiv);
+            applyLastClass(div.parent());
+		}
+		
+		var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+		// Creates a 3 dimensional array [year][month][day] of every day 
+		// between the given start and end dates
+        function getDates(start, end) {
+            var dates = [];
+			dates[start.getFullYear()] = [];
+			dates[start.getFullYear()][start.getMonth()] = [start]
+			var last = start;
+			while (last.compareTo(end) == -1) {
+				var next = last.clone().addDays(1);
+				if (!dates[next.getFullYear()]) { dates[next.getFullYear()] = []; }
+				if (!dates[next.getFullYear()][next.getMonth()]) { 
+					dates[next.getFullYear()][next.getMonth()] = []; 
+				}
+				dates[next.getFullYear()][next.getMonth()].push(next);
+				last = next;
+			}
+			return dates;
+        }
+
+        function addVtHeader(div, data, cellHeight) {
+            var headerDiv = jQuery("<div>", { "class": "ganttview-vtheader" });
+            for (var i = 0; i < data.length; i++) {
+                var itemDiv = jQuery("<div>", { "class": "ganttview-vtheader-item" });
+                itemDiv.append(jQuery("<div>", {
+                    "class": "ganttview-vtheader-item-name",
+                    "css": { "height": (data[i].series.length * cellHeight) + "px" }
+                }).append(data[i].name));
+                var seriesDiv = jQuery("<div>", { "class": "ganttview-vtheader-series" });
+                for (var j = 0; j < data[i].series.length; j++) {
+                    seriesDiv.append(jQuery("<div>", { "class": "ganttview-vtheader-series-name" })
+						.append(data[i].series[j].name));
+                }
+                itemDiv.append(seriesDiv);
+                headerDiv.append(itemDiv);
+            }
+            div.append(headerDiv);
+        }
+
+        function addHzHeader(div, dates, cellWidth) {
+            var headerDiv = jQuery("<div>", { "class": "ganttview-hzheader" });
+            var monthsDiv = jQuery("<div>", { "class": "ganttview-hzheader-months" });
+            var daysDiv = jQuery("<div>", { "class": "ganttview-hzheader-days" });
+            var totalW = 0;
+			for (var y in dates) {
+				for (var m in dates[y]) {
+					var w = dates[y][m].length * cellWidth;
+					totalW = totalW + w;
+					monthsDiv.append(jQuery("<div>", {
+						"class": "ganttview-hzheader-month",
+						"css": { "width": (w - 1) + "px" }
+					}).append(monthNames[m] + "/" + y));
+					for (var d in dates[y][m]) {
+						daysDiv.append(jQuery("<div>", { "class": "ganttview-hzheader-day" })
+							.append(dates[y][m][d].getDate()));
+					}
+				}
+			}
+            monthsDiv.css("width", totalW + "px");
+            daysDiv.css("width", totalW + "px");
+            headerDiv.append(monthsDiv).append(daysDiv);
+            div.append(headerDiv);
+        }
+
+        function addGrid(div, data, dates, cellWidth, showWeekends) {
+            var gridDiv = jQuery("<div>", { "class": "ganttview-grid" });
+            var rowDiv = jQuery("<div>", { "class": "ganttview-grid-row" });
+			for (var y in dates) {
+				for (var m in dates[y]) {
+					for (var d in dates[y][m]) {
+						var cellDiv = jQuery("<div>", { "class": "ganttview-grid-row-cell" });
+						if (DateUtils.isWeekend(dates[y][m][d]) && showWeekends) { 
+							cellDiv.addClass("ganttview-weekend"); 
+						}
+						rowDiv.append(cellDiv);
+					}
+				}
+			}
+            var w = jQuery("div.ganttview-grid-row-cell", rowDiv).length * cellWidth;
+            rowDiv.css("width", w + "px");
+            gridDiv.css("width", w + "px");
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < data[i].series.length; j++) {
+                    gridDiv.append(rowDiv.clone());
+                }
+            }
+            div.append(gridDiv);
+        }
+
+        function addBlockContainers(div, data) {
+            var blocksDiv = jQuery("<div>", { "class": "ganttview-blocks" });
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < data[i].series.length; j++) {
+                    blocksDiv.append(jQuery("<div>", { "class": "ganttview-block-container" }));
+                }
+            }
+            div.append(blocksDiv);
+        }
+
+        function addBlocks(div, data, cellWidth, start) {
+            var rows = jQuery("div.ganttview-blocks div.ganttview-block-container", div);
+            var rowIdx = 0;
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < data[i].series.length; j++) {
+                    var series = data[i].series[j];
+                    var size = DateUtils.daysBetween(series.start, series.end) + 1;
+					var offset = DateUtils.daysBetween(start, series.start);
+					var block = jQuery("<div>", {
+                        "class": "ganttview-block",
+                        "title": series.name + ", " + size + " days",
+                        "css": {
+                            "width": ((size * cellWidth) - 9) + "px",
+                            "margin-left": ((offset * cellWidth) + 3) + "px"
+                        }
+                    });
+                    addBlockData(block, data[i], series);
+                    if (data[i].series[j].color) {
+                        block.css("background-color", data[i].series[j].color);
+                    }
+                    block.append(jQuery("<div>", { "class": "ganttview-block-text" }).text(size));
+                    jQuery(rows[rowIdx]).append(block);
+                    rowIdx = rowIdx + 1;
+                }
+            }
+        }
+        
+        function addBlockData(block, data, series) {
+        	// This allows custom attributes to be added to the series data objects
+        	// and makes them available to the 'data' argument of click, resize, and drag handlers
+        	var blockData = { id: data.id, name: data.name };
+        	jQuery.extend(blockData, series);
+        	block.data("block-data", blockData);
+        }
+
+        function applyLastClass(div) {
+            jQuery("div.ganttview-grid-row div.ganttview-grid-row-cell:last-child", div).addClass("last");
+            jQuery("div.ganttview-hzheader-days div.ganttview-hzheader-day:last-child", div).addClass("last");
+            jQuery("div.ganttview-hzheader-months div.ganttview-hzheader-month:last-child", div).addClass("last");
+        }
+		
+		return {
+			render: render
+		};
+	}
+
+	var Behavior = function (div, opts) {
+		
+		function apply() {
+			
+			if (opts.behavior.clickable) { 
+            	bindBlockClick(div, opts.behavior.onClick); 
+        	}
+        	
+            if (opts.behavior.resizable) { 
+            	bindBlockResize(div, opts.cellWidth, opts.start, opts.behavior.onResize); 
+        	}
+            
+            if (opts.behavior.draggable) { 
+            	bindBlockDrag(div, opts.cellWidth, opts.start, opts.behavior.onDrag); 
+        	}
+		}
+
+        function bindBlockClick(div, callback) {
+            jQuery("div.ganttview-block", div).live("click", function () {
+                if (callback) { callback(jQuery(this).data("block-data")); }
+            });
+        }
+        
+        function bindBlockResize(div, cellWidth, startDate, callback) {
+        	jQuery("div.ganttview-block", div).resizable({
+        		grid: cellWidth, 
+        		handles: "e,w",
+        		stop: function () {
+        			var block = jQuery(this);
+        			updateDataAndPosition(div, block, cellWidth, startDate);
+        			if (callback) { callback(block.data("block-data")); }
+        		}
+        	});
+        }
+        
+        function bindBlockDrag(div, cellWidth, startDate, callback) {
+        	jQuery("div.ganttview-block", div).draggable({
+        		axis: "x", 
+        		grid: [cellWidth, cellWidth],
+        		stop: function () {
+        			var block = jQuery(this);
+        			updateDataAndPosition(div, block, cellWidth, startDate);
+        			if (callback) { callback(block.data("block-data")); }
+        		}
+        	});
+        }
+        
+        function updateDataAndPosition(div, block, cellWidth, startDate) {
+        	var container = jQuery("div.ganttview-slide-container", div);
+        	var scroll = container.scrollLeft();
+			var offset = block.offset().left - container.offset().left - 1 + scroll;
+			
+			// Set new start date
+			var daysFromStart = Math.round(offset / cellWidth);
+			var newStart = startDate.clone().addDays(daysFromStart);
+			block.data("block-data").start = newStart;
+
+			// Set new end date
+        	var width = block.outerWidth();
+			var numberOfDays = Math.round(width / cellWidth) - 1;
+			block.data("block-data").end = newStart.clone().addDays(numberOfDays);
+			jQuery("div.ganttview-block-text", block).text(numberOfDays + 1);
+			
+			// Remove top and left properties to avoid incorrect block positioning,
+        	// set position to relative to keep blocks relative to scrollbar when scrolling
+			block.css("top", "").css("left", "")
+				.css("position", "relative").css("margin-left", offset + "px");
+        }
+        
+        return {
+        	apply: apply	
+        };
+	}
+
+    var ArrayUtils = {
+	
+        contains: function (arr, obj) {
+            var has = false;
+            for (var i = 0; i < arr.length; i++) { if (arr[i] == obj) { has = true; } }
+            return has;
+        }
+    };
+
+    var DateUtils = {
+    	
+        daysBetween: function (start, end) {
+            if (!start || !end) { return 0; }
+            start = Date.parse(start); end = Date.parse(end);
+            if (start.getYear() == 1901 || end.getYear() == 8099) { return 0; }
+            var count = 0, date = start.clone();
+            while (date.compareTo(end) == -1) { count = count + 1; date.addDays(1); }
+            return count;
+        },
+        
+        isWeekend: function (date) {
+            return date.getDay() % 6 == 0;
+        },
+
+		getBoundaryDatesFromData: function (data, minDays) {
+			var minStart = new Date(); maxEnd = new Date();
+			for (var i = 0; i < data.length; i++) {
+				for (var j = 0; j < data[i].series.length; j++) {
+					var start = Date.parse(data[i].series[j].start);
+					var end = Date.parse(data[i].series[j].end)
+					if (i == 0 && j == 0) { minStart = start; maxEnd = end; }
+					if (minStart.compareTo(start) == 1) { minStart = start; }
+					if (maxEnd.compareTo(end) == -1) { maxEnd = end; }
+				}
+			}
+			
+			// Insure that the width of the chart is at least the slide width to avoid empty
+			// whitespace to the right of the grid
+			if (DateUtils.daysBetween(minStart, maxEnd) < minDays) {
+				maxEnd = minStart.clone().addDays(minDays);
+			}
+
+			var newMaxEnd = maxEnd.clone().moveToLastDayOfMonth();
+			
+			return [minStart, newMaxEnd];
+		}
+    };
+
+})(jQuery);
+
 Date.CultureInfo = {
     name: "en-US",
     englishName: "English (United States)",
