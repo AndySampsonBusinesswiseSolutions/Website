@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/includes/navigation/navigation.css">
+
 <header class="fusion-header-wrapper">
     <div class="fusion-header-v1 fusion-mobile-logo-1  fusion-mobile-menu-design-modern">
         <div class="fusion-header">
@@ -10,7 +12,21 @@
                         <img src="https://www.businesswisesolutions.co.uk/wp-content/uploads/2019/05/mobile-logo.png" srcset="https://www.businesswisesolutions.co.uk/wp-content/uploads/2019/05/mobile-logo.png 1x" alt="Businesswise Solutions Logo" retina_logo_url="" class="fusion-mobile-logo">
                     </a>
                 </div>
-                <?php if ($PAGE_TITLE != "Login") { ?>
+                <?php if ($PAGE_TITLE == "Login") { ?>
+                    <div class="topnav">
+                        <div class="login-container">
+                            <form action='/Internal/Dashboard/'>
+                                <input type="text" placeholder="Email Address" name="username" required>
+                                <input type="text" placeholder="Password" name="psw" required>
+                                <button type="submit" class="login-button">Login</button>
+                                <a href="/Internal/ForgottenPassword/" style="color: white;">Forgotten Password?</a>
+                            </form>
+                        </div>
+                    </div>
+                <?php } ?>
+                <?php if ($PAGE_TITLE == "Forgotten Password") { ?>
+                <?php } ?>
+                <?php if ($PAGE_TITLE != "Login" && $PAGE_TITLE != "Forgotten Password") { ?>
                     <nav class="fusion-main-menu" aria-label="Main Menu">
                         <ul id="menu-main-menu" class="fusion-menu">
                             <li style="padding-right: 25px;"><a href="/Internal/Dashboard/" class="fusion-flex-link fusion-bar-highlight"><i class="fas fa-home" title="Dashboard"></i></a></li>
