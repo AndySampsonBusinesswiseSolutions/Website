@@ -1,19 +1,60 @@
-function loadPage(){  
-	createTree(dashboard, "treeDiv", "addDashboardItem");
+function loadPage(){
+    createTree(dashboard, "treeDiv", "addDashboardItem");
+}
+
+function loadMap() {
+  var geocoder = new google.maps.Geocoder();
+    var mapOptions = {
+      zoom: 4.5,
+      center: new google.maps.LatLng(55, -5),
+      mapTypeId: google.maps.MapTypeId.SATELLITE,
+      disableDefaultUI: true
+    }
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+    var addresses = [
+      '50 Braybrooke Drive, Milton Keynes, MK4 1AW',
+      'The Energy Centre, 16 Lindred Road, Lomeshaye Industrial Estate, Nelson, BB9 5SR'
+    ]
+    
+    var addressLength = addresses.length;
+    for(var i = 0; i < addressLength; i++) {
+      geocoder.geocode( { 'address': addresses[i] }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var marker = new google.maps.Marker({
+                map: map,
+                position: results[0].geometry.location,
+                title: results[0].formatted_address
+            });
+
+            // (function(marker, i) {
+            //   // add click event
+            //   google.maps.event.addListener(marker, 'click', function() {
+            //       infowindow = new google.maps.InfoWindow({
+            //           content: marker.title
+            //       });
+            //       infowindow.open(map, marker);
+            //   });
+          // })(marker, i);
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+      });
+    }    
 }
 
 var branchCount = 0;
 var subBranchCount = 0;
-var myVar;
+// var myVar;
 
-function myFunction() {
-  myVar = setTimeout(showPage, 3000);
-}
+// function myFunction() {
+//   myVar = setTimeout(showPage, 3000);
+// }
 
-function showPage() {
-  document.getElementById("loader").style.display = "none";
-  document.getElementById("myDiv").style.display = "block";
-}
+// function showPage() {
+//   document.getElementById("loader").style.display = "none";
+//   document.getElementById("myDiv").style.display = "block";
+// }
 
 function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
