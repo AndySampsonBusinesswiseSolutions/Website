@@ -21,7 +21,18 @@
 			<div class="tree-column">
 				<div>
 					<div class="tree-column">
-						<div class="tree-div roundborder">
+						<div id="siteDiv" class="tree-div roundborder">
+						</div>
+						<br>
+						<div class="roundborder" style="background-color: #e9eaee;">
+							<ul class="format-listitem">
+								<li>
+									<input type="radio" name="group1" id="electricityCommodityradio" checked guid="0" onclick='createTree(data, "siteDiv", "", "Site");'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+								</li>
+								<li>
+									<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='createTree(data, "siteDiv", "", "Site");'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
+								</li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -36,7 +47,7 @@
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-bolt fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Portfolio Annualised Energy</span><br><br><span style="font-size: 15px;">Usage: 115,653,691kWh</span><br><span style="font-size: 15px;">Cost: £704,567</span>
+							<span>Portfolio Annualised Energy</span><br><br><span style="font-size: 15px;">Usage: 5,653,691kWh</span><br><span style="font-size: 15px;">Cost: £704,567</span>
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>

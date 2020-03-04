@@ -31,4 +31,130 @@ var dashboard = [
             {"Height": "360px"}
         ]
     }
+];
+
+var data = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"BaseName" : "39-41 Buckingham Palace Road"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "1",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200050469869"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "2",
+        "Attributes" : 
+        [
+            {"BaseName" : "35 Charles Street"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "3",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010064476"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            },
+            {
+                "GUID" : "4",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200051256079"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "5",
+        "Attributes" : 
+        [
+            {"BaseName" : "Montague Street"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "6",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200050071348"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "7",
+        "Attributes" : 
+        [
+            {"BaseName" : "1-3 1-2 Kensington Court"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "8",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010015159"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "9",
+        "Attributes" : 
+        [
+            {"BaseName" : "9 Fore Street"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "10",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "2000027480903"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "11",
+        "Attributes" : 
+        [
+            {"BaseName" : "17-19 Egerton Terrace"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "12",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010016808"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"}
+                    ]
+            }
+        ]
+    }
 ]

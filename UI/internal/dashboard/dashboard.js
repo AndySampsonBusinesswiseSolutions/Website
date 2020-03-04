@@ -1,9 +1,11 @@
 function loadPage(){
-    createTree(dashboard, "treeDiv", "addDashboardItem");
-    loadMap();
-    loadPieChart();
-    loadDatagrid();
-    loadUsageChart();
+  createTree(data, "siteDiv", "", "Site");
+  createTree(dashboard, "treeDiv", "addDashboardItem", "Dashboard");
+  loadMap();
+  loadPieChart();
+  loadDatagrid();
+  loadUsageChart();
+  addExpanderOnClickEvents();
 }
 
 function loadUsageChart() {
@@ -142,7 +144,7 @@ function loadMap() {
 var branchCount = 0;
 var subBranchCount = 0;
 
-function createTree(baseData, divId, checkboxFunction) {
+function createTree(baseData, divId, checkboxFunction, dataName) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
@@ -152,43 +154,141 @@ function createTree(baseData, divId, checkboxFunction) {
     branchCount = 0;
     subBranchCount = 0; 
 
-    buildTree(baseData, ul, checkboxFunction);
+    buildTree(baseData, ul, checkboxFunction, dataName);
 
     var div = document.getElementById(divId);
     clearElement(div);
     div.appendChild(tree);
 }
 
-function buildTree(baseData, baseElement, checkboxFunction) {
+function buildTree(baseData, baseElement, checkboxFunction, dataName) {
     var dataLength = baseData.length;
     for(var i = 0; i < dataLength; i++){
         var base = baseData[i];
         var baseName = getAttribute(base.Attributes, 'BaseName');
         var li = document.createElement('li');
-        createUL();
 
-        appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', baseName, baseName, base.GUID);
+        if(dataName == "Dashboard") {
+          createUL();
+
+          appendListItemChildren(li, 'Dashboard'.concat(base.GUID), checkboxFunction, 'Dashboard', baseName, '', '', baseName, base.GUID, false);
+        }
+        else {
+          var electricityCommodityradio = document.getElementById('electricityCommodityradio');
+          var commodity = electricityCommodityradio.checked ? 'Electricity' : 'Gas';
+
+          if(!commoditySiteMatch(base, commodity)) {
+            continue;
+          }
+
+          var ul = createUL();
+          var childrenCreated = false;
+          if(base.hasOwnProperty('Meters')) {
+            buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, false);
+            childrenCreated = true;
+          }
+
+          appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
+        }
 
         baseElement.appendChild(li);        
     }
 }
 
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, linkedSite, guid) {
-    li.appendChild(createBranchDiv(id));
-    li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createSpan(id, branchOption));
+function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
+  var metersLength = meters.length;
+  for(var i = 0; i < metersLength; i++){
+      var meter = meters[i];
+      if(!commodityMeterMatch(meter, commodity)) {
+          continue;
+      }
+
+      var meterAttributes = meter.Attributes;
+      var identifier = getAttribute(meterAttributes, 'Identifier');
+      var meterCommodity = getAttribute(meterAttributes, 'Commodity');
+      var deviceType = getAttribute(meterAttributes, 'DeviceType');
+      var hasSubMeters = meter.hasOwnProperty('SubMeters');
+      var li = document.createElement('li');
+      var branchId = 'Meter'.concat(meter.GUID);
+      var branchDiv = createBranchDiv(branchId);
+      
+      if(!showSubMeters || !hasSubMeters) {
+          branchDiv.removeAttribute('class', 'far fa-plus-square');
+          branchDiv.setAttribute('class', 'far fa-times-circle');
+      }
+
+      li.appendChild(branchDiv);
+      li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
+      li.appendChild(createTreeIcon(deviceType, meterCommodity));
+      li.appendChild(createSpan(branchId, identifier));  
+
+      baseElement.appendChild(li); 
+  }
 }
 
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    return branchDiv;
+function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, childrenCreated) {
+  li.appendChild(createBranchDiv(id, childrenCreated));
+  li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
+
+  if(commodity == '') {
+    li.appendChild(createSpan(id, branchOption));
+  }
+  else {
+    li.appendChild(createTreeIcon(branchOption, commodity));
+    li.appendChild(createSpan(id, branchOption));
+    li.appendChild(createBranchListDiv(id.concat('List'), ul));
+  }    
+}
+
+function createBranchDiv(branchDivId, childrenCreated = true) {
+  var branchDiv = document.createElement('div');
+  branchDiv.id = branchDivId;
+
+  if(childrenCreated) {
+      branchDiv.setAttribute('class', 'far fa-plus-square');
+  }
+
+  branchDiv.setAttribute('style', 'padding-right: 4px;');
+  return branchDiv;
+}
+
+function createBranchListDiv(branchListDivId, ul) {
+  var branchListDiv = document.createElement('div');
+  branchListDiv.id = branchListDivId;
+  branchListDiv.setAttribute('class', 'listitem-hidden');
+  branchListDiv.appendChild(ul);
+  return branchListDiv;
 }
 
 function createUL() {
     var ul = document.createElement('ul');
     ul.setAttribute('class', 'format-listitem');
     return ul;
+}
+
+function createTreeIcon(branch, commodity) {
+  var icon = document.createElement('i');
+  icon.setAttribute('class', getIconByBranch(branch, commodity));
+  icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
+  return icon;
+}
+
+function getIconByBranch(branch, commodity) {
+  switch (branch) {
+      case 'Mains':
+          if(commodity == 'Gas') {
+              return 'fas fa-burn';
+          }
+          else {
+              return 'fas fa-plug';
+          }
+      case 'Lighting':
+          return 'fas fa-lightbulb';
+      case 'Unknown':
+          return 'fas fa-question-circle';
+      default:
+          return 'fas fa-map-marker-alt';
+  }
 }
 
 function createSpan(spanId, innerHTML) {
@@ -223,20 +323,22 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
         }
     }
 
-    var width;
-    var height;
-    var dataLength = dashboard.length;
-    for(var i = 0; i < dataLength; i++) {
-        var item = dashboard[i];
-
-        if(item.GUID == guid) {
-            width = getAttribute(item.Attributes, "Width");
-            height = getAttribute(item.Attributes, "Height");
-            break;
-        }
-    }
-    functionArguments.push('"'.concat(height).concat('"'));
-    functionArguments.push('"'.concat(width).concat('"'));
+    if(branch == 'Dashboard') {
+      var width;
+      var height;
+      var dataLength = dashboard.length;
+      for(var i = 0; i < dataLength; i++) {
+          var item = dashboard[i];
+  
+          if(item.GUID == guid) {
+              width = getAttribute(item.Attributes, "Width");
+              height = getAttribute(item.Attributes, "Height");
+              break;
+          }
+      }
+      functionArguments.push('"'.concat(height).concat('"'));
+      functionArguments.push('"'.concat(width).concat('"'));
+    }    
 
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
     
@@ -615,4 +717,131 @@ function clearElement(element) {
 	while (element.firstChild) {
 		element.removeChild(element.firstChild);
 	}
+}
+
+function commoditySiteMatch(site, commodity) {
+  if(commodity == '') {
+      return true;
+  }
+
+  if(!site.hasOwnProperty('Meters')) {
+      return false;
+  }
+
+  var metersLength = site.Meters.length;
+  for(var i = 0; i < metersLength; i++) {
+      if(commodityMeterMatch(site.Meters[i], commodity)) {
+          return true;
+      }
+  }
+
+  return false;
+}
+
+function commodityMeterMatch(meter, commodity) {
+  if(commodity == '') {
+      return true;
+  }
+
+  var meterCommodity = getAttribute(meter.Attributes, 'Commodity');
+  return meterCommodity.toLowerCase() == commodity.toLowerCase();
+}
+
+function updateClassOnClick(elementId, firstClass, secondClass){
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
+	if(hasClass(element, firstClass)){
+		element.classList.remove(firstClass);
+
+		if(secondClass != ''){
+			element.classList.add(secondClass);
+		}
+	}
+	else {
+		if(secondClass != ''){
+			element.classList.remove(secondClass);
+		}
+		
+		element.classList.add(firstClass);
+	}
+}
+  
+function hasClass(elem, className) {
+	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+
+function addExpanderOnClickEvents() {
+	var expanders = document.getElementsByClassName('fa-plus-square');
+	var expandersLength = expanders.length;
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
+	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
+
+	updateAdditionalControls(element);
+	expandAdditionalLists(element);
+}
+
+function updateAdditionalControls(element) {
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
+}
+
+function expandAdditionalLists(element) {
+	var additionalLists = element.getAttribute('additionallists');
+
+	if(!additionalLists) {
+		return;
+	}
+
+	element.addEventListener('click', function (event) {
+		var controlArray = additionalLists.split(',');
+		for(var j = 0; j < controlArray.length; j++) {
+			var controlId = controlArray[j];
+			var controlElement = document.getElementById(controlId);
+			updateClass(controlElement, 'listitem-hidden', '');
+		}
+	});		
 }

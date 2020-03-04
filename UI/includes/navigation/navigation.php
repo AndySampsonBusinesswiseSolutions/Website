@@ -8,8 +8,6 @@
                     <a class="fusion-logo-link" href="https://www.businesswisesolutions.co.uk/">
                         <!-- standard logo -->
                         <img src="https://www.businesswisesolutions.co.uk/wp-content/uploads/2018/05/bws-logo-white.png" srcset="https://www.businesswisesolutions.co.uk/wp-content/uploads/2018/05/bws-logo-white.png 1x" alt="Businesswise Solutions Logo" retina_logo_url="" class="fusion-standard-logo">
-                        <!-- mobile logo -->
-                        <img src="https://www.businesswisesolutions.co.uk/wp-content/uploads/2019/05/mobile-logo.png" srcset="https://www.businesswisesolutions.co.uk/wp-content/uploads/2019/05/mobile-logo.png 1x" alt="Businesswise Solutions Logo" retina_logo_url="" class="fusion-mobile-logo">
                     </a>
                 </div>
                 <?php if ($PAGE_TITLE == "Login") { ?>

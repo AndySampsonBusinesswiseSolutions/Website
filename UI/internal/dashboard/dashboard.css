@@ -43,6 +43,9 @@
     list-style-type: none; 
     padding-left: 15px;
 }
+.listitem-hidden {
+  display: none;
+}
 .roundborder {
     border: solid black 1px;
       border-top-left-radius: 5px; 
