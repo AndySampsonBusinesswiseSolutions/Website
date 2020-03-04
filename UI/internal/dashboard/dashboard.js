@@ -1,21 +1,126 @@
 function loadPage(){
     createTree(dashboard, "treeDiv", "addDashboardItem");
     loadMap();
+    loadPieChart();
+    loadDatagrid();
+    loadUsageChart();
+}
+
+function loadUsageChart() {
+  var electricityVolumeSeries = [{
+    name: 'Forecast Volume',
+    data: [
+    null, null, null,
+    null, 438772, 473960, 436016, 448107, 462373, 510771, 494156, 462111, 480764, 484943, 501687,
+    475309, 423674, 474684, 436146, 447341, 462320, 510293, 493880, 462111, 480407, 485484, 502031,
+    475284, 423674, 474815, 436310, 447291, 462320, 508740, 493786, 461985, 480105, 486236, 502168,
+    475972, 423674, 474579, 435772, 447692, 462517, 507667, 493724, 461949, 479810, 486236, 501914,
+    477400, 439032, 473482, 435740, 448459, 462890, 509699, 494370, 461067
+          ]
+    }];
+
+  var electricityCategories = [
+    '10 2019', '11 2019', '12 2019',
+    '01 2020', '02 2020', '03 2020', '04 2020', '05 2020', '06 2020', '07 2020', '08 2020', '09 2020', '10 2020', '11 2020', '12 2020',
+    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
+    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
+    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023', '10 2023', '11 2023', '12 2023',
+    '01 2024', '02 2024', '03 2024', '04 2024', '05 2024', '06 2024', '07 2024', '08 2024', '09 2024'
+    ];
+
+  var electricityVolumeOptions = {
+      chart: {
+        type: 'bar'
+      },
+      tooltip: {
+          x: {
+          format: getChartTooltipXFormat("Yearly")
+          }
+      },
+      xaxis: {
+          title: {
+          text: ''
+          },
+          labels: {
+          format: getChartXAxisLabelFormat('Weekly')
+          },
+          categories: electricityCategories
+      },
+      yaxis: [{
+        title: {
+          text: 'kWh'
+        },
+          min: 0,
+          max: 520000,
+          decimalsInFloat: 0
+      }]
+    };
+
+  refreshChart(electricityVolumeSeries, "#electricityVolumeChart", electricityVolumeOptions);
+}
+
+function loadDatagrid() {
+  jexcel(document.getElementById('spreadsheet'), {
+    data:[
+        {address:'39-41 Buckingham Palace Road, London, SW1W 0PS',	meterpoint:'1200050469869',	annualvolume:'1,978,170',	annualcost:'238,637',carbon:'526'},
+        {address:'35 Charles Street, London, W1J 5EB',	meterpoint:'1200010064476',	annualvolume:'725,508',	annualcost:'92,358',carbon:'202'},
+        {address:'35 Charles Street, London, W1J 5EB',	meterpoint:'1200051256079',	annualvolume:'332,102',	annualcost:'42,042',carbon:'93'},
+        {address:'Montague Street, London, WC1B 5BJ',	meterpoint:'1200050071348',	annualvolume:'977,782',	annualcost:'123,285',carbon:'273'},
+        {address:'1-3 1-2 Kensington Court, London, W8 5DL',	meterpoint:'1200010015159',	annualvolume:'932,394',	annualcost:'118,214',carbon:'260'},
+        {address:'9 Fore Street, Evershot, Dorchester, DT2 0JR',	meterpoint:'2000027480903',	annualvolume:'415,371',	annualcost:'52,984',carbon:'115'},
+        {address:'17-19 Egerton Terrace, London, SW3 2BX',	meterpoint:'1200010016808',	annualvolume:'292,364',	annualcost:'37,047',carbon:'82'}
+    ],
+    columns: [
+        {type:'text', width:'150px', name:'address', title:'Address'},
+        {type:'text', width:'130px', name:'meterpoint', title:'Meter Point'},
+        {type:'text', width:'175px', name:'annualvolume', title:'Annual Volume (kWh)'},
+        {type:'text', width:'175px', name:'annualcost', title:'Annual Cost (£)'},
+        {type:'text', width:'175px', name:'carbon', title:'Carbon (tonnes)'},
+     ]
+});
+}
+
+function loadPieChart() {
+  var options = {
+    series: [93306, 1950, 4500, 2800],
+    chart: {
+    width: 475,
+    type: 'pie'
+  },
+  dataLabels: {
+    enabled: false
+  },
+  labels: ['Predictive Spend', 'Heaters', 'Chillers', 'Good Practice Savings @ 3%'],
+  responsive: [{
+    breakpoint: 480,
+    options: {
+      chart: {
+        width: 400
+      }
+    }
+  }]
+  };
+
+  var chart = new ApexCharts(document.querySelector("#piechart"), options);
+  chart.render();
 }
 
 function loadMap() {
   var geocoder = new google.maps.Geocoder();
     var mapOptions = {
-      zoom: 4.5,
+      zoom: 4.75,
       center: new google.maps.LatLng(55, -5),
-      mapTypeId: google.maps.MapTypeId.SATELLITE,
-      disableDefaultUI: true
+      mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
     var addresses = [
-      '50 Braybrooke Drive, Milton Keynes, MK4 1AW',
-      'The Energy Centre, 16 Lindred Road, Lomeshaye Industrial Estate, Nelson, BB9 5SR'
+      '39-41 Buckingham Palace Road, London, SW1W 0PS',
+      '35 Charles Street, London, W1J 5EB',
+      'Montague Street, London, WC1B 5BJ',
+      '1-3 1-2 Kensington Court, London, W8 5DL',
+      '9 Fore Street, Evershot, Dorchester, DT2 0JR',
+      '17-19 Egerton Terrace, London, SW3 2BX'
     ]
     
     var addressLength = addresses.length;
@@ -416,6 +521,30 @@ function addDashboardItem(checkbox, height, width) {
         var dashboardItem = document.getElementById(dashboardItemId);
         dashboard.removeChild(dashboardItem);
     }
+}
+
+function getChartTooltipXFormat(period) {
+  switch(period) {
+    case 'Daily':
+    case "Weekly":
+    case "Monthly":
+      return 'dd/MM/yyyy HH:mm';
+    case "Yearly":
+      return 'dd/MM/yyyy';
+  }
+}
+
+function getChartXAxisLabelFormat(period) {
+  switch(period) {
+    case 'Daily':
+      return 'HH:mm';
+    case "Weekly":
+      return 'dd/MM/yyyy';
+    case "Monthly":
+      return 'dd';
+    case "Yearly":
+      return 'MMM';
+  }
 }
 
 function refreshChart(newSeries, chartId, chartOptions) {

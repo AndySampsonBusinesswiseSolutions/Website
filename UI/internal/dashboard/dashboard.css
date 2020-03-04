@@ -1,6 +1,7 @@
 @import "https://use.fontawesome.com/releases/v5.11.2/css/all.css";
 @import "https://use.fontawesome.com/releases/v5.11.2/css/v4-shims.css";
-@import "//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css";
+@import "https://bossanova.uk/jexcel/v3/jexcel.css";
+@import "https://bossanova.uk/jsuites/v2/jsuites.css";
 
 .section-header {
     background: #b62a51;

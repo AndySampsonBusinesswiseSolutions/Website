@@ -17,57 +17,84 @@
 
 	<div>
 		<br>
-		<div style="text-align: center; margin-left: 30px; margin-right: 30px;">
-			<div class="roundborder">
-				<div style="overflow: hidden;">
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-industry fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Number of Sites</span><br><span style="font-size: 15px;">1</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-bolt fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Portfolio Annualised Energy</span><br><span style="font-size: 15px;">Usage: 258,075 kWh</span><br><span style="font-size: 15px;">Cost: £31,102</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-						<span>3 Year Extrapolated Spend</span><br><span style="font-size: 15px;">£93,306</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Predicted Total Savings (£)</span><br><span style="font-size: 15px;">£9,249</span><br><span style="font-size: 15px;">3 years</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Predicted Savings (£)</span><br><span style="font-size: 15px;">£3,083</span><br><span style="font-size: 15px;">per annum</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-percent fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Predicted Savings (%)</span><br><span style="font-size: 15px;">10%</span><br><span style="font-size: 15px;">per annum</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="far fa-lightbulb fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Good Practice Savings</span><br><span style="font-size: 15px;">3% </span><br><span style="font-size: 15px;">per annum</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Predicted Energy Savings Over 5 Years</span><br><span style="font-size: 15px;">£15,415</span>
-					</div>
-					<div class="roundborder" style="height: 150px; width: 150px; margin: 5px; float: left;">
-						<i class="fas fa-charging-station fa-4x" style="margin-top: 2px;"></i><br>
-						<span>Number of Sensors / Bridges</span><br><span style="font-size: 15px;">21 / 2</span>
-					</div>
-				</div>
-				<br>
-				<div style="overflow: hidden;">
-					<div id="map-canvas" class="roundborder" style="height: 300px; width: 300px; margin: 5px; float: left;">
-					</div>
-					<div class="roundborder" style="height: 300px; width: 300px; margin: 5px; float: left;">
-						<i class="fas fa-chart-pie fa-9x" style="margin-top: 2px;"></i><br>
+		<div>
+			<div class="tree-column">
+				<div>
+					<div class="tree-column">
+						<div class="tree-div roundborder">
+						</div>
 					</div>
 				</div>
 			</div>
+			<div class="fill-column"></div>
+			<div class="final-column">
+				<div class="dashboard roundborder" style="text-align: center; overflow: auto">
+					<div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-industry fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Number of Sites</span><br><br><span style="font-size: 15px;">7</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-bolt fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Portfolio Annualised Energy</span><br><br><span style="font-size: 15px;">Usage: 115,653,691kWh</span><br><span style="font-size: 15px;">Cost: £704,567</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Extrapolated Spend</span><br><br><span style="font-size: 15px;">£93,306</span><br><span style="font-size: 15px;">over 3 years</span>
+						</div>
+						<div id="map-canvas" class="roundborder" style="height: 360px; width: 360px; margin: 5px; float: right;"></div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Predicted Savings (3)</span><br><br><span style="font-size: 15px;">£15,415</span><br><span style="font-size: 15px;">over 5 years</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Predicted Savings (£)</span><br><br><span style="font-size: 15px;">£9,249</span><br><span style="font-size: 15px;">over 3 years</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Predicted Savings (£)</span><br><br><span style="font-size: 15px;">£3,083</span><br><span style="font-size: 15px;">per annum</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-percent fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Predicted Savings (%)</span><br><br><span style="font-size: 15px;">10%</span><br><span style="font-size: 15px;">per annum</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="far fa-lightbulb fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Good Practice Savings</span><br><br><span style="font-size: 15px;">3% </span><br><span style="font-size: 15px;">per annum</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-cloud fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Carbon</span><br><br><span style="font-size: 15px;">1,550 tonnes</span><br><span style="font-size: 15px;">per annum</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-charging-station fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Sensors / Bridges</span><br><br><span style="font-size: 15px;">21 / 2</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Opportunities</span><br><br><span style="font-size: 15px;">5 Pending</span><br><span style="font-size: 15px;">5 Active</span>
+						</div>
+						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Opportunities</span><br><br><span style="font-size: 15px;">1 Finished</span><br><span style="font-size: 15px;">100,000kWh</span><br><span style="font-size: 15px;">£10,000</span>
+						</a>
+						<div class="roundborder" style="height: 270px; width: 490px; margin: 5px; float: left;">
+							<span>Predictive Energy Spend & Savings Over 3 Years</span>
+							<div id="piechart"></div>
+						</div>
+						<div class="roundborder" style="height: 270px; width: 490px; margin: 5px; float: left; overflow: auto;">
+							<div id="spreadsheet"></div>
+						</div>
+						<div class="roundborder" style="height: 270px; width: 490px; margin: 5px; float: left;">
+							<div id="electricityVolumeChart"></div>
+						</div>
+					</div>
+				</div>
+				<div>Predicted savings are approximate</div>
+				<br>
+			</div>	
 		</div>
-		<div style="margin-left: 30px;">Predicted savings are approximate</div>
 		<div>
 			<div class="tree-column">
 				<div>
@@ -91,8 +118,8 @@
 
 <script src="dashboard.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
+<script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"></script>
 <script type="text/javascript" src="dashboard.json"></script>
 
