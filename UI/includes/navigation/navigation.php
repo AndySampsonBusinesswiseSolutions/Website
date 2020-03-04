@@ -15,7 +15,7 @@
                 <?php if ($PAGE_TITLE == "Login") { ?>
                     <div class="topnav">
                         <div class="login-container">
-                            <form action='/Internal/Dashboard/'>
+                            <form method="post" action='/Internal/Dashboard/'>
                                 <input type="text" placeholder="Email Address" name="username" required>
                                 <input type="text" placeholder="Password" name="psw" required>
                                 <button type="submit" class="login-button">Login</button>
