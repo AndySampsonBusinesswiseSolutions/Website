@@ -1,5 +1,6 @@
 function loadPage(){
     createTree(dashboard, "treeDiv", "addDashboardItem");
+    loadMap();
 }
 
 function loadMap() {
@@ -26,16 +27,6 @@ function loadMap() {
                 position: results[0].geometry.location,
                 title: results[0].formatted_address
             });
-
-            // (function(marker, i) {
-            //   // add click event
-            //   google.maps.event.addListener(marker, 'click', function() {
-            //       infowindow = new google.maps.InfoWindow({
-            //           content: marker.title
-            //       });
-            //       infowindow.open(map, marker);
-            //   });
-          // })(marker, i);
         } else {
             alert('Geocode was not successful for the following reason: ' + status);
         }
@@ -45,16 +36,6 @@ function loadMap() {
 
 var branchCount = 0;
 var subBranchCount = 0;
-// var myVar;
-
-// function myFunction() {
-//   myVar = setTimeout(showPage, 3000);
-// }
-
-// function showPage() {
-//   document.getElementById("loader").style.display = "none";
-//   document.getElementById("myDiv").style.display = "block";
-// }
 
 function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');

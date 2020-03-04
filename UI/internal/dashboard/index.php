@@ -98,7 +98,6 @@
 
 <script>
 	loadPage();
-	loadMap();
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>
