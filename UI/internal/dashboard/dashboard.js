@@ -103,7 +103,7 @@ function loadDatagrid(checkBoxes) {
         {type:'text', width:'175px', name:'annualcost', title:'Annual Cost (£)'},
         {type:'text', width:'175px', name:'carbon', title:'Carbon (tonnes)'},
      ]
-});
+  }); 
 }
 
 function loadPieChart() {

@@ -1,10 +1,7 @@
 function loadPage() {
 	createTree(data, "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
-	createTree(data, "gasTreeDiv", "gas", "updateChart(gasChart)", true);
 
 	addExpanderOnClickEvents();
-	addArrowOnClickEvents();
-	addCommoditySelectorOnClickEvent();
 	createCardButtons();
 }
 
@@ -206,53 +203,60 @@ function updateWholesaleUsageDatagrid() {
 	clearElement(datagridDiv);
 
 	var datagridDivWidth = datagridDiv.clientWidth;
-	var monthWidth = Math.floor(datagridDivWidth/10);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6)-1;
+	var monthWidth = Math.floor(datagridDivWidth/15);
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6.07)-1;
 
 	var treeDiv = document.getElementById('electricityTreeDiv');
 	var inputs = treeDiv.getElementsByTagName('input');
 	var commodity = 'electricity';
 	var checkBoxes = getCheckedCheckBoxes(inputs);
-
-	var html = 
-				'<table>'+
-					'<tr>'+
-						'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
-						'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Summary</th>'+
-						'<th style="border-bottom: solid black 1px;" colspan="3">Reason For Difference</th>'+
-					'</tr>'+
-					'<tr>'+
-						'<th style="border-right: solid black 1px;">Month</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">DUoS Reduction Project</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Waste Reduction</th>'+
-						'<th style="width: '+dataWidth+'px;">Unknown</th>'+
-					'</tr>';
-
 	var showBy = 'WholesaleUsage';
 	var newCategories = getNewCategories();   
 	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
-
 	var categoryLength = newCategories.length;
+	var displayData = [];
+
 	for(var i = 0; i < categoryLength; i++) {
-		var htmlRow = '<tr>'+
-						'<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[0]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[1]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[2]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[3]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[4]["data"][i]+'</td>'+
-						'<td>'+newSeries[5]["data"][i]+'</td>'+
-					  '</tr>';
-
-		html += htmlRow;
+		var row = {
+			month: newCategories[i], 
+			latestforecastusage:newSeries[0]["data"][i].toLocaleString(),
+			invoicedusage:newSeries[1]["data"][i].toLocaleString(),
+			usagedifference:newSeries[2]["data"][i].toLocaleString(),
+			duosreductionproject:newSeries[3]["data"][i].toLocaleString(),
+			wastereduction:newSeries[4]["data"][i].toLocaleString(),
+			unknown:newSeries[5]["data"][i].toLocaleString()
+		}
+		displayData.push(row);
 	}
-	
-	html += '</table>';
 
-	datagridDiv.innerHTML = html;
+	jexcel(document.getElementById('datagrid'), {
+		data: displayData,
+		columns: [
+			{type:'text', width:monthWidth, name:'month', title:'Month'},
+			{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast Usage'},
+			{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced Usage'},
+			{type:'text', width:dataWidth, name:'usagedifference', title:'Usage Difference'},
+			{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
+			{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
+			{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+		 ],
+		 nestedHeaders:[
+			[
+				{
+					title: '',
+					colspan: '1',
+				},
+				{
+					title: 'Summary',
+					colspan: '3',
+				},
+				{
+					title: 'Reason For Difference',
+					colspan: '3',
+				},
+			],
+		],
+	  }); 
 }
 
 function buildWholesaleCostForm(divToAppendTo) {
@@ -278,53 +282,60 @@ function updateWholesaleCostDatagrid() {
 	clearElement(datagridDiv);
 
 	var datagridDivWidth = datagridDiv.clientWidth;
-	var monthWidth = Math.floor(datagridDivWidth/10);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6)-1;
+	var monthWidth = Math.floor(datagridDivWidth/15);
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6.21)-1;
 
 	var treeDiv = document.getElementById('electricityTreeDiv');
 	var inputs = treeDiv.getElementsByTagName('input');
 	var commodity = 'electricity';
 	var checkBoxes = getCheckedCheckBoxes(inputs);
-
-	var html = 
-			'<table>'+
-				'<tr>'+
-					'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
-					'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Summary</th>'+
-					'<th style="border-bottom: solid black 1px;" colspan="3">Reason For Difference</th>'+
-				'</tr>'+
-				'<tr>'+
-					'<th style="border-right: solid black 1px;">Month</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Cost</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Cost</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Cost Difference</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">DUoS Reduction Project</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Waste Reduction</th>'+
-					'<th style="width: '+dataWidth+'px;">Unknown</th>'+
-				'</tr>';
-
 	var showBy = 'WholesaleCost';
 	var newCategories = getNewCategories();   
 	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
-
 	var categoryLength = newCategories.length;
+	var displayData = [];
+
 	for(var i = 0; i < categoryLength; i++) {
-		var htmlRow = '<tr>'+
-						'<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[0]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[1]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[2]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[3]["data"][i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+newSeries[4]["data"][i]+'</td>'+
-						'<td>'+newSeries[5]["data"][i]+'</td>'+
-					  '</tr>';
-
-		html += htmlRow;
+		var row = {
+			month: newCategories[i], 
+			latestforecastcost:newSeries[0]["data"][i].toLocaleString(),
+			invoicedcost:newSeries[1]["data"][i].toLocaleString(),
+			costdifference:newSeries[2]["data"][i].toLocaleString(),
+			duosreductionproject:newSeries[3]["data"][i].toLocaleString(),
+			wastereduction:newSeries[4]["data"][i].toLocaleString(),
+			unknown:newSeries[5]["data"][i].toLocaleString()
+		}
+		displayData.push(row);
 	}
-	
-	html += '</table>';
 
-	datagridDiv.innerHTML = html;
+	jexcel(document.getElementById('datagrid'), {
+		data: displayData,
+		columns: [
+			{type:'text', width:monthWidth, name:'month', title:'Month'},
+			{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast Cost'},
+			{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced Cost'},
+			{type:'text', width:dataWidth, name:'costdifference', title:'Cost Difference'},
+			{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
+			{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
+			{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+		 ],
+		 nestedHeaders:[
+			[
+				{
+					title: '',
+					colspan: '1',
+				},
+				{
+					title: 'Summary',
+					colspan: '3',
+				},
+				{
+					title: 'Reason For Difference',
+					colspan: '3',
+				},
+			],
+		],
+	  }); 
 }
 
 function buildWholesaleRateForm(divToAppendTo) {
@@ -351,54 +362,59 @@ function updateWholesaleRateDatagrid() {
 
 	var datagridDivWidth = datagridDiv.clientWidth;
 	var monthWidth = Math.floor(datagridDivWidth/10);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/7)-1;
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6.2)-1;
 
 	var treeDiv = document.getElementById('electricityTreeDiv');
 	var inputs = treeDiv.getElementsByTagName('input');
 	var commodity = 'electricity';
 	var checkBoxes = getCheckedCheckBoxes(inputs);
-
-	var html = 
-			'<table>'+
-				'<tr>'+
-					'<th style="width: '+monthWidth+'px; border-right: solid black 1px; border-bottom: solid black 1px;"></th>'+
-					'<th style="border-right: solid black 1px; border-bottom: solid black 1px;" colspan="3">Summary</th>'+
-					'<th style="border-bottom: solid black 1px;" colspan="4">Reason For Difference</th>'+
-				'</tr>'+
-				'<tr>'+
-					'<th style="border-right: solid black 1px;">Month</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Rate</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Rate</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Rate Difference</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Change</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">DUoS Reduction Project</th>'+
-					'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Waste Reduction</th>'+
-					'<th style="width: '+dataWidth+'px;">Unknown</th>'+
-				'</tr>';
-
 	var showBy = 'WholesaleRate';
 	var newCategories = getNewCategories();   
 	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
-
 	var categoryLength = newCategories.length;
+	var displayData = [];
+
 	for(var i = 0; i < categoryLength; i++) {
-		var htmlRow = '<tr>'+
-						'<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
-						'<td style="border-right: solid black 1px;">'+preciseRound(newSeries[0]["data"][i],2)+'</td>'+
-						'<td style="border-right: solid black 1px;">'+preciseRound(newSeries[1]["data"][i],2)+'</td>'+
-						'<td style="border-right: solid black 1px;">'+preciseRound(newSeries[2]["data"][i],2)+'</td>'+
-						'<td style="border-right: solid black 1px;">'+preciseRound(newSeries[3]["data"][i],2)+'</td>'+
-						'<td style="border-right: solid black 1px;">'+preciseRound(newSeries[4]["data"][i],2)+'</td>'+
-						'<td style="border-right: solid black 1px;">'+preciseRound(newSeries[5]["data"][i],2)+'</td>'+
-						'<td>'+preciseRound(newSeries[6]["data"][i],2)+'</td>'+
-					  '</tr>';
-
-		html += htmlRow;
+		var row = {
+			month: newCategories[i], 
+			latestforecastrate:newSeries[0]["data"][i].toLocaleString(),
+			invoicedrate:newSeries[1]["data"][i].toLocaleString(),
+			ratedifference:newSeries[2]["data"][i].toLocaleString(),
+			duosreductionproject:newSeries[3]["data"][i].toLocaleString(),
+			wastereduction:newSeries[4]["data"][i].toLocaleString(),
+			unknown:newSeries[5]["data"][i].toLocaleString()
+		}
+		displayData.push(row);
 	}
-	
-	html += '</table>';
 
-	datagridDiv.innerHTML = html;
+	jexcel(document.getElementById('datagrid'), {
+		data: displayData,
+		columns: [
+			{type:'text', width:monthWidth, name:'month', title:'Month'},
+			{type:'text', width:dataWidth, name:'latestforecastrate', title:'Latest Forecast Rate'},
+			{type:'text', width:dataWidth, name:'invoicedrate', title:'Invoiced Rate'},
+			{type:'text', width:dataWidth, name:'ratedifference', title:'Rate Difference'},
+			{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
+			{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
+			{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+		 ],
+		 nestedHeaders:[
+			[
+				{
+					title: '',
+					colspan: '1',
+				},
+				{
+					title: 'Summary',
+					colspan: '3',
+				},
+				{
+					title: 'Reason For Difference',
+					colspan: '3',
+				},
+			],
+		],
+	  }); 
 }
 
 function updateChart(callingElement, chart) {
@@ -778,14 +794,6 @@ switch(showBy) {
 }
 }
 
-function addCommoditySelectorOnClickEvent() {
-	var commoditySelector = document.getElementById("electricityGasSelector");
-	commoditySelector.addEventListener('click', function(event) {
-		updateClassOnClick("electricityDiv", "listitem-hidden", "")
-		updateClassOnClick("gasDiv", "listitem-hidden", "")
-	})	
-}
-
 var branchCount = 0;
 var subBranchCount = 0;
 
@@ -1078,82 +1086,6 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
-}
-
-function addArrowOnClickEvents() {
-	var arrows = document.getElementsByClassName('fa-angle-double-down');
-	var arrowsLength = arrows.length;
-	for(var i=0; i< arrowsLength; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-angle-double-down', 'fa-angle-double-up')
-			updateClassOnClick(this.id.replace('Arrow', 'SubMenu'), 'listitem-hidden', '')
-		});
-	}
-
-	arrows = document.getElementsByClassName('fa-angle-double-left');
-	arrowsLength = arrows.length;
-	for(var i=0; i< arrowsLength; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-angle-double-left', 'fa-angle-double-right')
-		});
-	}
-
-	var arrowHeaders = document.getElementsByClassName('arrow-header');
-	var arrowHeadersLength = arrowHeaders.length;
-	for(var i=0; i< arrowHeadersLength; i++){
-		arrowHeaders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id.concat('Arrow'), 'fa-angle-double-down', 'fa-angle-double-up')
-			updateClassOnClick(this.id.concat('SubMenu'), 'listitem-hidden', '')
-		});
-	}
 }
 
 function formatDate(dateToBeFormatted, format) {
