@@ -1,34 +1,45 @@
 function loadPage(){
-  createTree(data, "siteDiv", "", "Site");
+  createTree(data, "siteDiv", "updateDashboard", "Site");
   createTree(dashboard, "treeDiv", "addDashboardItem", "Dashboard");
-  loadMap();
-  loadPieChart();
-  loadDatagrid();
-  loadUsageChart();
   addExpanderOnClickEvents();
 }
 
-function loadUsageChart() {
-  var electricityVolumeSeries = [{
-    name: 'Forecast Volume',
-    data: [
-    null, null, null,
-    null, 438772, 473960, 436016, 448107, 462373, 510771, 494156, 462111, 480764, 484943, 501687,
-    475309, 423674, 474684, 436146, 447341, 462320, 510293, 493880, 462111, 480407, 485484, 502031,
-    475284, 423674, 474815, 436310, 447291, 462320, 508740, 493786, 461985, 480105, 486236, 502168,
-    475972, 423674, 474579, 435772, 447692, 462517, 507667, 493724, 461949, 479810, 486236, 501914,
-    477400, 439032, 473482, 435740, 448459, 462890, 509699, 494370, 461067
-          ]
-    }];
+function loadUsageChart(checkBoxes) {
+  clearElement(electricityVolumeChart);
 
   var electricityCategories = [
-    '10 2019', '11 2019', '12 2019',
-    '01 2020', '02 2020', '03 2020', '04 2020', '05 2020', '06 2020', '07 2020', '08 2020', '09 2020', '10 2020', '11 2020', '12 2020',
-    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023', '10 2023', '11 2023', '12 2023',
-    '01 2024', '02 2024', '03 2024', '04 2024', '05 2024', '06 2024', '07 2024', '08 2024', '09 2024'
+    '01-20', '02-20', '03-20', '04-20', '05-20', '06-20', '07-20', '08-20', '09-20', '10-20', '11-20', '12-20',
+    '01-21', '02-21', '03-21', '04-21', '05-21', '06-21', '07-21', '08-21', '09-21', '10-21', '11-21', '12-21',
+    '01-22', '02-22', '03-22', '04-22', '05-22', '06-22', '07-22', '08-22', '09-22', '10-22', '11-22', '12-22',
+    '01-23', '02-23', '03-23', '04-23', '05-23', '06-23', '07-23', '08-23', '09-23', '10-23', '11-23', '12-23',
+    '01-24', '02-24', '03-24', '04-24', '05-24', '06-24', '07-24', '08-24', '09-24'
     ];
+  var electricityCategoriesLength = electricityCategories.length;
+
+  var forecastVolume = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var guid = checkBoxes[i].getAttribute("guid");
+    var meter = getMeterByGUID(guid);
+
+    var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
+
+    for(var j = 0; j < electricityCategoriesLength; j++) {
+      forecastVolume[j] += meterUsage[j][electricityCategories[j]];
+    }
+  }
+
+  var maxVolume = Math.max(...forecastVolume)*1.05;
+
+  var electricityVolumeSeries = [{
+    name: 'Forecast Volume',
+    data: forecastVolume
+    }];  
 
   var electricityVolumeOptions = {
       chart: {
@@ -53,7 +64,7 @@ function loadUsageChart() {
           text: 'kWh'
         },
           min: 0,
-          max: 520000,
+          max: maxVolume,
           decimalsInFloat: 0
       }]
     };
@@ -61,17 +72,30 @@ function loadUsageChart() {
   refreshChart(electricityVolumeSeries, "#electricityVolumeChart", electricityVolumeOptions);
 }
 
-function loadDatagrid() {
+function loadDatagrid(checkBoxes) {
+  clearElement(document.getElementById('spreadsheet'));
+
+  var displayData = [];
+
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var guid = checkBoxes[i].getAttribute("guid");
+    var meter = getMeterByGUID(guid);
+
+    var linkedSite = checkBoxes[i].attributes['LinkedSite'].nodeValue;
+    var siteAttributes = getSiteAttributesByName(linkedSite);
+    var siteAddress = getAttribute(siteAttributes, 'GoogleAddress');
+    var meterPointIdentifier = getAttribute(meter.Attributes, 'Identifier');
+    var meterPointAnnualVolume = getAttribute(meter.Attributes, 'AnnualVolume');
+    var meterPointAnnualCost = getAttribute(meter.Attributes, 'AnnualCost');
+    var meterPointCarbon = getAttribute(meter.Attributes, 'Carbon');
+
+    var row = {address:siteAddress,	meterpoint:meterPointIdentifier.toLocaleString(), annualvolume:meterPointAnnualVolume.toLocaleString(), annualcost:meterPointAnnualCost.toLocaleString(), carbon:meterPointCarbon.toLocaleString()};
+    displayData.push(row);
+  }
+
   jexcel(document.getElementById('spreadsheet'), {
-    data:[
-        {address:'39-41 Buckingham Palace Road, London, SW1W 0PS',	meterpoint:'1200050469869',	annualvolume:'1,978,170',	annualcost:'238,637',carbon:'526'},
-        {address:'35 Charles Street, London, W1J 5EB',	meterpoint:'1200010064476',	annualvolume:'725,508',	annualcost:'92,358',carbon:'202'},
-        {address:'35 Charles Street, London, W1J 5EB',	meterpoint:'1200051256079',	annualvolume:'332,102',	annualcost:'42,042',carbon:'93'},
-        {address:'Montague Street, London, WC1B 5BJ',	meterpoint:'1200050071348',	annualvolume:'977,782',	annualcost:'123,285',carbon:'273'},
-        {address:'1-3 1-2 Kensington Court, London, W8 5DL',	meterpoint:'1200010015159',	annualvolume:'932,394',	annualcost:'118,214',carbon:'260'},
-        {address:'9 Fore Street, Evershot, Dorchester, DT2 0JR',	meterpoint:'2000027480903',	annualvolume:'415,371',	annualcost:'52,984',carbon:'115'},
-        {address:'17-19 Egerton Terrace, London, SW3 2BX',	meterpoint:'1200010016808',	annualvolume:'292,364',	annualcost:'37,047',carbon:'82'}
-    ],
+    data: displayData,
     columns: [
         {type:'text', width:'150px', name:'address', title:'Address'},
         {type:'text', width:'130px', name:'meterpoint', title:'Meter Point'},
@@ -83,6 +107,7 @@ function loadDatagrid() {
 }
 
 function loadPieChart() {
+  clearElement(document.getElementById('piechart'))
   var options = {
     series: [93306, 1950, 4500, 2800],
     chart: {
@@ -103,12 +128,11 @@ function loadPieChart() {
   }]
   };
 
-  var chart = new ApexCharts(document.querySelector("#piechart"), options);
-  chart.render();
+  renderChart("#piechart", options);
 }
 
-function loadMap() {
-  var geocoder = new google.maps.Geocoder();
+function loadMap(checkBoxes) {
+  clearElement(document.getElementById('map-canvas'));
     var mapOptions = {
       zoom: 4.75,
       center: new google.maps.LatLng(55, -5),
@@ -116,29 +140,63 @@ function loadMap() {
     }
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    var addresses = [
-      '39-41 Buckingham Palace Road, London, SW1W 0PS',
-      '35 Charles Street, London, W1J 5EB',
-      'Montague Street, London, WC1B 5BJ',
-      '1-3 1-2 Kensington Court, London, W8 5DL',
-      '9 Fore Street, Evershot, Dorchester, DT2 0JR',
-      '17-19 Egerton Terrace, London, SW3 2BX'
-    ]
+    var addresses = [];
+    var positions = [];
+
+    var checkBoxLength = checkBoxes.length;
+    for(var i = 0; i < checkBoxLength; i++) {
+      var linkedSite = checkBoxes[i].attributes['LinkedSite'].nodeValue;
+      var siteAttributes = getSiteAttributesByName(linkedSite);
+
+      var address = getAttribute(siteAttributes, 'GoogleAddress');
+      if(address && !addresses.includes(address)) {
+        addresses.push(address);
+
+        var latitude = getAttribute(siteAttributes, 'lat');
+        var longitude = getAttribute(siteAttributes, 'lng');
+        var latLng = {lat: latitude, lng: longitude};
+
+        positions.push(latLng);
+      }
+    }
     
     var addressLength = addresses.length;
     for(var i = 0; i < addressLength; i++) {
-      geocoder.geocode( { 'address': addresses[i] }, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location,
-                title: results[0].formatted_address
-            });
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
+
+      var marker = new google.maps.Marker({
+          map: map,
+          position: positions[i],
+          title: addresses[i]
       });
     }    
+}
+
+function getSiteAttributesByName(siteName) {
+  var dataLength = data.length;
+  for(var i = 0; i < dataLength; i++) {
+    var base = data[i];
+    var baseName = getAttribute(base.Attributes, 'BaseName');
+
+    if(baseName == siteName) {
+      return base.Attributes;
+    }
+  }
+}
+
+function getMeterByGUID(guid) {
+	var dataLength = data.length;
+	for(var i = 0; i < dataLength; i++) {
+		var site = data[i];
+    var meterLength = site.Meters.length;
+    for(var j = 0; j < meterLength; j++) {
+      var meter = site.Meters[j];
+      if(meter.GUID == guid) {
+        return meter;
+      }
+    }
+	}
+	
+	return null;
 }
 
 var branchCount = 0;
@@ -159,40 +217,49 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
     var div = document.getElementById(divId);
     clearElement(div);
     div.appendChild(tree);
+
+    if(dataName != "Dashboard") {
+      updateDashboard();
+    }
 }
 
 function buildTree(baseData, baseElement, checkboxFunction, dataName) {
-    var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
-        var baseName = getAttribute(base.Attributes, 'BaseName');
-        var li = document.createElement('li');
+  var dataLength = baseData.length;
+  for(var i = 0; i < dataLength; i++){
+      var base = baseData[i];
+      var baseName = getAttribute(base.Attributes, 'BaseName');
+      var li = document.createElement('li');
 
-        if(dataName == "Dashboard") {
-          createUL();
+      if(dataName == "Dashboard") {
+        createUL();
 
-          appendListItemChildren(li, 'Dashboard'.concat(base.GUID), checkboxFunction, 'Dashboard', baseName, '', '', baseName, base.GUID, false);
+        appendListItemChildren(li, 'Dashboard'.concat(base.GUID), checkboxFunction, 'Dashboard', baseName, '', '', baseName, base.GUID, false);
+      }
+      else {
+        var commodity = '';
+        if (document.getElementById('electricityCommodityradio').checked) {
+          commodity = 'Electricity';
         }
-        else {
-          var electricityCommodityradio = document.getElementById('electricityCommodityradio');
-          var commodity = electricityCommodityradio.checked ? 'Electricity' : 'Gas';
-
-          if(!commoditySiteMatch(base, commodity)) {
-            continue;
-          }
-
-          var ul = createUL();
-          var childrenCreated = false;
-          if(base.hasOwnProperty('Meters')) {
-            buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, false);
-            childrenCreated = true;
-          }
-
-          appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
+        else if (document.getElementById('gasCommodityradio').checked) {
+          commodity = 'Gas';
         }
 
-        baseElement.appendChild(li);        
-    }
+        if(!commoditySiteMatch(base, commodity)) {
+          continue;
+        }
+
+        var ul = createUL();
+        var childrenCreated = false;
+        if(base.hasOwnProperty('Meters')) {
+          buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, false);
+          childrenCreated = true;
+        }
+
+        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
+      }
+
+      baseElement.appendChild(li);        
+  }
 }
 
 function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
@@ -230,7 +297,7 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
   li.appendChild(createBranchDiv(id, childrenCreated));
   li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
 
-  if(commodity == '') {
+  if(checkboxBranch == 'Dashboard') {
     li.appendChild(createSpan(id, branchOption));
   }
   else {
@@ -796,52 +863,173 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
 }
 
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
+function updateDashboard(callingElement) {
+  var checkBoxes = getCheckedCheckBoxes();
 
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
+  loadMap(checkBoxes);
+  loadPieChart();
+  loadDatagrid(checkBoxes);
+  loadUsageChart(checkBoxes);
+  loadDashboardHeaderNumberOfSites(checkBoxes);
+  loadDashboardHeaderPortfolioAnnualisedEnergy(checkBoxes);
+  loadDashboardHeaderCarbon(checkBoxes);
+  loadDashboardHeaderOpportunities(checkBoxes);
 }
 
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
+function getCheckedCheckBoxes() {
+  var inputs = document.getElementById("siteDiv").getElementsByTagName('input');
+  var checkBoxes = [];
+  var inputLength = inputs.length;
+  
+  for(var i = 0; i < inputLength; i++) {
+    var input = inputs[i];
+    if(input.type.toLowerCase() == 'checkbox') {
+      if(input.checked) {
+        if(input.attributes['Branch'].nodeValue == 'Meter') {
+          if(!checkBoxes.includes(input)) {
+            checkBoxes.push(input);
+          }          
+        }
+  
+        if(input.attributes['Branch'].nodeValue == 'Site') {
+          var linkedSite = input.attributes['LinkedSite'].nodeValue;
+  
+          for(var j = 0; j< inputLength; j++) {
+            var meterInput = inputs[j];
+  
+            if(meterInput.type.toLowerCase() == 'checkbox'
+            && meterInput.attributes['Branch'].nodeValue == 'Meter'
+            && meterInput.attributes['LinkedSite'].nodeValue == linkedSite) {
+              if(!checkBoxes.includes(meterInput)) {
+                checkBoxes.push(meterInput);
+              } 
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  if(checkBoxes.length == 0) {
+    for(var i = 0; i < inputLength; i++) {
+      var input = inputs[i];
+      if(input.type.toLowerCase() == 'checkbox') {
+        if(input.attributes['Branch'].nodeValue == 'Meter') {
+          checkBoxes.push(input);
+        }
+      }
+    }
+  }
+  
+  return checkBoxes;
+}
 
-	if(!additionalLists) {
-		return;
-	}
+function loadDashboardHeaderNumberOfSites(checkBoxes) {
+  var addresses = [];
 
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var linkedSite = checkBoxes[i].attributes['LinkedSite'].nodeValue;
+    var siteAttributes = getSiteAttributesByName(linkedSite);
+
+    var address = getAttribute(siteAttributes, 'GoogleAddress');
+    if(address && !addresses.includes(address)) {
+      addresses.push(address);
+    }
+  }
+
+  var element = document.getElementById("dashboardHeaderNumberOfSites");
+  element.innerHTML = addresses.length;
+}
+
+function loadDashboardHeaderPortfolioAnnualisedEnergy(checkBoxes) {
+  var usage = 0;
+  var cost = 0;
+
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var guid = checkBoxes[i].getAttribute("guid");
+    var meter = getMeterByGUID(guid);
+
+    var meterUsage = getAttribute(meter.Attributes, "AnnualVolume");
+    var meterCost = getAttribute(meter.Attributes, "AnnualCost");
+
+    usage += meterUsage;
+    cost += meterCost;
+  }
+
+  var usageElement = document.getElementById("dashboardHeaderPortfolioAnnualisedEnergyUsage");
+  usageElement.innerHTML = "Usage: ".concat(usage.toLocaleString().concat(" kWh"));
+
+  var costElement = document.getElementById("dashboardHeaderPortfolioAnnualisedEnergyCost");
+  costElement.innerHTML = "Cost: £".concat(cost.toLocaleString());
+}
+
+function loadDashboardHeaderCarbon(checkBoxes) {
+  var carbon = 0;
+
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var guid = checkBoxes[i].getAttribute("guid");
+    var meter = getMeterByGUID(guid);
+
+    var meterCarbon = getAttribute(meter.Attributes, "Carbon");
+
+    carbon += meterCarbon;
+  }
+
+  var carbonElement = document.getElementById("dashboardHeaderCarbon");
+  carbonElement.innerHTML = carbon.toLocaleString().concat(" tonnes");
+}
+
+function loadDashboardHeaderOpportunities(checkBoxes) {
+  var headers = ["Number","UsageSaving","CostSaving"];
+  var pendingOpportunities = [0,0,0];
+  var activeOpportunities = [0,0,0];
+  var finishedOpportunities = [0,0,0];
+
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var guid = checkBoxes[i].getAttribute("guid");
+    var meter = getMeterByGUID(guid);
+
+    var meterPendingOpportunities = getAttribute(meter.Attributes, "PendingOpportunities");
+    var meterActiveOpportunities = getAttribute(meter.Attributes, "ActiveOpportunities");
+    var meterFinishedOpportunities = getAttribute(meter.Attributes, "FinishedOpportunities");
+
+    for(var j = 0; j < 3; j++) {
+      pendingOpportunities[j] += meterPendingOpportunities[j][headers[j]];
+      activeOpportunities[j] += meterActiveOpportunities[j][headers[j]];
+      finishedOpportunities[j] += meterFinishedOpportunities[j][headers[j]];
+    }    
+  }
+
+  var pendingOpportunitiesCountElement = document.getElementById("dashboardHeaderPendingOpportunitiesCount");
+  pendingOpportunitiesCountElement.innerHTML = "Count: ".concat(pendingOpportunities[0].toLocaleString());
+
+  var pendingOpportunitiesUsageElement = document.getElementById("dashboardHeaderPendingOpportunitiesUsage");
+  pendingOpportunitiesUsageElement.innerHTML = "Usage Saving: ".concat(pendingOpportunities[1].toLocaleString().concat(" kWh"));
+
+  var pendingOpportunitiesCostElement = document.getElementById("dashboardHeaderPendingOpportunitiesCost");
+  pendingOpportunitiesCostElement.innerHTML = "Cost Saving: £".concat(pendingOpportunities[2].toLocaleString());
+
+  var activeOpportunitiesCountElement = document.getElementById("dashboardHeaderActiveOpportunitiesCount");
+  activeOpportunitiesCountElement.innerHTML = "Count: ".concat(activeOpportunities[0].toLocaleString());
+
+  var activeOpportunitiesUsageElement = document.getElementById("dashboardHeaderActiveOpportunitiesUsage");
+  activeOpportunitiesUsageElement.innerHTML = "Usage Saving: ".concat(activeOpportunities[1].toLocaleString().concat(" kWh"));
+
+  var activeOpportunitiesCostElement = document.getElementById("dashboardHeaderActiveOpportunitiesCost");
+  activeOpportunitiesCostElement.innerHTML = "Cost Saving: £".concat(activeOpportunities[2].toLocaleString());
+
+  var finishedOpportunitiesCountElement = document.getElementById("dashboardHeaderFinishedOpportunitiesCount");
+  finishedOpportunitiesCountElement.innerHTML = "Count: ".concat(finishedOpportunities[0].toLocaleString());
+
+  var finishedOpportunitiesUsageElement = document.getElementById("dashboardHeaderFinishedOpportunitiesUsage");
+  finishedOpportunitiesUsageElement.innerHTML = "Usage Saving: ".concat(finishedOpportunities[1].toLocaleString().concat(" kWh"));
+
+  var finishedOpportunitiesCostElement = document.getElementById("dashboardHeaderFinishedOpportunitiesCost");
+  finishedOpportunitiesCostElement.innerHTML = "Cost Saving: £".concat(finishedOpportunities[2].toLocaleString());
 }

@@ -25,9 +25,13 @@
 						</div>
 						<br>
 						<div class="roundborder" style="background-color: #e9eaee;">
+							<span style="padding-left: 5px;">Select Commodity</span>
 							<ul class="format-listitem">
 								<li>
-									<input type="radio" name="group1" id="electricityCommodityradio" checked guid="0" onclick='createTree(data, "siteDiv", "", "Site");'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+									<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='createTree(data, "siteDiv", "", "Site");'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
+								</li>
+								<li>
+									<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='createTree(data, "siteDiv", "", "Site");'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
 								</li>
 								<li>
 									<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='createTree(data, "siteDiv", "", "Site");'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
@@ -39,15 +43,17 @@
 			</div>
 			<div class="fill-column"></div>
 			<div class="final-column">
-				<div class="dashboard roundborder" style="text-align: center; overflow: auto">
+				<div id="dashboardHeader" class="dashboard roundborder" style="text-align: center; overflow: auto">
 					<div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-industry fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Number of Sites</span><br><br><span style="font-size: 15px;">7</span>
+							<span>Number of Sites</span><br><br><span id="dashboardHeaderNumberOfSites" style="font-size: 15px;">7</span>
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-bolt fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Portfolio Annualised Energy</span><br><br><span style="font-size: 15px;">Usage: 5,653,691kWh</span><br><span style="font-size: 15px;">Cost: £704,567</span>
+							<span>Portfolio Annualised Energy</span><br><br>
+							<span id="dashboardHeaderPortfolioAnnualisedEnergyUsage" style="font-size: 15px;">Usage: 5,653,691kWh</span><br>
+							<span id="dashboardHeaderPortfolioAnnualisedEnergyCost" style="font-size: 15px;">Cost: £704,567</span>
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
@@ -56,7 +62,7 @@
 						<div id="map-canvas" class="roundborder" style="height: 360px; width: 360px; margin: 5px; float: right;"></div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Predicted Savings (3)</span><br><br><span style="font-size: 15px;">£15,415</span><br><span style="font-size: 15px;">over 5 years</span>
+							<span>Predicted Savings (£)</span><br><br><span style="font-size: 15px;">£15,415</span><br><span style="font-size: 15px;">over 5 years</span>
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
@@ -76,19 +82,28 @@
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-cloud fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Carbon</span><br><br><span style="font-size: 15px;">1,550 tonnes</span><br><span style="font-size: 15px;">per annum</span>
-						</div>
-						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
-							<i class="fas fa-charging-station fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Sensors / Bridges</span><br><br><span style="font-size: 15px;">21 / 2</span>
+							<span>Carbon</span><br><br><span id="dashboardHeaderCarbon" style="font-size: 15px;">1,550 tonnes</span><br><span style="font-size: 15px;">per annum</span>
 						</div>
 						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Opportunities</span><br><br><span style="font-size: 15px;">5 Pending</span><br><span style="font-size: 15px;">5 Active</span>
+							<span>Pending Opportunities</span><br><br>
+							<span id="dashboardHeaderPendingOpportunitiesCount" style="font-size: 12px;">1</span><br>
+							<span id="dashboardHeaderPendingOpportunitiesUsage" style="font-size: 12px;">100,000kWh</span><br>
+							<span id="dashboardHeaderPendingOpportunitiesCost" style="font-size: 12px;">£10,000</span>
+						</div>
+						<div class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
+							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+							<span>Active Opportunities</span><br><br>
+							<span id="dashboardHeaderActiveOpportunitiesCount" style="font-size: 12px;">1</span><br>
+							<span id="dashboardHeaderActiveOpportunitiesUsage" style="font-size: 12px;">100,000kWh</span><br>
+							<span id="dashboardHeaderActiveOpportunitiesCost" style="font-size: 12px;">£10,000</span>
 						</div>
 						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" class="roundborder" style="height: 175px; width: 175px; margin: 5px; float: left;">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Opportunities</span><br><br><span style="font-size: 15px;">1 Finished</span><br><span style="font-size: 15px;">100,000kWh</span><br><span style="font-size: 15px;">£10,000</span>
+							<span>Finished Opportunities</span><br><br>
+							<span id="dashboardHeaderFinishedOpportunitiesCount" style="font-size: 12px;">1</span><br>
+							<span id="dashboardHeaderFinishedOpportunitiesUsage" style="font-size: 12px;">100,000kWh</span><br>
+							<span id="dashboardHeaderFinishedOpportunitiesCost" style="font-size: 12px;">£10,000</span>
 						</a>
 						<div class="roundborder" style="height: 270px; width: 490px; margin: 5px; float: left;">
 							<span>Predictive Energy Spend & Savings Over 3 Years</span>
@@ -103,7 +118,6 @@
 					</div>
 				</div>
 				<div>Predicted savings are approximate</div>
-				<br>
 			</div>	
 		</div>
 		<div>
