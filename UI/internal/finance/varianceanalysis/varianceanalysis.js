@@ -49,7 +49,7 @@ function openTab(tabName, cardDivName) {
   }
 
 function createCardButtons(){
-	openTab("Usage", "cardDiv");	
+	openTab("Cost", "cardDiv");	
 	updateChart(document.getElementById('wholesaleCostElement0radio'), electricityChart);
 }
 

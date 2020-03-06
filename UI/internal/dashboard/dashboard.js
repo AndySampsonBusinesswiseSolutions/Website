@@ -1,11 +1,19 @@
 function loadPage(){
   createTree(data, "siteDiv", "updateDashboard", "Site");
   createTree(dashboard, "treeDiv", "addDashboardItem", "Dashboard");
-  addExpanderOnClickEvents();
+  addExpanderOnClickEvents(); 
+}
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "400px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0px";
 }
 
 function loadUsageChart(checkBoxes) {
-  clearElement(electricityVolumeChart);
+  clearElement(forecastUsageChart);
 
   var electricityCategories = [
     '01-20', '02-20', '03-20', '04-20', '05-20', '06-20', '07-20', '08-20', '09-20', '10-20', '11-20', '12-20',
@@ -37,13 +45,13 @@ function loadUsageChart(checkBoxes) {
   var maxVolume = Math.max(...forecastVolume)*1.05;
 
   var electricityVolumeSeries = [{
-    name: 'Forecast Volume',
+    name: 'Forecast Usage (kWh)',
     data: forecastVolume
     }];  
 
   var electricityVolumeOptions = {
       chart: {
-        type: 'bar'
+        type: 'bar',
       },
       tooltip: {
           x: {
@@ -69,7 +77,7 @@ function loadUsageChart(checkBoxes) {
       }]
     };
 
-  refreshChart(electricityVolumeSeries, "#electricityVolumeChart", electricityVolumeOptions);
+  refreshChart(electricityVolumeSeries, "#forecastUsageChart", electricityVolumeOptions);
 }
 
 function loadDatagrid(checkBoxes) {
@@ -104,31 +112,6 @@ function loadDatagrid(checkBoxes) {
         {type:'text', width:'175px', name:'carbon', title:'Carbon (tonnes)'},
      ]
   }); 
-}
-
-function loadPieChart() {
-  clearElement(document.getElementById('piechart'))
-  var options = {
-    series: [93306, 1950, 4500, 2800],
-    chart: {
-    width: 475,
-    type: 'pie'
-  },
-  dataLabels: {
-    enabled: false
-  },
-  labels: ['Predictive Spend', 'Heaters', 'Chillers', 'Good Practice Savings @ 3%'],
-  responsive: [{
-    breakpoint: 480,
-    options: {
-      chart: {
-        width: 400
-      }
-    }
-  }]
-  };
-
-  renderChart("#piechart", options);
 }
 
 function loadMap(checkBoxes) {
@@ -216,6 +199,12 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
 
     var div = document.getElementById(divId);
     clearElement(div);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerText = dataName != "Dashboard" ? "Select Sites/Meters" : "Select Custom Dashboard Items";
+
+    div.appendChild(header);
     div.appendChild(tree);
 
     if(dataName != "Dashboard") {
@@ -421,7 +410,7 @@ function addDashboardItem(checkbox, height, width) {
     if(checkbox.checked) {
         var newDashboardItem = document.createElement('div');
         newDashboardItem.id = dashboardItemId;
-        newDashboardItem.setAttribute('class', 'roundborder');
+        newDashboardItem.setAttribute('class', 'roundborder dashboard-item-small');
         newDashboardItem.setAttribute('style', 'float: left; width: ' + width + '; height: ' + height + ';');   
         dashboard.appendChild(newDashboardItem);
 
@@ -869,7 +858,6 @@ function updateDashboard(callingElement) {
   var checkBoxes = getCheckedCheckBoxes();
 
   loadMap(checkBoxes);
-  loadPieChart();
   loadDatagrid(checkBoxes);
   loadUsageChart(checkBoxes);
   loadDashboardHeaderNumberOfSites(checkBoxes);
