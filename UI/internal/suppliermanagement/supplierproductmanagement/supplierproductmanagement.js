@@ -164,18 +164,32 @@ function buildCardView(entity, divToAppendTo){
 	div.appendChild(table);
 	divToAppendTo.appendChild(div);
 
-	var button = document.createElement('button');
-	button.id = 'editDetailsButton';
-	button.innerHTML = 'Edit Details';
-	button.setAttribute('onclick', 'displayProductDataTable()');
-	button.setAttribute('style', 'margin-top: 5px; margin-right: 5px; margin-bottom: 5px;')
-	divToAppendTo.appendChild(button);	
+	var addDetailsButton = document.createElement('button');
+	addDetailsButton.id = 'addDetailsButton';
+	addDetailsButton.innerHTML = 'Add Details';
+	addDetailsButton.setAttribute('onclick', '');
+	addDetailsButton.setAttribute('style', 'margin-top: 5px; margin-right: 5px; margin-bottom: 5px;')
+	divToAppendTo.appendChild(addDetailsButton);	
 
-	var costElementButton = document.createElement('button');
-	costElementButton.id = 'editCostElementsButton';
-	costElementButton.innerHTML = 'Edit Cost Elements';
-	costElementButton.setAttribute('onclick', 'displayCostElementDataTable()');
-	divToAppendTo.appendChild(costElementButton);	
+	var editDetailsButton = document.createElement('button');
+	editDetailsButton.id = 'editDetailsButton';
+	editDetailsButton.innerHTML = 'Edit Details';
+	editDetailsButton.setAttribute('onclick', 'displayProductDataTable()');
+	editDetailsButton.setAttribute('style', 'margin-top: 5px; margin-right: 5px; margin-bottom: 5px;')
+	divToAppendTo.appendChild(editDetailsButton);	
+
+	var addCostElementsButton = document.createElement('button');
+	addCostElementsButton.id = 'addCostElementsButton';
+	addCostElementsButton.innerHTML = 'Add Cost Elements';
+	addCostElementsButton.setAttribute('onclick', '');
+	addCostElementsButton.setAttribute('style', 'margin-top: 5px; margin-right: 5px; margin-bottom: 5px;')
+	divToAppendTo.appendChild(addCostElementsButton);
+
+	var editCostElementsButton = document.createElement('button');
+	editCostElementsButton.id = 'editCostElementsButton';
+	editCostElementsButton.innerHTML = 'Edit Cost Elements';
+	editCostElementsButton.setAttribute('onclick', 'displayCostElementDataTable()');
+	divToAppendTo.appendChild(editCostElementsButton);	
 }
 
 function displayProductDataTable() {

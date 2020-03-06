@@ -35,6 +35,16 @@ var supplierproduct = [
                                     {"Wholesale": "Passthrough"},
                                     {"BSUoS": "Passthrough"}
                                 ]
+                            },
+                            {
+                                "GUID": 5,
+                                "Attributes" :[
+                                    {"ProductName": "Add New HH Product"},
+                                    {"DayPeriod": ""},
+                                    {"NightPeriod": ""}
+                                ],
+                                "CostElements":[
+                                ]
                             }
                         ]
                     },
@@ -53,6 +63,16 @@ var supplierproduct = [
                                 "CostElements":[
                                     {"Wholesale": "Fixed"},
                                     {"BSUoS": "Fixed"}
+                                ]
+                            },
+                            {
+                                "GUID": 6,
+                                "Attributes" :[
+                                    {"ProductName": "Add New NHH Product"},
+                                    {"DayPeriod": ""},
+                                    {"NightPeriod": ""}
+                                ],
+                                "CostElements":[
                                 ]
                             }
                         ]
@@ -96,6 +116,16 @@ var supplierproduct = [
                                 "CostElements":[
                                     {"Wholesale": "Passthrough"},
                                     {"BSUoS": "Passthrough"}
+                                ]
+                            },
+                            {
+                                "GUID": 7,
+                                "Attributes" :[
+                                    {"ProductName": "Add New HH Product"},
+                                    {"DayPeriod": ""},
+                                    {"NightPeriod": ""}
+                                ],
+                                "CostElements":[
                                 ]
                             }
                         ]
