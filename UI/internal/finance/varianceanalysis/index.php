@@ -30,7 +30,7 @@
 										<input type="radio" name="group2" id="allCommodityradio" checked guid="0" onclick='createTree(data, "electricityTreeDiv", "", "updateChart(electricityChart)", true);addExpanderOnClickEvents();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
 									</li>
 									<li>
-										<input type="radio" name="group2" id="electricityCommodityradio" checked guid="0" onclick='createTree(data, "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);addExpanderOnClickEvents();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+										<input type="radio" name="group2" id="electricityCommodityradio" guid="0" onclick='createTree(data, "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);addExpanderOnClickEvents();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
 									</li>
 									<li>
 										<input type="radio" name="group2" id="gasCommodityradio" guid="0" onclick='createTree(data, "electricityTreeDiv", "gas", "updateChart(electricityChart)", true);addExpanderOnClickEvents();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>

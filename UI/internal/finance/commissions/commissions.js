@@ -1,7 +1,7 @@
 var branchCount = 0;
 var subBranchCount = 0;
 
-function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters) {
+function createTree(baseData, divId, commodity, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
@@ -11,11 +11,13 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
     branchCount = 0;
     subBranchCount = 0; 
 
-    buildTree(baseData, ul, commodity, checkboxFunction, showSubMeters);
+    buildTree(baseData, ul, commodity, checkboxFunction);
 
     var div = document.getElementById(divId);
     clearElement(div);
     div.appendChild(tree);
+
+    updateChart(null, electricityChart);
 }
 
 function buildTree(baseData, baseElement, commodity, checkboxFunction) {
@@ -256,41 +258,49 @@ function updateChart(callingElement, chart) {
     updateDataGrid(newSeries, newCategories);
   }
   
-  function updateDataGrid(newSeries, newCategories) {
-      var datagridDiv = document.getElementById('electricityDatagrid');
-      clearElement(datagridDiv);
-  
-      var datagridDivWidth = datagridDiv.clientWidth;
-      var monthWidth = Math.floor(datagridDivWidth/5);
-      var dataWidth = Math.floor((datagridDivWidth - monthWidth)/3)-1;
-  
-      var html = 
-                  '<table>'+
-                      '<tr>'+
-                          '<th style="width: '+monthWidth+'px; border-right: solid black 1px;">Month</th>'+
-                          '<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecasted Commission</th>'+
-                          '<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Commission</th>'+
-                          '<th style="width: '+dataWidth+'px;">Difference</th>'+
-                      '</tr>';
-  
-      var categoryLength = newCategories.length;
-      for(var i = 0; i < categoryLength; i++) {
-          var htmlRow = '<tr>'+
-                          '<td style="border-right: solid black 1px;">'+newCategories[i]+'</td>'+
-                          '<td style="border-right: solid black 1px;">'+newSeries[0]["data"][i]+'</td>'+
-                          '<td style="border-right: solid black 1px;">'+newSeries[1]["data"][i]+'</td>'+
-                          '<td>'+newSeries[2]["data"][i]+'</td>'+
-                        '</tr>';
-  
-          html += htmlRow;
+function updateDataGrid(newSeries, newCategories) {
+    var datagridDiv = document.getElementById('electricityDatagrid');
+    var datagridDivWidth = datagridDiv.clientWidth;
+    var monthWidth = Math.floor(datagridDivWidth/10);
+    var dataWidth = Math.floor((datagridDivWidth - monthWidth)/3.12)-1;
+
+    clearElement(datagridDiv);
+
+    var categoryLength = newCategories.length;
+    var displayData = [];
+
+    for(var i = 0; i < categoryLength; i++) {
+      var seriesLatestforecastcommission = 0;
+      var seriesInvoicedcommission = 0;
+      var seriesDifference = 0;
+
+      if(newSeries[0]["data"][i]) {
+        seriesLatestforecastcommission = newSeries[0]["data"][i].toLocaleString();
+        seriesInvoicedcommission = newSeries[1]["data"][i].toLocaleString();
+        seriesDifference = newSeries[2]["data"][i].toLocaleString();
       }
-      
-      html += '</table>';
-  
-      datagridDiv.innerHTML = html;
+
+      var row = {
+        month: newCategories[i], 
+        latestforecastcommission:seriesLatestforecastcommission,
+        invoicedcommission:seriesInvoicedcommission,
+        difference:seriesDifference
+      }
+      displayData.push(row);
+    }
+
+	jexcel(document.getElementById('electricityDatagrid'), {
+		data: displayData,
+		columns: [
+			{type:'text', width:monthWidth, name:'month', title:'Month'},
+			{type:'text', width:dataWidth, name:'latestforecastcommission', title:'Latest Forecast Commission'},
+			{type:'text', width:dataWidth, name:'invoicedcommission', title:'Invoiced Commission'},
+			{type:'text', width:dataWidth, name:'difference', title:'Difference'}
+		 ]
+	  }); 
   }
   
-  function createBlankChart(chartId, noDataText) {
+function createBlankChart(chartId, noDataText) {
       var options = {
           chart: {
               height: '100%',
@@ -660,82 +670,6 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
-}
-
-function addArrowOnClickEvents() {
-	var arrows = document.getElementsByClassName('fa-angle-double-down');
-	var arrowsLength = arrows.length;
-	for(var i=0; i< arrowsLength; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-angle-double-down', 'fa-angle-double-up')
-			updateClassOnClick(this.id.replace('Arrow', 'SubMenu'), 'listitem-hidden', '')
-		});
-	}
-
-	arrows = document.getElementsByClassName('fa-angle-double-left');
-	arrowsLength = arrows.length;
-	for(var i=0; i< arrowsLength; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-angle-double-left', 'fa-angle-double-right')
-		});
-	}
-
-	var arrowHeaders = document.getElementsByClassName('arrow-header');
-	var arrowHeadersLength = arrowHeaders.length;
-	for(var i=0; i< arrowHeadersLength; i++){
-		arrowHeaders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id.concat('Arrow'), 'fa-angle-double-down', 'fa-angle-double-up')
-			updateClassOnClick(this.id.concat('SubMenu'), 'listitem-hidden', '')
-		});
-	}
 }
 
 function formatDate(dateToBeFormatted, format) {
