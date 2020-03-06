@@ -36,5 +36,22 @@ var user = [
             {"Can Log In": "Yes"},
             {"Can Amend User Details": "Yes"}
         ]
+    },
+    {
+        "GUID" : "2",
+        "Attributes" : 
+        [
+            {"UserName" : "Add New User"},
+            {"Address Line 1" : ""},
+            {"Address Line 2" : ""},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : ""},
+            {"Contact Name" : ""},
+            {"Contact Telephone Number" : ""},
+            {"Email" : ""}
+        ],
+        "Roles":[
+        ]
     }
 ]

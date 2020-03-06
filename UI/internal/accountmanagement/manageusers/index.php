@@ -21,8 +21,7 @@
 				<div class="tree-column">
 					<div id="treeDiv" class="tree-div">
 					</div>
-					<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='addUser()'>Add New User</button>
-					<button style="margin-bottom: 5px; width: 100%;" onclick='deleteUsers()'>Delete Selected Users</button>
+					<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='deleteUsers()'>Delete Selected Users</button>
 					<button style="width: 100%;" onclick='reinstateUsers()'>Reinstate Deleted Users</button>
 				</div>
 			</div>
