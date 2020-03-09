@@ -39,6 +39,7 @@
 </body>
 
 <script src="billvalidation.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="billvalidation.json"></script>
 <script type="text/javascript"> 
 	loadPage();

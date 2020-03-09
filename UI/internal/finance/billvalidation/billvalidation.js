@@ -16,54 +16,6 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
 }
 
 function clearElement(element) {
@@ -327,40 +279,104 @@ function openTab(evt, tabName, guid) {
 
 function createCardButton(checkbox){
 	var cardDiv = document.getElementById('cardDiv');
-	var tabDiv = document.getElementById('tabDiv');
-	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	var tabDiv = document.getElementById('tabDiv');	
 
 	if(checkbox.checked){
 		cardDiv.setAttribute('style', '');
+	}
+
+	switch(checkbox.getAttribute('branch')) {
+		case 'Period':
+			createPeriodButtons(checkbox, tabDiv, cardDiv);
+			break;
+		case 'Site':
+			createSiteButtons(checkbox, tabDiv, cardDiv);
+			break;
+		case 'Meter':
+			createMeterButtons(checkbox, tabDiv, cardDiv);
+			break;
+		default:
+			createBillButton(checkbox, tabDiv, cardDiv);
+			break;
+	}	
+
+	if(tabDiv.children.length == 0) {
+		cardDiv.setAttribute('style', 'display: none;');
+	}
+	else {
+		updateTabDiv();
+	}
+}
+
+function createPeriodButtons(checkbox, tabDiv, cardDiv) {
+	var listdiv = document.getElementById(checkbox.id.replace('checkbox', 'List'));
+	var inputs = listdiv.getElementsByTagName('input');
+	var inputLength = inputs.length;
+  
+    for(var i = 0; i < inputLength; i++) {
+	  if(inputs[i].type.toLowerCase() == 'checkbox'
+	  && inputs[i].getAttribute('branch') == 'Site') {
+		inputs[i].checked = !inputs[i].checked;
+		createSiteButtons(inputs[i], tabDiv, cardDiv)
+      }
+    }
+}
+
+function createSiteButtons(checkbox, tabDiv, cardDiv) {
+	var listdiv = document.getElementById(checkbox.id.replace('checkbox', 'List'));
+	var inputs = listdiv.getElementsByTagName('input');
+	var inputLength = inputs.length;
+  
+    for(var i = 0; i < inputLength; i++) {
+	  if(inputs[i].type.toLowerCase() == 'checkbox'
+	  && inputs[i].getAttribute('branch') == 'Meter') {
+		inputs[i].checked = !inputs[i].checked;
+		createMeterButtons(inputs[i], tabDiv, cardDiv)
+      }
+    }
+}
+
+function createMeterButtons(checkbox, tabDiv, cardDiv) {
+	var listdiv = document.getElementById(checkbox.id.replace('checkbox', 'List'));
+	var inputs = listdiv.getElementsByTagName('input');
+	var inputLength = inputs.length;
+  
+    for(var i = 0; i < inputLength; i++) {
+      if(inputs[i].type.toLowerCase() == 'checkbox') {
+		inputs[i].checked = !inputs[i].checked;
+		createBillButton(inputs[i], tabDiv, cardDiv)
+      }
+    }
+}
+
+function createBillButton(checkbox, tabDiv, cardDiv) {
+	if(checkbox.checked) {
+		var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
 		var button = document.createElement('button');
 		button.setAttribute('class', 'tablinks');
 		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
-
+	
 		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
 		var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
 		var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
-
+	
 		button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
 		button.id = span.id.replace('span', 'button');
 		tabDiv.appendChild(button);
-	
-		updateTabDiv();
 	}
 	else {
-		tabDiv.removeChild(document.getElementById(span.id.replace('span', 'button')));
+		tabDiv.removeChild(document.getElementById(checkbox.id.replace('checkbox', 'button')));
 
-		var divToRemove = document.getElementById(span.id.replace('span', 'div'));
+		var divToRemove = document.getElementById(checkbox.id.replace('checkbox', 'div'));
 		if(divToRemove) {
-			cardDiv.removeChild();
+			if(cardDiv.children.length == 0) {
+				cardDiv.setAttribute('style', 'display: none;');
+			}
+			else {
+				cardDiv.removeChild();
+			}
 		}
-
-		if(tabDiv.children.length == 0) {
-			cardDiv.setAttribute('style', 'display: none;');
-		}
-		else {
-            updateTabDiv();
-		}
-	}	
+	}
 }
 
 function updateTabDiv() {
@@ -417,7 +433,65 @@ function createCard(guid, divToAppendTo) {
 		}
 	}
 
+	if(billEntity.Status == "Valid")  {
+		buildBillChart(billEntity, divToAppendTo);
+	}
 	buildBillDataTable(billEntity, divToAppendTo);
+}
+
+function buildBillChart(bill, divToAppendTo) {
+	var chartDiv = document.createElement('div');
+	chartDiv.id = "chart".concat(bill.GUID);
+	chartDiv.setAttribute('class', 'chart');
+	divToAppendTo.appendChild(chartDiv);
+
+	var breakDiv = document.createElement('br');
+	divToAppendTo.appendChild(breakDiv);
+
+	// var dataSeries = [];
+	// dataSeries.push({name: "Expected Volume", data: getAttribute(bill.Details, "Expected Volume")});
+	// dataSeries.push({name: "Actual Volume", data: getAttribute(bill.Details, "Actual Volume")});
+	// dataSeries.push({name: "Expected Spend", data: getAttribute(bill.Details, "Expected Spend")});
+	// dataSeries.push({name: "Actual Spend", data: getAttribute(bill.Details, "Actual Spend")});
+
+	// var categories = ["Expected Volume", "Actual Volume", "Expected Spend", "Actual Spend"];
+
+	var options = {
+		series: [{
+		data: [getAttribute(bill.Details, "Expected Volume"), getAttribute(bill.Details, "Actual Volume"), getAttribute(bill.Details, "Expected Spend"), getAttribute(bill.Details, "Actual Spend")]
+	  }],
+		chart: {
+		height: 350,
+		type: 'bar',
+	  },
+	  plotOptions: {
+		bar: {
+		  columnWidth: '45%',
+		  distributed: true
+		}
+	  },
+	  dataLabels: {
+		enabled: false
+	  },
+	  legend: {
+		show: false
+	  },
+	  xaxis: {
+		categories: ["Expected Volume", "Actual Volume", "Expected Spend", "Actual Spend"],
+		labels: {
+		  style: {
+			fontSize: '12px'
+		  }
+		}
+	  }
+	  };
+	
+	  renderChart('#'.concat(chartDiv.id), options);
+}
+
+function renderChart(chartId, options) {
+	var chart = new ApexCharts(document.querySelector(chartId), options);
+	chart.render();
 }
 
 function buildBillDataTable(entity, divToAppendTo){

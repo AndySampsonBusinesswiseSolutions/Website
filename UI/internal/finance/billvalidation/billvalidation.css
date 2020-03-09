@@ -24,7 +24,7 @@
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
 }
-.tree-div {
+.tree-div, .chart {
     border: solid black 1px;
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
