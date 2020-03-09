@@ -14,7 +14,7 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+		<!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
 		<div class="tree-column">
 			<div id="siteDiv" class="tree-div roundborder">
 			</div>
@@ -40,7 +40,7 @@
 	</div>
 
 	<div class="section-header">
-		<span class="sidenav-icon" onclick="openNav()">&#9776;</span>
+		<!-- <span class="sidenav-icon" onclick="openNav()">&#9776;</span> -->
 		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 	</div>
 

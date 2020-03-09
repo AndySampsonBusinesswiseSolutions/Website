@@ -2,6 +2,20 @@ function loadPage(){
   createTree(data, "siteDiv", "updateDashboard", "Site");
   createTree(dashboard, "treeDiv", "addDashboardItem", "Dashboard");
   addExpanderOnClickEvents(); 
+
+  document.onmousemove=function(e) {
+    var mousecoords = getMousePos(e);
+    if(mousecoords.x <= 15) {
+      openNav();
+    }  
+    else if(mousecoords.x >= 400) {
+      closeNav();
+    }  
+};
+}
+
+function getMousePos(e) {
+  return {x:e.clientX,y:e.clientY};
 }
 
 function openNav() {
