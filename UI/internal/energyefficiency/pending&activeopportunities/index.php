@@ -25,13 +25,25 @@
 						<span style="padding-left: 5px;">Select Project Status</span>
 						<ul class="format-listitem">
 							<li>
-								<input type="radio" name="group2" value="All" id="allStatusradio" checked guid="0" onclick='buildDataGrid(); buildGanttChart()'><span id="allStatusspan" style="padding-left: 1px;">All</span>
+								<input type="radio" name="group2" value="All" id="allStatusradio" checked onclick='updateGanttChartAndDataGrid()'><span id="allStatusspan" style="padding-left: 1px;">All</span>
 							</li>
 							<li>
-								<input type="radio" name="group2" value="Pending" id="pendingStatusradio" guid="0" onclick='buildDataGrid(); buildGanttChart()'><span id="pendingStatusspan" style="padding-left: 1px;">Pending</span>
+								<input type="radio" name="group2" value="Pending" id="pendingStatusradio" onclick='updateGanttChartAndDataGrid()'><span id="pendingStatusspan" style="padding-left: 1px;">Pending</span>
 							</li>
 							<li>
-								<input type="radio" name="group2" value="Active" id="activeStatusradio" guid="0" onclick='buildDataGrid(); buildGanttChart()'><span id="activeStatusspan" style="padding-left: 1px;">Active</span>
+								<input type="radio" name="group2" value="Active" id="activeStatusradio" onclick='updateGanttChartAndDataGrid()'><span id="activeStatusspan" style="padding-left: 1px;">Active</span>
+							</li>
+						</ul>
+					</div>
+					<br>
+					<div class="datagrid" style="background-color: #e9eaee;">
+						<span style="padding-left: 5px;">Select Tree Display Order</span>
+						<ul class="format-listitem">
+							<li>
+								<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='updateGanttChartAndDataGrid()'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
+							</li>
+							<li>
+								<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='updateGanttChartAndDataGrid()'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
 							</li>
 						</ul>
 					</div>

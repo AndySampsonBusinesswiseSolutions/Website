@@ -1,6 +1,6 @@
 function pageLoad() {
     var data = activeopportunity;
-	createTree(data, "treeDiv", "");
+	createTree(data, "treeDiv", "updateGanttChartAndDataGrid()");
     addExpanderOnClickEvents();
     buildDataGrid();
     buildGanttChart();
@@ -226,19 +226,90 @@ function addExpanderOnClickEventsByElement(element) {
 	});
 }
 
-function buildGanttChart() {
+function updateGanttChartAndDataGrid() {
+    buildGanttChart();
+    buildDataGrid();
+}
+
+function filerGanttData () {
+    var projectInputs = $("input[type='checkbox'][branch='ProjectName']:checked");
+    var siteInputs = $("input[type='checkbox'][branch='Site']:checked");
+    var meterInputs = $("input[type='checkbox'][branch='Meter']:checked");
+    
     var status = $("input[type='radio'][name='group2']:checked").val();
     var ganttDataLength = ganttData.length;
     var newGanttData = [];
+    var idsToPush = [];
+
+    if(status == "All" 
+        && projectInputs.length == 0
+        && siteInputs.length == 0
+        && meterInputs.length == 0) {
+        return ganttData;
+    }
 
     for(var i = 0; i < ganttDataLength; i++) {
         var project = ganttData[i];
 
         if(status == 'All' || project.status == status) {
-            newGanttData.push(project);
+            if(projectInputs.length == 0
+                && siteInputs.length == 0
+                && meterInputs.length == 0) {
+                pushProjectId(idsToPush, project.id);
+            }
+            else {
+                for(var j = 0; j < projectInputs.length; j++) {
+                    var projectSpan = document.getElementById(projectInputs[j].id.replace('checkbox', 'span'));
+    
+                    if(projectSpan.innerText == project.name) {
+                        pushProjectId(idsToPush, project.id);
+                    }
+                }
+
+                for(var j = 0; j < siteInputs.length; j++) {
+                    var siteSpan = document.getElementById(siteInputs[j].id.replace('checkbox', 'span'));
+
+                    for(var k = 0; k < project.sites.length; k++) {
+                        if(project.sites[k].name == siteSpan.innerText) {
+                            pushProjectId(idsToPush, project.id);
+                        }
+                    }
+                }
+
+                for(var j = 0; j < meterInputs.length; j++) {
+                    var meterSpan = document.getElementById(meterInputs[j].id.replace('checkbox', 'span'));
+
+                    for(var k = 0; k < project.sites.length; k++) {
+                        for(var l = 0; l < project.sites[k].meters.length; l++) {
+                            if(project.sites[k].meters[l].identifier == meterSpan.innerText) {
+                                pushProjectId(idsToPush, project.id);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
+    idsToPush.forEach(element => {
+        for(var i = 0; i < ganttDataLength; i++) {
+            if(ganttData[i].id == element) {
+                newGanttData.push(ganttData[i]);
+            }
+        }
+    });
+
+    return newGanttData;
+}
+
+function pushProjectId(idsToPush, id) {
+    if(!idsToPush.includes(id)) {
+        idsToPush.push(id);
+    }
+}
+
+function buildGanttChart() {
+    var newGanttData = filerGanttData();
     var ganttChart = document.getElementById("ganttChart");
     clearElement(ganttChart);
 
@@ -253,23 +324,18 @@ function buildGanttChart() {
 }
 
 function buildDataGrid() {
-    var status = $("input[type='radio'][name='group2']:checked").val();
+    var newGanttData = filerGanttData();
     var spreadsheet = document.getElementById('spreadsheet');
     clearElement(spreadsheet);
 
     var columnsToMerge = ["A", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
     var displayData = [];
     var cellsToMerge = [];
-    var ganttDataLength = ganttData.length;
+    var ganttDataLength = newGanttData.length;
     var startRow = 1;
     var endRow = 1;
     for(var i = 0; i < ganttDataLength; i++) {
-        var project = ganttData[i];
-
-        if(status != 'All' && project.status != status) {
-            continue;
-        }
-
+        var project = newGanttData[i];
         var siteLength = project.sites.length;
         var mergeProject = siteLength > 1;
         var rowCount = 0;

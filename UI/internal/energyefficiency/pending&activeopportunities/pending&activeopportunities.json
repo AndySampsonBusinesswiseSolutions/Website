@@ -35,6 +35,15 @@ var activeopportunity = [
                         "Identifier": 1234567890126
                     }
                 ]
+            },
+			{
+                "SiteName": "Site A",
+                "Meters":[
+                    {
+                        "GUID": 22,
+                        "Identifier": 1234567890120
+					},
+                ]
             }
         ]
     }
