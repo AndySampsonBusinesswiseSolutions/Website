@@ -1,3 +1,6 @@
+@import "https://bossanova.uk/jexcel/v3/jexcel.css";
+@import "https://bossanova.uk/jsuites/v2/jsuites.css";
+
 .section-header {
     background: #b62a51;
     width: 100%;
@@ -29,14 +32,16 @@ html>body tbody.scrollContent3 {
 	overflow: scroll;
 }
 .tree-div {
+    max-height: 650px;
+    min-height: 300px;
+}
+.tree-div, .datagrid {
     border: solid black 1px;
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px; 
     border-bottom-right-radius: 5px;
     background-color: #e9eaee;
-    max-height: 650px;
-    min-height: 300px;
 }
 .scrolling-wrapper {
     overflow-x: auto;
@@ -49,6 +54,11 @@ html>body tbody.scrollContent3 {
 .format-listitem {
     list-style-type: none; 
     padding-left: 15px;
+}
+.show-pointer {
+    padding-left: 5px; 
+    padding-right: 5px; 
+    cursor: pointer;
 }
 
 
@@ -107,7 +117,7 @@ div.ganttview-hzheader-day {
 
 div.ganttview-vtheader {
 	margin-top: 41px;
-	width: 240px;
+	width: 280px;
 	overflow: hidden;
 	background-color: #fff;
 }
@@ -118,9 +128,10 @@ div.ganttview-vtheader-item {
 }
 
 div.ganttview-vtheader-item-name {
-	width: 100px;
+	width: 150px;
 	padding-left: 5px;
 	border-top: 1px solid #d0d0d0;
+	border-bottom: 1px solid #d0d0d0;
 	line-height: 16px;
 }
 
@@ -128,6 +139,8 @@ div.ganttview-vtheader-series-name {
 	width: 130px;
 	height: 31px;
 	border-top: 1px solid #d0d0d0;
+	border-left: 1px solid #d0d0d0;
+	border-bottom: 1px solid #d0d0d0;
 	line-height: 16px;
 	padding-left: 5px;
 }

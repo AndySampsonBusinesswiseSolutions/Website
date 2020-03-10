@@ -2,11 +2,14 @@ function pageLoad() {
     var data = activeopportunity;
 	createTree(data, "treeDiv", "");
     addExpanderOnClickEvents();
+    buildDataGrid();
     
     $(function () {
+        var tableContainer = document.getElementById('spreadsheet');
+
         $("#ganttChart").ganttView({ 
             data: ganttData,
-            slideWidth: 1300
+            slideWidth: tableContainer.clientWidth
         });
     });
 }
@@ -229,54 +232,44 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
 }
 
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
+function buildDataGrid() {
+    jexcel(document.getElementById('spreadsheet'), {
+        data:[
+            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site X',meter:'1234567890123',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
+            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site Y',meter:'1234567890124',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
+            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site Z',meter:'1234567890125',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
+            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site Z',meter:'1234567890126',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
+        ],
+        columns: [
+            {type:'text', width:'150px', name:'projectName', title:'Project Name'},
+            {type:'text', width:'115px', name:'site', title:'Site'},
+            {type:'text', width:'130px', name:'meter', title:'Meter'},
+            {type:'text', width:'115px', name:'engineer', title:'Engineer'},
+            {type:'text', width:'100px', name:'projectStatus', title:'Project<br>Status'},
+            {type:'text', width:'150px', name:'estimatedStartDate', title:'Estimated<br>Start Date'},
+            {type:'text', width:'115px', name:'estimatedFinishDate', title:'Estimated<br>End Date'},
+            {type:'text', width:'115px', name:'estimatedCost', title:'Estimated<br>Cost'},
+            {type:'text', width:'125px', name:'estimatedkWhSavings', title:'Estimated kWh<br>Savings (pa)'},
+            {type:'text', width:'115px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)'},
+            {type:'text', width:'115px', name:'totalROIMonths', title:'Total<br>ROI Months'},
+            {type:'text', width:'115px', name:'roiMonthsRemaining', title:'ROI Months<br>Remaining'},
+         ],
+         mergeCells : {
+             A1: [1, 4],
+             B3: [1, 2],
+             D1: [1, 4],
+             E1: [1, 4],
+             F1: [1, 4],
+             G1: [1, 4],
+             H1: [1, 4],
+             I1: [1, 4],
+             J1: [1, 4],
+             K1: [1, 4],
+             L1: [1, 4],
+         }
+    });
 }
 
 (function (jQuery) {
@@ -301,7 +294,7 @@ function expandAdditionalLists(element) {
             showWeekends: true,
             cellWidth: 20,
             cellHeight: 31,
-            slideWidth: 400,
+            slideWidth: 250,
             vHeaderWidth: 100,
             behavior: {
             	clickable: true//,
@@ -320,7 +313,7 @@ function expandAdditionalLists(element) {
 
 		function build() {
 			
-			var minDays = Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
+			var minDays = 30;// Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
 			var startEnd = DateUtils.getBoundaryDatesFromData(opts.data, minDays);
 			opts.start = startEnd[0];
 			opts.end = startEnd[1];
@@ -360,7 +353,7 @@ function expandAdditionalLists(element) {
 
             var slideDiv = jQuery("<div>", {
                 "class": "ganttview-slide-container",
-                "css": { "width": opts.slideWidth + "px" }
+                "css": { "width": (opts.slideWidth - 280) + "px" }
             });
 			
             dates = getDates(opts.start, opts.end);
@@ -396,11 +389,31 @@ function expandAdditionalLists(element) {
         function addVtHeader(div, data, cellHeight) {
             var headerDiv = jQuery("<div>", { "class": "ganttview-vtheader" });
             for (var i = 0; i < data.length; i++) {
+                var vtHeaderDiv = jQuery("<div>");
+                vtHeaderDiv.append(data[i].name);
+                vtHeaderDiv.append(jQuery("<br>"));
+
+                for(var j = 0; j < data[i].sites.length; j++) {
+                    var siteDiv = jQuery("<div>", { "css": { "padding-left" : "5px"}});
+                    siteDiv.append(data[i].sites[j].name);
+                    siteDiv.append(jQuery("<br>"));
+
+                    for(var k = 0; k < data[i].sites[j].meters.length; k++) {
+                        var meterDiv = jQuery("<div>", { "css": { "padding-left" : "10px"}});
+                        meterDiv.append(data[i].sites[j].meters[k].identifier);
+                        meterDiv.append(jQuery("<br>"));
+
+                        siteDiv.append(meterDiv);
+                    }
+
+                    vtHeaderDiv.append(siteDiv);
+                }
+
                 var itemDiv = jQuery("<div>", { "class": "ganttview-vtheader-item" });
                 itemDiv.append(jQuery("<div>", {
                     "class": "ganttview-vtheader-item-name",
                     "css": { "height": (data[i].series.length * cellHeight) + "px" }
-                }).append(data[i].name));
+                }).append(vtHeaderDiv));
                 var seriesDiv = jQuery("<div>", { "class": "ganttview-vtheader-series" });
                 for (var j = 0; j < data[i].series.length; j++) {
                     seriesDiv.append(jQuery("<div>", { "class": "ganttview-vtheader-series-name" })
@@ -424,7 +437,7 @@ function expandAdditionalLists(element) {
 					monthsDiv.append(jQuery("<div>", {
 						"class": "ganttview-hzheader-month",
 						"css": { "width": (w - 1) + "px" }
-					}).append(monthNames[m] + "/" + y));
+					}).append(monthNames[m] + " " + y));
 					for (var d in dates[y][m]) {
 						daysDiv.append(jQuery("<div>", { "class": "ganttview-hzheader-day" })
 							.append(dates[y][m][d].getDate()));
