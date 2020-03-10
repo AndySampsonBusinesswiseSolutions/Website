@@ -167,6 +167,10 @@ div.ganttview-grid-row-cell.ganttview-weekend {
 	background-color: #fafafa;
 }
 
+div.ganttview-grid-row-cell.ganttview-today {
+	background-color: lightcoral;
+}
+
 
 /* Blocks */
 

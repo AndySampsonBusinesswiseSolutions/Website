@@ -25,13 +25,13 @@
 						<span style="padding-left: 5px;">Select Project Status</span>
 						<ul class="format-listitem">
 							<li>
-								<input type="radio" name="group2" id="allStatusradio" checked guid="0" onclick=''><span id="allStatusspan" style="padding-left: 1px;">All</span>
+								<input type="radio" name="group2" value="All" id="allStatusradio" checked guid="0" onclick='buildDataGrid(); buildGanttChart()'><span id="allStatusspan" style="padding-left: 1px;">All</span>
 							</li>
 							<li>
-								<input type="radio" name="group2" id="pendingStatusradio" guid="0" onclick=''><span id="pendingStatusspan" style="padding-left: 1px;">Pending</span>
+								<input type="radio" name="group2" value="Pending" id="pendingStatusradio" guid="0" onclick='buildDataGrid(); buildGanttChart()'><span id="pendingStatusspan" style="padding-left: 1px;">Pending</span>
 							</li>
 							<li>
-								<input type="radio" name="group2" id="activeStatusradio" guid="0" onclick=''><span id="activeStatusspan" style="padding-left: 1px;">Active</span>
+								<input type="radio" name="group2" value="Active" id="activeStatusradio" guid="0" onclick='buildDataGrid(); buildGanttChart()'><span id="activeStatusspan" style="padding-left: 1px;">Active</span>
 							</li>
 						</ul>
 					</div>

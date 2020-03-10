@@ -3,15 +3,7 @@ function pageLoad() {
 	createTree(data, "treeDiv", "");
     addExpanderOnClickEvents();
     buildDataGrid();
-    
-    $(function () {
-        var tableContainer = document.getElementById('spreadsheet');
-
-        $("#ganttChart").ganttView({ 
-            data: ganttData,
-            slideWidth: tableContainer.clientWidth
-        });
-    });
+    buildGanttChart();
 }
 
 var branchCount = 0;
@@ -234,14 +226,99 @@ function addExpanderOnClickEventsByElement(element) {
 	});
 }
 
+function buildGanttChart() {
+    var status = $("input[type='radio'][name='group2']:checked").val();
+    var ganttDataLength = ganttData.length;
+    var newGanttData = [];
+
+    for(var i = 0; i < ganttDataLength; i++) {
+        var project = ganttData[i];
+
+        if(status == 'All' || project.status == status) {
+            newGanttData.push(project);
+        }
+    }
+
+    var ganttChart = document.getElementById("ganttChart");
+    clearElement(ganttChart);
+
+    $(function () {
+        var tableContainer = document.getElementById('spreadsheet');
+
+        $("#ganttChart").ganttView({ 
+            data: newGanttData,
+            slideWidth: tableContainer.clientWidth
+        });
+    });
+}
+
 function buildDataGrid() {
-    jexcel(document.getElementById('spreadsheet'), {
-        data:[
-            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site X',meter:'1234567890123',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
-            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site Y',meter:'1234567890124',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
-            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site Z',meter:'1234567890125',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
-            {projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',site:'Site Z',meter:'1234567890126',engineer:'En Gineer',projectStatus:'Pending',estimatedStartDate:'01/04/2020',estimatedFinishDate:'09/05/2020',estimatedCost:'£100,000',estimatedkWhSavings:'10,000',estimatedCostSavings:'£15,000',totalROIMonths:'7',roiMonthsRemaining:'7'},
-        ],
+    var status = $("input[type='radio'][name='group2']:checked").val();
+    var spreadsheet = document.getElementById('spreadsheet');
+    clearElement(spreadsheet);
+
+    var columnsToMerge = ["A", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+    var displayData = [];
+    var cellsToMerge = [];
+    var ganttDataLength = ganttData.length;
+    var startRow = 1;
+    var endRow = 1;
+    for(var i = 0; i < ganttDataLength; i++) {
+        var project = ganttData[i];
+
+        if(status != 'All' && project.status != status) {
+            continue;
+        }
+
+        var siteLength = project.sites.length;
+        var mergeProject = siteLength > 1;
+        var rowCount = 0;
+
+        for(var j = 0; j < siteLength; j++) {
+            var site = project.sites[j];
+            var meterLength = site.meters.length;
+            var mergeSite = meterLength > 1;
+
+            if(!mergeProject) {
+                mergeProject = mergeSite;
+            }
+
+            if(mergeSite) {
+                cellsToMerge.push({cell: "B" + endRow, rowSpan: meterLength});
+            }
+
+            for(var k = 0; k < meterLength; k++) {
+                var meter = site.meters[k];
+                displayData.push({
+                    projectName:project.name + ' <i class="fas fa-search show-pointer"></i>',
+                    site:site.name,
+                    meter:meter.identifier,
+                    engineer:'En Gineer',
+                    projectStatus:project.status,
+                    estimatedStartDate:'01/04/2020',
+                    estimatedFinishDate:'09/05/2020',
+                    estimatedCost:'£100,000',
+                    estimatedkWhSavings:'10,000',
+                    estimatedCostSavings:'£15,000',
+                    totalROIMonths:'7',
+                    roiMonthsRemaining:'7'},);
+                endRow++;
+                rowCount++;
+            }
+        }
+
+        if(mergeProject) {
+            for(var j = 0; j < columnsToMerge.length; j++)
+            {
+                cellsToMerge.push({cell: columnsToMerge[j] + startRow, rowSpan: rowCount});
+            }
+        }
+
+        startRow = endRow + 1;
+    }
+
+    var table = jexcel(spreadsheet, {
+        data: displayData,
         columns: [
             {type:'text', width:'150px', name:'projectName', title:'Project Name'},
             {type:'text', width:'115px', name:'site', title:'Site'},
@@ -255,20 +332,11 @@ function buildDataGrid() {
             {type:'text', width:'115px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)'},
             {type:'text', width:'115px', name:'totalROIMonths', title:'Total<br>ROI Months'},
             {type:'text', width:'115px', name:'roiMonthsRemaining', title:'ROI Months<br>Remaining'},
-         ],
-         mergeCells : {
-             A1: [1, 4],
-             B3: [1, 2],
-             D1: [1, 4],
-             E1: [1, 4],
-             F1: [1, 4],
-             G1: [1, 4],
-             H1: [1, 4],
-             I1: [1, 4],
-             J1: [1, 4],
-             K1: [1, 4],
-             L1: [1, 4],
-         }
+         ]
+    });
+
+    cellsToMerge.forEach(element => {
+        table.setMerge(element.cell, 1, element.rowSpan);
     });
 }
 
@@ -459,6 +527,9 @@ function buildDataGrid() {
 						var cellDiv = jQuery("<div>", { "class": "ganttview-grid-row-cell" });
 						if (DateUtils.isWeekend(dates[y][m][d]) && showWeekends) { 
 							cellDiv.addClass("ganttview-weekend"); 
+                        }
+                        if (DateUtils.isToday(dates[y][m][d])) { 
+							cellDiv.addClass("ganttview-today"); 
 						}
 						rowDiv.append(cellDiv);
 					}
@@ -505,7 +576,7 @@ function buildDataGrid() {
                     if (data[i].series[j].color) {
                         block.css("background-color", data[i].series[j].color);
                     }
-                    block.append(jQuery("<div>", { "class": "ganttview-block-text" }).text(size));
+                    block.append(jQuery("<div>", { "class": "ganttview-block-text" }));
                     jQuery(rows[rowIdx]).append(block);
                     rowIdx = rowIdx + 1;
                 }
@@ -627,6 +698,13 @@ function buildDataGrid() {
         
         isWeekend: function (date) {
             return date.getDay() % 6 == 0;
+        },
+
+        isToday: function (date) {
+            const today = new Date()
+            return date.getDate() == today.getDate() &&
+                date.getMonth() == today.getMonth() &&
+                date.getFullYear() == today.getFullYear();
         },
 
 		getBoundaryDatesFromData: function (data, minDays) {
