@@ -197,37 +197,11 @@
 		</div>
 		<div class="divcolumn middle"></div>
 		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
-			<!-- <div style="text-align: center; border-bottom: solid black 1px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Ranking</span>
 			</div>
-			<div class="row" style="text-align: center;">
-				<div class="divcolumn first"></div>
-				<div class="divcolumn left">
-					<div>
-						<span style="border-bottom: solid black 1px;">Site</span>
-					</div><br>
-					<span>Site X</span><br>
-					<span>Site Y</span><br>
-					<span>Site Z</span><br>
-				</div>
-				<div class="divcolumn middle">
-					<div>
-						<span style="border-bottom: solid black 1px;">Rank</span>
-					</div><br>
-					<span>1</span><br>
-					<span>2</span><br>
-					<span>3</span><br>
-				</div>
-				<div class="divcolumn right">
-					<div>
-						<span style="border-bottom: solid black 1px;">Notes</span>
-					</div><br>
-					<i class="fas fa-search show-pointer"></i><br>
-					<i class="fas fa-search show-pointer"></i><br>
-					<i class="fas fa-search show-pointer"></i><br>
-				</div>
-				<div class="last"></div>
-			</div>			 -->
+			<br>
+			<div id="siteRankingSpreadsheet"></div>		
 		</div>
 		<div class="divcolumn last"></div>
 	</div>
