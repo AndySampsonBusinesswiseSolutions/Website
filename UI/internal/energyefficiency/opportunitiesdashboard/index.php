@@ -16,33 +16,37 @@
 	<br>
 	<div class="row">
 		<div class="divcolumn first"></div>
-		<div class="roundborder divcolumn left" style="background-color: #e9eaee;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Opportunity Summary</span>
-				<br>
-				<div class="divcolumn first"></div>
-				<div class="divcolumn left">
-					<span>Number of Active Opportunities</span><br>
-					<span>Number of Pending Opportunities</span><br>
-					<span>Number of Finished Opportunities</span><br>
-					<br>
-					<span>Total kWh Savings of Finished Opportunities</span><br>
-					<span>Total £ Savings of Finished Opportunities</span><br>
-					<span>kWh Savings of Finished Opportunities over past 12 months</span><br>
-					<span>£ Savings of Finished Opportunities over past 12 months</span><br>
+		<div class="roundborder divcolumn left" style="background-color: #e9eaee; text-align: center; overflow: auto">
+			<div>
+				<div class="roundborder dashboard-item-small">
+					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+					<span>Pending Opportunities</span><br>
+					<span style="font-size: 15px;">Count: 10</span><br>
+					<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
+					<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
 				</div>
-				<div class="divcolumn middle"></div>
-				<div class="divcolumn right">
-					<span>2</span><br>
-					<span>10</span><br>
-					<span>5</span><br>
-					<br>
-					<span>300,000</span><br>
-					<span>£10,000</span><br>
-					<span>300,000</span><br>
-					<span>£10,000</span><br>
+				<div class="roundborder dashboard-item-small">
+					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+					<span>Active Opportunities</span><br>
+					<span style="font-size: 15px;">Count: 2</span><br>
+					<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
+					<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
 				</div>
-				<div class="divcolumn last"></div>
+				<div class="roundborder dashboard-item-small">
+					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+					<span>Finished Opportunities</span><br>
+					<span style="font-size: 15px;">Count: 5</span><br>
+					<span style="font-size: 11px;">Total kWh Savings: 10,000</span><br>
+					<span style="font-size: 11px;">Total £ Savings: £10,000</span><br>
+					<span style="font-size: 11px;">kWh Savings over past 12 months: 10,000</span><br>
+					<span style="font-size: 11px;">£ Savings over past 12 months: £10,000</span>
+				</div>
+				<div class="roundborder dashboard-item-small">
+					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+					<span>Sub Meters</span><br><br><br>
+					<span style="font-size: 15px;">Installed: 1</span><br>
+					<span style="font-size: 15px;">To Be Installed: 5</span>
+				</div>
 			</div>
 		</div>
 		<div class="divcolumn middle"></div>
@@ -186,7 +190,6 @@
 				</div>
 				<div class="divcolumn last"></div>
 			</div>
-			<br>
 			<div>
 				<div class="first"></div>
 				<div>

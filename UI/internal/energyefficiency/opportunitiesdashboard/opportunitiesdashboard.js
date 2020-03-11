@@ -27,10 +27,10 @@ function loadDataGrids() {
 	var row = {
 		siteName:'Site X <i class="fas fa-search show-pointer"></i>', 
 		ranking:'<div id="SiteXRanking"></div>',
-		savingskWh: '10000'.toLocaleString(),
-		savingsCost: '10000'.toLocaleString(),
-		capex: '10000'.toLocaleString(),
-		opex: '10000'.toLocaleString(),
+		savingskWh: '10,000',
+		savingsCost: '£10,000',
+		capex: '£10,000',
+		opex: '£10,000',
 	}
 	siteRankings.push(row);
 
@@ -62,7 +62,7 @@ function loadDataGrids() {
 		data: siteRankings,
 		columns: [
 			{type:'text', width:'165px', name:'siteName', title:'Site Name'},
-			{type:'text', width:'150px', name:'ranking', title:'Ranking'},
+			{type:'text', width:'150px', name:'ranking', title:'Ranking', readOnly: true},
 			{type:'text', width:'125px', name:'savingskWh', title:'Estimated kWh<br>Savings (pa)'},
 			{type:'text', width:'125px', name:'savingsCost', title:'Estimated £<br>Savings (pa)'},
 			{type:'text', width:'125px', name:'capex', title:'CAPEX<br>spend'},

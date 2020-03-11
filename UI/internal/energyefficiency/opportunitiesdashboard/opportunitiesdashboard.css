@@ -55,3 +55,10 @@ html>body tbody.scrollContent {
 	height: 150px;
 	overflow: scroll;
 }
+.dashboard-item-small {
+    height: 200px; 
+    width: 200px; 
+    margin: 5px; 
+    float: left;
+    background-color: lightblue;
+  }
