@@ -1,5 +1,49 @@
 function pageLoad() {
 	addExpanderOnClickEvents();
+	loadDataGrids();
+}
+
+function loadDataGrids() {
+	var futureSiteVisitData = [];
+	var historicalSiteVisitData = [];
+
+	for(var i = 1; i < 6; i++) {
+		var row = {
+			dateOfVisit: new Date(new Date().getFullYear(), new Date().getMonth() + i, new Date().getDate()).toDateString(), 
+			engineer:'En Gineer',
+			notes:'<i class="fas fa-search show-pointer"></i>',
+		}
+		futureSiteVisitData.push(row);
+
+		row = {
+			dateOfVisit: new Date(new Date().getFullYear(), new Date().getMonth() - i, new Date().getDate()).toDateString(), 
+			engineer:'En Gineer',
+			notes:'<i class="fas fa-search show-pointer"></i>',
+		}
+		historicalSiteVisitData.push(row);
+	}
+
+	jexcel(document.getElementById('futureSiteVisitSpreadsheet'), {
+		pagination:10,
+		minDimensions:[3,10],
+		data: futureSiteVisitData,
+		columns: [
+			{type:'text', width:'150px', name:'dateOfVisit', title:'Date Of Visit'},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer'},
+			{type:'text', width:'100px', name:'notes', title:'Notes'},
+		 ]
+	  }); 
+
+	jexcel(document.getElementById('historicalSiteVisitSpreadsheet'), {
+		pagination:10,
+		minDimensions:[3,10],
+		data: historicalSiteVisitData,
+		columns: [
+			{type:'text', width:'150px', name:'dateOfVisit', title:'Date Of Visit'},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer'},
+			{type:'text', width:'100px', name:'notes', title:'Notes'},
+		 ]
+	  }); 
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
