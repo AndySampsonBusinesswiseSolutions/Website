@@ -40,10 +40,10 @@
 						<span style="padding-left: 5px;">Select Tree Display Order</span>
 						<ul class="format-listitem">
 							<li>
-								<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='updateGanttChartAndDataGrid()'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
+								<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "updateGanttChartAndDataGrid()");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
 							</li>
 							<li>
-								<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='updateGanttChartAndDataGrid()'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
+								<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "treeDiv", "updateGanttChartAndDataGrid()");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
 							</li>
 						</ul>
 					</div>

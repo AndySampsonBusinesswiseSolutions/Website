@@ -6,6 +6,7 @@ var activeopportunity = [
         ],
         "Sites": [
             {
+                "GUID" : 1,
                 "SiteName": "Site X",
                 "Meters":[
                     {
@@ -15,6 +16,7 @@ var activeopportunity = [
                 ]
 			},
 			{
+                "GUID" : 2,
                 "SiteName": "Site Y",
                 "Meters":[
                     {
@@ -24,6 +26,7 @@ var activeopportunity = [
                 ]
 			},
 			{
+                "GUID" : 3,
                 "SiteName": "Site Z",
                 "Meters":[
                     {
@@ -37,12 +40,51 @@ var activeopportunity = [
                 ]
             },
 			{
+                "GUID" : 4,
                 "SiteName": "Site A",
                 "Meters":[
                     {
                         "GUID": 22,
                         "Identifier": 1234567890120
 					},
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 2013,
+        "Attributes" : [
+            {"ProjectName" : "LED Lighting 2"}
+        ],
+        "Sites": [
+            {
+                "GUID" : 201,
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 14,
+                        "Identifier": 1234567890123
+                    }
+                ]
+			},
+			{
+                "GUID" : 202,
+                "SiteName": "Site Y",
+                "Meters":[
+                    {
+                        "GUID": 16,
+                        "Identifier": 1234567890124
+                    }
+                ]
+			},
+			{
+                "GUID" : 203,
+                "SiteName": "Site Z",
+                "Meters":[
+					{
+                        "GUID": 20,
+                        "Identifier": 1234567890126
+                    }
                 ]
             }
         ]
