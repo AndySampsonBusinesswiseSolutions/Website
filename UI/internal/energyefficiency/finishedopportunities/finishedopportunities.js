@@ -1,219 +1,223 @@
 function pageLoad() {
-    var data = activeopportunity;
-	createTree(data, "treeDiv", "");
-	addExpanderOnClickEvents();
+  createTree(activeopportunity, "treeDiv", "");
+  addExpanderOnClickEvents();
+  updateGraphs();
+  showCumulativeSavingChart();  
+}
 
-	var electricityVolumeSeries = [{
-	name: 'CAPEX/OPEX',
-	type: 'bar',
-    data: [
-            -55000, 0, 0, 0, 0, 0, 
-            0, 0, 0, 0, 0, 0, 
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0,
-            -10000, 0, 0, 0, 0, 0
-          ]
-  }, {
-	name: 'Cumulative £ Saving',
-	type: 'line',
-    data: [
-		-49583.3333333333,-44166.6666666667,-38750,-33333.3333333333,-27916.6666666667,-22500,
--17083.3333333333,-11666.6666666667,-6250,-833.333333333338,4583.33333333333,10000,
-15416.6666666667,20833.3333333333,26250,31666.6666666667,37083.3333333333,42500,
-47916.6666666667,53333.3333333333,58750,64166.6666666667,69583.3333333333,75000,
-80416.6666666667,85833.3333333333,91250,96666.6666666667,102083.333333333,107500,
-107916.666666667,118333.333333333,128750,139166.666666667,149583.333333333,160000
+function showCumulativeSavingChart() {
+  updateClassOnClick('cumulativeSaving', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('cumulativeSaving'.concat('List'), 'listitem-hidden', '');
+}
 
-          ]
-  }, {
-	name: 'LED Lighting - Site X',
-	type: 'line',
-    data: [
-		-49583.33,-44166.66,-38749.99,-33333.32,-27916.65,-22499.98,
--17083.31,-11666.64,-6249.97,-833.300000000003,4583.37,10000.04,
-15416.71,20833.38,26250.05,31666.72,37083.39,42500.06,
-47916.73,53333.4,58750.07,64166.74,69583.41,75000.08,
-80416.75,85833.42,91250.09,96666.76,102083.43,107500.1,
-112916.77,118333.44,123750.11,129166.78,134583.45,140000.12
-          ]
-  }, {
-	name: 'LED Lighting - Site Y',
-	type: 'line',
-    data: [
-		null,null,null,null,null,null,
-		null,null,null,null,null,null,
-		null,null,null,null,null,null,
-		null,null,null,null,null,null,
-		null,null,null,null,null,null,
-		-5000,0,5000,10000,15000,20000
-          ]
-  }];
-  
-var electricityPriceSeries = [{
-    name: 'Estimated Cost Saving',
-    data: [
-              4718,4718,4718,4718,4718,4718,4718,4718,
-              3888,3888,3888,3888,3888,3888,3888,3888,
-              4536,4536,4536,4536,4536,4536,4536,4536,
-              3905,3905,3905,3905,3905,3905,3905,3905,
-              4558,4558,4558,4558,4558,4558,4558,4558,
-              3907,3907,3907,3907,3907,3907,3907,3907,
-            ]
-  },{
-    name: 'Actual Cost Saving',
-    data: [
-              5718,5718,5718,5718,5718,5718,
-              4888,4888,4888,4888,4888,4888,
-              5536,5536,5536,5536,5536,5536,
-              4905,4905,4905,4905,4905,4905,
-              5558,5558,5558,5558,5558,5558,
-              4907,4907,4907,4907,4907,4907
-            ]
-  },
-   {
-    name: 'Estimated kWh Saving',
-    data: [
-              3990,3990,3990,3990,3990,3990,3990,3990,
-              3310,3310,3310,3310,3310,3310,3310,3310,
-              4030,4030,4030,4030,4030,4030,4030,4030,
-              3340,3340,3340,3340,3340,3340,3340,3340,
-              4010,4010,4010,4010,4010,4010,4010,4010,
-              3350,3350,3350,3350,3350,3350,3350,3350,
-          ]
-  }, {
-    name: 'Actual kWh Saving',
-    data: [
-              4990,4990,4990,4990,4990,4990,
-              4310,4310,4310,4310,4310,4310,
-              5030,5030,5030,5030,5030,5030,
-              4340,4340,4340,4340,4340,4340,
-              5010,5010,5010,5010,5010,5010,
-              4350,4350,4350,4350,4350,4350,
-          ]
-  }];
-
-var electricityCategories = [
-  '02 2017', '03 2017', '04 2017',
-  '05 2017', '06 2017', '07 2017', '08 2017', '09 2017', '10 2017', '11 2017', '12 2017', '01 2018', '02 2018', '03 2018', '04 2018',
-  '05 2018', '06 2018', '07 2018', '08 2018', '09 2018', '10 2018', '11 2018', '12 2018', '01 2019', '02 2019', '03 2019', '04 2019',
-  '05 2019', '06 2019', '07 2019', '08 2019', '09 2019', '10 2019', '11 2019', '12 2019', '01 2020', '02 2020', '03 2020', '04 2020',
-  '05 2020', '06 2020', '07 2020', '08 2020', '09 2020', '10 2020', '11 2020', '12 2020', '01 2021'
-  ];
-  
-var costVolumeSavingOptions = {
-  chart: {
-    type: 'line'
-  },
-  tooltip: {
-      x: {
-      format: getChartTooltipXFormat("Yearly")
-      }
-  },
-  xaxis: {
-      title: {
-      text: ''
-      },
-      labels: {
-      format: getChartXAxisLabelFormat('Weekly')
-      },
-      categories: electricityCategories
-  },
-  yaxis: [{
-    title: {
-      text: '£'
-    },
-	decimalsInFloat: 0
-  }]
-};
-
-var cumulativeSavingOptions = {
-  chart: {
+function updateGraphs() {
+  var cumulativeSavingSeries = [{
+    name: 'CAPEX/OPEX',
     type: 'bar',
-    stacked: false
-  },
-  tooltip: {
-      x: {
-      format: getChartTooltipXFormat("Yearly")
-      }
-  },
-  xaxis: {
-      title: {
-      text: ''
+      data: [
+              -55000, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0, 
+              0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0,
+              0, 0, 0, 0, 0, 0,
+              -10000, 0, 0, 0, 0, 0
+            ]
+    }, {
+    name: 'Cumulative £ Saving',
+    type: 'line',
+      data: [
+      -49583.3333333333,-44166.6666666667,-38750,-33333.3333333333,-27916.6666666667,-22500,
+  -17083.3333333333,-11666.6666666667,-6250,-833.333333333338,4583.33333333333,10000,
+  15416.6666666667,20833.3333333333,26250,31666.6666666667,37083.3333333333,42500,
+  47916.6666666667,53333.3333333333,58750,64166.6666666667,69583.3333333333,75000,
+  80416.6666666667,85833.3333333333,91250,96666.6666666667,102083.333333333,107500,
+  107916.666666667,118333.333333333,128750,139166.666666667,149583.333333333,160000
+  
+            ]
+    }, {
+    name: 'LED Lighting - Site X',
+    type: 'line',
+      data: [
+      -49583.33,-44166.66,-38749.99,-33333.32,-27916.65,-22499.98,
+  -17083.31,-11666.64,-6249.97,-833.300000000003,4583.37,10000.04,
+  15416.71,20833.38,26250.05,31666.72,37083.39,42500.06,
+  47916.73,53333.4,58750.07,64166.74,69583.41,75000.08,
+  80416.75,85833.42,91250.09,96666.76,102083.43,107500.1,
+  112916.77,118333.44,123750.11,129166.78,134583.45,140000.12
+            ]
+    }, {
+    name: 'LED Lighting - Site Y',
+    type: 'line',
+      data: [
+      null,null,null,null,null,null,
+      null,null,null,null,null,null,
+      null,null,null,null,null,null,
+      null,null,null,null,null,null,
+      null,null,null,null,null,null,
+      -5000,0,5000,10000,15000,20000
+            ]
+    }];
+    
+    var costSavingSeries = [{
+        name: 'Estimated Cost Saving',
+        data: [
+                  4718,4718,4718,4718,4718,4718,4718,4718,
+                  3888,3888,3888,3888,3888,3888,3888,3888,
+                  4536,4536,4536,4536,4536,4536,4536,4536,
+                  3905,3905,3905,3905,3905,3905,3905,3905,
+                  4558,4558,4558,4558,4558,4558,4558,4558,
+                  3907,3907,3907,3907,3907,3907,3907,3907,
+                ]
+      },{
+        name: 'Actual Cost Saving',
+        data: [
+                  5718,5718,5718,5718,5718,5718,
+                  4888,4888,4888,4888,4888,4888,
+                  5536,5536,5536,5536,5536,5536,
+                  4905,4905,4905,4905,4905,4905,
+                  5558,5558,5558,5558,5558,5558,
+                  4907,4907,4907,4907,4907,4907
+                ]
+      }];
+  
+    var volumeSavingSeries = [
+      {
+        name: 'Estimated kWh Saving',
+        data: [
+                  3990,3990,3990,3990,3990,3990,3990,3990,
+                  3310,3310,3310,3310,3310,3310,3310,3310,
+                  4030,4030,4030,4030,4030,4030,4030,4030,
+                  3340,3340,3340,3340,3340,3340,3340,3340,
+                  4010,4010,4010,4010,4010,4010,4010,4010,
+                  3350,3350,3350,3350,3350,3350,3350,3350,
+              ]
+      }, {
+        name: 'Actual kWh Saving',
+        data: [
+                  4990,4990,4990,4990,4990,4990,
+                  4310,4310,4310,4310,4310,4310,
+                  5030,5030,5030,5030,5030,5030,
+                  4340,4340,4340,4340,4340,4340,
+                  5010,5010,5010,5010,5010,5010,
+                  4350,4350,4350,4350,4350,4350,
+              ]
+      }];
+  
+    var electricityCategories = [
+      '02 2017', '03 2017', '04 2017',
+      '05 2017', '06 2017', '07 2017', '08 2017', '09 2017', '10 2017', '11 2017', '12 2017', '01 2018', '02 2018', '03 2018', '04 2018',
+      '05 2018', '06 2018', '07 2018', '08 2018', '09 2018', '10 2018', '11 2018', '12 2018', '01 2019', '02 2019', '03 2019', '04 2019',
+      '05 2019', '06 2019', '07 2019', '08 2019', '09 2019', '10 2019', '11 2019', '12 2019', '01 2020', '02 2020', '03 2020', '04 2020',
+      '05 2020', '06 2020', '07 2020', '08 2020', '09 2020', '10 2020', '11 2020', '12 2020', '01 2021'
+      ];
+      
+    var cumulativeSavingOptions = {
+      chart: {
+        type: 'line'
+      },
+      tooltip: {
+          x: {
+          format: getChartTooltipXFormat("Yearly")
+          }
+      },
+      xaxis: {
+          title: {
+          text: ''
+          },
+          labels: {
+          format: getChartXAxisLabelFormat('Weekly')
+          },
+          categories: electricityCategories
+      },
+      yaxis: [{
+        title: {
+          text: '£'
+        },
+      decimalsInFloat: 0
+      }]
+    };
+  
+    var costSavingOptions = {
+      chart: {
+        type: 'bar',
+        stacked: false
+      },
+      tooltip: {
+          x: {
+          format: getChartTooltipXFormat("Yearly")
+          }
+      },
+      xaxis: {
+          title: {
+          text: ''
+          },
+          labels: {
+          format: getChartXAxisLabelFormat('Weekly')
+          },
+          categories: electricityCategories
+      },
+      yaxis: [
+      {
+      show: true,
+      axisTicks: {
+        show: false,
       },
       labels: {
-      format: getChartXAxisLabelFormat('Weekly')
+        style: {
+        color: '#00E396',
+        }
       },
-      categories: electricityCategories
-  },
-  yaxis: [{
-    title: {
-      text: 'kWh'
-    },
-      min: 3000,
-      max: 6000,
-      decimalsInFloat: 0
-  },
-	{
-	seriesName: 'Estimated Cost Saving',
-	opposite: true,
-	axisTicks: {
-		show: true,
-	},
-	labels: {
-		style: {
-		color: '#00E396',
-		}
-	},
-	title: {
-		text: "£"
-	},
-      min: 3000,
-      max: 6000,
-      decimalsInFloat: 0
-	},
-	{
-	seriesName: 'Actual kWh Saving',
-	show: false,
-	opposite: false,
-	axisTicks: {
-		show: true,
-	},
-	labels: {
-		style: {
-		color: '#00E396',
-		}
-	},
-	title: {
-		text: "kWh"
-	},
-      min: 3000,
-      max: 6000,
-      decimalsInFloat: 0
-	},
-	{
-	seriesName: 'Estimated kWh  Saving',
-	show: false,
-	opposite: true,
-	axisTicks: {
-		show: false,
-	},
-	labels: {
-		style: {
-		color: '#00E396',
-		}
-	},
-	title: {
-		text: "£"
-	},
-      min: 3000,
-      max: 6000,
-      decimalsInFloat: 0
-	}]
-};
-	
-	refreshChart(electricityVolumeSeries, "#electricityVolumeChart", costVolumeSavingOptions);
-	refreshChart(electricityPriceSeries, "#electricityPriceChart", cumulativeSavingOptions);
+      title: {
+        text: "kWh"
+      },
+          min: 3000,
+          max: 6000,
+          decimalsInFloat: 0
+      }]
+    };
+  
+    var volumeSavingOptions = {
+      chart: {
+        type: 'bar',
+        stacked: false
+      },
+      tooltip: {
+          x: {
+          format: getChartTooltipXFormat("Yearly")
+          }
+      },
+      xaxis: {
+          title: {
+          text: ''
+          },
+          labels: {
+          format: getChartXAxisLabelFormat('Weekly')
+          },
+          categories: electricityCategories
+      },
+      yaxis: [
+      {
+      show: true,
+      axisTicks: {
+        show: false,
+      },
+      labels: {
+        style: {
+        color: '#00E396',
+        }
+      },
+      title: {
+        text: "£"
+      },
+          min: 3000,
+          max: 6000,
+          decimalsInFloat: 0
+      }]
+    };
+    
+    refreshChart(cumulativeSavingSeries, "#cumulativeSavingChart", cumulativeSavingOptions);
+    refreshChart(costSavingSeries, "#costSavingChart", costSavingOptions);
+    refreshChart(volumeSavingSeries, "#volumeSavingChart", volumeSavingOptions);
 }
 
 var branchCount = 0;
@@ -434,54 +438,6 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
 }
 
 function getChartTooltipXFormat(period) {

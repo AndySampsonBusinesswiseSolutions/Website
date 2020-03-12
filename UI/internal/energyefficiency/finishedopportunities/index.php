@@ -25,13 +25,29 @@
 		</div>
 		<div class="fill-column"></div>
 		<div class="final-column">
-			<div class="tree-div" style="height: 375px;">
-				<div id="electricityPriceChart"></div>
-			</div>
+			<div class="roundborder">
+				<div id="cumulativeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
+				<div id="cumulativeSavingList"  class="listitem-hidden chart" style="margin: 5px;">
+					<div id="cumulativeSavingChart"></div>
+				</div>
+			</div>			
 			<br>
-			<div class="tree-div" style="height: 375px;">
-				<div id="electricityVolumeChart"></div>
-			</div>
+			<div class="roundborder">
+				<div id="costSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<span id="costSavingspan">Cost Saving Chart</span>
+				<div id="costSavingList"  class="listitem-hidden chart" style="margin: 5px;">
+					<div id="costSavingChart"></div>
+				</div>
+			</div>			
+			<br>
+			<div class="roundborder">
+				<div id="volumeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<span id="volumeSavingspan">Volume Saving Chart</span>
+				<div id="volumeSavingList"  class="listitem-hidden chart" style="margin: 5px;">
+					<div id="volumeSavingChart"></div>
+				</div>
+			</div>			
 			<br>
 			<div id="tableContainer" class="tableContainer3">
 				<table style="width: 100%;">
