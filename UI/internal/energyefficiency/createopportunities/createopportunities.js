@@ -1,5 +1,5 @@
 function pageLoad() {
-    createTree(data, "treeDiv", "", "", true);
+    //createTree(data, "treeDiv", "", "", true);
 	addExpanderOnClickEvents();
 }
 
@@ -218,4 +218,55 @@ function getIconByBranch(branch, commodity) {
         default:
             return 'fas fa-map-marker-alt';
     }
+}
+
+function updateClassOnClick(elementId, firstClass, secondClass){
+	var elements = document.getElementsByClassName(elementId);
+
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
+	}
+	else {
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
+		}
+	}
+}
+
+function updateClass(element, firstClass, secondClass)
+{
+	if(hasClass(element, firstClass)){
+		element.classList.remove(firstClass);
+
+		if(secondClass != ''){
+			element.classList.add(secondClass);
+		}
+	}
+	else {
+		if(secondClass != ''){
+			element.classList.remove(secondClass);
+		}
+		
+		element.classList.add(firstClass);
+	}
+}
+  
+function hasClass(elem, className) {
+	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+}
+
+function addExpanderOnClickEvents() {
+	var expanders = document.getElementsByClassName('fa-plus-square');
+	var expandersLength = expanders.length;
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
+	}
+}
+
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
 }
