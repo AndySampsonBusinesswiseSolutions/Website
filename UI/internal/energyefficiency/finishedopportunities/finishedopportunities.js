@@ -3,6 +3,79 @@ function pageLoad() {
   addExpanderOnClickEvents();
   updateGraphs();
   showCumulativeSavingChart();  
+  loadDataGrid();
+}
+
+function loadDataGrid() {
+	var opportunities = [];
+
+	var row = {
+		projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',
+    site:'Site X',
+    meter:'N/A',
+    engineer:'En Gineer',
+    startDate:'01/01/2017',
+    finishDate:'28/02/2017',
+    cost:'£55,000',
+    actualVolumeSavings:'10,000',
+    actualCostSavings:'£65,000',
+    estimatedVolumeSavings: '9,000',
+    estimatedCostSavings:'£60,000',
+    netVolumeSavings:'45,000',
+    netCostSavings:'£140,000',
+    totalROIMonths:'9',
+    remainingROIMonths:'0'
+	}
+  opportunities.push(row);
+  
+  row = {
+		projectName:'LED Lighting 2 <i class="fas fa-search show-pointer"></i>',
+    site:'Site Y',
+    meter:'N/A',
+    engineer:'En Gineer',
+    startDate:'01/08/2019',
+    finishDate:'15/08/2019',
+    cost:'£10,000',
+    actualVolumeSavings:'5,000',
+    actualCostSavings:'£60,000',
+    estimatedVolumeSavings: '9,000',
+    estimatedCostSavings:'£160,000',
+    netVolumeSavings:'45,000',
+    netCostSavings:'£120,000',
+    totalROIMonths:'2',
+    remainingROIMonths:'0'
+	}
+	opportunities.push(row);
+
+	jexcel(document.getElementById('spreadsheet'), {
+		pagination:10,
+    data: opportunities,
+    allowInsertRow: false,
+    allowManualInsertRow: false,
+    allowInsertColumn: false,
+    allowManualInsertColumn: false,
+    allowDeleteRow: false,
+    allowDeleteColumn: false,
+    allowRenameColumn: false,
+    wordWrap: true,
+		columns: [
+      {type:'text', width:'150px', name:'projectName', title:'Project Name', readOnly: true},
+      {type:'text', width:'100px', name:'site', title:'Site', readOnly: true},
+      {type:'text', width:'100px', name:'meter', title:'Meter', readOnly: true},
+      {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+      {type:'text', width:'100px', name:'startDate', title:'Start Date', readOnly: true},
+      {type:'text', width:'100px', name:'finishDate', title:'Finish Date', readOnly: true},
+      {type:'text', width:'100px', name:'cost', title:'Cost', readOnly: true},
+      {type:'text', width:'100px', name:'actualVolumeSavings', title:'Actual kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'100px', name:'actualCostSavings', title:'Actual £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'125px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'125px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'100px', name:'netVolumeSavings', title:'Net kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'100px', name:'netCostSavings', title:'Net £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'100px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
+      {type:'text', width:'100px', name:'remainingROIMonths', title:'Remaining<br>ROI Months', readOnly: true},
+		 ]
+    });													
 }
 
 function showCumulativeSavingChart() {
@@ -168,7 +241,7 @@ function updateGraphs() {
         }
       },
       title: {
-        text: "kWh"
+        text: "£"
       },
           min: 3000,
           max: 6000,
@@ -207,7 +280,7 @@ function updateGraphs() {
         }
       },
       title: {
-        text: "£"
+        text: "kWh"
       },
           min: 3000,
           max: 6000,

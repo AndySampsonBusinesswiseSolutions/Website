@@ -1,3 +1,6 @@
+@import "https://bossanova.uk/jexcel/v3/jexcel.css";
+@import "https://bossanova.uk/jsuites/v2/jsuites.css";
+
 .section-header {
     background: #b62a51;
     width: 100%;
@@ -36,15 +39,6 @@
     min-height: 650px;
     max-height: 800px;
     background-color: #e9eaee;
-}
-div.tableContainer3 {
-	clear: both;
-	height: 600px;
-	overflow: auto;
-}
-html>body tbody.scrollContent3 {
-	height: 590px;
-	overflow: scroll;
 }
 .listitem-hidden {
     display: none;
