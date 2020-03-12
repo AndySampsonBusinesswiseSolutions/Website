@@ -20,6 +20,18 @@
 				<div class="tree-column">
 					<div id="treeDiv" class="tree-div">
 					</div>
+					<br>
+					<div class="roundborder" style="background-color: #e9eaee;">
+						<span style="padding-left: 5px;">Select Tree Display Order</span>
+						<ul class="format-listitem">
+							<li>
+								<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
+							</li>
+							<li>
+								<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "treeDiv", "");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -57,7 +69,8 @@
 	<br>
 </body>
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script type="text/javascript" src="jquery-1.4.2.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
 <script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
 <script type="text/javascript" src="finishedopportunities.js"></script>

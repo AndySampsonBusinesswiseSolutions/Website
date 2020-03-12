@@ -1,6 +1,5 @@
 function pageLoad() {
   createTree(activeopportunity, "treeDiv", "");
-  addExpanderOnClickEvents();
   updateGraphs();
   showCumulativeSavingChart();  
   loadDataGrid();
@@ -306,11 +305,19 @@ function createTree(baseData, divId, checkboxFunction) {
     branchCount = 0;
     subBranchCount = 0; 
 
-    buildTree(baseData, ul, checkboxFunction);
+    var order = $("input[type='radio'][name='group1']:checked").val();
+    if(order == "Project") {
+        buildTree(baseData, ul, checkboxFunction);
+    }
+    else {
+        buildSiteProjectTree(baseData, ul, checkboxFunction);
+    }
 
     var div = document.getElementById(divId);
     clearElement(div);
     div.appendChild(tree);
+
+    addExpanderOnClickEvents();
 }
 
 function buildTree(baseData, baseElement, checkboxFunction) {
@@ -326,6 +333,70 @@ function buildTree(baseData, baseElement, checkboxFunction) {
 
         baseElement.appendChild(li);        
     }
+}
+
+function buildSiteProjectTree(baseData, baseElement, checkboxFunction) {
+  var siteNames = [];
+  var sites = [];
+
+  var dataLength = baseData.length;
+  for(var i = 0; i < dataLength; i++){
+      var project = baseData[i];
+      var siteLength = project.Sites.length;
+
+      for(var j = 0; j < siteLength; j++) {
+          if(!siteNames.includes(project.Sites[j].SiteName)) {
+              siteNames.push(project.Sites[j].SiteName);
+              sites.push(project.Sites[j]);
+          }
+      }
+  }
+
+  dataLength = sites.length;
+  for(var i = 0; i < dataLength; i++) {
+      var base = sites[i];
+      var li = document.createElement('li');
+      var ul = createUL();
+      
+      var projectNames = [];
+      var projects = [];
+
+      for(var j = 0; j < baseData.length; j++){
+          var project = baseData[j];
+          var projectName = getAttribute(project.Attributes, 'ProjectName');
+          var siteLength = project.Sites.length;
+
+          for(var k = 0; k < siteLength; k++) {
+              if(project.Sites[k].SiteName == base.SiteName) {
+                  if(!projectNames.includes(projectName)) {
+                      projectNames.push(projectName);
+                      projects.push({project: project, meters: project.Sites[k].Meters});
+                  }
+              }
+          }
+      }
+
+      buildProject(projects, ul, checkboxFunction, base.SiteName);        
+      appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', siteNames[i], ul, siteNames[i], base.GUID);
+
+      baseElement.appendChild(li); 
+  }
+}
+
+function buildProject(projects, baseElement, checkboxFunction, linkedSite) {
+  var projectsLength = projects.length;
+  for(var j = 0; j < projectsLength; j++){
+      var project = projects[j].project;
+      var projectName = getAttribute(project.Attributes, 'ProjectName');
+      var li = document.createElement('li');
+      var ul = createUL();
+      var branchId = 'Project'.concat(project.GUID).concat(linkedSite.replace(' ', ''));
+
+      buildMeter(projects[j].meters, ul, checkboxFunction, linkedSite);
+      appendListItemChildren(li, branchId, checkboxFunction, 'Project', projectName, ul, linkedSite, '');
+
+      baseElement.appendChild(li); 
+  }
 }
 
 function buildSite(sites, baseElement, checkboxFunction, linkedSite) {
