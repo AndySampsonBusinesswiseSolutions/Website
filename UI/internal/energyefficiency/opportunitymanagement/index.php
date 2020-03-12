@@ -108,12 +108,15 @@
 							<thead>
 								<tr>
 									<th id="th0" style="border: solid black 1px;">Customer</th>
+									<th id="th21" style="border: solid black 1px;">Opportunity<br>Type</th>
 									<th id="th1" style="border: solid black 1px;">Opportunity<br>Name</th>
 									<th id="th2" style="border: solid black 1px;">Site</th>
 									<th id="th3" style="border: solid black 1px;">Meter</th>
+									<th id="th22" style="border: solid black 1px;">Sub Meter</th>
 									<th id="th4" style="border: solid black 1px;">Engineer</th>
 									<th id="th5" style="border: solid black 1px;">Estimated<br>Start Date</th>
 									<th id="th6" style="border: solid black 1px;">Estimated<br>Finish Date</th>
+									<th id="th23" style="border: solid black 1px;">Percentage<br>Saving</th>
 									<th id="th7" style="border: solid black 1px;">Estimated<br>Cost</th>
 									<th id="th8" style="border: solid black 1px;">Estimated<br>kWh Savings (pa)</th>
 									<th id="th9" style="border: solid black 1px;">Estimated<br>£ Savings (pa)</th>
@@ -123,12 +126,15 @@
 							<tbody class="scrollContent3">
 								<tr>
 									<td headers="th0" style="border: solid black 1px;">David Ford Trading Ltd</td>
+									<td headers="th21" style="border: solid black 1px;">Custom</td>
 									<td headers="th1" style="border: solid black 1px;">LED Lighting <i class="fas fa-search show-pointer"></i></td>
 									<td headers="th2" style="border: solid black 1px;">Site X</td>
-									<td headers="th3" style="border: solid black 1px;">N/A</td>
+									<td headers="th3" style="border: solid black 1px;">12345678910125</td>
+									<td headers="th22" style="border: solid black 1px;">Sub Meter 2</td>
 									<td headers="th4" style="border: solid black 1px;">En Gineer</td>
 									<td headers="th5" style="border: solid black 1px;">01/04/2020</td>
 									<td headers="th6" style="border: solid black 1px;">30/06/2020</td>
+									<td headers="th23" style="border: solid black 1px;">10%</td>
 									<td headers="th7" style="border: solid black 1px;">£100,000</td>
 									<td headers="th8" style="border: solid black 1px;">10,000</td>
 									<td headers="th9" style="border: solid black 1px;">£15,000</td>
@@ -155,12 +161,15 @@
 							<thead>
 								<tr>
 									<th id="th0" style="border: solid black 1px;">Customer</th>
+									<th id="th21" style="border: solid black 1px;">Opportunity<br>Type</th>
 									<th id="th1" style="border: solid black 1px;">Opportunity<br>Name</th>
 									<th id="th2" style="border: solid black 1px;">Site</th>
 									<th id="th3" style="border: solid black 1px;">Meter</th>
+									<th id="th22" style="border: solid black 1px;">Sub Meter</th>
 									<th id="th4" style="border: solid black 1px;">Engineer</th>
 									<th id="th5" style="border: solid black 1px;">Estimated<br>Start Date</th>
 									<th id="th6" style="border: solid black 1px;">Estimated<br>Finish Date</th>
+									<th id="th23" style="border: solid black 1px;">Percentage<br>Saving</th>
 									<th id="th7" style="border: solid black 1px;">Estimated<br>Cost</th>
 									<th id="th8" style="border: solid black 1px;">Estimated<br>kWh Savings (pa)</th>
 									<th id="th9" style="border: solid black 1px;">Estimated<br>£ Savings (pa)</th>
@@ -170,12 +179,15 @@
 							<tbody class="scrollContent3">
 								<tr>
 									<td headers="th0" style="border: solid black 1px;">David Ford Trading Ltd</td>
+									<td headers="th21" style="border: solid black 1px;">Custom</td>
 									<td headers="th1" style="border: solid black 1px;">LED Lighting <i class="fas fa-search show-pointer"></i></td>
 									<td headers="th2" style="border: solid black 1px;">Site X</td>
-									<td headers="th3" style="border: solid black 1px;">N/A</td>
+									<td headers="th3" style="border: solid black 1px;">12345678910125</td>
+									<td headers="th22" style="border: solid black 1px;">Sub Meter 2</td>
 									<td headers="th4" style="border: solid black 1px;">En Gineer</td>
 									<td headers="th5" style="border: solid black 1px;">01/04/2020</td>
 									<td headers="th6" style="border: solid black 1px;">30/06/2020</td>
+									<td headers="th23" style="border: solid black 1px;">10%</td>
 									<td headers="th7" style="border: solid black 1px;">£100,000</td>
 									<td headers="th8" style="border: solid black 1px;">10,000</td>
 									<td headers="th9" style="border: solid black 1px;">£15,000</td>
