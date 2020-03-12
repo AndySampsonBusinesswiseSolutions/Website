@@ -51,115 +51,204 @@
 		</div>
 		<div class="divcolumn middle"></div>
 		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Recommended Opportunities</span>
-				<br>
-				<div class="divcolumn first"></div>
-				<div class="divcolumn" style="width: 30%;">
-					<ul class="format-listitem">
-						<li>
-							<div>
-								<span style="border-bottom: solid black 1px;">Opportunity</span>
-							</div>
-						</li>
-						<br>
-						<li>
-							<div id="Project1" class="far fa-plus-square" additionallists="Project1ListButtons,Project1ListSavings"></div>
-							<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
-							<span id="Project1span">LED Lighting Installation</span><i class="fas fa-search show-pointer"></i>
-							<div id="Project1List" class="listitem-hidden">
-								<ul class="format-listitem">
-									<li>
-										<div id="Site1" class="far fa-times-circle"></div>
-										<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
-										<span id="Site1span">Site X</span>
-									</li>
-									<li>
-										<div id="Site2" class="far fa-times-circle"></div>
-										<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
-										<span id="Site2span">Site Y</span>
-									</li>
-									<li>
-										<div id="Site3" class="far fa-times-circle"></div>
-										<i class="far fa-calender-alt" style="padding-left: 3px; padding-right: 3px;"></i>
-										<span id="Site2span">Site Z</span>
-									</li>
-								</ul>
-							</div>
-						</li>
-					</ul>
+			<div style="text-align: center;">
+				<div style="border-bottom: solid black 1px;">
+					<span>Recommended Opportunities</span>
 				</div>
-				<div class="divcolumn middle"></div>
-				<div class="divcolumn" style="width: 30%;">
-					<ul class="format-listitem">
-						<li>
-							<div>
-							<span style="border-bottom: solid black 1px;">Approve/Reject</span>
-							</div>
-						</li>
-						<br>
-						<li>
+				<br>
+				<div>
+					<div class="first" style="float: left;"></div>
+					<div style="width: 30%; float: left;">
+						<span style="border-bottom: solid black 1px;">Opportunity</span>
+					</div>
+					<div class="middle" style="float: left;"></div>
+					<div style="width: 30%; float: left;">
+						<span style="border-bottom: solid black 1px;">Approve/Reject</span>
+					</div>
+					<div class="middle" style="float: left;"></div>
+					<div style="width: 30%; float: left;">
+						<span style="border-bottom: solid black 1px;">Estimated Annual Savings</span>
+					</div>
+					<div class="last" style="float: left;"></div>
+				</div>
+				<br><br>
+				<div class="roundborder">
+					<div>
+						<div class="first" style="float: left;"></div>
+						<div style="width: 30%; float: left;">
+							<div id="Project1" class="far fa-plus-square show-pointer"></div>
+							<span id="Project1span">LED Lighting Installation</span><i class="fas fa-search show-pointer"></i>
+						</div>
+						<div class="middle" style="float: left;"></div>
+						<div style="width: 30%; float: left;">
 							<button class="show-pointer"style="width: 45%; background-color: green;">Approve Opportunity</button>
 							&nbsp&nbsp&nbsp&nbsp
 							<button class="show-pointer"style="width: 45%; background-color: red;">Reject Opportunity</button>
-							<div id="Project1ListButtons" class="listitem-hidden">
-								<ul class="format-listitem">
-									<li>
-										<button class="show-pointer"style="width: 45%; background-color: green;">Approve Site X</button>
-										&nbsp&nbsp&nbsp
-										<button class="show-pointer"style="width: 45%; background-color: red;">Reject Site X</button>
-									</li>
-									<li>
-										<button class="show-pointer"style="width: 45%; background-color: green;">Approve Site Y</button>
-										&nbsp&nbsp&nbsp
-										<button class="show-pointer"style="width: 45%; background-color: red;">Reject Site Y</button>
-									</li>
-									<li>
-										<button class="show-pointer"style="width: 45%; background-color: green;">Approve Site Z</button>
-										&nbsp&nbsp&nbsp
-										<button class="show-pointer"style="width: 45%; background-color: red;">Reject Site Z</button>
-									</li>
-								</ul>
-							</div>
-						</li>
-					</ul>
-				</div>
-				<div class="divcolumn middle"></div>
-				<div class="divcolumn" style="width: 30%;">
-					<ul class="format-listitem">
-						<li>
-							<div>
-							<span style="border-bottom: solid black 1px;">Estimated Annual Savings</span>
-							</div>
-						</li>
-						<br>
-						<li>
+						</div>
+						<div class="middle" style="float: left;"></div>
+						<div style="width: 30%; float: left;">
 							<span>kWh Savings: 10,000</span>
 							<br>
 							<span>£ Savings: £10,000</span>
-							<div id="Project1ListSavings" class="listitem-hidden">
-								<ul class="format-listitem">
-									<li>
-										<span>kWh Savings: 5,000</span>
-										<br>
-										<span>£ Savings: £5,000</span>
-									</li>
-									<li>
-										<span>kWh Savings: 3,000</span>
-										<br>
-										<span>£ Savings: £3,000</span>
-									</li>
-									<li>
-										<span>kWh Savings: 2,000</span>
-										<br>
-										<span>£ Savings: £2,000</span>
-									</li>
-								</ul>
+						</div>
+						<div class="last" style="float: left;"></div>
+					</div>
+					<br><br>
+					<div id="Project1List" class="listitem-hidden">
+						<div>
+							<div class="first" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<div id="Site1" class="far fa-times-circle"></div>
+								<span id="Site1span">Site X</span>
 							</div>
-						</li>
-					</ul>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site X Only</button>
+								&nbsp&nbsp&nbsp&nbsp
+								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site X Only</button>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<span>kWh Savings: 5,000</span>
+								<br>
+								<span>£ Savings: £5,000</span>
+							</div>
+							<div class="last" style="float: left;"></div>
+						</div>
+						<br><br>
+						<div>
+							<div class="first" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<div id="Site2" class="far fa-times-circle"></div>
+								<span id="Site2span">Site Y</span>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Y Only</button>
+								&nbsp&nbsp&nbsp&nbsp
+								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Y Only</button>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<span>kWh Savings: 2,000</span>
+								<br>
+								<span>£ Savings: £2,000</span>
+							</div>
+							<div class="last" style="float: left;"></div>
+						</div>
+						<br><br>
+						<div>
+							<div class="first" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<div id="Site3" class="far fa-times-circle"></div>
+								<span id="Site3span">Site Z</span>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Z Only</button>
+								&nbsp&nbsp&nbsp&nbsp
+								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Z Only</button>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<span>kWh Savings: 3,000</span>
+								<br>
+								<span>£ Savings: £3,000</span>
+							</div>
+							<div class="last" style="float: left;"></div>
+						</div>
+						<br><br>
+					</div>
 				</div>
-				<div class="divcolumn last"></div>
+				<br>
+				<div class="roundborder">
+					<div>
+						<div class="first" style="float: left;"></div>
+						<div style="width: 30%; float: left;">
+							<div id="Project2" class="far fa-plus-square show-pointer"></div>
+							<span id="Project2span">LED Lighting Installation 2</span><i class="fas fa-search show-pointer"></i>
+						</div>
+						<div class="middle" style="float: left;"></div>
+						<div style="width: 30%; float: left;">
+							<button class="show-pointer"style="width: 45%; background-color: green;">Approve Opportunity</button>
+							&nbsp&nbsp&nbsp&nbsp
+							<button class="show-pointer"style="width: 45%; background-color: red;">Reject Opportunity</button>
+						</div>
+						<div class="middle" style="float: left;"></div>
+						<div style="width: 30%; float: left;">
+							<span>kWh Savings: 10,000</span>
+							<br>
+							<span>£ Savings: £10,000</span>
+						</div>
+						<div class="last" style="float: left;"></div>
+					</div>
+					<br><br>
+					<div id="Project2List" class="listitem-hidden">
+						<div>
+							<div class="first" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<div id="Site1" class="far fa-times-circle"></div>
+								<span id="Site1span">Site X</span>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site X Only</button>
+								&nbsp&nbsp&nbsp&nbsp
+								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site X Only</button>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<span>kWh Savings: 5,000</span>
+								<br>
+								<span>£ Savings: £5,000</span>
+							</div>
+							<div class="last" style="float: left;"></div>
+						</div>
+						<br><br>
+						<div>
+							<div class="first" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<div id="Site2" class="far fa-times-circle"></div>
+								<span id="Site2span">Site Y</span>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Y Only</button>
+								&nbsp&nbsp&nbsp&nbsp
+								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Y Only</button>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<span>kWh Savings: 2,000</span>
+								<br>
+								<span>£ Savings: £2,000</span>
+							</div>
+							<div class="last" style="float: left;"></div>
+						</div>
+						<br><br>
+						<div>
+							<div class="first" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<div id="Site3" class="far fa-times-circle"></div>
+								<span id="Site3span">Site Z</span>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Z Only</button>
+								&nbsp&nbsp&nbsp&nbsp
+								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Z Only</button>
+							</div>
+							<div class="middle" style="float: left;"></div>
+							<div style="width: 30%; float: left;">
+								<span>kWh Savings: 3,000</span>
+								<br>
+								<span>£ Savings: £3,000</span>
+							</div>
+							<div class="last" style="float: left;"></div>
+						</div>
+						<br><br>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="divcolumn last"></div>
