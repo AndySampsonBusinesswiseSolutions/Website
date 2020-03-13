@@ -21,6 +21,7 @@
 				<div class="tree-column">
 					<div id="treeDiv" class="tree-div">
 					</div>
+					<button style="width: 100%; margin-top: 5px;">Upload Usage</button>
 				</div>
 			</div>
 		</div>

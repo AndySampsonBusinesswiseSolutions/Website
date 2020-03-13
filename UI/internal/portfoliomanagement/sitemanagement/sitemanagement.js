@@ -490,13 +490,13 @@ function openTab(evt, tabName, guid, branch) {
 	
 	switch(branch) {
 		case "Site":
-            createCard(guid, newDiv, 'Site', 'BaseName');		
+            createCard(guid, newDiv, 'Site');		
 			break;
 		case "Meter":
-			createCard(guid, newDiv, 'Meter', 'Identifier');
+			createCard(guid, newDiv, 'Meter');
 			break;
 		case "SubMeter":
-			createCard(guid, newDiv, 'SubMeter', 'Identifier');
+			createCard(guid, newDiv, 'SubMeter');
 			break;
 	}
 
@@ -555,11 +555,11 @@ function updateTabDiv() {
     }
 }
 
-function createCard(guid, divToAppendTo, type, identifier) {
+function createCard(guid, divToAppendTo, type) {
     var site = getEntityByGUID(guid, type);
 
 	buildCardView(type, site, divToAppendTo);
-    buildDataTable(type, site, identifier, divToAppendTo);
+    buildDataTable(site, divToAppendTo);
 }
 
 function buildCardView(type, entity, divToAppendTo){
@@ -669,7 +669,7 @@ function displayDataTable() {
 	}
 }
 
-function buildDataTable(type, entity, attributeRequired, divToAppendTo){
+function buildDataTable(entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
 	div.setAttribute('style', 'display: none');
@@ -684,19 +684,17 @@ function buildDataTable(type, entity, attributeRequired, divToAppendTo){
 
 	var tableRow = document.createElement('tr');
 
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Type'));
-	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 15%; border: solid black 1px;', 'Identifier'));
 	tableRow.appendChild(createTableHeader('padding-right: 50px; width: 30%; border: solid black 1px;', 'Attribute'));
 	tableRow.appendChild(createTableHeader('padding-right: 50px; border: solid black 1px;', 'Value'));
 	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
 
     table.appendChild(tableRow);
-    displayAttributes(type, getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table);
+    displayAttributes(entity.Attributes, table);
 
 	treeDiv.appendChild(table);
 }
 
-function displayAttributes(type, identifier, attributes, table) {
+function displayAttributes(attributes, table) {
 	if(!attributes) {
 		return;
 	}
@@ -706,18 +704,12 @@ function displayAttributes(type, identifier, attributes, table) {
 		var tableRow = document.createElement('tr');
 		tableRow.id = 'row' + i;
 
-		for(var j = 0; j < 4; j++) {
+		for(var j = 0; j < 2; j++) {
 			var tableDatacell = document.createElement('td');
 			tableDatacell.setAttribute('style', 'border: solid black 1px;');
 
 			switch(j) {
 				case 0:
-					tableDatacell.innerHTML = type;
-					break;	
-				case 1:
-					tableDatacell.innerHTML = identifier;
-					break;
-				case 2:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = key;
 						break;
@@ -725,7 +717,7 @@ function displayAttributes(type, identifier, attributes, table) {
 					
 					tableDatacell.id = 'attribute' + i;
 					break;
-				case 3:
+				case 1:
 					for(var key in attributes[i]) {
 						tableDatacell.innerHTML = attributes[i][key];
 						break;

@@ -57,6 +57,14 @@ var data = [
                             {"Identifier" : "Sub Meter 2"},
                             {"Commodity" : "Electricity"}
                         ],
+                    },
+                    {
+                        "GUID" : "104",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Add New Sub Meter"},
+                            {"Commodity" : "Electricity"}
+                        ]
                     }
                 ],
             },
@@ -72,6 +80,19 @@ var data = [
                         {"SensorType" : "Test Sensor Type 1"},
                         {"Commodity" : "Electricity"}
                     ],
+            },
+            {
+                "GUID" : "102",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "Add New Meter"},
+                        {"DeviceType" : "Unknown"},
+                        {"DeviceSubType" : ""},
+                        {"Zone" : ""},
+                        {"Panel" : ""},
+                        {"SensorType" : ""},
+                        {"Commodity" : ""}
+                    ]
             }
         ]
     },
@@ -133,9 +154,45 @@ var data = [
                             {"Identifier" : "Sub Meter 2"},
                             {"Commodity" : "Electricity"}
                         ]
+                    },
+                    {
+                        "GUID" : "103",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Add New Sub Meter"},
+                            {"Commodity" : "Electricity"}
+                        ]
                     }
                 ],
+            },
+            {
+                "GUID" : "101",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "Add New Meter"},
+                        {"DeviceType" : "Unknown"},
+                        {"DeviceSubType" : ""},
+                        {"Zone" : ""},
+                        {"Panel" : ""},
+                        {"SensorType" : ""},
+                        {"Commodity" : ""}
+                    ]
             }
+        ]
+    },
+    {
+        "GUID" : "100",
+        "Attributes" : 
+        [
+            {"BaseName" : "Add New Site"},
+            {"Address Line 1" : ""},
+            {"Address Line 2" : ""},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : ""},
+            {"Contact Name" : ""},
+            {"Contact Telephone Number" : ""},
+            {"Sq. ft" : ""}
         ]
     }
 ]
