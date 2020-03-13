@@ -265,12 +265,51 @@ function pageLoad() {
             ],
             columns: [
                 {type:'text', width:'115px', name:'date', title:'Date'},
-                {type:'text', width:'115px', name:'tradereference', title:'Trade Reference'},
+                {type:'text', width:'135px', name:'tradereference', title:'Trade Reference'},
                 {type:'text', width:'115px', name:'period', title:'Period'},
                 {type:'text', width:'115px', name:'volume', title:'Volume'},
                 {type:'text', width:'115px', name:'price', title:'Price'},
              ]
         });
+
+    jexcel(document.getElementById('spreadsheet5'), {
+          data:[
+              {month:'10 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+              {month:'11 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+              {month:'12 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+              {month:'01 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+              {month:'02 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+              {month:'03 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+              {month:'04 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+              {month:'05 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+              {month:'06 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+              {month:'07 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+              {month:'08 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+              {month:'09 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+          ],
+          columns: [
+              {type:'text', width:'115px', name:'month', title:'Month'},
+              {type:'text', width:'115px', name:'openvol', title:'Open Volume'},
+              {type:'text', width:'115px', name:'hedgevol', title:'Hedge Volume'},
+              {type:'text', width:'115px', name:'capprice', title:'Cap Price'},
+              {type:'text', width:'115px', name:'ecp', title:'ECP'},
+              {type:'text', width:'115px', name:'marketprice', title:'Market Price'},
+              {type:'text', width:'115px', name:'day1price', title:'Day 1 Price'},
+           ]
+      });
+  
+    jexcel(document.getElementById('spreadsheet6'), {
+          data:[
+              {date:'15/02/2018',	tradereference:'00002',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+          ],
+          columns: [
+              {type:'text', width:'115px', name:'date', title:'Date'},
+              {type:'text', width:'135px', name:'tradereference', title:'Trade Reference'},
+              {type:'text', width:'115px', name:'period', title:'Period'},
+              {type:'text', width:'115px', name:'volume', title:'Volume'},
+              {type:'text', width:'115px', name:'price', title:'Price'},
+           ]
+      });
 }
 
 function getChartTooltipXFormat(period) {

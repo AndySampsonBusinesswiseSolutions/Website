@@ -12,24 +12,17 @@
     padding-left: 350px;
     padding-right: 30px;
 }
-.tree-div {
+.tree-div, .roundborder  {
     border: solid black 1px;
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
     border-bottom-left-radius: 5px; 
     border-bottom-right-radius: 5px;
-    background-color: #e9eaee;
-    max-height: 650px;
+    
 }
 .tree-div {
-    min-height: 300px;
-}
-.roundborder {
-    border: solid black 1px;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px; 
+    background-color: #e9eaee;
+    max-height: 900px;
 }
 .divcolumn {
     float: left;

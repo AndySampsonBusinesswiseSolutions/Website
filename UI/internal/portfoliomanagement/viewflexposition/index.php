@@ -21,15 +21,13 @@
         <div class="panel-heading">
             <a data-toggle="collapse" data-parent="#accordion1" href="#collapse1" class="expandicon" style="padding-left: 15px;">Electricity Volume</a>
         </div>
-        <div id="collapse1" class="panel-collapse collapse">
+        <div id="collapse1" class="panel-collapse collapse in">
             <div class="panel-body">
               <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                <div class="final-column">
-                  <div class="tree-div" style="height: 1000px;">
+                  <div class="tree-div">
                     <div id="electricityVolumeChart"></div>
                   </div>
                 </div>	
-              </div>
             </div>
         </div>
     </div>
@@ -44,12 +42,10 @@
         <div id="collapse2" class="panel-collapse collapse">
             <div class="panel-body">
               <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                <div class="final-column">
                   <div class="tree-div" style="height: 1000px;">
                     <div id="electricityPriceChart"></div>
                   </div>
                 </div>	
-              </div>
             </div>
         </div>
     </div>
@@ -64,12 +60,10 @@
         <div id="collapse3" class="panel-collapse collapse">
             <div class="panel-body">
               <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                <div class="final-column">
                   <div class="tree-div" style="height: 1000px;">
                     <div id="gasVolumeChart"></div>
                   </div>
                 </div>	
-              </div>
             </div>
         </div>
     </div>
@@ -84,12 +78,10 @@
         <div id="collapse4" class="panel-collapse collapse">
             <div class="panel-body">
               <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                <div class="final-column">
                   <div class="tree-div" style="height: 1000px;">
                     <div id="gasPriceChart"></div>
                   </div>
                 </div>	
-              </div>
             </div>
         </div>
     </div>
@@ -127,6 +119,17 @@
         </div>
         <div id="collapse6" class="panel-collapse collapse">
             <div class="panel-body">
+            <div class="row roundborder" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
+                <div class="divcolumn first"></div>
+                <div class="divcolumn left">
+                  <div id="spreadsheet5"></div>
+                </div>
+                <div class="divcolumn middle"></div>
+                <div class="divcolumn right">
+                  <div id="spreadsheet6"></div>
+                </div>
+                <div class="divcolumn last"></div>
+              </div>
             </div>
         </div>
     </div>
