@@ -21,6 +21,7 @@
 				<div class="tree-column">
 					<div id="treeDiv" class="tree-div">
 					</div>
+					<button style="width: 100%; margin-top: 5px;">Upload Contract</button>
 				</div>
 			</div>
 		</div>
@@ -28,10 +29,14 @@
 		<div class="final-column">
 			<br>
 			<div>
-				<div class="group-by-div">
 					<span>Out Of Contract Meters</span>
-					<div id="outOfContract"></div>
-				</div>
+					<div id="outOfContract"></div><br>
+					<span>Active Contracts</span>
+					<div id="active"></div><br>
+					<span>Pending Contracts</span>
+					<div id="pending"></div><br>
+					<span>Finished Contracts</span>
+					<div id="finished"></div><br>
 			</div>
 		</div>
 	</div>
