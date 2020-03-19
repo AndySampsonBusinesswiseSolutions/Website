@@ -1,73 +1,168 @@
 function pageLoad() {
-    createTree(data, "DeviceType", "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
-	createTree(data, "DeviceType", "gasTreeDiv", "gas", "updateChart(gasChart)", true);
-	addExpanderOnClickEvents();
-	addArrowOnClickEvents();
-	addCommoditySelectorOnClickEvent();	
+  createTree(data, "DeviceType", "siteDiv", "", "updateCharts()", true);
+  addExpanderOnClickEvents(document);
+  updateClassOnClick('usage', 'fa-plus-square', 'fa-minus-square');
 
-	createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
-	createBlankChart("#gasChart", "There's no gas data to display. Select from the tree to the left to display");
+  document.onmousemove=function(e) {
+    var mousecoords = getMousePos(e);
+    if(mousecoords.x <= 15) {
+      openNav();
+    }  
+    else if(mousecoords.x >= 400) {
+      closeNav();
+    }  
+  };
+
+  window.onload = function() {
+    updateCharts();
+  }
 }
 
-function updateChart(callingElement, chart) {
-    var treeDiv = document.getElementById(chart.id.replace('Chart', 'TreeDiv'));
-    var inputs = treeDiv.getElementsByTagName('input');
-    var commodity = chart.id.replace('Chart', '').toLowerCase();
-    var checkBoxes = getCheckedCheckBoxes(inputs);		
-    
-    clearElement(chart);
+function getMousePos(e) {
+  return {x:e.clientX,y:e.clientY};
+}
 
-    if(checkBoxes.length == 0) {
-        createBlankChart('#' + commodity + 'Chart', 'There is no ' + commodity + ' data to display. Select from the tree to the left to display');
-        return;
+function openNav() {
+  document.getElementById("mySidenav").style.width = "400px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0px";
+}
+
+function updateCharts() {
+  updateUsageChart();
+  updateTotalCostChart();
+  updateCostBreakdownChart();
+  updateCapacityChart();
+}
+
+function updateUsageChart() {
+  var usageChartOptionsTimeSpan = document.getElementById('usageChartOptionsTimeSpan');
+  var usageChartOptionsDateRange = document.getElementById('usageChartOptionsDateRange');
+
+  var showByArray = ['Usage'];
+  updateChart(usageChartOptionsDateRange, usageChartOptionsTimeSpan, showByArray, '#usageChart');
+}
+
+function updateTotalCostChart() {
+  var totalCostChartOptionsTimeSpan = document.getElementById('totalCostChartOptionsTimeSpan');
+  var totalCostChartOptionsDateRange = document.getElementById('totalCostChartOptionsDateRange');
+  
+  var showByArray = ['Cost'];
+  updateChart(totalCostChartOptionsDateRange, totalCostChartOptionsTimeSpan, showByArray, '#totalCostChart');
+}
+
+function updateCostBreakdownChart() {
+  var costBreakdownChartOptionsTimeSpan = document.getElementById('costBreakdownChartOptionsTimeSpan');
+  var costBreakdownChartOptionsDateRange = document.getElementById('costBreakdownChartOptionsDateRange');
+  
+  var showByArray = [];
+
+  var costBreakdownChartElementAllOptionscheckbox = document.getElementById('costBreakdownChartElementAllOptionscheckbox');
+  if(costBreakdownChartElementAllOptionscheckbox.checked) {
+    showByArray = [
+      'CCL',
+      'CM',
+      'BSUoS',
+      'CFD',
+      'FiT',
+      'RO',
+      'DLoss',
+      'DUoSCap',
+      'DUoSCapFix',
+      'DUoSSC',
+      'DUoS',
+      'TLoss',
+      'Wholesale'
+    ];
+  }
+  else {
+    var costBreakdownChartElementOptionsList = document.getElementById('costBreakdownChartElementOptionsList');
+    var inputs = costBreakdownChartElementOptionsList.getElementsByTagName('input');
+    var inputLength = inputs.length;
+
+    for(var i = 0; i < inputLength; i++) {
+      if(inputs[i].checked) {
+        showByArray.push(inputs[i].id.replace('costBreakdownChartElement', '').replace('Optionscheckbox', ''));
+      }
     }
+  }
 
-    var showBySpan = document.getElementById(commodity.concat('ChartHeaderShowBy'));
-    var periodSpan = document.getElementById(commodity.concat('ChartHeaderPeriod'));
-    var chartDate = new Date(document.getElementById(commodity.concat('Calendar')).value);
-    var newCategories = getNewCategories(periodSpan.children[0].value, chartDate);   
-    var newSeries = getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, getPeriodDateFormat(periodSpan.children[0].value));
-    var typeSpan = document.getElementById(commodity.concat('ChartHeaderType'));
+  updateChart(costBreakdownChartOptionsDateRange, costBreakdownChartOptionsTimeSpan, showByArray, '#costBreakdownChart');
+}
 
-    var chartOptions = {
+function updateCapacityChart() {
+  var capacityChartOptionsTimeSpan = document.getElementById('capacityChartOptionsTimeSpan');
+  var capacityChartOptionsDateRange = document.getElementById('capacityChartOptionsDateRange');
+  
+  var showByArray = ['Capacity', 'MaxDemand'];
+  updateChart(capacityChartOptionsDateRange, capacityChartOptionsTimeSpan, showByArray, '#capacityChart');
+}
+
+function getChartTypeFromCategoryCount(categoryCount) {
+  return categoryCount == 1 ? 'bar' : 'line';
+}
+
+function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
+  var startDateMilliseconds = parseInt(dateRangeElement.getElementsByClassName('rz-pointer-min')[0].getAttribute('aria-valuenow'));
+  var endDateMilliseconds = parseInt(dateRangeElement.getElementsByClassName('rz-pointer-max')[0].getAttribute('aria-valuenow'));
+  var startDate = new Date(startDateMilliseconds);
+  var endDate = new Date(endDateMilliseconds + (24*60*60*1000));
+
+  var treeDiv = document.getElementById('siteDiv');
+  var inputs = treeDiv.getElementsByTagName('input');
+  var checkBoxes = getCheckedCheckBoxes(inputs);	
+  var dateFormat = getPeriodDateFormat(timeSpanElement.children[6].innerHTML)
+  var newCategories = getCategoryTexts(startDate, endDate, dateFormat);
+
+  var newSeries = [];
+  var showByLength = showByArray.length;
+
+  for(var i = 0; i < showByLength; i++) {
+    newSeries.push(...getNewChartSeries(checkBoxes, showByArray[i], newCategories, getCommodity(), dateFormat, startDate, endDate));
+  }  
+
+  var chartOptions = {
     chart: {
-        type: getChartType(typeSpan.children[0].value),
-        stacked: typeSpan.children[0].value.includes('Stacked')
+        type: getChartTypeFromCategoryCount(newCategories.length),
     },
-    tooltip: {
-        x: {
-        format: getChartTooltipXFormat(periodSpan.children[0].value)
-        }
-    },
-    yaxis: [{
-        title: {
-            text: getChartYAxisTitle(showBySpan.children[0].value, commodity)
-        },
-          show: true
-    }],
     xaxis: {
-        type: 'datetime',
-        title: {
-        text: formatDate(chartDate, getChartXAxisTitleFormat(periodSpan.children[0].value))
-        },
-        labels: {
-        format: getChartXAxisLabelFormat(periodSpan.children[0].value)
-        },
-        min: new Date(newCategories[0]).getTime(),
-        max: new Date(newCategories[newCategories.length - 1]).getTime(),
-          categories: newCategories
+        type: getXAxisTypeFromTimeSpan(timeSpanElement.children[6].innerHTML),
+        min: newCategories[0],
+        max: newCategories[newCategories.length - 1],
+        categories: newCategories
     }
-    };
+  };
 
-    refreshChart(newSeries, newCategories, '#'.concat(commodity).concat('Chart'), chartOptions);
+  clearElement(document.getElementById(chartId.replace('#', '')));
+  refreshChart(newSeries, chartId, chartOptions);
 }
 
-function addCommoditySelectorOnClickEvent() {
-    var commoditySelector = document.getElementById("electricityGasSelector");
-    commoditySelector.addEventListener('click', function(event) {
-        updateClassOnClick("electricityDiv", "listitem-hidden", "")
-        updateClassOnClick("gasDiv", "listitem-hidden", "")
-    })	
+function getXAxisTypeFromTimeSpan(timeSpan) {
+  switch(timeSpan) {
+    case 'Half Hourly':
+    // case 'Daily':
+    // case 'Weekly':
+      return 'datetime';
+    default:
+      return 'category';
+  }
+}
+
+function getCommodity() {
+  var commodity = '';
+  var electricityCommodityradio = document.getElementById('electricityCommodityradio');
+  if(electricityCommodityradio.checked) {
+    commodity = 'Electricity';
+  }
+  else {
+    var gasCommodityradio = document.getElementById('gasCommodityradio');
+    if(gasCommodityradio.checked) {
+      commodity = 'Gas';
+    }
+  }
+  return commodity;
 }
 
 var branchCount = 0;
@@ -445,8 +540,8 @@ function hasClass(elem, className) {
 	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
 
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
+function addExpanderOnClickEvents(element) {
+	var expanders = element.getElementsByClassName('fa-plus-square');
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
@@ -458,82 +553,6 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
-}
-
-function addArrowOnClickEvents() {
-	var arrows = document.getElementsByClassName('fa-angle-double-down');
-	var arrowsLength = arrows.length;
-	for(var i=0; i< arrowsLength; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-angle-double-down', 'fa-angle-double-up')
-			updateClassOnClick(this.id.replace('Arrow', 'SubMenu'), 'listitem-hidden', '')
-		});
-	}
-
-	arrows = document.getElementsByClassName('fa-angle-double-left');
-	arrowsLength = arrows.length;
-	for(var i=0; i< arrowsLength; i++){
-		arrows[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id, 'fa-angle-double-left', 'fa-angle-double-right')
-		});
-	}
-
-	var arrowHeaders = document.getElementsByClassName('arrow-header');
-	var arrowHeadersLength = arrowHeaders.length;
-	for(var i=0; i< arrowHeadersLength; i++){
-		arrowHeaders[i].addEventListener('click', function (event) {
-			updateClassOnClick(this.id.concat('Arrow'), 'fa-angle-double-down', 'fa-angle-double-up')
-			updateClassOnClick(this.id.concat('SubMenu'), 'listitem-hidden', '')
-		});
-	}
 }
 
 function createBlankChart(chartId, noDataText) {
@@ -575,39 +594,40 @@ function getCheckedCheckBoxes(inputs) {
         }
       }
     }
+
+    if(checkBoxes.length == 0) {
+      for(var i = 0; i < inputLength; i++) {
+        if(inputs[i].type.toLowerCase() == 'checkbox') {
+          if(inputs[i].getAttribute('branch') == 'Site') {
+            checkBoxes.push(inputs[i]);
+          }
+        }
+      }
+    }
   
     return checkBoxes;
 }
 
-function getNewCategories(period, chartDate) {
-    var dateFormat = getPeriodDateFormat(period);
-    switch(period) {
-      case 'Daily':
-        return getCategoryTexts(new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate()), new Date(chartDate.getFullYear(), chartDate.getMonth(), chartDate.getDate() + 1), dateFormat);
-      case "Weekly":
-        return getCategoryTexts(getMonday(chartDate), new Date(getMonday(chartDate).getFullYear(), getMonday(chartDate).getMonth(), getMonday(chartDate).getDate() + 7), dateFormat);
-      case "Monthly":
-        return getCategoryTexts(new Date(chartDate.getFullYear(), chartDate.getMonth(), 1), new Date(chartDate.getFullYear(), chartDate.getMonth() + 1, 1), dateFormat);
-      case "Yearly":
-        return getCategoryTexts(new Date(chartDate.getFullYear(), 0, 1), endDate = new Date(chartDate.getFullYear() + 1, 0, 1), dateFormat);
-    }
-}
-
 function getPeriodDateFormat(period) {
     switch(period) {
+      case 'Half Hourly':
+        return 'dd MMM yy hh:mm:ss';
       case 'Daily':
       case "Weekly":
-        return 'yyyy-MM-dd hh:mm:ss';
+        return 'dd MMM yy';
       case "Monthly":
+        return 'MMM yyyy';
+      case "Quarterly":
+        return 'yyyy QQ';
       case "Yearly":
-        return 'yyyy-MM-dd';
+        return 'yyyy';
     }
 }
 
 function getCategoryTexts(startDate, endDate, dateFormat) {
     var newCategories = [];
   
-    for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+    for(var newDate = new Date(startDate); newDate < new Date(endDate); newDate.setDate(newDate.getDate() + 1)) {
       for(var hh = 0; hh < 48; hh++) {
         var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
   
@@ -624,7 +644,7 @@ function formatDate(dateToBeFormatted, format) {
 	var baseDate = new Date(dateToBeFormatted);
 
 	switch(format) {
-		case 'yyyy-MM-dd':
+		case 'dd MMM yy':
 			var aaaa = baseDate.getFullYear();
 			var gg = baseDate.getDate();
 			var mm = (baseDate.getMonth() + 1);
@@ -637,8 +657,8 @@ function formatDate(dateToBeFormatted, format) {
 				mm = '0' + mm;
 			}
 		
-			return aaaa + '-' + mm + '-' + gg;
-		case 'yyyy-MM-dd hh:mm:ss':
+			return gg + ' ' + convertMonthIdToShortCode(mm) + ' ' + aaaa;
+		case 'dd MMM yy hh:mm:ss':
 			var hours = baseDate.getHours()
 			var minutes = baseDate.getMinutes()
 			var seconds = baseDate.getSeconds();
@@ -655,7 +675,7 @@ function formatDate(dateToBeFormatted, format) {
 				seconds = '0' + seconds;
 			}			
 		
-			return formatDate(baseDate, 'yyyy-MM-dd') + ' ' + hours + ':' + minutes + ':' + seconds;
+			return formatDate(baseDate, 'dd MMM yy') + ' ' + hours + ':' + minutes + ':' + seconds;
 		case 'MMM yyyy':
 			var aaaa = baseDate.getFullYear();
 			var mm = (baseDate.getMonth() + 1);
@@ -663,15 +683,15 @@ function formatDate(dateToBeFormatted, format) {
 			return convertMonthIdToShortCode(mm) + ' ' + aaaa;
 		case 'yyyy':
 			return baseDate.getFullYear();
-		case 'yyyy-MM-dd to yyyy-MM-dd':
-			var startDate = getMonday(baseDate);
-			var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 6);
+		case 'yyyy QQ':
+			var aaaa = baseDate.getFullYear();
+			var mm = (baseDate.getMonth() + 1);
 
-			return formatDate(startDate, 'yyyy-MM-dd') + ' to ' + formatDate(endDate, 'yyyy-MM-dd')
+      return aaaa + ' ' + convertMonthIdToQuarter(mm);
 	}
 }
 
-function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dateFormat) {
+function getNewChartSeries(checkBoxes, showBy, newCategories, commodity, dateFormat, startDate, endDate) {
     var meters = [];
     var newSeries = [];
     var checkBoxesLength = checkBoxes.length;
@@ -685,14 +705,6 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dat
       if(checkboxBranch == 'Site') {				
         meters = getSitesByAttribute('BaseName', linkedSite)[0].Meters;
       }
-      else if(checkboxBranch.includes('GroupByOption')) {
-        meters = getMetersByAttribute(checkboxBranch.replace('GroupByOption|', ''), span.innerHTML, linkedSite);
-        seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
-      }
-      else if(checkboxBranch.includes('GroupBySubOption')) {
-        meters = getMetersByAttribute(checkboxBranch.replace('GroupBySubOption|', ''), span.innerHTML, linkedSite);
-        seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
-      }
       else if(checkboxBranch == 'Meter') {
         meters = getMetersByAttribute('Identifier', span.innerHTML, linkedSite);
       }
@@ -701,7 +713,32 @@ function getNewChartSeries(checkBoxes, showBySpan, newCategories, commodity, dat
         seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
       }
   
-      newSeries.push(summedMeterSeries(meters, seriesName, showBySpan.children[0].value, newCategories, commodity, dateFormat));
+      if(showBy == "MaxDemand") {
+        var meterLength = meters.length;
+
+        for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+          var meter = meters[meterCount];
+      
+          if(commodityMeterMatch(meter, commodity)) {
+            var meterData = meter['Capacity'];
+            
+            if(!meterData) {
+              continue;
+            }
+
+            var site = getSitesByAttribute('BaseName', linkedSite)[0];
+            var maxDemand = getAttribute(site.Attributes, 'MaxDemand');      
+            meter['MaxDemand'] = JSON.parse(JSON.stringify(meterData));
+
+            var meterDataLength = meterData.length;
+            for(var j = 0; j < meterDataLength; j++) {
+              meter['MaxDemand'][j].Value = maxDemand;
+            }
+          }
+        }
+      }
+      
+      newSeries.push(summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat, startDate, endDate));
     }
   
     return newSeries;
@@ -744,13 +781,50 @@ function getMetersByAttribute(attribute, value, linkedSite) {
     return meters;
 }
 
-function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat) {
+function getSubMetersByAttribute(attribute, value, linkedSite) {
+  var subMeters = [];
+  var dataLength = data.length;
+
+  for(var siteCount = 0; siteCount < dataLength; siteCount++) {
+    var site = data[siteCount];
+    var meterLength = site.Meters.length;
+
+    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+      var meter = site.Meters[meterCount];
+
+      if(meter['SubMeters']){
+        var subMeterLength = meter.SubMeters.length;
+
+        for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++){
+          var subMeter = meter.SubMeters[subMeterCount];
+
+          if(getAttribute(subMeter.Attributes, attribute) == value) {
+            if(linkedSiteMatch(subMeter.GUID, 'SubMeter', linkedSite)) {
+              subMeters.push(subMeter);
+            }
+          }
+        }
+      }              
+    }			
+  }
+
+  return subMeters;
+}
+
+function linkedSiteMatch(identifier, meterType, linkedSite) {
+  var identifierCheckbox = document.getElementById(meterType.concat(identifier).concat('checkbox'));
+  var identifierLinkedSite = identifierCheckbox.attributes['linkedSite'].nodeValue;
+
+  return identifierLinkedSite == linkedSite;
+}
+
+function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat, startDate, endDate) {
     var meterLength = meters.length;
     var summedMeterSeries = {
-      name: seriesName,
+      name: seriesName.concat(' - ').concat(showBy),
       data: [0]
     };
-  
+    
     for(var meterCount = 0; meterCount < meterLength; meterCount++) {
       var meter = meters[meterCount];
   
@@ -763,21 +837,26 @@ function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity,
   
         var meterDataLength = meterData.length;
         for(var j = 0; j < meterDataLength; j++) {
-          var i = newCategories.findIndex(n => n == formatDate(meterData[j].Date, dateFormat));
-          var value = meterData[j].Value;
-  
-          if(!value && !summedMeterSeries.data[i]){
-            summedMeterSeries.data[i] = null;
-          }
-          else if(value && !summedMeterSeries.data[i]) {
-            summedMeterSeries.data[i] = value;
-          }
-          else if(value && summedMeterSeries.data[i]) {
-            summedMeterSeries.data[i] += value;
-          }							     
+          var meterDate = new Date(meterData[j].Date);
+
+          if(meterDate >= startDate && meterDate <= endDate) {
+            var formattedDate = formatDate(meterDate, dateFormat);
+            var i = newCategories.findIndex(n => n == formattedDate);
+            var value = meterData[j].Value;
+    
+            if(!value && !summedMeterSeries.data[i]){
+              summedMeterSeries.data[i] = null;
+            }
+            else if(value && !summedMeterSeries.data[i]) {
+              summedMeterSeries.data[i] = value;
+            }
+            else if(value && summedMeterSeries.data[i]) {
+              summedMeterSeries.data[i] += value;
+            }		
+          }          					     
         }
       }
-    }
+    } 
   
     return summedMeterSeries;
 }
@@ -847,20 +926,20 @@ function getChartYAxisTitle(showBy, commodity) {
     }
 }
 
-function refreshChart(newSeries, newCategories, chartId, chartOptions) {
+function refreshChart(newSeries, chartId, chartOptions) {
     var options = {
       chart: {
           height: '100%',
           width: '100%',
         type: chartOptions.chart.type,
-        stacked: chartOptions.chart.stacked,
+        // stacked: chartOptions.chart.stacked,
         zoom: {
           type: 'x',
           enabled: true,
           autoScaleYaxis: true
         },
         animations: {
-          enabled: false
+          enabled: true
         },
         toolbar: {
           autoSelected: 'zoom',
@@ -872,11 +951,11 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
       dataLabels: {
         enabled: false
       },
-      tooltip: {
-        x: {
-          format: chartOptions.tooltip.x.format
-        }
-      },
+      // tooltip: {
+      //   x: {
+      //     format: chartOptions.tooltip.x.format
+      //   }
+      // },
       legend: {
         show: true,
         position: 'right',
@@ -885,7 +964,7 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
         }
       },
       series: newSeries,
-      yaxis: chartOptions.yaxis,
+      // yaxis: chartOptions.yaxis,
       xaxis: chartOptions.xaxis
     };  
   
@@ -922,16 +1001,26 @@ function convertMonthIdToFullText(monthId) {
 }
 
 function convertMonthIdToShortCode(monthId) {
-	return convertMonthIdToFullText(monthId).slice(0, 3).toUpperCase();
+	return convertMonthIdToFullText(parseInt(monthId)).slice(0, 3).toUpperCase();
 }
 
-function getMonday(date) {
-	var mondayDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-	var day = mondayDate.getDay() || 7;  
-
-	if( day !== 1 ) {
-		mondayDate.setHours(-24 * (day - 1)); 
+function convertMonthIdToQuarter(monthId) {
+  switch(monthId) {
+		case 1:
+		case 2:
+		case 3:
+			return 'Q1';
+		case 4:
+		case 5:
+		case 6:
+      return 'Q2';
+		case 7:
+		case 8:
+		case 9:
+      return 'Q3';
+		case 10:
+		case 11:
+		case 12:
+			return 'Q4';
 	}
-	
-	return mondayDate;
 }

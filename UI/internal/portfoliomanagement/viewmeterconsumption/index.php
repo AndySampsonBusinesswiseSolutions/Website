@@ -11,250 +11,221 @@
 	<link rel="stylesheet" href="viewmeterconsumption.css">
 </head>
 
-<body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-
-	<div style="margin-left: 15px;">
-		<div>Select Commodity To Display</div>
-		<span>Electricity</span><span class="show-pointer">&nbsp;<i class="fas fa-angle-double-left" id="electricityGasSelector"></i>&nbsp;</span><span>Gas</span>
-	</div>
-	<div id="electricityDiv">
-		<div class="row">
-			<div class="tree-column">
-				<div>
-					<br><b style="padding-left: 15px;">Electricity Meters</b>
-					<div class="tree-column">
-						<div id="electricityGroupDiv" class="group-div">
-							<div id="electricityGroupByDiv" class="group-by-div">
-								<div style="width: 30%; display: inline-block;">
-									<span>Group By:</span>
-								</div>
-								<div style="float: right;" class="show-pointer">
-									<span title="Period" class="show-pointer">
-										<span class="arrow-header" id="electricityTreeHeaderGroupBy">
-											<select class="show-pointer" onchange="createTree(data, this.value, 'electricityTreeDiv', 'electricity', 'updateChart(electricityChart)'); addExpanderOnClickEvents(); updateChart(this, electricityChart)">
-												<option value="DeviceType">Device Type</option>
-												<option value="Zone">Zone>Panel</option>
-												<option value="Hierarchy">Hierarchy</option>
-											</select>
-										</span>
-										<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityTreeHeaderGroupByArrow"></span>
-									</span>
-								</div>
-							</div>
-						</div>
-						<br>
-						<div id="electricityTreeDiv" class="tree-div">
-						</div>
-					</div>
-				</div>
+<body ng-app="dateRangeDemo" ng-controller="dateRangeCtrl">
+	<div id="mySidenav" class="sidenav">
+		<div class="tree-column">
+			<div id="siteDiv" class="tree-div">
 			</div>
-			<div class="fill-column"></div>
-			<div class="final-column">
-				<div>
-					<br>
-					<br>
-					<div>
-						<div class="group-div">
-							<div class="group-by-div">
-								<div style="width: 30%; display: inline-block;">
-									<span class="fas fa-chart-line" style="padding-right: 5px"></span>
-									<span class="chart-header">Electricity Time View</span>
-								</div>
-								<div style="float: right;">
-									<span style="padding-right: 5px;" class="simple-divider"></span>
-									<span>Show By:</span>
-									<span title="Show By" class="show-pointer">
-										<span class="arrow-header" id="electricityChartHeaderShowBy">
-											<select class="show-pointer" onchange="updateChart(this, electricityChart)">
-												<option value="Energy">Energy</option>
-												<option value="Power">Power</option>
-												<option value="Current">Current</option>
-												<option value="Cost">Cost</option>
-											</select>
-										</span>
-										<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityChartHeaderShowByArrow"></span>
-									</span>          
-									<span style="padding-right: 5px;" class="simple-divider"></span>
-									<span>Period:</span>
-									<span title="Period" class="show-pointer">
-										<span class="arrow-header" id="electricityChartHeaderPeriod">
-											<select class="show-pointer" onchange="updateChart(this, electricityChart)">
-												<option value="Daily">Daily</option>
-												<option value="Weekly">Weekly</option>
-												<option value="Monthly">Monthly</option>
-												<option value="Yearly">Yearly</option>
-											</select>
-										</span>
-										<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="electricityChartHeaderPeriodArrow"></span>
-									</span>
-									<span class="simple-divider" style="padding-left: 5px;"></span>
-									<input type="date" name="calendar" id="electricityCalendar" value="2019-11-26" onchange="updateChart(this, electricityChart)">
-									<span class="simple-divider"></span>
-									<span style="padding-left: 5px;" id="electricityChartHeaderType">
-										<select class="show-pointer" onchange="updateChart(this, electricityChart)">
-											<option value="Line">Line</option>
-											<option value="Bar">Bar</option>
-											<option value="Stacked Line">Stacked Line</option>
-											<option value="Stacked Bar">Stacked Bar</option>
-											<option value="Area">Area</option>
-										</select>
-									</span>
-									<span title="Chart Type" class="fas fa-chart-bar show-pointer"></span>
-									<span class="simple-divider"></span>
-									<span style="padding-left: 5px;">
-										<select class="show-pointer">
-											<option value="Outside Temp">Outside Temp</option>
-											<option value="On/Off Hours">On/Off Hours</option>
-											<option value="Sensor Level (RSSI)">Sensor Level (RSSI)</option>
-											<option value="Bulk">Bulk</option>
-											<option value="Error Correction">Error Correction</option>
-										</select>
-									</span>
-									<span title="Layers" class="fas fa-layer-group show-pointer"></span>
-									<span class="simple-divider"></span>
-									<span style="padding-left: 5px;">
-										<select class="show-pointer">
-											<option value="Xlsx">Xlsx</option>
-											<option value="Csv">Csv</option>
-											<option value="Image">Image</option>
-											<option value="Pdf">Pdf</option>
-										</select>
-									</span>
-									<span title="Download" class="fas fa-download show-pointer"></span>
-									<span class="simple-divider"></span>
-									<span title="Refresh" class="fas fa-sync show-pointer"></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<br>
-					<div class="chart">
-						<div id="electricityChart">
-						</div>
-					</div>
-				</div>
-			</div>	
+			<br>
+			<div class="roundborder" style="background-color: #e9eaee;">
+				<span style="padding-left: 5px;">Select Commodity</span>
+				<ul class="format-listitem">
+					<li>
+						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
+					</li>
+					<li>
+						<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "Electricity", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+					</li>
+					<li>
+						<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "Gas", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div class="roundborder" style="background-color: #e9eaee;">
+				<span id="usageChartOptionsspan" style="padding-left: 5px;">Usage Chart Options</span>
+				<div id="usageChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<ul id="usageChartOptionsList" class="format-listitem listitem-hidden">
+					<li>
+						<span>Date Range</span>
+						<rzslider id="usageChartOptionsDateRange"
+							rz-slider-model="usageChartOptionsDateRange.minValue" 
+							rz-slider-high="usageChartOptionsDateRange.maxValue" 
+							rz-slider-options="usageChartOptionsDateRange.options">
+						</rzslider>
+					</li>
+					<li>
+						<span>Time Span</span>
+						<rzslider id="usageChartOptionsTimeSpan"
+							rz-slider-model="usageChartOptionsTimeSpan.value" 
+							rz-slider-options="usageChartOptionsTimeSpan.options">
+						</rzslider>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div class="roundborder" style="background-color: #e9eaee;">
+				<span id="totalCostChartOptionsspan" style="padding-left: 5px;">Total Cost Chart Options</span>
+				<div id="totalCostChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<ul id="totalCostChartOptionsList" class="format-listitem listitem-hidden">
+					<li>
+						<span>Date Range</span>
+						<rzslider id="totalCostChartOptionsDateRange"
+							rz-slider-model="totalCostChartOptionsDateRange.minValue" 
+							rz-slider-high="totalCostChartOptionsDateRange.maxValue" 
+							rz-slider-options="totalCostChartOptionsDateRange.options">
+						</rzslider>
+					</li>
+					<li>
+						<span>Time Span</span>
+						<rzslider id="totalCostChartOptionsTimeSpan"
+							rz-slider-model="totalCostChartOptionsTimeSpan.value" 
+							rz-slider-options="totalCostChartOptionsTimeSpan.options">
+						</rzslider>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div class="roundborder" style="background-color: #e9eaee;">
+				<span id="costBreakdownChartOptionsspan" style="padding-left: 5px;">Cost Breakdown Chart Options</span>
+				<div id="costBreakdownChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<ul id="costBreakdownChartOptionsList" class="format-listitem listitem-hidden">
+					<li>
+						<span>Date Range</span>
+						<rzslider id="costBreakdownChartOptionsDateRange"
+							rz-slider-model="costBreakdownChartOptionsDateRange.minValue" 
+							rz-slider-high="costBreakdownChartOptionsDateRange.maxValue" 
+							rz-slider-options="costBreakdownChartOptionsDateRange.options">
+						</rzslider>
+					</li>
+					<li>
+						<span>Time Span</span>
+						<rzslider id="costBreakdownChartOptionsTimeSpan"
+							rz-slider-model="costBreakdownChartOptionsTimeSpan.value" 
+							rz-slider-options="costBreakdownChartOptionsTimeSpan.options">
+						</rzslider>
+					</li>
+					<li>
+						<span id="costBreakdownChartElementOptionsspan" style="padding-left: 5px;">Cost Elements</span>
+						<div id="costBreakdownChartElementOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+						<ul id="costBreakdownChartElementOptionsList" class="format-listitem listitem-hidden">
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementAllOptionscheckbox" checked onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementAllOptionsspan" style="padding-left: 5px;">All Cost Elements</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementCCLOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementCCLOptionsspan" style="padding-left: 5px;">Climate Change Levy</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementCMOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementCMOptionsspan" style="padding-left: 5px;">Capacity Market</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementBSUoSOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementBSUoSOptionsspan" style="padding-left: 5px;">BSUoS</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementCfDOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementCfDOptionsspan" style="padding-left: 5px;">Contract For Difference</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementFiTOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementFiTOptionsspan" style="padding-left: 5px;">Feed In Tariff</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementROOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementROOptionsspan" style="padding-left: 5px;">Renewable Obligation</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementDLossOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementDLossOptionsspan" style="padding-left: 5px;">Distribution Loss</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementDUoSCapOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementDUoSCapOptionsspan" style="padding-left: 5px;">DUoS Capacity</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementDUoSCapFixOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementDUoSCapFixOptionsspan" style="padding-left: 5px;">DUoS Capacity Fixed</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementDUoSSCOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementDUoSSCOptionsspan" style="padding-left: 5px;">DUoS Standing Charge</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementDUoSOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementDUoSOptionsspan" style="padding-left: 5px;">DUoS</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementTLossOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementTLossOptionsspan" style="padding-left: 5px;">Transmission Loss</span>
+							</li>
+							<li>
+								<input type="checkbox" id="costBreakdownChartElementWholesaleOptionscheckbox" onclick="updateCostBreakdownChart();"></input>
+								<span id="costBreakdownChartElementWholesaleOptionsspan" style="padding-left: 5px;">Wholesale</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div class="roundborder" style="background-color: #e9eaee;">
+				<span id="capacityChartOptionsspan" style="padding-left: 5px;">Capacity Chart Options</span>
+				<div id="capacityChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<ul id="capacityChartOptionsList" class="format-listitem listitem-hidden">
+					<li>
+						<span>Date Range</span>
+						<rzslider id="capacityChartOptionsDateRange"
+							rz-slider-model="capacityChartOptionsDateRange.minValue" 
+							rz-slider-high="capacityChartOptionsDateRange.maxValue" 
+							rz-slider-options="capacityChartOptionsDateRange.options">
+						</rzslider>
+					</li>
+					<li>
+						<span>Time Span</span>
+						<rzslider id="capacityChartOptionsTimeSpan"
+							rz-slider-model="capacityChartOptionsTimeSpan.value" 
+							rz-slider-options="capacityChartOptionsTimeSpan.options">
+						</rzslider>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
-	<div id="gasDiv" class="listitem-hidden">
-		<div class="row">
-			<div class="tree-column">
-				<div>
-					<br><b style="padding-left: 15px;">Gas Meters</b>
-					<div class="tree-column">
-						<div id="gasGroupDiv" class="group-div">
-							<div id="gasGroupByDiv" class="group-by-div">
-								<div style="width: 30%; display: inline-block;">
-									<span>Group By:</span>
-								</div>
-								<div style="float: right;" class="show-pointer">
-									<span title="Period" class="show-pointer">
-										<span class="arrow-header" id="gasTreeHeaderGroupBy">
-											<select class="show-pointer" onchange="createTree(data, this.value, 'gasTreeDiv', 'gas', 'updateChart(gasChart)'); addExpanderOnClickEvents(); updateChart(this, gasChart)">
-												<option value="DeviceType">Device Type</option>
-												<option value="Zone">Zone>Panel</option>
-												<option value="Hierarchy">Hierarchy</option>
-											</select>
-										</span>
-										<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasTreeHeaderGroupByArrow"></span>
-									</span>
-								</div>
-							</div>
-						</div>
-						<br>
-						<div id="gasTreeDiv" class="tree-div">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="fill-column"></div>
-			<div class="final-column">
-				<div>
-					<br>
-					<br>
-					<div>
-						<div class="group-div">
-							<div class="group-by-div">
-								<div style="width: 30%; display: inline-block;">
-									<span class="fas fa-chart-line" style="padding-right: 5px"></span>
-									<span class="chart-header">Gas Time View</span>
-								</div>
-								<div style="float: right;">
-									<span style="padding-right: 5px;" class="simple-divider"></span>
-									<span>Show By:</span>
-									<span title="Show By" class="show-pointer">
-										<span class="arrow-header" id="gasChartHeaderShowBy">
-											<select class="show-pointer" onchange="updateChart(this, gasChart)">
-												<option value="Energy">Energy</option>
-												<option value="Cost">Cost</option>
-											</select>
-										</span>
-										<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderShowByArrow"></span>
-									</span>          
-									<span style="padding-right: 5px;" class="simple-divider"></span>
-									<span>Period:</span>
-									<span title="Period" class="show-pointer">
-										<span class="arrow-header" id="gasChartHeaderPeriod">
-											<select class="show-pointer" onchange="updateChart(this, gasChart)">
-												<option value="Monthly">Monthly</option>
-												<option value="Yearly">Yearly</option>
-											</select>
-										</span>
-										<span class="fa fa-angle-double-down" style="padding-left: 10px;" id="gasChartHeaderPeriodArrow"></span>
-									</span>
-									<span class="simple-divider" style="padding-left: 5px;"></span>
-									<input type="date" name="calendar" id="gasCalendar" value="2019-11-26" onchange="updateChart(this, gasChart)">
-									<span class="simple-divider"></span>
-									<span style="padding-left: 5px;" id="gasChartHeaderType">
-										<select class="show-pointer" onchange="updateChart(this, gasChart)">
-											<option value="Line">Line</option>
-											<option value="Bar">Bar</option>
-											<option value="Stacked Line">Stacked Line</option>
-											<option value="Stacked Bar">Stacked Bar</option>
-											<option value="Area">Area</option>
-										</select>
-									</span>
-									<span title="Chart Type" class="fas fa-chart-bar show-pointer"></span>
-									<span class="simple-divider"></span>
-									<span style="padding-left: 5px;">
-										<select class="show-pointer">
-											<option value="Outside Temp">Outside Temp</option>
-											<option value="On/Off Hours">On/Off Hours</option>
-											<option value="Sensor Level (RSSI)">Sensor Level (RSSI)</option>
-											<option value="Bulk">Bulk</option>
-											<option value="Error Correction">Error Correction</option>
-										</select>
-									</span>
-									<span title="Layers" class="fas fa-layer-group show-pointer"></span>
-									<span class="simple-divider"></span>
-									<span style="padding-left: 5px;">
-										<select class="show-pointer">
-											<option value="Xlsx">Xlsx</option>
-											<option value="Csv">Csv</option>
-											<option value="Image">Image</option>
-											<option value="Pdf">Pdf</option>
-										</select>
-									</span>
-									<span title="Download" class="fas fa-download show-pointer"></span>
-									<span class="simple-divider"></span>
-									<span title="Refresh" class="fas fa-sync show-pointer"></span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<br>
-					<div class="chart">
-						<div id="gasChart">
-						</div>
-					</div>
-				</div>
-			</div>
+
+	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+	<br>
+	<div class="roundborder">
+		<span id="usagespan" style="padding-left: 5px;">Usage Chart</span>
+		<div id="usage" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+		<div id="usageList" class="chart" style="margin: 5px;">
+			<div id="usageChart"></div>
+		</div>
+	</div>
+	<br>
+	<div class="roundborder">
+		<span id="totalCostspan" style="padding-left: 5px;">Total Cost Chart</span>
+		<div id="totalCost" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+		<div id="totalCostList"  class="listitem-hidden chart" style="margin: 5px;">
+			<div id="totalCostChart"></div>
+		</div>
+	</div>
+	<br>
+	<div class="roundborder">
+		<span id="costBreakdownspan" style="padding-left: 5px;">Cost Breakdown Chart</span>
+		<div id="costBreakdown" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+		<div id="costBreakdownList"  class="listitem-hidden chart" style="margin: 5px;">
+			<div id="costBreakdownChart"></div>
+		</div>
+	</div>
+	<br>
+	<div class="roundborder">
+		<span id="capacityspan" style="padding-left: 5px;">Capacity Chart</span>
+		<div id="capacity" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+		<div id="capacityList"  class="listitem-hidden chart" style="margin: 5px;">
+			<div id="capacityChart"></div>
 		</div>
 	</div>
 	<br>
 </body>
 
+<link rel="stylesheet" href="rzslider.css" />
+<link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
+<script data-require="ui-bootstrap@*" data-semver="2.2.0" src="https://cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-2.2.0.js"></script>
+<script src="rzslider.js"></script>
+<script src="script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="viewmeterconsumption.json"></script>
 <script type="text/javascript" src="viewmeterconsumption.js"></script>
