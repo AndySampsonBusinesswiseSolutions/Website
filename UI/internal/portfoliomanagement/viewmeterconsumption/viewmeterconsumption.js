@@ -182,6 +182,12 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
 
     var div = document.getElementById(divId);
     clearElement(div);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerText = "Select Sites/Meters";
+
+    div.appendChild(header);
     div.appendChild(tree);
 }
 

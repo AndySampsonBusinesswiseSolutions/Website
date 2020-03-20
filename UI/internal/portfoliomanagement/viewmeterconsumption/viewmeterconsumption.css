@@ -14,9 +14,10 @@
     cursor: pointer;
 }
 .tree-column {
-    float: left;
-    width: 350px;
-    padding-left: 15px;
+  float: left;
+  width: 385px;
+  padding-left: 15px;
+  padding-top: 50px;
 }
 .fill-column {
     width: 50px;
@@ -81,7 +82,7 @@
     z-index: 100;
     top: 0;
     left: 0;
-    background-color: black;
+    background-color: #505152;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
