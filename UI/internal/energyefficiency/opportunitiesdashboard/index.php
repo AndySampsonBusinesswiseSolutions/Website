@@ -12,6 +12,27 @@
 </head>
 
 <body>
+	<div id="arrangeVisitPopup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span><br><br>
+			<form action="" onsubmit="requestVisit();return false">
+				<div id="siteDiv" class="tree-div roundborder">
+				</div>
+				<br>
+				<label for="visitDate">Select Visit Date:</label>
+				<input type="date" id="visitDate" name="visitDate" required></input>*
+				<br>
+				<br>
+				<label for="notes">Enter Notes:</label>
+				<br>
+				<textarea id="notes" name="notes" class="roundborder" title="Enter any notes you would like associated with this visit"></textarea>
+				<br>
+				<br>
+				<input type="submit" style="float: right;" id="submit"></input>
+				<br>
+			</form>
+		</div>
+	</div>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 	<br>
 	<div class="row">
@@ -282,7 +303,7 @@
 			<div>
 				<div class="first"></div>
 				<div>
-					<button class="show-pointer" style="width: 100%;">Arrange Visit</button>
+					<button id="arrangeVisitButton" class="show-pointer" style="width: 100%;">Request Visit</button>
 				</div>
 				<div class="last"></div>
 			</div>
@@ -300,6 +321,7 @@
 	<br>
 </body>
 
+<script src="opportunitiesdashboard.json"></script>
 <script src="opportunitiesdashboard.js"></script>
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
 <script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>

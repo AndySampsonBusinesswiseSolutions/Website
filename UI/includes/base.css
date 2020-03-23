@@ -95,6 +95,13 @@ textarea {
     -webkit-appearance: none;
 }
 
+textarea {
+    color: black; 
+    border: solid black 1px; 
+    min-width: 100%; 
+    min-height: 100px;
+}
+
 input[type=search]::-webkit-search-decoration {
     -webkit-appearance: none
 }
@@ -10972,8 +10979,7 @@ input[type=email],
 input[type=number],
 input[type=password],
 input[type=text],
-select,
-textarea {
+select {
     font-size: 13px;
     color: #ffffff
 }
@@ -10995,8 +11001,7 @@ input[type=email]:focus,
 input[type=number]:focus,
 input[type=password]:focus,
 input[type=text]:focus,
-select:focus,
-textarea:focus {
+select:focus {
     border-color: #d2d2d2
 }
 
@@ -11192,8 +11197,7 @@ input[type=email],
 input[type=number],
 input[type=password],
 input[type=text],
-select,
-textarea {
+select {
     border-width: 0px;
     border-color: #d2d2d2;
     border-radius: 9px
@@ -23976,12 +23980,12 @@ button.close {
 }
 
 .close {
-    color: #000;
+    color: black;
     float: right;
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    opacity: .2
+    cursor: pointer;
 }
 
 .modal-open {
