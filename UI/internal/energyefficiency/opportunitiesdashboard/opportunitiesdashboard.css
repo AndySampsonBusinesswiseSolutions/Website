@@ -14,14 +14,22 @@
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
-.modal-content {
+.modal-content, .modal-content-wide {
     background-color: #fefefe;
     margin-top: 100px;
-    margin-left: calc(30%);
     padding: 20px;
     border: 1px solid #888;
-    width: 500px;
     color: black;
+}
+
+.modal-content {
+    margin-left: calc(30%);
+    width: 500px;
+}
+
+.modal-content-wide {
+    margin-left: calc(4%);
+    width: 75%;
 }
 
 .requiredMessage {

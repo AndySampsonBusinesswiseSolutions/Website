@@ -58,6 +58,87 @@ function displayFutureSiteVisitPopup(row) {
 	}
 }
 
+function displayHistoricalSiteVisitPopup(row) {
+	var modal = document.getElementById("historicalSiteVisitPopup");
+	var span = modal.getElementsByClassName("close")[0];
+	var title = modal.getElementsByClassName("title")[0];
+	modal.style.display = "block";
+
+	var btn = document.getElementById("historicalSiteVisitButton" + row);
+	var visitDate = btn.getAttribute('dateOfVisit');
+	var engineer = btn.getAttribute('engineer');
+
+	title.innerHTML = 'Site Visit Request for ' + visitDate;
+
+	var historicalSiteVisitAssignedEngineer = document.getElementById("historicalSiteVisitAssignedEngineer");
+	historicalSiteVisitAssignedEngineer.innerHTML = engineer;
+
+	var historicalSiteVisitSiteList = document.getElementById("historicalSiteVisitSiteList");
+	historicalSiteVisitSiteList.innerHTML = "Site X";
+
+	clearElement(document.getElementById('spreadsheet'))
+	var opportunities = [{
+		projectName:'LED Lighting',
+		site:'Site X',
+		meter:'N/A',
+		engineer:'En Gineer',
+		startDate:'01/01/2017',
+		finishDate:'28/02/2017',
+		cost:'£55,000',
+		actualVolumeSavings:'10,000',
+		actualCostSavings:'£65,000',
+		estimatedVolumeSavings: '9,000',
+		estimatedCostSavings:'£60,000',
+		netVolumeSavings:'45,000',
+		netCostSavings:'£140,000',
+		totalROIMonths:'9',
+		remainingROIMonths:'0'
+	}];
+
+	jexcel(document.getElementById('spreadsheet'), {
+		pagination:10,
+		data: opportunities,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+			columns: [
+			{type:'text', width:'150px', name:'projectName', title:'Project Name', readOnly: true},
+			{type:'text', width:'100px', name:'site', title:'Site', readOnly: true},
+			{type:'text', width:'100px', name:'meter', title:'Meter', readOnly: true},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+			{type:'text', width:'100px', name:'startDate', title:'Start Date', readOnly: true},
+			{type:'text', width:'100px', name:'finishDate', title:'Finish Date', readOnly: true},
+			{type:'text', width:'100px', name:'cost', title:'Cost', readOnly: true},
+			{type:'text', width:'100px', name:'actualVolumeSavings', title:'Actual kWh<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'100px', name:'actualCostSavings', title:'Actual £<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'125px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'125px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'100px', name:'netVolumeSavings', title:'Net kWh<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'100px', name:'netCostSavings', title:'Net £<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'100px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
+			{type:'text', width:'100px', name:'remainingROIMonths', title:'Remaining<br>ROI Months', readOnly: true},
+		 ]
+    });	
+
+	var historicalSiteVisitNotes = document.getElementById("historicalSiteVisitNotes");
+	historicalSiteVisitNotes.innerHTML = "Here is where we will list all notes currently joined to this site visit<br>It can include notes from customer, notes from internal users, any rearrangement dates that have been agreed etc";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
+}
+
 function getAttribute(attributes, attributeRequired) {
 	for (var attribute in attributes) {
 		var array = attributes[attribute];
@@ -255,7 +336,7 @@ function loadDataGrids() {
 		row = {
 			dateOfVisit: visitDate, 
 			engineer:'En Gineer',
-			notes:'<i class="fas fa-search show-pointer" id="historicalSiteVisitButton' + i + '" dateOfVisit="' + visitDate + '" engineer="En Gineer"></i>',
+			notes:'<i class="fas fa-search show-pointer" id="historicalSiteVisitButton' + i + '" dateOfVisit="' + visitDate + '" engineer="En Gineer" onclick="displayHistoricalSiteVisitPopup(' + i + ')"></i>',
 		}
 		historicalSiteVisitData.push(row);
 	}
