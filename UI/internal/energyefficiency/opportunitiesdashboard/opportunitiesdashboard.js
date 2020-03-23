@@ -18,12 +18,6 @@ function setupRequestVisitPopup() {
 	span.onclick = function() {
 		modal.style.display = "none";
 	}
-
-	window.onclick = function(event) {
-		if (event.target == modal) {
-			modal.style.display = "none";
-		}
-	}
 }
 
 function displayFutureSiteVisitPopup(row) {
@@ -49,12 +43,6 @@ function displayFutureSiteVisitPopup(row) {
 
 	span.onclick = function() {
 		modal.style.display = "none";
-	}
-
-	window.onclick = function(event) {
-		if (event.target == modal) {
-			modal.style.display = "none";
-		}
 	}
 }
 
@@ -106,7 +94,7 @@ function displayHistoricalSiteVisitPopup(row) {
 		allowDeleteColumn: false,
 		allowRenameColumn: false,
 		wordWrap: true,
-			columns: [
+		columns: [
 			{type:'text', width:'150px', name:'projectName', title:'Project Name', readOnly: true},
 			{type:'text', width:'100px', name:'site', title:'Site', readOnly: true},
 			{type:'text', width:'100px', name:'meter', title:'Meter', readOnly: true},
@@ -130,12 +118,6 @@ function displayHistoricalSiteVisitPopup(row) {
 
 	span.onclick = function() {
 		modal.style.display = "none";
-	}
-
-	window.onclick = function(event) {
-		if (event.target == modal) {
-			modal.style.display = "none";
-		}
 	}
 }
 
