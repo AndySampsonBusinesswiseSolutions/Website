@@ -16,11 +16,11 @@
 		<div class="modal-content">
 			<span>Request Visit</span><span class="close" title="Close">&times;</span><br><br>
 			<form action="" onsubmit="requestVisit(); return false;">
-				<div class="requiredMessage" id="requestVisitSiteRequiredMessage"><i class="fas fa-exclamation-circle">Please select a site below</i></div>
+				<div class="requiredMessage roundborder" id="requestVisitSiteRequiredMessage"><i class="fas fa-exclamation-circle">Please select a site below</i></div>
 				<div id="requestVisitSiteDiv" class="tree-div roundborder">
 				</div>
 				<br>
-				<div class="requiredMessage" id="requestVisitVisitDateRequiredMessage"></div>
+				<div class="requiredMessage roundborder" id="requestVisitVisitDateRequiredMessage"></div>
 				<label for="requestVisitVisitDate">Select Visit Date:</label>
 				<input type="date" id="requestVisitVisitDate" name="visitDate"></input>
 				<br>

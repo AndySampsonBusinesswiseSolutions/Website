@@ -174,7 +174,7 @@ function requestVisit() {
 	if(!siteIsSelected()) {
 		popupIsValid = false;
 		requestVisitSiteRequiredMessage.style.display = 'block';
-		window.setTimeout("closeElement('requestVisitSiteRequiredMessage');", 2000);
+		window.setTimeout("closeElement('requestVisitSiteRequiredMessage');", 12000);
 	}
 	else {
 		requestVisitSiteRequiredMessage.style.display = 'none';

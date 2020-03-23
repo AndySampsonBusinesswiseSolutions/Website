@@ -40,9 +40,9 @@
     content: '';
     position: absolute;
     top: 100%;
-    left: 5px;
+    left: 0px;
     background: #b62a51;
-    width: 10px;
+    width: 15px;
     height: 10px;
     
     /* The points are: (left top: x y, right top: x y, center bottom: x y) */
