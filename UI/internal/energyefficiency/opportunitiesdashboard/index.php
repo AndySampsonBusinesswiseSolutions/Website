@@ -12,23 +12,25 @@
 </head>
 
 <body>
-	<div id="arrangeVisitPopup" class="popup">
+	<div id="requestVisitPopup" class="popup">
 		<div class="modal-content">
-			<span class="close" title="Close">&times;</span><br><br>
-			<form action="" onsubmit="requestVisit();return false">
-				<div id="siteDiv" class="tree-div roundborder">
+			<span>Request Visit</span><span class="close" title="Close">&times;</span><br><br>
+			<form action="" onsubmit="requestVisit(); return false;">
+				<div class="requiredMessage" id="requestVisitSiteRequiredMessage"><i class="fas fa-exclamation-circle">Please select a site below</i></div>
+				<div id="requestVisitSiteDiv" class="tree-div roundborder">
 				</div>
 				<br>
-				<label for="visitDate">Select Visit Date:</label>
-				<input type="date" id="visitDate" name="visitDate" required></input>*
+				<div class="requiredMessage" id="requestVisitVisitDateRequiredMessage"></div>
+				<label for="requestVisitVisitDate">Select Visit Date:</label>
+				<input type="date" id="requestVisitVisitDate" name="visitDate"></input>
 				<br>
 				<br>
-				<label for="notes">Enter Notes:</label>
+				<label for="requestVisitNotes">Enter Notes:</label>
 				<br>
-				<textarea id="notes" name="notes" class="roundborder" title="Enter any notes you would like associated with this visit"></textarea>
+				<textarea id="requestVisitNotes" name="requestVisitNotes" class="roundborder" title="Enter any notes you would like associated with this visit"></textarea>
 				<br>
 				<br>
-				<input type="submit" style="float: right;" id="submit"></input>
+				<input type="submit" style="float: right;" id="requestVisitSubmit"></input>
 				<br>
 			</form>
 		</div>
@@ -303,7 +305,7 @@
 			<div>
 				<div class="first"></div>
 				<div>
-					<button id="arrangeVisitButton" class="show-pointer" style="width: 100%;">Request Visit</button>
+					<button id="requestVisitButton" class="show-pointer" style="width: 100%;">Request Visit</button>
 				</div>
 				<div class="last"></div>
 			</div>

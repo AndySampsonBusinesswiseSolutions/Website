@@ -17,12 +17,37 @@
 .modal-content {
     background-color: #fefefe;
     margin-top: 100px;
-    margin-left: 50px;
+    margin-left: calc(30%);
     padding: 20px;
     border: 1px solid #888;
     width: 500px;
     color: black;
-  }
+}
+
+.requiredMessage {
+    position: relative;
+    margin-bottom: 10px;
+    max-width: calc(100%);
+    text-align: center;
+    display: none;
+    background: #b62a51;
+    color: white;
+    font-size: 15px;
+    font-weight:bold;
+}
+  
+.requiredMessage::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 5px;
+    background: #b62a51;
+    width: 10px;
+    height: 10px;
+    
+    /* The points are: (left top: x y, right top: x y, center bottom: x y) */
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
 
 .section-header {
     background: #b62a51;

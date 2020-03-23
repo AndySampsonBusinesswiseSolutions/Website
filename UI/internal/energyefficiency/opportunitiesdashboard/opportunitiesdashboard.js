@@ -1,20 +1,20 @@
 function pageLoad() {
 	addExpanderOnClickEvents();
 	loadDataGrids();
-	setupPopup();
+	setupRequestVisitPopup();
 }
 
-function setupPopup() {
-	createTree(data, "siteDiv");
+function setupRequestVisitPopup() {
+	createTree(data, "requestVisitSiteDiv");
 
 	// Get the modal
-	var modal = document.getElementById("arrangeVisitPopup");
+	var modal = document.getElementById("requestVisitPopup");
 
 	// Get the button that opens the modal
-	var btn = document.getElementById("arrangeVisitButton");
+	var btn = document.getElementById("requestVisitButton");
 
 	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
+	var span = modal.getElementsByClassName("close")[0];
 
 	// When the user clicks the button, open the modal 
 	btn.onclick = function() {
@@ -54,6 +54,22 @@ function clearElement(element) {
 	}
 }
 
+function siteIsSelected() {
+	var inputs = document.getElementById("requestVisitSiteDiv").getElementsByTagName('input');
+	var inputLength = inputs.length;
+	
+	for(var i = 0; i < inputLength; i++) {
+	  var input = inputs[i];
+	  if(input.type.toLowerCase() == 'checkbox') {
+		if(input.checked) {
+			return true;
+		}
+	  }
+	}
+
+	return false;
+  }
+
 var branchCount = 0;
 var subBranchCount = 0;
 
@@ -74,10 +90,10 @@ function createTree(baseData, divId) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerText = "Select Sites";
+    header.innerText = "Select Site(s)";
 
     div.appendChild(header);
-    div.appendChild(tree);
+	div.appendChild(tree);
 }
 
 function buildTree(baseData, baseElement) {
@@ -148,11 +164,53 @@ function createCheckbox(checkboxId, branch, linkedSite, guid) {
 }
 
 function requestVisit() {
-	var modal = document.getElementById("arrangeVisitPopup");
-	var visitDate = document.getElementById("visitDate").value;
-	var notes = document.getElementById("notes").value;
+	var modal = document.getElementById("requestVisitPopup");
+	var requestVisitSiteRequiredMessage = document.getElementById("requestVisitSiteRequiredMessage");
+	var requestVisitVisitDateRequiredMessage = document.getElementById("requestVisitVisitDateRequiredMessage");
+	var visitDate = document.getElementById("requestVisitVisitDate").value;
+	var notes = document.getElementById("requestVisitNotes").value;
 
-	modal.style.display = "none";
+	var popupIsValid = true;
+	if(!siteIsSelected()) {
+		popupIsValid = false;
+		requestVisitSiteRequiredMessage.style.display = 'block';
+		window.setTimeout("closeElement('requestVisitSiteRequiredMessage');", 2000);
+	}
+	else {
+		requestVisitSiteRequiredMessage.style.display = 'none';
+	}
+
+	if(visitDate == "") {
+		popupIsValid = false;
+		requestVisitVisitDateRequiredMessage.style.display = 'block';
+		requestVisitVisitDateRequiredMessage.innerHTML = '<i class="fas fa-exclamation-circle">Please select a visit date</i>'
+		window.setTimeout("closeElement('requestVisitVisitDateRequiredMessage');", 2000);
+	}
+	else {
+		var requestVisitDate = new Date(visitDate);
+
+		if(requestVisitDate < new Date()) {
+			popupIsValid = false;
+			requestVisitVisitDateRequiredMessage.style.display = 'block';
+			requestVisitVisitDateRequiredMessage.innerHTML = '<i class="fas fa-exclamation-circle">Please select a visit date in the future</i>'
+			window.setTimeout("closeElement('requestVisitVisitDateRequiredMessage');", 2000);
+		}
+		else {
+			requestVisitVisitDateRequiredMessage.style.display = 'none';
+		}
+	}
+
+	if(popupIsValid) {
+		modal.style.display = "none";
+	}
+	else {
+		event.preventDefault();
+		return false;
+	}
+}
+
+function closeElement(elementId){
+	document.getElementById(elementId).style.display="none";
 }
 
 function loadDataGrids() {
