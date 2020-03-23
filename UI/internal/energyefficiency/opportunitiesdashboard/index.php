@@ -35,6 +35,14 @@
 			</form>
 		</div>
 	</div>
+	<div id="futureSiteVisitPopup" class="popup">
+		<div class="modal-content">
+			<span class="title" id="futureSiteVisitTitle"></span><span class="close" title="Close">&times;</span><br><br>
+			<span>Assigned Engineer:</span>&nbsp<span id="futureSiteVisitAssignedEngineer"></span><br><br>
+			<div>Site(s) To Visit:</div><span id="futureSiteVisitSiteList"></span><br><br>
+			<div>Attached Notes:</div><span id=futureSiteVisitNotes></span>
+		</div>
+	</div>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 	<br>
 	<div class="row">
@@ -98,7 +106,7 @@
 				<div class="roundborder">
 					<div>
 						<div class="first" style="float: left;"></div>
-						<div style="width: 30%; float: left;">
+						<div style="width: 30%; float: left; padding-top: 10px;">
 							<div id="Project1" class="far fa-plus-square show-pointer"></div>
 							<span id="Project1span">LED Lighting Installation</span><i class="fas fa-search show-pointer"></i>
 						</div>
@@ -120,7 +128,7 @@
 					<div id="Project1List" class="listitem-hidden">
 						<div>
 							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div style="width: 30%; float: left; padding-top: 10px;">
 								<div id="Site1" class="far fa-times-circle"></div>
 								<span id="Site1span">Site X</span>
 							</div>
@@ -141,7 +149,7 @@
 						<br><br>
 						<div>
 							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div style="width: 30%; float: left; padding-top: 10px;">
 								<div id="Site2" class="far fa-times-circle"></div>
 								<span id="Site2span">Site Y</span>
 							</div>
@@ -162,7 +170,7 @@
 						<br><br>
 						<div>
 							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div style="width: 30%; float: left; padding-top: 10px;">
 								<div id="Site3" class="far fa-times-circle"></div>
 								<span id="Site3span">Site Z</span>
 							</div>
@@ -187,7 +195,7 @@
 				<div class="roundborder">
 					<div>
 						<div class="first" style="float: left;"></div>
-						<div style="width: 30%; float: left;">
+						<div style="width: 30%; float: left; padding-top: 10px;">
 							<div id="Project2" class="far fa-plus-square show-pointer"></div>
 							<span id="Project2span">LED Lighting Installation 2</span><i class="fas fa-search show-pointer"></i>
 						</div>
@@ -209,7 +217,7 @@
 					<div id="Project2List" class="listitem-hidden">
 						<div>
 							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div style="width: 30%; float: left; padding-top: 10px;">
 								<div id="Site1" class="far fa-times-circle"></div>
 								<span id="Site1span">Site X</span>
 							</div>
@@ -230,7 +238,7 @@
 						<br><br>
 						<div>
 							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div style="width: 30%; float: left; padding-top: 10px;">
 								<div id="Site2" class="far fa-times-circle"></div>
 								<span id="Site2span">Site Y</span>
 							</div>
@@ -251,7 +259,7 @@
 						<br><br>
 						<div>
 							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div style="width: 30%; float: left; padding-top: 10px;">
 								<div id="Site3" class="far fa-times-circle"></div>
 								<span id="Site3span">Site Z</span>
 							</div>

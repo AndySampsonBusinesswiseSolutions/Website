@@ -39,7 +39,7 @@
 .requiredMessage::after {
     content: '';
     position: absolute;
-    top: 100%;
+    top: 90%;
     left: 0px;
     background: #b62a51;
     width: 15px;
