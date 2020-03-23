@@ -178,11 +178,21 @@ function loadDataGrids() {
 
 	var row = {
 		siteName:'Site X <i class="fas fa-search show-pointer"></i>', 
-		ranking:'<div id="SiteXRanking"></div>',
+		ranking:'<div id="SiteXRanking" initialValue="3"></div>',
 		savingskWh: '10,000',
 		savingsCost: '£10,000',
 		capex: '£10,000',
 		opex: '£10,000',
+	}
+	siteRankings.push(row);
+
+	row = {
+		siteName:'Site Y <i class="fas fa-search show-pointer"></i>', 
+		ranking:'<div id="SiteYRanking" initialValue="5"></div>',
+		savingskWh: '50,000',
+		savingsCost: '£50,000',
+		capex: '£50,000',
+		opex: '£50,000',
 	}
 	siteRankings.push(row);
 
@@ -222,7 +232,34 @@ function loadDataGrids() {
 		 ]
 	  }); 
 
-	jSuites.rating(document.getElementById("SiteXRanking"), {value: 3},);
+	jSuites.rating(document.getElementById("SiteXRanking"), 
+		{
+			value: 3,
+			onchange: function(el, val) {
+				resetRating(el, val);
+			}
+		});
+	jSuites.rating(document.getElementById("SiteYRanking"), 
+		{
+			value: 5,
+			onchange: function(el, val) {
+				resetRating(el, val);
+			}
+		});
+}
+
+function resetRating(el, val) {
+	var initialValue = el.getAttribute('initialValue');
+	if(initialValue != val) {
+		var i = 0;
+		for(i = 1; i <= initialValue; i++) {
+			el.children[i - 1].setAttribute('class', 'jrating-selected');
+		}
+
+		for(var j = i; j <= 5; j++) {
+			el.children[j - 1].setAttribute('class', '');
+		}
+	}
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
