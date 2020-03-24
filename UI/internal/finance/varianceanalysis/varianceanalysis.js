@@ -150,43 +150,43 @@ function getColumns(showBy, monthWidth, dataWidth) {
 	switch (showBy) {
 		case "WholesaleRate":
 			return [
-				{type:'text', width:monthWidth, name:'month', title:'Month'},
-				{type:'text', width:dataWidth, name:'latestforecastrate', title:'Latest Forecast Rate'},
-				{type:'text', width:dataWidth, name:'invoicedrate', title:'Invoiced Rate'},
-				{type:'text', width:dataWidth, name:'ratedifference', title:'Rate Difference'},
-				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
-				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
-				{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+				{type:'text', width:monthWidth, name:'month', title:'Month', readOnly: true},
+				{type:'text', width:dataWidth, name:'latestforecastrate', title:'Latest Forecast Rate', readOnly: true},
+				{type:'text', width:dataWidth, name:'invoicedrate', title:'Invoiced Rate', readOnly: true},
+				{type:'text', width:dataWidth, name:'ratedifference', title:'Rate Difference', readOnly: true},
+				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project', readOnly: true},
+				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction', readOnly: true},
+				{type:'text', width:dataWidth, name:'unknown', title:'Unknown', readOnly: true},
 			 ];
 		case "WholesaleCost":
 			return [
-				{type:'text', width:monthWidth, name:'month', title:'Month'},
-				{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast Cost'},
-				{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced Cost'},
-				{type:'text', width:dataWidth, name:'costdifference', title:'Cost Difference'},
-				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
-				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
-				{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+				{type:'text', width:monthWidth, name:'month', title:'Month', readOnly: true},
+				{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast Cost', readOnly: true},
+				{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced Cost', readOnly: true},
+				{type:'text', width:dataWidth, name:'costdifference', title:'Cost Difference', readOnly: true},
+				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project', readOnly: true},
+				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction', readOnly: true},
+				{type:'text', width:dataWidth, name:'unknown', title:'Unknown', readOnly: true},
 			 ];
 		case "WholesaleUsage":
 			return [
-				{type:'text', width:monthWidth, name:'month', title:'Month'},
-				{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast Usage'},
-				{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced Usage'},
-				{type:'text', width:dataWidth, name:'usagedifference', title:'Usage Difference'},
-				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
-				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
-				{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+				{type:'text', width:monthWidth, name:'month', title:'Month', readOnly: true},
+				{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast Usage', readOnly: true},
+				{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced Usage', readOnly: true},
+				{type:'text', width:dataWidth, name:'usagedifference', title:'Usage Difference', readOnly: true},
+				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project', readOnly: true},
+				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction', readOnly: true},
+				{type:'text', width:dataWidth, name:'unknown', title:'Unknown', readOnly: true},
 			 ];
 		case "Forecast":
 			return [
-				{type:'text', width:monthWidth, name:'month', title:'Month'},
-				{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast'},
-				{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced'},
-				{type:'text', width:dataWidth, name:'usagedifference', title:'Difference'},
-				{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast'},
-				{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced'},
-				{type:'text', width:dataWidth, name:'costdifference', title:'Difference'},
+				{type:'text', width:monthWidth, name:'month', title:'Month', readOnly: true},
+				{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast', readOnly: true},
+				{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced', readOnly: true},
+				{type:'text', width:dataWidth, name:'usagedifference', title:'Difference', readOnly: true},
+				{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast', readOnly: true},
+				{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced', readOnly: true},
+				{type:'text', width:dataWidth, name:'costdifference', title:'Difference', readOnly: true},
 			 ];
 	}
 }

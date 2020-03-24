@@ -339,12 +339,21 @@ function updateDataGrid(newSeries, newCategories) {
     }
 
 	jexcel(document.getElementById('commissionDatagrid'), {
+    pagination:12,
+    allowInsertRow: false,
+    allowManualInsertRow: false,
+    allowInsertColumn: false,
+    allowManualInsertColumn: false,
+    allowDeleteRow: false,
+    allowDeleteColumn: false,
+    allowRenameColumn: false,
+    wordWrap: true,
 		data: displayData,
 		columns: [
-			{type:'text', width:monthWidth, name:'month', title:'Month'},
-			{type:'text', width:dataWidth, name:'latestforecastcommission', title:'Latest Forecast Commission'},
-			{type:'text', width:dataWidth, name:'invoicedcommission', title:'Invoiced Commission'},
-			{type:'text', width:dataWidth, name:'difference', title:'Difference'}
+			{type:'text', width:monthWidth, name:'month', title:'Month', readOnly: true},
+			{type:'text', width:dataWidth, name:'latestforecastcommission', title:'Latest Forecast Commission', readOnly: true},
+			{type:'text', width:dataWidth, name:'invoicedcommission', title:'Invoiced Commission', readOnly: true},
+			{type:'text', width:dataWidth, name:'difference', title:'Difference', readOnly: true}
 		 ]
 	  }); 
   }
