@@ -23,13 +23,13 @@
 				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
-						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='loadPage();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
+						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
 					</li>
 					<li>
-						<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='loadPage();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+						<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='pageLoad();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
 					</li>
 					<li>
-						<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='loadPage();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
+						<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='pageLoad();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
 					</li>
 				</ul>
 			</div>

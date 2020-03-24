@@ -1,471 +1,243 @@
-function loadPage() {
-	createTree(data, "electricityTreeDiv", "electricity", "updateChart(electricityChart)", true);
+function pageLoad() {
+	createTree(data, "treeDiv", "", "updateChart(chart)", true);
 
-	addExpanderOnClickEvents();
-	createCardButtons();
+	document.onmousemove=function(e) {
+	  var mousecoords = getMousePos(e);
+	  if(mousecoords.x <= 25) {
+		openNav();
+	  }  
+	  else if(mousecoords.x >= 400) {
+		closeNav();
+	  }  
+	};
 }
 
-function openTab(tabName, cardDivName) {
-	var cardDiv = document.getElementById(cardDivName);
-	clearElement(cardDiv);
-
-	var newDiv = document.createElement('div');
-	newDiv.setAttribute('class', 'tabcontent');
-	newDiv.id = tabName.concat('div');
-	cardDiv.appendChild(newDiv);
-
-	newDiv = document.getElementById(newDiv.id);
-	newDiv.style.display = "block";
-	newDiv.style.border = "none";
-
-	if(tabName == 'Wholesale') {
-		if(document.getElementById('usageCostElement0radio').checked) {
-			tabName = 'WholesaleUsage';
-		}
-		else if(document.getElementById('costCostElement0radio').checked) {
-			tabName = 'WholesaleCost';
-		}
-		else if(document.getElementById('rateCostElement0radio').checked) {
-			tabName = 'WholesaleRate';
-		}
-		else {
-			tabName = 'WholesaleUsage';
-		}
-	}
-	else if(tabName == 'Usage') {
-		tabName = 'WholesaleUsage';
-	}
-	else if(tabName == 'Cost') {
-		tabName = 'WholesaleCost';
-	}
-	else if(tabName == 'Rate') {
-		tabName = 'WholesaleRate';
-	}
-	else {
-		tabName = 'WholesaleUsage';
-	}
-
-	createCard(newDiv, tabName);
+function getMousePos(e) {
+	return {x:e.clientX,y:e.clientY};
+  }
+  
+  function openNav() {
+	document.getElementById("mySidenav").style.width = "400px";
+  }
+  
+  function closeNav() {
+	document.getElementById("mySidenav").style.width = "0px";
   }
 
-function createCardButtons(){
-	openTab("Cost", "cardDiv");	
-	updateChart(document.getElementById('wholesaleCostElement0radio'), electricityChart);
+function getCommodity() {
+	var commodity = '';
+	var electricityCommodityradio = document.getElementById('electricityCommodityradio');
+	if(electricityCommodityradio.checked) {
+	  commodity = 'Electricity';
+	}
+	else {
+	  var gasCommodityradio = document.getElementById('gasCommodityradio');
+	  if(gasCommodityradio.checked) {
+		commodity = 'Gas';
+	  }
+	}
+	return commodity;
+  }
+
+function getShowBy(callingElement) {
+	if(!callingElement || document.getElementById('variance0radio').checked) {
+		return 'Forecast';
+	}
+
+	var display = '';
+	if(document.getElementById('usageCostElement0radio').checked) {
+		display = 'Usage';
+	}
+	else if(document.getElementById('costCostElement0radio').checked) {
+		display = 'Cost';
+	}
+	else if(document.getElementById('rateCostElement0radio').checked) {
+		display = 'Rate';
+	}
+
+	var type = '';
+	var typeSelectorList = document.getElementById('typeSelectorList');
+	var inputs = typeSelectorList.getElementsByTagName('input');
+	var inputLength = inputs.length;
+
+	for(var i = 0; i < inputLength; i++) {
+		var input = inputs[i];
+		if(input.type.toLowerCase() == 'radio') {
+			if(input.checked) {
+				type = input.id.replace('CostElement0radio', '');
+				break;
+			}
+		}
+	}
+  
+	type = 'Wholesale';
+	return type + display;
 }
 
-function createCard(divToAppendTo, tabName) {
-	switch(tabName) {
-		case "WholesaleUsage":
-			buildWholesaleUsageForm(divToAppendTo);
-			break;
-		case "WholesaleCost":
-			buildWholesaleCostForm(divToAppendTo);
-			break;
+function getDataWidthDivider(showBy) {
+	switch (showBy) {
 		case "WholesaleRate":
-			buildWholesaleRateForm(divToAppendTo);
-			break;
-		case "RenewablesObligationUsage":
-			buildRenewablesUsageForm(divToAppendTo);
-			break;
-		case "DistributionUsage":
-		case "DistributionCost":
-		case "DistributionRate":
-		case "RenewablesCost":
-		case "RenewablesRate":
-		case "BalancingUsage":
-		case "BalancingCost":
-		case "BalancingRate":
-		case "OtherUsage":
-		case "OtherCost":
-		case "OtherRate":
+		case "WholesaleCost":
+		case "WholesaleUsage":
 		case "Forecast":
-			buildForecastForm(divToAppendTo);
-			break;
-		case "CostElements":
-			buildCostElementHeaderForm(divToAppendTo);
-			createCostElementCardButtons();
-			break;
-		case "Wholesale":
-		case "RenewablesObligation":
-		case "Balancing":
-		case "Other":
-			buildCostElementHeaderSubForm(divToAppendTo);
-			createCostElementDetailCardButtons(tabName);
-			break;
-		case "Network":
-			buildCostElementDetailHeaderSubForm(divToAppendTo);
-			createNetworkCostElementCardButtons(tabName);
-			break;
-		case "Renewables":
-			buildCostElementDetailHeaderSubForm(divToAppendTo);
-			createRenewablesCostElementCardButtons(tabName);
-			break;
+			return 6.17;
 	}
 }
 
-function createDisplayAttributesDiv(divToAppendTo, id) {
-	var div = document.createElement('div');
-	div.id = id;
-	divToAppendTo.appendChild(div);
-
-	var treeDiv = document.getElementById(id);
-	clearElement(treeDiv);
-
-	return treeDiv;
-}
-
-function buildForecastForm(divToAppendTo) {
-	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
-
-	var treeDivWidth = treeDiv.clientWidth;
-	var monthWidth = Math.floor(treeDivWidth/10);
-	var dataWidth = Math.floor((treeDivWidth - monthWidth)/6)-1;
-
-	var html = 
-		'<div>'+
-			'<div class="chart">'+
-				'<div id="electricityChart">'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div class="datagrid scrolling-wrapper">'+
-				'<table>'+
-					'<tr>'+
-						'<th style="width: '+monthWidth+'px; border-right: solid black 1px;">Month</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Cost</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Cost</th>'+
-						'<th style="width: '+dataWidth+'px;">Cost Difference</th>'+
-					'</tr>'+
-					'<tr><td style="border-right: solid black 1px;">2019-01</td></tr>'+
-				'</table>'+
-			'</div>'+
-		'</div>'
-
-	treeDiv.innerHTML = html;
-}
-
-function buildForecastForm(divToAppendTo) {
-	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
-
-	var treeDivWidth = treeDiv.clientWidth;
-	var monthWidth = Math.floor(treeDivWidth/10);
-	var dataWidth = Math.floor((treeDivWidth - monthWidth)/6)-1;
-
-	var html = 
-		'<div>'+
-			'<div class="chart">'+
-				'<div id="electricityChart">'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div class="datagrid scrolling-wrapper">'+
-				'<table>'+
-					'<tr>'+
-						'<th style="width: '+monthWidth+'px; border-right: solid black 1px;">Month</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Usage</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Usage</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Usage Difference</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Latest Forecast Cost</th>'+
-						'<th style="width: '+dataWidth+'px; border-right: solid black 1px;">Invoiced Cost</th>'+
-						'<th style="width: '+dataWidth+'px;">Cost Difference</th>'+
-					'</tr>'+
-					'<tr><td style="border-right: solid black 1px;">2019-01</td></tr>'+
-				'</table>'+
-			'</div>'+
-		'</div>'
-
-	treeDiv.innerHTML = html;
-}
-
-function buildWholesaleUsageForm(divToAppendTo) {
-	var datagridDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
-
-	var html = 
-		'<div>'+
-			'<div class="chart">'+
-				'<div id="electricityChart">'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div id="datagrid" class="datagrid scrolling-wrapper">'+
-			'</div></div>';
-
-	datagridDiv.innerHTML = html;
-
-	updateWholesaleUsageDatagrid();
-}
-
-function updateWholesaleUsageDatagrid() {
-	var datagridDiv = document.getElementById('datagrid');
-	clearElement(datagridDiv);
-
-	var datagridDivWidth = datagridDiv.clientWidth;
-	var monthWidth = Math.floor(datagridDivWidth/15);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6.07)-1;
-
-	var treeDiv = document.getElementById('electricityTreeDiv');
-	var inputs = treeDiv.getElementsByTagName('input');
-	var commodity = 'electricity';
-	var checkBoxes = getCheckedCheckBoxes(inputs);
-	var showBy = 'WholesaleUsage';
-	var newCategories = getNewCategories();   
-	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
-	var categoryLength = newCategories.length;
+function getDisplayData(showBy, newSeries, newCategories) {
 	var displayData = [];
-
-	for(var i = 0; i < categoryLength; i++) {
-		var row = {
-			month: newCategories[i], 
-			latestforecastusage:newSeries[0]["data"][i].toLocaleString(),
-			invoicedusage:newSeries[1]["data"][i].toLocaleString(),
-			usagedifference:newSeries[2]["data"][i].toLocaleString(),
-			duosreductionproject:newSeries[3]["data"][i].toLocaleString(),
-			wastereduction:newSeries[4]["data"][i].toLocaleString(),
-			unknown:newSeries[5]["data"][i].toLocaleString()
-		}
-		displayData.push(row);
-	}
-
-	jexcel(document.getElementById('datagrid'), {
-		data: displayData,
-		columns: [
-			{type:'text', width:monthWidth, name:'month', title:'Month'},
-			{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast Usage'},
-			{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced Usage'},
-			{type:'text', width:dataWidth, name:'usagedifference', title:'Usage Difference'},
-			{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
-			{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
-			{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
-		 ],
-		 nestedHeaders:[
-			[
-				{
-					title: '',
-					colspan: '1',
-				},
-				{
-					title: 'Summary',
-					colspan: '3',
-				},
-				{
-					title: 'Reason For Difference',
-					colspan: '3',
-				},
-			],
-		],
-	  }); 
-}
-
-function buildWholesaleCostForm(divToAppendTo) {
-	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
-
-	var html = 
-		'<div>'+
-			'<div class="chart">'+
-				'<div id="electricityChart">'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div id="datagrid" class="datagrid scrolling-wrapper">'+
-			'</div></div>';
-
-	treeDiv.innerHTML = html;
-
-	updateWholesaleCostDatagrid()
-}
-
-function updateWholesaleCostDatagrid() {
-	var datagridDiv = document.getElementById('datagrid');
-	clearElement(datagridDiv);
-
-	var datagridDivWidth = datagridDiv.clientWidth;
-	var monthWidth = Math.floor(datagridDivWidth/15);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6.21)-1;
-
-	var treeDiv = document.getElementById('electricityTreeDiv');
-	var inputs = treeDiv.getElementsByTagName('input');
-	var commodity = 'electricity';
-	var checkBoxes = getCheckedCheckBoxes(inputs);
-	var showBy = 'WholesaleCost';
-	var newCategories = getNewCategories();   
-	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
 	var categoryLength = newCategories.length;
-	var displayData = [];
 
-	for(var i = 0; i < categoryLength; i++) {
-		var row = {
-			month: newCategories[i], 
-			latestforecastcost:newSeries[0]["data"][i].toLocaleString(),
-			invoicedcost:newSeries[1]["data"][i].toLocaleString(),
-			costdifference:newSeries[2]["data"][i].toLocaleString(),
-			duosreductionproject:newSeries[3]["data"][i].toLocaleString(),
-			wastereduction:newSeries[4]["data"][i].toLocaleString(),
-			unknown:newSeries[5]["data"][i].toLocaleString()
-		}
-		displayData.push(row);
+	switch (showBy) {
+		case "WholesaleRate":
+			for(var i = 0; i < categoryLength; i++) {
+				var row = {
+					month: newCategories[i], 
+					latestforecastrate:(newSeries[0]["data"][i] ?? 0).toLocaleString(),
+					invoicedrate:(newSeries[1]["data"][i] ?? 0).toLocaleString(),
+					ratedifference:(newSeries[2]["data"][i] ?? 0).toLocaleString(),
+					duosreductionproject:(newSeries[3]["data"][i] ?? 0).toLocaleString(),
+					wastereduction:(newSeries[4]["data"][i] ?? 0).toLocaleString(),
+					unknown:(newSeries[5]["data"][i] ?? 0).toLocaleString()
+				}
+				displayData.push(row);
+			}
+		case "WholesaleCost":
+			for(var i = 0; i < categoryLength; i++) {
+				var row = {
+					month: newCategories[i], 
+					latestforecastcost:(newSeries[0]["data"][i] ?? 0).toLocaleString(),
+					invoicedcost:(newSeries[1]["data"][i] ?? 0).toLocaleString(),
+					costdifference:(newSeries[2]["data"][i] ?? 0).toLocaleString(),
+					duosreductionproject:(newSeries[3]["data"][i] ?? 0).toLocaleString(),
+					wastereduction:(newSeries[4]["data"][i] ?? 0).toLocaleString(),
+					unknown:(newSeries[5]["data"][i] ?? 0).toLocaleString()
+				}
+				displayData.push(row);
+			}
+		case "WholesaleUsage":
+			for(var i = 0; i < categoryLength; i++) {
+				var row = {
+					month: newCategories[i], 
+					latestforecastusage:(newSeries[0]["data"][i] ?? 0).toLocaleString(),
+					invoicedusage:(newSeries[1]["data"][i] ?? 0).toLocaleString(),
+					usagedifference:(newSeries[2]["data"][i] ?? 0).toLocaleString(),
+					duosreductionproject:(newSeries[3]["data"][i] ?? 0).toLocaleString(),
+					wastereduction:(newSeries[4]["data"][i] ?? 0).toLocaleString(),
+					unknown:(newSeries[5]["data"][i] ?? 0).toLocaleString()
+				}
+				displayData.push(row);
+			}
+		case "Forecast":
+			for(var i = 0; i < categoryLength; i++) {
+				var row = {
+					month: newCategories[i], 
+					latestforecastusage:(newSeries[0]["data"][i] ?? 0).toLocaleString(),
+					invoicedusage:(newSeries[1]["data"][i] ?? 0).toLocaleString(),
+					usagedifference:(newSeries[2]["data"][i] ?? 0).toLocaleString(),
+					latestforecastcost:(newSeries[3]["data"][i] ?? 0).toLocaleString(),
+					invoicedcost:(newSeries[4]["data"][i] ?? 0).toLocaleString(),
+					costdifference:(newSeries[5]["data"][i] ?? 0).toLocaleString()
+				}
+				displayData.push(row);
+			}
 	}
 
-	jexcel(document.getElementById('datagrid'), {
-		data: displayData,
-		columns: [
-			{type:'text', width:monthWidth, name:'month', title:'Month'},
-			{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast Cost'},
-			{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced Cost'},
-			{type:'text', width:dataWidth, name:'costdifference', title:'Cost Difference'},
-			{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
-			{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
-			{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
-		 ],
-		 nestedHeaders:[
-			[
-				{
-					title: '',
-					colspan: '1',
-				},
-				{
-					title: 'Summary',
-					colspan: '3',
-				},
-				{
-					title: 'Reason For Difference',
-					colspan: '3',
-				},
-			],
-		],
-	  }); 
+	return displayData;
 }
 
-function buildWholesaleRateForm(divToAppendTo) {
-	var treeDiv = createDisplayAttributesDiv(divToAppendTo, 'displayAttributes');	
-
-	var html = 
-		'<div>'+
-			'<div class="chart">'+
-				'<div id="electricityChart">'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div id="datagrid" class="datagrid scrolling-wrapper">'+
-			'</div></div>'
-
-	treeDiv.innerHTML = html;
-
-	updateWholesaleRateDatagrid();
-}
-
-function updateWholesaleRateDatagrid() {
-	var datagridDiv = document.getElementById('datagrid');
-	clearElement(datagridDiv);
-
-	var datagridDivWidth = datagridDiv.clientWidth;
-	var monthWidth = Math.floor(datagridDivWidth/10);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/6.2)-1;
-
-	var treeDiv = document.getElementById('electricityTreeDiv');
-	var inputs = treeDiv.getElementsByTagName('input');
-	var commodity = 'electricity';
-	var checkBoxes = getCheckedCheckBoxes(inputs);
-	var showBy = 'WholesaleRate';
-	var newCategories = getNewCategories();   
-	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
-	var categoryLength = newCategories.length;
-	var displayData = [];
-
-	for(var i = 0; i < categoryLength; i++) {
-		var row = {
-			month: newCategories[i], 
-			latestforecastrate:newSeries[0]["data"][i].toLocaleString(),
-			invoicedrate:newSeries[1]["data"][i].toLocaleString(),
-			ratedifference:newSeries[2]["data"][i].toLocaleString(),
-			duosreductionproject:newSeries[3]["data"][i].toLocaleString(),
-			wastereduction:newSeries[4]["data"][i].toLocaleString(),
-			unknown:newSeries[5]["data"][i].toLocaleString()
-		}
-		displayData.push(row);
+function getColumns(showBy, monthWidth, dataWidth) {
+	switch (showBy) {
+		case "WholesaleRate":
+			return [
+				{type:'text', width:monthWidth, name:'month', title:'Month'},
+				{type:'text', width:dataWidth, name:'latestforecastrate', title:'Latest Forecast Rate'},
+				{type:'text', width:dataWidth, name:'invoicedrate', title:'Invoiced Rate'},
+				{type:'text', width:dataWidth, name:'ratedifference', title:'Rate Difference'},
+				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
+				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
+				{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+			 ];
+		case "WholesaleCost":
+			return [
+				{type:'text', width:monthWidth, name:'month', title:'Month'},
+				{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast Cost'},
+				{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced Cost'},
+				{type:'text', width:dataWidth, name:'costdifference', title:'Cost Difference'},
+				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
+				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
+				{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+			 ];
+		case "WholesaleUsage":
+			return [
+				{type:'text', width:monthWidth, name:'month', title:'Month'},
+				{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast Usage'},
+				{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced Usage'},
+				{type:'text', width:dataWidth, name:'usagedifference', title:'Usage Difference'},
+				{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
+				{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
+				{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
+			 ];
+		case "Forecast":
+			return [
+				{type:'text', width:monthWidth, name:'month', title:'Month'},
+				{type:'text', width:dataWidth, name:'latestforecastusage', title:'Latest Forecast'},
+				{type:'text', width:dataWidth, name:'invoicedusage', title:'Invoiced'},
+				{type:'text', width:dataWidth, name:'usagedifference', title:'Difference'},
+				{type:'text', width:dataWidth, name:'latestforecastcost', title:'Latest Forecast'},
+				{type:'text', width:dataWidth, name:'invoicedcost', title:'Invoiced'},
+				{type:'text', width:dataWidth, name:'costdifference', title:'Difference'},
+			 ];
 	}
+}
 
-	jexcel(document.getElementById('datagrid'), {
-		data: displayData,
-		columns: [
-			{type:'text', width:monthWidth, name:'month', title:'Month'},
-			{type:'text', width:dataWidth, name:'latestforecastrate', title:'Latest Forecast Rate'},
-			{type:'text', width:dataWidth, name:'invoicedrate', title:'Invoiced Rate'},
-			{type:'text', width:dataWidth, name:'ratedifference', title:'Rate Difference'},
-			{type:'text', width:dataWidth, name:'duosreductionproject', title:'DUoS Reduction Project'},
-			{type:'text', width:dataWidth, name:'wastereduction', title:'Waste Reduction'},
-			{type:'text', width:dataWidth, name:'unknown', title:'Unknown'},
-		 ],
-		 nestedHeaders:[
-			[
-				{
-					title: '',
-					colspan: '1',
-				},
-				{
-					title: 'Summary',
-					colspan: '3',
-				},
-				{
-					title: 'Reason For Difference',
-					colspan: '3',
-				},
-			],
-		],
-	  }); 
+function getNestedHeaders(showBy) {
+	switch (showBy) {
+		case "WholesaleRate":
+		case "WholesaleCost":
+		case "WholesaleUsage":
+			return [
+				[
+					{
+						title: '',
+						colspan: '1',
+					},
+					{
+						title: 'Summary',
+						colspan: '3',
+					},
+					{
+						title: 'Reason For Difference',
+						colspan: '3',
+					},
+				],
+			];
+		case "Forecast":
+			return [
+				[
+					{
+						title: '',
+						colspan: '1',
+					},
+					{
+						title: 'Usage',
+						colspan: '3',
+					},
+					{
+						title: 'Cost',
+						colspan: '3',
+					},
+				],
+			];
+	}
 }
 
 function updateChart(callingElement, chart) {
-	var treeDiv = document.getElementById(chart.id.replace('Chart', 'TreeDiv'));
+	var treeDiv = document.getElementById('treeDiv');
 	var inputs = treeDiv.getElementsByTagName('input');
-	var commodity = chart.id.replace('Chart', '').toLowerCase();
+	var commodity = getCommodity();
 	var checkBoxes = getCheckedCheckBoxes(inputs);
-  
-	var showBy = 'Forecast';
-  
-	switch(callingElement.id) {
-	  case 'variance0radio':
-		showBy = 'WholesaleUsage';
-	  case 'wholesaleCostElement0radio':
-		if(document.getElementById('usageCostElement0radio').checked) {
-		  showBy = 'WholesaleUsage';
-		}
-		else if(document.getElementById('costCostElement0radio').checked) {
-		  showBy = 'WholesaleCost';
-		}
-		else if(document.getElementById('rateCostElement0radio').checked) {
-		  showBy = 'WholesaleRate';
-		}
-		else {
-		  createBlankChart("#electricityChart", "There's no electricity data to display. Select from the tree to the left to display");
-		  return;
-		}
-		break;
-	  case 'usageCostElement0radio':
-		showBy = 'WholesaleUsage';
-		break;
-	  case 'costCostElement0radio':
-		showBy = 'WholesaleCost';
-		break;
-	  case 'rateCostElement0radio':
-		showBy = 'WholesaleRate';
-		break;
-	  default:
-		  if(document.getElementById('usageCostElement0radio').checked) {
-			showBy = 'WholesaleUsage';
-		  }
-		  else if(document.getElementById('costCostElement0radio').checked) {
-			showBy = 'WholesaleCost';
-		  }
-		  else if(document.getElementById('rateCostElement0radio').checked) {
-			showBy = 'WholesaleRate';
-		  }
-		  else {
-			showBy = 'Forecast';
-		  }
-	}
+	var showBy = getShowBy(callingElement);
   
 	clearElement(chart);
 	
@@ -506,8 +278,35 @@ function updateChart(callingElement, chart) {
 	}
 	};
   
-	refreshChart(newSeries, newCategories, '#'.concat(commodity).concat('Chart'), chartOptions);
+	refreshChart(newSeries, '#chart', chartOptions);
+	updateDataGrid(showBy, newSeries, newCategories);
   }
+
+function updateDataGrid(showBy, newSeries, newCategories) {
+	var datagridDiv = document.getElementById('datagridDiv');
+	var datagridDivWidth = datagridDiv.clientWidth;
+	var monthWidth = Math.floor(datagridDivWidth/10);
+	var dataWidthDivider = getDataWidthDivider(showBy);
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/dataWidthDivider)-1;
+
+	var datagrid = document.getElementById('datagrid');
+	clearElement(datagrid);
+
+	jexcel(datagrid, {
+		pagination:12,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: getDisplayData(showBy, newSeries, newCategories),
+		columns: getColumns(showBy, monthWidth, dataWidth),
+		nestedHeaders: getNestedHeaders(showBy)
+		}); 
+}
   
   function createBlankChart(chartId, noDataText) {
 	  var options = {
@@ -537,7 +336,7 @@ function updateChart(callingElement, chart) {
 	chart.render();
   }
   
-  function refreshChart(newSeries, newCategories, chartId, chartOptions) {
+  function refreshChart(newSeries, chartId, chartOptions) {
 	var options = {
 	  chart: {
 		  height: '100%',
@@ -661,14 +460,16 @@ return newSeries;
 }
   
 function getSeries(showBy) {
-switch(showBy) {
-	case "WholesaleUsage":
-	return ["Latest Forecast Usage","Invoiced Usage","Usage Difference","DUoS Reduction Project","Waste Reduction","Unknown"];
-	case "WholesaleCost":
-	return ["Latest Forecast Cost","Invoiced Cost","Cost Difference","DUoS Reduction Project","Waste Reduction","Unknown"];
-	case "WholesaleRate":
-		return ["Latest Forecast Rate","Invoiced Rate","Rate Difference","Usage Change","DUoS Reduction Project","Waste Reduction","Unknown"];
-}
+	switch(showBy) {
+		case "WholesaleUsage":
+			return ["Latest Forecast Usage","Invoiced Usage","Usage Difference","DUoS Reduction Project","Waste Reduction","Unknown"];
+		case "WholesaleCost":
+			return ["Latest Forecast Cost","Invoiced Cost","Cost Difference","DUoS Reduction Project","Waste Reduction","Unknown"];
+		case "WholesaleRate":
+			return ["Latest Forecast Rate","Invoiced Rate","Rate Difference","Usage Change","DUoS Reduction Project","Waste Reduction","Unknown"];
+		case "Forecast":
+			return ["Latest Forecast Usage","Invoiced Usage","Usage Difference","Latest Forecast Cost","Invoiced Cost","Cost Difference"];
+	}
 }
   
 function getMetersByAttribute(attribute, value, linkedSite) {
@@ -801,7 +602,8 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
+	var ul = createUL();
+	ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -811,7 +613,16 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
 
     var div = document.getElementById(divId);
     clearElement(div);
-    div.appendChild(tree);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
+	div.appendChild(tree);
+	
+	updateChart(null, chart);
+	addExpanderOnClickEvents();
 }
 
 function buildTree(baseData, baseElement, commodity, checkboxFunction, showSubMeters) {
@@ -833,7 +644,7 @@ function buildTree(baseData, baseElement, commodity, checkboxFunction, showSubMe
             childrenCreated = true;
         }
 
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
+        appendListItemChildren(li, 'site'.concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
 
         baseElement.appendChild(li);        
     }
@@ -967,7 +778,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     }
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
     
-    checkBox.setAttribute('onclick', functionName.concat(';updateWholesaleUsageDatagrid()'));
+    checkBox.setAttribute('onclick', functionName);
     return checkBox;
 }
 
@@ -1079,6 +890,11 @@ function addExpanderOnClickEvents() {
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+
+	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('displaySelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('typeSelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {

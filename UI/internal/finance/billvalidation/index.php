@@ -42,7 +42,7 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="billvalidation.json"></script>
 <script type="text/javascript"> 
-	loadPage();
+	pageLoad();
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

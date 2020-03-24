@@ -1,4 +1,4 @@
-function loadPage(){  
+function pageLoad(){  
 	createTree(dashboard, "treeDiv", "addDashboardItem");
 }
 
