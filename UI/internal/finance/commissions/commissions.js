@@ -1,3 +1,30 @@
+function pageLoad() {
+  createTree(data, "treeDiv", "", "updateChart(commissionChart)");
+  addExpanderOnClickEvents();
+
+  document.onmousemove=function(e) {
+    var mousecoords = getMousePos(e);
+    if(mousecoords.x <= 25) {
+      openNav();
+    }  
+    else if(mousecoords.x >= 400) {
+      closeNav();
+    }  
+  };
+}
+
+function getMousePos(e) {
+  return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+  document.getElementById("mySidenav").style.width = "400px";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0px";
+}
+
 var branchCount = 0;
 var subBranchCount = 0;
 
@@ -6,6 +33,7 @@ function createTree(baseData, divId, commodity, checkboxFunction) {
     tree.setAttribute('class', 'scrolling-wrapper');
     
     var ul = createUL();
+    ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -15,9 +43,15 @@ function createTree(baseData, divId, commodity, checkboxFunction) {
 
     var div = document.getElementById(divId);
     clearElement(div);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
     div.appendChild(tree);
 
-    updateChart(null, electricityChart);
+    updateChart(null, commissionChart);
 }
 
 function buildTree(baseData, baseElement, commodity, checkboxFunction) {
@@ -208,10 +242,25 @@ function getIconByBranch(branch, commodity) {
     }
 }
 
+function getCommodity() {
+  var commodity = '';
+  var electricityCommodityradio = document.getElementById('electricityCommodityradio');
+  if(electricityCommodityradio.checked) {
+    commodity = 'Electricity';
+  }
+  else {
+    var gasCommodityradio = document.getElementById('gasCommodityradio');
+    if(gasCommodityradio.checked) {
+      commodity = 'Gas';
+    }
+  }
+  return commodity;
+}
+
 function updateChart(callingElement, chart) {
-    var treeDiv = document.getElementById(chart.id.replace('Chart', 'TreeDiv'));
+    var treeDiv = document.getElementById('treeDiv');
     var inputs = treeDiv.getElementsByTagName('input');
-    var commodity = chart.id.replace('Chart', '').toLowerCase();
+    var commodity = getCommodity();
     var checkBoxes = getCheckedCheckBoxes(inputs);
   
     var showBy = 'Cost';
@@ -254,15 +303,15 @@ function updateChart(callingElement, chart) {
     }
     };
   
-    refreshChart(newSeries, newCategories, '#'.concat(commodity).concat('Chart'), chartOptions);
+    refreshChart(newSeries, newCategories, '#commissionChart', chartOptions);
     updateDataGrid(newSeries, newCategories);
   }
   
 function updateDataGrid(newSeries, newCategories) {
-    var datagridDiv = document.getElementById('electricityDatagrid');
+    var datagridDiv = document.getElementById('commissionDatagrid');
     var datagridDivWidth = datagridDiv.clientWidth;
     var monthWidth = Math.floor(datagridDivWidth/10);
-    var dataWidth = Math.floor((datagridDivWidth - monthWidth)/3.12)-1;
+    var dataWidth = Math.floor((datagridDivWidth - monthWidth)/3.1)-1;
 
     clearElement(datagridDiv);
 
@@ -289,7 +338,7 @@ function updateDataGrid(newSeries, newCategories) {
       displayData.push(row);
     }
 
-	jexcel(document.getElementById('electricityDatagrid'), {
+	jexcel(document.getElementById('commissionDatagrid'), {
 		data: displayData,
 		columns: [
 			{type:'text', width:monthWidth, name:'month', title:'Month'},
@@ -662,7 +711,10 @@ function addExpanderOnClickEvents() {
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
-	}
+  }
+  
+  updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
