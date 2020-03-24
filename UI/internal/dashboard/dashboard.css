@@ -78,7 +78,7 @@
 
 .dashboard-item-small, .dashboard-item-large, .custom-dashboard-item-large {
   height: 225px; 
-  width: 225px; 
+  width: 12.04%; 
   margin: 4.25px; 
   float: left;
   background-color: lightblue;
