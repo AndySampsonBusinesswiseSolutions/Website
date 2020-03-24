@@ -1,17 +1,18 @@
-function loadPage(){
+function loadPage() {
   createTree(data, "siteDiv", "updateDashboard", "Site");
-  createTree(dashboard, "treeDiv", "addDashboardItem", "Dashboard");
+  createTree(dashboard, "dashboardDiv", "addDashboardItem", "Dashboard");
+  
   addExpanderOnClickEvents(); 
 
   document.onmousemove=function(e) {
     var mousecoords = getMousePos(e);
-    if(mousecoords.x <= 15) {
+    if(mousecoords.x <= 25) {
       openNav();
     }  
     else if(mousecoords.x >= 400) {
       closeNav();
     }  
-};
+  };
 }
 
 function getMousePos(e) {
@@ -24,74 +25,6 @@ function openNav() {
 
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0px";
-}
-
-function loadUsageChart(checkBoxes) {
-  clearElement(forecastUsageChart);
-
-  var electricityCategories = [
-    '01-20', '02-20', '03-20', '04-20', '05-20', '06-20', '07-20', '08-20', '09-20', '10-20', '11-20', '12-20',
-    '01-21', '02-21', '03-21', '04-21', '05-21', '06-21', '07-21', '08-21', '09-21', '10-21', '11-21', '12-21',
-    '01-22', '02-22', '03-22', '04-22', '05-22', '06-22', '07-22', '08-22', '09-22', '10-22', '11-22', '12-22',
-    '01-23', '02-23', '03-23', '04-23', '05-23', '06-23', '07-23', '08-23', '09-23', '10-23', '11-23', '12-23',
-    '01-24', '02-24', '03-24', '04-24', '05-24', '06-24', '07-24', '08-24', '09-24'
-    ];
-  var electricityCategoriesLength = electricityCategories.length;
-
-  var forecastVolume = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0, 0];
-
-  var checkBoxLength = checkBoxes.length;
-  for(var i = 0; i < checkBoxLength; i++) {
-    var guid = checkBoxes[i].getAttribute("guid");
-    var meter = getMeterByGUID(guid);
-
-    var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
-
-    for(var j = 0; j < electricityCategoriesLength; j++) {
-      forecastVolume[j] += meterUsage[j][electricityCategories[j]];
-    }
-  }
-
-  var maxVolume = Math.max(...forecastVolume)*1.05;
-
-  var electricityVolumeSeries = [{
-    name: 'Forecast Usage (kWh)',
-    data: forecastVolume
-    }];  
-
-  var electricityVolumeOptions = {
-      chart: {
-        type: 'bar',
-      },
-      tooltip: {
-          x: {
-          format: getChartTooltipXFormat("Yearly")
-          }
-      },
-      xaxis: {
-          title: {
-          text: ''
-          },
-          labels: {
-          format: getChartXAxisLabelFormat('Weekly')
-          },
-          categories: electricityCategories
-      },
-      yaxis: [{
-        title: {
-          text: 'kWh'
-        },
-          min: 0,
-          max: maxVolume,
-          decimalsInFloat: 0
-      }]
-    };
-
-  refreshChart(electricityVolumeSeries, "#forecastUsageChart", electricityVolumeOptions);
 }
 
 function loadDatagrid(checkBoxes) {
@@ -117,13 +50,22 @@ function loadDatagrid(checkBoxes) {
   }
 
   jexcel(document.getElementById('spreadsheet'), {
+    pagination:5,
+    allowInsertRow: false,
+    allowManualInsertRow: false,
+    allowInsertColumn: false,
+    allowManualInsertColumn: false,
+    allowDeleteRow: false,
+    allowDeleteColumn: false,
+    allowRenameColumn: false,
+    wordWrap: true,
     data: displayData,
     columns: [
-        {type:'text', width:'150px', name:'address', title:'Address'},
-        {type:'text', width:'130px', name:'meterpoint', title:'Meter Point'},
-        {type:'text', width:'175px', name:'annualvolume', title:'Annual Volume (kWh)'},
-        {type:'text', width:'175px', name:'annualcost', title:'Annual Cost (£)'},
-        {type:'text', width:'175px', name:'carbon', title:'Carbon (tonnes)'},
+        {type:'text', width:'150px', name:'address', title:'Address', readOnly: true},
+        {type:'text', width:'130px', name:'meterpoint', title:'Meter Point', readOnly: true},
+        {type:'text', width:'175px', name:'annualvolume', title:'Annual Volume (kWh)', readOnly: true},
+        {type:'text', width:'175px', name:'annualcost', title:'Annual Cost (£)', readOnly: true},
+        {type:'text', width:'175px', name:'carbon', title:'Carbon (tonnes)', readOnly: true},
      ]
   }); 
 }
@@ -131,8 +73,8 @@ function loadDatagrid(checkBoxes) {
 function loadMap(checkBoxes) {
   clearElement(document.getElementById('map-canvas'));
     var mapOptions = {
-      zoom: 4.75,
-      center: new google.maps.LatLng(55, -5),
+      zoom: 3.75,
+      center: new google.maps.LatLng(56, -5),
       mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -204,6 +146,7 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
     tree.setAttribute('class', 'scrolling-wrapper');
     
     var ul = createUL();
+    ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -216,7 +159,9 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerText = dataName != "Dashboard" ? "Select Sites/Meters" : "Select Custom Dashboard Items";
+
+    var headerText = dataName != "Dashboard" ? "Select Sites/Meters" : "Select Custom Dashboard Items";
+    header.innerHTML = headerText + ' <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -232,10 +177,9 @@ function buildTree(baseData, baseElement, checkboxFunction, dataName) {
       var base = baseData[i];
       var baseName = getAttribute(base.Attributes, 'BaseName');
       var li = document.createElement('li');
+      var ul = createUL();
 
       if(dataName == "Dashboard") {
-        createUL();
-
         appendListItemChildren(li, 'Dashboard'.concat(base.GUID), checkboxFunction, 'Dashboard', baseName, '', '', baseName, base.GUID, false);
       }
       else {
@@ -251,7 +195,6 @@ function buildTree(baseData, baseElement, checkboxFunction, dataName) {
           continue;
         }
 
-        var ul = createUL();
         var childrenCreated = false;
         if(base.hasOwnProperty('Meters')) {
           buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, false);
@@ -381,6 +324,10 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     checkBox.setAttribute('LinkedSite', linkedSite);
     checkBox.setAttribute('GUID', guid);
 
+    if(checkBox.id == 'Dashboard4checkbox') {
+      checkBox.setAttribute('checked', true);
+    }
+
     functionArguments.push(checkBox.id);
     if(functionArrayLength > 1) {
         var functionArgumentLength = functionArray[1].split(',').length;
@@ -393,186 +340,233 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
         }
     }
 
-    if(branch == 'Dashboard') {
-      var width;
-      var height;
-      var dataLength = dashboard.length;
-      for(var i = 0; i < dataLength; i++) {
-          var item = dashboard[i];
-  
-          if(item.GUID == guid) {
-              width = getAttribute(item.Attributes, "Width");
-              height = getAttribute(item.Attributes, "Height");
-              break;
-          }
-      }
-      functionArguments.push('"'.concat(height).concat('"'));
-      functionArguments.push('"'.concat(width).concat('"'));
-    }    
-
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
     
     checkBox.setAttribute('onclick', functionName);
     return checkBox;
 }
 
-function addDashboardItem(checkbox, height, width) {
-    var dashboard = document.getElementById('dashboard');
-    var guid = checkbox.getAttribute('guid');
-    var dashboardItemId = 'dashboardItem'.concat(guid);
+function addCustomDashboardItems(checkBoxes) {
+  loadUsageChart(checkBoxes);
+  loadElectricityPriceChart();
+  loadElectricityUsageChart();
+  loadGasPriceChart();
+  loadGasUsageChart();
+}
 
-    if(checkbox.checked) {
-        var newDashboardItem = document.createElement('div');
-        newDashboardItem.id = dashboardItemId;
-        newDashboardItem.setAttribute('class', 'roundborder dashboard-item-small');
-        newDashboardItem.setAttribute('style', 'float: left; width: ' + width + '; height: ' + height + ';');   
-        dashboard.appendChild(newDashboardItem);
+function loadUsageChart(checkBoxes) {
+  var electricityCategories = [
+    '01-20', '02-20', '03-20', '04-20', '05-20', '06-20', '07-20', '08-20', '09-20', '10-20', '11-20', '12-20',
+    '01-21', '02-21', '03-21', '04-21', '05-21', '06-21', '07-21', '08-21', '09-21', '10-21', '11-21', '12-21',
+    '01-22', '02-22', '03-22', '04-22', '05-22', '06-22', '07-22', '08-22', '09-22', '10-22', '11-22', '12-22',
+    '01-23', '02-23', '03-23', '04-23', '05-23', '06-23', '07-23', '08-23', '09-23', '10-23', '11-23', '12-23',
+    '01-24', '02-24', '03-24', '04-24', '05-24', '06-24', '07-24', '08-24', '09-24'
+    ];
+  var electricityCategoriesLength = electricityCategories.length;
 
-        var electricityVolumeSeries = [{
-            name: 'Open Vol',
-            data: [
-                        1.324, 1.324, 1.324, 1.324, 1.324, 1.324, 
-                      0.713, 0.713, 0.713, 0.713, 0.713, 0.713, 
-                      1.323, 1.323, 1.323, 1.323, 1.323, 1.323,
-                      0.711, 0.711, 0.711, 0.711, 0.711, 0.711,
-                      0.934, 0.934, 0.934, 0.934, 0.934, 0.934,
-                      0.711, 0.711, 0.711, 0.711, 0.711, 0.711
-                  ]
-          }, {
-            name: 'Hedge Vol',
-            data: [
-                        1.426, 1.426, 1.426, 1.426, 1.426, 1.426, 
-                        1.657, 1.657, 1.657, 1.657, 1.657, 1.657, 
-                        1.417, 1.417, 1.417, 1.417, 1.417, 1.417,
-                        1.659, 1.659, 1.659, 1.659, 1.659, 1.659,
-                        1.806, 1.806, 1.806, 1.806, 1.806, 1.806,
-                        1.659, 1.659, 1.659, 1.659, 1.659, 1.659
-                  ]
-          }];
-          
-        var electricityPriceSeries = [{
-            name: 'Cap Price',
-            type: 'line',
-            data: [
-                      5.718,5.718,5.718,5.718,5.718,5.718,
-                      4.888,4.888,4.888,4.888,4.888,4.888,
-                      5.536,5.536,5.536,5.536,5.536,5.536,
-                      4.905,4.905,4.905,4.905,4.905,4.905,
-                      5.558,5.558,5.558,5.558,5.558,5.558,
-                      4.907,4.907,4.907,4.907,4.907,4.907
-                    ]
-          }, {
-            name: 'ECP',
-            type: 'line',
-            data: [
-                      4.990,4.990,4.990,4.990,4.990,4.990,
-                      4.310,4.310,4.310,4.310,4.310,4.310,
-                      5.030,5.030,5.030,5.030,5.030,5.030,
-                      4.340,4.340,4.340,4.340,4.340,4.340,
-                      5.010,5.010,5.010,5.010,5.010,5.010,
-                      4.350,4.350,4.350,4.350,4.350,4.350,
-                  ]
-          }, {
-            name: 'Market',
-            type: 'line',
-            data: [
-                      4.886,4.886,4.886,4.886,4.886,4.886,
-                      4.270,4.270,4.270,4.270,4.270,4.270,
-                      4.990,4.990,4.990,4.990,4.990,4.990,
-                      4.296,4.296,4.296,4.296,4.296,4.296,
-                      4.973,4.973,4.973,4.973,4.973,4.973,
-                      4.301,4.301,4.301,4.301,4.301,4.301,
-                  ]
-          }, {
-            name: 'Day1Price',
-            type: 'line',
-            data: [
-                      5.918,5.918,5.918,5.918,5.918,5.918,
-                      4.444,4.444,4.444,4.444,4.444,4.444,
-                      5.033,5.033,5.033,5.033,5.033,5.033,
-                      4.459,4.459,4.459,4.459,4.459,4.459,
-                      5.053,5.053,5.053,5.053,5.053,5.053,
-                      4.461,4.461,4.461,4.461,4.461,4.461,
-                  ]
-          }];
-        
-        var electricityCategories = [
-          '10 2020', '11 2020', '12 2020',
-          '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-          '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-          '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
-          ];
-          
-        var electricityVolumeOptions = {
-          chart: {
-            type: 'bar',
-            stacked: true
+  var forecastVolume = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+  var checkBoxLength = checkBoxes.length;
+  for(var i = 0; i < checkBoxLength; i++) {
+    var guid = checkBoxes[i].getAttribute("guid");
+    var meter = getMeterByGUID(guid);
+
+    var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
+
+    for(var j = 0; j < electricityCategoriesLength; j++) {
+      forecastVolume[j] += meterUsage[j][electricityCategories[j]];
+    }
+  }
+
+  var maxVolume = Math.max(...forecastVolume)*1.05;
+
+  var electricityVolumeSeries = [{
+    name: 'Forecast Usage (kWh)',
+    data: forecastVolume
+    }];  
+
+  var electricityVolumeOptions = {
+      chart: {
+        type: 'bar',
+      },
+      tooltip: {
+          x: {
+          format: getChartTooltipXFormat("Yearly")
+          }
+      },
+      xaxis: {
+          title: {
+          text: ''
           },
-          tooltip: {
-              x: {
-              format: 'dd/MM/yyyy'
-              }
+          labels: {
+          format: getChartXAxisLabelFormat('Weekly')
           },
-          xaxis: {
-              title: {
-              text: ''
-              },
-              labels: {
-              format: 'dd/MM/yyyy'
-              },
-              categories: electricityCategories
+          categories: electricityCategories
+      },
+      yaxis: [{
+        title: {
+          text: 'kWh'
+        },
+          min: 0,
+          max: maxVolume,
+          decimalsInFloat: 0
+      }]
+    };
+
+  refreshChart(electricityVolumeSeries, "#totalUsageChart", electricityVolumeOptions);
+}
+
+function loadElectricityPriceChart() {
+  var electricityPriceSeries = [{
+      name: 'Cap Price',
+      type: 'line',
+      data: [
+                5.718,5.718,5.718,5.718,5.718,5.718,
+                4.888,4.888,4.888,4.888,4.888,4.888,
+                5.536,5.536,5.536,5.536,5.536,5.536,
+                4.905,4.905,4.905,4.905,4.905,4.905,
+                5.558,5.558,5.558,5.558,5.558,5.558,
+                4.907,4.907,4.907,4.907,4.907,4.907
+              ]
+    }, {
+      name: 'ECP',
+      type: 'line',
+      data: [
+                4.990,4.990,4.990,4.990,4.990,4.990,
+                4.310,4.310,4.310,4.310,4.310,4.310,
+                5.030,5.030,5.030,5.030,5.030,5.030,
+                4.340,4.340,4.340,4.340,4.340,4.340,
+                5.010,5.010,5.010,5.010,5.010,5.010,
+                4.350,4.350,4.350,4.350,4.350,4.350,
+            ]
+    }, {
+      name: 'Market',
+      type: 'line',
+      data: [
+                4.886,4.886,4.886,4.886,4.886,4.886,
+                4.270,4.270,4.270,4.270,4.270,4.270,
+                4.990,4.990,4.990,4.990,4.990,4.990,
+                4.296,4.296,4.296,4.296,4.296,4.296,
+                4.973,4.973,4.973,4.973,4.973,4.973,
+                4.301,4.301,4.301,4.301,4.301,4.301,
+            ]
+    }, {
+      name: 'Day1Price',
+      type: 'line',
+      data: [
+                5.918,5.918,5.918,5.918,5.918,5.918,
+                4.444,4.444,4.444,4.444,4.444,4.444,
+                5.033,5.033,5.033,5.033,5.033,5.033,
+                4.459,4.459,4.459,4.459,4.459,4.459,
+                5.053,5.053,5.053,5.053,5.053,5.053,
+                4.461,4.461,4.461,4.461,4.461,4.461,
+            ]
+    }];
+
+  var electricityCategories = [
+    '10 2020', '11 2020', '12 2020',
+    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
+    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
+    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+    ];
+  
+  var electricityPriceOptions = {
+    chart: {
+      type: 'line',
+      stacked: false
+    },
+    tooltip: {
+        x: {
+        format: 'dd/MM/yyyy'
+        }
+    },
+    xaxis: {
+        title: {
+        text: ''
+        },
+        labels: {
+        format: 'dd/MM/yyyy'
+        },
+        categories: electricityCategories
+    },
+    yaxis: [{
+      title: {
+        text: 'p/kWh'
+      },
+        min: 4,
+        max: 6,
+        decimalsInFloat: 3
+    }]
+  };
+
+  refreshChart(electricityPriceSeries, "#electricityPriceChart", electricityPriceOptions);
+}
+
+function loadElectricityUsageChart() {
+  var electricityUsageSeries = [{
+    name: 'Open Vol',
+    data: [
+                1.324, 1.324, 1.324, 1.324, 1.324, 1.324, 
+              0.713, 0.713, 0.713, 0.713, 0.713, 0.713, 
+              1.323, 1.323, 1.323, 1.323, 1.323, 1.323,
+              0.711, 0.711, 0.711, 0.711, 0.711, 0.711,
+              0.934, 0.934, 0.934, 0.934, 0.934, 0.934,
+              0.711, 0.711, 0.711, 0.711, 0.711, 0.711
+          ]
+  }, {
+    name: 'Hedge Vol',
+    data: [
+                1.426, 1.426, 1.426, 1.426, 1.426, 1.426, 
+                1.657, 1.657, 1.657, 1.657, 1.657, 1.657, 
+                1.417, 1.417, 1.417, 1.417, 1.417, 1.417,
+                1.659, 1.659, 1.659, 1.659, 1.659, 1.659,
+                1.806, 1.806, 1.806, 1.806, 1.806, 1.806,
+                1.659, 1.659, 1.659, 1.659, 1.659, 1.659
+          ]
+  }];
+  var electricityCategories = [
+    '10 2020', '11 2020', '12 2020',
+    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
+    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
+    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+    ];
+  var electricityUsageOptions = {
+      chart: {
+        type: 'bar',
+        stacked: true
+      },
+      tooltip: {
+          x: {
+          format: 'dd/MM/yyyy'
+          }
+      },
+      xaxis: {
+          title: {
+          text: ''
           },
-          yaxis: [{
-            title: {
-              text: 'MW'
-            },
-              min: 0,
-              max: 3,
-              decimalsInFloat: 3
-          }]
-        };
-        
-        var electricityPriceOptions = {
-          chart: {
-            type: 'line',
-            stacked: false
+          labels: {
+          format: 'dd/MM/yyyy'
           },
-          tooltip: {
-              x: {
-              format: 'dd/MM/yyyy'
-              }
-          },
-          xaxis: {
-              title: {
-              text: ''
-              },
-              labels: {
-              format: 'dd/MM/yyyy'
-              },
-              categories: electricityCategories
-          },
-          yaxis: [{
-            title: {
-              text: 'p/kWh'
-            },
-              min: 4,
-              max: 6,
-              decimalsInFloat: 3
-          }]
-        };
-        
-        var gasVolumeSeries = [{
-            name: 'Open Vol',
-            data: [
-                        300,300,300,1000,1650,1900,2150,1900,1800,1200,300,300,300,300,300,1000,1650,1900,2150,1900,1800,1200,300,300,300,300,300
-                  ]
-          }, {
-            name: 'Hedge Vol',
-            data: [
-                        456,434,664,1036,1631,2032,2180,1949,1790,1232,1192,579,448,442,663,1047,1638,2007,2198,1953,1786,1218,1202,579,448,445,653
-                  ]
-          }];
-        var gasPriceSeries = [{
+          categories: electricityCategories
+      },
+      yaxis: [{
+        title: {
+          text: 'MW'
+        },
+          min: 0,
+          max: 3,
+          decimalsInFloat: 3
+      }]
+    };
+  refreshChart(electricityUsageSeries, "#electricityUsageChart", electricityUsageOptions);
+}
+
+function loadGasPriceChart() {
+  var gasPriceSeries = [{
             name: 'Cap Price',
             data: [
                       1.505846706,1.517857448,1.568527763,1.692013198,1.800109871,1.88943976,2.022683923,1.986276363,1.824882025,1.601181966,1.532870874,1.512227412,1.528742182,1.565900413,1.630082813,1.786973123,1.880431704,1.930726684,1.952496153,1.901825837,1.790351144,1.589171225,1.532495539,1.51072607,1.517857448,1.558769035,1.673997086,
@@ -593,42 +587,12 @@ function addDashboardItem(checkbox, height, width) {
                       1.368951551,1.379870407,1.42593433,1.538193817,1.636463519,1.717672509,1.838803566,1.805705785,1.658983659,1.455619969,1.393518977,1.374752193,1.38976562,1.42354583,1.481893466,1.624521021,1.709483368,1.755206076,1.774996503,1.728932579,1.627591949,1.444701113,1.393177762,1.373387336,1.379870407,1.41706276,1.521815533,
                   ]
           }];
-        
-        var gasCategories = [
+  var gasCategories = [
           '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
           '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
           '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
           ];
-          
-        var gasVolumeOptions = {
-          chart: {
-              type: 'bar',
-            stacked: true
-          },
-          tooltip: {
-              x: {
-              format: 'dd/MM/yyyy'
-              }
-          },
-          xaxis: {
-              title: {
-              text: ''
-              },
-              labels: {
-              format: 'dd/MM/yyyy'
-              },
-              categories: gasCategories
-          },
-          yaxis: [{
-            title: {
-              text: 'th/day'
-            },
-              min: 0,
-              max: 5000,
-              decimalsInFloat: 0
-          }]
-        };
-        var gasPriceOptions = {
+  var gasPriceOptions = {
           chart: {
             type: 'line',
             stacked: false
@@ -656,43 +620,61 @@ function addDashboardItem(checkbox, height, width) {
               decimalsInFloat: 3
           }]
         };
+  refreshChart(gasPriceSeries, "#gasPriceChart", gasPriceOptions);
+}
 
-        if(guid == 0) {
-            var flexElectricityPriceItem = document.createElement('div');
-            flexElectricityPriceItem.id = 'electricityPriceChart';
+function loadGasUsageChart() {
+  var gasUsageSeries = [{
+        name: 'Open Vol',
+        data: [
+                    300,300,300,1000,1650,1900,2150,1900,1800,1200,300,300,300,300,300,1000,1650,1900,2150,1900,1800,1200,300,300,300,300,300
+              ]
+      }, {
+        name: 'Hedge Vol',
+        data: [
+                    456,434,664,1036,1631,2032,2180,1949,1790,1232,1192,579,448,442,663,1047,1638,2007,2198,1953,1786,1218,1202,579,448,445,653
+              ]
+      }];
+  var gasCategories = [
+      '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
+      '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
+      '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+      ];
+  var gasUsageOptions = {
+        chart: {
+            type: 'bar',
+          stacked: true
+        },
+        tooltip: {
+            x: {
+            format: 'dd/MM/yyyy'
+            }
+        },
+        xaxis: {
+            title: {
+            text: ''
+            },
+            labels: {
+            format: 'dd/MM/yyyy'
+            },
+            categories: gasCategories
+        },
+        yaxis: [{
+          title: {
+            text: 'th/day'
+          },
+            min: 0,
+            max: 5000,
+            decimalsInFloat: 0
+        }]
+      };
+  refreshChart(gasUsageSeries, "#gasUsageChart", gasUsageOptions);
+}
 
-            newDashboardItem.appendChild(flexElectricityPriceItem);
-            refreshChart(electricityPriceSeries, "#electricityPriceChart", electricityPriceOptions);
-        }
-
-        if(guid == 1) {
-            var flexElectricityPositionItem = document.createElement('div');
-            flexElectricityPositionItem.id = 'electricityVolumeChart';
-
-            newDashboardItem.appendChild(flexElectricityPositionItem);
-            refreshChart(electricityVolumeSeries, "#electricityVolumeChart", electricityVolumeOptions);
-        }
-
-        if(guid == 2) {
-            var flexGasPriceItem = document.createElement('div');
-            flexGasPriceItem.id = 'gasPriceChart';
-
-            newDashboardItem.appendChild(flexGasPriceItem);
-            refreshChart(gasPriceSeries, "#gasPriceChart", gasPriceOptions);
-        }
-
-        if(guid == 3) {
-            var flexGasPositionItem = document.createElement('div');
-            flexGasPositionItem.id = 'gasVolumeChart';
-
-            newDashboardItem.appendChild(flexGasPositionItem);
-            refreshChart(gasVolumeSeries, "#gasVolumeChart", gasVolumeOptions);
-        }
-    }
-    else {
-        var dashboardItem = document.getElementById(dashboardItemId);
-        dashboard.removeChild(dashboardItem);
-    }
+function addDashboardItem(checkbox) {
+  var guid = checkbox.getAttribute('guid');
+  var dashboardItemId = 'customDashboardItem'.concat(guid);
+  updateClassOnClick(dashboardItemId, 'listitem-hidden', '')
 }
 
 function getChartTooltipXFormat(period) {
@@ -858,7 +840,13 @@ function addExpanderOnClickEvents() {
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
-	}
+  }
+  
+  updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('siteDivSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('dashboardDivSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('mainDashboardSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('customDashboardSelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -873,11 +861,12 @@ function updateDashboard(callingElement) {
 
   loadMap(checkBoxes);
   loadDatagrid(checkBoxes);
-  loadUsageChart(checkBoxes);
   loadDashboardHeaderNumberOfSites(checkBoxes);
   loadDashboardHeaderPortfolioAnnualisedEnergy(checkBoxes);
   loadDashboardHeaderCarbon(checkBoxes);
   loadDashboardHeaderOpportunities(checkBoxes);
+
+  addCustomDashboardItems(checkBoxes);
 }
 
 function getCheckedCheckBoxes() {

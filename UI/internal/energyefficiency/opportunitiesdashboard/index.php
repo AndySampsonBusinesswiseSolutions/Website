@@ -136,21 +136,21 @@
 		<div class="divcolumn first"></div>
 		<div class="roundborder divcolumn left" style="background-color: #e9eaee; text-align: center; overflow: auto">
 			<div>
-				<div class="roundborder dashboard-item-small">
+				<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"   class="roundborder dashboard-item-small">
 					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 					<span>Pending Opportunities</span><br>
 					<span style="font-size: 15px;">Count: 10</span><br>
 					<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
 					<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
-				</div>
-				<div class="roundborder dashboard-item-small">
+				</a>
+				<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"  class="roundborder dashboard-item-small">
 					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 					<span>Active Opportunities</span><br>
 					<span style="font-size: 15px;">Count: 2</span><br>
 					<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
 					<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
-				</div>
-				<div class="roundborder dashboard-item-small">
+				</a>
+				<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="roundborder dashboard-item-small">
 					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 					<span>Finished Opportunities</span><br>
 					<span style="font-size: 15px;">Count: 5</span><br>
@@ -158,7 +158,7 @@
 					<span style="font-size: 11px;">Total £ Savings: £10,000</span><br>
 					<span style="font-size: 11px;">kWh Savings over past 12 months: 10,000</span><br>
 					<span style="font-size: 11px;">£ Savings over past 12 months: £10,000</span>
-				</div>
+				</a>
 				<div class="roundborder dashboard-item-small">
 					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 					<span>Sub Meters</span><br><br><br>

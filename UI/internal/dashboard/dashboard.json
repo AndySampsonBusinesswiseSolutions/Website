@@ -1,34 +1,32 @@
 var dashboard = [
     {
+        "GUID" : "4",
+        "Attributes" :[
+            {"BaseName" : "Total Usage"}
+        ]
+    },
+    {
         "GUID" : "0",
         "Attributes" :[
-            {"BaseName" : "Flex Electricity Price"},
-            {"Width": "360px"},
-            {"Height": "360px"}
+            {"BaseName" : "Flex Electricity Price"}
         ]
     },
     {
         "GUID" : "1",
         "Attributes" :[
-            {"BaseName" : "Flex Electricity Position"},
-            {"Width": "360px"},
-            {"Height": "360px"}
+            {"BaseName" : "Flex Electricity Position"}
         ]
     },
     {
         "GUID" : "2",
         "Attributes" :[
-            {"BaseName" : "Flex Gas Price"},
-            {"Width": "360px"},
-            {"Height": "360px"}
+            {"BaseName" : "Flex Gas Price"}
         ]
     },
     {
         "GUID" : "3",
         "Attributes" :[
-            {"BaseName" : "Flex Gas Position"},
-            {"Width": "360px"},
-            {"Height": "360px"}
+            {"BaseName" : "Flex Gas Position"}
         ]
     }
 ];

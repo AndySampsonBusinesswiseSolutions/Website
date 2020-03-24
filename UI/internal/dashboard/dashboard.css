@@ -13,8 +13,7 @@
     font-size: 25px;
     font-weight:bold;
 }
-.dashboard {
-    min-height: 650px; 
+.dashboard{
     background-color: #e9eaee;
 }
 .tree-column {
@@ -23,9 +22,6 @@
     padding-left: 15px;
     padding-top: 50px;
 }
-.fill-column {
-    width: 50px;
-}
 .final-column {
     padding-left: 15px;
     padding-right: 15px;
@@ -33,7 +29,6 @@
 .tree-div {
     background-color: #e9eaee;
     max-height: 650px;
-    min-height: 300px;
 }
 .scrolling-wrapper {
     overflow-x: auto;
@@ -49,10 +44,10 @@
 }
 .roundborder {
     border: solid black 1px;
-      border-top-left-radius: 5px; 
-      border-top-right-radius: 5px;
-      border-bottom-left-radius: 5px; 
-      border-bottom-right-radius: 5px; 
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
 }
 .sidenav-icon {
   font-size: 30px; 
@@ -74,41 +69,26 @@
   opacity: 95%;
 }
 
-.sidenav a {
-  text-decoration: none;
-  font-size: 25px;
-  color: white;
-  display: block;
-  transition: 0.3s;
-}
-
-.sidenav a:hover {
-  color: #818181;
-}
-
 .sidenav .closebtn {
   position: absolute;
-  top: 65px;
-  font-size: 36px;
+  top: 70px;
+  left: 370px;
+  font-size: 30px;
 }
 
-@media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
-}
-
-.dashboard-item-small {
+.dashboard-item-small, .dashboard-item-large, .custom-dashboard-item-large {
   height: 225px; 
   width: 225px; 
-  margin: 5px; 
+  margin: 4.25px; 
   float: left;
   background-color: lightblue;
 }
 
 .dashboard-item-large {
-  height: 270px; 
+  width: 49.5%; 
+}
+
+.custom-dashboard-item-large {
+  height: 360px;
   width: 49.4%; 
-  margin: 5px; 
-  float: left; 
-  background-color: lightblue;
 }
