@@ -13,30 +13,22 @@
 }
 .tree-column {
     float: left;
-    width: 300px;
+    width: 385px;
     padding-left: 15px;
-}
-.fill-column {
-    width: 50px;
-}
-.group-by-div {
-    border: solid #e9eaee 1px; 
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
+    padding-top: 50px;
 }
 .tree-div, .chart {
-    border: solid black 1px;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px;
     background-color: #e9eaee;
     max-height: 650px;
-    min-height: 300px;
+}
+.chart {
+    min-height: 650px;
+    width: calc(49.85%);
+    float: left;
 }
 .final-column {
-    padding-left: 350px;
-    padding-right: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .scrolling-wrapper {
     overflow-x: auto;
@@ -50,13 +42,46 @@
     list-style-type: none; 
     padding-left: 15px;
 }
+.roundborder, .tabDiv {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+}
+.roundborder, .card {
+    border: solid black 1px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+.sidenav-icon {
+    font-size: 30px; 
+    cursor: pointer; 
+    float: left; 
+    color: white;
+  }
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background-color: #505152;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    opacity: 95%;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 70px;
+    left: 370px;
+    font-size: 30px;
+  }
 /* Style the tab */
 .tabDiv {
     overflow: hidden;
-    border: 1px solid black;
-    background-color: #f1f1f1;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
+    background-color: #e9eaee;
   }
   
   /* Style the buttons inside the tab */
@@ -67,7 +92,6 @@
     outline: none;
     cursor: pointer;
     padding: 5px 5px;
-    transition: 0.3s;
     font-size: 10px;
   }
   
@@ -82,11 +106,8 @@
   }
   
   /* Style the tab content */
-  .tabcontent {
+  .card {
     display: none;
     padding: 5px 5px;
-    border: 1px solid black;
     border-top: none;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px;
   }

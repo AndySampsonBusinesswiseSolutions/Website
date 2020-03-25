@@ -13,27 +13,23 @@
 </head>
 
 <body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-
-	<div>
-		<div class="row">
-			<div class="tree-column">
-				<div>
-					<br>
-					<div class="tree-column">
-						<div id="treeDiv" class="tree-div">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="fill-column"></div>
-			<div class="final-column">
-				<br>
-				<div class="group-by-div" id="cardDiv" style="display: none;">
-					<div class="tabDiv" id="tabDiv" style="overflow-y: auto; overflow: auto;"></div>
-				</div>
+	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div class="tree-column">
+			<div id="treeDiv" class="tree-div roundborder">
 			</div>
 		</div>
+	</div>
+
+	<div class="section-header">
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	</div>
+
+	<div class="final-column">
+		<br>
+		<div class="tabDiv" id="tabDiv"></div>
+		<div class="group-by-div" id="cardDiv"></div>
 	</div>
 	<br>
 </body>

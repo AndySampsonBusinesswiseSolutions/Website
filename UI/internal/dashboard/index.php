@@ -40,7 +40,7 @@
 	</div>
 
 	<div class="section-header">
-		<i class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
 		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 	</div>
 

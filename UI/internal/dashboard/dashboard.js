@@ -20,11 +20,13 @@ function getMousePos(e) {
 }
 
 function openNav() {
-  document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
 }
 
 function closeNav() {
-  document.getElementById("mySidenav").style.width = "0px";
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
 }
 
 function loadDatagrid(checkBoxes) {

@@ -1,6 +1,29 @@
 function pageLoad(){  
 	createTree(billvalidation, "treeDiv", "createCardButton");
-	addExpanderOnClickEvents();
+
+	document.onmousemove=function(e) {
+		var mousecoords = getMousePos(e);
+		if(mousecoords.x <= 25) {
+			openNav();
+		}  
+		else if(mousecoords.x >= 400) {
+			closeNav();
+		}  
+	};
+}
+
+function getMousePos(e) {
+	return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
 }
 
 function addExpanderOnClickEvents() {
@@ -9,6 +32,8 @@ function addExpanderOnClickEvents() {
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+
+	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -74,24 +99,33 @@ function hasClass(elem, className) {
 	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
 
-var branchCount = 0;
 var subBranchCount = 0;
 
 function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
+	var ul = createUL();
+	ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
-    branchCount = 0;
     subBranchCount = 0; 
 
     buildTree(baseData, ul, checkboxFunction);
 
     var div = document.getElementById(divId);
     clearElement(div);
-    div.appendChild(tree);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Bills <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
+	div.appendChild(tree);
+	
+	document.getElementById('Period13checkbox').checked = true;
+	createCardButton(document.getElementById('Period13checkbox'));
+	addExpanderOnClickEvents();
 }
 
 function buildTree(baseData, baseElement, checkboxFunction) {
@@ -251,110 +285,100 @@ function getBillStatusColour(status) {
     }
 }
 
-function openTab(evt, tabName, guid) {
-	var cardDiv = document.getElementById('cardDiv');
-
-	var tabContent = document.getElementsByClassName("tabcontent");
-	var tabContentLength = tabContent.length;
-	for (var i = 0; i < tabContentLength; i++) {
-	  cardDiv.removeChild(tabContent[i]);
-	}
-
+function openTab(callingElement, tabName, guid) {
 	var tabLinks = document.getElementsByClassName("tablinks");
 	var tabLinksLength = tabLinks.length;
 	for (var i = 0; i < tabLinksLength; i++) {
 		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
 	}
+	callingElement.className += " active";
 	
 	var newDiv = document.createElement('div');
-	newDiv.setAttribute('class', 'tabcontent');
+	newDiv.setAttribute('class', 'card');
 	newDiv.id = tabName;
+
+	var cardDiv = document.getElementById('cardDiv');
+	clearElement(cardDiv);
 	cardDiv.appendChild(newDiv);
 
 	createCard(guid, newDiv);
 
 	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
   }
 
 function createCardButton(checkbox){
-	var cardDiv = document.getElementById('cardDiv');
 	var tabDiv = document.getElementById('tabDiv');	
-
-	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-	}
+	var id = checkbox.id.replace('checkbox', 'List');
 
 	switch(checkbox.getAttribute('branch')) {
 		case 'Period':
-			createPeriodButtons(checkbox, tabDiv, cardDiv);
+			createPeriodButtons(id, tabDiv);
 			break;
 		case 'Site':
-			createSiteButtons(checkbox, tabDiv, cardDiv);
+			createSiteButtons(id, tabDiv);
 			break;
 		case 'Meter':
-			createMeterButtons(checkbox, tabDiv, cardDiv);
+			createMeterButtons(id, tabDiv);
 			break;
 		default:
-			createBillButton(checkbox, tabDiv, cardDiv);
+			createBillButton(checkbox, tabDiv);
 			break;
 	}	
 
-	if(tabDiv.children.length == 0) {
-		cardDiv.setAttribute('style', 'display: none;');
+	updateTabDiv();
+}
+
+function createPeriodButtons(id, tabDiv) {
+	var listdiv = document.getElementById(id);
+	var inputs = listdiv.getElementsByTagName('input');
+	var inputLength = inputs.length;
+
+    for(var i = 0; i < inputLength; i++) {
+		var input = inputs[i];
+		if(input.type.toLowerCase() == 'checkbox'
+		&& input.getAttribute('branch') == 'Site') {
+			input.checked = !input.checked;
+			createSiteButtons(input.id.replace('checkbox', 'List'), tabDiv);
+		}
 	}
-	else {
-		updateTabDiv();
+}
+
+function createSiteButtons(id, tabDiv) {
+	var listdiv = document.getElementById(id);
+	var inputs = listdiv.getElementsByTagName('input');
+	var inputLength = inputs.length;
+  
+    for(var i = 0; i < inputLength; i++) {
+		var input = inputs[i];
+		if(input.type.toLowerCase() == 'checkbox'
+		&& input.getAttribute('branch') == 'Meter') {
+			input.checked = !input.checked;
+			createMeterButtons(input.id.replace('checkbox', 'List'), tabDiv);
+		}
 	}
 }
 
-function createPeriodButtons(checkbox, tabDiv, cardDiv) {
-	var listdiv = document.getElementById(checkbox.id.replace('checkbox', 'List'));
+function createMeterButtons(id, tabDiv) {
+	var listdiv = document.getElementById(id);
 	var inputs = listdiv.getElementsByTagName('input');
 	var inputLength = inputs.length;
-  
+
     for(var i = 0; i < inputLength; i++) {
-	  if(inputs[i].type.toLowerCase() == 'checkbox'
-	  && inputs[i].getAttribute('branch') == 'Site') {
-		inputs[i].checked = !inputs[i].checked;
-		createSiteButtons(inputs[i], tabDiv, cardDiv)
-      }
-    }
+		var input = inputs[i];
+		if(input.type.toLowerCase() == 'checkbox') {
+			input.checked = !input.checked;
+			createBillButton(input, tabDiv);
+		}
+	}	
 }
 
-function createSiteButtons(checkbox, tabDiv, cardDiv) {
-	var listdiv = document.getElementById(checkbox.id.replace('checkbox', 'List'));
-	var inputs = listdiv.getElementsByTagName('input');
-	var inputLength = inputs.length;
-  
-    for(var i = 0; i < inputLength; i++) {
-	  if(inputs[i].type.toLowerCase() == 'checkbox'
-	  && inputs[i].getAttribute('branch') == 'Meter') {
-		inputs[i].checked = !inputs[i].checked;
-		createMeterButtons(inputs[i], tabDiv, cardDiv)
-      }
-    }
-}
+function createBillButton(checkbox, tabDiv) {
+	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
 
-function createMeterButtons(checkbox, tabDiv, cardDiv) {
-	var listdiv = document.getElementById(checkbox.id.replace('checkbox', 'List'));
-	var inputs = listdiv.getElementsByTagName('input');
-	var inputLength = inputs.length;
-  
-    for(var i = 0; i < inputLength; i++) {
-      if(inputs[i].type.toLowerCase() == 'checkbox') {
-		inputs[i].checked = !inputs[i].checked;
-		createBillButton(inputs[i], tabDiv, cardDiv)
-      }
-    }
-}
-
-function createBillButton(checkbox, tabDiv, cardDiv) {
-	if(checkbox.checked) {
-		var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	if(checkbox.checked) {	
 		var button = document.createElement('button');
 		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
+		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 	
 		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
 		var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
@@ -365,17 +389,8 @@ function createBillButton(checkbox, tabDiv, cardDiv) {
 		tabDiv.appendChild(button);
 	}
 	else {
-		tabDiv.removeChild(document.getElementById(checkbox.id.replace('checkbox', 'button')));
-
-		var divToRemove = document.getElementById(checkbox.id.replace('checkbox', 'div'));
-		if(divToRemove) {
-			if(cardDiv.children.length == 0) {
-				cardDiv.setAttribute('style', 'display: none;');
-			}
-			else {
-				cardDiv.removeChild();
-			}
-		}
+		var button = document.getElementById(span.id.replace('span', 'button'));
+		tabDiv.removeChild(button);
 	}
 }
 
@@ -384,15 +399,22 @@ function updateTabDiv() {
 	var tabDivChildren = tabDiv.children;
 	var tabDivChildrenLength = tabDivChildren.length;
 
-    tabDivChildren[0].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px;'));
-    for(var i = 1; i < tabDivChildrenLength; i++) {
-        tabDivChildren[i].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px; border-left: solid black 1px;'));
-    }
+	if(tabDivChildrenLength == 0) {
+		cardDiv.style.display = 'none';
+		tabDiv.style.display = 'none';
+	}
+	else {
+		var percentage = (1 / tabDivChildrenLength) * 100;
+		tabDivChildren[0].setAttribute('style', 'width: '.concat(percentage).concat('%;'));
+		for(var i = 1; i < tabDivChildrenLength; i++) {
+			tabDivChildren[i].setAttribute('style', 'width: '.concat(percentage).concat('%; border-left: solid black 1px;'));
+		}
+		
+		tabDiv.style.display = '';
+	}	
 }
 
 function createCard(guid, divToAppendTo) {
-	var billEntity;
-	
 	var dataLength = billvalidation.length;
 	for(var i = 0; i < dataLength; i++) {
 		var datum = billvalidation[i];
@@ -413,80 +435,164 @@ function createCard(guid, divToAppendTo) {
 					var bill = bills[l];
 
 					if(bill.GUID == guid) {
-						billEntity = bill;
-						break;
+						populateCard(bill, divToAppendTo);
+						return;
 					}
 				}
-
-				if(billEntity){
-					break;
-				}
-			}
-
-			if(billEntity){
-				break;
 			}
 		}
+	}
+}
 
-		if(billEntity){
-			break;
-		}
+function populateCard(bill, divToAppendTo) {
+	if(bill.Status == "Valid")  {
+		buildBillChart(bill, divToAppendTo);
 	}
 
-	if(billEntity.Status == "Valid")  {
-		buildBillChart(billEntity, divToAppendTo);
-	}
-	buildBillDataTable(billEntity, divToAppendTo);
+	buildBillDataTable(bill, divToAppendTo);
 }
 
 function buildBillChart(bill, divToAppendTo) {
-	var chartDiv = document.createElement('div');
-	chartDiv.id = "chart".concat(bill.GUID);
-	chartDiv.setAttribute('class', 'chart');
-	divToAppendTo.appendChild(chartDiv);
+	var firstChartDiv = document.createElement('div');
+	firstChartDiv.id = "firstChartDiv";
+	firstChartDiv.setAttribute('class', 'roundborder chart');
+	firstChartDiv.setAttribute('style', 'margin-right: 5px;');
+	divToAppendTo.appendChild(firstChartDiv);
 
-	var breakDiv = document.createElement('br');
-	divToAppendTo.appendChild(breakDiv);
+	var secondChartDiv = document.createElement('div');
+	secondChartDiv.id = "secondChartDiv";
+	secondChartDiv.setAttribute('class', 'roundborder chart');
+	divToAppendTo.appendChild(secondChartDiv);
 
-	// var dataSeries = [];
-	// dataSeries.push({name: "Expected Volume", data: getAttribute(bill.Details, "Expected Volume")});
-	// dataSeries.push({name: "Actual Volume", data: getAttribute(bill.Details, "Actual Volume")});
-	// dataSeries.push({name: "Expected Spend", data: getAttribute(bill.Details, "Expected Spend")});
-	// dataSeries.push({name: "Actual Spend", data: getAttribute(bill.Details, "Actual Spend")});
+	var firstChart = document.createElement('div');
+	firstChart.id = "firstChart";
+	firstChartDiv.appendChild(firstChart);
 
-	// var categories = ["Expected Volume", "Actual Volume", "Expected Spend", "Actual Spend"];
+	var secondChart = document.createElement('div');
+	secondChart.id = "secondChart";
+	secondChartDiv.appendChild(secondChart);
+
+	var clearDiv = document.createElement('div');
+	clearDiv.setAttribute('style', 'clear: left;')
+	divToAppendTo.appendChild(clearDiv);
+	divToAppendTo.appendChild(document.createElement('br'));
 
 	var options = {
 		series: [{
-		data: [getAttribute(bill.Details, "Expected Volume"), getAttribute(bill.Details, "Actual Volume"), getAttribute(bill.Details, "Expected Spend"), getAttribute(bill.Details, "Actual Spend")]
-	  }],
-		chart: {
-		height: 350,
+			name: "Expected Usage",
+			data: [getAttribute(bill.Details, "Expected Usage")]
+		  },
+		  {
+			name: "Actual Usage",
+			data: [getAttribute(bill.Details, "Actual Usage")]
+	  	}],
+	  	chart: {
+		height: '100%',
+		width: '100%',
 		type: 'bar',
-	  },
-	  plotOptions: {
-		bar: {
-		  columnWidth: '45%',
-		  distributed: true
+		stacked: false,
+		zoom: {
+			type: 'x',
+			enabled: true,
+			autoScaleYaxis: true
+		},
+		animations: {
+			enabled: true,
+			easing: 'easeout',
+			speed: 800,
+			animateGradually: {
+				enabled: true,
+				delay: 150
+			},
+			dynamicAnimation: {
+				enabled: true,
+				speed: 350
+			}
+		},
+		toolbar: {
+			autoSelected: 'zoom',
+			tools: {
+				download: false
+			}
 		}
-	  },
-	  dataLabels: {
-		enabled: false
-	  },
-	  legend: {
-		show: false
-	  },
-	  xaxis: {
-		categories: ["Expected Volume", "Actual Volume", "Expected Spend", "Actual Spend"],
-		labels: {
-		  style: {
-			fontSize: '12px'
-		  }
+		},
+		dataLabels: {
+			enabled: false
+		},
+	  	title: {
+			text: 'Expected Usage v Actual Usage',
+			align: 'center'
+		},
+		legend: {
+			show: true,
+			showForSingleSeries: true,
+			showForNullSeries: true,
+			showForZeroSeries: true,
+			floating: false,
+			position: 'right',
+			onItemClick: {
+				toggleDataSeries: true
+			},
+			width: 100,
+			offsetY: 150,
+			formatter: function(seriesName) {
+				return seriesName + '<br><br>';
+			}
+		},
+		yaxis: [{
+			axisTicks: {
+				show: true
+			},
+				axisBorder: {
+				show: true,
+			},
+			forceNiceScale: true,
+			title: {
+				text: 'kWh Usage',
+			},
+			show: true,
+			decimalsInFloat: 0,
+			labels: {
+				formatter: function(val) {
+					return val.toLocaleString();
+				}
+			}
+		}],
+		xaxis: {
+			type: 'category',
+			categories: ["Expected Usage", "Actual Usage"]
 		}
-	  }
-	  };
-	
-	  renderChart('#'.concat(chartDiv.id), options);
+	//   xaxis: {
+	// 	categories: ["Expected Usage", "Actual Usage", "Expected Spend", "Actual Spend"],
+	// 	labels: {
+	// 	  style: {
+	// 		fontSize: '12px'
+	// 	  }
+	// 	}
+	//   }
+	};
+
+	var secondaryChartOptions = JSON.parse(JSON.stringify(options));
+	secondaryChartOptions.series = [{
+		name: "Expected Spend",
+		data: [getAttribute(bill.Details, "Expected Spend")]
+	  },
+	  {
+		name: "Actual Spend",
+		data: [getAttribute(bill.Details, "Actual Spend")]
+	  }]
+	secondaryChartOptions.title.text = 'Expected Spend v Actual Spend';
+	secondaryChartOptions.legend.formatter = function(seriesName) {
+		return seriesName + '<br><br>';
+	}
+	secondaryChartOptions.yaxis[0].title.text = '£ Spend';
+	secondaryChartOptions.yaxis[0].labels.formatter = function(val) {
+		return '£' + val.toLocaleString();
+	}
+	secondaryChartOptions.xaxis.categories = ["Expected Spend", "Actual Spend"];
+
+	renderChart('#firstChart', options);
+	renderChart('#secondChart', secondaryChartOptions);
 }
 
 function renderChart(chartId, options) {
@@ -498,9 +604,6 @@ function buildBillDataTable(entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
 	divToAppendTo.appendChild(div);
-	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
 
 	var table = document.createElement('table');
 	table.id = 'dataTable';
@@ -508,7 +611,7 @@ function buildBillDataTable(entity, divToAppendTo){
 
 	displayAttributes(entity.Details, table);
 
-	treeDiv.appendChild(table);
+	div.appendChild(table);
 }
 
 function displayAttributes(attributes, table) {

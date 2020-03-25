@@ -36,8 +36,8 @@ var billvalidation = [
                                 "Status": "Invalid",
                                 "Details": [
                                     {"Status": "Invalid"},
-                                    {"Status Reason": "Bill expected by 17th Feb 2020 but not received"},
-                                    {"Date Bill Expected": "17/02/2020"},
+                                    {"Status Reason": "Bill expected by 18th Feb 2020 but not received"},
+                                    {"Date Bill Expected": "18/02/2020"},
                                     {"Date Bill Received": "Not Yet Received"},
                                     {"Expected Payment Date": "02/03/2020"},
                                 ]
@@ -54,8 +54,8 @@ var billvalidation = [
                                 "Status": "Invalid",
                                 "Details": [
                                     {"Status": "Invalid"},
-                                    {"Status Reason": "Bill expected by 17th Feb 2020 but not received"},
-                                    {"Date Bill Expected": "17/02/2020"},
+                                    {"Status Reason": "Bill expected by 19th Feb 2020 but not received"},
+                                    {"Date Bill Expected": "19/02/2020"},
                                     {"Date Bill Received": "Not Yet Received"},
                                     {"Expected Payment Date": "02/03/2020"},
                                 ]
@@ -90,8 +90,8 @@ var billvalidation = [
                                     {"Estimated Validation Competion Date": "29/02/2020"},
                                     {"Actual Validation Competion Date": "27/02/2020"},
                                     {"Expected Payment Date": "31/01/2020"},
-                                    {"Expected Volume": 5000},
-                                    {"Actual Volume": 4900},
+                                    {"Expected Usage": 5000},
+                                    {"Actual Usage": 4900},
                                     {"Expected Spend": 500},
                                     {"Actual Spend": 490}
                                 ]
@@ -129,7 +129,7 @@ var billvalidation = [
                                     {"Status": "Invalid"},
                                     {"Date Bill Expected": "17/01/2020"},
                                     {"Date Bill Received": "17/01/2020"},
-                                    {"Status Reason": "Volume exceeded tolerances"},
+                                    {"Status Reason": "Usage exceeded tolerances"},
                                     {"Expected Payment Date": "31/01/2020"},
                                 ]
                             }

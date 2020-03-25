@@ -18,11 +18,13 @@ function getMousePos(e) {
   
   function openNav() {
 	document.getElementById("mySidenav").style.width = "400px";
-  }
-  
-  function closeNav() {
+	document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+	document.getElementById("openNav").style.color = "white";
 	document.getElementById("mySidenav").style.width = "0px";
-  }
+}
 
 function getCommodity() {
 	var commodity = '';
@@ -243,15 +245,22 @@ function getChartTitle(showBy) {
 	}
 }
 
+function getYAxisTitle(showBy) {
+	switch (showBy) {
+		case "WholesaleRate":
+			return 'p/kWh Rate';
+		case "WholesaleCost":
+			return '£ Cost';
+		case "WholesaleUsage":
+		case "Forecast":
+			return 'kWh Usage';
+	}
+}
+
 function updateChart(callingElement) {
-	var treeDiv = document.getElementById('treeDiv');
-	var inputs = treeDiv.getElementsByTagName('input');
-	var commodity = getCommodity();
-	var checkBoxes = getCheckedCheckBoxes(inputs);
 	var showBy = getShowBy(callingElement);
-	var chartTitle = getChartTitle(showBy);	
 	var newCategories = getNewCategories();   
-	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
+	var newSeries = getNewChartSeries(getCheckedCheckBoxes(document.getElementById('treeDiv').getElementsByTagName('input')), showBy, newCategories, getCommodity());
 	var chartOptions = {
 		chart: {
 			height: '100%',
@@ -287,7 +296,7 @@ function updateChart(callingElement) {
 			enabled: false
 		},
 		title: {
-			text: chartTitle,
+			text: getChartTitle(showBy),
 			align: 'center'
 		},
 		tooltip: {
@@ -321,7 +330,7 @@ function updateChart(callingElement) {
 			},
 			forceNiceScale: true,
 			title: {
-				text: 'kWh Usage',
+				text: getYAxisTitle(showBy),
 			},
 			show: true,
 			decimalsInFloat: 0,
@@ -582,38 +591,6 @@ for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate(
 }
 
 return newCategories;
-}
-
-function getChartXAxisLabelFormat() {
-return 'MMM yyyy';
-}
-  
-function getChartType(chartType) {
-switch(chartType){
-	case 'Line':
-	case 'Bar':
-	case 'Area':
-	return chartType.toLowerCase();
-	case 'Stacked Line':
-	case 'Stacked Bar':
-	return chartType.replace('Stacked ', '').toLowerCase();
-}
-}
-
-function getChartYAxisTitle(showBy, commodity) {
-switch(showBy) {
-	case 'Energy':
-	if(commodity == 'Gas') {
-		return 'Energy (Thm)';
-	}
-	return 'Energy (MWh)';
-	case 'Power':
-	return 'Power (MW)';
-	case 'Current':
-	return 'Current (A)';
-	case 'Cost':
-	return 'Cost (£)';
-}
 }
 
 var branchCount = 0;
