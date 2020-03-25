@@ -287,7 +287,7 @@ function updateChart(callingElement, chart) {
         show: true,
       },
       title: {
-        text: ''
+        text: '£'
       },
           show: true,
           decimalsInFloat: 2

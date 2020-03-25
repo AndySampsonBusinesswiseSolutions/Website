@@ -51,9 +51,6 @@
 				<span>Main Dashboard <i class="far fa-plus-square" id="mainDashboardSelector"></i></span>
 			</div>
 			<div id="mainDashboardSelectorList">
-				<div class="roundborder dashboard-item-large" style="overflow: auto;">
-					<div id="spreadsheet" style="margin-top: 2px;"></div>
-				</div>
 				<div class="roundborder dashboard-item-small">
 					<i class="fas fa-industry fa-4x" style="margin-top: 2px;"></i><br>
 					<span>Number of Sites</span><br><br><br><span id="dashboardHeaderNumberOfSites" style="font-size: 50px;"></span>
@@ -67,6 +64,9 @@
 				<div class="roundborder dashboard-item-small">
 					<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
 					<span>Extrapolated Spend</span><br><br><br><span style="font-size: 15px;">£93,306</span><br><span style="font-size: 15px;">over 3 years</span>
+				</div>
+				<div class="roundborder dashboard-item-large" style="overflow: auto;">
+					<div id="spreadsheet" style="margin-top: 2px;"></div>
 				</div>
 				<div id="map-canvas" class="roundborder dashboard-item-small"></div>
 				<div class="roundborder dashboard-item-small">

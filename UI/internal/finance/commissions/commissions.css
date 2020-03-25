@@ -24,9 +24,12 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-.tree-div {
+.tree-div, .chart {
     background-color: #e9eaee;
     max-height: 650px;
+}
+.chart {
+    min-height: 650px;
 }
 .scrolling-wrapper {
     overflow-x: auto;

@@ -44,7 +44,7 @@
 	<div class="final-column">
 		<div>
 			<br>
-			<div class="roundborder">
+			<div class="roundborder chart">
 				<div id="commissionChart">
 				</div>
 			</div>
