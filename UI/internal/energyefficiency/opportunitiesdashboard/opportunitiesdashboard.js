@@ -49,14 +49,14 @@ function displayFutureSiteVisitPopup(row) {
 function displayHistoricalSiteVisitPopup(row) {
 	var modal = document.getElementById("historicalSiteVisitPopup");
 	var span = modal.getElementsByClassName("close")[0];
-	var title = modal.getElementsByClassName("title")[0];
+	var title = document.getElementById("historicalSiteVisitTitle");
 	modal.style.display = "block";
 
 	var btn = document.getElementById("historicalSiteVisitButton" + row);
 	var visitDate = btn.getAttribute('dateOfVisit');
 	var engineer = btn.getAttribute('engineer');
 
-	title.innerHTML = 'Site Visit Request for ' + visitDate;
+	title.innerText = 'Site Visit Request for ' + visitDate;
 
 	var historicalSiteVisitAssignedEngineer = document.getElementById("historicalSiteVisitAssignedEngineer");
 	historicalSiteVisitAssignedEngineer.innerHTML = engineer;
@@ -64,8 +64,37 @@ function displayHistoricalSiteVisitPopup(row) {
 	var historicalSiteVisitSiteList = document.getElementById("historicalSiteVisitSiteList");
 	historicalSiteVisitSiteList.innerHTML = "Site X";
 
-	clearElement(document.getElementById('spreadsheet'))
-	var opportunities = [{
+	var historicalSiteVisitRecommendedOpportunities = [{
+		customer:'David Ford Trading Ltd',
+		opportunityType:'Custom',
+		opportunityName:'LED Lighting',
+		site:'Site X',
+		meter:'12345678910125',
+		engineer:'En Gineer',
+		startDate:'01/01/2017',
+		finishDate:'28/02/2017',
+		percentageSaving:'10%',
+		estimatedCost:'£100,000',
+		estimatedVolumeSavings: '10,000',
+		estimatedCostSavings:'£15,000'
+	}];
+
+	var historicalSiteVisitPendingActiveOpportunities = [{
+		customer:'David Ford Trading Ltd',
+		opportunityType:'Custom',
+		opportunityName:'LED Lighting',
+		site:'Site X',
+		meter:'12345678910125',
+		engineer:'En Gineer',
+		startDate:'01/01/2017',
+		finishDate:'28/02/2017',
+		percentageSaving:'10%',
+		estimatedCost:'£100,000',
+		estimatedVolumeSavings: '10,000',
+		estimatedCostSavings:'£15,000'
+	}];
+
+	var historicalSiteVisitFinishedOpportunities = [{
 		projectName:'LED Lighting',
 		site:'Site X',
 		meter:'N/A',
@@ -83,9 +112,67 @@ function displayHistoricalSiteVisitPopup(row) {
 		remainingROIMonths:'0'
 	}];
 
-	jexcel(document.getElementById('spreadsheet'), {
-		pagination:10,
-		data: opportunities,
+	clearElement(document.getElementById('historicalSiteVisitRecommendedOpportunitiesSpreadsheet'));
+	clearElement(document.getElementById('historicalSiteVisitPendingActiveOpportunitiesSpreadsheet'));
+	clearElement(document.getElementById('historicalSiteVisitFinishedOpportunitiesSpreadsheet'));
+
+	jexcel(document.getElementById('historicalSiteVisitRecommendedOpportunitiesSpreadsheet'), {
+		pagination:5,
+		data: historicalSiteVisitRecommendedOpportunities,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		columns: [
+			{type:'text', width:'150px', name:'customer', title:'Customer', readOnly: true},
+			{type:'text', width:'150px', name:'opportunityType', title:'Opportunity Type', readOnly: true},
+			{type:'text', width:'150px', name:'opportunityName', title:'Opportunity Name', readOnly: true},
+			{type:'text', width:'100px', name:'site', title:'Site', readOnly: true},
+			{type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+			{type:'text', width:'100px', name:'startDate', title:'Estimated<br>Start Date', readOnly: true},
+			{type:'text', width:'100px', name:'finishDate', title:'Estimated<br>Finish Date', readOnly: true},
+			{type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
+			{type:'text', width:'100px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+			{type:'text', width:'125px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'125px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true}
+		 ]
+	});	
+	
+	jexcel(document.getElementById('historicalSiteVisitPendingActiveOpportunitiesSpreadsheet'), {
+		pagination:5,
+		data: historicalSiteVisitPendingActiveOpportunities,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		columns: [
+			{type:'text', width:'150px', name:'customer', title:'Customer', readOnly: true},
+			{type:'text', width:'150px', name:'opportunityType', title:'Opportunity Type', readOnly: true},
+			{type:'text', width:'150px', name:'opportunityName', title:'Opportunity Name', readOnly: true},
+			{type:'text', width:'100px', name:'site', title:'Site', readOnly: true},
+			{type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+			{type:'text', width:'100px', name:'startDate', title:'Estimated<br>Start Date', readOnly: true},
+			{type:'text', width:'100px', name:'finishDate', title:'Estimated<br>Finish Date', readOnly: true},
+			{type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
+			{type:'text', width:'100px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+			{type:'text', width:'125px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'125px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true}
+		 ]
+	});	
+	
+	jexcel(document.getElementById('historicalSiteVisitFinishedOpportunitiesSpreadsheet'), {
+		pagination:5,
+		data: historicalSiteVisitFinishedOpportunities,
 		allowInsertRow: false,
 		allowManualInsertRow: false,
 		allowInsertColumn: false,
@@ -345,37 +432,61 @@ function loadDataGrids() {
 
 	jexcel(document.getElementById('futureSiteVisitSpreadsheet'), {
 		pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
 		minDimensions:[3,10],
 		data: futureSiteVisitData,
 		columns: [
-			{type:'text', width:'150px', name:'dateOfVisit', title:'Date Of Visit'},
-			{type:'text', width:'100px', name:'engineer', title:'Engineer'},
-			{type:'text', width:'100px', name:'notes', title:'Notes'},
+			{type:'text', width:'150px', name:'dateOfVisit', title:'Date Of Visit', readOnly: true},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+			{type:'text', width:'100px', name:'notes', title:'Notes', readOnly: true},
 		 ]
 	  }); 
 
 	jexcel(document.getElementById('historicalSiteVisitSpreadsheet'), {
 		pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
 		minDimensions:[3,10],
 		data: historicalSiteVisitData,
 		columns: [
-			{type:'text', width:'150px', name:'dateOfVisit', title:'Date Of Visit'},
-			{type:'text', width:'100px', name:'engineer', title:'Engineer'},
-			{type:'text', width:'100px', name:'notes', title:'Notes'},
+			{type:'text', width:'150px', name:'dateOfVisit', title:'Date Of Visit', readOnly: true},
+			{type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+			{type:'text', width:'100px', name:'notes', title:'Notes', readOnly: true},
 		 ]
 	  }); 
 
 	jexcel(document.getElementById('siteRankingSpreadsheet'), {
 		pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
 		minDimensions:[6,10],
 		data: siteRankings,
 		columns: [
-			{type:'text', width:'165px', name:'siteName', title:'Site Name'},
+			{type:'text', width:'165px', name:'siteName', title:'Site Name', readOnly: true},
 			{type:'text', width:'150px', name:'ranking', title:'Ranking', readOnly: true},
-			{type:'text', width:'125px', name:'savingskWh', title:'Estimated kWh<br>Savings (pa)'},
-			{type:'text', width:'125px', name:'savingsCost', title:'Estimated £<br>Savings (pa)'},
-			{type:'text', width:'125px', name:'capex', title:'CAPEX<br>spend'},
-			{type:'text', width:'125px', name:'opex', title:'OPEX<br>spend'},
+			{type:'text', width:'125px', name:'savingskWh', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'125px', name:'savingsCost', title:'Estimated £<br>Savings (pa)', readOnly: true},
+			{type:'text', width:'125px', name:'capex', title:'CAPEX<br>spend', readOnly: true},
+			{type:'text', width:'125px', name:'opex', title:'OPEX<br>spend', readOnly: true},
 		 ]
 	  }); 
 

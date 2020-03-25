@@ -111,15 +111,14 @@
     padding-right: 5px; 
     cursor: pointer;
 }
-html>body tbody.scrollContent {
-	display: block;
-	height: 150px;
-	overflow: scroll;
-}
 .dashboard-item-small {
     height: 200px; 
     width: 200px; 
     margin: 5px; 
     float: left;
     background-color: lightblue;
-  }
+}
+.title {
+    text-align: center;
+    font-size: 20px;
+}

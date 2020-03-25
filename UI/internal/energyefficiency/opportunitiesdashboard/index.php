@@ -14,7 +14,11 @@
 <body>
 	<div id="requestVisitPopup" class="popup">
 		<div class="modal-content">
-			<span>Request Visit</span><span class="close" title="Close">&times;</span><br><br>
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span>Request Visit</span>
+			</div>
+			<br>
 			<form action="" onsubmit="requestVisit(); return false;">
 				<div class="requiredMessage roundborder" id="requestVisitSiteRequiredMessage"><i class="fas fa-exclamation-circle">Please select a site below</i></div>
 				<div id="requestVisitSiteDiv" class="tree-div roundborder">
@@ -37,7 +41,11 @@
 	</div>
 	<div id="futureSiteVisitPopup" class="popup">
 		<div class="modal-content">
-			<span class="title" id="futureSiteVisitTitle"></span><span class="close" title="Close">&times;</span><br><br>
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="futureSiteVisitTitle"></span>
+			</div>
+			<br>
 			<span>Assigned Engineer:</span>&nbsp<span id="futureSiteVisitAssignedEngineer"></span><br><br>
 			<div>Site(s) To Visit:</div><span id="futureSiteVisitSiteList"></span><br><br>
 			<div>Attached Notes:</div><span id=futureSiteVisitNotes></span>
@@ -45,89 +53,27 @@
 	</div>
 	<div id="historicalSiteVisitPopup" class="popup">
 		<div class="modal-content-wide">
-			<span class="title" id="historicalSiteVisitTitle"></span><span class="close" title="Close">&times;</span><br><br>
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="historicalSiteVisitTitle"></span>
+			</div>
 			<span>Assigned Engineer:</span>&nbsp<span id="historicalSiteVisitAssignedEngineer"></span><br><br>
 			<div>Site(s) Visited:</div><span id="historicalSiteVisitSiteList"></span><br><br>
 			<div>Recommended Opportunities:</div>
 			<span id="historicalSiteVisitRecommendedOpportunitiesList">
-				<table style="width: 100%;">
-					<thead>
-						<tr>
-							<th id="th0" style="border: solid black 1px;">Customer</th>
-							<th id="th21" style="border: solid black 1px;">Opportunity<br>Type</th>
-							<th id="th1" style="border: solid black 1px;">Opportunity<br>Name</th>
-							<th id="th2" style="border: solid black 1px;">Site</th>
-							<th id="th3" style="border: solid black 1px;">Meter</th>
-							<th id="th22" style="border: solid black 1px;">Sub Meter</th>
-							<th id="th4" style="border: solid black 1px;">Engineer</th>
-							<th id="th5" style="border: solid black 1px;">Estimated<br>Start Date</th>
-							<th id="th6" style="border: solid black 1px;">Estimated<br>Finish Date</th>
-							<th id="th23" style="border: solid black 1px;">Percentage<br>Saving</th>
-							<th id="th7" style="border: solid black 1px;">Estimated<br>Cost</th>
-							<th id="th8" style="border: solid black 1px;">Estimated<br>kWh Savings (pa)</th>
-							<th id="th9" style="border: solid black 1px;">Estimated<br>£ Savings (pa)</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td headers="th0" style="border: solid black 1px;">David Ford Trading Ltd</td>
-							<td headers="th21" style="border: solid black 1px;">Custom</td>
-							<td headers="th1" style="border: solid black 1px;">LED Lighting</td>
-							<td headers="th2" style="border: solid black 1px;">Site X</td>
-							<td headers="th3" style="border: solid black 1px;">12345678910125</td>
-							<td headers="th22" style="border: solid black 1px;">Sub Meter 2</td>
-							<td headers="th4" style="border: solid black 1px;">En Gineer</td>
-							<td headers="th5" style="border: solid black 1px;">01/04/2020</td>
-							<td headers="th6" style="border: solid black 1px;">30/06/2020</td>
-							<td headers="th23" style="border: solid black 1px;">10%</td>
-							<td headers="th7" style="border: solid black 1px;">£100,000</td>
-							<td headers="th8" style="border: solid black 1px;">10,000</td>
-							<td headers="th9" style="border: solid black 1px;">£15,000</td>
-						</tr>
-					</tbody>
-				</table>
+				<div id="historicalSiteVisitRecommendedOpportunitiesSpreadsheet"></div>
 			</span><br><br>
 			<div>Pending & Active Opportunities:</div>
 			<span id="historicalSiteVisitPendingActiveOpportunitiesList">
-				<table style="width: 100%;">
-					<thead>
-						<tr>
-							<th id="th0" style="border: solid black 1px;">Customer</th>
-							<th id="th21" style="border: solid black 1px;">Opportunity<br>Type</th>
-							<th id="th1" style="border: solid black 1px;">Opportunity<br>Name</th>
-							<th id="th2" style="border: solid black 1px;">Site</th>
-							<th id="th3" style="border: solid black 1px;">Meter</th>
-							<th id="th22" style="border: solid black 1px;">Sub Meter</th>
-							<th id="th4" style="border: solid black 1px;">Engineer</th>
-							<th id="th5" style="border: solid black 1px;">Estimated<br>Start Date</th>
-							<th id="th6" style="border: solid black 1px;">Estimated<br>Finish Date</th>
-							<th id="th23" style="border: solid black 1px;">Percentage<br>Saving</th>
-							<th id="th7" style="border: solid black 1px;">Estimated<br>Cost</th>
-							<th id="th8" style="border: solid black 1px;">Estimated<br>kWh Savings (pa)</th>
-							<th id="th9" style="border: solid black 1px;">Estimated<br>£ Savings (pa)</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td headers="th0" style="border: solid black 1px;">David Ford Trading Ltd</td>
-							<td headers="th21" style="border: solid black 1px;">Custom</td>
-							<td headers="th1" style="border: solid black 1px;">LED Lighting</td>
-							<td headers="th2" style="border: solid black 1px;">Site X</td>
-							<td headers="th3" style="border: solid black 1px;">12345678910125</td>
-							<td headers="th22" style="border: solid black 1px;">Sub Meter 2</td>
-							<td headers="th4" style="border: solid black 1px;">En Gineer</td>
-							<td headers="th5" style="border: solid black 1px;">01/04/2020</td>
-							<td headers="th6" style="border: solid black 1px;">30/06/2020</td>
-							<td headers="th23" style="border: solid black 1px;">10%</td>
-							<td headers="th7" style="border: solid black 1px;">£100,000</td>
-							<td headers="th8" style="border: solid black 1px;">10,000</td>
-							<td headers="th9" style="border: solid black 1px;">£15,000</td>
-						</tr>
-					</tbody>
-				</table>
+				<div id="historicalSiteVisitPendingActiveOpportunitiesSpreadsheet"></div>
 			</span><br><br>
-			<div>Finished Opportunities:</div><span id="historicalSiteVisitFinishedOpportunitiesList"><div id="spreadsheet"></div></span><br><br>
-			<div>Attached Notes:</div><span id=historicalSiteVisitNotes></span>
+			<div>Finished Opportunities:</div>
+			<span id="historicalSiteVisitFinishedOpportunitiesList">
+				<div id="historicalSiteVisitFinishedOpportunitiesSpreadsheet"></div>
+			</span>
+			<br><br>
+			<div>Attached Notes:</div>
+			<span id=historicalSiteVisitNotes></span>
 		</div>
 	</div>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
