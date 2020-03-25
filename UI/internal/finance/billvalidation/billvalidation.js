@@ -562,14 +562,6 @@ function buildBillChart(bill, divToAppendTo) {
 			type: 'category',
 			categories: ["Expected Usage", "Actual Usage"]
 		}
-	//   xaxis: {
-	// 	categories: ["Expected Usage", "Actual Usage", "Expected Spend", "Actual Spend"],
-	// 	labels: {
-	// 	  style: {
-	// 		fontSize: '12px'
-	// 	  }
-	// 	}
-	//   }
 	};
 
 	var secondaryChartOptions = JSON.parse(JSON.stringify(options));
