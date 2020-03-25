@@ -24,12 +24,16 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-.tree-div, .chart {
+.tree-div, .chart, .half-chart {
     background-color: #e9eaee;
     max-height: 650px;
 }
-.chart {
+.chart, .half-chart {
     min-height: 650px;
+}
+.half-chart {
+    width: calc(49.85%);
+    float: left;
 }
 .scrolling-wrapper {
     overflow-x: auto;

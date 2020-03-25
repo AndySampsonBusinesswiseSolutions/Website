@@ -232,55 +232,158 @@ function getNestedHeaders(showBy) {
 	}
 }
 
-function updateChart(callingElement, chart) {
+function getChartTitle(showBy) {
+	switch (showBy) {
+		case "WholesaleRate":
+		case "WholesaleCost":
+		case "WholesaleUsage":
+			return "Cost Element Comparison";
+		case "Forecast":
+			return "Forecast v Invoice Usage Summary";
+	}
+}
+
+function updateChart(callingElement) {
 	var treeDiv = document.getElementById('treeDiv');
 	var inputs = treeDiv.getElementsByTagName('input');
 	var commodity = getCommodity();
 	var checkBoxes = getCheckedCheckBoxes(inputs);
 	var showBy = getShowBy(callingElement);
-  
-	clearElement(chart);
-	
+	var chartTitle = getChartTitle(showBy);	
 	var newCategories = getNewCategories();   
 	var newSeries = getNewChartSeries(checkBoxes, showBy, newCategories, commodity);
-  
 	var chartOptions = {
-	chart: {
-	  type: 'bar',
-	  stacked: false
-	},
-	tooltip: {
-	  x: {
-	  format: getChartTooltipXFormat()
-	  }
-	},
-	yaxis: [{
-	  axisTicks: {
-		show: true
-	  },
-	  axisBorder: {
-		show: true,
-	  },
-	  title: {
-		text: ''
-	  },
-		  show: true,
-		  decimalsInFloat: 2
-	}],
-	xaxis: {
-	  type: 'category',
-	  title: {
-		text: ''
-	  },
-	  min: new Date(newCategories[0]).getTime(),
-	  max: new Date(newCategories[newCategories.length - 1]).getTime(),
-		  categories: newCategories
-	}
+		chart: {
+			height: '100%',
+			width: '100%',
+			type: 'bar',
+			stacked: false,
+			zoom: {
+				type: 'x',
+				enabled: true,
+				autoScaleYaxis: true
+			},
+			animations: {
+				enabled: true,
+				easing: 'easeout',
+				speed: 800,
+				animateGradually: {
+					enabled: true,
+					delay: 150
+				},
+				dynamicAnimation: {
+					enabled: true,
+					speed: 350
+				}
+			},
+			toolbar: {
+				autoSelected: 'zoom',
+				tools: {
+					download: false
+				}
+			}
+		},
+		dataLabels: {
+			enabled: false
+		},
+		title: {
+			text: chartTitle,
+			align: 'center'
+		},
+		tooltip: {
+			x: {
+				format: 'MMM yyyy'
+			}
+		},
+		legend: {
+			show: true,
+			showForSingleSeries: true,
+			showForNullSeries: true,
+			showForZeroSeries: true,
+			floating: false,
+			position: 'right',
+			onItemClick: {
+				toggleDataSeries: true
+			},
+			width: 100,
+			offsetY: 150,
+			formatter: function(seriesName) {
+				return seriesName + '<br><br>';
+			}
+		},
+		series: newSeries,
+		yaxis: [{
+			axisTicks: {
+				show: true
+			},
+				axisBorder: {
+				show: true,
+			},
+			forceNiceScale: true,
+			title: {
+				text: 'kWh Usage',
+			},
+			show: true,
+			decimalsInFloat: 0,
+			labels: {
+				formatter: function(val) {
+					return val.toLocaleString();
+				}
+			}
+		}],
+		xaxis: {
+			type: 'category',
+			categories: newCategories
+		}
 	};
+
+	chartDiv.style.display = 'none';
+	rightHandChartDiv.style.display = 'none';
+	leftHandChartDiv.style.display = 'none';
   
-	refreshChart(newSeries, '#chart', chartOptions);
+	if(showBy == 'Forecast') {
+		var initialChartSeries = [];
+		var secondaryChartSeries = [];
+
+		var seriesLength = newSeries.length;
+		for(var i = 0; i < seriesLength; i++) {
+			var series = newSeries[i];
+			if(series.name.includes('Usage')) {
+				initialChartSeries.push(series);
+			}
+			else {
+				secondaryChartSeries.push(series);
+			}
+		}
+
+		chartOptions.series = initialChartSeries;
+
+		var secondaryChartOptions = JSON.parse(JSON.stringify(chartOptions));
+		secondaryChartOptions.series = secondaryChartSeries;
+		secondaryChartOptions.title.text = secondaryChartOptions.title.text.replace('Usage', 'Cost');
+		secondaryChartOptions.yaxis[0].title.text = '£ Cost';
+		secondaryChartOptions.yaxis[0].labels.formatter = function(val) {
+				return '£' + val.toLocaleString();
+			};
+		secondaryChartOptions.legend.formatter = function(seriesName) {
+				return seriesName + '<br><br>';
+			};
+
+		rightHandChartDiv.style.display = '';
+		leftHandChartDiv.style.display = '';
+		clearElement(rightHandChart);
+		clearElement(leftHandChart);
+		renderChart('#rightHandChart', chartOptions);
+		renderChart('#leftHandChart', secondaryChartOptions);
+	}
+	else {
+		chartDiv.style.display = '';
+		clearElement(chart);
+		renderChart('#chart', chartOptions);
+	}
+	
 	updateDataGrid(showBy, newSeries, newCategories);
-  }
+}
 
 function updateDataGrid(showBy, newSeries, newCategories) {
 	var datagridDiv = document.getElementById('datagridDiv');
@@ -307,90 +410,12 @@ function updateDataGrid(showBy, newSeries, newCategories) {
 		nestedHeaders: getNestedHeaders(showBy)
 		}); 
 }
-  
-  function createBlankChart(chartId, noDataText) {
-	  var options = {
-		  chart: {
-			  height: '100%',
-			  width: '100%',
-			type: 'line'
-		  },
-		  series: [],
-		  yaxis: {
-			  show: false
-		  },
-		noData: {
-			  text: noDataText,
-			  align: 'center',
-			  verticalAlign: 'middle',
-			  offsetX: 0,
-			  offsetY: 0
-		  }
-		}
-		
-		renderChart(chartId, options);
-  }
-  
-  function renderChart(chartId, options) {
+
+function renderChart(chartId, options) {
 	var chart = new ApexCharts(document.querySelector(chartId), options);
 	chart.render();
-  }
-  
-  function refreshChart(newSeries, chartId, chartOptions) {
-	var options = {
-	  chart: {
-		  height: '100%',
-		  width: '100%',
-		type: chartOptions.chart.type,
-		stacked: chartOptions.chart.stacked,
-		zoom: {
-		  type: 'x',
-		  enabled: true,
-		  autoScaleYaxis: true
-		},
-		animations: {
-		  enabled: true,
-		  easing: 'easeout',
-		  speed: 800,
-		  animateGradually: {
-			  enabled: true,
-			  delay: 150
-		  },
-		  dynamicAnimation: {
-			  enabled: true,
-			  speed: 350
-		  }
-	  },
-		toolbar: {
-		  autoSelected: 'zoom',
-		  tools: {
-			download: false
-		  }
-		}
-	  },
-	  dataLabels: {
-		enabled: false
-	  },
-	  tooltip: {
-		x: {
-		  format: chartOptions.tooltip.x.format
-		}
-	  },
-	  legend: {
-		show: true,
-		position: 'right',
-		onItemClick: {
-		  toggleDataSeries: false
-		}
-	  },
-	  series: newSeries,
-	  yaxis: chartOptions.yaxis,
-	  xaxis: chartOptions.xaxis
-	};  
-  
-	renderChart(chartId, options);
-  }
-  
+}
+
 function getCheckedCheckBoxes(inputs) {
 var checkBoxes = [];
 var inputLength = inputs.length;
@@ -558,11 +583,7 @@ for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate(
 
 return newCategories;
 }
-  
-function getChartTooltipXFormat() {
-return 'MMM yyyy';
-}
-  
+
 function getChartXAxisLabelFormat() {
 return 'MMM yyyy';
 }

@@ -20,7 +20,7 @@ var data = [
                                 {"DeviceType" : "Mains"},
                                 {"Commodity" : "Gas"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
@@ -43,7 +43,7 @@ var data = [
                                 {"DeviceType" : "Mains"},
                                 {"Commodity" : "Electricity"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
@@ -66,7 +66,7 @@ var data = [
                                 {"DeviceType" : "Lighting"},
                                 {"Commodity" : "Electricity"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
@@ -106,7 +106,7 @@ var data = [
                                 {"DeviceType" : "Mains"},
                                 {"Commodity" : "Gas"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
@@ -129,7 +129,7 @@ var data = [
                                 {"DeviceType" : "Lighting"},
                                 {"Commodity" : "Electricity"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
@@ -160,7 +160,7 @@ var data = [
                                 {"DeviceType" : "Mains"},
                                 {"Commodity" : "Gas"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
@@ -183,7 +183,7 @@ var data = [
                                 {"DeviceType" : "Lighting"},
                                 {"Commodity" : "Electricity"}
                             ],
-                            "Cost" : [
+                            "Commission" : [
                                 {"Month" :"JAN 2019", "Latest Forecasted Commission" : 100000, "Difference" : 10000, "Invoiced Commission" : 110000},
                                 {"Month" :"FEB 2019", "Latest Forecasted Commission" : 100000, "Difference" : 2000, "Invoiced Commission" : 102000},
                                 {"Month" :"MAR 2019", "Latest Forecasted Commission" : 100000, "Difference" : -10000, "Invoiced Commission" : 90000},
