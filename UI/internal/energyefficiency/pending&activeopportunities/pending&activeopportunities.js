@@ -1,6 +1,30 @@
 function pageLoad() {
     createTree(activeopportunity, "treeDiv", "updateGanttChartAndDataGrid()");
     updateGanttChartAndDataGrid();
+
+    document.onmousemove=function(e) {
+        var mousecoords = getMousePos(e);
+        if(mousecoords.x <= 25) {
+          openNav();
+        }  
+        else if(mousecoords.x >= 400) {
+          closeNav();
+        }  
+    };
+}
+    
+function getMousePos(e) {
+    return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "400px";
+    document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+    document.getElementById("openNav").style.color = "white";
+    document.getElementById("mySidenav").style.width = "0px";
 }
 
 var branchCount = 0;
@@ -452,20 +476,29 @@ function buildDataGrid() {
     }
 
     var table = jexcel(spreadsheet, {
+        pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
         data: displayData,
         columns: [
-            {type:'text', width:'150px', name:'projectName', title:'Project Name'},
-            {type:'text', width:'115px', name:'site', title:'Site'},
-            {type:'text', width:'130px', name:'meter', title:'Meter'},
-            {type:'text', width:'115px', name:'engineer', title:'Engineer'},
-            {type:'text', width:'100px', name:'projectStatus', title:'Project<br>Status'},
-            {type:'text', width:'150px', name:'estimatedStartDate', title:'Estimated<br>Start Date'},
-            {type:'text', width:'115px', name:'estimatedFinishDate', title:'Estimated<br>End Date'},
-            {type:'text', width:'115px', name:'estimatedCost', title:'Estimated<br>Cost'},
-            {type:'text', width:'125px', name:'estimatedkWhSavings', title:'Estimated kWh<br>Savings (pa)'},
-            {type:'text', width:'115px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)'},
-            {type:'text', width:'115px', name:'totalROIMonths', title:'Total<br>ROI Months'},
-            {type:'text', width:'115px', name:'roiMonthsRemaining', title:'ROI Months<br>Remaining'},
+            {type:'text', width:'175px', name:'projectName', title:'Project Name', readOnly: true},
+            {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+            {type:'text', width:'150px', name:'engineer', title:'Engineer', readOnly: true},
+            {type:'text', width:'150px', name:'projectStatus', title:'Project<br>Status', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedFinishDate', title:'Estimated<br>End Date', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedkWhSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
+            {type:'text', width:'150px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
+            {type:'text', width:'150px', name:'roiMonthsRemaining', title:'ROI Months<br>Remaining', readOnly: true},
          ]
     });
 
@@ -495,7 +528,7 @@ function buildDataGrid() {
         var defaults = {
             showWeekends: true,
             cellWidth: 20,
-            cellHeight: 31,
+            cellHeight: 50,
             slideWidth: 250,
             vHeaderWidth: 100,
             behavior: {
@@ -515,7 +548,7 @@ function buildDataGrid() {
 
 		function build() {
 			
-			var minDays = 30;// Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
+			var minDays = 35;// Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
 			var startEnd = DateUtils.getBoundaryDatesFromData(opts.data, minDays);
 			opts.start = startEnd[0];
 			opts.end = startEnd[1];
@@ -526,10 +559,7 @@ function buildDataGrid() {
 	            var div = jQuery("<div>", { "class": "ganttview" });
 	            new Chart(div, opts).render();
 				container.append(div);
-				
-				var w = jQuery("div.ganttview-vtheader", container).outerWidth() +
-					jQuery("div.ganttview-slide-container", container).outerWidth();
-	            container.css("width", (w + 2) + "px");
+	            container.css("width", "100%");
 	            
 	            new Behavior(container, opts).apply();
 	        });
@@ -555,7 +585,7 @@ function buildDataGrid() {
 
             var slideDiv = jQuery("<div>", {
                 "class": "ganttview-slide-container",
-                "css": { "width": (opts.slideWidth - 280) + "px" }
+                "css": { "width": "85%" }
             });
 			
             dates = getDates(opts.start, opts.end);
@@ -638,7 +668,7 @@ function buildDataGrid() {
 					totalW = totalW + w;
 					monthsDiv.append(jQuery("<div>", {
 						"class": "ganttview-hzheader-month",
-						"css": { "width": (w - 1) + "px" }
+						"css": { "width": w + "px" }
 					}).append(monthNames[m] + " " + y));
 					for (var d in dates[y][m]) {
 						daysDiv.append(jQuery("<div>", { "class": "ganttview-hzheader-day" })
