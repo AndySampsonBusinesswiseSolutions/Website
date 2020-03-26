@@ -1,7 +1,474 @@
 function pageLoad() {
     var data = customer;
 	createTree(data, "treeDiv", "");
-	addExpanderOnClickEvents();
+    addExpanderOnClickEvents();
+    setupDataGrids();
+    
+    document.onmousemove=function(e) {
+        var mousecoords = getMousePos(e);
+        if(mousecoords.x <= 25) {
+          openNav();
+        }  
+        else if(mousecoords.x >= 400) {
+          closeNav();
+        }  
+    };
+}
+
+function getMousePos(e) {
+    return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "400px";
+    document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+    document.getElementById("openNav").style.color = "white";
+    document.getElementById("mySidenav").style.width = "0px";
+}
+
+function closeElement(elementId){
+	document.getElementById(elementId).style.display="none";
+}
+
+function displayScheduleRequestedVisitPopup(row) {
+	var modal = document.getElementById("scheduleRequestedVisitPopup");
+	var title = document.getElementById("scheduleRequestedVisitTitle");
+    var span = modal.getElementsByClassName("close")[0];
+    var customer = document.getElementById('requestedVisitsCustomer' + row).innerText;
+    var visitDate = document.getElementById('requestedVisitsVisitDate' + row).innerText;
+
+    var scheduleRequestedVisitRequestedVisitDate = document.getElementById('scheduleRequestedVisitRequestedVisitDate');
+    var scheduleRequestedVisitScheduledVisitDate = document.getElementById('scheduleRequestedVisitScheduledVisitDate');
+
+    scheduleRequestedVisitRequestedVisitDate.innerText = visitDate;
+    scheduleRequestedVisitScheduledVisitDate.value = "2020-04-01";
+
+    title.innerText = 'Schedule Visit - ' + customer;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function scheduleRequestedVisit() {
+    var modal = document.getElementById("scheduleRequestedVisitPopup");
+    var visitDate = document.getElementById('scheduleRequestedVisitScheduledVisitDate').value;
+    var engineer = document.getElementById('scheduleRequestedVisitAssignEngineer').value;
+
+    var popupIsValid = true;
+    if(visitDate == "") {
+		popupIsValid = false;
+		scheduleRequestedVisitScheduledVisitDateRequiredMessage.style.display = 'block';
+		scheduleRequestedVisitScheduledVisitDateRequiredMessage.innerHTML = '<i class="fas fa-exclamation-circle">Please select a visit date</i>'
+		window.setTimeout("closeElement('scheduleRequestedVisitScheduledVisitDateRequiredMessage');", 2000);
+	}
+	else {
+		var requestVisitDate = new Date(visitDate);
+
+		if(requestVisitDate < new Date()) {
+			popupIsValid = false;
+			scheduleRequestedVisitScheduledVisitDateRequiredMessage.style.display = 'block';
+			scheduleRequestedVisitScheduledVisitDateRequiredMessage.innerHTML = '<i class="fas fa-exclamation-circle">Please select a visit date in the future</i>'
+			window.setTimeout("closeElement('scheduleRequestedVisitScheduledVisitDateRequiredMessage');", 2000);
+		}
+		else {
+			scheduleRequestedVisitScheduledVisitDateRequiredMessage.style.display = 'none';
+		}
+    }
+    
+    if(engineer == "") {
+        popupIsValid = false;
+		scheduleRequestedVisitAssignEngineerRequiredMessage.style.display = 'block';
+		scheduleRequestedVisitAssignEngineerRequiredMessage.innerHTML = '<i class="fas fa-exclamation-circle">Please select an engineer</i>'
+		window.setTimeout("closeElement('scheduleRequestedVisitAssignEngineerRequiredMessage');", 2000);
+    }
+
+	if(popupIsValid) {
+		modal.style.display = "none";
+	}
+	else {
+		event.preventDefault();
+		return false;
+    }
+    
+	modal.style.display = "none";
+}
+
+function displayRejectRequestedVisitPopup(row) {
+	var modal = document.getElementById("rejectRequestedVisitPopup");
+	var title = document.getElementById("rejectRequestedVisitTitle");
+    var span = modal.getElementsByClassName("close")[0];
+    var customer = document.getElementById('requestedVisitsCustomer' + row).innerText;
+    var visitDate = document.getElementById('requestedVisitsVisitDate' + row).innerText;
+
+    title.innerText = 'Reject Visit - ' + customer + ' - ' + visitDate;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function rejectRequestedVisit() {
+    var modal = document.getElementById("rejectRequestedVisitPopup");
+	modal.style.display = "none";
+}
+
+function displayRejectRequestedVisitPopup(row) {
+	var modal = document.getElementById("rejectRequestedVisitPopup");
+	var title = document.getElementById("rejectRequestedVisitTitle");
+    var span = modal.getElementsByClassName("close")[0];
+    var customer = document.getElementById('requestedVisitsCustomer' + row).innerText;
+    var visitDate = document.getElementById('requestedVisitsVisitDate' + row).innerText;
+
+    title.innerText = 'Reject Visit - ' + customer + ' - ' + visitDate;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function rejectRequestedVisit() {
+    var modal = document.getElementById("rejectRequestedVisitPopup");
+	modal.style.display = "none";
+}
+
+function displayApproveScheduledVisitPopup(row) {
+	var modal = document.getElementById("approveScheduledVisitPopup");
+	var title = document.getElementById("approveScheduledVisitTitle");
+    var span = modal.getElementsByClassName("close")[0];
+    var customer = document.getElementById('scheduledVisitsCustomer' + row).innerText;
+    var visitDate = document.getElementById('scheduledVisitsVisitDate' + row).innerText;
+
+    title.innerText = 'Start Visit - ' + customer + ' - ' + visitDate;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function approveScheduledVisit() {
+    var modal = document.getElementById("approveScheduledVisitPopup");
+    modal.style.display = "none";
+    
+    window.open("../CreateOpportunities");
+}
+
+function displayRejectScheduledVisitPopup(row) {
+	var modal = document.getElementById("rejectScheduledVisitPopup");
+	var title = document.getElementById("rejectScheduledVisitTitle");
+    var span = modal.getElementsByClassName("close")[0];
+    var customer = document.getElementById('scheduledVisitsCustomer' + row).innerText;
+    var visitDate = document.getElementById('scheduledVisitsVisitDate' + row).innerText;
+
+    title.innerText = 'Reject Visit - ' + customer + ' - ' + visitDate;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function rejectScheduledVisit() {
+    var modal = document.getElementById("rejectScheduledVisitPopup");
+	modal.style.display = "none";
+}
+
+function displayApproveOpportunityPopup(row) {
+	var modal = document.getElementById("approveOpportunityPopup");
+	var title = document.getElementById("approveOpportunityTitle");
+	var estimatedAnnualSavings = document.getElementById("approveOpportunityEstimatedAnnualSavings");
+	var span = modal.getElementsByClassName("close")[0];
+
+    title.innerText = 'Approve Opportunity - ' + document.getElementById('opportunityName' + row).innerText;
+	estimatedAnnualSavings.innerHTML = document.getElementById('estimatedSavings' + row).innerHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function approveOpportunity() {
+    var modal = document.getElementById("approveOpportunityPopup");
+	modal.style.display = "none";
+}
+
+function displayRejectOpportunityPopup(row) {
+	var modal = document.getElementById("rejectOpportunityPopup");
+	var title = document.getElementById("rejectOpportunityTitle");
+	var estimatedAnnualSavings = document.getElementById("rejectOpportunityEstimatedAnnualSavings");
+	var span = modal.getElementsByClassName("close")[0];
+
+    title.innerText = 'Reject Opportunity - ' + document.getElementById('opportunityName' + row).innerText;
+	estimatedAnnualSavings.innerHTML = document.getElementById('estimatedSavings' + row).innerHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function rejectOpportunity() {
+    var modal = document.getElementById("rejectOpportunityPopup");
+	modal.style.display = "none";
+}
+
+function displayCloseOpportunityPopup(row) {
+	var modal = document.getElementById("closeOpportunityPopup");
+	var title = document.getElementById("closeOpportunityTitle");
+	var estimatedAnnualSavings = document.getElementById("closeOpportunityEstimatedAnnualSavings");
+	var span = modal.getElementsByClassName("close")[0];
+
+    title.innerText = 'Close Opportunity - ' + document.getElementById('opportunityName' + row).innerText;
+	estimatedAnnualSavings.innerHTML = document.getElementById('estimatedSavings' + row).innerHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function closeOpportunity() {
+    var modal = document.getElementById("closeOpportunityPopup");
+	modal.style.display = "none";
+}
+
+function setupDataGrids() {
+    setupRequestedVisitsDataGrid();
+    setupScheduledVisitsDataGrid();
+    setupRecommendedOpportunitiesDataGrid();
+    setupPendingActiveOpportunitiesDataGrid();
+    setupRejectedOpportunitiesDataGrid();
+}
+
+function setupRequestedVisitsDataGrid() {
+    var data = [];
+    var row = {
+        customer:'<div id="requestedVisitsCustomer1">David Ford Trading Ltd</div>', 
+		site:'Site X',
+        visitDate:'<div id="requestedVisitsVisitDate1">01/04/2020</div>',
+        manageVisit: '<button class="show-pointer btn approve" onclick="displayScheduleRequestedVisitPopup(1)">Schedule Visit</button>'
+                    +'<button class="show-pointer btn reject" onclick="displayRejectRequestedVisitPopup(1)">Reject Visit</button>'
+	}
+    data.push(row);
+    
+    jexcel(document.getElementById('requestedVisitsSpreadsheet'), {
+		pagination:5,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: data,
+		columns: [
+            {type:'text', width:'210px', name:'customer', title:'Customer', readOnly: true},
+            {type:'text', width:'210px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'210px', name:'visitDate', title:'Requested Visit Date', readOnly: true},
+            {type:'text', width:'215px', name:'manageVisit', title:'Manage Visit', readOnly: true},
+		 ]
+	  }); 
+}
+
+function setupScheduledVisitsDataGrid() {
+    var data = [];
+    var row = {
+        customer:'<div id="scheduledVisitsCustomer1">David Ford Trading Ltd</div>', 
+		site:'Site X',
+        engineer:'En Gineer',
+        visitDate:'<div id="scheduledVisitsVisitDate1">01/04/2020</div>',
+        manageVisit: '<button class="show-pointer btn approve" onclick="displayApproveScheduledVisitPopup(1)">Start Visit</button>'
+                    +'<button class="show-pointer btn reject" onclick="displayRejectScheduledVisitPopup(1)">Reject Visit</button>'
+	}
+    data.push(row);
+    
+    jexcel(document.getElementById('scheduledVisitsSpreadsheet'), {
+		pagination:5,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: data,
+		columns: [
+            {type:'text', width:'165px', name:'customer', title:'Customer', readOnly: true},
+            {type:'text', width:'165px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'165px', name:'engineer', title:'Engineer', readOnly: true},
+            {type:'text', width:'165px', name:'visitDate', title:'Scheduled Visit Date', readOnly: true},
+            {type:'text', width:'185px', name:'manageVisit', title:'Manage Visit', readOnly: true},
+		 ]
+	  }); 
+}
+
+function setupRecommendedOpportunitiesDataGrid() {
+    var data = [];
+    var row = {
+        customer:'David Ford Trading Ltd', 
+        opportunityType:'Custom',
+        opportunityName:'<div id="opportunityName1">LED Lighting</div>',
+		site:'Site X',
+        meter:'12345678910125',
+        subMeter:'Sub Meter 2',
+        engineer:'En Gineer',
+        estimatedStartDate:'01/04/2020',
+        estimatedFinishDate:'30/06/2020',
+        percentageSaving:'10%',
+        estimatedCost:'£100,000',
+        estimatedSavings:'<div id="estimatedSavings1">kWh: 10,000<br>£: £15,000</div>',
+        approveReject: '<button class="show-pointer btn approve" onclick="displayApproveOpportunityPopup(1)">Approve Opportunity</button>'
+                          +'<button class="show-pointer btn reject" onclick="displayRejectOpportunityPopup(1)">Reject Opportunity</button>',
+        manageOpportunity: '<button class="show-pointer btn">Manage Opportunity</button>'
+                          +'<button class="show-pointer btn">Add Opportunities</button>'
+	}
+    data.push(row);
+    
+    jexcel(document.getElementById('recommendedOpportunitiesSpreadsheet'), {
+		pagination:5,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: data,
+		columns: [
+            {type:'text', width:'150px', name:'customer', title:'Customer', readOnly: true},
+            {type:'text', width:'100px', name:'opportunityType', title:'Opportunity<Br>Type', readOnly: true},
+            {type:'text', width:'100px', name:'opportunityName', title:'Opportunity<br>Name', readOnly: true},
+            {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+            {type:'text', width:'100px', name:'subMeter', title:'Sub Meter', readOnly: true},
+            {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+            {type:'text', width:'105px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
+            {type:'text', width:'105px', name:'estimatedFinishDate', title:'Estimated<br>Finish Date', readOnly: true},
+            {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
+            {type:'text', width:'120px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+            {type:'text', width:'125px', name:'estimatedSavings', title:'Estimated <br>Savings (pa)', readOnly: true},
+            {type:'text', width:'197px', name:'manageOpportunity', title:'Manage Opportunity', readOnly: true},
+            {type:'text', width:'197px', name:'approveReject', title:'Approve/Reject<br>Opportunity', readOnly: true},
+		 ]
+	  }); 
+}
+
+function setupPendingActiveOpportunitiesDataGrid() {
+    var data = [];
+    var row = {
+        customer:'David Ford Trading Ltd', 
+        opportunityType:'Custom',
+        opportunityName:'LED Lighting',
+		site:'Site X',
+        meter:'12345678910125',
+        subMeter:'Sub Meter 2',
+        engineer:'En Gineer',
+        estimatedStartDate:'01/04/2020',
+        estimatedFinishDate:'30/06/2020',
+        percentageSaving:'10%',
+        estimatedCost:'£100,000',
+        estimatedSavings:'kWh: 10,000<br>£: £15,000',
+        close: '<button class="show-pointer btn reject" onclick="displayCloseOpportunityPopup(1)">Close Opportunity</button>',
+        manageOpportunity: '<button class="show-pointer btn">Manage Opportunity</button>'
+                          +'<button class="show-pointer btn">Add Opportunities</button>'
+	}
+    data.push(row);
+    
+    jexcel(document.getElementById('pendingActiveOpportunitiesSpreadsheet'), {
+		pagination:5,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: data,
+		columns: [
+            {type:'text', width:'150px', name:'customer', title:'Customer', readOnly: true},
+            {type:'text', width:'100px', name:'opportunityType', title:'Opportunity<Br>Type', readOnly: true},
+            {type:'text', width:'100px', name:'opportunityName', title:'Opportunity<br>Name', readOnly: true},
+            {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+            {type:'text', width:'100px', name:'subMeter', title:'Sub Meter', readOnly: true},
+            {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+            {type:'text', width:'105px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
+            {type:'text', width:'105px', name:'estimatedFinishDate', title:'Estimated<br>Finish Date', readOnly: true},
+            {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
+            {type:'text', width:'120px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+            {type:'text', width:'125px', name:'estimatedSavings', title:'Estimated <br>Savings (pa)', readOnly: true},
+            {type:'text', width:'197px', name:'manageOpportunity', title:'Manage Opportunity', readOnly: true},
+            {type:'text', width:'197px', name:'close', title:'Close<br>Opportunity', readOnly: true},
+		 ]
+	  }); 
+}
+
+function setupRejectedOpportunitiesDataGrid() {
+    var data = [];
+    var row = {
+        customer:'David Ford Trading Ltd', 
+        opportunityType:'Custom',
+        opportunityName:'LED Lighting',
+		site:'Site X',
+        meter:'12345678910125',
+        subMeter:'Sub Meter 2',
+        engineer:'En Gineer',
+        estimatedStartDate:'01/04/2020',
+        estimatedFinishDate:'30/06/2020',
+        percentageSaving:'10%',
+        estimatedCost:'£100,000',
+        estimatedSavings:'kWh: 10,000<br>£: £15,000',
+        notes: 'Rejected due to site being sold',
+	}
+    data.push(row);
+    
+    jexcel(document.getElementById('rejectedOpportunitiesSpreadsheet'), {
+		pagination:5,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: data,
+		columns: [
+            {type:'text', width:'150px', name:'customer', title:'Customer', readOnly: true},
+            {type:'text', width:'100px', name:'opportunityType', title:'Opportunity<Br>Type', readOnly: true},
+            {type:'text', width:'100px', name:'opportunityName', title:'Opportunity<br>Name', readOnly: true},
+            {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+            {type:'text', width:'100px', name:'subMeter', title:'Sub Meter', readOnly: true},
+            {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
+            {type:'text', width:'105px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
+            {type:'text', width:'105px', name:'estimatedFinishDate', title:'Estimated<br>Finish Date', readOnly: true},
+            {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
+            {type:'text', width:'120px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+            {type:'text', width:'125px', name:'estimatedSavings', title:'Estimated <br>Savings (pa)', readOnly: true},
+            {type:'text', width:'394px', name:'notes', title:'Notes', readOnly: true},
+		 ]
+	  }); 
 }
 
 var branchCount = 0;
@@ -201,7 +668,10 @@ function addExpanderOnClickEvents() {
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
-	}
+    }
+    
+    updateClassOnClick('recommendedOpportunities', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('pendingActiveOpportunities', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -209,52 +679,4 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
-		}
-	});		
 }
