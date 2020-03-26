@@ -90,6 +90,16 @@
 			<span id=historicalSiteVisitNotes></span>
 		</div>
 	</div>
+	<div id="siteRankingPopup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="siteRankingTitle"></span>
+			</div>
+			<br>
+			<div>Opportunities:</div><span id="siteRankingOpportunityList"></span>
+		</div>
+	</div>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 	<br>
 	<div class="row">
@@ -155,7 +165,7 @@
 						<div class="first" style="float: left;"></div>
 						<div style="width: 30%; float: left; padding-top: 10px;">
 							<div id="Project1" class="far fa-plus-square show-pointer"></div>
-							<span id="Project1span">LED Lighting Installation</span><i class="fas fa-search show-pointer"></i>
+							<span id="Project1span">LED Lighting Installation</span>
 						</div>
 						<div class="middle" style="float: left;"></div>
 						<div style="width: 30%; float: left;">
@@ -244,7 +254,7 @@
 						<div class="first" style="float: left;"></div>
 						<div style="width: 30%; float: left; padding-top: 10px;">
 							<div id="Project2" class="far fa-plus-square show-pointer"></div>
-							<span id="Project2span">LED Lighting Installation 2</span><i class="fas fa-search show-pointer"></i>
+							<span id="Project2span">LED Lighting Installation 2</span>
 						</div>
 						<div class="middle" style="float: left;"></div>
 						<div style="width: 30%; float: left;">

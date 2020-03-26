@@ -250,6 +250,46 @@ function displayHistoricalSiteVisitPopup(row) {
 	}
 }
 
+function displaySiteRankingPopup(row) {
+	var modal = document.getElementById("siteRankingPopup");
+	var span = modal.getElementsByClassName("close")[0];
+	var title = modal.getElementsByClassName("title")[0];
+	modal.style.display = "block";
+
+	var btn = document.getElementById("SiteRanking" + row);
+	var site = btn.getAttribute('site');
+
+	title.innerHTML = 'Site Ranking for ' + site;
+
+	var siteRankingOpportunityList = document.getElementById("siteRankingOpportunityList");
+
+	if(row == 1) {
+		siteRankingOpportunityList.innerHTML = 
+			"Project: LED Lighting Installation (Recommended)<br>"
+			+ "kWh Savings: 5,000<br>"
+			+ "£ Savings: £5,000<br><br>"
+			+ "Project: LED Lighting Installation 2 (Recommended)<br>"
+			+ "kWh Savings: 5,000<br>"
+			+ "£ Savings: £5,000<br>";
+	}
+	else {
+		siteRankingOpportunityList.innerHTML = 
+			"Project: LED Lighting Installation (Recommended)<br>"
+			+ "kWh Savings: 2,000<br>"
+			+ "£ Savings: £2,000<br><br>"
+			+ "Project: LED Lighting Installation 2 (Recommended)<br>"
+			+ "kWh Savings: 2,000<br>"
+			+ "£ Savings: £2,000<br><br>"
+			+ "Project: Freezer Management (Under Analysis)<br>"
+			+ "kWh Savings: 46,000<br>"
+			+ "£ Savings: £46,000<br>";
+	}
+	
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
 function getAttribute(attributes, attributeRequired) {
 	for (var attribute in attributes) {
 		var array = attributes[attribute];
@@ -466,8 +506,8 @@ function loadDataGrids() {
 	}
 
 	var row = {
-		siteName:'Site X <i class="fas fa-search show-pointer"></i>', 
-		ranking:'<div id="SiteXRanking" initialValue="3"></div>',
+		siteName:'Site X <i onclick="displaySiteRankingPopup(1)" class="fas fa-search show-pointer"></i>', 
+		ranking:'<div id="SiteRanking1" site="Site X" initialValue="3""></div>',
 		savingskWh: '10,000',
 		savingsCost: '£10,000',
 		capex: '£10,000',
@@ -476,8 +516,8 @@ function loadDataGrids() {
 	siteRankings.push(row);
 
 	row = {
-		siteName:'Site Y <i class="fas fa-search show-pointer"></i>', 
-		ranking:'<div id="SiteYRanking" initialValue="5"></div>',
+		siteName:'Site Y <i onclick="displaySiteRankingPopup(2)" class="fas fa-search show-pointer"></i>', 
+		ranking:'<div id="SiteRanking2" site="Site Y" initialValue="5""></div>',
 		savingskWh: '50,000',
 		savingsCost: '£50,000',
 		capex: '£50,000',
@@ -545,14 +585,14 @@ function loadDataGrids() {
 		 ]
 	  }); 
 
-	jSuites.rating(document.getElementById("SiteXRanking"), 
+	jSuites.rating(document.getElementById("SiteRanking1"), 
 		{
 			value: 3,
 			onchange: function(el, val) {
 				resetRating(el, val);
 			}
 		});
-	jSuites.rating(document.getElementById("SiteYRanking"), 
+	jSuites.rating(document.getElementById("SiteRanking2"), 
 		{
 			value: 5,
 			onchange: function(el, val) {
