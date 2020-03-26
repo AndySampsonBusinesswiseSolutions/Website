@@ -161,7 +161,7 @@ function approveScheduledVisit() {
     var modal = document.getElementById("approveScheduledVisitPopup");
     modal.style.display = "none";
     
-    window.open("../CreateOpportunities");
+    window.open("../CreateOpportunities", "_self");
 }
 
 function displayRejectScheduledVisitPopup(row) {
@@ -338,7 +338,7 @@ function setupRecommendedOpportunitiesDataGrid() {
         approveReject: '<button class="show-pointer btn approve" onclick="displayApproveOpportunityPopup(1)">Approve Opportunity</button>'
                           +'<button class="show-pointer btn reject" onclick="displayRejectOpportunityPopup(1)">Reject Opportunity</button>',
         manageOpportunity: '<button class="show-pointer btn">Manage Opportunity</button>'
-                          +'<button class="show-pointer btn">Add Opportunities</button>'
+                          +'<button class="show-pointer btn" onclick="approveScheduledVisit()">Add Opportunities</button>'
 	}
     data.push(row);
     
@@ -389,7 +389,7 @@ function setupPendingActiveOpportunitiesDataGrid() {
         estimatedSavings:'kWh: 10,000<br>£: £15,000',
         close: '<button class="show-pointer btn reject" onclick="displayCloseOpportunityPopup(1)">Close Opportunity</button>',
         manageOpportunity: '<button class="show-pointer btn">Manage Opportunity</button>'
-                          +'<button class="show-pointer btn">Add Opportunities</button>'
+                          +'<button class="show-pointer btn" onclick="approveScheduledVisit()">Add Opportunities</button>'
 	}
     data.push(row);
     
