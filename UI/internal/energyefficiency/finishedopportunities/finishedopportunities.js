@@ -3,6 +3,30 @@ function pageLoad() {
   updateGraphs();
   showCumulativeSavingChart();  
   loadDataGrid();
+
+  document.onmousemove=function(e) {
+    var mousecoords = getMousePos(e);
+    if(mousecoords.x <= 25) {
+      openNav();
+    }  
+    else if(mousecoords.x >= 400) {
+      closeNav();
+    }  
+};
+}
+
+function getMousePos(e) {
+return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+document.getElementById("mySidenav").style.width = "400px";
+document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+document.getElementById("openNav").style.color = "white";
+document.getElementById("mySidenav").style.width = "0px";
 }
 
 function loadDataGrid() {
@@ -59,20 +83,20 @@ function loadDataGrid() {
     wordWrap: true,
 		columns: [
       {type:'text', width:'150px', name:'projectName', title:'Project Name', readOnly: true},
-      {type:'text', width:'100px', name:'site', title:'Site', readOnly: true},
-      {type:'text', width:'100px', name:'meter', title:'Meter', readOnly: true},
-      {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
-      {type:'text', width:'100px', name:'startDate', title:'Start Date', readOnly: true},
-      {type:'text', width:'100px', name:'finishDate', title:'Finish Date', readOnly: true},
-      {type:'text', width:'100px', name:'cost', title:'Cost', readOnly: true},
-      {type:'text', width:'100px', name:'actualVolumeSavings', title:'Actual kWh<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'100px', name:'actualCostSavings', title:'Actual £<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'125px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'125px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'100px', name:'netVolumeSavings', title:'Net kWh<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'100px', name:'netCostSavings', title:'Net £<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'100px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
-      {type:'text', width:'100px', name:'remainingROIMonths', title:'Remaining<br>ROI Months', readOnly: true},
+      {type:'text', width:'119px', name:'site', title:'Site', readOnly: true},
+      {type:'text', width:'119px', name:'meter', title:'Meter', readOnly: true},
+      {type:'text', width:'119px', name:'engineer', title:'Engineer', readOnly: true},
+      {type:'text', width:'119px', name:'startDate', title:'Start Date', readOnly: true},
+      {type:'text', width:'119px', name:'finishDate', title:'Finish Date', readOnly: true},
+      {type:'text', width:'119px', name:'cost', title:'Cost', readOnly: true},
+      {type:'text', width:'119px', name:'actualVolumeSavings', title:'Actual kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'119px', name:'actualCostSavings', title:'Actual £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'119px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'119px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'119px', name:'netVolumeSavings', title:'Net kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'119px', name:'netCostSavings', title:'Net £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'119px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
+      {type:'text', width:'119px', name:'remainingROIMonths', title:'Remaining<br>ROI Months', readOnly: true},
 		 ]
     });													
 }

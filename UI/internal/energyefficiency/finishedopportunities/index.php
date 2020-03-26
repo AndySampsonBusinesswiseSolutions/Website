@@ -12,57 +12,55 @@
 </head>
 
 <body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-	<br>
-	<div class="row">
+	<div id="mySidenav" class="sidenav">	
+		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div>
-				<div class="tree-column">
-					<div id="treeDiv" class="tree-div">
-					</div>
-					<br>
-					<div class="roundborder" style="background-color: #e9eaee;">
-						<span style="padding-left: 5px;">Select Tree Display Order</span>
-						<ul class="format-listitem">
-							<li>
-								<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
-							</li>
-							<li>
-								<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "treeDiv", "");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
-							</li>
-						</ul>
-					</div>
-				</div>
+			<div class="tree-div roundborder">
+				<span style="padding-left: 5px;">Select Tree Display Order</span>
+				<ul class="format-listitem">
+					<li>
+						<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
+					</li>
+					<li>
+						<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "treeDiv", "");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div id="treeDiv" class="tree-div roundborder">
 			</div>
 		</div>
-		<div class="fill-column"></div>
-		<div class="final-column">
-			<div class="roundborder">
-				<div id="cumulativeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
-				<div id="cumulativeSavingList"  class="listitem-hidden chart" style="margin: 5px;">
-					<div id="cumulativeSavingChart"></div>
-				</div>
-			</div>			
-			<br>
-			<div class="roundborder">
-				<div id="costSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<span id="costSavingspan">Cost Saving Chart</span>
-				<div id="costSavingList"  class="listitem-hidden chart" style="margin: 5px;">
-					<div id="costSavingChart"></div>
-				</div>
-			</div>			
-			<br>
-			<div class="roundborder">
-				<div id="volumeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<span id="volumeSavingspan">Volume Saving Chart</span>
-				<div id="volumeSavingList"  class="listitem-hidden chart" style="margin: 5px;">
-					<div id="volumeSavingChart"></div>
-				</div>
-			</div>			
-			<br>
-			<div class="roundborder">
-				<div id="spreadsheet"></div>
+	</div>
+
+	<div class="section-header">
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	</div>
+	<br>
+	<div class="final-column">
+		<div id="spreadsheet"></div>
+		<br>
+		<div class="roundborder">
+			<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
+			<div id="cumulativeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			<div id="cumulativeSavingList"  class="listitem-hidden tree-div roundborder" style="margin: 5px;">
+				<div id="cumulativeSavingChart"></div>
+			</div>
+		</div>			
+		<br>
+		<div class="roundborder">
+			<span id="costSavingspan">Cost Saving Chart</span>
+			<div id="costSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			<div id="costSavingList"  class="listitem-hidden tree-div roundborder" style="margin: 5px;">
+				<div id="costSavingChart"></div>
+			</div>
+		</div>			
+		<br>
+		<div class="roundborder">
+			<span id="volumeSavingspan">Volume Saving Chart</span>
+			<div id="volumeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder" style="margin: 5px;">
+				<div id="volumeSavingChart"></div>
 			</div>
 		</div>
 	</div>
