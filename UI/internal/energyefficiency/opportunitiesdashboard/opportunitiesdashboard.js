@@ -20,6 +20,48 @@ function setupRequestVisitPopup() {
 	}
 }
 
+function openApproveRejectOpportunityPopup(element) {
+	var modal = document.getElementById("approveRejectOpportunityPopup");
+	var title = document.getElementById("approveRejectOpportunityTitle");
+	var estimatedAnnualSavings = document.getElementById("approveRejectOpportunityEstimatedAnnualSavings");
+	var span = modal.getElementsByClassName("close")[0];
+	var projectSpan;
+	var approve = hasClass(element, 'approve');
+	var label = document.getElementById("approveRejectOpportunityNotesLabel");
+	var notes = document.getElementById("approveRejectOpportunityNotes");
+
+	if(element.id.includes('Site')) {
+		var list = element.parentNode.parentNode.parentNode.id;
+		projectSpan = document.getElementById(list.replace('List', 'span'));
+
+		var siteTitle = document.getElementById("approveRejectOpportunitySiteTitle");
+		siteTitle.style.display = "";
+		siteTitle.innerText = 'For ' + element.innerHTML.replace((approve ? 'Approve<br>' : 'Reject<br>'), '');
+	}
+	else {
+		projectSpan = document.getElementById(element.id.replace((approve ? 'ApproveOpportunityButton' : 'RejectOpportunityButton'), 'span'));
+	}
+
+	if(approve) {
+		title.innerText = 'Approve Opportunity - ' + projectSpan.innerText;
+		label.style.display = "none";
+		notes.style.display = "none";
+	}
+	else {
+		title.innerText = 'Reject Opportunity - ' + projectSpan.innerText;
+		label.style.display = "";
+		notes.style.display = "";
+	}
+
+	estimatedAnnualSavings.innerHTML = document.getElementById(element.id.replace((approve ? 'ApproveOpportunityButton' : 'RejectOpportunityButton'), 'EstimatedAnnualSavings')).innerHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
 function displayFutureSiteVisitPopup(row) {
 	var modal = document.getElementById("futureSiteVisitPopup");
 	var span = modal.getElementsByClassName("close")[0];
@@ -291,7 +333,6 @@ function appendListItemChildren(li, id, checkboxBranch, branchOption, ul, linked
 	li.appendChild(createBranchListDiv(id.concat('List'), ul));
 }
 
-
 function createBranchDiv(branchDivId) {
 	var branchDiv = document.createElement('div');
 	branchDiv.id = branchDivId;
@@ -381,6 +422,20 @@ function requestVisit() {
 		event.preventDefault();
 		return false;
 	}
+}
+
+function approveRejectOpportunity() {
+	var modal = document.getElementById("approveRejectOpportunityPopup");
+	var title = document.getElementById("approveRejectOpportunityTitle");
+	
+	if(title.innerText.includes('Approve')) {
+
+	}
+	else {
+
+	}
+
+	modal.style.display = "none";
 }
 
 function closeElement(elementId){

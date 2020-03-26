@@ -12,6 +12,20 @@
 </head>
 
 <body>
+	<div id="approveRejectOpportunityPopup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="approveRejectOpportunityTitle"></span><br><br>
+				<span id="approveRejectOpportunitySiteTitle" style="display: none;"></span>
+			</div>
+			<br>
+			<div>Estimated Annual Savings:</div><span id="approveRejectOpportunityEstimatedAnnualSavings"></span><br><br>
+			<label id="approveRejectOpportunityNotesLabel" style="display: none;" for="approveRejectOpportunityNotes">Please let us know why this opportunity is being rejected:</label><br>
+			<textarea id="approveRejectOpportunityNotes" name="approveRejectOpportunityNotes" class="roundborder" style="display: none;"></textarea><br><br>
+			<input type="submit" style="float: right;" id="approveRejectOpportunitySubmit" onclick="approveRejectOpportunity();"></input>
+		</div>
+	</div>
 	<div id="requestVisitPopup" class="popup">
 		<div class="modal-content">
 			<span class="close" title="Close">&times;</span>
@@ -31,7 +45,7 @@
 				<br>
 				<label for="requestVisitNotes">Enter Notes:</label>
 				<br>
-				<textarea id="requestVisitNotes" name="requestVisitNotes" class="roundborder" title="Enter any notes you would like associated with this visit"></textarea>
+				<textarea id="requestVisitNotes" name="requestVisitNotes" class="roundborder" title="Enter any notes you would like associated with this visit:"></textarea>
 				<br>
 				<br>
 				<input type="submit" style="float: right;" id="requestVisitSubmit"></input>
@@ -145,12 +159,12 @@
 						</div>
 						<div class="middle" style="float: left;"></div>
 						<div style="width: 30%; float: left;">
-							<button class="show-pointer"style="width: 45%; background-color: green;">Approve Opportunity</button>
+							<button class="show-pointer approve" id="Project1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve Opportunity</button>
 							&nbsp&nbsp&nbsp&nbsp
-							<button class="show-pointer"style="width: 45%; background-color: red;">Reject Opportunity</button>
+							<button class="show-pointer reject" id="Project1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject Opportunity</button>
 						</div>
 						<div class="middle" style="float: left;"></div>
-						<div style="width: 30%; float: left;">
+						<div id="Project1EstimatedAnnualSavings" style="width: 30%; float: left;">
 							<span>kWh Savings: 10,000</span>
 							<br>
 							<span>£ Savings: £10,000</span>
@@ -167,12 +181,12 @@
 							</div>
 							<div class="middle" style="float: left;"></div>
 							<div style="width: 30%; float: left;">
-								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site X Only</button>
+								<button class="show-pointer approve" id="Project1Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site X Only</button>
+								<button class="show-pointer reject" id="Project1Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
 							</div>
 							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div id="Project1Site1EstimatedAnnualSavings" style="width: 30%; float: left;">
 								<span>kWh Savings: 5,000</span>
 								<br>
 								<span>£ Savings: £5,000</span>
@@ -188,12 +202,12 @@
 							</div>
 							<div class="middle" style="float: left;"></div>
 							<div style="width: 30%; float: left;">
-								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Y Only</button>
+								<button class="show-pointer approve" id="Project1Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Y Only</button>
+								<button class="show-pointer reject" id="Project1Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
 							</div>
 							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div id="Project1Site2EstimatedAnnualSavings" style="width: 30%; float: left;">
 								<span>kWh Savings: 2,000</span>
 								<br>
 								<span>£ Savings: £2,000</span>
@@ -209,12 +223,12 @@
 							</div>
 							<div class="middle" style="float: left;"></div>
 							<div style="width: 30%; float: left;">
-								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Z Only</button>
+								<button class="show-pointer approve" id="Project1Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Z Only</button>
+								<button class="show-pointer reject" id="Project1Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
 							</div>
 							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div id="Project1Site3EstimatedAnnualSavings" style="width: 30%; float: left;">
 								<span>kWh Savings: 3,000</span>
 								<br>
 								<span>£ Savings: £3,000</span>
@@ -234,12 +248,12 @@
 						</div>
 						<div class="middle" style="float: left;"></div>
 						<div style="width: 30%; float: left;">
-							<button class="show-pointer"style="width: 45%; background-color: green;">Approve Opportunity</button>
+							<button class="show-pointer approve" id="Project2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve Opportunity</button>
 							&nbsp&nbsp&nbsp&nbsp
-							<button class="show-pointer"style="width: 45%; background-color: red;">Reject Opportunity</button>
+							<button class="show-pointer reject" id="Project2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject Opportunity</button>
 						</div>
 						<div class="middle" style="float: left;"></div>
-						<div style="width: 30%; float: left;">
+						<div id="Project2EstimatedAnnualSavings" style="width: 30%; float: left;">
 							<span>kWh Savings: 10,000</span>
 							<br>
 							<span>£ Savings: £10,000</span>
@@ -256,12 +270,12 @@
 							</div>
 							<div class="middle" style="float: left;"></div>
 							<div style="width: 30%; float: left;">
-								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site X Only</button>
+								<button class="show-pointer approve" id="Project2Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site X Only</button>
+								<button class="show-pointer reject" id="Project2Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
 							</div>
 							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div id="Project2Site1EstimatedAnnualSavings" style="width: 30%; float: left;">
 								<span>kWh Savings: 5,000</span>
 								<br>
 								<span>£ Savings: £5,000</span>
@@ -277,12 +291,12 @@
 							</div>
 							<div class="middle" style="float: left;"></div>
 							<div style="width: 30%; float: left;">
-								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Y Only</button>
+								<button class="show-pointer approve" id="Project2Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Y Only</button>
+								<button class="show-pointer reject" id="Project2Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
 							</div>
 							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div id="Project2Site2EstimatedAnnualSavings" style="width: 30%; float: left;">
 								<span>kWh Savings: 2,000</span>
 								<br>
 								<span>£ Savings: £2,000</span>
@@ -298,12 +312,12 @@
 							</div>
 							<div class="middle" style="float: left;"></div>
 							<div style="width: 30%; float: left;">
-								<button class="show-pointer"style="width: 45%; background-color: green;">Approve<br>Site Z Only</button>
+								<button class="show-pointer approve" id="Project2Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer"style="width: 45%; background-color: red;">Reject<br>Site Z Only</button>
+								<button class="show-pointer reject" id="Project2Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
 							</div>
 							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div id="Project2Site3EstimatedAnnualSavings" style="width: 30%; float: left;">
 								<span>kWh Savings: 3,000</span>
 								<br>
 								<span>£ Savings: £3,000</span>
@@ -346,7 +360,7 @@
 			<div>
 				<div class="first"></div>
 				<div>
-					<button id="requestVisitButton" class="show-pointer" style="width: 100%;">Request Visit</button>
+					<button id="requestVisitButton" class="show-pointer" style="width: 25%; float: right;">Request Visit</button>
 				</div>
 				<div class="last"></div>
 			</div>

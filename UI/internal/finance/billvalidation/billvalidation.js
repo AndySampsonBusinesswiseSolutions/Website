@@ -125,6 +125,7 @@ function createTree(baseData, divId, checkboxFunction) {
 	
 	document.getElementById('Period13checkbox').checked = true;
 	createCardButton(document.getElementById('Period13checkbox'));
+	openTab(document.getElementById('Bill15button'), 'Bill15button', '15');
 	addExpanderOnClickEvents();
 }
 
@@ -303,7 +304,7 @@ function openTab(callingElement, tabName, guid) {
 
 	createCard(guid, newDiv);
 
-	document.getElementById(tabName).style.display = "block";
+	newDiv.style.display = "block";
   }
 
 function createCardButton(checkbox){
@@ -378,7 +379,7 @@ function createBillButton(checkbox, tabDiv) {
 	if(checkbox.checked) {	
 		var button = document.createElement('button');
 		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
+		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
 	
 		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
 		var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
