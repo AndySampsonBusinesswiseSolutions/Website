@@ -1,6 +1,5 @@
 function pageLoad() {
-    var data = customer;
-	createTree(data, "treeDiv", "");
+	createTree(customer, "treeDiv", "");
     addExpanderOnClickEvents();
     setupDataGrids();
     
@@ -479,6 +478,7 @@ function createTree(baseData, divId, checkboxFunction) {
     tree.setAttribute('class', 'scrolling-wrapper');
     
     var ul = createUL();
+    ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -488,6 +488,12 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var div = document.getElementById(divId);
     clearElement(div);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Customers/Sites <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
     div.appendChild(tree);
 }
 
@@ -670,8 +676,13 @@ function addExpanderOnClickEvents() {
 		addExpanderOnClickEventsByElement(expanders[i]);
     }
     
+    updateClassOnClick('rejectedOpportunities', 'fa-plus-square', 'fa-minus-square');
     updateClassOnClick('recommendedOpportunities', 'fa-plus-square', 'fa-minus-square');
     updateClassOnClick('pendingActiveOpportunities', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('opportunityStatusSelector', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('requestedVisits', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('scheduledVisits', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {

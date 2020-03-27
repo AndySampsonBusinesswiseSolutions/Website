@@ -17,7 +17,8 @@
 		<div class="tree-column">
 			<div class="tree-div roundborder">
 				<span style="padding-left: 5px;">Select Tree Display Order</span>
-				<ul class="format-listitem">
+				<div id="treeDisplayOrder" class="far fa-plus-square show-pointer"></div>
+				<ul id="treeDisplayOrderList" class="format-listitem">
 					<li>
 						<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
 					</li>

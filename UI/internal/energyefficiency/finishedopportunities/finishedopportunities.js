@@ -324,6 +324,7 @@ function createTree(baseData, divId, checkboxFunction) {
     tree.setAttribute('class', 'scrolling-wrapper');
     
     var ul = createUL();
+    ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -339,6 +340,12 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var div = document.getElementById(divId);
     clearElement(div);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Projects/Sites <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
     div.appendChild(tree);
 
     addExpanderOnClickEvents();
@@ -598,7 +605,10 @@ function addExpanderOnClickEvents() {
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
-	}
+  }
+  
+  updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('treeDisplayOrder', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {

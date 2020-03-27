@@ -17,7 +17,8 @@
 		<div class="tree-column">
 			<div class="tree-div roundborder">
 				<span style="padding-left: 5px;">Select Tree Display Order</span>
-				<ul class="format-listitem">
+				<div id="treeDisplayOrder" class="far fa-plus-square show-pointer"></div>
+				<ul id="treeDisplayOrderList" class="format-listitem">
 					<li>
 						<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "updateGanttChartAndDataGrid()");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
 					</li>
@@ -32,7 +33,8 @@
 			<br>
 			<div class="tree-div roundborder">
 				<span style="padding-left: 5px;">Select Project Status</span>
-					<ul class="format-listitem">
+				<div id="projectStatus" class="far fa-plus-square show-pointer"></div>
+					<ul id="projectStatusList" class="format-listitem">
 						<li>
 							<input type="radio" name="group2" value="All" id="allStatusradio" checked onclick='updateGanttChartAndDataGrid()'><span id="allStatusspan" style="padding-left: 1px;">All</span>
 						</li>

@@ -114,6 +114,21 @@
 		<div class="tree-column">
 			<div id="treeDiv" class="tree-div roundborder">
 			</div>
+			<br>
+			<div id="opportunityStatusDiv" class="tree-div roundborder">
+				<span style="padding-left: 5px;">Select Opportunity Status <i class="far fa-plus-square" id="opportunityStatusSelector"></i></span>
+				<ul class="format-listitem" id="opportunityStatusSelectorList">
+					<li>
+						<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
+					</li>
+					<li>
+						<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
+					</li>
+					<li>
+						<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
+					</li>
+				</ul>
+			</div>
 		</div>
 	</div>
 
@@ -127,56 +142,68 @@
 			<div class="roundborder divcolumn left">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Requested Visits</span>
+					<div id="requestedVisits" class="far fa-plus-square show-pointer"></div>
 				</div>
 				<br>
-				<div id="requestedVisitsSpreadsheet"></div>
+				<div id="requestedVisitsList">
+					<div id="requestedVisitsSpreadsheet"></div>
+				</div>
 			</div>
 			<div class="middle"></div>
 			<div class="roundborder divcolumn right">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Scheduled Visits</span>
+					<div id="scheduledVisits" class="far fa-plus-square show-pointer"></div>
 				</div>
 				<br>
-				<div id="scheduledVisitsSpreadsheet"></div>
+				<div id="scheduledVisitsList">
+					<div id="scheduledVisitsSpreadsheet"></div>
+				</div>
 			</div>
 		</div>
 		<div style="clear: left;"></div>
 		<br>
-		<div class="roundborder divcolumn">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Rejected Opportunities</span>
-				<div id="rejectedOpportunities" class="far fa-plus-square show-pointer"></div>
+		<div id="rejectedOpportunitiesDiv" class="listitem-hidden">
+			<div class="roundborder divcolumn">
+				<div style="text-align: center; border-bottom: solid black 1px;">
+					<span>Rejected Opportunities</span>
+					<div id="rejectedOpportunities" class="far fa-plus-square show-pointer"></div>
+				</div>
+				<br>
+				<div id="rejectedOpportunitiesList">
+					<div id="rejectedOpportunitiesSpreadsheet"></div>
+				</div>
 			</div>
+			<div style="clear: left;"></div>
 			<br>
-			<div id="rejectedOpportunitiesList" class="listitem-hidden">
-				<div id="rejectedOpportunitiesSpreadsheet"></div>
-			</div>
 		</div>
-		<div style="clear: left;"></div>
-		<br>
-		<div class="roundborder divcolumn">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Recommended Opportunities</span>
-				<div id="recommendedOpportunities" class="far fa-plus-square show-pointer"></div>
+		<div id="recommendedOpportunitiesDiv">
+			<div class="roundborder divcolumn">
+				<div style="text-align: center; border-bottom: solid black 1px;">
+					<span>Recommended Opportunities</span>
+					<div id="recommendedOpportunities" class="far fa-plus-square show-pointer"></div>
+				</div>
+				<br>
+				<div id="recommendedOpportunitiesList">
+					<div id="recommendedOpportunitiesSpreadsheet"></div>
+				</div>
 			</div>
+			<div style="clear: left;"></div>
 			<br>
-			<div id="recommendedOpportunitiesList">
-				<div id="recommendedOpportunitiesSpreadsheet"></div>
-			</div>
 		</div>
-		<div style="clear: left;"></div>
-		<br>
-		<div class="roundborder divcolumn">
-			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Pending & Active Opportunities</span>
-				<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer"></div>
+		<div id="pendingActiveOpportunitiesDiv">
+			<div class="roundborder divcolumn">
+				<div style="text-align: center; border-bottom: solid black 1px;">
+					<span>Pending & Active Opportunities</span>
+					<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer"></div>
+				</div>
+				<br>
+				<div id="pendingActiveOpportunitiesList">
+					<div id="pendingActiveOpportunitiesSpreadsheet"></div>
+				</div>
 			</div>
-			<br>
-			<div id="pendingActiveOpportunitiesList">
-				<div id="pendingActiveOpportunitiesSpreadsheet"></div>
-			</div>
+			<div style="clear: left;"></div>
 		</div>
-		<div style="clear: left;"></div>
 	</div>
 	<br>
 </body>
