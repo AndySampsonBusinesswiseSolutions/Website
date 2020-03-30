@@ -10935,7 +10935,6 @@ body:not(.avada-has-pagination-padding) .pagination .pagination-dots {
 .select2-container--default .select2-selection--single .select2-selection__arrow,
 input.s,
 input[type=email],
-input[type=number],
 input[type=password],
 input[type=text] {
     height: 50px;
@@ -10975,7 +10974,6 @@ input[type=text] {
 .search-page-search-form input,
 input.s,
 input[type=email],
-input[type=number],
 input[type=password],
 input[type=text] {
     font-size: 13px;
@@ -10996,7 +10994,6 @@ input[type=text] {
 .search-page-search-form input:focus,
 input.s:focus,
 input[type=email]:focus,
-input[type=number]:focus,
 input[type=password]:focus,
 input[type=text]:focus {
     border-color: #d2d2d2
@@ -11191,7 +11188,6 @@ input::-ms-input-placeholder {
 .select2-dropdown,
 input.s,
 input[type=email],
-input[type=number],
 input[type=password],
 input[type=text] {
     border-width: 0px;

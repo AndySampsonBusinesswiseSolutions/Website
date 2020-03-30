@@ -190,17 +190,17 @@ div.ganttview-grid-row-cell.ganttview-today {
 /* Blocks */
 
 div.ganttview-blocks {
-	margin-top: 40px;
+	margin-top: 20px;
 }
 
 div.ganttview-block-container {
-	height: 31px;
+	height: 50px;
 	padding-top: 4px;
 }
 
 div.ganttview-block {
 	position: relative;
-	height: 25px;
+	height: 40px;
 	background-color: #E5ECF9;
 	border: 1px solid #c0c0c0;
 	border-radius: 10px;

@@ -36,4 +36,38 @@ var customer = [
             {"CustomerName" : "Site Y"}
         ]
     }
-]
+];
+
+var ganttData = [
+	{
+		id: 1, name: "LED Lighting", status: "Pending",
+		sites: [
+			{name: "Site X", meters: [{identifier: 1234567890123}]},
+			{name: "Site Y", meters: [{identifier: 1234567890124}]},
+			{name: "Site Z", meters: [
+					{identifier: 1234567890125},
+					{identifier: 1234567890126}
+				]}
+		], 
+		series: [
+			{ name: "Purchase Sub Meter", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Purchase LED Lights", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Install Sub Meter", start: new Date(2020,03,05), end: new Date(2020,03,05) },
+			{ name: "Receive Base Sub Meter Readings", start: new Date(2020,03,06), end: new Date(2020,04,05) },
+			{ name: "Install LED Lights", start: new Date(2020,04,06), end: new Date(2020,04,09) },
+		]
+    },
+    {
+		id: 2, name: "LED Lighting",  status: "Active",
+		sites: [
+			{name: "Site A", meters: [{identifier: 1234567890120}]},
+		], 
+		series: [
+			{ name: "Purchase Sub Meter", start: new Date(2020,02,05), end: new Date(2020,02,14) },
+			{ name: "Purchase LED Lights", start: new Date(2020,02,05), end: new Date(2020,02,14) },
+			{ name: "Install Sub Meter", start: new Date(2020,02,15), end: new Date(2020,02,15) },
+			{ name: "Receive Base Sub Meter Readings", start: new Date(2020,02,16), end: new Date(2020,03,15) },
+			{ name: "Install LED Lights", start: new Date(2020,03,16), end: new Date(2020,03,19) },
+		]
+	}
+];

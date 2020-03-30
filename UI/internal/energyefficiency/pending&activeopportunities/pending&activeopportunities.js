@@ -741,7 +741,7 @@ function buildDataGrid() {
 					var offset = DateUtils.daysBetween(start, series.start);
 					var block = jQuery("<div>", {
                         "class": "ganttview-block",
-                        "title": series.name + ", " + size + " days",
+                        "title": series.name + ": " + size + " days",
                         "css": {
                             "width": ((size * cellWidth) - 9) + "px",
                             "margin-left": ((offset * cellWidth) + 3) + "px"
