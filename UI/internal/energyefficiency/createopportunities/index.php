@@ -34,7 +34,7 @@
                 <span>Create New Opportunity</span>
                 <div id="createNewOpportunity" class="far fa-plus-square show-pointer"></div>
             </div>
-            <div>
+            <div id="createNewOpportunityList">
                 <div style="margin-top: 5px;">
                     <div style="float: left;">
                         <div class="tree-div roundborder" style="padding: 5px; text-align: right;">

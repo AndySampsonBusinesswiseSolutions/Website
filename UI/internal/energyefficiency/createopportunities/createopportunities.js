@@ -264,6 +264,7 @@ function addExpanderOnClickEvents() {
     }
     
     updateClassOnClick('identifiedOpportunities', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('createNewOpportunity', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
