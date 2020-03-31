@@ -35,6 +35,7 @@
                 <div id="createNewOpportunity" class="far fa-plus-square show-pointer"></div>
             </div>
             <div id="createNewOpportunityList">
+            <div>
                 <div style="margin-top: 5px;">
                     <div style="float: left;">
                         <div class="tree-div roundborder" style="padding: 5px; text-align: right;">
@@ -302,6 +303,7 @@
                 </div>
             </div>
             <div style="clear: both;"></div>
+            </div>
         </div>
     </div>
     <br>
