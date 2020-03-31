@@ -1,3 +1,6 @@
+@import "https://bossanova.uk/jexcel/v3/jexcel.css";
+@import "https://bossanova.uk/jsuites/v2/jsuites.css";
+
 .section-header {
     background: #b62a51;
     width: 100%;
@@ -9,21 +12,13 @@
     font-weight:bold;
 }
 .divcolumn {
-    float: left;
+    background-color: #e9eaee;
     padding: 10px;
-    min-height: 100px;
-}
-.first, .last {
-    float: left;
-    width: 2%;
-}
-.left, .right {
-    float: left;
-    width: 46%;
 }
 .middle {
     float: left;
-    width: 2%;
+    width: 1%;
+    min-height: 100px;
 }
 .tree-div, .roundborder {
     border: solid black 1px;
@@ -34,14 +29,31 @@
 }
 .tree-div {
     background-color: #e9eaee;
-    max-height: 650px;
-    min-height: 300px;
+    min-height: 183px;
+    max-height: 183px;
 }
 .show-pointer {
-    padding-left: 5px; 
-    padding-right: 5px; 
     cursor: pointer;
 }
 .listitem-hidden {
     display: none;
+}
+.approve {
+    background-color: green;
+}
+.reject {
+    background-color: red;
+}
+.format-listitem {
+    list-style-type: none; 
+    padding-left: 15px;
+}
+.scrolling-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+.final-column {
+    padding-left: 15px;
+    padding-right: 15px;
 }

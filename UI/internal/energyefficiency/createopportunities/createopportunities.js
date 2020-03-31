@@ -1,6 +1,7 @@
 function pageLoad() {
-    //createTree(data, "treeDiv", "", "", true);
-	addExpanderOnClickEvents();
+    createTree(data, "treeDiv", "", "", true);
+    addExpanderOnClickEvents();
+    loadDataGrids();
 }
 
 var branchCount = 0;
@@ -20,6 +21,12 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
 
     var div = document.getElementById(divId);
     clearElement(div);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s)';
+
+    div.appendChild(header);
     div.appendChild(tree);
 }
 
@@ -32,12 +39,11 @@ function buildTree(baseData, baseElement, commodity, checkboxFunction, showSubMe
             continue;
         }
         
-        var baseName = getAttribute(base.Attributes, 'BaseName');
         var li = document.createElement('li');
         var ul = createUL();
 
-        buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, showSubMeters);
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), baseName, commodity, ul, true);
+        buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, base.SiteName, showSubMeters);
+        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), base.SiteName, commodity, ul, true);
 
         baseElement.appendChild(li);        
     }
@@ -58,28 +64,23 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
             continue;
         }
 
-        var meterAttributes = meter.Attributes;
-        var identifier = getAttribute(meterAttributes, 'Identifier');
-        var meterCommodity = getAttribute(meterAttributes, 'Commodity');
-        var deviceType = getAttribute(meterAttributes, 'DeviceType');
-        var hasSubMeters = meter.hasOwnProperty('SubMeters');
         var li = document.createElement('li');
         var branchId = 'Meter'.concat(meter.GUID);
         var branchDiv = createBranchDiv(branchId);
         
-        if(!showSubMeters || !hasSubMeters) {
+        if(!showSubMeters || !meter.hasOwnProperty('SubMeters')) {
             branchDiv.removeAttribute('class', 'far fa-plus-square');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
-        li.appendChild(createTreeIcon(deviceType, meterCommodity));
-        li.appendChild(createSpan(branchId, identifier));
+        li.appendChild(createTreeIcon('', meter.Commodity));
+        li.appendChild(createSpan(branchId, meter.Identifier));
 
-        if(showSubMeters && hasSubMeters) {
+        if(showSubMeters && meter.hasOwnProperty('SubMeters')) {
             var ul = createUL();
-            buildSubMeterHierarchy(meter['SubMeters'], ul, deviceType, meterCommodity, checkboxFunction, linkedSite);
+            buildSubMeterHierarchy(meter['SubMeters'], ul, '', meter.Commodity, checkboxFunction, linkedSite);
 
             li.appendChild(createBranchListDiv(branchId.concat('List'), ul));
         }        
@@ -94,7 +95,6 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         var subMeter = subMeters[i];
         var li = document.createElement('li');
 
-        var identifier = getAttribute(subMeter.Attributes, 'Identifier');
         var branchDiv = createBranchDiv(subMeter.GUID);
         branchDiv.removeAttribute('class', 'far fa-plus-square');
         branchDiv.setAttribute('class', 'far fa-times-circle');
@@ -102,7 +102,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox('SubMeter'.concat(subMeter.GUID), checkboxFunction, 'SubMeter', linkedSite, subMeter.GUID));
         li.appendChild(createTreeIcon(deviceType, commodity));
-        li.appendChild(createSpan('SubMeter'.concat(subMeter.GUID), identifier));   
+        li.appendChild(createSpan('SubMeter'.concat(subMeter.GUID), subMeter.Identifier));   
 
         baseElement.appendChild(li); 
     }
@@ -261,7 +261,9 @@ function addExpanderOnClickEvents() {
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
-	}
+    }
+    
+    updateClassOnClick('identifiedOpportunities', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -269,4 +271,147 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
+}
+
+function getAttribute(attributes, attributeRequired) {
+	for (var attribute in attributes) {
+		var array = attributes[attribute];
+
+		for(var key in array) {
+			if(key == attributeRequired) {
+				return array[key];
+			}
+		}
+	}
+
+	return null;
+}
+
+function clearElement(element) {
+	while (element.firstChild) {
+		element.removeChild(element.firstChild);
+	}
+}
+
+function loadDataGrids() {
+    var identifiedOpportunitiesData = [];
+    var createNewOpportunityData = [];
+
+    var row = {
+		group:'1',
+        opportunityType:'Custom',
+        opportunityName:'LED Lighting',
+        status:'Recommend',
+        site:'Site X',
+        meter:'12345678910125',
+        subMeter:'Sub Meter 2',
+        estimatedStartDate:'01/04/2020',
+        month:'All Months',
+        dayOfWeek:'All Days',
+        timePeriod:'All Periods',
+        estimatedCost:'£5,000',
+        percentageSaving:'10%',
+        estimatedSavings:'kWh: 5,000<br>£: £1,000',
+        actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
+	}
+	identifiedOpportunitiesData.push(row);
+
+	row = {
+		group:'2',
+        opportunityType:'Custom',
+        opportunityName:'LED Lighting',
+        status:'Approved',
+        site:'Site X',
+        meter:'12345678910126',
+        subMeter:'New Sub Meter Required',
+        estimatedStartDate:'01/04/2020',
+        month:'Multiple <i class="fas fa-search show-pointer"></i>',
+        dayOfWeek:'Multiple <i class="fas fa-search show-pointer"></i>',
+        timePeriod:'Multiple <i class="fas fa-search show-pointer"></i>',
+        estimatedCost:'£5,000',
+        percentageSaving:'N/A',
+        estimatedSavings:'kWh: N/A<br>£: N/A',
+        actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
+	}
+    identifiedOpportunitiesData.push(row);
+    
+    row = {
+        site:'Site Z',
+        meter:'12345678910123',
+        subMeter:'Sub Meter 1',
+        month:'All Months',
+        dayOfWeek:'All Days',
+        timePeriod:'All Periods',
+        percentageSaving:'',
+        estimatedSavings:'kWh: 5,000<br>£: £10,000',
+        actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
+	}
+    createNewOpportunityData.push(row);
+    
+    row = {
+        site:'Site Y',
+        meter:'12345678910124',
+        subMeter:'New Sub Meter Required',
+        month:'Multiple <i class="fas fa-search show-pointer"></i>',
+        dayOfWeek:'Multiple <i class="fas fa-search show-pointer"></i>',
+        timePeriod:'Multiple <i class="fas fa-search show-pointer"></i>',
+        percentageSaving:'',
+        estimatedSavings:'kWh: N/A<br>£: N/A',
+        actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
+	}
+	createNewOpportunityData.push(row);
+
+    jexcel(document.getElementById('identifiedOpportunitiesSpreadsheet'), {
+		pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: identifiedOpportunitiesData,
+		columns: [
+            {type:'text', width:'50px', name:'group', title:'Group'},
+            {type:'text', width:'150px', name:'opportunityType', title:'Opportunity Type', readOnly: true},
+            {type:'text', width:'150px', name:'opportunityName', title:'Opportunity Name', readOnly: true},
+            {type:'text', width:'100px', name:'status', title:'Status', readOnly: true},
+            {type:'text', width:'178px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
+            {type:'text', width:'125px', name:'subMeter', title:'Sub Meter', readOnly: true},
+            {type:'text', width:'100px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
+            {type:'text', width:'100px', name:'month', title:'Month', readOnly: true},
+            {type:'text', width:'100px', name:'dayOfWeek', title:'Day Of Week', readOnly: true},
+            {type:'text', width:'100px', name:'timePeriod', title:'Time Period', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedCost', title:'Estimated Cost', readOnly: true},
+            {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
+            {type:'text', width:'150px', name:'estimatedSavings', title:'Estimated<br>Savings (pa)', readOnly: true},
+            {type:'text', width:'100px', name:'actions', title:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>', readOnly: true},
+		 ]
+      }); 
+      
+    jexcel(document.getElementById('createNewOpportunitySpreadsheet'), {
+		pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: createNewOpportunityData,
+		columns: [
+            {type:'text', width:'200px', name:'site', title:'Site', readOnly: true},
+            {type:'text', width:'200px', name:'meter', title:'Meter', readOnly: true},
+            {type:'text', width:'200px', name:'subMeter', title:'Sub Meter', readOnly: true},
+            {type:'text', width:'100px', name:'month', title:'Month', readOnly: true},
+            {type:'text', width:'100px', name:'dayOfWeek', title:'Day Of Week', readOnly: true},
+            {type:'text', width:'100px', name:'timePeriod', title:'Time Period', readOnly: true},
+            {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving'},
+            {type:'text', width:'150px', name:'estimatedSavings', title:'Estimated<br>Savings (pa)', readOnly: true},
+            {type:'text', width:'100px', name:'actions', title:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>', readOnly: true},
+		 ]
+	  }); 
 }

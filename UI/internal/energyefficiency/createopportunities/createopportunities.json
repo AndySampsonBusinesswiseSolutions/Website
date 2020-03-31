@@ -1,132 +1,90 @@
 var data = [
     {
-        "GUID" : "0",
-        "Attributes" : 
-        [
-            {"BaseName" : "Leeds"},
-        ],
-        "Meters" :
-        [
+        "GUID" : 1,
+        "SiteName": "Site X",
+        "Meters":[
             {
-                "GUID" : "1",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "987654"},
-                        {"DeviceType" : "Mains"},
-                        {"Commodity" : "Gas"}
-                    ],
-            },
-            {
-                "GUID" : "2",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "1234567890123"},
-                        {"DeviceType" : "Mains"},
-                        {"Commodity" : "Electricity"}
-                    ],
-                "SubMeters" :
-                [
+                "GUID": 18,
+                "Identifier": 1234567890125,
+                "Commodity": "Electricity",
+                "SubMeters": [
                     {
-                        "GUID" : "3",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 1"},
-                            {"Commodity" : "Electricity"}
-                        ],
+                        "GUID": 101,
+                        "Identifier": "Sub Meter 2",
                     },
                     {
-                        "GUID" : "4",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 2"},
-                            {"Commodity" : "Electricity"}
-                        ],
-                    },
-                    {
-                        "GUID" : "12",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "New Sub Meter Required"},
-                            {"Commodity" : "Electricity"}
-                        ],
+                        "GUID": 102,
+                        "Identifier": "New Sub Meter Required",
                     }
-                ],
+                ]
             },
             {
-                "GUID" : "5",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "1234567890124"},
-                        {"DeviceType" : "Lighting"},
-                        {"Commodity" : "Electricity"}
-                    ],
-                    "SubMeters" :
-                    [
-                        {
-                            "GUID" : "13",
-                            "Attributes" : 
-                            [
-                                {"Identifier" : "New Sub Meter Required"},
-                                {"Commodity" : "Electricity"}
-                            ],
-                        }
-                    ],
+                "GUID": 20,
+                "Identifier": 1234567890126,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 103,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            }
+            
+        ]
+    },
+    {
+        "GUID" : 2,
+        "SiteName": "Site Y",
+        "Meters":[
+            {
+                "GUID": 16,
+                "Identifier": 1234567890124,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 104,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
             }
         ]
     },
     {
-        "GUID" : "6",
-        "Attributes" : 
-        [
-            {"BaseName" : "Manchester"},
-        ],
-        "Meters" :
-        [
+        "GUID" : 3,
+        "SiteName": "Site Z",
+        "Meters":[
             {
-                "GUID" : "7",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "987650"},
-                        {"DeviceType" : "Mains"},
-                        {"Commodity" : "Gas"}
-                    ],
-            },
-            {
-                "GUID" : "8",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "1234567890120"},
-                        {"DeviceType" : "Lighting"},
-                        {"Commodity" : "Electricity"}
-                    ],
-                "SubMeters" :
-                [
+                "GUID": 14,
+                "Identifier": 1234567890123,
+                "Commodity": "Electricity",
+                "SubMeters": [
                     {
-                        "GUID" : "9",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 1"},
-                            {"Commodity" : "Electricity"}
-                        ],
+                        "GUID": 105,
+                        "Identifier": "Sub Meter 1",
                     },
                     {
-                        "GUID" : "10",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 2"},
-                            {"Commodity" : "Electricity"}
-                        ],
-                    },
-                    {
-                        "GUID" : "11",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "New Sub Meter Required"},
-                            {"Commodity" : "Electricity"}
-                        ],
+                        "GUID": 106,
+                        "Identifier": "New Sub Meter Required",
                     }
-                ],
+                ]
             }
         ]
+    },
+    {
+        "GUID" : 4,
+        "SiteName": "Site A",
+        "Meters":[
+            {
+                "GUID": 22,
+                "Identifier": 1234567890120,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 107,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            },
+        ]
     }
-]
+];

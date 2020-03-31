@@ -14,228 +14,294 @@
 <body>
     <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
     <br>
-    <div class="row" style="padding-left: 30px; padding-right:30px;">
-        <div class="roundborder" style="padding-left: 5px; padding-right:5px;">
-            <div style="text-align: center;">
-                <span style="border-bottom: solid black 1px;">Identified Opportunities<br></span>
-                <br>
-                <table style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <td style="border: solid black 1px;">Opportunity Type</td>
-                            <td style="border: solid black 1px;">Opportunity Name</td>
-                            <td style="border: solid black 1px;">Status</td>
-                            <td style="border: solid black 1px;">Site</td>
-                            <td style="border: solid black 1px;">Meter</td>
-                            <td style="border: solid black 1px;">Sub Meter</td>
-                            <td style="border: solid black 1px;">Month</td>
-                            <td style="border: solid black 1px;">Day Of Week</td>
-                            <td style="border: solid black 1px;">Time Period</td>
-                            <td style="border: solid black 1px;">Estimated Cost</td>
-                            <td style="border: solid black 1px;">Percentage Saving</td>
-                            <td style="border: solid black 1px;">Estimated Annual kWh Savings</td>
-                            <td style="border: solid black 1px;">Estimated Annual £ Savings</td>
-                            <td style="border: solid black 1px;"><input type="checkbox">&nbsp<i class="fas fa-trash-alt"></i></input</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="border: solid black 1px;">Custom</td>
-                            <td style="border: solid black 1px;">LED Lighting</td>
-                            <td style="border: solid black 1px;">Recommend</td>
-                            <td style="border: solid black 1px;">Site X</td>
-                            <td style="border: solid black 1px;">12345678910125</td>
-                            <td style="border: solid black 1px;">Sub Meter 2</td>
-                            <td style="border: solid black 1px;">All Months</td>
-                            <td style="border: solid black 1px;">All Days</td>
-                            <td style="border: solid black 1px;">All Periods</td>
-                            <td style="border: solid black 1px;">£5,000</td>
-                            <td style="border: solid black 1px;">10%</td>
-                            <td style="border: solid black 1px;">5,000</td>
-                            <td style="border: solid black 1px;">£1,000</td>
-                            <td style="border: solid black 1px;"><input type="checkbox">&nbsp<i class="fas fa-trash-alt"></i></input</td>
-                        </tr>
-                        <tr>
-                            <td style="border: solid black 1px;">Custom</td>
-                            <td style="border: solid black 1px;">LED Lighting</td>
-                            <td style="border: solid black 1px;">Approved</td>
-                            <td style="border: solid black 1px;">Site X</td>
-                            <td style="border: solid black 1px;">12345678910126</td>
-                            <td style="border: solid black 1px;">New Sub Meter Required</td>
-                            <td style="border: solid black 1px;">All Months</td>
-                            <td style="border: solid black 1px;">All Days</td>
-                            <td style="border: solid black 1px;">All Periods</td>
-                            <td style="border: solid black 1px;">£5,000</td>
-                            <td style="border: solid black 1px;">N/A</td>
-                            <td style="border: solid black 1px;">N/A</td>
-                            <td style="border: solid black 1px;">N/A</td>
-                            <td style="border: solid black 1px;"><input type="checkbox">&nbsp<i class="fas fa-trash-alt"></i></input</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <br>
+    <div class="final-column">
+        <div class="roundborder divcolumn">
+            <div style="text-align: center; border-bottom: solid black 1px;">
+                <span>Identified Opportunities</span>
+                <div id="identifiedOpportunities" class="far fa-plus-square show-pointer"></div>
+            </div>
+            <div id="identifiedOpportunitiesList">
                 <div style="text-align: right;">
-                    <button style="background-color: green;">Submit Selected Opportunities</button>&nbsp;
-                    <button style="background-color: red;">Reject Selected Opportunities</button>
+                    <button class="approve show-pointer">Submit Selected Opportunities</button>&nbsp;
+                    <button class="reject show-pointer">Reject Selected Opportunities</button>
                 </div>
+                <br>
+                <div id="identifiedOpportunitiesSpreadsheet"></div>
             </div>
         </div>
-    </div>
-    <br>
-    <div class="row" style="padding-left: 30px; padding-right:30px;">
-        <div class="divcolumn roundborder" style="width: 100%;">
-            <div style="text-align: center;">
-                <span style="border-bottom: solid black 1px;">Create New Opportunity</span>
+        <div class="roundborder divcolumn" style="margin-top: 5px;">
+            <div style="text-align: center; border-bottom: solid black 1px;">
+                <span>Create New Opportunity</span>
+                <div id="createNewOpportunity" class="far fa-plus-square show-pointer"></div>
             </div>
-            <br>
-            <div style="float: left;">
-                <div style="float: left; width: 300px;">
-                    <div class="tree-div" id="treeDiv"></div>
-                    <br>
-                    <div class="roundborder" style="padding: 5px;">
-                        <div class="roundborder" style="width: 100%;">
-                            <div id="monthOfYear" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-                            <span id="monthOfYearspan">Months</span>
-                            <div id="monthOfYearList"  class="listitem-hidden" style="margin: 5px;">
-                                <div class="roundborder">
-                                    <input type="checkbox" checked>All Year</input><br><br>
-                                    <input type="checkbox">January</input>&nbsp&nbsp&nbsp<input type="checkbox">February</input>&nbsp&nbsp&nbsp<input type="checkbox">March</input><br>
-                                    <input type="checkbox">April</input>&nbsp&nbsp&nbsp<input type="checkbox">May</input>&nbsp&nbsp&nbsp<input type="checkbox">June</input><br>
-                                    <input type="checkbox">July</input>&nbsp&nbsp&nbsp<input type="checkbox">August</input>&nbsp&nbsp&nbsp<input type="checkbox">September</input><br>
-                                    <input type="checkbox">October</input>&nbsp&nbsp&nbsp<input type="checkbox">November</input>&nbsp&nbsp&nbsp<input type="checkbox">December</input>
-                                </div>
-                            </div>
+            <div>
+                <div style="margin-top: 5px;">
+                    <div style="float: left;">
+                        <div class="tree-div roundborder" style="padding: 5px; text-align: right;">
+                            <label for="opportunityType">Select Opportunity Type:</label>
+                            <select id="opportunityType" style="width:46%;">
+                                <option value="Custom">Custom</option>
+                                <option value="DUoSReduction">DUoS Reduction</option>
+                                <option value="TriadReduction">Triad Reduction</option>
+                            </select>
+                            <br>
+                            <label for="opportunityStatus">Select Opportunity Status:</label>
+                            <select id="opportunityStatus" style="width:46%;">
+                                <option value="Recommend">Recommend</option>
+                                <option value="Approved">Approved</option>
+                            </select>
+                            <br>
+                            <label for="opportunityName">Enter Opportunity Name:</label>
+                            <input id="opportunityName" style="width:46%;"></input>
+                            <br>
+                            <label for="opportunityStartDate">Enter Estimated Start Date:</label>
+                            <input id="opportunityStartDate" type="date" style="width:46%;"></input>
+                            <br>
+                            <label for="opportunityCAPEXCost">Enter Estimated CAPEX Cost:</label>
+                            <input id="opportunityCAPEXCost" style="width:46%;"></input>
+                            <br>
+                            <label for="opportunityOPEXCost">Enter Estimated OPEX Cost:</label>
+                            <input id="opportunityOPEXCost" style="width:46%;"></input><br>
+                            <input type="checkbox" class="show-pointer">Include BWS Fee In OPEX Cost?</input>
                         </div>
-                        <div class="roundborder" style="width: 100%;">
-                            <div id="dayOfWeek" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-                            <span id="dayOfWeekspan">Days Of The Week</span>
-                            <div id="dayOfWeekList"  class="listitem-hidden" style="margin: 5px;">
-                                <div class="roundborder">
-                                    <input type="checkbox" checked>All Week</input><br><br>
-                                    <input type="checkbox">Weekdays</input>&nbsp&nbsp&nbsp<input type="checkbox">Weekends</input><br><br>
-                                    <input type="checkbox">Monday</input>&nbsp&nbsp&nbsp<input type="checkbox">Tuesday</input>&nbsp&nbsp&nbsp<input type="checkbox">Wednesday</input><br>
-                                    <input type="checkbox">Thursday</input>&nbsp&nbsp&nbsp<input type="checkbox">Friday</input><br>
-                                    <input type="checkbox">Saturday</input>&nbsp&nbsp&nbsp<input type="checkbox">Sunday</input>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="middle"></div>
+                    <div style="float: left;">
+                        <div id="treeDiv" class="tree-div scrolling-wrapper" style="padding: 5px;">
                         </div>
-                        <div class="roundborder" style="width: 100%;">
-                            <div id="timePeriod" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-                            <span id="timePeriodspan">Time Periods</span>
-                            <div id="timePeriodList"  class="listitem-hidden" style="margin: 5px;">
-                                <div class="roundborder">
-                                    <input type="checkbox" checked>All Day</input><br><br>
-                                    <input type="checkbox">Day (07:00 - 19:00)</input>&nbsp&nbsp&nbsp<input type="checkbox">Night (19:00 - 07:00)</input><br><br>
-                                    <input type="checkbox">00:00 - 00:30</input>&nbsp&nbsp&nbsp<input type="checkbox">00:30 - 01:00</input>&nbsp&nbsp&nbsp<input type="checkbox">01:00 - 01:30</input>&nbsp&nbsp&nbsp<input type="checkbox">01:30 - 02:00</input><br>
-                                    <input type="checkbox">02:00 - 02:30</input>&nbsp&nbsp&nbsp<input type="checkbox">02:30 - 03:00</input>&nbsp&nbsp&nbsp<input type="checkbox">03:00 - 03:30</input>&nbsp&nbsp&nbsp<input type="checkbox">03:30 - 04:00</input><br>
-                                    <input type="checkbox">04:00 - 04:30</input>&nbsp&nbsp&nbsp<input type="checkbox">04:30 - 05:00</input>&nbsp&nbsp&nbsp<input type="checkbox">05:00 - 05:30</input>&nbsp&nbsp&nbsp<input type="checkbox">05:30 - 06:00</input><br>
-                                    <input type="checkbox">06:00 - 06:30</input>&nbsp&nbsp&nbsp<input type="checkbox">06:30 - 07:00</input>&nbsp&nbsp&nbsp<input type="checkbox">07:00 - 07:30</input>&nbsp&nbsp&nbsp<input type="checkbox">07:30 - 08:00</input><br>
-                                    <input type="checkbox">08:00 - 08:30</input>&nbsp&nbsp&nbsp<input type="checkbox">08:30 - 09:00</input>&nbsp&nbsp&nbsp<input type="checkbox">09:00 - 09:30</input>&nbsp&nbsp&nbsp<input type="checkbox">09:30 - 10:00</input><br>
-                                    <input type="checkbox">10:00 - 10:30</input>&nbsp&nbsp&nbsp<input type="checkbox">10:30 - 11:00</input>&nbsp&nbsp&nbsp<input type="checkbox">11:00 - 11:30</input>&nbsp&nbsp&nbsp<input type="checkbox">11:30 - 12:00</input><br>
-                                    <input type="checkbox">12:00 - 12:30</input>&nbsp&nbsp&nbsp<input type="checkbox">12:30 - 13:00</input>&nbsp&nbsp&nbsp<input type="checkbox">13:00 - 13:30</input>&nbsp&nbsp&nbsp<input type="checkbox">13:30 - 14:00</input><br>
-                                    <input type="checkbox">14:00 - 14:30</input>&nbsp&nbsp&nbsp<input type="checkbox">14:30 - 15:00</input>&nbsp&nbsp&nbsp<input type="checkbox">15:00 - 15:30</input>&nbsp&nbsp&nbsp<input type="checkbox">15:30 - 16:00</input><br>
-                                    <input type="checkbox">16:00 - 16:30</input>&nbsp&nbsp&nbsp<input type="checkbox">16:30 - 17:00</input>&nbsp&nbsp&nbsp<input type="checkbox">17:00 - 17:30</input>&nbsp&nbsp&nbsp<input type="checkbox">17:30 - 18:00</input><br>
-                                    <input type="checkbox">18:00 - 18:30</input>&nbsp&nbsp&nbsp<input type="checkbox">18:30 - 19:00</input>&nbsp&nbsp&nbsp<input type="checkbox">19:00 - 19:30</input>&nbsp&nbsp&nbsp<input type="checkbox">19:30 - 20:00</input><br>
-                                    <input type="checkbox">20:00 - 20:30</input>&nbsp&nbsp&nbsp<input type="checkbox">20:30 - 21:00</input>&nbsp&nbsp&nbsp<input type="checkbox">21:00 - 21:30</input>&nbsp&nbsp&nbsp<input type="checkbox">21:30 - 22:00</input><br>
-                                    <input type="checkbox">22:00 - 22:30</input>&nbsp&nbsp&nbsp<input type="checkbox">22:30 - 23:00</input>&nbsp&nbsp&nbsp<input type="checkbox">23:00 - 23:30</input>&nbsp&nbsp&nbsp<input type="checkbox">23:30 - 00:00</input>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="middle"></div>
+                    <div style="float: left;">
+                        <div class="tree-div scrolling-wrapper" style="padding: 5px;">
+                            <span id="timePeriodsDiv" style="padding-left: 5px;">Select Time Periods</span>
+                            <ul class="format-listitem" id="timePeriodsDivSelectorList">
+                                <li>
+                                    <div id="monthOfYear" class="far fa-plus-square show-pointer"></div>
+                                    <span id="monthOfYearspan">Months</span>
+                                    <div id="monthOfYearList"  class="listitem-hidden">
+                                        <ul class="format-listitem">
+                                            <li>
+                                                <div class="far fa-times-circle"></div>
+                                                <input type="checkbox" class="show-pointer" checked><span>All Year</span>
+                                            </li>
+                                            <li>
+                                                <div id="monthOfYearDetail" class="far fa-plus-square show-pointer"></div>
+                                                <span id="monthOfYearDetailspan">Select Specific Month(s)</span>
+                                                <div id="monthOfYearDetailList"  class="listitem-hidden">
+                                                    <ul class="format-listitem">
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>January</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>February</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>March</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>April</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>May</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>June</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>July</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>August</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>September</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>October</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>November</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>December</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div id="dayOfWeek" class="far fa-plus-square show-pointer"></div>
+                                    <span id="dayOfWeekspan">Days Of The Week</span>
+                                    <div id="dayOfWeekList"  class="listitem-hidden">
+                                        <ul class="format-listitem">
+                                            <li>
+                                                <div class="far fa-times-circle"></div>
+                                                <input type="checkbox" class="show-pointer" checked><span>All Week</span>
+                                            </li>
+                                            <li>
+                                                <div id="dayOfWeekDetail" class="far fa-plus-square show-pointer"></div>
+                                                <span id="dayOfWeekDetailspan">Select Specific Day(s)</span>
+                                                <div id="dayOfWeekDetailList"  class="listitem-hidden">
+                                                    <ul class="format-listitem">
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Monday</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Tuesday</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Wednesday</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Thursday</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Friday</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Saturday</span>
+                                                        </li>
+                                                        <li>
+                                                            <div style="padding-right: 4px;" class="far fa-times-circle"></div>
+                                                            <input type="checkbox" class="show-pointer"><span>Sunday</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div id="timePeriod" class="far fa-plus-square show-pointer"></div>
+                                    <span id="timePeriodspan">Time Periods</span>
+                                    <div id="timePeriodList"  class="listitem-hidden">
+                                        <ul class="format-listitem">
+                                            <li>
+                                                <div class="far fa-times-circle"></div>
+                                                <input type="checkbox" class="show-pointer" checked><span>All Day</span>
+                                            </li>
+                                            <li>
+                                                <div id="timePeriodDetail" class="far fa-plus-square show-pointer"></div>
+                                                <span id="timePeriodDetailspan">Select Specific Time Period(s)</span>
+                                                <div id="timePeriodDetailList"  class="listitem-hidden">
+                                                    <ul class="format-listitem">
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>Day (07:00 - 19:00)</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>Night (19:00 - 07:00)</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>00:00 - 00:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>00:00 - 00:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>00:30 - 01:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>01:00 - 01:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>01:30 - 02:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>02:00 - 02:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>02:30 - 03:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>03:00 - 03:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>03:30 - 04:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>04:00 - 04:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>04:30 - 05:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>05:00 - 05:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>05:30 - 06:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>06:00 - 06:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>06:30 - 07:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>07:00 - 07:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>07:30 - 08:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>08:00 - 08:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>08:30 - 09:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>09:00 - 09:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>09:30 - 10:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>10:00 - 10:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>10:30 - 11:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>11:00 - 11:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>11:30 - 12:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>12:00 - 12:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>12:30 - 13:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>13:00 - 13:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>13:30 - 14:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>14:00 - 14:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>14:30 - 15:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>15:00 - 15:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>15:30 - 16:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>16:00 - 16:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>16:30 - 17:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>17:00 - 17:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>17:30 - 18:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>18:00 - 18:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>18:30 - 19:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>19:00 - 19:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>19:30 - 20:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>20:00 - 20:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>20:30 - 21:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>21:00 - 21:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>21:30 - 22:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>22:00 - 22:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>22:30 - 23:00</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>23:00 - 23:30</span></li>
+                                                        <li><div style="padding-right: 4px;" class="far fa-times-circle"></div><input type="checkbox" class="show-pointer"><span>23:30 - 00:00</span></li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="middle"></div>
+                    <div style="float: left;">
+                        <div class="tree-div roundborder" style="padding: 5px; width: 918px;">
+                            <label for="opportunityNotes">Notes:</label>
+                            <textarea id="opportunityNotes" style="height: 15%; resize: none;"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="middle">&nbsp</div>
-            <div style="float: left;">
-                <div>
-                    <div class="roundborder" style="padding: 5px;">
-                        <label for="opportunityType" style="width:50%;">Select Opportunity Type:</label>
-                        <select id="opportunityType" style="width:48%;">
-                            <option value="Custom">Custom</option>
-                            <option value="DUoSReduction">DUoS Reduction</option>
-                            <option value="TriadReduction">Triad Reduction</option>
-                        </select>
-                        <br>
-                        <label for="opportunityStatus" style="width:50%;">Select Opportunity Status:</label>
-                        <select id="opportunityStatus" style="width:48%;">
-                            <option value="Recommend">Recommend</option>
-                            <option value="Approved">Approved</option>
-                        </select>
-                        <br>
-                        <label for="opportunityName" style="width:50%;">Enter Opportunity Name:</label>
-                        <input id="opportunityName" style="width:48%;"></input>
-                        <br>
-                        <label for="opportunityStartDate" style="width:50%;">Select Estimated Start Date:</label>
-                        <input id="opportunityStartDate" style="width:48%;"></input>
-                        <br>
-                        <label for="opportunityCost" style="width:50%;">Enter Estimated Cost:</label>
-                        <input id="opportunityCost" style="width:48%;"></input>
+            <div style="clear: both;"></div>
+            <div style="margin-top: 5px;">
+                <div class="roundborder" style="text-align: center; float: left; width: 1375px;">
+                    <div style="padding: 5px;">
+                        <label for="applyPercentage">Percentage Saving</label>
+                        <input id="applyPercentage"></input>
+                        <button class="show-pointer">Apply Percentage Saving</button>
                     </div>
-                    <div>&nbsp</div>
-                    <div class="roundborder" style="padding: 5px;">
-                        <label for="opportunityNotes">Notes:</label>
-                        <input id="opportunityNotes"></input>
-                    </div>
+                    <div id="createNewOpportunitySpreadsheet"></div>
                 </div>
-                <br>
-                <div class="roundborder" style="text-align: center;">
-                    <label for="applyPercentage">Percentage Saving</label>
-                    <input id="applyPercentage"></input>
-                    <button class="show-pointer">Apply Percentage Saving</button>
-                    <br>
-                    <table style="margin: 5px;">
-                        <thead>
-                            <tr>
-                                <td style="border: solid black 1px;"><input type="checkbox" checked></input></td>
-                                <td style="border: solid black 1px;">Meter</td>
-                                <td style="border: solid black 1px;">Sub Meter</td>
-                                <td style="border: solid black 1px;">Month</td>
-                                <td style="border: solid black 1px;">Day Of The Week</td>
-                                <td style="border: solid black 1px;">Time Period</td>
-                                <td style="border: solid black 1px;">Percentage Saving</td>
-                                <td style="border: solid black 1px;">Estimated Annual<br>kWh Savings</td>
-                                <td style="border: solid black 1px;">Estimated Annual<br>£ Savings</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="border: solid black 1px;"><input type="checkbox" checked></input></td>
-                                <td style="border: solid black 1px;">1234567890123</td>
-                                <td style="border: solid black 1px;">Sub Meter 1</td>
-                                <td style="border: solid black 1px;">All Months</td>
-                                <td style="border: solid black 1px;">All Days</td>
-                                <td style="border: solid black 1px;">All Periods</td>
-                                <td style="border: solid black 1px;"><input style="width: 100%;"></input></td>
-                                <td style="border: solid black 1px;">5,000</td>
-                                <td style="border: solid black 1px;">£10,000</td>
-                            </tr>
-                            <tr>
-                                <td style="border: solid black 1px;"><input type="checkbox" checked></input></td>
-                                <td style="border: solid black 1px;">1234567890124</td>
-                                <td style="border: solid black 1px;">New Sub Meter Required</td>
-                                <td style="border: solid black 1px;">All Months</td>
-                                <td style="border: solid black 1px;">All Days</td>
-                                <td style="border: solid black 1px;">All Periods</td>
-                                <td style="border: solid black 1px;"><input style="width: 100%;"></input></td>
-                                <td style="border: solid black 1px;">N/A</td>
-                                <td style="border: solid black 1px;">N/A</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="middle"></div>
+                <div class="roundborder" style="text-align: center; float: left;">
                     <span style="border-bottom: solid black 1px;">Estimated Savings<br></span>
                     <br>
-                    <div>
+                    <div style="padding: 5px;">
                         <span>Number of new sub meters required: 1</span><br>
                         <span>Estimated Annual kWh Savings on Existing Sub Meters: 10,000</span><br>
                         <span>Estimated Annual £ Savings on Existing Sub Meters: £1,000</span>
                     </div>
                 </div>
+                <div class="middle"></div>
+                <div style="float: right;">
+                    <br><br>
+                    <button class="show-pointer approve" style="width: 100%;">Add Opportunity</button>
+                    <button class="show-pointer reject" style="width: 100%;">Reset Opportunity</button>
+                </div>
             </div>
-        </div>
-        <br>
-        <div style="float: right;">
-            <button class="show-pointer">Add Opportunity</button>
-            &nbsp&nbsp&nbsp&nbsp&nbsp
-            <button class="show-pointer">Reset Opportunity</button>
+            <div style="clear: both;"></div>
         </div>
     </div>
     <br>
@@ -243,6 +309,8 @@
 
 <script type="text/javascript" src="createopportunities.js"></script>
 <script type="text/javascript" src="createopportunities.json"></script>
+<script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
+<script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
 
 <script type="text/javascript"> 
 	pageLoad();
