@@ -12,6 +12,16 @@
 </head>
 
 <body>
+    <div id="popup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="title"></span>
+			</div>
+			<br>
+			<span id="popupText"></span><br>
+		</div>
+	</div>
     <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
     <br>
     <div class="final-column">

@@ -16,7 +16,7 @@
 		<div class="modal-content">
 			<span class="close" title="Close">&times;</span>
 			<div class="title">
-				<span id="contactTitle"></span><br><br>
+				<span id="contactTitle"></span>
 			</div>
 			<br>
 			<span id="contact"></span><br>

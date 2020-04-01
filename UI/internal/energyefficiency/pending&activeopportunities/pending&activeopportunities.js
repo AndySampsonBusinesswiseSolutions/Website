@@ -469,8 +469,8 @@ function buildDataGrid() {
                     estimatedCost:'£100,000',
                     estimatedkWhSavings:'10,000',
                     estimatedCostSavings:'£15,000',
-                    totalROIMonths:'7',
-                    roiMonthsRemaining:'7'},);
+                    totalROIMonths:'84',
+                    roiMonthsRemaining:'84'},);
                 endRow++;
                 rowCount++;
             }

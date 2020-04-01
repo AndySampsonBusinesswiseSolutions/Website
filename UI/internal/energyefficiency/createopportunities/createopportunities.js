@@ -294,6 +294,51 @@ function clearElement(element) {
 	}
 }
 
+function displayContactPopup(type, row) {
+    var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+    var span = modal.getElementsByClassName("close")[0];
+    var popupText = document.getElementById("popupText");
+    var site = document.getElementById(type + 'Site' + row).innerText;
+
+    var text = 'BWS Contact: En Gineer - 07777 777777<br><br>'
+                    + 'David Ford Trading Ltd Contact(s):<br>'
+                    + '<span style="margin-left: 5px;">Main Office: 01234 567890</span><br><br>'
+                    + '<span style="margin-left: 5px;">' + site + ':</span><br>'
+                    + '<span style="margin-left: 10px;">Site Contact: David Ford - 07890 123456</span><br>'
+                    + '<span style="margin-left: 10px;">Engineer Contact: Andrew Sampson - 07890 654321</span>';
+
+    popupText.innerHTML = text;
+    
+    finalisePopup(title, 'Contacts<br>', modal, span);
+}
+
+function displayTimePeriodPopup(type, row) {
+    var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+    var span = modal.getElementsByClassName("close")[0];
+    var popupText = document.getElementById("popupText");
+
+    var text = 'Time Periods Selected<br><br>'
+                    + 'Months: November, December, January, February<br>'
+                    + 'Days: Tuesday, Wednesday, Thursday<br>'
+                    + 'Periods: 16:30 - 17:00, 17:00 - 17:30, 17:30 - 18:00';
+
+    popupText.innerHTML = text;
+    
+    finalisePopup(title, 'Time Periods<br>', modal, span);
+}
+
+function finalisePopup(title, titleHTML, modal, span) {
+    title.innerHTML = titleHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
 function loadDataGrids() {
     var identifiedOpportunitiesData = [];
     var createNewOpportunityData = [];
@@ -303,16 +348,15 @@ function loadDataGrids() {
         opportunityType:'Custom',
         opportunityName:'LED Lighting',
         status:'Recommend',
-        site:'Site X',
+        site:'<div id="identifiedOpportunitiesSite1">Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'identifiedOpportunities'" + ', 1)"></i></div>',
         meter:'12345678910125',
         subMeter:'Sub Meter 2',
         estimatedStartDate:'01/04/2020',
-        month:'All Months',
-        dayOfWeek:'All Days',
-        timePeriod:'All Periods',
+        timePeriod:'All Months<br>All Days<br>All Periods',
         estimatedCost:'£5,000',
         percentageSaving:'10%',
         estimatedSavings:'kWh: 5,000<br>£: £1,000',
+        roi:'Total: 60<br>Remaining: 60',
         actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
 	}
 	identifiedOpportunitiesData.push(row);
@@ -322,22 +366,21 @@ function loadDataGrids() {
         opportunityType:'Custom',
         opportunityName:'LED Lighting',
         status:'Approved',
-        site:'Site X',
+        site:'<div id="identifiedOpportunitiesSite2">Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'identifiedOpportunities'" + ', 2)"></i></div>',
         meter:'12345678910126',
         subMeter:'New Sub Meter Required',
         estimatedStartDate:'01/04/2020',
-        month:'Multiple <i class="fas fa-search show-pointer"></i>',
-        dayOfWeek:'Multiple <i class="fas fa-search show-pointer"></i>',
-        timePeriod:'Multiple <i class="fas fa-search show-pointer"></i>',
-        estimatedCost:'£5,000',
+        timePeriod:'Multiple Months<br>Multiple Days<br>Multiple Months <i class="fas fa-search show-pointer"onclick="displayTimePeriodPopup(' + "'identifiedOpportunities'" + ', 2)"></i>',
+        estimatedCost:'£5,000,000',
         percentageSaving:'5%',
         estimatedSavings:'kWh: N/A<br>£: N/A',
+        roi:'Total: N/A<br>Remaining: N/A',
         actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
 	}
     identifiedOpportunitiesData.push(row);
     
     row = {
-        site:'Site Z',
+        site:'<div id="createNewOpportunitySite1">Site Z <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'createNewOpportunity'" + ', 1)"></i></div>',
         meter:'12345678910123',
         subMeter:'Sub Meter 1',
         month:'All Months',
@@ -350,7 +393,7 @@ function loadDataGrids() {
     createNewOpportunityData.push(row);
     
     row = {
-        site:'Site Y',
+        site:'<div id="createNewOpportunitySite2">Site Y <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'createNewOpportunity'" + ', 2)"></i></div>',
         meter:'12345678910124',
         subMeter:'New Sub Meter Required',
         month:'Multiple <i class="fas fa-search show-pointer"></i>',
@@ -381,13 +424,12 @@ function loadDataGrids() {
             {type:'text', width:'178px', name:'site', title:'Site', readOnly: true},
             {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
             {type:'text', width:'125px', name:'subMeter', title:'Sub Meter', readOnly: true},
-            {type:'text', width:'100px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
-            {type:'text', width:'100px', name:'month', title:'Month', readOnly: true},
-            {type:'text', width:'100px', name:'dayOfWeek', title:'Day Of Week', readOnly: true},
-            {type:'text', width:'100px', name:'timePeriod', title:'Time Period', readOnly: true},
-            {type:'text', width:'150px', name:'estimatedCost', title:'Estimated Cost', readOnly: true},
+            {type:'text', width:'110px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
+            {type:'text', width:'175px', name:'timePeriod', title:'Time Periods', readOnly: true},
+            {type:'text', width:'100px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
             {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
             {type:'text', width:'150px', name:'estimatedSavings', title:'Estimated<br>Savings (pa)', readOnly: true},
+            {type:'text', width:'160px', name:'roi', title:'ROI Months', readOnly: true},
             {type:'text', width:'100px', name:'actions', title:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>', readOnly: true},
 		 ]
       }); 
