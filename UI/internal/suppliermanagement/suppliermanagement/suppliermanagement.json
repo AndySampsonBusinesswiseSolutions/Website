@@ -3,7 +3,7 @@ var supplier = [
         "GUID" : "0",
         "Attributes" : 
         [
-            {"BaseName" : "Haven Power Limited"},
+            {"SupplierName" : "Haven Power Limited"},
             {"Address Line 1" : "32"},
             {"Address Line 2" : "The Havens"},
             {"Address Line 3" : ""},
@@ -18,7 +18,7 @@ var supplier = [
         "GUID" : "1",
         "Attributes" : 
         [
-            {"BaseName" : "Hudson Energy UK"},
+            {"SupplierName" : "Hudson Energy UK"},
             {"Address Line 1" : "3rd floor"},
             {"Address Line 2" : "Elder House"},
             {"Address Line 3" : "586-592 Elder Gate"},
@@ -33,7 +33,7 @@ var supplier = [
         "GUID" : "2",
         "Attributes" : 
         [
-            {"BaseName" : "Add New Supplier"},
+            {"SupplierName" : "Add New Supplier"},
             {"Address Line 1" : ""},
             {"Address Line 2" : ""},
             {"Address Line 3" : ""},
