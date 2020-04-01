@@ -98,10 +98,9 @@
 .reject {
     background-color: red;
 }
-.popup {
+.popup, .contact-popup {
     display: none;
     position: fixed; /* Stay in place */
-    z-index: 100000; /* Sit on top */
     left: 0;
     top: 0;
     width: 125%; /* Full width */
@@ -109,6 +108,14 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.popup {
+    z-index: 100000;
+}
+
+.contact-popup {
+    z-index: 100001;
 }
 
 .modal-content, .modal-content-wide {

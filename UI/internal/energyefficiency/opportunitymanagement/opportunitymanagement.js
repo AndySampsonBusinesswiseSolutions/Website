@@ -200,15 +200,21 @@ function displayManageOpportunityPopup(type, row) {
     data.push(document.getElementById(type + 'OpportunitiesSite' + row).innerHTML);
     data.push(document.getElementById(type + 'OpportunitiesMeter' + row).innerHTML);
     data.push(document.getElementById(type + 'OpportunitiesSubMeter' + row).innerHTML);
-    data.push(document.getElementById(type + 'OpportunitiesEngineer' + row).innerHTML);
-    data.push(document.getElementById(type + 'OpportunitiesEstimatedStartDate' + row).innerHTML);
-    data.push(document.getElementById(type + 'OpportunitiesEstimatedFinishDate' + row).innerHTML);
+
+    var savings = document.getElementById(type + 'OpportunitiesEstimatedDates' + row).innerHTML;
+    data.push(savings.split('<br>')[0].replace('Start: ', ''));
+    data.push(savings.split('<br>')[1].replace('Finish: ', ''));
+
     data.push(document.getElementById(type + 'OpportunitiesPercentageSaving' + row).innerHTML);
     data.push(document.getElementById(type + 'OpportunitiesEstimatedCost' + row).innerHTML);
 
     var savings = document.getElementById(type + 'OpportunitiesEstimatedSavings' + row).innerHTML;
     data.push(savings.split('<br>')[0].replace('kWh: ', ''));
     data.push(savings.split('<br>')[1].replace('£: ', ''));
+
+    var savings = document.getElementById(type + 'OpportunitiesROI' + row).innerHTML;
+    data.push(savings.split('<br>')[0].replace('Total: ', ''));
+    data.push(savings.split('<br>')[1].replace('Remaining: ', ''));
 
     var detailSpans = modal.getElementsByClassName('manageOpportunityOpportunityDetailSpan');
     var detailLength = detailSpans.length;
@@ -253,11 +259,30 @@ function setupDataGrids() {
     setupRejectedOpportunitiesDataGrid();
 }
 
+function displayContactPopup(type, row) {
+    var modal = document.getElementById("contactPopup");
+	var title = document.getElementById("contactTitle");
+    var span = modal.getElementsByClassName("close")[0];
+    var contact = document.getElementById("contact");
+    var customer = document.getElementById(type + 'Customer' + row).innerText;
+
+    var contactText = 'BWS Contact: ' + (type == 'requestedVisits' ? 'Main Office' : 'En Gineer') + ' - 07777 777777<br><br>'
+                    + customer + ' Contact(s):<br>'
+                    + '<span style="margin-left: 5px;">Main Office: 01234 567890</span><br><br>'
+                    + '<span style="margin-left: 5px;">Site X:</span><br>'
+                    + '<span style="margin-left: 10px;">Site Contact: David Ford - 07890 123456</span><br>'
+                    + '<span style="margin-left: 10px;">Engineer Contact: Andrew Sampson - 07890 654321</span>'
+
+    contact.innerHTML = contactText;
+    
+    finalisePopup(title, 'Contacts<br>', modal, span);
+}
+
 function setupRequestedVisitsDataGrid() {
     var data = [];
     var row = {
         customer:'<div id="requestedVisitsCustomer1">David Ford Trading Ltd</div>', 
-		site:'Site X',
+		site:'Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'requestedVisits'" + ', 1)"></i>',
         visitDate:'<div id="requestedVisitsVisitDate1">01/04/2020</div>',
         manageVisit: '<button class="show-pointer btn approve" onclick="displayScheduleRequestedVisitPopup(1)">Schedule Visit</button>'
                     +'<button class="show-pointer btn reject" onclick="displayRejectRequestedVisitPopup(1)">Reject Visit</button>'
@@ -288,7 +313,7 @@ function setupScheduledVisitsDataGrid() {
     var data = [];
     var row = {
         customer:'<div id="scheduledVisitsCustomer1">David Ford Trading Ltd</div>', 
-		site:'Site X',
+		site:'Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'scheduledVisits'" + ', 1)"></i>',
         engineer:'En Gineer',
         visitDate:'<div id="scheduledVisitsVisitDate1">01/04/2020</div>',
         manageVisit: '<button class="show-pointer btn approve" onclick="displayApproveScheduledVisitPopup(1)">Start Visit</button>'
@@ -323,15 +348,14 @@ function setupRecommendedOpportunitiesDataGrid() {
         customer:'<div id="recommendedOpportunitiesCustomer1">David Ford Trading Ltd</div>', 
         opportunityType:'<div id="recommendedOpportunitiesOpportunityType1">Custom</div>',
         opportunityName:'<div id="recommendedOpportunitiesOpportunityName1">LED Lighting 2</div>',
-		site:'<div id="recommendedOpportunitiesSite1">Site X</div>',
+		site:'<div id="recommendedOpportunitiesSite1">Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'recommendedOpportunities'" + ', 1)"></i></div>',
         meter:'<div id="recommendedOpportunitiesMeter1">1234567890125</div>',
         subMeter:'<div id="recommendedOpportunitiesSubMeter1">Sub Meter</div>',
-        engineer:'<div id="recommendedOpportunitiesEngineer1">En Gineer</div>',
-        estimatedStartDate:'<div id="recommendedOpportunitiesEstimatedStartDate1">01/04/2020</div>',
-        estimatedFinishDate:'<div id="recommendedOpportunitiesEstimatedFinishDate1">30/06/2020</div>',
+        estimatedDates:'<div id="recommendedOpportunitiesEstimatedDates1">Start: 01/04/2020<br>Finish: 30/06/2020</div>',
         percentageSaving:'<div id="recommendedOpportunitiesPercentageSaving1">10%</div>',
         estimatedCost:'<div id="recommendedOpportunitiesEstimatedCost1">£100,000</div>',
         estimatedSavings:'<div id="recommendedOpportunitiesEstimatedSavings1">kWh: 10,000<br>£: £15,000</div>',
+        roi:'<div id="recommendedOpportunitiesROI1">Total: 7<br>Remaining: 7</div>',
         approveReject: '<button class="show-pointer btn approve" onclick="displayApproveOpportunityPopup(1)">Approve Opportunity</button>'
                           +'<button class="show-pointer btn reject" onclick="displayRejectOpportunityPopup(1)">Reject Opportunity</button>',
         manageOpportunity: '<button class="show-pointer btn" onclick="displayManageOpportunityPopup(' + "'recommended'" +', 1)">Manage Opportunity</button>'
@@ -357,14 +381,13 @@ function setupRecommendedOpportunitiesDataGrid() {
             {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
             {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
             {type:'text', width:'100px', name:'subMeter', title:'Sub Meter', readOnly: true},
-            {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
-            {type:'text', width:'105px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
-            {type:'text', width:'105px', name:'estimatedFinishDate', title:'Estimated<br>Finish Date', readOnly: true},
+            {type:'text', width:'175px', name:'estimatedDates', title:'Estimated<br>Dates', readOnly: true},
             {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
             {type:'text', width:'120px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
             {type:'text', width:'125px', name:'estimatedSavings', title:'Estimated <br>Savings (pa)', readOnly: true},
+            {type:'text', width:'140px', name:'roi', title:'ROI<br>Months', readOnly: true},
             {type:'text', width:'197px', name:'manageOpportunity', title:'Manage Opportunity', readOnly: true},
-            {type:'text', width:'197px', name:'approveReject', title:'Approve/Reject<br>Opportunity', readOnly: true},
+            {type:'text', width:'195px', name:'approveReject', title:'Approve/Reject<br>Opportunity', readOnly: true},
 		 ]
 	  }); 
 }
@@ -375,15 +398,14 @@ function setupPendingActiveOpportunitiesDataGrid() {
         customer:'<div id="pendingActiveOpportunitiesCustomer1">David Ford Trading Ltd</div>', 
         opportunityType:'<div id="pendingActiveOpportunitiesOpportunityType1">Custom</div>',
         opportunityName:'<div id="pendingActiveOpportunitiesOpportunityName1">LED Lighting</div>',
-		site:'<div id="pendingActiveOpportunitiesSite1">Site X</div>',
+		site:'<div id="pendingActiveOpportunitiesSite1">Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'pendingActiveOpportunities'" + ', 1)"></i></div>',
         meter:'<div id="pendingActiveOpportunitiesMeter1">12345678910124</div>',
         subMeter:'<div id="pendingActiveOpportunitiesSubMeter1">Sub Meter</div>',
-        engineer:'<div id="pendingActiveOpportunitiesEngineer1">En Gineer</div>',
-        estimatedStartDate:'<div id="pendingActiveOpportunitiesEstimatedStartDate1">01/04/2020</div>',
-        estimatedFinishDate:'<div id="pendingActiveOpportunitiesEstimatedFinishDate1">30/06/2020</div>',
+        estimatedDates:'<div id="pendingActiveOpportunitiesEstimatedDates1">Start: 01/04/2020<br>Finish: 30/06/2020</div>',
         percentageSaving:'<div id="pendingActiveOpportunitiesPercentageSaving1">15%</div>',
         estimatedCost:'<div id="pendingActiveOpportunitiesEstimatedCost1">£150,000</div>',
         estimatedSavings:'<div id="pendingActiveOpportunitiesEstimatedSavings1">kWh: 20,000<br>£: £25,000</div>',
+        roi:'<div id="pendingActiveOpportunitiesROI1">Total: 6<br>Remaining: 6</div>',
         close: '<button class="show-pointer btn reject" onclick="displayCloseOpportunityPopup(1)">Close Opportunity</button>',
         manageOpportunity: '<button class="show-pointer btn" onclick="displayManageOpportunityPopup(' + "'pendingActive'" +', 1)">Manage Opportunity</button>'
                           +'<button class="show-pointer btn" onclick="approveScheduledVisit()">Add Opportunities</button>'
@@ -408,14 +430,13 @@ function setupPendingActiveOpportunitiesDataGrid() {
             {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
             {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
             {type:'text', width:'100px', name:'subMeter', title:'Sub Meter', readOnly: true},
-            {type:'text', width:'100px', name:'engineer', title:'Engineer', readOnly: true},
-            {type:'text', width:'105px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
-            {type:'text', width:'105px', name:'estimatedFinishDate', title:'Estimated<br>Finish Date', readOnly: true},
+            {type:'text', width:'175px', name:'estimatedDates', title:'Estimated<br>Dates', readOnly: true},
             {type:'text', width:'100px', name:'percentageSaving', title:'Percentage<br>Saving', readOnly: true},
             {type:'text', width:'120px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
             {type:'text', width:'125px', name:'estimatedSavings', title:'Estimated <br>Savings (pa)', readOnly: true},
+            {type:'text', width:'140px', name:'roi', title:'ROI<br>Months', readOnly: true},
             {type:'text', width:'197px', name:'manageOpportunity', title:'Manage Opportunity', readOnly: true},
-            {type:'text', width:'197px', name:'close', title:'Close<br>Opportunity', readOnly: true},
+            {type:'text', width:'195px', name:'close', title:'Close<br>Opportunity', readOnly: true},
 		 ]
 	  }); 
 }
@@ -426,7 +447,7 @@ function setupRejectedOpportunitiesDataGrid() {
         customer:'David Ford Trading Ltd', 
         opportunityType:'Custom',
         opportunityName:'LED Lighting',
-		site:'Site X',
+		site:'Site X <i class="fas fa-search show-pointer" onclick="displayContactPopup(' + "'rejectedOpportunities'" + ', 1)"></i>',
         meter:'1234567890125',
         subMeter:'Sub Meter 2',
         engineer:'En Gineer',

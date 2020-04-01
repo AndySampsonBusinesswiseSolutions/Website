@@ -12,6 +12,16 @@
 </head>
 
 <body>
+	<div id="contactPopup" class="contact-popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="contactTitle"></span><br><br>
+			</div>
+			<br>
+			<span id="contact"></span><br>
+		</div>
+	</div>
 	<div id="scheduleRequestedVisitPopup" class="popup">
 		<div class="modal-content">
 			<span class="close" title="Close">&times;</span>
@@ -118,13 +128,14 @@
 							<span style="width: 50%; text-align: right;">Site:</span><span id="siteSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Meter:</span><span id="meterSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Sub Meter:</span><span id="subMeterSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
-							<span style="width: 50%; text-align: right;">Engineer:</span><span id="engineerSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Estimated Start Date:</span><span id="estimatedStartDateSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Estimated Finish Date:</span><span id="estimatedFinishDateSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Percentage Saving:</span><span id="percentageSavingSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Estimated Cost:</span><span id="estimatedCAPEXCostSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Estimated kWh Savings (pa):</span><span id="estimatedUsageSavingsSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 							<span style="width: 50%; text-align: right;">Estimated £ Savings (pa):</span><span id="estimatedCostSavingsSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
+							<span style="width: 50%; text-align: right;">ROI Total Months:</span><span id="roiTotalMonthsSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
+							<span style="width: 50%; text-align: right;">ROI Remaining Months:</span><span id="roiRemainingMonthsSpan" class="manageOpportunityOpportunityDetailSpan" style="margin-left: 5px;"></span><br>
 						</div>
 					</div>
 				</div>
