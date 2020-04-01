@@ -12,28 +12,53 @@
 </head>
 
 <body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>	
-
-	<div class="row">
-		<div class="tree-column">
-			<div>
-				<br>
-				<div class="tree-column">
-					<div id="treeDiv" class="tree-div">
-					</div>
-					<button style="width: 100%; margin-top: 5px;">Upload Usage</button>
-				</div>
+	<div id="deleteRowPopup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="deleteRowTitle"></span><br><br>
 			</div>
-		</div>
-		<div class="fill-column"></div>
-		<div class="final-column">
 			<br>
-			<div>
-				<div class="group-by-div" id="cardDiv" style="display: none;">
-					<div class="tabDiv" id="tabDiv" style="overflow-y: auto; overflow: auto;"></div>
-				</div>
-			</div>
+			<span id="deleteRowText" style="font-size: 15px;"></span><br><br>
+			<button style="float: right;" class="reject">Delete Attribute</button>
+			<br>
 		</div>
+	</div>
+	<div id="uploadUsagePopup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="uploadUsageTitle"></span>
+			</div>
+			<div id="drop-area">
+				<!-- <p>Upload multiple files with the file dialog or by dragging and dropping images onto the dashed region</p> -->
+				<input type="file" id="fileElem" multiple accept="*" onchange="handleFiles(this.files)"><br>
+				<label class="button" for="fileElem">Select some files</label><br><br>
+				<progress id="progress-bar" max=100 value=0 style="width: 100%;"></progress><br>
+				<div id="gallery"></div>
+			</div>
+			<button style="float: right; margin-top: 5px;" class="show-pointer approve">Upload Usage</button>
+			<br>
+		</div>
+	</div>
+	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div class="tree-column">
+			<div id="treeDiv" class="tree-div roundborder">
+			</div>
+			<button style="width: 100%; margin-top: 5px;" onclick="displayUploadUsage();">Upload Usage</button>
+		</div>
+	</div>
+
+	<div class="section-header">
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	</div>
+
+	<div class="final-column">
+		<br>
+		<div class="tabDiv" id="tabDiv"></div>
+		<div id="cardDiv"></div>
 	</div>
 	<br>
 </body>

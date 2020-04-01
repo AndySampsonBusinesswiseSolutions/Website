@@ -291,8 +291,8 @@
                     <br>
                     <div style="padding: 5px;">
                         <span>Number of new sub meters required: 1</span><br>
-                        <span>Estimated Annual kWh Savings on Existing Sub Meters: 10,000</span><br>
-                        <span>Estimated Annual £ Savings on Existing Sub Meters: £1,000</span>
+                        <span>Estimated Annual kWh Savings on Existing Devices: 10,000</span><br>
+                        <span>Estimated Annual £ Savings on Existing Devices: £1,000</span>
                     </div>
                 </div>
                 <div class="middle"></div>

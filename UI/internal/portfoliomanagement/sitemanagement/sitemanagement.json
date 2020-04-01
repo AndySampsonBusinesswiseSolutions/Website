@@ -3,15 +3,19 @@ var data = [
         "GUID" : "0",
         "Attributes" : 
         [
-            {"BaseName" : "Leeds"},
-            {"Address Line 1" : "Manor Mill Ln"},
-            {"Address Line 2" : "Leeds"},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : ""},
-            {"Postcode" : "LS11 8BR"},
+            {"Name" : "39-41 Buckingham Palace Road, London"},
+            {"Address Line 1" : "39-41"},
+            {"Address Line 2" : "Buckingham Palace Rd"},
+            {"Address Line 3" : "Westminster"},
+            {"Address Line 4" : "London"},
+            {"Postcode" : "SW1W 0PS"},
             {"Contact Name" : "David Ford"},
+            {"Contact Type" : "Site"},
             {"Contact Telephone Number" : "0113 270 1244"},
-            {"Sq. ft" : "100"}
+            {"Sq. ft" : "100"},
+            {"lat" : 51.4981763},
+            {"lng" : -0.1435512},
+            {"GoogleAddress" : "39-41 Buckingham Palace Rd, Westminster, London SW1W 0PS, UK"},
         ],
         "Meters" :
         [
@@ -100,15 +104,19 @@ var data = [
         "GUID" : "6",
         "Attributes" : 
         [
-            {"BaseName" : "Manchester"},
-            {"Address Line 1" : "Bury"},
-            {"Address Line 2" : "Greater Manchester"},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : ""},
-            {"Postcode" : "BL9 6BS"},
+            {"Name" : "35 Charles St, Mayfair, London"},
+            {"Address Line 1" : "35"},
+            {"Address Line 2" : "Charles St"},
+            {"Address Line 3" : "Mayfair"},
+            {"Address Line 4" : "London"},
+            {"Postcode" : "W1J 5EB"},
             {"Contact Name" : "David Ford"},
+            {"Contact Type" : "Site"},
             {"Contact Telephone Number" : "0113 270 1244"},
-            {"Sq. ft" : "100"}
+            {"Sq. ft" : "100"},
+            {"lat" : 51.507668},
+            {"lng" : -0.1470636},
+            {"GoogleAddress" : "35 Charles St, Mayfair, London W1J 5EB, UK"},
         ],
         "Meters" :
         [
@@ -184,13 +192,14 @@ var data = [
         "GUID" : "100",
         "Attributes" : 
         [
-            {"BaseName" : "Add New Site"},
+            {"Name" : "Add New Site"},
             {"Address Line 1" : ""},
             {"Address Line 2" : ""},
             {"Address Line 3" : ""},
             {"Address Line 4" : ""},
             {"Postcode" : ""},
             {"Contact Name" : ""},
+            {"Contact Type" : ""},
             {"Contact Telephone Number" : ""},
             {"Sq. ft" : ""}
         ]

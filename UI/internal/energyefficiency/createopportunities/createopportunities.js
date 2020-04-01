@@ -330,7 +330,7 @@ function loadDataGrids() {
         dayOfWeek:'Multiple <i class="fas fa-search show-pointer"></i>',
         timePeriod:'Multiple <i class="fas fa-search show-pointer"></i>',
         estimatedCost:'£5,000',
-        percentageSaving:'N/A',
+        percentageSaving:'5%',
         estimatedSavings:'kWh: N/A<br>£: N/A',
         actions:'<input type="checkbox" class="show-pointer"></input>&nbsp<i class="fas fa-trash-alt show-pointer"></i>'
 	}
