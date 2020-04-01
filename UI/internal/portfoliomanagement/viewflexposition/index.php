@@ -16,121 +16,80 @@
 <body>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
   <br>
-  <div class="panel-group" id="accordion1" style="padding-left: 15px; padding-right: 15px; padding-bottom: 15px;">
-    <div class="panel panel-default" style="border: solid black 1px;">
-        <div class="panel-heading">
-            <a data-toggle="collapse" data-parent="#accordion1" href="#collapse1" class="expandicon" style="padding-left: 15px;">Electricity Volume</a>
+  <div class="final-column">
+    <div class="roundborder">
+        <div style="text-align: center;">
+            <span>Electricity Volume</span>
+            <div id="electricityVolume" class="far fa-plus-square show-pointer"></div>
         </div>
-        <div id="collapse1" class="panel-collapse collapse in">
-            <div class="panel-body">
-              <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                  <div class="tree-div">
-                    <div id="electricityVolumeChart"></div>
-                  </div>
-                </div>	
-            </div>
+        <div id="electricityVolumeList" class="roundborder chart">
+            <div id="electricityVolumeChart"></div>
         </div>
     </div>
-  </div>
-  <div class="panel-group" id="accordion2" style="padding-left: 15px; padding-right: 15px; padding-bottom: 15px;">
-    <div class="panel panel-default" style="border: solid black 1px;">
-        <div class="panel-heading">
-
-            <a data-toggle="collapse" data-parent="#accordion2" href="#collapse2" class="expandicon" style="padding-left: 15px;">Electricity Price</a>
-
+    <br>
+    <div class="roundborder">
+        <div style="text-align: center;">
+            <span>Electricity Price</span>
+            <div id="electricityPrice" class="far fa-plus-square show-pointer"></div>
         </div>
-        <div id="collapse2" class="panel-collapse collapse">
-            <div class="panel-body">
-              <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                  <div class="tree-div" style="height: 1000px;">
-                    <div id="electricityPriceChart"></div>
-                  </div>
-                </div>	
-            </div>
+        <div id="electricityPriceList" class="roundborder chart listitem-hidden">
+            <div id="electricityPriceChart"></div>
         </div>
     </div>
-  </div>
-  <div class="panel-group" id="accordion3" style="padding-left: 15px; padding-right: 15px; padding-bottom: 15px;">
-    <div class="panel panel-default" style="border: solid black 1px;">
-        <div class="panel-heading">
-
-            <a data-toggle="collapse" data-parent="#accordion3" href="#collapse3" class="expandicon" style="padding-left: 15px;">Gas Volume</a>
-
+    <br>
+    <div class="roundborder">
+        <div style="text-align: center;">
+            <span>Gas Volume</span>
+            <div id="gasVolume" class="far fa-plus-square show-pointer"></div>
         </div>
-        <div id="collapse3" class="panel-collapse collapse">
-            <div class="panel-body">
-              <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                  <div class="tree-div" style="height: 1000px;">
-                    <div id="gasVolumeChart"></div>
-                  </div>
-                </div>	
-            </div>
+        <div id="gasVolumeList" class="roundborder chart listitem-hidden">
+            <div id="gasVolumeChart"></div>
         </div>
     </div>
-  </div>
-  <div class="panel-group" id="accordion4" style="padding-left: 15px; padding-right: 15px; padding-bottom: 15px;">
-    <div class="panel panel-default" style="border: solid black 1px;">
-        <div class="panel-heading">
-
-            <a data-toggle="collapse" data-parent="#accordion4" href="#collapse4" class="expandicon" style="padding-left: 15px;">Gas Price</a>
-
+    <br>
+    <div class="roundborder">
+        <div style="text-align: center;">
+            <span>Gas Price</span>
+            <div id="gasPrice" class="far fa-plus-square show-pointer"></div>
         </div>
-        <div id="collapse4" class="panel-collapse collapse">
-            <div class="panel-body">
-              <div class="row" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                  <div class="tree-div" style="height: 1000px;">
-                    <div id="gasPriceChart"></div>
-                  </div>
-                </div>	
-            </div>
+        <div id="gasPriceList" class="roundborder chart listitem-hidden">
+            <div id="gasPriceChart"></div>
         </div>
     </div>
-  </div>
-  <div class="panel-group" id="accordion5" style="padding-left: 15px; padding-right: 15px; padding-bottom: 15px;">
-    <div class="panel panel-default" style="border: solid black 1px;">
-        <div class="panel-heading">
-
-            <a data-toggle="collapse" data-parent="#accordion5" href="#collapse5" class="expandicon" style="padding-left: 15px;">Electricity Datagrids</a>
-
+    <br>
+    <div class="roundborder">
+        <div style="text-align: center;">
+            <span>Electricity Datagrids</span>
+            <div id="electricityDatagrids" class="far fa-plus-square show-pointer"></div>
         </div>
-        <div id="collapse5" class="panel-collapse collapse">
-            <div class="panel-body">
-              <div class="row roundborder" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                <div class="divcolumn first"></div>
-                <div class="divcolumn left">
-                  <div id="spreadsheet3"></div>
-                </div>
-                <div class="divcolumn middle"></div>
-                <div class="divcolumn right">
-                  <div id="spreadsheet4"></div>
-                </div>
-                <div class="divcolumn last"></div>
-              </div>
-            </div>
+        <div id="electricityDatagridsList" class="roundborder chart listitem-hidden">
+          <div class="first"></div>
+          <div class="left">
+            <div id="spreadsheet3"></div>
+          </div>
+          <div class="middle"></div>
+          <div class="right">
+            <div id="spreadsheet4"></div>
+          </div>
+          <div class="last"></div>
         </div>
     </div>
-  </div>
-  <div class="panel-group" id="accordion6" style="padding-left: 15px; padding-right: 15px;">
-    <div class="panel panel-default" style="border: solid black 1px;">
-        <div class="panel-heading">
-
-            <a data-toggle="collapse" data-parent="#accordion6" href="#collapse6" class="expandicon" style="padding-left: 15px;">Gas Datagrids</a>
-
+    <br>
+    <div class="roundborder">
+        <div style="text-align: center;">
+            <span>Gas Datagrids</span>
+            <div id="gasDatagrids" class="far fa-plus-square show-pointer"></div>
         </div>
-        <div id="collapse6" class="panel-collapse collapse">
-            <div class="panel-body">
-            <div class="row roundborder" style="margin-left: 15px; margin-right: 15px; margin-bottom: 15px;">
-                <div class="divcolumn first"></div>
-                <div class="divcolumn left">
-                  <div id="spreadsheet5"></div>
-                </div>
-                <div class="divcolumn middle"></div>
-                <div class="divcolumn right">
-                  <div id="spreadsheet6"></div>
-                </div>
-                <div class="divcolumn last"></div>
-              </div>
-            </div>
+        <div id="gasDatagridsList" class="roundborder chart listitem-hidden">
+          <div class="first"></div>
+          <div class="left">
+            <div id="spreadsheet5"></div>
+          </div>
+          <div class="middle"></div>
+          <div class="right">
+            <div id="spreadsheet6"></div>
+          </div>
+          <div class="last"></div>
         </div>
     </div>
   </div> 

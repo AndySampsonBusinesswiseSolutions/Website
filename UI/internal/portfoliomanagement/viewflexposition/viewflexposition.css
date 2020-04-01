@@ -9,10 +9,16 @@
     font-weight:bold;
 }
 .final-column {
-    padding-left: 350px;
-    padding-right: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
-.tree-div, .roundborder  {
+.chart {
+    background-color: #e9eaee;
+    max-height: 650px;
+    min-height: 650px;
+    margin: 5px;
+}
+.roundborder  {
     border: solid black 1px;
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
@@ -20,24 +26,16 @@
     border-bottom-right-radius: 5px;
     
 }
-.tree-div {
-    background-color: #e9eaee;
-    max-height: 900px;
-}
-.divcolumn {
-    float: left;
-    padding: 10px;
-    min-height: 100px;
-}
 .left, .right {
     float: left;
     width: 46%;
+    min-height: 100px;
 }
-.middle {
+.middle, .first, .last {
     float: left;
     width: 2%;
+    min-height: 100px;
 }
-.first, .last {
-    float: left;
-    width: 2%;
+.listitem-hidden {
+    display: none;
 }
