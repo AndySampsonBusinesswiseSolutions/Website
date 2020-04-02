@@ -12,35 +12,44 @@
 </head>
 
 <body>
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-
-	<div class="row">
-		<div class="tree-column">
-			<div>
-				<br>
-				<div class="tree-column">
-					<div id="treeDiv" class="tree-div">
-					</div>
-					<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='deleteUsers()'>Delete Selected Products</button>
-					<button style="width: 100%;" onclick='reinstateUsers()'>Reinstate Deleted Products</button>
-				</div>
+	<div id="deleteRowPopup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="deleteRowTitle"></span><br><br>
 			</div>
-		</div>
-		<div class="fill-column"></div>
-		<div class="final-column">
 			<br>
-			<div>
-				<div class="group-by-div" id="cardDiv" style="display: none;">
-					<div class="tabDiv" id="tabDiv" style="overflow-y: auto; overflow: auto;"></div>
-				</div>
-			</div>
+			<span id="deleteRowText" style="font-size: 15px;"></span><br><br>
+			<button style="float: right;" class="reject">Delete Attribute</button>
+			<br>
 		</div>
+	</div>
+	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div class="tree-column">
+			<div id="treeDiv" class="tree-div roundborder">
+			</div>
+			<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='deleteUsers()'>Delete Selected Products</button>
+					<button style="width: 100%;" onclick='reinstateUsers()'>Reinstate Deleted Products</button>
+		</div>
+	</div>
+
+	<div class="section-header">
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	</div>
+
+	<div class="final-column">
+		<br>
+		<div class="tabDiv" id="tabDiv"></div>
+		<div id="cardDiv"></div>
 	</div>
 	<br>
 </body>
 
 <script type="text/javascript" src="supplierproductmanagement.js"></script>
 <script type="text/javascript" src="supplierproductmanagement.json"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"></script>
 
 <script type="text/javascript"> 
 	pageLoad();
