@@ -40,6 +40,42 @@ var managecustomers = [
         "GUID" : "2",
         "Attributes" : 
         [
+            {"CustomerName" : "DFS Trading - North East"},
+            {"Address Line 1" : "3rd floor"},
+            {"Address Line 2" : "Elder House"},
+            {"Address Line 3" : "586-592 Elder Gate"},
+            {"Address Line 4" : "Milton Keynes"},
+            {"Postcode" : "MK9 1LR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0330 088 2679"},
+            {"Email" : "Sales@HudsonEnergy.co.uk"}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    },
+    {
+        "GUID" : "3",
+        "Attributes" : 
+        [
+            {"CustomerName" : "DFS Trading - North West"},
+            {"Address Line 1" : "3rd floor"},
+            {"Address Line 2" : "Elder House"},
+            {"Address Line 3" : "586-592 Elder Gate"},
+            {"Address Line 4" : "Milton Keynes"},
+            {"Postcode" : "MK9 1LR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0330 088 2679"},
+            {"Email" : "Sales@HudsonEnergy.co.uk"}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    },
+    {
+        "GUID" : "4",
+        "Attributes" : 
+        [
             {"CustomerName" : "Add New Customer"},
             {"Address Line 1" : ""},
             {"Address Line 2" : ""},
