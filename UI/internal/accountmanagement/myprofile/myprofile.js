@@ -1,311 +1,111 @@
-function pageLoad() {
+function pageLoad() {    
 	createTree(myprofile, "treeDiv", "createCardButton");
-	addExpanderOnClickEvents();
+	
+	document.onmousemove=function(e) {
+		var mousecoords = getMousePos(e);
+		if(mousecoords.x <= 25) {
+			openNav();
+		}  
+		else if(mousecoords.x >= 400) {
+			closeNav();
+		}  
+	};
 }
 
-function openTab(evt, tabName, guid, branch) {
-	var cardDiv = document.getElementById('cardDiv');
+function getMousePos(e) {
+	return {x:e.clientX,y:e.clientY};
+}
 
-	var tabContent = document.getElementsByClassName("tabcontent");
-	var tabContentLength = tabContent.length;
-	for (var i = 0; i < tabContentLength; i++) {
-	  cardDiv.removeChild(tabContent[i]);
-	}
+function openNav() {
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
+}
 
-	var tabLinks = document.getElementsByClassName("tablinks");
-	var tabLinksLength = tabLinks.length;
-	for (var i = 0; i < tabLinksLength; i++) {
-		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
-	}
-	
-	var newDiv = document.createElement('div');
-	newDiv.setAttribute('class', 'tabcontent');
-	newDiv.id = tabName;
-	cardDiv.appendChild(newDiv);
+function closeNav() {
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
+}
 
-	createCard(guid, newDiv, 'User');
+function updateClassOnClick(elementId, firstClass, secondClass){
+	var elements = document.getElementsByClassName(elementId);
 
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-  }
-
-function createCardButton(checkbox){
-	var cardDiv = document.getElementById('cardDiv');
-	var tabDiv = document.getElementById('tabDiv');
-	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
-
-	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
-
-		button.innerHTML = span.innerHTML;
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
-	
-		updateTabDiv();
+	if(elements.length == 0) {
+		var element = document.getElementById(elementId);
+		updateClass(element, firstClass, secondClass);
 	}
 	else {
-		tabDiv.removeChild(document.getElementById(span.id.replace('span', 'button')));
-
-		var divToRemove = document.getElementById(span.id.replace('span', 'div'));
-		if(divToRemove) {
-			cardDiv.removeChild();
-		}
-
-		if(tabDiv.children.length == 0) {
-			cardDiv.setAttribute('style', 'display: none;');
-		}
-		else {
-            updateTabDiv();
-		}
-	}	
-}
-
-function updateTabDiv() {
-	var tabDiv = document.getElementById('tabDiv');
-	var tabDivChildren = tabDiv.children;
-	var tabDivChildrenLength = tabDivChildren.length;
-
-    tabDivChildren[0].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px;'));
-    for(var i = 1; i < tabDivChildrenLength; i++) {
-        tabDivChildren[i].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px; border-left: solid black 1px;'));
-    }
-}
-
-function createCard(guid, divToAppendTo, identifier) {
-	var user;
-	
-	var userLength = myprofile.length;
-	for(var i = 0; i < userLength; i++) {
-		user = myprofile[i];
-
-		if(user.GUID == guid) {
-			break;
+		for(var i = 0; i< elements.length; i++) {
+			updateClass(elements[i], firstClass, secondClass)
 		}
 	}
+}
 
-	if(getAttribute(user.Attributes, 'UserName') == 'Change Password') {
-		buildChangePasswordForm(divToAppendTo);
+function updateClass(element, firstClass, secondClass) {
+	if(hasClass(element, firstClass)){
+		element.classList.remove(firstClass);
+
+		if(secondClass != ''){
+			element.classList.add(secondClass);
+		}
 	}
 	else {
-		buildUserDataTable(user, identifier, divToAppendTo);
-	}
-}
-
-function displayUserDataTable() {
-	var button = document.getElementById('editDetailsButton');
-	var div = document.getElementById('displayAttributes');
-
-	if(button.innerHTML == 'Edit Details') {
-		div.setAttribute('style', '');
-		button.innerText = 'Hide Details';
-	}
-	else {
-		div.setAttribute('style', 'display: none');
-		button.innerText = 'Edit Details'
-	}
-}
-
-function buildChangePasswordForm(divToAppendTo) {
-	var div = document.createElement('div');
-	div.id = 'displayAttributes';
-	divToAppendTo.appendChild(div);
-	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
-
-	var html = 
-			'<div>'+
-				'<div>'+
-					'<span style="border: solid black 1px;">Current Password</span>'+
-					'<input></input>'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div>'+
-				'<div>'+
-					'<span style="border: solid black 1px;">New Password</span>'+
-					'<input></input>'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div>'+
-				'<div>'+
-					'<span style="border: solid black 1px;">Confirm New Password</span>'+
-					'<input></input>'+
-				'</div>'+
-			'</div>'+
-			'<br>'+
-			'<div>'+
-				'<div>'+
-					'<button>Change Password</button>'+
-				'</div>'+
-			'</div>'
-
-	treeDiv.innerHTML = html;
-}
-
-function buildUserDataTable(entity, attributeRequired, divToAppendTo){
-	var div = document.createElement('div');
-	div.id = 'displayAttributes';
-	divToAppendTo.appendChild(div);
-	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
-
-	var table = document.createElement('table');
-	table.id = 'dataTable';
-	table.setAttribute('style', 'width: 100%;');
-
-	var tableRow = document.createElement('tr');
-
-	tableRow.appendChild(createTableHeader('width: 15%; border: solid black 1px;', 'Type'));
-	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Attribute'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
-	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
-
-    table.appendChild(tableRow);
-	displayAttributes(entity.Details, table, 'User');
-
-	treeDiv.appendChild(table);
-}
-
-function displayAttributes(attributes, table, type) {
-	if(!attributes) {
-		return;
-	}
-
-	var attributesLength = attributes.length;
-	for(var i = 0; i < attributesLength; i++) {
-		var tableRow = document.createElement('tr');
-		tableRow.id = 'row'.concat(type + i);
-
-		for(var j = 0; j < 3; j++) {
-			var tableDatacell = document.createElement('td');
-			tableDatacell.setAttribute('style', 'border: solid black 1px;');
-
-			switch(j) {
-				case 0:
-					tableDatacell.innerHTML = type;
-					break;	
-				case 1:
-				// 	tableDatacell.innerHTML = identifier;
-				// 	break;
-				// case 2:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = key;
-						break;
-					}	
-					
-					tableDatacell.id = 'attribute'.concat(type + i);
-					break;
-				// case 3:
-				case 2:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = attributes[i][key];
-						break;
-					}
-
-					tableDatacell.id = 'value'.concat(type + i);
-					break;
-			}
-
-			tableRow.appendChild(tableDatacell);
+		if(secondClass != ''){
+			element.classList.remove(secondClass);
 		}
-
-		var tableDatacell = document.createElement('td');
-		tableDatacell.setAttribute('style', 'border: solid black 1px;');
-
-		var editIcon = createIcon('editRow' + type + i, 'fas fa-edit', 'cursor: pointer;', 'showDetailEditor("' + type + i + '")', 'Edit');
-		//var deleteIcon = createIcon('deleteRow' + type + i, 'fas fa-trash-alt', 'cursor: pointer;', 'deleteRow("' + type + i + '")');
-		var saveChangeIcon = createIcon('saveRow' + type + i, 'fas fa-save', 'display: none;', 'saveRow("' + type + i + '")', 'Save');
-		var undoChangeIcon = createIcon('undoRow' + type + i, 'fas fa-undo', 'display: none;', 'undoRow("' + type + i + '")', 'Undo');
-		var cancelChangeIcon = createIcon('cancelRow' + type + i, 'far fa-window-close', 'display: none;', 'cancelRow("' + type + i + '")', 'Cancel');
-
-		tableDatacell.appendChild(editIcon);
-		//tableDatacell.appendChild(deleteIcon);
-		tableDatacell.appendChild(saveChangeIcon);
-		tableDatacell.appendChild(undoChangeIcon);
-		tableDatacell.appendChild(cancelChangeIcon);
-
-		tableRow.appendChild(tableDatacell);
-
-		table.appendChild(tableRow);
-	}	
+		
+		element.classList.add(firstClass);
+	}
+}
+  
+function hasClass(elem, className) {
+	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
 
-function showDetailEditor(row) {
-	var tableDatacell = document.getElementById('value' + row);
-	var textBoxValue = tableDatacell.innerText;
-	tableDatacell.innerText = '';
+function addExpanderOnClickEvents() {
+	var expanders = document.getElementsByClassName('fa-plus-square');
+	var expandersLength = expanders.length;
+	for(var i = 0; i < expandersLength; i++){
+		addExpanderOnClickEventsByElement(expanders[i]);
+	}
 
-	var textBox = document.createElement('input');
-	textBox.id = 'input' + row;	
-	textBox.value = textBoxValue;	
-	textBox.setAttribute('originalValue', textBoxValue);
-	textBox.setAttribute('style', 'width: 100%;');
-	tableDatacell.appendChild(textBox);
-
-	textBox.focus();
-
-	showHideIcon('editRow' + row, 'display: none;');
-	//showHideIcon('deleteRow' + row, 'display: none;');
-	showHideIcon('saveRow' + row, 'cursor: pointer;');
-	showHideIcon('undoRow' + row, 'cursor: pointer;');
-	showHideIcon('cancelRow' + row, 'cursor: pointer;');
+	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
 }
 
-function saveRow(row) {
-	var textBox = document.getElementById('input' + row);
-	var tableDatacell = document.getElementById('value' + row);
-
-	tableDatacell.innerText = textBox.value;
-
-	showHideIcon('editRow' + row, 'cursor: pointer;');
-	//showHideIcon('deleteRow' + row, 'cursor: pointer;');
-	showHideIcon('saveRow' + row, 'display: none;');
-	showHideIcon('undoRow' + row, 'display: none;');
-	showHideIcon('cancelRow' + row, 'display: none;');
+function addExpanderOnClickEventsByElement(element) {
+	element.addEventListener('click', function (event) {
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
+		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+	});
 }
-
-function undoRow(row) {
-	var textBox = document.getElementById('input' + row);
-	textBox.value = textBox.getAttribute('originalValue');
-}
-
-function cancelRow(row) {
-	var textBox = document.getElementById('input' + row);
-	var tableDatacell = document.getElementById('value' + row);
-
-	tableDatacell.innerText = textBox.getAttribute('originalValue');
-
-	showHideIcon('editRow' + row, 'cursor: pointer;');
-	//showHideIcon('deleteRow' + row, 'cursor: pointer;');
-	showHideIcon('saveRow' + row, 'display: none;');
-	showHideIcon('undoRow' + row, 'display: none;');
-	showHideIcon('cancelRow' + row, 'display: none;');
-}
-
-var branchCount = 0;
-var subBranchCount = 0;
 
 function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
+	var ul = createUL();
+	ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
-
-    branchCount = 0;
-    subBranchCount = 0; 
 
     buildTree(baseData, ul, checkboxFunction);
 
     var div = document.getElementById(divId);
     clearElement(div);
-    div.appendChild(tree);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Section(s) <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
+	div.appendChild(tree);
+	
+	for(var i = 0; i < 3; i++) {
+		document.getElementById('User' + i +'checkbox').checked = true;
+		createCardButton(document.getElementById('User' + i +'checkbox'));
+	}
+
+	openTab(document.getElementById('User0button'), 'User0button', '0');
+
+	addExpanderOnClickEvents();
 }
 
 function buildTree(baseData, baseElement, checkboxFunction) {
@@ -316,7 +116,7 @@ function buildTree(baseData, baseElement, checkboxFunction) {
         var li = document.createElement('li');
         var ul = createUL();
 
-        appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', baseName, ul, baseName, base.GUID);
+        appendListItemChildren(li, 'User'.concat(base.GUID), checkboxFunction, 'User', baseName, ul, baseName, base.GUID);
 
         baseElement.appendChild(li);        
     }
@@ -325,7 +125,7 @@ function buildTree(baseData, baseElement, checkboxFunction) {
 function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
     li.appendChild(createBranchDiv(id));
     li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createTreeIcon(branchOption));
+    li.appendChild(createTreeIcon());
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
 }
@@ -351,9 +151,9 @@ function createUL() {
     return ul;
 }
 
-function createTreeIcon(branch) {
+function createTreeIcon() {
     var icon = document.createElement('i');
-    icon.setAttribute('class', getIconByBranch(branch));
+    icon.setAttribute('class', getIconByBranch());
     icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
     return icon;
 }
@@ -391,8 +191,8 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     return checkBox;
 }
 
-function getIconByBranch(branch) {
-    return 'fas fa-user';
+function getIconByBranch() {
+	return 'fas fa-user';
 }
 
 function getAttribute(attributes, attributeRequired) {
@@ -415,103 +215,352 @@ function clearElement(element) {
 	}
 }
 
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
+function openTab(callingElement, tabName, guid) {
+	var tabLinks = document.getElementsByClassName("tablinks");
+	var tabLinksLength = tabLinks.length;
+	for (var i = 0; i < tabLinksLength; i++) {
+		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
 	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
+	callingElement.className += " active";
+	
+	var newDiv = document.createElement('div');
+	newDiv.setAttribute('class', 'card');
+	newDiv.id = tabName;
+
+	var cardDiv = document.getElementById('cardDiv');
+	clearElement(cardDiv);
+	cardDiv.appendChild(newDiv);
+	
+	createCard(guid, newDiv);
+
+	newDiv.style.display = "block";
+  }
+
+function createCardButton(checkbox){
+	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+
+	if(checkbox.checked){
+		cardDiv.setAttribute('style', '');
+		var button = document.createElement('button');
+		button.setAttribute('class', 'tablinks');
+		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
+
+		if(checkbox.getAttribute('branch') == "SubMeter") {
+			button.innerHTML = checkbox.parentNode.parentNode.parentNode.parentNode.children[3].innerText.concat(' - ').concat(span.innerHTML);
 		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass)
-{
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
+		else {
+			button.innerHTML = span.innerHTML;
 		}
 		
-		element.classList.add(firstClass);
+		button.id = span.id.replace('span', 'button');
+		tabDiv.appendChild(button);
 	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-	}
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
-}
-
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
+	else {
+		var button = document.getElementById(span.id.replace('span', 'button'));
+		tabDiv.removeChild(button);
 	}	
+
+	updateTabDiv();
 }
 
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
+function updateTabDiv() {
+	var tabDiv = document.getElementById('tabDiv');
+	var tabDivChildren = tabDiv.children;
+	var tabDivChildrenLength = tabDivChildren.length;
 
-	if(!additionalLists) {
+	if(tabDivChildrenLength == 0) {
+		document.getElementById('User2checkbox').checked = true;
+		createCardButton(document.getElementById('User2checkbox'));
+		openTab(document.getElementById('User2button'), 'User2button', '2');
+	}
+	else {
+		var percentage = (1 / tabDivChildrenLength) * 100;
+		tabDivChildren[0].setAttribute('style', 'width: '.concat(percentage).concat('%;'));
+		for(var i = 1; i < tabDivChildrenLength; i++) {
+			tabDivChildren[i].setAttribute('style', 'width: '.concat(percentage).concat('%; border-left: solid black 1px;'));
+		}
+		
+		tabDiv.style.display = '';
+
+		for(var i = 0; i < tabDivChildrenLength; i++) {
+			if(hasClass(tabDivChildren[i], 'active')) {
+				return;
+			}
+		}
+
+		var lastChild = tabDivChildren[i - 1];
+		lastChild.className += " active";
+		lastChild.dispatchEvent(new Event('click'));
+	}
+}
+
+function createCard(guid, divToAppendTo) {
+	var user;
+	
+	var userLength = myprofile.length;
+	for(var i = 0; i < userLength; i++) {
+		user = myprofile[i];
+
+		if(user.GUID == guid) {
+			break;
+		}
+	}
+
+	if(getAttribute(user.Attributes, 'UserName') == 'Change Password') {
+		buildChangePasswordForm(divToAppendTo);
+	}
+	else {
+		buildUserDataTable(user, divToAppendTo);
+	}
+}
+
+function displayUserDataTable() {
+	var button = document.getElementById('editDetailsButton');
+	var div = document.getElementById('displayAttributes');
+
+	if(button.innerHTML == 'Edit Details') {
+		div.setAttribute('style', '');
+		button.innerText = 'Hide Details';
+	}
+	else {
+		div.setAttribute('style', 'display: none');
+		button.innerText = 'Edit Details'
+	}
+}
+
+function buildChangePasswordForm(divToAppendTo) {
+	var div = document.createElement('div');
+	div.id = 'displayAttributes';
+	div.setAttribute('style', 'text-align: center;');
+	divToAppendTo.appendChild(div);
+	clearElement(div);
+
+	var html = 
+			'<div style="padding-left: 38px;">'+
+				'<label for="currentPasswordInput">Current Password:</label>'+
+				'<input type="password" id="currentPasswordInput" style="margin-left: 5px;"></input>'+
+			'</div>'+
+			'<div style="margin-top: 5px; padding-left: 62px;">'+
+				'<label for="newPasswordInput">New Password:</label>'+
+				'<input type="password" id="newPasswordInput" style="margin-left: 5px;"></input>'+
+			'</div>'+
+			'<div style="margin-top: 5px;">'+
+				'<label for="confirmNewPasswordInput">Confirm New Password:</label>'+
+				'<input type="password" id="confirmNewPasswordInput" style="margin-left: 5px;"></input>'+
+			'</div>'+
+			'<div style="margin-top: 5px;">'+
+				'<button id="changePasswordButton" style="width: 25%;" class="show-pointer">Change Password</button>'+
+			'</div>';
+
+	div.innerHTML = html;
+}
+
+function buildUserDataTable(entity, divToAppendTo){
+	var div = document.createElement('div');
+	div.id = 'displayAttributes';
+	divToAppendTo.appendChild(div);
+	
+	var treeDiv = document.getElementById('displayAttributes');
+	clearElement(treeDiv);
+
+	var table = document.createElement('table');
+	table.id = 'dataTable';
+	table.setAttribute('style', 'width: 100%;');
+
+	var tableRow = document.createElement('tr');
+
+	tableRow.appendChild(createTableHeader('width: 30%; border: solid black 1px;', 'Attribute'));
+	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
+	tableRow.appendChild(createTableHeader('width: 5%; border: solid black 1px;', ''));
+
+    table.appendChild(tableRow);
+	displayAttributes(entity.Details, table, 'User');
+
+	treeDiv.appendChild(table);
+}
+
+function displayAttributes(attributes, table) {
+	if(!attributes) {
 		return;
 	}
 
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
+	var attributesLength = attributes.length;
+	for(var i = 0; i < attributesLength; i++) {
+		var tableRow = document.createElement('tr');
+		tableRow.id = 'row' + i;
+
+		for(var j = 0; j < 2; j++) {
+			var tableDatacell = document.createElement('td');
+			tableDatacell.setAttribute('style', 'border: solid black 1px;');
+
+			switch(j) {
+				case 0:
+					for(var key in attributes[i]) {
+						tableDatacell.innerHTML = key;
+						break;
+					}	
+					
+					tableDatacell.id = 'attribute' + i;
+					break;
+				case 1:
+					for(var key in attributes[i]) {
+						tableDatacell.innerHTML = attributes[i][key];
+						break;
+					}
+
+					tableDatacell.id = 'value' + i;
+					break;
+			}
+
+			tableRow.appendChild(tableDatacell);
 		}
-	});		
+
+		var tableDatacell = document.createElement('td');
+		tableDatacell.setAttribute('style', 'border: solid black 1px;');
+
+		var editIcon = createIcon('editRow' + i, 'fas fa-edit', 'cursor: pointer;', 'showDetailEditor(' + i + ')', 'Edit');
+		var deleteIcon = createIcon('deleteRow' + i, 'fas fa-trash-alt', 'cursor: pointer;', 'deleteRow(' + i + ')', 'Delete');
+		var saveChangeIcon = createIcon('saveRow' + i, 'fas fa-save', 'display: none;', 'saveRow(' + i + ')', 'Save');
+		var undoChangeIcon = createIcon('undoRow' + i, 'fas fa-undo', 'display: none;', 'undoRow(' + i + ')', 'Undo');
+		var cancelChangeIcon = createIcon('cancelRow' + i, 'far fa-window-close', 'display: none;', 'cancelRow(' + i + ')', 'Cancel');
+
+		tableDatacell.appendChild(editIcon);
+		tableDatacell.appendChild(deleteIcon);
+		tableDatacell.appendChild(saveChangeIcon);
+		tableDatacell.appendChild(undoChangeIcon);
+		tableDatacell.appendChild(cancelChangeIcon);
+
+		tableRow.appendChild(tableDatacell);
+
+		table.appendChild(tableRow);
+	}
+
+	var tableRow = document.createElement('tr');
+	tableRow.id = 'row' + i;
+
+	var tableDatacell = document.createElement('td');
+	tableDatacell.id = 'attribute' + i;
+	tableDatacell.setAttribute('style', 'border: solid black 1px;');
+	tableDatacell.innerHTML = '<select style="width: 100%;"><option value=""></option><option value="Attribute 1">Attribute 1</option><option value="Attribute 2">Attribute 2</option></select>'
+	tableRow.appendChild(tableDatacell);
+
+	var inputTableDatacell = document.createElement('td');
+	inputTableDatacell.id = 'value' + i;
+	inputTableDatacell.setAttribute('style', 'border: solid black 1px;');
+	inputTableDatacell.innerHTML = '<input style="width: 100%;"></input>'
+	tableRow.appendChild(inputTableDatacell);
+
+	var saveChangeIcon = createIcon('saveRow' + i, 'fas fa-save', 'cursor: pointer;', 'saveRow(' + i + ')', 'Save');
+	var saveTableDatacell = document.createElement('td');
+	saveTableDatacell.setAttribute('style', 'border: solid black 1px;');
+	saveTableDatacell.appendChild(saveChangeIcon);
+	tableRow.appendChild(saveTableDatacell);
+
+	table.appendChild(tableRow);
+}
+
+function showDetailEditor(row) {
+	var tableDatacell = document.getElementById('value' + row);
+	var textBoxValue = tableDatacell.innerText;
+	tableDatacell.innerText = '';
+
+	var textBox = document.createElement('input');
+	textBox.id = 'input' + row;	
+	textBox.value = textBoxValue;	
+	textBox.setAttribute('originalValue', textBoxValue);
+	textBox.setAttribute('style', 'width: 100%;');
+	tableDatacell.appendChild(textBox);
+
+	textBox.focus();
+
+	showHideIcon('editRow' + row, 'display: none');
+	showHideIcon('deleteRow' + row, 'display: none');
+	showHideIcon('saveRow' + row, 'cursor: pointer');
+	showHideIcon('undoRow' + row, 'cursor: pointer');
+	showHideIcon('cancelRow' + row, 'cursor: pointer');
+}
+
+function deleteRow(row) {
+	var attribute = document.getElementById('attribute' + row);
+	var value = document.getElementById('value' + row);
+
+	var modal = document.getElementById("deleteRowPopup");
+	var title = document.getElementById("deleteRowTitle");
+	var span = modal.getElementsByClassName("close")[0];
+	var deleteRowText = document.getElementById('deleteRowText');
+
+	deleteRowText.innerText = "Are you sure you want to delete the '" + attribute.innerText + "' attribute with current value of '" + value.innerText + "'?";
+
+    finalisePopup(title, 'Delete Attribute?<br><br>', modal, span);
+}
+
+function finalisePopup(title, titleHTML, modal, span) {
+    title.innerHTML = titleHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function saveRow(row) {
+	var textBox = document.getElementById('input' + row);
+	var tableDatacell = document.getElementById('value' + row);
+
+	tableDatacell.innerText = textBox.value;
+
+	showHideIcon('editRow' + row, 'cursor: pointer');
+	showHideIcon('deleteRow' + row, 'cursor: pointer');
+	showHideIcon('saveRow' + row, 'display: none');
+	showHideIcon('undoRow' + row, 'display: none');
+	showHideIcon('cancelRow' + row, 'display: none');
+}
+
+function undoRow(row) {
+	var textBox = document.getElementById('input' + row);
+	textBox.value = textBox.getAttribute('originalValue');
+}
+
+function cancelRow(row) {
+	var textBox = document.getElementById('input' + row);
+	var tableDatacell = document.getElementById('value' + row);
+
+	tableDatacell.innerText = textBox.getAttribute('originalValue');
+
+	showHideIcon('editRow' + row, 'cursor: pointer');
+	showHideIcon('deleteRow' + row, 'cursor: pointer');
+	showHideIcon('saveRow' + row, 'display: none');
+	showHideIcon('undoRow' + row, 'display: none');
+	showHideIcon('cancelRow' + row, 'display: none');
+}
+
+function showHideIcon(id, style) {
+	var element = document.getElementById(id);
+	element.setAttribute('style', style);
+}
+
+function getEntityByGUID(guid, type) {
+	var dataLength = myprofile.length;
+	for(var i = 0; i < dataLength; i++) {
+		var entity = myprofile[i];
+		if(entity.GUID == guid) {
+			return entity;
+		}
+	}
+	
+	return null;
+}
+
+function createTableHeader(style, value) {
+	var tableHeader = document.createElement('th');
+
+	if(style != '') {
+		tableHeader.setAttribute('style', style);
+	}
+	
+	tableHeader.innerHTML = value;
+	return tableHeader;
 }
 
 function createIcon(iconId, className, style, onClickEvent, title) {
@@ -532,20 +581,4 @@ function createIcon(iconId, className, style, onClickEvent, title) {
 	}
 
 	return icon;
-}
-
-function createTableHeader(style, value) {
-	var tableHeader = document.createElement('th');
-
-	if(style != '') {
-		tableHeader.setAttribute('style', style);
-	}
-	
-	tableHeader.innerHTML = value;
-	return tableHeader;
-}
-
-function showHideIcon(iconId, style) {
-	var icon = document.getElementById(iconId);
-	icon.setAttribute('style', style);
 }
