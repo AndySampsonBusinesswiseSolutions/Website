@@ -1,10 +1,34 @@
 function pageLoad() {
-	createTree(data, "Hierarchy", "treeDiv", "", "filterContracts()");
-	buildContractDataGrids(contracts);
+	createTree(data, "Hierarchy", "treeDiv", "", "filterContractsByStatus()");
+	filterContractsByStatus(null);
 	addExpanderOnClickEvents();	
+	
+	document.onmousemove=function(e) {
+		var mousecoords = getMousePos(e);
+		if(mousecoords.x <= 25) {
+			openNav();
+		}  
+		else if(mousecoords.x >= 400) {
+			closeNav();
+		}  
+	};
 }
 
-function showRates(contractIndex, contractDetailIndex, mpxnIndex) {
+function getMousePos(e) {
+	return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
+}
+
+function showRates(contractType, contractIndex, contractDetailIndex, mpxnIndex) {
 	var table = document.createElement('table');
 	table.setAttribute('style', 'width: 100%;');
 
@@ -12,6 +36,22 @@ function showRates(contractIndex, contractDetailIndex, mpxnIndex) {
 	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Rate'));
 	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Value'));
 	table.appendChild(tableRow);
+	var contracts = [];
+
+	switch(contractType) {
+		case "outOfContract":
+			contracts = ooccontracts;
+			break;
+		case "active":
+			contracts = activecontracts;
+			break;
+		case "pending":
+			contracts = pendingcontracts;
+			break;
+		case "finished":
+			contracts = finishedcontracts;
+			break;
+	}
 
 	var mpxn = contracts[contractIndex].Contract[contractDetailIndex].MPXN[mpxnIndex];
 	var rates = mpxn.Rates;
@@ -37,22 +77,29 @@ function showRates(contractIndex, contractDetailIndex, mpxnIndex) {
 		}
 	}
 
-	xdialog.confirm(table.outerHTML, function() {}, 
-	{
-		style: 'width:50%;font-size:0.8rem;',
-		buttons: {
-			ok: {
-				text: 'Close',
-				style: 'background: Green;'
-			}
-		},
-		title: mpxn.ProductType.concat(' Rates For ').concat(mpxn.Identifier)
-	});
+	var modal = document.getElementById("ratePopup");
+	var title = document.getElementById("rateTitle");
+	var span = modal.getElementsByClassName("close")[0];
+	var rateText = document.getElementById('rateText');
+
+	rateText.appendChild(table);
+
+    finalisePopup(title, 'Rates<br><br>', modal, span);
 }
 
-function buildContractDataGrids(contracts, applyClickEvent) {
+function finalisePopup(title, titleHTML, modal, span) {
+    title.innerHTML = titleHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function buildContractDataGrids(contracts, contractType, applyClickEvent) {
 	var table = document.createElement('table');
-	table.setAttribute('style', 'width: 100%; border: solid black 1px;');
+	table.setAttribute('style', 'width: 100%; border: solid black 1px; text-align: center;');
 
 	var tableRow = document.createElement('tr');
 	tableRow.appendChild(createTableHeader('', 'Supplier'));
@@ -74,13 +121,13 @@ function buildContractDataGrids(contracts, applyClickEvent) {
 		var mpxnDatacell = getAttributeBySupplier(contract.Contract, 'Identifier');
 
 		var tableRow = document.createElement('tr');
-		tableRow.appendChild(getSupplier(contract.Supplier, hasMultipleContracts, true, applyClickEvent));
-		tableRow.appendChild(getContractReferenceBySupplier(contract.Contract[0].ContractReference, hasMultipleContracts, mpxnDatacell.innerText == 'Multiple', '', applyClickEvent));
+		tableRow.appendChild(getSupplier(contractType, contract.Supplier, hasMultipleContracts, true, applyClickEvent));
+		tableRow.appendChild(getContractReferenceBySupplier(contractType, contract.Contract[0].ContractReference, hasMultipleContracts, mpxnDatacell.innerText == 'Multiple', '', applyClickEvent));
 		tableRow.appendChild(mpxnDatacell);
 		tableRow.appendChild(getAttributeBySupplier(contract.Contract, 'ContractStartDate'));
 		tableRow.appendChild(getAttributeBySupplier(contract.Contract, 'ContractEndDate'));
 		tableRow.appendChild(getAttributeByMPXN(contract.Contract[0].MPXN[0], 'ProductType'));
-		tableRow.appendChild(getRates(i, 0, 0, mpxnDatacell.innerText != 'Multiple'));
+		tableRow.appendChild(getRates(contractType, i, 0, 0, mpxnDatacell.innerText != 'Multiple'));
 		tableRow.appendChild(getAttributeBySupplier(contract.Contract, 'IsBusinesswiseContract'));
 		table.appendChild(tableRow);		
 
@@ -91,16 +138,16 @@ function buildContractDataGrids(contracts, applyClickEvent) {
 
 			if(hasMultipleContracts) {
 				var tableRow = document.createElement('tr');
-				tableRow.appendChild(getSupplier('', hasMultipleMPXNs, false, applyClickEvent));
-				tableRow.appendChild(getContractReferenceByContract(contractDetail.ContractReference, hasMultipleMPXNs, true, contract.Supplier, applyClickEvent));
+				tableRow.appendChild(getSupplier(contractType, '', hasMultipleMPXNs, false, applyClickEvent));
+				tableRow.appendChild(getContractReferenceByContract(contractType, contractDetail.ContractReference, hasMultipleMPXNs, true, contract.Supplier, applyClickEvent));
 				tableRow.appendChild(getAttributeByMPXN(contractDetail.MPXN[0], 'Identifier', hasMultipleMPXNs));
 				tableRow.appendChild(getAttributeByContract(contractDetail, 'ContractStartDate'));
 				tableRow.appendChild(getAttributeByContract(contractDetail, 'ContractEndDate'));
 				tableRow.appendChild(getAttributeByMPXN(contractDetail.MPXN[0], 'ProductType'));
-				tableRow.appendChild(getRates(i, j, 0, !hasMultipleMPXNs));
+				tableRow.appendChild(getRates(contractType, i, j, 0, !hasMultipleMPXNs));
 				tableRow.appendChild(getAttributeByContract(contractDetail, 'IsBusinesswiseContract'));
 	
-				tableRow.setAttribute('class', 'listitem-hidden '.concat('OutOfContract'.concat(contract.Supplier).concat('List')));
+				tableRow.setAttribute('class', 'listitem-hidden '.concat(contractType.concat(contract.Supplier).concat('List')));
 				table.appendChild(tableRow);
 			}						
 
@@ -109,32 +156,32 @@ function buildContractDataGrids(contracts, applyClickEvent) {
 					var mpxn = contractDetail.MPXN[k];
 	
 					var tableRow = document.createElement('tr');
-					tableRow.appendChild(getSupplier('', false, false, applyClickEvent));
-					tableRow.appendChild(getContractReferenceByContract('', false, false, '', applyClickEvent));
+					tableRow.appendChild(getSupplier(contractType, '', false, false, applyClickEvent));
+					tableRow.appendChild(getContractReferenceByContract(contractType, '', false, false, '', applyClickEvent));
 					tableRow.appendChild(getAttributeByMPXN(mpxn, 'Identifier'));
 					tableRow.appendChild(getAttributeByMPXN(mpxn, 'ContractStartDate'));
 					tableRow.appendChild(getAttributeByMPXN(mpxn, 'ContractEndDate'));
 					tableRow.appendChild(getAttributeByMPXN(mpxn, 'ProductType'));
-					tableRow.appendChild(getRates(i, j, k, true));
+					tableRow.appendChild(getRates(contractType, i, j, k, true));
 					tableRow.appendChild(getAttributeByMPXN(mpxn, 'IsBusinesswiseContract'));
 					
-					tableRow.setAttribute('class', 'listitem-hidden '.concat('OutOfContract'.concat(contractDetail.ContractReference).concat('List')));
+					tableRow.setAttribute('class', 'listitem-hidden '.concat(contractType.concat(contractDetail.ContractReference).concat('List')));
 					table.appendChild(tableRow);
 				}
 			}			
 		}
 	}
 
-	var divToAppendTo = document.getElementById('outOfContract');
+	var divToAppendTo = document.getElementById(contractType);
 	clearElement(divToAppendTo);
 	divToAppendTo.appendChild(table);
 }
 
-function getSupplier(supplier, hasMultipleRecords, applyGroupIcon, applyClickEvent) {
+function getSupplier(contractType, supplier, hasMultipleRecords, applyGroupIcon, applyClickEvent) {
 	var tableDatacell = document.createElement('td');
 
 	if(hasMultipleRecords && applyGroupIcon) {
-		var icon = createGroupByIcon('OutOfContract'.concat(supplier), 'far fa-plus-square', 'padding-right: 10px;', null, applyClickEvent);
+		var icon = createGroupByIcon(contractType.concat(supplier), 'far fa-plus-square', 'padding-right: 10px;', contractType, null, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 	}
@@ -143,11 +190,11 @@ function getSupplier(supplier, hasMultipleRecords, applyGroupIcon, applyClickEve
 	return tableDatacell;
 }
 
-function getContractReferenceBySupplier(contractReference, hasMultipleRecords, applyGroupIcon, contractSupplier, applyClickEvent) {
+function getContractReferenceBySupplier(contractType, contractReference, hasMultipleRecords, applyGroupIcon, contractSupplier, applyClickEvent) {
 	var tableDatacell = document.createElement('td');
 
 	if(!hasMultipleRecords && applyGroupIcon) {
-		var icon = createGroupByIcon('OutOfContract'.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractSupplier, applyClickEvent);
+		var icon = createGroupByIcon(contractType.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractType, contractSupplier, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 
@@ -159,11 +206,11 @@ function getContractReferenceBySupplier(contractReference, hasMultipleRecords, a
 	return tableDatacell;
 }
 
-function getContractReferenceByContract(contractReference, hasMultipleRecords, applyGroupIcon, contractSupplier, applyClickEvent) {
+function getContractReferenceByContract(contractType, contractReference, hasMultipleRecords, applyGroupIcon, contractSupplier, applyClickEvent) {
 	var tableDatacell = document.createElement('td');
 
 	if(hasMultipleRecords && applyGroupIcon) {
-		var icon = createGroupByIcon('OutOfContract'.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractSupplier, applyClickEvent);
+		var icon = createGroupByIcon(contractType.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractType, contractSupplier, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 	}
@@ -175,11 +222,11 @@ function getContractReferenceByContract(contractReference, hasMultipleRecords, a
 	return tableDatacell;
 }
 
-function createGroupByIcon(iconId, className, style, contractSupplier, applyClickEvent) {
+function createGroupByIcon(iconId, className, style, contractType, contractSupplier, applyClickEvent) {
 	var icon = createIcon(iconId, className.concat(' show-pointer'), style);
 
 	if(contractSupplier) {
-		icon.setAttribute('additionalcontrols', 'OutOfContract'.concat(contractSupplier));
+		icon.setAttribute('additionalcontrols', contractType.concat(contractSupplier));
 	}
 
 	if(applyClickEvent) {
@@ -189,11 +236,11 @@ function createGroupByIcon(iconId, className, style, contractSupplier, applyClic
 	return icon;
 }
 
-function getRates(contractIndex, contractDetailIndex, mpxnIndex, canShowRates) {
+function getRates(contractType, contractIndex, contractDetailIndex, mpxnIndex, canShowRates) {
 	var tableDatacell = document.createElement('td');
 
 	if(canShowRates) {
-		var icon = createIcon('', 'fas fa-search show-pointer', null, 'showRates(' + contractIndex + ',' + contractDetailIndex + ',' + mpxnIndex + ')');
+		var icon = createIcon('', 'fas fa-search show-pointer', null, 'showRates("' + contractType + '",' + contractIndex + ',' + contractDetailIndex + ',' + mpxnIndex + ')');
 
 		tableDatacell.appendChild(icon);
 	}
@@ -244,7 +291,11 @@ function getAttributeByMPXN(mpxn, attribute, hasMultipleRecords) {
 	return tableDatacell;
 }
 
-function filterContracts(element) {
+function filterContractsBySiteMeter(element, contracts, contractType) {
+	if(!element) {
+		return buildContractDataGrids(contracts, contractType, false);;
+	}
+
 	var span = document.getElementById(element.id.replace('checkbox', 'span'));
 	var linkedCheckboxes = document.getElementsByTagName('input');
 	var linkedCheckboxesLength = linkedCheckboxes.length;
@@ -273,7 +324,7 @@ function filterContracts(element) {
 	}
 
 	if(mpxns.length == 0) {
-		buildContractDataGrids(contracts, true);
+		buildContractDataGrids(contracts, contractType, true);
 	}
 	else {
 		var filteredContracts = [];
@@ -336,8 +387,15 @@ function filterContracts(element) {
 			}
 		}
 
-		buildContractDataGrids(filteredContracts, true);
+		buildContractDataGrids(filteredContracts, contractType, true);
 	}
+}
+
+function filterContractsByStatus(element) {
+	filterContractsBySiteMeter(element, ooccontracts, 'outOfContract');
+	filterContractsBySiteMeter(element, activecontracts, 'active');
+	filterContractsBySiteMeter(element, pendingcontracts, 'pending');
+	filterContractsBySiteMeter(element, finishedcontracts, 'finished');
 }
 
 var branchCount = 0;
@@ -701,6 +759,9 @@ function addExpanderOnClickEvents() {
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+
+	updateClassOnClick("outOfContractMeters", 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick("finishedContracts", 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -807,4 +868,116 @@ function createIcon(iconId, className, style, onClickEvent, title) {
 	}
 
 	return icon;
+}
+
+function displayUploadContract() {
+	var modal = document.getElementById("uploadContractPopup");
+	var title = document.getElementById("uploadContractTitle");
+	var span = modal.getElementsByClassName("close")[0];
+
+	finalisePopup(title, 'Upload Contract<br><br>', modal, span);
+	//setupContractDragAndDrop();
+}
+
+let dropArea = document.getElementById("drop-area")
+
+function setupContractDragAndDrop() {
+	// ************************ Drag and drop ***************** //
+
+	// Prevent default drag behaviors
+	;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+		dropArea.addEventListener(eventName, preventDefaults, false)   
+		document.body.addEventListener(eventName, preventDefaults, false)
+	})
+
+	// Highlight drop area when item is dragged over it
+	;['dragenter', 'dragover'].forEach(eventName => {
+		dropArea.addEventListener(eventName, highlight, false)
+	})
+
+	;['dragleave', 'drop'].forEach(eventName => {
+		dropArea.addEventListener(eventName, unhighlight, false)
+	})
+
+	// Handle dropped files
+	dropArea.addEventListener('drop', handleDrop, false)
+}
+
+function preventDefaults (e) {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+function highlight(e) {
+  dropArea.classList.add('highlight')
+}
+
+function unhighlight(e) {
+  dropArea.classList.remove('highlight')
+}
+
+function handleDrop(e) {
+  var dt = e.dataTransfer
+  var files = dt.files
+
+  handleFiles(files)
+}
+
+let uploadProgress = []
+let progressBar = document.getElementById('progress-bar')
+
+function initializeProgress(numFiles) {
+  progressBar.value = 0
+  uploadProgress = []
+
+  for(let i = numFiles; i > 0; i--) {
+    uploadProgress.push(0)
+  }
+}
+
+function updateProgress(fileNumber, percent) {
+  uploadProgress[fileNumber] = percent
+  let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
+  console.debug('update', fileNumber, percent, total)
+  progressBar.value = total
+}
+
+function handleFiles(files) {
+  files = [...files]
+  initializeProgress(files.length)
+  files.forEach(uploadFile)
+  files.forEach(previewFile)
+}
+
+function previewFile(file) {
+	var icon = document.createElement('i');
+	icon.setAttribute('class', 'far fa-file-excel fa-9x');
+	icon.setAttribute('title', file.name);
+	document.getElementById('gallery').appendChild(icon)
+}
+
+function uploadFile(file, i) {
+  var url = 'https://api.cloudinary.com/v1_1/joezimim007/image/upload'
+  var xhr = new XMLHttpRequest()
+  var formData = new FormData()
+  xhr.open('POST', url, true)
+  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+
+  // Update progress (can be used to show progress indicator)
+  xhr.upload.addEventListener("progress", function(e) {
+    updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
+  })
+
+  xhr.addEventListener('readystatechange', function(e) {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      updateProgress(i, 100)
+    }
+    else if (xhr.readyState == 4 && xhr.status != 200) {
+      // Error. Inform the user
+    }
+  })
+
+  formData.append('upload_preset', 'ujpu6gyk')
+  formData.append('file', file)
+  xhr.send(formData)
 }

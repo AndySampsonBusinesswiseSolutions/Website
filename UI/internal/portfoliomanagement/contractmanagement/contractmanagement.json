@@ -1,4 +1,4 @@
-var contracts = [
+var ooccontracts = [
     {
         "Supplier" : "Haven",
         "Contract" : [
@@ -32,6 +32,7 @@ var contracts = [
                         "ContractStartDate" : "02/12/2019",
                         "ContractEndDate" : "31/12/2019",
                         "ProductType" : "Out Of Contract",
+                        "ProductStatus" : "Out Of Contract",
                         "IsBusinesswiseContract" : "No",
                         "Rates" : [
                             {
@@ -51,29 +52,43 @@ var contracts = [
                                 "Rate" : "£5/day"
                             }
                         ]
-                    },
+                    }
+                ]  
+            }
+        ]              
+    }
+];
+
+var finishedcontracts = [
+    {
+        "Supplier" : "Haven",
+        "Contract" : [
+            {
+                "ContractReference" : "Haven0002",
+                "MPXN" : [
                     {
                         "Identifier" : "1234567890124",
                         "ContractStartDate" : "01/12/2019",
                         "ContractEndDate" : "30/12/2019",
-                        "ProductType" : "Out Of Contract",
+                        "ProductType" : "Two Rate Fixed",
+                        "ProductStatus" : "Finished",
                         "IsBusinesswiseContract" : "No",
                         "Rates" : [
                             {
                                 "RateName" : "Unit Rate 1",
-                                "Rate" : "19p/kWh"
+                                "Rate" : "15p/kWh"
                             },
                             {
                                 "RateName" : "Unit Rate 2",
-                                "Rate" : "11p/kWh"
+                                "Rate" : "8p/kWh"
                             },
                             {
                                 "RateName" : "Capacity Charge",
-                                "Rate" : "6p/kVa/day"
+                                "Rate" : "2.5p/kVa/day"
                             },
                             {
                                 "RateName" : "Standing Charge",
-                                "Rate" : "£4.5/day"
+                                "Rate" : "£2.5/day"
                             }
                         ]
                     }
@@ -82,6 +97,9 @@ var contracts = [
         ]              
     }
 ];
+
+var activecontracts = [];
+var pendingcontracts = [];
 
 var data = [
     {
