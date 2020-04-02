@@ -104,8 +104,15 @@ function updateTabDiv() {
 }
 
 function createCard(guid, divToAppendTo) {
-	var productEntity;
-	
+	var productEntity = getProductEntity(guid);	
+
+	buildCardView(productEntity, divToAppendTo);
+	buildProductDataTable(productEntity, divToAppendTo);
+	divToAppendTo.appendChild(document.createElement('br'));
+	buildCostElementDataTable(productEntity, divToAppendTo);
+}
+
+function getProductEntity(guid) {
 	var supplierproductLength = supplierproduct.length;
 	for(var i = 0; i < supplierproductLength; i++) {
 		var site = supplierproduct[i];
@@ -126,30 +133,12 @@ function createCard(guid, divToAppendTo) {
 					var product = products[l];
 
 					if(product.GUID == guid) {
-						productEntity = product;
-						break;
+						return product;
 					}
 				}
-
-				if(productEntity) {
-					break;
-				}
 			}
-
-			if(productEntity) {
-				break;
-			}
-		}
-
-		if(productEntity) {
-			break;
 		}
 	}
-
-	buildCardView(productEntity, divToAppendTo);
-	buildProductDataTable(productEntity, divToAppendTo);
-	divToAppendTo.appendChild(document.createElement('br'));
-	buildCostElementDataTable(productEntity, divToAppendTo);
 }
 
 function buildCardView(entity, divToAppendTo){
@@ -396,12 +385,12 @@ function deleteRow(row) {
 	var attribute = document.getElementById('attribute' + row);
 	var value = document.getElementById('value' + row);
 
-	var modal = document.getElementById("deleteRowPopup");
-	var title = document.getElementById("deleteRowTitle");
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
 	var span = modal.getElementsByClassName("close")[0];
-	var deleteRowText = document.getElementById('deleteRowText');
+	var text = document.getElementById('text');
 
-	deleteRowText.innerText = "Are you sure you want to delete the '" + attribute.innerText + "' attribute with current value of '" + value.innerText + "'?";
+	text.innerText = "Are you sure you want to delete the '" + attribute.innerText + "' attribute with current value of '" + value.innerText + "'?";
 
     finalisePopup(title, 'Delete Attribute?<br><br>', modal, span);
 }
@@ -447,6 +436,67 @@ function cancelRow(row) {
 	showHideIcon('cancelRow' + row, 'display: none');
 }
 
+function deleteProducts() {
+	var products = getProducts().join("<br>");
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Delete Product(s)";
+	text.innerHTML = "Are you sure you want to delete the following products?<br>" + products;
+
+    finalisePopup(title, 'Delete Product?<br><br>', modal, span);
+}
+
+function reinstateProducts() {
+	var products = getProducts();
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Reinstate Product(s)";
+	button.classList.replace('reject', 'approve');
+
+	text.innerHTML = "Please select products to reinstate:<br>";
+	products.forEach(function(product, i) {
+		var checkbox = document.createElement('input');
+		checkbox.type = 'checkbox';
+		checkbox.id = 'reinstateProduct' + i + 'checkbox';
+		checkbox.setAttribute('productValue', product);
+
+		text.innerHTML += checkbox.outerHTML + product + '<br>';
+	});
+
+    finalisePopup(title, 'Reinstate Product?<br><br>', modal, span);
+}
+
+function getProducts() {
+	var inputs = document.getElementsByTagName('input');
+	var inputLength = inputs.length;
+	var products = [];
+
+	for(var i = 0; i < inputLength; i++) {
+		var input = inputs[i];
+
+		if(input.type.toLowerCase() == 'checkbox' && input.checked) {
+			var span = document.getElementById(input.id.replace('checkbox', 'span'));
+
+			if(!span.innerText.startsWith('Add New')) {
+				var button = document.getElementById(input.id.replace('checkbox', 'button'));
+				products.push(button.innerText);
+			}
+		}
+	}
+
+	return products;
+}
+
 var branchCount = 0;
 var subBranchCount = 0;
 
@@ -473,7 +523,7 @@ function createTree(baseData, divId, checkboxFunction) {
     div.appendChild(header);
 	div.appendChild(tree);
 	
-	var guids = [0, 1, 4];
+	var guids = [0, 1, 4, 5, 6];
 	guids.forEach(function(guid) {
 		document.getElementById('Product' + guid + 'checkbox').checked = true;
 		createCardButton(document.getElementById('Product' + guid + 'checkbox'));

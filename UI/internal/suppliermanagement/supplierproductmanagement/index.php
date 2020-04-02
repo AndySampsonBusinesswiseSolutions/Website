@@ -12,15 +12,15 @@
 </head>
 
 <body>
-	<div id="deleteRowPopup" class="popup">
+	<div id="popup" class="popup">
 		<div class="modal-content">
 			<span class="close" title="Close">&times;</span>
 			<div class="title">
-				<span id="deleteRowTitle"></span><br><br>
+				<span id="title"></span><br><br>
 			</div>
 			<br>
-			<span id="deleteRowText" style="font-size: 15px;"></span><br><br>
-			<button style="float: right;" class="reject">Delete Attribute</button>
+			<span id="text" style="font-size: 15px;"></span><br><br>
+			<button style="float: right;" class="reject" id="button">Delete Attribute</button>
 			<br>
 		</div>
 	</div>
@@ -29,8 +29,8 @@
 		<div class="tree-column">
 			<div id="treeDiv" class="tree-div roundborder">
 			</div>
-			<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='deleteUsers()'>Delete Selected Products</button>
-					<button style="width: 100%;" onclick='reinstateUsers()'>Reinstate Deleted Products</button>
+			<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='deleteProducts()'>Delete Selected Products</button>
+			<button style="width: 100%;" onclick='reinstateProducts()'>Reinstate Deleted Products</button>
 		</div>
 	</div>
 
