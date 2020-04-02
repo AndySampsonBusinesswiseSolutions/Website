@@ -59,6 +59,9 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
 	document.getElementById('Site6checkbox').checked = true;
 	createCardButton(document.getElementById('Site6checkbox'));
 
+	document.getElementById('Site100checkbox').checked = true;
+	createCardButton(document.getElementById('Site100checkbox'));
+
 	addExpanderOnClickEvents();
 }
 
@@ -592,6 +595,15 @@ function buildCardView(entity, divToAppendTo){
 	button.setAttribute('onclick', 'displayDataTable()');
 	divToAppendTo.appendChild(button);	
 
+	var name = getAttribute(entity.Attributes, 'Name');
+	if(name && name.startsWith('Add New')) {
+		var addNewbutton = document.createElement('button');
+		addNewbutton.id = 'addNewButton';
+		addNewbutton.innerHTML = name;
+		addNewbutton.setAttribute('style', 'margin-left: 10px;');
+		divToAppendTo.appendChild(addNewbutton);	
+	}
+
 	loadMap(entityAttributes);
 }
 
@@ -656,15 +668,6 @@ function buildDataTable(entity, divToAppendTo){
 	displayAttributes(entity.Attributes, table);
 
 	div.appendChild(table);
-
-	var name = getAttribute(entity.Attributes, 'Name');
-	if(name && name.startsWith('Add New')) {
-		var addNewbutton = document.createElement('button');
-		addNewbutton.id = 'addNewButton';
-		addNewbutton.innerHTML = name;
-		addNewbutton.setAttribute('style', 'margin-top: 10px;');
-		div.appendChild(addNewbutton);	
-	}
 }
 
 function displayAttributes(attributes, table) {

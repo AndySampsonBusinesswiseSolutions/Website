@@ -190,6 +190,15 @@ function buildCardView(entity, divToAppendTo){
 	editCostElementsButton.innerHTML = 'Edit Cost Elements';
 	editCostElementsButton.setAttribute('onclick', 'displayCostElementDataTable()');
 	divToAppendTo.appendChild(editCostElementsButton);	
+
+	var name = getAttribute(entity.Attributes, 'ProductName');
+	if(name && name.startsWith('Add New')) {
+		var addNewbutton = document.createElement('button');
+		addNewbutton.id = 'addNewButton';
+		addNewbutton.innerHTML = name;
+		addNewbutton.setAttribute('style', 'margin-left: 10px;');
+		divToAppendTo.appendChild(addNewbutton);	
+	}
 }
 
 function displayProductDataTable() {

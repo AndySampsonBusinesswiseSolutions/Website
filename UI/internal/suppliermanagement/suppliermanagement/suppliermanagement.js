@@ -98,12 +98,12 @@ function createTree(baseData, divId, checkboxFunction) {
     div.appendChild(header);
 	div.appendChild(tree);
 	
-	document.getElementById('Supplier0checkbox').checked = true;
-	createCardButton(document.getElementById('Supplier0checkbox'));
+	for(var i = 0; i < 3; i++) {
+		document.getElementById('Supplier' + i + 'checkbox').checked = true;
+		createCardButton(document.getElementById('Supplier' + i + 'checkbox'));
+	}
+	
 	openTab(document.getElementById('Supplier0button'), 'Supplier0button', '0', 'Supplier');
-
-	document.getElementById('Supplier1checkbox').checked = true;
-	createCardButton(document.getElementById('Supplier1checkbox'));
 
 	addExpanderOnClickEvents();
 }
@@ -363,6 +363,15 @@ function buildCardView(type, entity, divToAppendTo){
 	button.innerHTML = 'Edit Details';
 	button.setAttribute('onclick', 'displayDataTable()');
 	divToAppendTo.appendChild(button);	
+
+	var name = getAttribute(entity.Attributes, 'SupplierName');
+	if(name && name.startsWith('Add New')) {
+		var addNewbutton = document.createElement('button');
+		addNewbutton.id = 'addNewButton';
+		addNewbutton.innerHTML = name;
+		addNewbutton.setAttribute('style', 'margin-left: 10px;');
+		divToAppendTo.appendChild(addNewbutton);	
+	}
 
 	loadMap(entityAttributes);
 }
