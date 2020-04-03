@@ -51,7 +51,7 @@
   
       //Configs
       $scope.usageChartOptionsTimeSpan = {
-        value: new Date(2000, 0, 1),
+        value: dates[1],
         options: {
           id: 'usageChartOptionsTimeSpan',
           stepsArray: dates,
@@ -67,7 +67,7 @@
       };
 
       $scope.totalCostChartOptionsTimeSpan = {
-        value: new Date(2000, 0, 1),
+        value: dates[1],
         options: {
           stepsArray: dates,
           translate: function(date) {
@@ -82,7 +82,7 @@
       };
 
       $scope.costBreakdownChartOptionsTimeSpan = {
-        value: new Date(2000, 0, 1),
+        value: dates[1],
         options: {
           stepsArray: dates,
           translate: function(date) {
@@ -97,7 +97,7 @@
       };
 
       $scope.capacityChartOptionsTimeSpan = {
-        value: new Date(2000, 0, 1),
+        value: dates[1],
         options: {
           stepsArray: dates,
           translate: function(date) {

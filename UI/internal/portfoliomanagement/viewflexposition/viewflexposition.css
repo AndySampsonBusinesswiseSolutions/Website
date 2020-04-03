@@ -12,8 +12,10 @@
     padding-left: 15px;
     padding-right: 15px;
 }
-.chart {
+.tree-div, .chart {
     background-color: #e9eaee;
+}
+.chart {
     max-height: 650px;
     min-height: 650px;
     margin: 5px;

@@ -82,6 +82,7 @@ function showRates(contractType, contractIndex, contractDetailIndex, mpxnIndex) 
 	var span = modal.getElementsByClassName("close")[0];
 	var rateText = document.getElementById('rateText');
 
+	clearElement(rateText);
 	rateText.appendChild(table);
 
     finalisePopup(title, 'Rates<br><br>', modal, span);

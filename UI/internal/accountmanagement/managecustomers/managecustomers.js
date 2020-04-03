@@ -57,7 +57,7 @@ function createCardButton(checkbox){
 		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
 
 		if(checkbox.getAttribute('branch') == "ChildCustomer") {
-			var parentCustomerNode = span.parentNode.parentNode.parentNode.parentNode.children[2];
+			var parentCustomerNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
 
 			button.innerHTML = parentCustomerNode.innerText.concat(' - ').concat(span.innerHTML);
 		}
@@ -521,15 +521,19 @@ function createTree(baseData, divId, checkboxFunction) {
 function buildTree(baseData, baseElement, checkboxFunction) {
     var dataLength = baseData.length;
     for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
-        var baseName = getAttribute(base.Attributes, 'CustomerName');
-        var li = document.createElement('li');
-        var ul = createUL();
+		var base = baseData[i];
+		var isChildCustomer = getAttribute(base.Attributes, 'IsChildCustomer');
 
-        buildChildCustomer(base.ChildCustomers, ul, checkboxFunction, baseName);
-        appendListItemChildren(li, 'Customer'.concat(base.GUID), checkboxFunction, 'Customer', baseName, ul, baseName, base.GUID, base.ChildCustomers.length > 0);
-
-        baseElement.appendChild(li);        
+		if(!isChildCustomer) {
+			var baseName = getAttribute(base.Attributes, 'CustomerName');
+			var li = document.createElement('li');
+			var ul = createUL();
+	
+			buildChildCustomer(base.ChildCustomers, ul, checkboxFunction, baseName);
+			appendListItemChildren(li, 'Customer'.concat(base.GUID), checkboxFunction, 'Customer', baseName, ul, baseName, base.GUID, base.ChildCustomers.length > 0);
+	
+			baseElement.appendChild(li); 
+		}    
     }
 }
 

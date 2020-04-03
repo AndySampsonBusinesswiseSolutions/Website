@@ -15,19 +15,29 @@ function pageLoad() {
 
   window.onload = function() {
     updateCharts();
+    hideSliders();
   }
 }
 
 function getMousePos(e) {
-  return {x:e.clientX,y:e.clientY};
+	return {x:e.clientX,y:e.clientY};
 }
 
 function openNav() {
-  document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
 }
 
 function closeNav() {
-  document.getElementById("mySidenav").style.width = "0px";
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
+}
+
+function hideSliders() {
+  var sliders = document.getElementsByClassName('slider-list');
+  [...sliders].forEach(slider => {
+    slider.classList.add('listitem-hidden');
+  });
 }
 
 function updateCharts() {
@@ -127,6 +137,17 @@ function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
     chart: {
         type: getChartTypeFromCategoryCount(newCategories.length),
     },
+    yaxis: {
+      title: {
+        text: getChartYAxisTitle(chartId)
+      },
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return getYAxisLabelFormat(chartId, val);
+        }
+      }
+    },
     xaxis: {
         type: getXAxisTypeFromTimeSpan(timeSpanElement.children[6].innerHTML),
         min: newCategories[0],
@@ -137,6 +158,106 @@ function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
 
   clearElement(document.getElementById(chartId.replace('#', '')));
   refreshChart(newSeries, chartId, chartOptions);
+}
+
+function getYAxisLabelFormat(chartId, val) {
+  switch(chartId) {
+    case '#usageChart':
+    case '#capacityChart':
+      return val.toLocaleString();
+    default:
+      return '£' + val.toLocaleString();
+  }
+}
+
+function refreshChart(newSeries, chartId, chartOptions) {
+  var options = {
+    chart: {
+        height: '100%',
+        width: '100%',
+      type: chartOptions.chart.type,
+      zoom: {
+        type: 'x',
+        enabled: true,
+        autoScaleYaxis: true
+      },
+      animations: {
+        enabled: true,
+        easing: 'easeout',
+        speed: 800,
+        animateGradually: {
+            enabled: true,
+            delay: 150
+        },
+        dynamicAnimation: {
+            enabled: true,
+            speed: 350
+        }
+      },
+      toolbar: {
+        autoSelected: 'zoom',
+        tools: {
+          download: false
+        }
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    legend: {
+      show: true,
+      showForSingleSeries: true,
+      showForNullSeries: true,
+      showForZeroSeries: true,
+      position: 'right',
+      onItemClick: {
+        toggleDataSeries: true
+      },
+      width: getLegendWidth(chartId),
+      offsetY: getLegendOffsetY(chartId),
+      formatter: function(seriesName) {
+        return getLegendFormat(chartId, seriesName);
+      }
+    },
+    series: newSeries,
+    yaxis: chartOptions.yaxis,
+    xaxis: chartOptions.xaxis
+  };  
+
+  renderChart(chartId, options);
+}
+
+function getLegendWidth(chartId) {
+  switch(chartId) {
+    case '#usageChart':
+    case '#totalCostChart':
+    case '#capacityChart':
+      return 100;
+    default:
+      return 200;
+  }
+}
+
+function getLegendOffsetY(chartId) {
+  switch(chartId) {
+    case '#usageChart':
+    case '#totalCostChart':
+    case '#capacityChart':
+      return 250;
+    default:
+      return 0;
+  }
+}
+
+function getLegendFormat(chartId, seriesName) {
+  switch(chartId) {
+    case '#usageChart':
+    case '#totalCostChart':
+    case '#capacityChart':
+      return seriesName + '<br><br>';
+    default:
+      return seriesName;
+  }
 }
 
 function getXAxisTypeFromTimeSpan(timeSpan) {
@@ -867,114 +988,15 @@ function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity,
     return summedMeterSeries;
 }
 
-function getChartType(chartType) {
-    switch(chartType){
-      case 'Line':
-      case 'Bar':
-      case 'Area':
-        return chartType.toLowerCase();
-      case 'Stacked Line':
-      case 'Stacked Bar':
-        return chartType.replace('Stacked ', '').toLowerCase();
-    }
-}
-
-function getChartXAxisLabelFormat(period) {
-    switch(period) {
-      case 'Daily':
-        return 'HH:mm';
-      case "Weekly":
-        return 'dd/MM/yyyy';
-      case "Monthly":
-        return 'dd';
-      case "Yearly":
-        return 'MMM';
-    }
-}
-  
-function getChartTooltipXFormat(period) {
-    switch(period) {
-      case 'Daily':
-      case "Weekly":
-      case "Monthly":
-        return 'dd/MM/yyyy HH:mm';
-      case "Yearly":
-        return 'dd/MM/yyyy';
-    }
-}
-  
-function getChartXAxisTitleFormat(period) {
-    switch(period) {
-      case 'Daily':
-        return 'yyyy-MM-dd';
-      case "Weekly":
-        return 'yyyy-MM-dd to yyyy-MM-dd';
-      case "Monthly":
-        return 'MMM yyyy';
-      case "Yearly":
-        return 'yyyy';
-    }
-}
-
-function getChartYAxisTitle(showBy, commodity) {
-    switch(showBy) {
-      case 'Energy':
-        if(commodity == 'Gas') {
-          return 'Energy (Thm)';
-        }
-        return 'Energy (MWh)';
-      case 'Power':
-        return 'Power (MW)';
-      case 'Current':
-        return 'Current (A)';
-      case 'Cost':
-        return 'Cost (£)';
-    }
-}
-
-function refreshChart(newSeries, chartId, chartOptions) {
-    var options = {
-      chart: {
-          height: '100%',
-          width: '100%',
-        type: chartOptions.chart.type,
-        // stacked: chartOptions.chart.stacked,
-        zoom: {
-          type: 'x',
-          enabled: true,
-          autoScaleYaxis: true
-        },
-        animations: {
-          enabled: true
-        },
-        toolbar: {
-          autoSelected: 'zoom',
-          tools: {
-            download: false
-          }
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      // tooltip: {
-      //   x: {
-      //     format: chartOptions.tooltip.x.format
-      //   }
-      // },
-      legend: {
-        show: true,
-        position: 'right',
-        onItemClick: {
-          toggleDataSeries: false
-        }
-      },
-      series: newSeries,
-      // yaxis: chartOptions.yaxis,
-      xaxis: chartOptions.xaxis
-    };  
-  
-    renderChart(chartId, options);
+function getChartYAxisTitle(showBy) {
+  switch(showBy) {
+    case '#usageChart':
+      return 'kWh';
+    case '#capacityChart':
+      return 'kVa';
+    default:
+      return '£';
+  }
 }
 
 function convertMonthIdToFullText(monthId) {

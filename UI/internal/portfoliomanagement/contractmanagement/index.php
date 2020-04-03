@@ -86,7 +86,7 @@
                 <span>Finished Contracts</span>
                 <div id="finishedContracts" class="far fa-plus-square show-pointer"></div>
             </div>
-            <div id="fnishedContractsList" style="margin: 5px;">
+            <div id="finishedContractsList" style="margin: 5px;">
                 <div id="finished"></div>
             </div>
         </div>

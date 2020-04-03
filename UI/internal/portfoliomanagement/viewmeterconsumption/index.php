@@ -13,6 +13,7 @@
 
 <body ng-app="dateRangeDemo" ng-controller="dateRangeCtrl">
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="siteDiv" class="tree-div">
 			</div>
@@ -35,7 +36,7 @@
 			<div class="roundborder" style="background-color: #e9eaee;">
 				<span id="usageChartOptionsspan" style="padding-left: 5px;">Usage Chart Options</span>
 				<div id="usageChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<ul id="usageChartOptionsList" class="format-listitem listitem-hidden">
+				<ul id="usageChartOptionsList" class="format-listitem slider-list">
 					<li>
 						<span>Date Range</span>
 						<rzslider id="usageChartOptionsDateRange"
@@ -57,7 +58,7 @@
 			<div class="roundborder" style="background-color: #e9eaee;">
 				<span id="totalCostChartOptionsspan" style="padding-left: 5px;">Total Cost Chart Options</span>
 				<div id="totalCostChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<ul id="totalCostChartOptionsList" class="format-listitem listitem-hidden">
+				<ul id="totalCostChartOptionsList" class="format-listitem slider-list">
 					<li>
 						<span>Date Range</span>
 						<rzslider id="totalCostChartOptionsDateRange"
@@ -79,7 +80,7 @@
 			<div class="roundborder" style="background-color: #e9eaee;">
 				<span id="costBreakdownChartOptionsspan" style="padding-left: 5px;">Cost Breakdown Chart Options</span>
 				<div id="costBreakdownChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<ul id="costBreakdownChartOptionsList" class="format-listitem listitem-hidden">
+				<ul id="costBreakdownChartOptionsList" class="format-listitem slider-list">
 					<li>
 						<span>Date Range</span>
 						<rzslider id="costBreakdownChartOptionsDateRange"
@@ -163,7 +164,7 @@
 			<div class="roundborder" style="background-color: #e9eaee;">
 				<span id="capacityChartOptionsspan" style="padding-left: 5px;">Capacity Chart Options</span>
 				<div id="capacityChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-				<ul id="capacityChartOptionsList" class="format-listitem listitem-hidden">
+				<ul id="capacityChartOptionsList" class="format-listitem slider-list">
 					<li>
 						<span>Date Range</span>
 						<rzslider id="capacityChartOptionsDateRange"
@@ -184,7 +185,10 @@
 		</div>
 	</div>
 
-	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
+	<div class="section-header">
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	</div>
 	<br>
 	<div class="final-column">
 		<div class="roundborder">

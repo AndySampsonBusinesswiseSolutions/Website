@@ -48,7 +48,8 @@ var managecustomers = [
             {"Postcode" : "MK9 1LR"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"}
+            {"Email" : "Sales@HudsonEnergy.co.uk"},
+            {"IsChildCustomer" : true}
         ]
         ,
         "ChildCustomers" :[
@@ -66,7 +67,8 @@ var managecustomers = [
             {"Postcode" : "MK9 1LR"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"}
+            {"Email" : "Sales@HudsonEnergy.co.uk"},
+            {"IsChildCustomer" : true}
         ]
         ,
         "ChildCustomers" :[
