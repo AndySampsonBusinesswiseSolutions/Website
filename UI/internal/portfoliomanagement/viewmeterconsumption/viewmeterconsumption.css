@@ -19,12 +19,9 @@
   padding-left: 15px;
   padding-top: 50px;
 }
-.fill-column {
-    width: 50px;
-}
 .final-column {
-    padding-left: 350px;
-    padding-right: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 .scrolling-wrapper {
     overflow-x: auto;

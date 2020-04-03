@@ -186,35 +186,42 @@
 
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 	<br>
-	<div class="roundborder">
-		<span id="usagespan" style="padding-left: 5px;">Usage Chart</span>
-		<div id="usage" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-		<div id="usageList" class="chart" style="margin: 5px;">
-			<div id="usageChart"></div>
+	<div class="final-column">
+		<div class="roundborder">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="usagespan" style="padding-left: 5px;">Usage Chart</span>
+				<div id="usage" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			</div>
+			<div id="usageList" class="chart" style="margin: 5px;">
+				<div id="usageChart"></div>
+			</div>
 		</div>
-	</div>
-	<br>
-	<div class="roundborder">
-		<span id="totalCostspan" style="padding-left: 5px;">Total Cost Chart</span>
-		<div id="totalCost" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-		<div id="totalCostList"  class="listitem-hidden chart" style="margin: 5px;">
-			<div id="totalCostChart"></div>
+		<div class="roundborder" style="margin-top: 5px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="totalCostspan" style="padding-left: 5px;">Total Cost Chart</span>
+				<div id="totalCost" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			</div>
+			<div id="totalCostList"  class="listitem-hidden chart" style="margin: 5px;">
+				<div id="totalCostChart"></div>
+			</div>
 		</div>
-	</div>
-	<br>
-	<div class="roundborder">
-		<span id="costBreakdownspan" style="padding-left: 5px;">Cost Breakdown Chart</span>
-		<div id="costBreakdown" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-		<div id="costBreakdownList"  class="listitem-hidden chart" style="margin: 5px;">
-			<div id="costBreakdownChart"></div>
+		<div class="roundborder" style="margin-top: 5px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="costBreakdownspan" style="padding-left: 5px;">Cost Breakdown Chart</span>
+				<div id="costBreakdown" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			</div>
+			<div id="costBreakdownList"  class="listitem-hidden chart" style="margin: 5px;">
+				<div id="costBreakdownChart"></div>
+			</div>
 		</div>
-	</div>
-	<br>
-	<div class="roundborder">
-		<span id="capacityspan" style="padding-left: 5px;">Capacity Chart</span>
-		<div id="capacity" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-		<div id="capacityList"  class="listitem-hidden chart" style="margin: 5px;">
-			<div id="capacityChart"></div>
+		<div class="roundborder" style="margin-top: 5px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="capacityspan" style="padding-left: 5px;">Capacity Chart</span>
+				<div id="capacity" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+			</div>
+			<div id="capacityList"  class="listitem-hidden chart" style="margin: 5px;">
+				<div id="capacityChart"></div>
+			</div>
 		</div>
 	</div>
 	<br>
