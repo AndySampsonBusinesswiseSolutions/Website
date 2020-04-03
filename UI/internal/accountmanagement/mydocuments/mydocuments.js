@@ -1,114 +1,70 @@
-function pageLoad() {
+function pageLoad() {    
 	createTree(documents, "treeDiv", "createCardButton");
-	addExpanderOnClickEvents();	
+	
+	document.onmousemove=function(e) {
+		var mousecoords = getMousePos(e);
+		if(mousecoords.x <= 25) {
+			openNav();
+		}  
+		else if(mousecoords.x >= 400) {
+			closeNav();
+		}  
+	};
 }
 
-function addDocument() {
-	var div = 
-		'<div>'+
-			'<div>'+
-				'<button>Select Document</button>'+
-				'<span>Full path of document selected will appear here</span>'+
-			'</div>'+
-		'</div>'+
-		'<br>'+
-		'<div>'+
-			'<div>'+
-				'<span style="border: solid black 1px;">Select Document Type</span>'+
-				'<select>'+
-					'<option value="LOA">Letter Of Authority</option>'+
-					'<option value="Invoice">Invoice</option>'+
-					'<option value="Bill">Bill</option>'+
-				'</select>'+
-			'</div>'+
-		'</div>'+
-		'<br>'+
-		'<div>'+
-			'<div>'+
-				'<span style="border: solid black 1px;">Select Letter Of Authority End Date</span>'+
-				'<input type="date" name="calendar" id="calendar" value="2019-11-26">'+
-			'</div>'+
-		'</div>'+
-		'<br>'+
-		'<div>'+
-			'<div>'+
-				'<span style="border: solid black 1px;">Letter Of Authority Signed By</span>'+
-				'<input></input>'+
-			'</div>'+
-		'</div>'+
-		'<br>'
-
-	xdialog.confirm(div, function() {}, 
-	{
-		style: 'width:50%;font-size:0.8rem;',
-		buttons: {
-			ok: {
-				text: 'Save & Close',
-				style: 'background: Green;'
-			}
-		},
-		title: 'Upload Document'
-	});
+function getMousePos(e) {
+	return {x:e.clientX,y:e.clientY};
 }
 
-function openTab(evt, tabName, guid, branch) {
-	var cardDiv = document.getElementById('cardDiv');
+function openNav() {
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
+}
 
-	var tabContent = document.getElementsByClassName("tabcontent");
-	var tabContentLength = tabContent.length;
-	for (var i = 0; i < tabContentLength; i++) {
-	  cardDiv.removeChild(tabContent[i]);
-	}
+function closeNav() {
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
+}
 
+function openTab(callingElement, tabName, guid) {
 	var tabLinks = document.getElementsByClassName("tablinks");
 	var tabLinksLength = tabLinks.length;
 	for (var i = 0; i < tabLinksLength; i++) {
 		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
 	}
+	callingElement.className += " active";
 	
 	var newDiv = document.createElement('div');
-	newDiv.setAttribute('class', 'tabcontent');
+	newDiv.setAttribute('class', 'card');
 	newDiv.id = tabName;
+
+	var cardDiv = document.getElementById('cardDiv');
+	clearElement(cardDiv);
 	cardDiv.appendChild(newDiv);
+	
+	createCard(guid, newDiv);
 
-	createCard(guid, newDiv, 'Document');
-
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-  }
+	newDiv.style.display = "block";
+}
 
 function createCardButton(checkbox){
-	var cardDiv = document.getElementById('cardDiv');
-	var tabDiv = document.getElementById('tabDiv');
 	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
 
 	if(checkbox.checked){
 		cardDiv.setAttribute('style', '');
 		var button = document.createElement('button');
 		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(event, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
-
+		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
 		button.innerHTML = span.innerHTML;
 		button.id = span.id.replace('span', 'button');
 		tabDiv.appendChild(button);
-	
-		updateTabDiv();
 	}
 	else {
-		tabDiv.removeChild(document.getElementById(span.id.replace('span', 'button')));
-
-		var divToRemove = document.getElementById(span.id.replace('span', 'div'));
-		if(divToRemove) {
-			cardDiv.removeChild();
-		}
-
-		if(tabDiv.children.length == 0) {
-			cardDiv.setAttribute('style', 'display: none;');
-		}
-		else {
-            updateTabDiv();
-		}
+		var button = document.getElementById(span.id.replace('span', 'button'));
+		tabDiv.removeChild(button);
 	}	
+
+	updateTabDiv();
 }
 
 function updateTabDiv() {
@@ -116,108 +72,144 @@ function updateTabDiv() {
 	var tabDivChildren = tabDiv.children;
 	var tabDivChildrenLength = tabDivChildren.length;
 
-    tabDivChildren[0].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px;'));
-    for(var i = 1; i < tabDivChildrenLength; i++) {
-        tabDivChildren[i].setAttribute('style', 'width: '.concat(tabDiv.clientWidth/tabDivChildrenLength).concat('px; border-left: solid black 1px;'));
-    }
-}
-
-function createCard(guid, divToAppendTo, identifier) {
-	var document;
-	
-	var documentLength = documents.length;
-	for(var i = 0; i < documentLength; i++) {
-		document = documents[i];
-
-		if(document.GUID == guid) {
-			break;
-		}
+	if(tabDivChildrenLength == 0) {
+		document.getElementById('User0checkbox').checked = true;
+		createCardButton(document.getElementById('User0checkbox'));
+		openTab(document.getElementById('User0button'), 'User0button', '0');
 	}
+	else {
+		var percentage = (1 / tabDivChildrenLength) * 100;
+		tabDivChildren[0].setAttribute('style', 'width: '.concat(percentage).concat('%;'));
+		for(var i = 1; i < tabDivChildrenLength; i++) {
+			tabDivChildren[i].setAttribute('style', 'width: '.concat(percentage).concat('%; border-left: solid black 1px;'));
+		}
+		
+		tabDiv.style.display = '';
 
-	buildDocumentDataTable(document, identifier, divToAppendTo);
+		for(var i = 0; i < tabDivChildrenLength; i++) {
+			if(hasClass(tabDivChildren[i], 'active')) {
+				return;
+			}
+		}
+
+		var lastChild = tabDivChildren[i - 1];
+		lastChild.className += " active";
+		lastChild.dispatchEvent(new Event('click'));
+	}
 }
 
-function buildDocumentDataTable(entity, attributeRequired, divToAppendTo){
+function createCard(guid, divToAppendTo) {
+	var document = getEntityByGUID(guid);
+
+	buildDocumentDataTable(document, divToAppendTo);
+}
+
+function buildDocumentDataTable(entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
+	div.setAttribute('class', 'tree-div scrolling-wrapper');
 	divToAppendTo.appendChild(div);
-	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
+	clearElement(div);
 
 	var table = document.createElement('table');
 	table.id = 'dataTable';
 	table.setAttribute('style', 'width: 100%;');
 
-	var tableRow = document.createElement('tr');
+	displayAttributes(entity.Attributes, table);
 
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Document Name'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'LOA End Date'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'LOA Signed By'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Uploaded By'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Uploaded Date'));
-	tableRow.appendChild(createTableHeader('border: solid black 1px;', 'Actions'));
-
-    table.appendChild(tableRow);
-	displayAttributes(getAttribute(entity.Attributes, attributeRequired), entity.Attributes, table, 'Document');
-
-	treeDiv.appendChild(table);
+	div.appendChild(table);
 }
 
-function displayAttributes(identifier, attributes, table, type) {
-	if(!attributes) {
-		return;
+function displayAttributes(attributes, table) {
+	var tableRow = document.createElement('tr');
+
+	tableRow.appendChild(createTableHeader('Document Name', 0));
+
+	var headers = attributes.Headers;
+	var headerLength = headers.length;
+
+	for(var i = 0; i < headerLength; i++) {
+		tableRow.appendChild(createTableHeader(headers[i], i + 1));
 	}
 
-	var attributesLength = attributes.length;
-	for(var i = 0; i < attributesLength; i++) {
+	tableRow.appendChild(createTableHeader('Uploaded By', headerLength + 1));
+	tableRow.appendChild(createTableHeader('Uploaded Date', headerLength + 2));
+	tableRow.appendChild(createTableHeader('Actions', headerLength + 3));
+
+	table.appendChild(tableRow);
+	
+	var documents = attributes.Documents;
+	var documentLength = documents.length;
+
+	for(var i = 0; i < documentLength; i++) {
+		var records = documents[i];
 		var tableRow = document.createElement('tr');
-		tableRow.id = 'row'.concat(type + i);
+		tableRow.id = 'row' + i;
 
-		for(var j = 0; j < 6; j++) {
+		records.Attributes.forEach(record => {
 			var tableDatacell = document.createElement('td');
-			tableDatacell.setAttribute('style', 'border: solid black 1px;');
-
-			switch(j) {
-				case 0:
-					tableDatacell.innerHTML = 'Businesswise Solutions LOA 2019';
-					break;	
-				case 1:
-					tableDatacell.innerHTML = '31/01/2020';
-					break;	
-				case 2:
-					tableDatacell.innerHTML = 'Mo Money (Finance Director)';
-					break;
-				case 3:
-					tableDatacell.innerHTML = 'Sys Tem';
-					break;	
-				case 4:
-					tableDatacell.innerHTML = '02/02/2019';
-					break;	
-				case 5:
-					tableDatacell.id = 'value'.concat(type + i);
-
-					var downloadIcon = document.createElement('i');
-					downloadIcon.setAttribute('class', 'fas fa-download');
-					downloadIcon.setAttribute('title', 'Download Now');
-					downloadIcon.setAttribute('style', 'padding-right: 15px;');
-
-					var addToDownloadBasketIcon = document.createElement('i');
-					addToDownloadBasketIcon.setAttribute('class', 'fas fa-cart-arrow-down');
-					addToDownloadBasketIcon.setAttribute('title', 'Add To Download Cart');
-
-					tableDatacell.appendChild(downloadIcon);
-					tableDatacell.appendChild(addToDownloadBasketIcon);
-					break;
-			}
-
+			tableDatacell.setAttribute('class', 'table-cell');
+			tableDatacell.innerHTML = record.Value;
 			tableRow.appendChild(tableDatacell);
-		}
+		});
 
+		var tableDatacell = document.createElement('td');
+		tableDatacell.setAttribute('class', 'table-cell');
+
+		var downloadIcon = document.createElement('i');
+		downloadIcon.setAttribute('class', 'fas fa-download show-pointer');
+		downloadIcon.setAttribute('title', 'Download Now');
+		downloadIcon.setAttribute('style', 'padding-right: 25px;');
+
+		var addToDownloadBasketIcon = document.createElement('i');
+		addToDownloadBasketIcon.setAttribute('class', 'fas fa-cart-arrow-down show-pointer');
+		addToDownloadBasketIcon.setAttribute('title', 'Add To Download Cart');
+
+		tableDatacell.appendChild(downloadIcon);
+		tableDatacell.appendChild(addToDownloadBasketIcon);
+		
 		tableRow.appendChild(tableDatacell);
-
 		table.appendChild(tableRow);
-	}	
+	}
+}
+
+function finalisePopup(title, titleHTML, modal, span) {
+    title.innerHTML = titleHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
+	}
+}
+
+function uploadDocument() {
+	var modal = document.getElementById("uploadDocumentPopup");
+	var title = document.getElementById("uploadDocumentTitle");
+	var span = modal.getElementsByClassName("close")[0];
+
+    finalisePopup(title, 'Upload Document<br><br>', modal, span);
+}
+
+function displayFileDetailsPopup(row) {
+	var modal = document.getElementById("fileDetailsPopup");
+	var title = document.getElementById("fileDetailsTitle");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById("fileDetailsText");
+
+	text.innerHTML = 'Sites/Meters/Sub Meters chosen:<br>'
+				   + '<div style="padding-left:15px;">Site: Leeds</div>'
+				   + '<div style="padding-left:30px;">Meter: 987654</div>'
+				   + '<div style="padding-left:30px;">Meter: 1234567890123</div>'
+				   + '<div style="padding-left:45px;">Sub Meter: Sub Meter 1</div>'
+				   + '<div style="padding-left:45px;">Sub Meter: Sub Meter 2</div><br>'
+				   + '<div style="padding-left:15px;">Meter: 1234567890120</div><br>'
+				   + 'Date Range chosen:<br>'
+				   + '<div style="padding-left:15px;">01/11/2019 to 26/11/2019</div><br>'
+				   + 'Time Span chosen:<br>'
+				   + '<div style="padding-left:15px;">Daily</div><br>'
+
+    finalisePopup(title, 'File Details<br><br>', modal, span);
 }
 
 var branchCount = 0;
@@ -227,7 +219,8 @@ function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
+	var ul = createUL();
+	ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -237,18 +230,33 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var div = document.getElementById(divId);
     clearElement(div);
-    div.appendChild(tree);
+
+    var header = document.createElement('span');
+    header.style = "padding-left: 5px;";
+    header.innerHTML = 'Select Document Type(s) <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+
+    div.appendChild(header);
+	div.appendChild(tree);
+	
+	for(var i = 0; i < 6; i++) {
+		document.getElementById('Document'+ i + 'checkbox').checked = true;
+		createCardButton(document.getElementById('Document'+ i + 'checkbox'));	
+	}
+
+	openTab(document.getElementById('Document0button'), 'Document0button', '0');
+
+	addExpanderOnClickEvents();
 }
 
 function buildTree(baseData, baseElement, checkboxFunction) {
     var dataLength = baseData.length;
     for(var i = 0; i < dataLength; i++){
         var base = baseData[i];
-        var baseName = getAttribute(base.Attributes, 'BaseName');
+        var baseName = base.Attributes.DocumentType;
         var li = document.createElement('li');
         var ul = createUL();
 
-        appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', baseName, ul, baseName, base.GUID);
+        appendListItemChildren(li, 'Document'.concat(base.GUID), checkboxFunction, 'Document', baseName, ul, baseName, base.GUID);
 
         baseElement.appendChild(li);        
     }
@@ -257,7 +265,7 @@ function buildTree(baseData, baseElement, checkboxFunction) {
 function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
     li.appendChild(createBranchDiv(id));
     li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createTreeIcon(branchOption));
+    li.appendChild(createTreeIcon());
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
 }
@@ -283,9 +291,9 @@ function createUL() {
     return ul;
 }
 
-function createTreeIcon(branch) {
+function createTreeIcon() {
     var icon = document.createElement('i');
-    icon.setAttribute('class', getIconByBranch(branch));
+    icon.setAttribute('class', getIconByBranch());
     icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
     return icon;
 }
@@ -323,8 +331,8 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     return checkBox;
 }
 
-function getIconByBranch(branch) {
-    return 'far fa-file';
+function getIconByBranch() {
+	return 'far fa-file';
 }
 
 function clearElement(element) {
@@ -345,6 +353,39 @@ function getAttribute(attributes, attributeRequired) {
 	}
 
 	return null;
+}
+
+function showHideIcon(iconId, style) {
+	var icon = document.getElementById(iconId);
+	icon.setAttribute('style', style);
+}
+
+function createIcon(iconId, className, style, onClickEvent, title) {
+	var icon = document.createElement('i');
+	icon.id = iconId;
+	icon.setAttribute('class', className);
+
+	if(style) {
+		icon.setAttribute('style', style);
+	}
+
+	if(onClickEvent) {
+		icon.setAttribute('onclick', onClickEvent);
+	}
+
+	if(title) {
+		icon.setAttribute('title', title);
+	}
+
+	return icon;
+}
+
+function createTableHeader(value, id) {
+	var tableHeader = document.createElement('th');
+	tableHeader.id = "tableHeader" + id;
+	tableHeader.setAttribute('class', 'table-header');
+	tableHeader.innerHTML = value;
+	return tableHeader;
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
@@ -389,6 +430,9 @@ function addExpanderOnClickEvents() {
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+
+	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square')
+	updateClassOnClick('loaDetails', 'fa-plus-square', 'fa-minus-square')
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -396,63 +440,16 @@ function addExpanderOnClickEventsByElement(element) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
 		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
 	});
-
-	updateAdditionalControls(element);
-	expandAdditionalLists(element);
 }
 
-function updateAdditionalControls(element) {
-	var additionalcontrols = element.getAttribute('additionalcontrols');
-
-	if(!additionalcontrols) {
-		return;
-	}
-
-	var listToHide = element.id.concat('List');
-	var clickEventFunction = function (event) {
-		updateClassOnClick(listToHide, 'listitem-hidden', '')
-	};
-
-	var controlArray = additionalcontrols.split(',');
-	for(var j = 0; j < controlArray.length; j++) {
-		var controlId = controlArray[j];	
-
-		element.addEventListener('click', function (event) {
-			var controlElement = document.getElementById(controlId);
-			if(hasClass(this, 'fa-minus-square')) {				
-				controlElement.addEventListener('click', clickEventFunction, false);
-			}
-			else {
-				controlElement.removeEventListener('click', clickEventFunction);
-			}
-		});
-	}	
-}
-
-function expandAdditionalLists(element) {
-	var additionalLists = element.getAttribute('additionallists');
-
-	if(!additionalLists) {
-		return;
-	}
-
-	element.addEventListener('click', function (event) {
-		var controlArray = additionalLists.split(',');
-		for(var j = 0; j < controlArray.length; j++) {
-			var controlId = controlArray[j];
-			var controlElement = document.getElementById(controlId);
-			updateClass(controlElement, 'listitem-hidden', '');
+function getEntityByGUID(guid) {
+	var dataLength = documents.length;
+	for(var i = 0; i < dataLength; i++) {
+		var entity = documents[i];
+		if(entity.GUID == guid) {
+			return entity;
 		}
-	});		
-}
-
-function createTableHeader(style, value) {
-	var tableHeader = document.createElement('th');
-
-	if(style != '') {
-		tableHeader.setAttribute('style', style);
 	}
 	
-	tableHeader.innerHTML = value;
-	return tableHeader;
+	return null;
 }
