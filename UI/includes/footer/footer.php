@@ -1,5 +1,3 @@
-<link rel="stylesheet" href="/includes/footer/footer.css">
-
 <div>
     <footer class="footer fusion-footer-widget-area fusion-widget-area">
         <div class="fusion-row">

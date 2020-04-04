@@ -459,7 +459,7 @@ function buildDataGrid() {
             for(var k = 0; k < meterLength; k++) {
                 var meter = site.meters[k];
                 displayData.push({
-                    projectName:project.name + ' <i class="fas fa-search show-pointer"></i>',
+                    projectName:project.name,
                     site:site.name,
                     meter:meter.identifier,
                     engineer:'En Gineer',

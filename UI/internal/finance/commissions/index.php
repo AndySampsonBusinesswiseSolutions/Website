@@ -48,8 +48,9 @@
 				<div id="commissionChart">
 				</div>
 			</div>
-			<br>
-			<div id="commissionDatagrid" class="roundborder scrolling-wrapper">
+			<div class="roundborder scrolling-wrapper" style="margin-top: 5px;">
+				<div id="commissionDatagrid" style="margin: 5px;">
+				</div>
 			</div>
 		</div>
 	</div>	

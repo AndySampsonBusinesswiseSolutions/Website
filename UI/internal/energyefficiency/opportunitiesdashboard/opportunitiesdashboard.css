@@ -71,21 +71,19 @@
     float: left;
     padding: 10px;
     min-height: 100px;
+    max-height: 500px;
+    background-color: #e9eaee;
+    width: 49%;
 }
-
-.left, .right {
-    float: left;
-    width: 46%;
-}
-
-.middle {
+.divider-column {
     float: left;
     width: 2%;
+    min-height: 1px;
 }
-
-.first, .last {
+.opportunity-column {
     float: left;
-    width: 2%;
+    width: 30%;
+    min-height: 1px;
 }
 .roundborder {
     border: solid black 1px;
@@ -113,7 +111,7 @@
 }
 .dashboard-item-small {
     height: 200px; 
-    width: 200px; 
+    width: 23.75%; 
     margin: 5px; 
     float: left;
     background-color: lightblue;
@@ -129,4 +127,8 @@
 .reject {
     width: 45%; 
     background-color: red;
+}
+.final-column {
+    padding-left: 15px;
+    padding-right: 15px;
 }

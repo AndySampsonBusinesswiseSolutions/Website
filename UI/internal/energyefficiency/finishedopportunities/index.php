@@ -41,26 +41,30 @@
 	<div class="final-column">
 		<div id="spreadsheet"></div>
 		<br>
-		<div class="roundborder">
-			<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
-			<div id="cumulativeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-			<div id="cumulativeSavingList"  class="listitem-hidden tree-div roundborder" style="margin: 5px;">
+		<div class="roundborder dashboard" style="padding: 10px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
+				<div id="cumulativeSaving" class="far fa-plus-square show-pointer"></div>
+			</div>
+			<div id="cumulativeSavingList" class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
 				<div id="cumulativeSavingChart"></div>
 			</div>
-		</div>			
-		<br>
-		<div class="roundborder">
-			<span id="costSavingspan">Cost Saving Chart</span>
-			<div id="costSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-			<div id="costSavingList"  class="listitem-hidden tree-div roundborder" style="margin: 5px;">
+		</div>
+		<div class="roundborder dashboard" style="margin-top: 5px; padding: 10px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="costSavingspan">Cost Saving Chart</span>
+				<div id="costSaving" class="far fa-plus-square show-pointer"></div>
+			</div>
+			<div id="costSavingList"  class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
 				<div id="costSavingChart"></div>
 			</div>
-		</div>			
-		<br>
-		<div class="roundborder">
-			<span id="volumeSavingspan">Volume Saving Chart</span>
-			<div id="volumeSaving" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
-			<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder" style="margin: 5px;">
+		</div>
+		<div class="roundborder dashboard" style="margin-top: 5px; padding: 10px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span id="volumeSavingspan">Volume Saving Chart</span>
+				<div id="volumeSaving" class="far fa-plus-square show-pointer"></div>
+			</div>
+			<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
 				<div id="volumeSavingChart"></div>
 			</div>
 		</div>

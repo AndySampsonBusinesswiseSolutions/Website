@@ -474,9 +474,8 @@ function buildBillChart(bill, divToAppendTo) {
 	secondChartDiv.appendChild(secondChart);
 
 	var clearDiv = document.createElement('div');
-	clearDiv.setAttribute('style', 'clear: left;')
+	clearDiv.setAttribute('style', 'clear: left;');
 	divToAppendTo.appendChild(clearDiv);
-	divToAppendTo.appendChild(document.createElement('br'));
 
 	var options = {
 		series: [{
@@ -596,6 +595,7 @@ function renderChart(chartId, options) {
 function buildBillDataTable(entity, divToAppendTo){
 	var div = document.createElement('div');
 	div.id = 'displayAttributes';
+	div.setAttribute('style', 'margin-top: 5px;');
 	divToAppendTo.appendChild(div);
 
 	var table = document.createElement('table');

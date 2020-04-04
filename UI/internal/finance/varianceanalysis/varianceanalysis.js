@@ -399,7 +399,7 @@ function updateDataGrid(showBy, newSeries, newCategories) {
 	var datagridDivWidth = datagridDiv.clientWidth;
 	var monthWidth = Math.floor(datagridDivWidth/10);
 	var dataWidthDivider = getDataWidthDivider(showBy);
-	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/dataWidthDivider)-1;
+	var dataWidth = Math.floor((datagridDivWidth - monthWidth)/dataWidthDivider)-3;
 
 	var datagrid = document.getElementById('datagrid');
 	clearElement(datagrid);

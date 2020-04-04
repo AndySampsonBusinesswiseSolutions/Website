@@ -54,7 +54,7 @@
 
 	<div class="final-column">
 		<br>
-		<div class="tree-div roundborder scrolling-wrapper">
+		<div class="tree-div roundborder scrolling-wrapper" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Your Current LOA Details</span>
 				<i class="far fa-plus-square" id="loaDetails"></i>
@@ -65,7 +65,7 @@
 			</div>
 		</div>
 		<br>
-		<div class="tree-div roundborder scrolling-wrapper">
+		<div class="tree-div roundborder scrolling-wrapper" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Download Basket</span>
 				<i class="far fa-plus-square" id="downloadBasket"></i>

@@ -167,9 +167,8 @@
 			</div>
 		</div>
 		<div style="clear: left;"></div>
-		<br>
-		<div id="datagridDiv" class="roundborder scrolling-wrapper">
-			<div id="datagrid">
+		<div id="datagridDiv" class="roundborder scrolling-wrapper" style="margin-top: 5px;">
+			<div id="datagrid" style="margin: 5px;">
 			</div>
 		</div>
 	</div>

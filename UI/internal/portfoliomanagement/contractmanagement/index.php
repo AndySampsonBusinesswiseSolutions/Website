@@ -59,7 +59,7 @@
                 <span>Out Of Contract Meters</span>
                 <div id="outOfContractMeters" class="far fa-plus-square show-pointer"></div>
             </div>
-            <div id="outOfContractMetersList" style="margin: 5px;">
+            <div id="outOfContractMetersList" style="margin-top: 5px;">
                 <div id="outOfContract"></div>
             </div>
         </div>
@@ -68,7 +68,7 @@
                 <span>Active Contracts</span>
                 <div id="activeContracts" class="far fa-plus-square show-pointer"></div>
             </div>
-            <div id="activeContractsList" class="listitem-hidden" style="margin: 5px;">
+            <div id="activeContractsList" class="listitem-hidden" style="margin-top: 5px;">
                 <div id="active"></div>
             </div>
         </div>
@@ -77,7 +77,7 @@
                 <span>Pending Contracts</span>
                 <div id="pendingContracts" class="far fa-plus-square show-pointer"></div>
             </div>
-            <div id="pendingContractsList" class="listitem-hidden" style="margin: 5px;">
+            <div id="pendingContractsList" class="listitem-hidden" style="margin-top: 5px;">
                 <div id="pending"></div>
             </div>
         </div>
@@ -86,7 +86,7 @@
                 <span>Finished Contracts</span>
                 <div id="finishedContracts" class="far fa-plus-square show-pointer"></div>
             </div>
-            <div id="finishedContractsList" style="margin: 5px;">
+            <div id="finishedContractsList" style="margin-top: 5px;">
                 <div id="finished"></div>
             </div>
         </div>

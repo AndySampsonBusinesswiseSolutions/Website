@@ -99,8 +99,12 @@ function pageLoad() {
       title: {
         text: 'MW'
       },
-        min: 0,
-        max: 3,
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return val.toLocaleString();
+        }
+      },
         decimalsInFloat: 3
     }]
   };
@@ -128,8 +132,12 @@ function pageLoad() {
       title: {
         text: 'p/kWh'
       },
-        min: 4,
-        max: 6,
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return val.toLocaleString();
+        }
+      },
         decimalsInFloat: 3
     }]
   };
@@ -197,8 +205,12 @@ function pageLoad() {
       title: {
         text: 'th/day'
       },
-        min: 0,
-        max: 5000,
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return val.toLocaleString();
+        }
+      },
         decimalsInFloat: 0
     }]
   };
@@ -226,16 +238,20 @@ function pageLoad() {
       title: {
         text: 'p/kWh'
       },
-        min: 1.1,
-        max: 2.1,
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return val.toLocaleString();
+        }
+      },
         decimalsInFloat: 3
     }]
   };
         
-  refreshChart(electricityVolumeSeries, electricityCategories, "#electricityVolumeChart", electricityVolumeOptions);
-  refreshChart(electricityPriceSeries, electricityCategories, "#electricityPriceChart", electricityPriceOptions);
-  refreshChart(gasVolumeSeries, gasCategories, "#gasVolumeChart", gasVolumeOptions);
-  refreshChart(gasPriceSeries, gasCategories, "#gasPriceChart", gasPriceOptions);
+  refreshChart(electricityVolumeSeries, "#electricityVolumeChart", electricityVolumeOptions);
+  refreshChart(electricityPriceSeries, "#electricityPriceChart", electricityPriceOptions);
+  refreshChart(gasVolumeSeries, "#gasVolumeChart", gasVolumeOptions);
+  refreshChart(gasPriceSeries, "#gasPriceChart", gasPriceOptions);
       
   jexcel(document.getElementById('spreadsheet3'), {
         data:[
@@ -403,7 +419,7 @@ function renderChart(chartId, options) {
     chart.render();
 }
   
-function refreshChart(newSeries, newCategories, chartId, chartOptions) {
+function refreshChart(newSeries, chartId, chartOptions) {
     var options = {
       chart: {
           height: '100%',
@@ -416,7 +432,17 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
           autoScaleYaxis: true
         },
         animations: {
-          enabled: false
+          enabled: true,
+          easing: 'easeout',
+          speed: 800,
+          animateGradually: {
+              enabled: true,
+              delay: 150
+          },
+          dynamicAnimation: {
+              enabled: true,
+              speed: 350
+          }
         },
         toolbar: {
           autoSelected: 'zoom',
@@ -435,9 +461,16 @@ function refreshChart(newSeries, newCategories, chartId, chartOptions) {
       },
       legend: {
         show: true,
+        showForSingleSeries: true,
+        showForNullSeries: true,
+        showForZeroSeries: true,
         position: 'right',
         onItemClick: {
-          toggleDataSeries: false
+          toggleDataSeries: true
+        },
+        offsetY: 250,
+        formatter: function(seriesName) {
+          return seriesName + '<br><br>';
         }
       },
       series: newSeries,

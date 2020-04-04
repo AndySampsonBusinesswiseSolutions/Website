@@ -18,7 +18,7 @@
 .chart {
     max-height: 650px;
     min-height: 650px;
-    margin: 5px;
+    margin-top: 5px;
 }
 .roundborder  {
     border: solid black 1px;

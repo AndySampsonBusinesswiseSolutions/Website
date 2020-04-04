@@ -395,6 +395,9 @@ function loadUsageChart(checkBoxes) {
       chart: {
         type: 'bar',
       },
+      title: {
+        text: 'Forecast Portfolio Usage'
+      },
       tooltip: {
           x: {
           format: getChartTooltipXFormat("Yearly")
@@ -413,9 +416,7 @@ function loadUsageChart(checkBoxes) {
         title: {
           text: 'kWh'
         },
-          min: 0,
-          max: maxVolume,
-          decimalsInFloat: 0
+        forceNiceScale: true,
       }]
     };
 
@@ -481,6 +482,9 @@ function loadElectricityPriceChart() {
       type: 'line',
       stacked: false
     },
+    title: {
+      text: 'Flex Electricity Price'
+    },
     tooltip: {
         x: {
         format: 'dd/MM/yyyy'
@@ -499,9 +503,7 @@ function loadElectricityPriceChart() {
       title: {
         text: 'p/kWh'
       },
-        min: 4,
-        max: 6,
-        decimalsInFloat: 3
+      forceNiceScale: true,
     }]
   };
 
@@ -541,6 +543,9 @@ function loadElectricityUsageChart() {
         type: 'bar',
         stacked: true
       },
+      title: {
+        text: 'Flex Electricity Usage'
+      },
       tooltip: {
           x: {
           format: 'dd/MM/yyyy'
@@ -559,9 +564,7 @@ function loadElectricityUsageChart() {
         title: {
           text: 'MW'
         },
-          min: 0,
-          max: 3,
-          decimalsInFloat: 3
+        forceNiceScale: true,
       }]
     };
   refreshChart(electricityUsageSeries, "#electricityUsageChart", electricityUsageOptions);
@@ -599,6 +602,9 @@ function loadGasPriceChart() {
             type: 'line',
             stacked: false
           },
+          title: {
+            text: 'Flex Gas Price'
+          },
           tooltip: {
               x: {
               format: 'dd/MM/yyyy'
@@ -617,9 +623,7 @@ function loadGasPriceChart() {
             title: {
               text: 'p/kWh'
             },
-              min: 1.1,
-              max: 2.1,
-              decimalsInFloat: 3
+            forceNiceScale: true,
           }]
         };
   refreshChart(gasPriceSeries, "#gasPriceChart", gasPriceOptions);
@@ -647,6 +651,9 @@ function loadGasUsageChart() {
             type: 'bar',
           stacked: true
         },
+        title: {
+          text: 'Flex Gas Usage'
+        },
         tooltip: {
             x: {
             format: 'dd/MM/yyyy'
@@ -665,9 +672,7 @@ function loadGasUsageChart() {
           title: {
             text: 'th/day'
           },
-            min: 0,
-            max: 5000,
-            decimalsInFloat: 0
+          forceNiceScale: true,
         }]
       };
   refreshChart(gasUsageSeries, "#gasUsageChart", gasUsageOptions);
@@ -709,6 +714,7 @@ function refreshChart(newSeries, chartId, chartOptions) {
         height: '100%',
         width: '100%',
       type: chartOptions.chart.type,
+      title: chartOptions.chart.title,
       stacked: chartOptions.chart.stacked,
       zoom: {
         type: 'x',
@@ -716,7 +722,17 @@ function refreshChart(newSeries, chartId, chartOptions) {
         autoScaleYaxis: true
       },
       animations: {
-        enabled: false
+        enabled: true,
+        easing: 'easeout',
+        speed: 800,
+        animateGradually: {
+            enabled: true,
+            delay: 150
+        },
+        dynamicAnimation: {
+            enabled: true,
+            speed: 350
+        }
       },
       toolbar: {
         autoSelected: 'zoom',
@@ -735,9 +751,15 @@ function refreshChart(newSeries, chartId, chartOptions) {
     },
     legend: {
       show: true,
+      showForSingleSeries: true,
+      showForNullSeries: true,
+      showForZeroSeries: true,
       position: 'right',
       onItemClick: {
-        toggleDataSeries: false
+        toggleDataSeries: true
+      },
+      formatter: function(seriesName) {
+        return seriesName + '<br><br>';
       }
     },
     series: newSeries,

@@ -46,7 +46,7 @@
 
 	<br>
 	<div class="final-column">
-		<div id="dashboardHeader" class="dashboard roundborder" style="text-align: center; overflow: auto">
+		<div id="dashboardHeader" class="dashboard roundborder" style="text-align: center; overflow: auto;">
 			<div style="text-align: left; margin-left: 4.25px;">
 				<span>Main Dashboard <i class="far fa-plus-square" id="mainDashboardSelector"></i></span>
 			</div>
@@ -113,8 +113,7 @@
 			</div>
 		</div>
 		<div style="font-size: 10px;">*Predicted savings are approximate</div>
-		<br>
-		<div id="customDashboard" class="dashboard roundborder" style="text-align: center; overflow: auto">
+		<div id="customDashboard" class="dashboard roundborder" style="text-align: center; overflow: auto; margin-top: 15px;">
 			<div style="text-align: left; margin-left: 4.25px;">
 				<span>Custom Dashboard <i class="far fa-plus-square" id="customDashboardSelector"></i></span>
 			</div>

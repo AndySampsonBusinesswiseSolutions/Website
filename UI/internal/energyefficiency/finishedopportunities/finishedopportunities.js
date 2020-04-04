@@ -33,7 +33,7 @@ function loadDataGrid() {
 	var opportunities = [];
 
 	var row = {
-		projectName:'LED Lighting <i class="fas fa-search show-pointer"></i>',
+		projectName:'LED Lighting',
     site:'Site X',
     meter:'N/A',
     engineer:'En Gineer',
@@ -52,7 +52,7 @@ function loadDataGrid() {
   opportunities.push(row);
   
   row = {
-		projectName:'LED Lighting 2 <i class="fas fa-search show-pointer"></i>',
+		projectName:'LED Lighting 2',
     site:'Site Y',
     meter:'N/A',
     engineer:'En Gineer',
@@ -229,6 +229,12 @@ function updateGraphs() {
         title: {
           text: '£'
         },
+        forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return '£' + val.toLocaleString();
+        }
+      },
       decimalsInFloat: 0
       }]
     };
@@ -266,9 +272,12 @@ function updateGraphs() {
       title: {
         text: "£"
       },
-          min: 3000,
-          max: 6000,
-          decimalsInFloat: 0
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return '£' + val.toLocaleString();
+        }
+      },
       }]
     };
   
@@ -305,9 +314,12 @@ function updateGraphs() {
       title: {
         text: "kWh"
       },
-          min: 3000,
-          max: 6000,
-          decimalsInFloat: 0
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return val.toLocaleString();
+        }
+      },
       }]
     };
     
@@ -660,7 +672,17 @@ function getChartTooltipXFormat(period) {
           autoScaleYaxis: true
         },
         animations: {
-          enabled: false
+          enabled: true,
+          easing: 'easeout',
+          speed: 800,
+          animateGradually: {
+              enabled: true,
+              delay: 150
+          },
+          dynamicAnimation: {
+              enabled: true,
+              speed: 350
+          }
         },
         toolbar: {
           autoSelected: 'zoom',
@@ -679,9 +701,16 @@ function getChartTooltipXFormat(period) {
       },
       legend: {
         show: true,
+        showForSingleSeries: true,
+        showForNullSeries: true,
+        showForZeroSeries: true,
         position: 'right',
         onItemClick: {
-          toggleDataSeries: false
+          toggleDataSeries: true
+        },
+        offsetY: 250,
+        formatter: function(seriesName) {
+          return seriesName + '<br><br>';
         }
       },
       series: newSeries,

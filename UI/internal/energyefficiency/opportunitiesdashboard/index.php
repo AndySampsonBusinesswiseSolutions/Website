@@ -102,9 +102,8 @@
 	</div>
 	<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 	<br>
-	<div class="row">
-		<div class="divcolumn first"></div>
-		<div class="roundborder divcolumn left" style="background-color: #e9eaee; text-align: center; overflow: auto">
+	<div class="final-column" style="text-align: center;">
+		<div class="roundborder divcolumn">
 			<div>
 				<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"   class="roundborder dashboard-item-small">
 					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
@@ -137,113 +136,112 @@
 				</div>
 			</div>
 		</div>
-		<div class="divcolumn middle"></div>
-		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
-			<div style="text-align: center;">
+		<div class="divider-column"></div>
+		<div class="roundborder divcolumn" style="overflow: auto">
+			<div>
 				<div style="border-bottom: solid black 1px;">
 					<span>Recommended Opportunities</span>
 				</div>
-				<br>
-				<div>
-					<div class="first" style="float: left;"></div>
-					<div style="width: 30%; float: left;">
+				<div style="margin-top: 5px;">
+					<div class="divider-column"></div>
+					<div class="opportunity-column">
 						<span style="border-bottom: solid black 1px;">Opportunity</span>
 					</div>
-					<div class="middle" style="float: left;"></div>
-					<div style="width: 30%; float: left;">
+					<div class="divider-column"></div>
+					<div class="opportunity-column">
 						<span style="border-bottom: solid black 1px;">Approve/Reject</span>
 					</div>
-					<div class="middle" style="float: left;"></div>
-					<div style="width: 30%; float: left;">
+					<div class="divider-column"></div>
+					<div class="opportunity-column">
 						<span style="border-bottom: solid black 1px;">Estimated Annual Savings</span>
 					</div>
-					<div class="last" style="float: left;"></div>
+					<div class="divider-column"></div>
 				</div>
-				<br><br>
-				<div class="roundborder">
+				<br>
+				<div class="roundborder" style="margin-top: 5px;">
 					<div>
-						<div class="first" style="float: left;"></div>
-						<div style="width: 30%; float: left; padding-top: 10px;">
+						<div class="divider-column"></div>
+						<div class="opportunity-column" style="padding-top: 10px;">
 							<div id="Project1" class="far fa-plus-square show-pointer"></div>
 							<span id="Project1span">LED Lighting Installation</span>
 						</div>
-						<div class="middle" style="float: left;"></div>
-						<div style="width: 30%; float: left;">
+						<div class="divider-column"></div>
+						<div class="opportunity-column">
 							<button class="show-pointer approve" id="Project1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve Opportunity</button>
 							&nbsp&nbsp&nbsp&nbsp
 							<button class="show-pointer reject" id="Project1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject Opportunity</button>
 						</div>
-						<div class="middle" style="float: left;"></div>
-						<div id="Project1EstimatedAnnualSavings" style="width: 30%; float: left;">
+						<div class="divider-column"></div>
+						<div id="Project1EstimatedAnnualSavings" class="opportunity-column">
 							<span>kWh Savings: 10,000</span>
 							<br>
 							<span>£ Savings: £10,000</span>
 						</div>
-						<div class="last" style="float: left;"></div>
+						<div class="divider-column"></div>
 					</div>
 					<br><br>
 					<div id="Project1List" class="listitem-hidden">
 						<div>
-							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left; padding-top: 10px;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column" style="padding-top: 10px;">
 								<div id="Site1" class="far fa-times-circle"></div>
 								<span id="Site1span">Site X</span>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column">
 								<button class="show-pointer approve" id="Project1Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
 								&nbsp&nbsp&nbsp&nbsp
 								<button class="show-pointer reject" id="Project1Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div id="Project1Site1EstimatedAnnualSavings" style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div id="Project1Site1EstimatedAnnualSavings" class="opportunity-column">
 								<span>kWh Savings: 5,000</span>
 								<br>
 								<span>£ Savings: £5,000</span>
 							</div>
-							<div class="last" style="float: left;"></div>
+							<div class="divider-column"></div>
 						</div>
 						<br><br>
 						<div>
-							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left; padding-top: 10px;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column" style="padding-top: 10px;">
 								<div id="Site2" class="far fa-times-circle"></div>
 								<span id="Site2span">Site Y</span>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column">
 								<button class="show-pointer approve" id="Project1Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
 								&nbsp&nbsp&nbsp&nbsp
 								<button class="show-pointer reject" id="Project1Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div id="Project1Site2EstimatedAnnualSavings" style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div id="Project1Site2EstimatedAnnualSavings" class="opportunity-column">
 								<span>kWh Savings: 2,000</span>
 								<br>
 								<span>£ Savings: £2,000</span>
 							</div>
-							<div class="last" style="float: left;"></div>
+							<div class="divider-column"></div>
 						</div>
 						<br><br>
 						<div>
-							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left; padding-top: 10px;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column" style="padding-top: 10px;">
 								<div id="Site3" class="far fa-times-circle"></div>
 								<span id="Site3span">Site Z</span>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column">
 								<button class="show-pointer approve" id="Project1Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
 								&nbsp&nbsp&nbsp&nbsp
 								<button class="show-pointer reject" id="Project1Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div id="Project1Site3EstimatedAnnualSavings" style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div id="Project1Site3EstimatedAnnualSavings" class="opportunity-column">
 								<span>kWh Savings: 3,000</span>
 								<br>
 								<span>£ Savings: £3,000</span>
 							</div>
-							<div class="last" style="float: left;"></div>
+							<div class="divider-column"></div>
 						</div>
 						<br><br>
 					</div>
@@ -251,140 +249,132 @@
 				<br>
 				<div class="roundborder">
 					<div>
-						<div class="first" style="float: left;"></div>
-						<div style="width: 30%; float: left; padding-top: 10px;">
+						<div class="divider-column"></div>
+						<div class="opportunity-column" style="padding-top: 10px;">
 							<div id="Project2" class="far fa-plus-square show-pointer"></div>
 							<span id="Project2span">LED Lighting Installation 2</span>
 						</div>
-						<div class="middle" style="float: left;"></div>
-						<div style="width: 30%; float: left;">
+						<div class="divider-column"></div>
+						<div class="opportunity-column">
 							<button class="show-pointer approve" id="Project2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve Opportunity</button>
 							&nbsp&nbsp&nbsp&nbsp
 							<button class="show-pointer reject" id="Project2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject Opportunity</button>
 						</div>
-						<div class="middle" style="float: left;"></div>
-						<div id="Project2EstimatedAnnualSavings" style="width: 30%; float: left;">
+						<div class="divider-column"></div>
+						<div id="Project2EstimatedAnnualSavings" class="opportunity-column">
 							<span>kWh Savings: 10,000</span>
 							<br>
 							<span>£ Savings: £10,000</span>
 						</div>
-						<div class="last" style="float: left;"></div>
+						<div class="divider-column"></div>
 					</div>
 					<br><br>
 					<div id="Project2List" class="listitem-hidden">
 						<div>
-							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left; padding-top: 10px;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column" style="padding-top: 10px;">
 								<div id="Site1" class="far fa-times-circle"></div>
 								<span id="Site1span">Site X</span>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column">
 								<button class="show-pointer approve" id="Project2Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
 								&nbsp&nbsp&nbsp&nbsp
 								<button class="show-pointer reject" id="Project2Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div id="Project2Site1EstimatedAnnualSavings" style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div id="Project2Site1EstimatedAnnualSavings" class="opportunity-column">
 								<span>kWh Savings: 5,000</span>
 								<br>
 								<span>£ Savings: £5,000</span>
 							</div>
-							<div class="last" style="float: left;"></div>
+							<div class="divider-column"></div>
 						</div>
 						<br><br>
 						<div>
-							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left; padding-top: 10px;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column" style="padding-top: 10px;">
 								<div id="Site2" class="far fa-times-circle"></div>
 								<span id="Site2span">Site Y</span>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column">
 								<button class="show-pointer approve" id="Project2Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
 								&nbsp&nbsp&nbsp&nbsp
 								<button class="show-pointer reject" id="Project2Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div id="Project2Site2EstimatedAnnualSavings" style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div id="Project2Site2EstimatedAnnualSavings" class="opportunity-column">
 								<span>kWh Savings: 2,000</span>
 								<br>
 								<span>£ Savings: £2,000</span>
 							</div>
-							<div class="last" style="float: left;"></div>
+							<div class="divider-column"></div>
 						</div>
 						<br><br>
 						<div>
-							<div class="first" style="float: left;"></div>
-							<div style="width: 30%; float: left; padding-top: 10px;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column" style="padding-top: 10px;">
 								<div id="Site3" class="far fa-times-circle"></div>
 								<span id="Site3span">Site Z</span>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div class="opportunity-column">
 								<button class="show-pointer approve" id="Project2Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
 								&nbsp&nbsp&nbsp&nbsp
 								<button class="show-pointer reject" id="Project2Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
 							</div>
-							<div class="middle" style="float: left;"></div>
-							<div id="Project2Site3EstimatedAnnualSavings" style="width: 30%; float: left;">
+							<div class="divider-column"></div>
+							<div id="Project2Site3EstimatedAnnualSavings" class="opportunity-column">
 								<span>kWh Savings: 3,000</span>
 								<br>
 								<span>£ Savings: £3,000</span>
 							</div>
-							<div class="last" style="float: left;"></div>
+							<div class="divider-column"></div>
 						</div>
 						<br><br>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="divcolumn last"></div>
 	</div>
+	<div style="clear: both;"></div>
 	<br>
-	<div class="row">
-		<div class="divcolumn first"></div>
-		<div class="roundborder divcolumn left" style="background-color: #e9eaee;">
+	<div class="final-column">
+		<div class="roundborder divcolumn">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Visits</span>
 			</div>
-			<div class="row">
-				<div class="divcolumn first"></div>
-				<div class="divcolumn left">
+			<div>
+				<div class="divcolumn" style="float: left;">
 					<div style="text-align: center;">
 						<span style="border-bottom: solid black 1px;">Future Site Visits</span>
 					</div>
 					<br>
 					<div id="futureSiteVisitSpreadsheet"></div>
 				</div>
-				<div class="divcolumn middle"></div>
-				<div class="divcolumn right">
+				<div class="divider-column"></div>
+				<div class="divcolumn" style="float: left;">
 					<div style="text-align: center;">
 						<span style="border-bottom: solid black 1px;">Historical Site Visits</span>
 					</div>
 					<br>
 					<div id="historicalSiteVisitSpreadsheet"></div>
+					<br>
+					<button id="requestVisitButton" class="show-pointer" style="width: 100%; float: right;">Request Visit</button>
 				</div>
-				<div class="divcolumn last"></div>
-			</div>
-			<div>
-				<div class="first"></div>
-				<div>
-					<button id="requestVisitButton" class="show-pointer" style="width: 25%; float: right;">Request Visit</button>
-				</div>
-				<div class="last"></div>
 			</div>
 		</div>
-		<div class="divcolumn middle"></div>
-		<div class="roundborder divcolumn right" style="background-color: #e9eaee;">
+		<div class="divider-column"></div>
+		<div class="roundborder divcolumn">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Ranking</span>
 			</div>
 			<br>
 			<div id="siteRankingSpreadsheet"></div>		
 		</div>
-		<div class="divcolumn last"></div>
 	</div>
+	<div style="clear: both;"></div>
 	<br>
 </body>
 

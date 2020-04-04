@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="/includes/navigation/navigation.css">
+<link rel="stylesheet" href="/includes/base.css">
 
 <header class="fusion-header-wrapper">
     <div class="fusion-header-v1 fusion-mobile-logo-1  fusion-mobile-menu-design-modern">
