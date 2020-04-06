@@ -80,3 +80,8 @@
   left: 370px;
   font-size: 30px;
 }
+
+ul {
+    margin-top: 0;
+    margin-bottom: 10px;
+}

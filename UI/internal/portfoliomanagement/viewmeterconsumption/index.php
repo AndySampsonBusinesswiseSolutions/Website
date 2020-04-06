@@ -4,14 +4,14 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html ng-app="dateRangeDemo" ng-controller="dateRangeCtrl">
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
 
 	<link rel="stylesheet" href="viewmeterconsumption.css">
 </head>
 
-<body ng-app="dateRangeDemo" ng-controller="dateRangeCtrl">
+<body>
 	<div id="mySidenav" class="sidenav">
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">

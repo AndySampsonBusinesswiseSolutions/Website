@@ -8,11 +8,8 @@
 .section-header-text {
   color: white;
   text-align: center;
-  font: 13px/20px PTSansRegular, Arial, Helvetica, sans-serif;
   font-size: 25px;
   font-weight: bold;
-  line-height: 1.5;
-  font-family: Overpass;
 }
 .dashboard{
   background-color: #e9eaee;

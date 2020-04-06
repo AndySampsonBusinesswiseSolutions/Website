@@ -176,7 +176,7 @@
 			</div>			
 			<div style="clear: left;"></div>
 		</div>
-		<div id="datagridDiv" class="roundborder scrolling-wrapper" style="margin-top: 5px;">
+		<div id="datagridDiv" class="roundborder tree-div scrolling-wrapper" style="margin-top: 5px;">
 			<div id="datagrid" style="margin: 5px;">
 			</div>
 		</div>
