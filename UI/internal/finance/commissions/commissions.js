@@ -48,7 +48,7 @@ function createTree(baseData, divId, commodity, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -130,7 +130,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
     else {
         branchDiv.setAttribute('class', 'far fa-times-circle');
@@ -690,6 +690,7 @@ function addExpanderOnClickEvents() {
   
   updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
   updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('commissionsChart', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {

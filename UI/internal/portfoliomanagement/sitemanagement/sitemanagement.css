@@ -153,11 +153,6 @@
 .reject {
     background-color: red;
 }
-.show-pointer {
-    cursor: pointer;
-}
-
-
 
 #drop-area {
     border: 2px dashed #ccc;

@@ -163,7 +163,7 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
     header.style = "padding-left: 5px;";
 
     var headerText = dataName != "Dashboard" ? "Select Sites/Meters" : "Select Custom Dashboard Items";
-    header.innerHTML = headerText + ' <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = headerText + ' <i class="far fa-plus-square show-pointer" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -228,7 +228,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
       var branchDiv = createBranchDiv(branchId);
       
       if(!showSubMeters || !hasSubMeters) {
-          branchDiv.removeAttribute('class', 'far fa-plus-square');
+          branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
           branchDiv.setAttribute('class', 'far fa-times-circle');
       }
 
@@ -260,7 +260,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
   branchDiv.id = branchDivId;
 
   if(childrenCreated) {
-      branchDiv.setAttribute('class', 'far fa-plus-square');
+      branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
   }
 
   branchDiv.setAttribute('style', 'padding-right: 4px;');
@@ -325,6 +325,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     checkBox.setAttribute('Branch', branch);
     checkBox.setAttribute('LinkedSite', linkedSite);
     checkBox.setAttribute('GUID', guid);
+    checkBox.setAttribute('class', 'show-pointer');
 
     if(checkBox.id == 'Dashboard4checkbox') {
       checkBox.setAttribute('checked', true);
@@ -384,8 +385,6 @@ function loadUsageChart(checkBoxes) {
     }
   }
 
-  var maxVolume = Math.max(...forecastVolume)*1.05;
-
   var electricityVolumeSeries = [{
     name: 'Forecast Usage (kWh)',
     data: forecastVolume
@@ -396,7 +395,8 @@ function loadUsageChart(checkBoxes) {
         type: 'bar',
       },
       title: {
-        text: 'Forecast Portfolio Usage'
+        text: 'Forecast Portfolio Usage',
+        align: 'center'
       },
       tooltip: {
           x: {
@@ -417,6 +417,11 @@ function loadUsageChart(checkBoxes) {
           text: 'kWh'
         },
         forceNiceScale: true,
+        labels: {
+          formatter: function(val) {
+            return val.toLocaleString();
+          }
+        }
       }]
     };
 
@@ -483,7 +488,8 @@ function loadElectricityPriceChart() {
       stacked: false
     },
     title: {
-      text: 'Flex Electricity Price'
+      text: 'Flex Electricity Price',
+      align: 'center'
     },
     tooltip: {
         x: {
@@ -504,6 +510,11 @@ function loadElectricityPriceChart() {
         text: 'p/kWh'
       },
       forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return val.toLocaleString();
+        }
+      }
     }]
   };
 
@@ -544,7 +555,8 @@ function loadElectricityUsageChart() {
         stacked: true
       },
       title: {
-        text: 'Flex Electricity Usage'
+        text: 'Flex Electricity Usage',
+        align: 'center'
       },
       tooltip: {
           x: {
@@ -565,6 +577,11 @@ function loadElectricityUsageChart() {
           text: 'MW'
         },
         forceNiceScale: true,
+        labels: {
+          formatter: function(val) {
+            return val.toFixed(3);
+          }
+        }
       }]
     };
   refreshChart(electricityUsageSeries, "#electricityUsageChart", electricityUsageOptions);
@@ -603,7 +620,8 @@ function loadGasPriceChart() {
             stacked: false
           },
           title: {
-            text: 'Flex Gas Price'
+            text: 'Flex Gas Price',
+            align: 'center'
           },
           tooltip: {
               x: {
@@ -624,6 +642,11 @@ function loadGasPriceChart() {
               text: 'p/kWh'
             },
             forceNiceScale: true,
+            labels: {
+              formatter: function(val) {
+                return val.toLocaleString();
+              }
+            }
           }]
         };
   refreshChart(gasPriceSeries, "#gasPriceChart", gasPriceOptions);
@@ -652,7 +675,8 @@ function loadGasUsageChart() {
           stacked: true
         },
         title: {
-          text: 'Flex Gas Usage'
+          text: 'Flex Gas Usage',
+          align: 'center'
         },
         tooltip: {
             x: {
@@ -673,6 +697,11 @@ function loadGasUsageChart() {
             text: 'th/day'
           },
           forceNiceScale: true,
+          labels: {
+            formatter: function(val) {
+              return val.toLocaleString();
+            }
+          }
         }]
       };
   refreshChart(gasUsageSeries, "#gasUsageChart", gasUsageOptions);
@@ -714,7 +743,6 @@ function refreshChart(newSeries, chartId, chartOptions) {
         height: '100%',
         width: '100%',
       type: chartOptions.chart.type,
-      title: chartOptions.chart.title,
       stacked: chartOptions.chart.stacked,
       zoom: {
         type: 'x',
@@ -741,6 +769,7 @@ function refreshChart(newSeries, chartId, chartOptions) {
         }
       }
     },
+    title: chartOptions.title,
     dataLabels: {
       enabled: false
     },

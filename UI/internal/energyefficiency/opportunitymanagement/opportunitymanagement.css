@@ -72,9 +72,6 @@
   left: 370px;
   font-size: 30px;
 }
-.show-pointer {
-    cursor: pointer;
-}
 .btn {
     width: calc(100% - 10px); 
     margin: 5px;

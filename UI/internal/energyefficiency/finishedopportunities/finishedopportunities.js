@@ -83,20 +83,20 @@ function loadDataGrid() {
     wordWrap: true,
 		columns: [
       {type:'text', width:'150px', name:'projectName', title:'Project Name', readOnly: true},
-      {type:'text', width:'119px', name:'site', title:'Site', readOnly: true},
-      {type:'text', width:'119px', name:'meter', title:'Meter', readOnly: true},
-      {type:'text', width:'119px', name:'engineer', title:'Engineer', readOnly: true},
-      {type:'text', width:'119px', name:'startDate', title:'Start Date', readOnly: true},
-      {type:'text', width:'119px', name:'finishDate', title:'Finish Date', readOnly: true},
-      {type:'text', width:'119px', name:'cost', title:'Cost', readOnly: true},
-      {type:'text', width:'119px', name:'actualVolumeSavings', title:'Actual kWh<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'119px', name:'actualCostSavings', title:'Actual £<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'119px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'119px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'119px', name:'netVolumeSavings', title:'Net kWh<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'119px', name:'netCostSavings', title:'Net £<br>Savings (pa)', readOnly: true},
-      {type:'text', width:'119px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
-      {type:'text', width:'119px', name:'remainingROIMonths', title:'Remaining<br>ROI Months', readOnly: true},
+      {type:'text', width:'118px', name:'site', title:'Site', readOnly: true},
+      {type:'text', width:'118px', name:'meter', title:'Meter', readOnly: true},
+      {type:'text', width:'118px', name:'engineer', title:'Engineer', readOnly: true},
+      {type:'text', width:'118px', name:'startDate', title:'Start Date', readOnly: true},
+      {type:'text', width:'118px', name:'finishDate', title:'Finish Date', readOnly: true},
+      {type:'text', width:'118px', name:'cost', title:'Cost', readOnly: true},
+      {type:'text', width:'118px', name:'actualVolumeSavings', title:'Actual kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'118px', name:'actualCostSavings', title:'Actual £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'118px', name:'estimatedVolumeSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'118px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'118px', name:'netVolumeSavings', title:'Net kWh<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'118px', name:'netCostSavings', title:'Net £<br>Savings (pa)', readOnly: true},
+      {type:'text', width:'118px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
+      {type:'text', width:'118px', name:'remainingROIMonths', title:'Remaining<br>ROI Months', readOnly: true},
 		 ]
     });													
 }
@@ -355,7 +355,7 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Projects/Sites <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Projects/Sites <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -466,7 +466,7 @@ function buildMeter(meters, baseElement, checkboxFunction, linkedSite) {
         appendListItemChildren(li, branchId, checkboxFunction, 'Meter', meter.Identifier, ul, linkedSite, '');
 
         var branchDiv = li.children[branchId];
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         baseElement.appendChild(li); 
@@ -484,7 +484,7 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
 function createBranchDiv(branchDivId) {
     var branchDiv = document.createElement('div');
     branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square');
+    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     branchDiv.setAttribute('style', 'padding-right: 4px;');
     return branchDiv;
 }

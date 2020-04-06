@@ -657,6 +657,12 @@ function addExpanderOnClickEvents() {
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
 	}
+
+	updateClassOnClick('recommendedOpportunities', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('siteVisits', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('futureSiteVisits', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('historicalSiteVisits', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('siteRanking', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {

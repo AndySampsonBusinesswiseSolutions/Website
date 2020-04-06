@@ -20,7 +20,7 @@
 			</div>
 			<br>
 			<div class="roundborder" style="background-color: #e9eaee;">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square" id="commoditySelector"></i></span>
+				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
 						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
@@ -44,11 +44,19 @@
 	<div class="final-column">
 		<div>
 			<br>
-			<div class="roundborder chart">
-				<div id="commissionChart">
+			<div class="dashboard roundborder" style="padding: 10px;">
+				<div style="text-align: center; border-bottom: solid black 1px;">
+					<span>Commission Chart</span>
+					<i class="far fa-plus-square show-pointer" id="commissionsChart"></i>
+					<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Commission Chart To Download Basket"></div>
+					<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Commission Chart"></div>
+				</div>
+				<div id="commissionsChartList" class="roundborder chart" style="margin-top: 5px;">
+					<div id="commissionChart">
+					</div>
 				</div>
 			</div>
-			<div class="roundborder scrolling-wrapper" style="margin-top: 5px;">
+			<div class="dashboard roundborder scrolling-wrapper" style="margin-top: 5px;">
 				<div id="commissionDatagrid" style="margin: 5px;">
 				</div>
 			</div>

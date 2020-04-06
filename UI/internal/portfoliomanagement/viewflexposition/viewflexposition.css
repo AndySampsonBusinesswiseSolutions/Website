@@ -12,8 +12,17 @@
     padding-left: 15px;
     padding-right: 15px;
 }
+.tree-column {
+    float: left;
+    width: 385px;
+    padding-left: 15px;
+    padding-top: 50px;
+}
 .tree-div, .chart {
     background-color: #e9eaee;
+}
+.tree-div {
+    padding: 10px;
 }
 .chart {
     max-height: 650px;
@@ -41,3 +50,33 @@
 .listitem-hidden {
     display: none;
 }
+.format-listitem {
+    list-style-type: none; 
+    padding-left: 15px;
+}
+.sidenav-icon {
+    font-size: 30px; 
+    cursor: pointer; 
+    float: left; 
+    color: white;
+  }
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background-color: #505152;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    opacity: 95%;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 70px;
+    left: 370px;
+    font-size: 30px;
+  }

@@ -104,45 +104,46 @@
 	<br>
 	<div class="final-column" style="text-align: center;">
 		<div class="roundborder divcolumn">
-			<div>
-				<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"   class="roundborder dashboard-item-small">
-					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-					<span>Pending Opportunities</span><br>
-					<span style="font-size: 15px;">Count: 10</span><br>
-					<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
-					<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
-				</a>
-				<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"  class="roundborder dashboard-item-small">
-					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-					<span>Active Opportunities</span><br>
-					<span style="font-size: 15px;">Count: 2</span><br>
-					<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
-					<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
-				</a>
-				<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="roundborder dashboard-item-small">
-					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-					<span>Finished Opportunities</span><br>
-					<span style="font-size: 15px;">Count: 5</span><br>
-					<span style="font-size: 11px;">Total kWh Savings: 10,000</span><br>
-					<span style="font-size: 11px;">Total £ Savings: £10,000</span><br>
-					<span style="font-size: 11px;">kWh Savings over past 12 months: 10,000</span><br>
-					<span style="font-size: 11px;">£ Savings over past 12 months: £10,000</span>
-				</a>
-				<div class="roundborder dashboard-item-small">
-					<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-					<span>Sub Meters</span><br><br><br>
-					<span style="font-size: 15px;">Installed: 1</span><br>
-					<span style="font-size: 15px;">To Be Installed: 5</span>
-				</div>
+			<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"   class="roundborder dashboard-item-small">
+				<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+				<span>Pending Opportunities</span><br>
+				<span style="font-size: 15px;">Count: 10</span><br>
+				<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
+				<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
+			</a>
+			<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"  class="roundborder dashboard-item-small">
+				<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+				<span>Active Opportunities</span><br>
+				<span style="font-size: 15px;">Count: 2</span><br>
+				<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
+				<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
+			</a>
+			<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="roundborder dashboard-item-small">
+				<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+				<span>Finished Opportunities</span><br>
+				<span style="font-size: 15px;">Count: 5</span><br>
+				<span style="font-size: 11px;">Total kWh Savings: 10,000</span><br>
+				<span style="font-size: 11px;">Total £ Savings: £10,000</span><br>
+				<span style="font-size: 11px;">kWh Savings over past 12 months: 10,000</span><br>
+				<span style="font-size: 11px;">£ Savings over past 12 months: £10,000</span>
+			</a>
+			<div class="roundborder dashboard-item-small">
+				<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
+				<span>Sub Meters</span><br><br><br>
+				<span style="font-size: 15px;">Installed: 1</span><br>
+				<span style="font-size: 15px;">To Be Installed: 5</span>
 			</div>
 		</div>
 		<div class="divider-column"></div>
 		<div class="roundborder divcolumn" style="overflow: auto">
-			<div>
-				<div style="border-bottom: solid black 1px;">
-					<span>Recommended Opportunities</span>
-				</div>
-				<div style="margin-top: 5px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span>Recommended Opportunities</span>
+				<i class="far fa-plus-square show-pointer" id="recommendedOpportunities"></i>
+				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Recommended Opportunities To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Recommended Opportunities"></div>
+			</div>
+			<div id="recommendedOpportunitiesList" style="margin-top: 5px;">
+				<div>
 					<div class="divider-column"></div>
 					<div class="opportunity-column">
 						<span style="border-bottom: solid black 1px;">Opportunity</span>
@@ -344,23 +345,34 @@
 		<div class="roundborder divcolumn">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Visits</span>
+				<i class="far fa-plus-square show-pointer" id="siteVisits"></i>
+				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Visits To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Visits"></div>
 			</div>
-			<div>
+			<div id="siteVisitsList" style="margin-top: 5px;">
 				<div class="divcolumn" style="float: left;">
-					<div style="text-align: center;">
-						<span style="border-bottom: solid black 1px;">Future Site Visits</span>
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Future Site Visits</span>
+						<i class="far fa-plus-square show-pointer" id="futureSiteVisits"></i>
+						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Future Site Visits To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Future Site Visits"></div>
 					</div>
-					<br>
-					<div id="futureSiteVisitSpreadsheet"></div>
+					<div id="futureSiteVisitsList" style="margin-top: 5px;">
+						<div id="futureSiteVisitSpreadsheet"></div>
+					</div>
 				</div>
 				<div class="divider-column"></div>
 				<div class="divcolumn" style="float: left;">
-					<div style="text-align: center;">
-						<span style="border-bottom: solid black 1px;">Historical Site Visits</span>
+					<div style="text-align: center; border-bottom: solid black 1px;">
+						<span>Historical Site Visits</span>
+						<i class="far fa-plus-square show-pointer" id="historicalSiteVisits"></i>
+						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Historical Site Visits To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Historical Site Visits"></div>
 					</div>
-					<br>
-					<div id="historicalSiteVisitSpreadsheet"></div>
-					<br>
+					<div id="historicalSiteVisitsList" style="margin-top: 5px;">
+						<div id="historicalSiteVisitSpreadsheet"></div>
+					</div>
+					<div style="margin-top: 5px;"></div>
 					<button id="requestVisitButton" class="show-pointer" style="width: 100%; float: right;">Request Visit</button>
 				</div>
 			</div>
@@ -369,9 +381,13 @@
 		<div class="roundborder divcolumn">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Ranking</span>
+				<i class="far fa-plus-square show-pointer" id="siteRanking"></i>
+				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Ranking To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Ranking"></div>
 			</div>
-			<br>
-			<div id="siteRankingSpreadsheet"></div>		
+			<div id="siteRankingList" style="margin-top: 5px;">
+				<div id="siteRankingSpreadsheet"></div>
+			</div>
 		</div>
 	</div>
 	<div style="clear: both;"></div>

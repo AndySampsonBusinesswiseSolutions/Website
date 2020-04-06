@@ -56,9 +56,21 @@
 
 	<br>
 	<div class="final-column">
-		<div id="spreadsheet"></div>
-		<br>
-		<div id="ganttChart"></div>
+		<div class="roundborder tree-div scrolling-wrapper">
+			<div id="spreadsheet"></div>
+		</div>
+		<div style="margin-top: 5px;"></div>
+		<div class="roundborder tree-div scrolling-wrapper">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span>Pending & Active Opportunities Chart</span>
+				<i class="far fa-plus-square show-pointer" id="pendingAndActiveOpportunities"></i>
+				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></div>
+			</div>
+			<div id="pendingAndActiveOpportunitiesList" style="margin-top: 5px;">
+				<div id="ganttChart"></div>
+			</div>
+		</div>
 	</div>
 	<br>
 </body>

@@ -41,8 +41,8 @@ function getCommodity() {
 	return commodity;
   }
 
-function getShowBy(callingElement) {
-	if(!callingElement || document.getElementById('variance0radio').checked) {
+function getShowBy() {
+	if(document.getElementById('variance0radio').checked) {
 		return 'Forecast';
 	}
 
@@ -258,7 +258,7 @@ function getYAxisTitle(showBy) {
 }
 
 function updateChart(callingElement) {
-	var showBy = getShowBy(callingElement);
+	var showBy = getShowBy();
 	var newCategories = getNewCategories();   
 	var newSeries = getNewChartSeries(getCheckedCheckBoxes(document.getElementById('treeDiv').getElementsByTagName('input')), showBy, newCategories, getCommodity());
 	var chartOptions = {
@@ -614,7 +614,7 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);
@@ -674,7 +674,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -702,7 +702,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
 
         var identifier = getAttribute(subMeter.Attributes, 'Identifier');
         var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -719,7 +719,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');
@@ -765,7 +765,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     checkBox.id = checkboxId.concat('checkbox');
     checkBox.setAttribute('Branch', branch);
     checkBox.setAttribute('LinkedSite', linkedSite);
-    checkBox.setAttribute('GUID', guid);
+	checkBox.setAttribute('GUID', guid);
 
     functionArguments.push(checkBox.id);
     if(functionArrayLength > 1) {
@@ -893,6 +893,8 @@ function addExpanderOnClickEvents() {
 	updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
 	updateClassOnClick('displaySelector', 'fa-plus-square', 'fa-minus-square');
 	updateClassOnClick('typeSelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('varianceAnalysisChart', 'fa-plus-square', 'fa-minus-square');
+	
 }
 
 function addExpanderOnClickEventsByElement(element) {

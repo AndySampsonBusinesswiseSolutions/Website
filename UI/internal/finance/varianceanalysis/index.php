@@ -19,7 +19,7 @@
 			</div>
 			<br>
 			<div class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square" id="commoditySelector"></i></span>
+				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
 						<input type="radio" name="group2" id="allCommodityradio" checked guid="0" onclick='createTree(data, "treeDiv", "", "updateChart()", true);'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
@@ -34,7 +34,7 @@
 			</div>
 			<br>
 			<div id="displayTreeDiv" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Display <i class="far fa-plus-square" id="displaySelector"></i></span>
+				<span style="padding-left: 5px;">Select Display <i class="far fa-plus-square show-pointer" id="displaySelector"></i></span>
 				<ul class="format-listitem" id="displaySelectorList">
 					<li>
 						<input type="radio" name="group1" id="costCostElement0radio" checked guid="0" onclick='updateChart(this);'><span id="costCostElement0span" style="padding-left: 1px;">Cost</span>
@@ -49,18 +49,18 @@
 			</div>
 			<br>
 			<div id="costTreeDiv" class="tree-div roundborder scrolling-wrapper">
-				<span style="padding-left: 5px;">Select Type <i class="far fa-plus-square" id="typeSelector"></i></span>
+				<span style="padding-left: 5px;">Select Type <i class="far fa-plus-square show-pointer" id="typeSelector"></i></span>
 				<ul class="format-listitem" id="typeSelectorList">
 					<li>
 						<input type="radio" name="group0" id="variance0radio" guid="0" checked onclick='updateChart(this);'><span id="variance0span" style="padding-left: 1px;">Forecast v Invoice Summary</span>
 					</li>
 					<li>
-						<div id="variance1" class="far fa-plus-square" style="padding-right: 4px;"></div>
+						<div id="variance1" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
 						<span id="variance1span" style="padding-left: 1px;">Cost Elements</span>
 						<div id="variance1List" class="listitem-hidden">
 							<ul class="format-listitem">
 								<li>
-									<div id="networkCostElement0" style="padding-right: 4px;" class="far fa-plus-square"></div>
+									<div id="networkCostElement0" style="padding-right: 4px;" class="far fa-plus-square show-pointer"></div>
 									<span id="networkCostElement0span" style="padding-left: 1px;">Network</span>
 									<div id="networkCostElement0List" class="listitem-hidden">
 										<ul class="format-listitem">
@@ -80,7 +80,7 @@
 									</div>
 								</li>
 								<li>
-									<div id="renewablesCostElement0" style="padding-right: 4px;" class="far fa-plus-square"></div>
+									<div id="renewablesCostElement0" style="padding-right: 4px;" class="far fa-plus-square show-pointer"></div>
 									<span id="renewablesCostElement0span" style="padding-left: 1px;">Renewables</span>
 									<div id="renewablesCostElement0List" class="listitem-hidden">
 										<ul class="format-listitem">
@@ -108,7 +108,7 @@
 									</div>
 								</li>
 								<li>
-									<div id="balancingCostElement0" style="padding-right: 4px;" class="far fa-plus-square"></div>
+									<div id="balancingCostElement0" style="padding-right: 4px;" class="far fa-plus-square show-pointer"></div>
 									<span id="balancingCostElement0span" style="padding-left: 1px;">Balancing</span>
 									<div id="balancingCostElement0List" class="listitem-hidden">
 										<ul class="format-listitem">
@@ -124,7 +124,7 @@
 									</div>
 								</li>
 								<li>
-									<div id="otherCostElement0" style="padding-right: 4px;" class="far fa-plus-square"></div>
+									<div id="otherCostElement0" style="padding-right: 4px;" class="far fa-plus-square show-pointer"></div>
 									<span id="otherCostElement0span" style="padding-left: 1px;">Other</span>
 									<div id="otherCostElement0List" class="listitem-hidden">
 										<ul class="format-listitem">
@@ -151,22 +151,31 @@
 		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
 		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 	</div>
-
+	<br>
 	<div class="final-column">
-		<br>
-		<div id="rightHandChartDiv" class="roundborder half-chart" style="margin-right: 5px;">
-			<div id="rightHandChart">
+		<div class="dashboard roundborder" style="padding: 10px;">
+			<div style="text-align: center; border-bottom: solid black 1px;">
+				<span>Variance Analysis Charts</span>
+				<i class="far fa-plus-square show-pointer" id="varianceAnalysisChart"></i>
+				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Variance Analysis Chart To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Variance Analysis Chart"></div>
 			</div>
+			<div id="varianceAnalysisChartList" style="margin-top: 5px;">
+				<div id="rightHandChartDiv" class="roundborder half-chart" style="margin-right: 5px;">
+					<div id="rightHandChart">
+					</div>
+				</div>
+				<div id="leftHandChartDiv" class="roundborder half-chart">
+					<div id="leftHandChart">
+					</div>
+				</div>
+				<div id="chartDiv" class="roundborder chart">
+					<div id="chart">
+					</div>
+				</div>
+			</div>			
+			<div style="clear: left;"></div>
 		</div>
-		<div id="leftHandChartDiv" class="roundborder half-chart">
-			<div id="leftHandChart">
-			</div>
-		</div>
-		<div id="chartDiv" class="roundborder chart">
-			<div id="chart">
-			</div>
-		</div>
-		<div style="clear: left;"></div>
 		<div id="datagridDiv" class="roundborder scrolling-wrapper" style="margin-top: 5px;">
 			<div id="datagrid" style="margin: 5px;">
 			</div>

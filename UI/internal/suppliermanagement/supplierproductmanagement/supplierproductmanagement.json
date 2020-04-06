@@ -78,10 +78,6 @@ var supplierproduct = [
                         ]
                     }
                 ]
-            },
-            {
-                "CommodityName": "Add New Commodity",
-                "ProfileClasses":[]
             }
         ]
     },
@@ -135,10 +131,6 @@ var supplierproduct = [
                         ]
                     }
                 ]
-            },
-            {
-                "CommodityName": "Add New Commodity",
-                "ProfileClasses":[]
             }
         ]
     }

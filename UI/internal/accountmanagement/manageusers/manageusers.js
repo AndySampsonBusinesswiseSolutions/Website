@@ -49,19 +49,29 @@ function openTab(callingElement, tabName, guid) {
 
 function createCardButton(checkbox){
 	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	var button = document.getElementById(span.id.replace('span', 'button'));
 
 	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
-		button.innerHTML = span.innerHTML;
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
+		if(!button) {
+			cardDiv.setAttribute('style', '');
+			var button = document.createElement('button');
+			button.setAttribute('class', 'tablinks');
+			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
+			button.innerHTML = span.innerHTML;
+
+			if(!span.innerText.includes('Add New')) {
+				button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add ' + span.innerText + ' To Download Basket"></div>'
+				+ '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download ' + span.innerText + '"></div>';
+			}
+
+			button.id = span.id.replace('span', 'button');
+			tabDiv.appendChild(button);
+		}		
 	}
 	else {
-		var button = document.getElementById(span.id.replace('span', 'button'));
-		tabDiv.removeChild(button);
+		if(button) {
+			tabDiv.removeChild(button);
+		}
 	}	
 
 	updateTabDiv();
@@ -75,7 +85,7 @@ function updateTabDiv() {
 	if(tabDivChildrenLength == 0) {
 		document.getElementById('User0checkbox').checked = true;
 		createCardButton(document.getElementById('User0checkbox'));
-		openTab(document.getElementById('User0button'), 'User0button', '0');
+		openTab(document.getElementById('User0button'), 'User0div', '0');
 	}
 	else {
 		var percentage = (1 / tabDivChildrenLength) * 100;
@@ -463,7 +473,7 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select User(s) <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select User(s) <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);

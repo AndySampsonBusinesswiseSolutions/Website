@@ -39,12 +39,16 @@
 	</div>
 	<br>
 	<div class="final-column">
-		<div id="spreadsheet"></div>
-		<br>
+		<div class="roundborder dashboard scrolling-wrapper" style="padding: 10px;">
+			<div id="spreadsheet"></div>
+		</div>
+		<div style="margin-top: 5px;"></div>
 		<div class="roundborder dashboard" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
 				<div id="cumulativeSaving" class="far fa-plus-square show-pointer"></div>
+				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="float: right;" title="Download Cumulative Saving Chart"></div>
 			</div>
 			<div id="cumulativeSavingList" class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
 				<div id="cumulativeSavingChart"></div>
@@ -54,6 +58,8 @@
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="costSavingspan">Cost Saving Chart</span>
 				<div id="costSaving" class="far fa-plus-square show-pointer"></div>
+				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="float: right;" title="Download Cost Saving Chart"></div>
 			</div>
 			<div id="costSavingList"  class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
 				<div id="costSavingChart"></div>
@@ -63,6 +69,8 @@
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="volumeSavingspan">Volume Saving Chart</span>
 				<div id="volumeSaving" class="far fa-plus-square show-pointer"></div>
+				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="float: right;" title="Download Volume Saving Chart"></div>
 			</div>
 			<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
 				<div id="volumeSavingChart"></div>

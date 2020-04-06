@@ -54,7 +54,7 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Projects/Sites <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Projects/Sites <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -164,7 +164,7 @@ function buildMeter(meters, baseElement, checkboxFunction, linkedSite) {
         appendListItemChildren(li, branchId, checkboxFunction, 'Meter', meter.Identifier, ul, linkedSite, '');
 
         var branchDiv = li.children[branchId];
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         baseElement.appendChild(li); 
@@ -182,7 +182,7 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
 function createBranchDiv(branchDivId) {
     var branchDiv = document.createElement('div');
     branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square');
+    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     branchDiv.setAttribute('style', 'padding-right: 4px;');
     return branchDiv;
 }
@@ -320,6 +320,7 @@ function addExpanderOnClickEvents() {
     updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
     updateClassOnClick('treeDisplayOrder', 'fa-plus-square', 'fa-minus-square');
     updateClassOnClick('projectStatus', 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick('pendingAndActiveOpportunities', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -411,21 +412,6 @@ function pushProjectId(idsToPush, id) {
     }
 }
 
-function buildGanttChart() {
-    var newGanttData = filerGanttData();
-    var ganttChart = document.getElementById("ganttChart");
-    clearElement(ganttChart);
-
-    $(function () {
-        var tableContainer = document.getElementById('spreadsheet');
-
-        $("#ganttChart").ganttView({ 
-            data: newGanttData,
-            slideWidth: tableContainer.clientWidth
-        });
-    });
-}
-
 function buildDataGrid() {
     var newGanttData = filerGanttData();
     var spreadsheet = document.getElementById('spreadsheet');
@@ -501,11 +487,11 @@ function buildDataGrid() {
             {type:'text', width:'175px', name:'projectName', title:'Project Name', readOnly: true},
             {type:'text', width:'150px', name:'site', title:'Site', readOnly: true},
             {type:'text', width:'150px', name:'meter', title:'Meter', readOnly: true},
-            {type:'text', width:'150px', name:'engineer', title:'Engineer', readOnly: true},
-            {type:'text', width:'150px', name:'projectStatus', title:'Project<br>Status', readOnly: true},
+            {type:'text', width:'140px', name:'engineer', title:'Engineer', readOnly: true},
+            {type:'text', width:'140px', name:'projectStatus', title:'Project<br>Status', readOnly: true},
             {type:'text', width:'150px', name:'estimatedStartDate', title:'Estimated<br>Start Date', readOnly: true},
             {type:'text', width:'150px', name:'estimatedFinishDate', title:'Estimated<br>End Date', readOnly: true},
-            {type:'text', width:'150px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
+            {type:'text', width:'140px', name:'estimatedCost', title:'Estimated<br>Cost', readOnly: true},
             {type:'text', width:'150px', name:'estimatedkWhSavings', title:'Estimated kWh<br>Savings (pa)', readOnly: true},
             {type:'text', width:'150px', name:'estimatedCostSavings', title:'Estimated £<br>Savings (pa)', readOnly: true},
             {type:'text', width:'150px', name:'totalROIMonths', title:'Total<br>ROI Months', readOnly: true},
@@ -515,6 +501,21 @@ function buildDataGrid() {
 
     cellsToMerge.forEach(element => {
         table.setMerge(element.cell, 1, element.rowSpan);
+    });
+}
+
+function buildGanttChart() {
+    var newGanttData = filerGanttData();
+    var ganttChart = document.getElementById("ganttChart");
+    clearElement(ganttChart);
+
+    $(function () {
+        var tableContainer = document.getElementById('spreadsheet');
+
+        $("#ganttChart").ganttView({ 
+            data: newGanttData,
+            slideWidth: tableContainer.clientWidth
+        });
     });
 }
 
@@ -596,7 +597,7 @@ function buildDataGrid() {
 
             var slideDiv = jQuery("<div>", {
                 "class": "ganttview-slide-container",
-                "css": { "width": "85%" }
+                "css": { "width": "84.5%" }
             });
 			
             dates = getDates(opts.start, opts.end);

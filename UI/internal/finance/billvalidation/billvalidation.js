@@ -118,14 +118,14 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Bills <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Bills <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);
 	
 	document.getElementById('Period13checkbox').checked = true;
 	createCardButton(document.getElementById('Period13checkbox'));
-	openTab(document.getElementById('Bill15button'), 'Bill15button', '15');
+	openTab(document.getElementById('Bill15button'), 'Bill15div', '15');
 	addExpanderOnClickEvents();
 }
 
@@ -182,7 +182,7 @@ function buildBill(bills, baseElement, checkboxFunction, linkedSite) {
         appendListItemChildren(li, branchId, checkboxFunction, 'Bill'.concat(bill.Status), bill.BillNumber, ul, linkedSite, bill.GUID);
 
         var branchDiv = li.children[branchId];
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         var branchIcon = li.children['Bill'.concat(bill.GUID).concat('span')];
@@ -203,7 +203,7 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
 function createBranchDiv(branchDivId) {
     var branchDiv = document.createElement('div');
     branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square');
+    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     branchDiv.setAttribute('style', 'padding-right: 4px;');
     return branchDiv;
 }
@@ -247,7 +247,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     checkBox.id = checkboxId.concat('checkbox');
     checkBox.setAttribute('Branch', branch);
     checkBox.setAttribute('LinkedSite', linkedSite);
-    checkBox.setAttribute('GUID', guid);
+	checkBox.setAttribute('GUID', guid);
 
     functionArguments.push(checkBox.id);
     if(functionArrayLength > 1) {
@@ -305,7 +305,7 @@ function openTab(callingElement, tabName, guid) {
 	createCard(guid, newDiv);
 
 	newDiv.style.display = "block";
-  }
+}
 
 function createCardButton(checkbox){
 	var tabDiv = document.getElementById('tabDiv');	
@@ -313,13 +313,13 @@ function createCardButton(checkbox){
 
 	switch(checkbox.getAttribute('branch')) {
 		case 'Period':
-			createPeriodButtons(id, tabDiv);
+			createPeriodButtons(id, tabDiv, checkbox.checked);
 			break;
 		case 'Site':
-			createSiteButtons(id, tabDiv);
+			createSiteButtons(id, tabDiv, checkbox.checked);
 			break;
 		case 'Meter':
-			createMeterButtons(id, tabDiv);
+			createMeterButtons(id, tabDiv, checkbox.checked);
 			break;
 		default:
 			createBillButton(checkbox, tabDiv);
@@ -329,7 +329,7 @@ function createCardButton(checkbox){
 	updateTabDiv();
 }
 
-function createPeriodButtons(id, tabDiv) {
+function createPeriodButtons(id, tabDiv, isChecked) {
 	var listdiv = document.getElementById(id);
 	var inputs = listdiv.getElementsByTagName('input');
 	var inputLength = inputs.length;
@@ -338,13 +338,13 @@ function createPeriodButtons(id, tabDiv) {
 		var input = inputs[i];
 		if(input.type.toLowerCase() == 'checkbox'
 		&& input.getAttribute('branch') == 'Site') {
-			input.checked = !input.checked;
-			createSiteButtons(input.id.replace('checkbox', 'List'), tabDiv);
+			input.checked = isChecked;
+			createSiteButtons(input.id.replace('checkbox', 'List'), tabDiv, isChecked);
 		}
 	}
 }
 
-function createSiteButtons(id, tabDiv) {
+function createSiteButtons(id, tabDiv, isChecked) {
 	var listdiv = document.getElementById(id);
 	var inputs = listdiv.getElementsByTagName('input');
 	var inputLength = inputs.length;
@@ -353,13 +353,13 @@ function createSiteButtons(id, tabDiv) {
 		var input = inputs[i];
 		if(input.type.toLowerCase() == 'checkbox'
 		&& input.getAttribute('branch') == 'Meter') {
-			input.checked = !input.checked;
-			createMeterButtons(input.id.replace('checkbox', 'List'), tabDiv);
+			input.checked = isChecked;
+			createMeterButtons(input.id.replace('checkbox', 'List'), tabDiv, isChecked);
 		}
 	}
 }
 
-function createMeterButtons(id, tabDiv) {
+function createMeterButtons(id, tabDiv, isChecked) {
 	var listdiv = document.getElementById(id);
 	var inputs = listdiv.getElementsByTagName('input');
 	var inputLength = inputs.length;
@@ -367,7 +367,7 @@ function createMeterButtons(id, tabDiv) {
     for(var i = 0; i < inputLength; i++) {
 		var input = inputs[i];
 		if(input.type.toLowerCase() == 'checkbox') {
-			input.checked = !input.checked;
+			input.checked = isChecked;
 			createBillButton(input, tabDiv);
 		}
 	}	
@@ -375,23 +375,30 @@ function createMeterButtons(id, tabDiv) {
 
 function createBillButton(checkbox, tabDiv) {
 	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	var button = document.getElementById(span.id.replace('span', 'button'));
 
 	if(checkbox.checked) {	
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
+		if(!button) {
+			button = document.createElement('button');
+			button.setAttribute('class', 'tablinks');
+			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
+		
+			var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
+			var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
+			var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
+		
+			button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
+			button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Bill To Download Basket"></div>'
+							  + '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Bill"></div>';
 	
-		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
-		var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
-		var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
-	
-		button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
+			button.id = span.id.replace('span', 'button');
+			tabDiv.appendChild(button);
+		}		
 	}
 	else {
-		var button = document.getElementById(span.id.replace('span', 'button'));
-		tabDiv.removeChild(button);
+		if(button) {
+			tabDiv.removeChild(button);
+		}		
 	}
 }
 
@@ -401,8 +408,12 @@ function updateTabDiv() {
 	var tabDivChildrenLength = tabDivChildren.length;
 
 	if(tabDivChildrenLength == 0) {
-		cardDiv.style.display = 'none';
-		tabDiv.style.display = 'none';
+		var cardDiv = document.getElementById('cardDiv');
+		clearElement(cardDiv);
+
+		document.getElementById('Period13checkbox').checked = true;
+		createCardButton(document.getElementById('Period13checkbox'));
+		openTab(document.getElementById('Bill15button'), 'Bill15div', '15');
 	}
 	else {
 		var percentage = (1 / tabDivChildrenLength) * 100;
@@ -412,6 +423,17 @@ function updateTabDiv() {
 		}
 		
 		tabDiv.style.display = '';
+
+		for(var i = 0; i < tabDivChildrenLength; i++) {
+			if(hasClass(tabDivChildren[i], 'active')) {
+				cardDiv.style.display = '';
+				return;
+			}
+		}
+
+		var lastChild = tabDivChildren[i - 1];
+		lastChild.className += " active";
+		lastChild.dispatchEvent(new Event('click'));
 	}	
 }
 
@@ -454,16 +476,35 @@ function populateCard(bill, divToAppendTo) {
 }
 
 function buildBillChart(bill, divToAppendTo) {
+	var containerDiv = document.createElement('div');
+	containerDiv.setAttribute('style', 'text-align: center; border-bottom: solid black 1px;');
+	divToAppendTo.appendChild(containerDiv);
+
+	var containerDivSpan = document.createElement('span');
+	containerDivSpan.innerText = 'Charts';
+	containerDiv.appendChild(containerDivSpan);
+
+	var containerDivIcon = document.createElement('i');
+	containerDivIcon.id = 'billChart';
+	containerDivIcon.setAttribute('class', 'far fa-plus-square show-pointer');
+	containerDivIcon.setAttribute('style', 'margin-left: 5px;');
+	containerDiv.appendChild(containerDivIcon);
+
+	var containerListDiv = document.createElement('div');
+	containerListDiv.id = 'billChartList';
+	containerListDiv.setAttribute('style', 'margin-top: 5px;');
+	divToAppendTo.appendChild(containerListDiv);
+
 	var firstChartDiv = document.createElement('div');
 	firstChartDiv.id = "firstChartDiv";
 	firstChartDiv.setAttribute('class', 'roundborder chart');
 	firstChartDiv.setAttribute('style', 'margin-right: 5px;');
-	divToAppendTo.appendChild(firstChartDiv);
+	containerListDiv.appendChild(firstChartDiv);
 
 	var secondChartDiv = document.createElement('div');
 	secondChartDiv.id = "secondChartDiv";
 	secondChartDiv.setAttribute('class', 'roundborder chart');
-	divToAppendTo.appendChild(secondChartDiv);
+	containerListDiv.appendChild(secondChartDiv);
 
 	var firstChart = document.createElement('div');
 	firstChart.id = "firstChart";
@@ -585,6 +626,9 @@ function buildBillChart(bill, divToAppendTo) {
 
 	renderChart('#firstChart', options);
 	renderChart('#secondChart', secondaryChartOptions);
+
+	addExpanderOnClickEventsByElement(containerDivIcon);
+	updateClassOnClick(containerDivIcon.id, 'fa-plus-square', 'fa-minus-square');
 }
 
 function renderChart(chartId, options) {

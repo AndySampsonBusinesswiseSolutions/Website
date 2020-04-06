@@ -49,19 +49,24 @@ function openTab(callingElement, tabName, guid) {
 
 function createCardButton(checkbox){
 	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	var button = document.getElementById(span.id.replace('span', 'button'));
 
 	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
-		button.innerHTML = span.innerHTML;
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
+		if(!button) {
+			cardDiv.setAttribute('style', '');
+			var button = document.createElement('button');
+			button.setAttribute('class', 'tablinks');
+			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
+			button.innerHTML = span.innerHTML;
+			button.id = span.id.replace('span', 'button');
+			tabDiv.appendChild(button);
+		}
 	}
 	else {
-		var button = document.getElementById(span.id.replace('span', 'button'));
-		tabDiv.removeChild(button);
+		
+		if(button) {
+			tabDiv.removeChild(button);
+		}
 	}	
 
 	updateTabDiv();
@@ -233,7 +238,7 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Document Type(s) <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Document Type(s) <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);

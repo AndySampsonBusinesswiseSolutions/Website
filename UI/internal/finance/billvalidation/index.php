@@ -29,7 +29,7 @@
 	<div class="final-column">
 		<br>
 		<div class="tabDiv" id="tabDiv"></div>
-		<div class="group-by-div" id="cardDiv"></div>
+		<div id="cardDiv"></div>
 	</div>
 	<br>
 </body>

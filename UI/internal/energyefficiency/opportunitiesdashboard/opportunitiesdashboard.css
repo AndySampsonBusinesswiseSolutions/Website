@@ -104,11 +104,6 @@
 .listitem-hidden {
     display: none;
 }
-.show-pointer {
-    padding-left: 5px; 
-    padding-right: 5px; 
-    cursor: pointer;
-}
 .dashboard-item-small {
     height: 200px; 
     width: 23.75%; 

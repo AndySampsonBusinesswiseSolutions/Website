@@ -182,7 +182,7 @@ function getSupplier(contractType, supplier, hasMultipleRecords, applyGroupIcon,
 	var tableDatacell = document.createElement('td');
 
 	if(hasMultipleRecords && applyGroupIcon) {
-		var icon = createGroupByIcon(contractType.concat(supplier), 'far fa-plus-square', 'padding-right: 10px;', contractType, null, applyClickEvent);
+		var icon = createGroupByIcon(contractType.concat(supplier), 'far fa-plus-square show-pointer', 'padding-right: 10px;', contractType, null, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 	}
@@ -195,7 +195,7 @@ function getContractReferenceBySupplier(contractType, contractReference, hasMult
 	var tableDatacell = document.createElement('td');
 
 	if(!hasMultipleRecords && applyGroupIcon) {
-		var icon = createGroupByIcon(contractType.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractType, contractSupplier, applyClickEvent);
+		var icon = createGroupByIcon(contractType.concat(contractReference), 'far fa-plus-square show-pointer', 'padding-right: 10px;', contractType, contractSupplier, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 
@@ -211,7 +211,7 @@ function getContractReferenceByContract(contractType, contractReference, hasMult
 	var tableDatacell = document.createElement('td');
 
 	if(hasMultipleRecords && applyGroupIcon) {
-		var icon = createGroupByIcon(contractType.concat(contractReference), 'far fa-plus-square', 'padding-right: 10px;', contractType, contractSupplier, applyClickEvent);
+		var icon = createGroupByIcon(contractType.concat(contractReference), 'far fa-plus-square show-pointer', 'padding-right: 10px;', contractType, contractSupplier, applyClickEvent);
 
 		tableDatacell.appendChild(icon);
 	}
@@ -535,7 +535,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -563,7 +563,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
 
         var identifier = getAttribute(subMeter.Attributes, 'Identifier');
         var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -596,7 +596,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');

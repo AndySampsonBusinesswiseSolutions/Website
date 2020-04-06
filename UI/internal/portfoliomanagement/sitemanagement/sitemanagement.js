@@ -47,7 +47,7 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s) <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s) <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);
@@ -181,7 +181,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -209,7 +209,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
 
         var identifier = getAttribute(subMeter.Attributes, 'Identifier');
         var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -242,7 +242,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');
@@ -469,26 +469,36 @@ function openTab(callingElement, tabName, guid, branch) {
 
 function createCardButton(checkbox){
 	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	var button = document.getElementById(span.id.replace('span', 'button'));
 
 	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
+		if(!button) {
+			var branch = checkbox.getAttribute('branch');
+			cardDiv.setAttribute('style', '');
+			var button = document.createElement('button');
+			button.setAttribute('class', 'tablinks');
+			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 
-		if(checkbox.getAttribute('branch') == "SubMeter") {
-			button.innerHTML = checkbox.parentNode.parentNode.parentNode.parentNode.children[3].innerText.concat(' - ').concat(span.innerHTML);
+			if(branch == "Site") {
+				button.innerHTML = span.innerHTML;
+			}
+			else {
+				button.innerHTML = checkbox.parentNode.parentNode.parentNode.parentNode.children[3].innerText.concat(' - ').concat(span.innerHTML);
+			}
+
+			if(!span.innerText.includes('Add New ')) {
+				button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add ' + branch + ' To Download Basket"></div>'
+				+ '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download ' + branch + '"></div>';
+			}
+			
+			button.id = span.id.replace('span', 'button');
+			tabDiv.appendChild(button);
 		}
-		else {
-			button.innerHTML = span.innerHTML;
-		}
-		
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
 	}
 	else {
-		var button = document.getElementById(span.id.replace('span', 'button'));
-		tabDiv.removeChild(button);
+		if(button) {
+			tabDiv.removeChild(button);
+		}
 	}	
 
 	updateTabDiv();
@@ -502,7 +512,7 @@ function updateTabDiv() {
 	if(tabDivChildrenLength == 0) {
 		document.getElementById('Site100checkbox').checked = true;
 		createCardButton(document.getElementById('Site100checkbox'));
-		openTab(document.getElementById('Site100button'), 'Site100button', '100', 'Site');
+		openTab(document.getElementById('Site100button'), 'Site100div', '100', 'Site');
 	}
 	else {
 		var percentage = (1 / tabDivChildrenLength) * 100;

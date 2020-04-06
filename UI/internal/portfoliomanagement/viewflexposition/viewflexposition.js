@@ -335,6 +335,35 @@ function pageLoad() {
   for(var i = 0; i < textAreas.length; i++) {
     textAreas[i].style.display = "none";
   }
+
+  document.onmousemove=function(e) {
+		var mousecoords = getMousePos(e);
+		if(mousecoords.x <= 25) {
+			openNav();
+		}  
+		else if(mousecoords.x >= 400) {
+			closeNav();
+		}  
+	};
+}
+
+function getMousePos(e) {
+	return {x:e.clientX,y:e.clientY};
+}
+
+function openNav() {
+	document.getElementById("mySidenav").style.width = "400px";
+	document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav() {
+	document.getElementById("openNav").style.color = "white";
+	document.getElementById("mySidenav").style.width = "0px";
+}
+
+function showHideContainer(checkbox) {
+  var container = document.getElementById(checkbox.id.replace('Checkbox', 'Container'));
+  container.style.display = checkbox.checked ? "" : "none"
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
@@ -381,6 +410,7 @@ function addExpanderOnClickEvents() {
   }
   
   updateClassOnClick('electricityVolume', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('itemsToDisplaySelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {

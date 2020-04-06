@@ -57,7 +57,7 @@
 		<div class="tree-div roundborder scrolling-wrapper" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Your Current LOA Details</span>
-				<i class="far fa-plus-square" id="loaDetails"></i>
+				<i class="far fa-plus-square show-pointer" id="loaDetails"></i>
 			</div>
 			<div id="loaDetailsList">
 				<span style="font-size: 20px; color: red;">Your current LOA is 5 days away from expiring!</span>
@@ -68,7 +68,7 @@
 		<div class="tree-div roundborder scrolling-wrapper" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Download Basket</span>
-				<i class="far fa-plus-square" id="downloadBasket"></i>
+				<i class="far fa-plus-square show-pointer" id="downloadBasket"></i>
 			</div>
 			<div id="downloadBasketList" class="listitem-hidden" style="padding: 5px;">
 				<table style="width: 100%;">

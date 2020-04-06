@@ -69,7 +69,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !meter.hasOwnProperty('SubMeters')) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -96,7 +96,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
         var li = document.createElement('li');
 
         var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -113,7 +113,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');

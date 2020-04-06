@@ -66,7 +66,7 @@ var documents = [
                         {"Name": "Document Name", "Value": "Haven 2019 Contract.pdf"},
                         {"Name": "Supplier", "Value": "Haven"},
                         {"Name": "Contract Number", "Value": "Haven0001"},
-                        {"Name": "Earliest Start Date", "Value": "01/01/20219"},
+                        {"Name": "Earliest Start Date", "Value": "01/01/2019"},
                         {"Name": "Latest End Date", "Value": "31/12/2019"},
                         {"Name": "Number Of Meters", "Value": "4"},
                         {"Name": "Contract Signed By", "Value": "Les Money (Finance Director)"},

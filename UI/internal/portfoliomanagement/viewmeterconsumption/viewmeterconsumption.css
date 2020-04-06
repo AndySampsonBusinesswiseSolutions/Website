@@ -1,3 +1,6 @@
+@import "https://bossanova.uk/jexcel/v3/jexcel.css";
+@import "https://bossanova.uk/jsuites/v2/jsuites.css";
+
 .section-header {
   background: #b62a51;
   width: 100%;
@@ -5,13 +8,14 @@
 .section-header-text {
   color: white;
   text-align: center;
+  font: 13px/20px PTSansRegular, Arial, Helvetica, sans-serif;
   font-size: 25px;
-  font-weight:bold;
+  font-weight: bold;
+  line-height: 1.5;
+  font-family: Overpass;
 }
-.show-pointer {
-  padding-left: 5px; 
-  padding-right: 5px; 
-  cursor: pointer;
+.dashboard{
+  background-color: #e9eaee;
 }
 .tree-column {
   float: left;
@@ -35,21 +39,19 @@
   list-style-type: none; 
   padding-left: 15px;
 }
-.tree-div, .chart, .roundborder {
+.tree-div, .chart {
   background-color: #e9eaee;
+  max-height: 650px;
+}
+.chart {
+  min-height: 650px;
+}
+.roundborder {
   border: solid black 1px;
   border-top-left-radius: 5px; 
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px; 
   border-bottom-right-radius: 5px;
-}
-.tree-div {
-  min-height: 300px;
-  max-height: 650px;
-}
-.chart {
-  min-height: 650px;
-  max-height: 650px;
 }
 .sidenav-icon {
   font-size: 30px; 

@@ -110,7 +110,11 @@
 		<div class="modal-content-wide">
 			<span class="close" title="Close">&times;</span>
 			<div class="title">
-				<span id="manageOpportunityTitle"></span><br><br>
+				<span id="manageOpportunityTitle"></span>
+				<br>
+				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Opportunity To Download Basket"></div>
+				<div class="fas fa-download show-pointer" style="float: right;" title="Download Opportunity"></div>
+				<br>
 			</div>
 			<br>
 			<div>
@@ -153,7 +157,7 @@
 							<div class="scrolling-wrapper">
 								<ul class="format-listitem" id="addNewTimelineStepTreeList">
 									<li>
-										<div id="Site0" class="far fa-plus-square" style="padding-right: 4px;"></div>
+										<div id="Site0" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
 										<input type="checkbox" id="Site0checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site0span">Site X</span>
 										<div id="Site0List" class="listitem-hidden">
 											<ul class="format-listitem">
@@ -168,7 +172,7 @@
 										</div>
 									</li>
 									<li>
-										<div id="Site1" class="far fa-plus-square" style="padding-right: 4px;"></div>
+										<div id="Site1" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
 										<input type="checkbox" id="Site1checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site1span">Site Y</span>
 										<div id="Site1List" class="listitem-hidden">
 											<ul class="format-listitem">
@@ -183,7 +187,7 @@
 										</div>
 									</li>
 									<li>
-										<div id="Site2" class="far fa-plus-square" style="padding-right: 4px;"></div>
+										<div id="Site2" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
 										<input type="checkbox" id="Site2checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site2span">Site Z</span>
 										<div id="Site2List" class="listitem-hidden">
 											<ul class="format-listitem">
@@ -205,7 +209,7 @@
 										</div>
 									</li>
 									<li>
-										<div id="Site3" class="far fa-plus-square" style="padding-right: 4px;"></div>
+										<div id="Site3" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
 										<input type="checkbox" id="Site3checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site3span">Site A</span>
 										<div id="Site3List" class="listitem-hidden">
 											<ul class="format-listitem">
@@ -337,7 +341,7 @@
 			</div>
 			<br>
 			<div id="opportunityStatusDiv" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Opportunity Status <i class="far fa-plus-square" id="opportunityStatusSelector"></i></span>
+				<span style="padding-left: 5px;">Select Opportunity Status <i class="far fa-plus-square show-pointer" id="opportunityStatusSelector"></i></span>
 				<ul class="format-listitem" id="opportunityStatusSelectorList">
 					<li>
 						<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
@@ -364,6 +368,8 @@
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Requested Visits</span>
 					<div id="requestedVisits" class="far fa-plus-square show-pointer"></div>
+					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></div>
+					<div class="fas fa-download show-pointer" style="float: right;" title="Download Requested Visits"></div>
 				</div>
 				<br>
 				<div id="requestedVisitsList">
@@ -375,6 +381,8 @@
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Scheduled Visits</span>
 					<div id="scheduledVisits" class="far fa-plus-square show-pointer"></div>
+					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></div>
+					<div class="fas fa-download show-pointer" style="float: right;" title="Download Scheduled Visits"></div>
 				</div>
 				<br>
 				<div id="scheduledVisitsList">
@@ -389,6 +397,8 @@
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Rejected Opportunities</span>
 					<div id="rejectedOpportunities" class="far fa-plus-square show-pointer"></div>
+					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></div>
+					<div class="fas fa-download show-pointer" style="float: right;" title="Download Rejected Opportunities"></div>
 				</div>
 				<br>
 				<div id="rejectedOpportunitiesList">
@@ -403,6 +413,8 @@
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Recommended Opportunities</span>
 					<div id="recommendedOpportunities" class="far fa-plus-square show-pointer"></div>
+					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></div>
+					<div class="fas fa-download show-pointer" style="float: right;" title="Download Recommended Opportunities"></div>
 				</div>
 				<br>
 				<div id="recommendedOpportunitiesList">
@@ -417,6 +429,8 @@
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Pending & Active Opportunities</span>
 					<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer"></div>
+					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
+					<div class="fas fa-download show-pointer" style="float: right;" title="Download Pending & Active Opportunities"></div>
 				</div>
 				<br>
 				<div id="pendingActiveOpportunitiesList">

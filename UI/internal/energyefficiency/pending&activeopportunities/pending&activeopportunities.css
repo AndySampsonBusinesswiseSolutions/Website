@@ -26,7 +26,8 @@
 }
 .tree-div {
     background-color: #e9eaee;
-    max-height: 650px;
+	max-height: 650px;
+	padding: 10px;
 }
 .scrolling-wrapper {
     overflow-x: auto;
@@ -147,7 +148,8 @@ div.ganttview-vtheader-item-name {
 	padding-left: 5px;
 	border-top: 1px solid #d0d0d0;
 	border-bottom: 1px solid #d0d0d0;
-	line-height: 16px;
+    line-height: 16px;
+    overflow: auto;
 }
 
 div.ganttview-vtheader-series-name {
@@ -157,7 +159,9 @@ div.ganttview-vtheader-series-name {
 	border-left: 1px solid #d0d0d0;
 	border-bottom: 1px solid #d0d0d0;
 	line-height: 16px;
-	padding-left: 5px;
+    padding-left: 5px;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 

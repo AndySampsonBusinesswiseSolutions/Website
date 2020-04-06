@@ -49,24 +49,34 @@ function openTab(callingElement, tabName, guid, branch) {
 
 function createCardButton(checkbox){
 	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
+	var button = document.getElementById(span.id.replace('span', 'button'));
 
 	if(checkbox.checked){
-		cardDiv.setAttribute('style', '');
-		var button = document.createElement('button');
-		button.setAttribute('class', 'tablinks');
-		button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
+		if(!button) {
+			cardDiv.setAttribute('style', '');
+			var button = document.createElement('button');
+			button.setAttribute('class', 'tablinks');
+			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 
-		var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[2];
-		var commodityNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[2];
-		var supplierNode = commodityNode.parentNode.parentNode.parentNode.parentNode.children[2];
+			var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[2];
+			var commodityNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[2];
+			var supplierNode = commodityNode.parentNode.parentNode.parentNode.parentNode.children[2];
 
-		button.innerHTML = supplierNode.innerText.concat(' - ').concat(commodityNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
-		button.id = span.id.replace('span', 'button');
-		tabDiv.appendChild(button);
+			button.innerHTML = supplierNode.innerText.concat(' - ').concat(commodityNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
+
+			if(!span.innerText.includes('Add New ')) {
+				button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Supplier Product To Download Basket"></div>'
+				+ '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Supplier Product"></div>';
+			}
+
+			button.id = span.id.replace('span', 'button');
+			tabDiv.appendChild(button);
+		}
 	}
-	else {
-		var button = document.getElementById(span.id.replace('span', 'button'));
-		tabDiv.removeChild(button);
+	else {		
+		if(button) {
+			tabDiv.removeChild(button);
+		}
 	}	
 
 	updateTabDiv();
@@ -80,7 +90,7 @@ function updateTabDiv() {
 	if(tabDivChildrenLength == 0) {
 		document.getElementById('Product0checkbox').checked = true;
 		createCardButton(document.getElementById('Product0checkbox'));
-		openTab(document.getElementById('Product0button'), 'Product0button', '0', 'Product');
+		openTab(document.getElementById('Product0button'), 'Product0div', '0', 'Product');
 	}
 	else {
 		var percentage = (1 / tabDivChildrenLength) * 100;
@@ -527,7 +537,7 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Product(s) <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Product(s) <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);
@@ -604,7 +614,7 @@ function buildProduct(products, baseElement, checkboxFunction, linkedSite) {
         var branchId = 'Product'.concat(product.GUID);
         var branchDiv = createBranchDiv(branchId);
         
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -619,7 +629,7 @@ function buildProduct(products, baseElement, checkboxFunction, linkedSite) {
 function createBranchDiv(branchDivId) {
     var branchDiv = document.createElement('div');
     branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square');
+    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     branchDiv.setAttribute('style', 'padding-right: 4px;');
     return branchDiv;
 }

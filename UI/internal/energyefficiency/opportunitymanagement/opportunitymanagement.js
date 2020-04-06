@@ -510,7 +510,7 @@ function createTree(baseData, divId, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Customers/Sites <i class="far fa-plus-square" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Customers/Sites <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -563,7 +563,7 @@ function createBranchDiv(branchDivId, hasChildren) {
     branchDiv.id = branchDivId;
 
     if(hasChildren) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
     else {
         branchDiv.setAttribute('class', 'far fa-times-circle');

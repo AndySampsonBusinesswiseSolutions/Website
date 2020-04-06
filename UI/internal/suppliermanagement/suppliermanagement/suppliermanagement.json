@@ -6,12 +6,15 @@ var supplier = [
             {"SupplierName" : "Haven Power Limited"},
             {"Address Line 1" : "32"},
             {"Address Line 2" : "The Havens"},
-            {"Address Line 3" : ""},
+            {"Address Line 3" : "Ransomes Industrial Estate"},
             {"Address Line 4" : "Ipswich"},
             {"Postcode" : "IP3 9SJ"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "01473 277556"},
-            {"Email" : "contact.us@havenpower.com"}
+            {"Email" : "contact.us@havenpower.com"},
+            {"lat" : 52.026861},
+            {"lng" : 1.217566},
+            {"GoogleAddress" : "32 The Havens, Ransomes Industrial Estate, Ipswich IP3 9SJ, UK"},
         ]
     },
     {
@@ -26,7 +29,10 @@ var supplier = [
             {"Postcode" : "MK9 1LR"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"}
+            {"Email" : "Sales@HudsonEnergy.co.uk"},
+            {"lat" : 52.034106},
+            {"lng" : -0.772030},
+            {"GoogleAddress" : "3rd floor, Elder House, 586-592 Elder Gate, Milton Keynes MK9 1LR, UK"},
         ]
     },
     {

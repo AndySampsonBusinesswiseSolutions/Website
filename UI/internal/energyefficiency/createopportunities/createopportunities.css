@@ -32,9 +32,6 @@
     min-height: 183px;
     max-height: 183px;
 }
-.show-pointer {
-    cursor: pointer;
-}
 .listitem-hidden {
     display: none;
 }

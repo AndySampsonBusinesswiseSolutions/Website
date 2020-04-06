@@ -15,12 +15,12 @@
 	<div id="mySidenav" class="sidenav">
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="siteDiv" class="tree-div">
+			<div id="siteDiv" class="tree-div roundborder">
 			</div>
 			<br>
-			<div class="roundborder" style="background-color: #e9eaee;">
-				<span style="padding-left: 5px;">Select Commodity</span>
-				<ul class="format-listitem">
+			<div class="tree-div roundborder">
+				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
+				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
 						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
 					</li>
@@ -191,39 +191,47 @@
 	</div>
 	<br>
 	<div class="final-column">
-		<div class="roundborder" style="padding: 10px;">
+		<div class="dashboard roundborder" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="usagespan">Usage Chart</span>
 				<div id="usage" class="far fa-plus-square show-pointer"></div>
+				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Usage Chart To Download Basket"></div>
+				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Usage Chart"></div>
 			</div>
-			<div id="usageList" class="chart" style="margin-top: 5px;">
+			<div id="usageList" class="roundborder chart" style="margin-top: 5px;">
 				<div id="usageChart"></div>
 			</div>
 		</div>
-		<div class="roundborder" style="margin-top: 5px; padding: 10px;">
+		<div class="dashboard roundborder" style="margin-top: 5px; padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="totalCostspan">Total Cost Chart</span>
 				<div id="totalCost" class="far fa-plus-square show-pointer"></div>
+				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Total Cost Chart To Download Basket"></div>
+				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Total Cost Chart"></div>
 			</div>
-			<div id="totalCostList"  class="listitem-hidden chart" style="margin-top: 5px;">
+			<div id="totalCostList" class="listitem-hidden roundborder chart" style="margin-top: 5px;">
 				<div id="totalCostChart"></div>
 			</div>
 		</div>
-		<div class="roundborder" style="margin-top: 5px; padding: 10px;">
+		<div class="dashboard roundborder" style="margin-top: 5px; padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="costBreakdownspan">Cost Breakdown Chart</span>
 				<div id="costBreakdown" class="far fa-plus-square show-pointer"></div>
+				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Cost Breakdown Chart To Download Basket"></div>
+				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Cost Breakdown Chart"></div>
 			</div>
-			<div id="costBreakdownList"  class="listitem-hidden chart" style="margin-top: 5px;">
+			<div id="costBreakdownList" class="listitem-hidden roundborder chart" style="margin-top: 5px;">
 				<div id="costBreakdownChart"></div>
 			</div>
 		</div>
-		<div class="roundborder" style="margin-top: 5px; padding: 10px;">
+		<div class="dashboard roundborder" style="margin-top: 5px; padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="capacityspan">Capacity Chart</span>
 				<div id="capacity" class="far fa-plus-square show-pointer"></div>
+				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Capacity Chart To Download Basket"></div>
+				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Capacity Chart"></div>
 			</div>
-			<div id="capacityList"  class="listitem-hidden chart" style="margin-top: 5px;">
+			<div id="capacityList" class="listitem-hidden roundborder chart" style="margin-top: 5px;">
 				<div id="capacityChart"></div>
 			</div>
 		</div>

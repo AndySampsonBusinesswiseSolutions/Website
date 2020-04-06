@@ -294,6 +294,7 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
     tree.setAttribute('class', 'scrolling-wrapper');
     
     var ul = createUL();
+    ul.id = divId.concat('SelectorList');
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -306,7 +307,7 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerText = "Select Sites/Meters";
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -428,7 +429,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -456,7 +457,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
 
         var identifier = getAttribute(subMeter.Attributes, 'Identifier');
         var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -489,7 +490,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');
@@ -672,7 +673,10 @@ function addExpanderOnClickEvents(element) {
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
-	}
+  }
+  
+  updateClassOnClick('siteDivSelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
