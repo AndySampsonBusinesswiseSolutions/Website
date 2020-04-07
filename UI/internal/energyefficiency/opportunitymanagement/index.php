@@ -116,8 +116,7 @@
 				<div class="fas fa-download show-pointer" style="float: right;" title="Download Opportunity"></div>
 				<br>
 			</div>
-			<br>
-			<div>
+			<div style="margin-top: 5px;">
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span id="opportunityDetailsSpan">Opportunity Details</span>
@@ -313,8 +312,7 @@
 				</div>
 			</div>
 			<div style="clear: left;"></div>
-			<br>
-			<div id="spreadsheet" class="roundborder scrolling-wrapper tree-div">
+			<div id="spreadsheet" class="roundborder scrolling-wrapper tree-div" style="margin-top: 5px;">
 				<div id="ganttChart"></div>
 			</div>
 			<br>

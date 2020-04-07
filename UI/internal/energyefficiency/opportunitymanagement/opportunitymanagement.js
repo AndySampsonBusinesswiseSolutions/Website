@@ -223,7 +223,7 @@ function displayManageOpportunityPopup(type, row) {
         detailSpans[i].innerHTML = data[i];
     }
 
-    finalisePopup(title, 'Manage Opportunity<br><br>' + data[0] + ' - ' + data[2], modal, span);
+    finalisePopup(title, 'Manage Opportunity<br>' + data[0] + ' - ' + data[2], modal, span);
     buildGanttChart();
 }
 
