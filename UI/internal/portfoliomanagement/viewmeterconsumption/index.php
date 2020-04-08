@@ -22,18 +22,41 @@
 				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
-						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
+						<input type="radio" name="commoditySelector" id="allCommodityradio" checked guid="0" onclick=''><span id="allCommodityspan" style="padding-left: 1px;">All</span>
 					</li>
 					<li>
-						<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "Electricity", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+						<input type="radio" name="commoditySelector" id="electricityCommodityradio" guid="0" onclick=''><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
 					</li>
 					<li>
-						<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='createTree(data, "DeviceType", "siteDiv", "Gas", "updateCharts()", true); addExpanderOnClickEvents(siteDiv); updateCharts();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
+						<input type="radio" name="commoditySelector" id="gasCommodityradio" guid="0" onclick=''><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
 					</li>
 				</ul>
 			</div>
 			<br>
-			<div class="roundborder" style="background-color: #e9eaee;">
+			<div class="tree-div roundborder">
+				<span style="padding-left: 5px;">Select Grouping Option <i class="far fa-plus-square show-pointer" id="groupingSelector"></i></span>
+				<ul class="format-listitem" id="groupingSelectorList">
+					<li>
+						<input type="radio" name="groupingSelector" id="noGroupradio" checked guid="0" onclick=''><span id="noGroupspan" style="padding-left: 1px;">No Grouping</span>
+					</li>
+					<li>
+						<input type="radio" name="groupingSelector" id="groupradio" guid="0" onclick=''><span id="groupspan" style="padding-left: 1px;">Group <i class="far fa-plus-square show-pointer" id="mathematicalFunctionSelector"></i></span>
+						<ul class="format-listitem listitem-hidden" id="mathematicalFunctionSelectorList">
+							<li>
+								<input type="checkbox" id="sumcheckbox" checked guid="0" onclick=''><span id="sumspan" style="padding-left: 1px;">Sum</span>
+							</li>
+							<li>
+								<input type="checkbox" id="averagecheckbox" guid="0" onclick=''><span id="averagespan" style="padding-left: 1px;">Average</span>
+							</li>
+							<li>
+								<input type="checkbox" id="standardDeviationcheckbox" guid="0" onclick=''><span id="standardDeviationspan" style="padding-left: 1px;">Standard Deviation</span>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+			<br>
+			<div class="tree-div roundborder">
 				<span id="usageChartOptionsspan" style="padding-left: 5px;">Usage Chart Options</span>
 				<div id="usageChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
 				<ul id="usageChartOptionsList" class="format-listitem slider-list">
@@ -55,7 +78,7 @@
 				</ul>
 			</div>
 			<br>
-			<div class="roundborder" style="background-color: #e9eaee;">
+			<div class="tree-div roundborder">
 				<span id="totalCostChartOptionsspan" style="padding-left: 5px;">Total Cost Chart Options</span>
 				<div id="totalCostChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
 				<ul id="totalCostChartOptionsList" class="format-listitem slider-list">
@@ -77,7 +100,7 @@
 				</ul>
 			</div>
 			<br>
-			<div class="roundborder" style="background-color: #e9eaee;">
+			<div class="tree-div roundborder">
 				<span id="costBreakdownChartOptionsspan" style="padding-left: 5px;">Cost Breakdown Chart Options</span>
 				<div id="costBreakdownChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
 				<ul id="costBreakdownChartOptionsList" class="format-listitem slider-list">
@@ -161,7 +184,7 @@
 				</ul>
 			</div>
 			<br>
-			<div class="roundborder" style="background-color: #e9eaee;">
+			<div class="tree-div roundborder">
 				<span id="capacityChartOptionsspan" style="padding-left: 5px;">Capacity Chart Options</span>
 				<div id="capacityChartOptions" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
 				<ul id="capacityChartOptionsList" class="format-listitem slider-list">

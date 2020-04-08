@@ -1,7 +1,5 @@
 function pageLoad() {
-  createTree(data, "DeviceType", "siteDiv", "", "updateCharts()", true);
-  addExpanderOnClickEvents(document);
-  updateClassOnClick('usage', 'fa-plus-square', 'fa-minus-square');
+  createTree(sites, "updateCharts()");  
 
   document.onmousemove=function(e) {
     var mousecoords = getMousePos(e);
@@ -130,7 +128,7 @@ function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
   var showByLength = showByArray.length;
 
   for(var i = 0; i < showByLength; i++) {
-    newSeries.push(...getNewChartSeries(checkBoxes, showByArray[i], newCategories, getCommodity(), dateFormat, startDate, endDate));
+    newSeries.push(...getNewChartSeries(checkBoxes, showByArray[i], newCategories, getCommodityOption(), dateFormat, startDate, endDate));
   }  
 
   var chartOptions = {
@@ -263,15 +261,13 @@ function getLegendFormat(chartId, seriesName) {
 function getXAxisTypeFromTimeSpan(timeSpan) {
   switch(timeSpan) {
     case 'Half Hourly':
-    // case 'Daily':
-    // case 'Weekly':
       return 'datetime';
     default:
       return 'category';
   }
 }
 
-function getCommodity() {
+function getCommodityOption() {
   var commodity = '';
   var electricityCommodityradio = document.getElementById('electricityCommodityradio');
   if(electricityCommodityradio.checked) {
@@ -286,330 +282,229 @@ function getCommodity() {
   return commodity;
 }
 
-var branchCount = 0;
-var subBranchCount = 0;
-
-function createTree(baseData, groupByOption, divId, commodity, checkboxFunction, showSubMeters) {
+function createTree(sites, functions) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
-    ul.id = divId.concat('SelectorList');
+    var ul = createBranchUl('siteDivSelector', false);
     tree.appendChild(ul);
 
-    branchCount = 0;
-    subBranchCount = 0; 
+    buildSiteBranch(sites, getCommodityOption(), ul, functions);
 
-    buildTree(baseData, groupByOption, ul, commodity, checkboxFunction, showSubMeters);
-
-    var div = document.getElementById(divId);
+    var div = document.getElementById('siteDiv');
     clearElement(div);
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="siteDivSelector"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
+
+    addExpanderOnClickEvents();
 }
 
-function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunction, showSubMeters) {
-    var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
+//build site
+function buildSiteBranch(sites, commodityOption, elementToAppendTo, functions) {
+  var siteLength = sites.length;
 
-        if(!commoditySiteMatch(base, commodity)) {
-            continue;
-        }
-        
-        var baseName = getAttribute(base.Attributes, 'BaseName');
-        var li = document.createElement('li');
-        var ul = createUL();
-        var childrenCreated = false;
-        
-        if(groupByOption == 'Hierarchy') {
-            if(base.hasOwnProperty('Meters')) {
-                buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, showSubMeters);
-                childrenCreated = true;
-            }
+  for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+    var site = sites[siteCount];
 
-        }
-        else {
-            buildBranch(base.Meters, groupByOption, ul, commodity, checkboxFunction, baseName, showSubMeters);
-            childrenCreated = true;
-        }
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
-
-        baseElement.appendChild(li);        
+    if(!commodityMatch(site, commodityOption)) {
+      continue;
     }
+
+    var listItem = appendListItemChildren('Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes);
+    elementToAppendTo.appendChild(listItem);
+
+    if(site.hasOwnProperty('Areas')) {
+      var ul = listItem.getElementsByTagName('ul')[0];
+      buildAreaBranch(site.Areas, commodityOption, ul, functions, 'Site' + siteCount);
+    }
+  }
 }
 
-function buildBranch(meters, groupByOption, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
-    var branchOptions = getBranchOptions(meters, groupByOption, commodity);
-    var branchId;
-    var groupBySubOption;
+//build area
+function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions, previousId) {
+  var areaLength = areas.length;
 
-    switch (groupByOption) {
-        case 'DeviceType':
-            branchId = commodity.concat('DeviceType');
-            groupBySubOption = 'DeviceSubType';
-            break;
-        case 'Zone':
-            branchId = commodity.concat('Zone');
-            groupBySubOption = 'Panel';
-            break;
+  for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+    var area = areas[areaCount];
+
+    if(!commodityMatch(area, commodityOption)) {
+      continue;
     }
 
-    var branchOptionsLength = branchOptions.length;
-    for(var i = 0; i < branchOptionsLength; i++) {
-        var branchOption = branchOptions[i];
-        var li = document.createElement('li');
+    var listItem = appendListItemChildren(previousId + 'Area' + areaCount, area.hasOwnProperty('Commodities'), functions, area.Attributes);
+    elementToAppendTo.appendChild(listItem);
 
-        var matchedMeters = getMatchedMeters(meters, groupByOption, branchOption, commodity);
-        var ul = createUL();
-        buildSubBranch(matchedMeters, ul, groupBySubOption, commodity, checkboxFunction, linkedSite, showSubMeters);
-        appendListItemChildren(li, branchId.concat(branchCount), checkboxFunction, 'GroupByOption|'.concat(groupByOption), branchOption, commodity, ul, linkedSite, '');
-
-        baseElement.appendChild(li);
-        branchCount++;
+    if(area.hasOwnProperty('Commodities')) {
+      var ul = listItem.getElementsByTagName('ul')[0];
+      buildCommodityBranch(area.Commodities, commodityOption, ul, functions, previousId + 'Area' + areaCount);
     }
+  }
 }
 
-function buildSubBranch(meters, baseElement, groupBySubOption, commodity, checkboxFunction, linkedSite, showSubMeters) {
-    var branchOptions = getBranchOptions(meters, groupBySubOption, commodity);
-    var branchId; 
+//build commodity
+function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions, previousId) {
+  var commodityLength = commodities.length;
 
-    switch (groupBySubOption) {
-        case 'DeviceSubType':
-            branchId = commodity.concat('DeviceSubType');
-            break;
-        case 'Panel':
-            branchId = commodity.concat('Panel');
-            break;
+  for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
+    var commodity = commodities[commodityCount];
+
+    if(!commodityMatch(commodity, commodityOption)) {
+      continue;
     }
 
-    var branchOptionsLength = branchOptions.length;
-    for(var i = 0; i < branchOptionsLength; i++) {
-        var branchOption = branchOptions[i];
-        var li = document.createElement('li');
+    var listItem = appendListItemChildren(previousId + 'Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), functions, commodity.Attributes);
+    elementToAppendTo.appendChild(listItem);
 
-        var matchedMeters = getMatchedMeters(meters, groupBySubOption, branchOption, commodity);
-        var ul = createUL();
-        buildIdentifierHierarchy(matchedMeters, ul, commodity, checkboxFunction, linkedSite, showSubMeters);
-        appendListItemChildren(li, branchId.concat(subBranchCount), checkboxFunction, 'GroupBySubOption|'.concat(groupBySubOption), branchOption, commodity, ul, linkedSite, '');
-
-        baseElement.appendChild(li);
-        subBranchCount++;
+    if(commodity.hasOwnProperty('Meters')) {
+      var ul = listItem.getElementsByTagName('ul')[0];
+      buildMeterBranch(commodity.Meters, commodityOption, ul, functions, previousId + 'Commodity' + commodityCount);
     }
+  }
 }
 
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, childrenCreated) {
-    li.appendChild(createBranchDiv(id, childrenCreated));
-    li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createTreeIcon(branchOption, commodity));
-    li.appendChild(createSpan(id, branchOption));
-    li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
+//build meter
+function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions, previousId) {
+  var meterLength = meters.length;
 
-function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
-    var metersLength = meters.length;
-    for(var i = 0; i < metersLength; i++){
-        var meter = meters[i];
-        if(!commodityMeterMatch(meter, commodity)) {
-            continue;
-        }
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = meters[meterCount];
 
-        var meterAttributes = meter.Attributes;
-        var identifier = getAttribute(meterAttributes, 'Identifier');
-        var meterCommodity = getAttribute(meterAttributes, 'Commodity');
-        var deviceType = getAttribute(meterAttributes, 'DeviceType');
-        var hasSubMeters = meter.hasOwnProperty('SubMeters');
-        var li = document.createElement('li');
-        var branchId = 'Meter'.concat(meter.GUID);
-        var branchDiv = createBranchDiv(branchId);
-        
-        if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
-            branchDiv.setAttribute('class', 'far fa-times-circle');
-        }
-
-        li.appendChild(branchDiv);
-        li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
-        li.appendChild(createTreeIcon(deviceType, meterCommodity));
-        li.appendChild(createSpan(branchId, identifier));
-
-        if(showSubMeters && hasSubMeters) {
-            var ul = createUL();
-            buildSubMeterHierarchy(meter['SubMeters'], ul, deviceType, meterCommodity, checkboxFunction, linkedSite);
-
-            li.appendChild(createBranchListDiv(branchId.concat('List'), ul));
-        }        
-
-        baseElement.appendChild(li); 
-    }
-}
-
-function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, checkboxFunction, linkedSite) {
-    var subMetersLength = subMeters.length;
-    for(var i = 0; i < subMetersLength; i++){
-        var subMeter = subMeters[i];
-        var li = document.createElement('li');
-
-        var identifier = getAttribute(subMeter.Attributes, 'Identifier');
-        var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
-        branchDiv.setAttribute('class', 'far fa-times-circle');
-
-        li.appendChild(branchDiv);
-        li.appendChild(createCheckbox('SubMeter'.concat(subMeter.GUID), checkboxFunction, 'SubMeter', linkedSite, subMeter.GUID));
-        li.appendChild(createTreeIcon(deviceType, commodity));
-        li.appendChild(createSpan('SubMeter'.concat(subMeter.GUID), identifier));   
-
-        baseElement.appendChild(li); 
-    }
-}
-
-function getBranchOptions(meters, property, commodity) {
-    var branchOptions = [];
-    var metersLength = meters.length;
-
-    for(var i = 0; i < metersLength; i++) {
-        var meter = meters[i];
-        var attribute = getAttribute(meter.Attributes, property);
-        if(!branchOptions.includes(attribute)
-            && commodityMeterMatch(meter, commodity)) {
-            branchOptions.push(attribute);
-        }        
+    if(!commodityMatch(meter, commodityOption)) {
+      continue;
     }
 
-    return branchOptions;
+    var listItem = appendListItemChildren(previousId + 'Meter' + meterCount, meter.hasOwnProperty('SubAreas'), functions, meter.Attributes);
+    elementToAppendTo.appendChild(listItem);
+
+    if(meter.hasOwnProperty('SubAreas')) {
+      var ul = listItem.getElementsByTagName('ul')[0];
+      buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions, previousId + 'Meter' + meterCount);
+    }
+  }
 }
 
-function createBranchDiv(branchDivId, childrenCreated = true) {
+//build sub area
+function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions, previousId) {
+  var subAreaLength = subAreas.length;
+
+  for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
+    var subArea = subAreas[subAreaCount];
+
+    if(!commodityMatch(subArea, commodityOption)) {
+      continue;
+    }
+
+    var listItem = appendListItemChildren(previousId + 'SubArea' + subAreaCount, subArea.hasOwnProperty('Assets'), functions, subArea.Attributes);
+    elementToAppendTo.appendChild(listItem);
+
+    if(subArea.hasOwnProperty('Assets')) {
+      var ul = listItem.getElementsByTagName('ul')[0];
+      buildAssetBranch(subArea.Assets, commodityOption, ul, functions, previousId + 'SubArea' + subAreaCount);
+    }
+  }
+}
+
+//build asset
+function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions, previousId) {
+  var assetLength = assets.length;
+
+  for(var assetCount = 0; assetCount < assetLength; assetCount++) {
+    var asset = assets[assetCount];
+
+    if(!commodityMatch(asset, commodityOption)) {
+      continue;
+    }
+
+    var listItem = appendListItemChildren(previousId + 'Asset' + assetCount, asset.hasOwnProperty('SubMeters'), functions, asset.Attributes);
+    elementToAppendTo.appendChild(listItem);
+
+    if(asset.hasOwnProperty('SubMeters')) {
+      var ul = listItem.getElementsByTagName('ul')[0];
+      buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions, previousId + 'Asset' + assetCount);
+    }
+  }
+}
+
+//build sub meter
+function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions, previousId) {
+  var subMeterLength = subMeters.length;
+
+  for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
+    var subMeter = subMeters[subMeterCount];
+
+    if(!commodityMatch(subMeter, commodityOption)) {
+      continue;
+    }
+
+    var listItem = appendListItemChildren(previousId + 'SubMeter' + subMeterCount, false, functions, subMeter.Attributes);
+    elementToAppendTo.appendChild(listItem);
+  }
+}
+
+function commodityMatch(entity, commodity) {
+  if(commodity == '') {
+      return true;
+  }
+
+  var entityCommodities = getAttribute(entity.Attributes, 'Commodities');
+  return entityCommodities && entityCommodities.contains(commodity);
+}
+
+function appendListItemChildren(id, hasChildren, functions, attributes) {
+  var li = document.createElement('li');
+  li.appendChild(createBranchDiv(id, hasChildren));
+  li.appendChild(createBranchCheckbox(id, functions));
+  li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
+  li.appendChild(createBranchSpan(id, getAttribute(attributes, 'Name')));
+
+  if(hasChildren) {
+    li.appendChild(createBranchUl(id));
+  }
+
+  return li;
+}
+
+function createBranchUl(id, hideUl = true) {
+  var ul = document.createElement('ul');
+  ul.id = id.concat('List');
+  ul.setAttribute('class', 'format-listitem' + (hideUl ? ' listitem-hidden' : ''));
+  return ul;
+}
+
+function createBranchDiv(branchDivId, hasChildren = true) {
     var branchDiv = document.createElement('div');
     branchDiv.id = branchDivId;
-
-    if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
-    }
-
+    branchDiv.setAttribute('class', (hasChildren ? 'far fa-plus-square show-pointer' : 'far fa-times-circle'));
     branchDiv.setAttribute('style', 'padding-right: 4px;');
     return branchDiv;
 }
 
-function createBranchListDiv(branchListDivId, ul) {
-    var branchListDiv = document.createElement('div');
-    branchListDiv.id = branchListDivId;
-    branchListDiv.setAttribute('class', 'listitem-hidden');
-    branchListDiv.appendChild(ul);
-    return branchListDiv;
-}
+function createBranchCheckbox(id, functions) {
+  var checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';  
+  checkbox.id = id.concat('checkbox');
 
-function createUL() {
-    var ul = document.createElement('ul');
-    ul.setAttribute('class', 'format-listitem');
-    return ul;
-}
+  var functionArray = functions.replace(')', '').split('(');
+  var functionArrayLength = functionArray.length;
+  var functionName = functionArray[0];
+  var functionArguments = [];
 
-function createTreeIcon(branch, commodity) {
-    var icon = document.createElement('i');
-    icon.setAttribute('class', getIconByBranch(branch, commodity));
-    icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
-    return icon;
-}
-
-function createSpan(spanId, innerHTML) {
-    var span = document.createElement('span');
-    span.id = spanId.concat('span');
-    span.innerHTML = innerHTML;
-    return span;
-}
-
-function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) {
-    var functionArray = checkboxFunction.replace(')', '').split('(');
-    var functionArrayLength = functionArray.length;
-    var functionName = functionArray[0];
-    var functionArguments = [];
-
-    var checkBox = document.createElement('input');
-    checkBox.type = 'checkbox';  
-    checkBox.id = checkboxId.concat('checkbox');
-    checkBox.setAttribute('Branch', branch);
-    checkBox.setAttribute('LinkedSite', linkedSite);
-    checkBox.setAttribute('GUID', guid);
-
-    functionArguments.push(checkBox.id);
-    if(functionArrayLength > 1) {
-        var functionArgumentLength = functionArray[1].split(',').length;
-        for(var i = 0; i < functionArgumentLength; i++) {
-            functionArguments.push(functionArray[1].split(',')[i]);
-        }
-    }
-    functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
-    
-    checkBox.setAttribute('onclick', functionName);
-    return checkBox;
-}
-
-function commoditySiteMatch(site, commodity) {
-    if(commodity == '') {
-        return true;
-    }
-
-    if(!site.hasOwnProperty('Meters')) {
-        return false;
-    }
-
-    var metersLength = site.Meters.length;
-    for(var i = 0; i < metersLength; i++) {
-        if(commodityMeterMatch(site.Meters[i], commodity)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function commodityMeterMatch(meter, commodity) {
-    if(commodity == '') {
-        return true;
-    }
-
-    var meterCommodity = getAttribute(meter.Attributes, 'Commodity');
-    return meterCommodity.toLowerCase() == commodity.toLowerCase();
-}
-
-function getIconByBranch(branch, commodity) {
-    switch (branch) {
-        case 'Mains':
-            if(commodity == 'Gas') {
-                return 'fas fa-burn';
-            }
-            else {
-                return 'fas fa-plug';
-            }
-        case 'Lighting':
-            return 'fas fa-lightbulb';
-        case 'Unknown':
-            return 'fas fa-question-circle';
-        default:
-            return 'fas fa-map-marker-alt';
-    }
-}
-
-function getMatchedMeters(meters, attribute, branchOption, commodity) {
-    var matchedMeters = [];
-    var metersLength = meters.length;
-
-    for(var i = 0; i < metersLength; i++){
-        var meter = meters[i];
-        if(getAttribute(meter.Attributes, attribute) == branchOption
-            && commodityMeterMatch(meter, commodity)) {
-            matchedMeters.push(meter);
-        }
-    }
-
-    return matchedMeters;
+  functionArguments.push(checkbox.id);
+  if(functionArrayLength > 1) {
+      var functionArgumentLength = functionArray[1].split(',').length;
+      for(var i = 0; i < functionArgumentLength; i++) {
+          functionArguments.push(functionArray[1].split(',')[i]);
+      }
+  }
+  functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
+  
+  checkbox.setAttribute('onclick', functionName);
+  return checkbox;
 }
 
 function getAttribute(attributes, attributeRequired) {
@@ -624,6 +519,20 @@ function getAttribute(attributes, attributeRequired) {
 	}
 
 	return null;
+}
+
+function createBranchIcon(iconClass) {
+  var icon = document.createElement('i');
+  icon.setAttribute('class', iconClass);
+  icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
+  return icon;
+}
+
+function createBranchSpan(id, innerHTML) {
+  var span = document.createElement('span');
+  span.id = id.concat('span');
+  span.innerHTML = innerHTML;
+  return span;
 }
 
 function clearElement(element) {
@@ -668,15 +577,16 @@ function hasClass(elem, className) {
 	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
 
-function addExpanderOnClickEvents(element) {
-	var expanders = element.getElementsByClassName('fa-plus-square');
+function addExpanderOnClickEvents() {
+	var expanders = document.getElementsByClassName('fa-plus-square');
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
   }
   
   updateClassOnClick('siteDivSelector', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('usage', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -833,7 +743,7 @@ function getNewChartSeries(checkBoxes, showBy, newCategories, commodity, dateFor
       var span = document.getElementById(checkBoxes[checkboxCount].id.replace('checkbox', 'span'));
       var seriesName = span.innerHTML;
   
-      if(checkboxBranch == 'Site') {				
+      if(checkboxBranch == 'Site') {
         meters = getSitesByAttribute('BaseName', linkedSite)[0].Meters;
       }
       else if(checkboxBranch == 'Meter') {

@@ -848,5 +848,8 @@ body {
 }
 ul {
     margin-top: 0px!important;
-    margin-bottom: 10px!important;
+    margin-bottom: 0px!important;
+}
+.tree-div {
+    padding: 5px!important;
 }
