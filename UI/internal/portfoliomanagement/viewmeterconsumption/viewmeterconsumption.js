@@ -39,29 +39,241 @@ function hideSliders() {
 }
 
 function updateCharts() {
-  updateUsageChart();
-  updateTotalCostChart();
-  updateCostBreakdownChart();
-  updateCapacityChart();
+  var treeDiv = document.getElementById('siteDiv');
+  var inputs = treeDiv.getElementsByTagName('input');
+  var checkboxes = getCheckedCheckBoxes(inputs);	
+  var commodityOption = getCommodityOption();
+  var meters = getMeters(checkboxes, commodityOption);
+
+  updateUsageChart(meters);
+  updateTotalCostChart(meters);
+  updateCostBreakdownChart(meters);
+  updateCapacityChart(meters);
 }
 
-function updateUsageChart() {
+function getMeters(checkboxes, commodityOption) {
+  var noGroupradio = document.getElementById('noGroupradio');
+  var checkboxLength = checkboxes.length;
+  var tempMeters = [];
+  var commodities = [];
+  var branches = [];
+
+  if(commodityOption == '') {
+    commodities.push('Electricity');
+    commodities.push('Gas');
+  }
+  else {
+    commodities.push(commodityOption);
+  }
+
+  for(var i = 0; i < checkboxLength; i++) {
+    var span = document.getElementById(checkboxes[i].id.replace('checkbox', 'span'));
+    var hierarchy = checkboxes[i].id.replace('checkbox', '').split('_');
+    var lastRecord = hierarchy[hierarchy.length - 1];
+
+    for(var j = 0; j < commodities.length; j++) {
+      var meters = [];
+      var branch = '';
+
+      if(lastRecord.includes('Site')) {
+        var site = sites[parseInt(lastRecord.replace('Site', ''))];
+        meters = getMetersBySite(site, commodities[j]);
+        branch = 'Site';
+      }
+      else if(lastRecord.includes('SubArea')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 5].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 4].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 3].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 2].replace('Meter', ''))];
+        var subArea = meter.SubAreas[parseInt(lastRecord.replace('SubArea', ''))];
+        meters = getSubMetersBySubArea(subArea, commodities[j]);
+        branch = 'SubArea';
+      }
+      else if(lastRecord.includes('Area')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
+        var area = site.Areas[parseInt(lastRecord.replace('Area', ''))];
+        meters = getMetersByArea(area, commodities[j]);
+        branch = 'Area';
+      }
+      else if(lastRecord.includes('Commodity')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 3].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 2].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(lastRecord.replace('Commodity', ''))];
+        meters = getMetersByCommodity(commodity, commodities[j]);
+        branch = 'Commodity';
+      }
+      else if(lastRecord.includes('SubMeter')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 7].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 6].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 5].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 4].replace('Meter', ''))];
+        var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 3].replace('SubArea', ''))];
+        var asset = subArea.Assets[parseInt(hierarchy[hierarchy.length - 2].replace('Asset', ''))];
+        var subMeter = asset.SubMeters[parseInt(lastRecord.replace('SubMeter', ''))];
+        branch = 'SubMeter';
+
+        if(getAttribute(subMeter.Attributes, 'Commodities').includes(commodities[j])) {
+          meters.push(subMeter);
+        }
+      }
+      else if(lastRecord.includes('Meter')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 4].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 3].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 2].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(lastRecord.replace('Meter', ''))];
+        branch = 'Meter';
+
+        if(getAttribute(meter.Attributes, 'Commodities').includes(commodities[j])) {
+          meters.push(meter);
+        }
+      }
+      else if(lastRecord.includes('Asset')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 6].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 5].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 4].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 3].replace('Meter', ''))];
+        var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 2].replace('SubArea', ''))];
+        var asset = subArea.Assets[parseInt(lastRecord.replace('Asset', ''))];
+        meters = getSubMetersByAsset(asset, commodities[j]);
+        branch = 'Asset';
+      }
+  
+      if(meters.length > 0) {
+        var tempMeter = {
+          SeriesName: span.innerText + ' - ' + commodities[j],
+          Commodity: commodities[j],
+          Branch: branch,
+          Meters: meters
+        }
+    
+        tempMeters.push(tempMeter);
+
+        if(!branches.includes(branch)) {
+          branches.push(branch);
+        }
+      }
+    }    
+  }
+
+  if(noGroupradio.checked) {
+    return tempMeters;
+  }
+
+  var series = [];
+  for(var i = 0; i < branches.length; i++) {
+    for(var j = 0; j < commodities.length; j++) {
+      var tempMeter = {
+        SeriesName: branches[i] + ' - ' + commodities[j],
+        Meters: []
+      }
+  
+      for(var k = 0; k < tempMeters.length; k++) {
+        if(tempMeters[k].Commodity == commodities[j] && tempMeters[k].Branch == branches[i]) {
+          tempMeter.Meters.push(...tempMeters[k].Meters);
+        }      
+      }
+  
+      if(tempMeter.Meters.length > 0) {
+        series.push(tempMeter);
+      }
+    }
+  }  
+
+  return series;
+}
+
+function getMetersBySite(site, commodityOption) {
+  var meters = [];
+
+  var areaLength = site.Areas.length;
+  for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+    var area = site.Areas[areaCount];
+
+    if(getAttribute(area.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(...getMetersByArea(area, commodityOption));
+    }
+  }
+
+  return [...meters];
+}
+
+function getMetersByArea(area, commodityOption) {
+  var meters = [];
+
+  var commodityLength = area.Commodities.length;
+  for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
+    var commodity = area.Commodities[commodityCount];
+
+    if(getAttribute(commodity.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(...getMetersByCommodity(commodity, commodityOption));
+    }
+  }
+
+  return [...meters];
+}
+
+function getMetersByCommodity(commodity, commodityOption) {
+  var meters = [];
+
+  var meterLength = commodity.Meters.length;
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = commodity.Meters[meterCount];
+
+    if(getAttribute(meter.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(meter);
+    }
+  }
+
+  return [...meters];
+}
+
+function getSubMetersBySubArea(subArea, commodityOption) {
+  var meters = [];
+
+  var assetLength = subArea.Assets.length;
+  for(var assetCount = 0; assetCount < assetLength; assetCount++) {
+    var asset = subArea.Assets[assetCount];
+
+    if(getAttribute(asset.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(...getSubMetersByAsset(asset, commodityOption));
+    }
+  }
+
+  return [...meters];
+}
+
+function getSubMetersByAsset(asset, commodityOption) {
+  var meters = [];
+
+  var subMeterLength = asset.SubMeters.length;
+  for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
+    var subMeter = asset.SubMeters[subMeterCount];
+
+    if(getAttribute(subMeter.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(subMeter);
+    }
+  }
+
+  return [...meters];
+}
+
+function updateUsageChart(meters) {
   var usageChartOptionsTimeSpan = document.getElementById('usageChartOptionsTimeSpan');
   var usageChartOptionsDateRange = document.getElementById('usageChartOptionsDateRange');
 
   var showByArray = ['Usage'];
-  updateChart(usageChartOptionsDateRange, usageChartOptionsTimeSpan, showByArray, '#usageChart');
+  updateChart(usageChartOptionsDateRange, usageChartOptionsTimeSpan, showByArray, '#usageChart', meters);
 }
 
-function updateTotalCostChart() {
+function updateTotalCostChart(meters) {
   var totalCostChartOptionsTimeSpan = document.getElementById('totalCostChartOptionsTimeSpan');
   var totalCostChartOptionsDateRange = document.getElementById('totalCostChartOptionsDateRange');
   
   var showByArray = ['Cost'];
-  updateChart(totalCostChartOptionsDateRange, totalCostChartOptionsTimeSpan, showByArray, '#totalCostChart');
+  updateChart(totalCostChartOptionsDateRange, totalCostChartOptionsTimeSpan, showByArray, '#totalCostChart', meters);
 }
 
-function updateCostBreakdownChart() {
+function updateCostBreakdownChart(meters) {
   var costBreakdownChartOptionsTimeSpan = document.getElementById('costBreakdownChartOptionsTimeSpan');
   var costBreakdownChartOptionsDateRange = document.getElementById('costBreakdownChartOptionsDateRange');
   
@@ -97,30 +309,26 @@ function updateCostBreakdownChart() {
     }
   }
 
-  updateChart(costBreakdownChartOptionsDateRange, costBreakdownChartOptionsTimeSpan, showByArray, '#costBreakdownChart');
+  updateChart(costBreakdownChartOptionsDateRange, costBreakdownChartOptionsTimeSpan, showByArray, '#costBreakdownChart', meters);
 }
 
-function updateCapacityChart() {
+function updateCapacityChart(meters) {
   var capacityChartOptionsTimeSpan = document.getElementById('capacityChartOptionsTimeSpan');
   var capacityChartOptionsDateRange = document.getElementById('capacityChartOptionsDateRange');
   
   var showByArray = ['Capacity', 'MaxDemand'];
-  updateChart(capacityChartOptionsDateRange, capacityChartOptionsTimeSpan, showByArray, '#capacityChart');
+  updateChart(capacityChartOptionsDateRange, capacityChartOptionsTimeSpan, showByArray, '#capacityChart', meters);
 }
 
 function getChartTypeFromCategoryCount(categoryCount) {
   return categoryCount == 1 ? 'bar' : 'line';
 }
 
-function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
+function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId, meters) {
   var startDateMilliseconds = parseInt(dateRangeElement.getElementsByClassName('rz-pointer-min')[0].getAttribute('aria-valuenow'));
   var endDateMilliseconds = parseInt(dateRangeElement.getElementsByClassName('rz-pointer-max')[0].getAttribute('aria-valuenow'));
   var startDate = new Date(startDateMilliseconds);
   var endDate = new Date(endDateMilliseconds + (24*60*60*1000));
-
-  var treeDiv = document.getElementById('siteDiv');
-  var inputs = treeDiv.getElementsByTagName('input');
-  var checkBoxes = getCheckedCheckBoxes(inputs);	
   var dateFormat = getPeriodDateFormat(timeSpanElement.children[6].innerHTML)
   var newCategories = getCategoryTexts(startDate, endDate, dateFormat);
 
@@ -128,14 +336,23 @@ function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
   var showByLength = showByArray.length;
 
   for(var i = 0; i < showByLength; i++) {
-    newSeries.push(...getNewChartSeries(checkBoxes, showByArray[i], newCategories, getCommodityOption(), dateFormat, startDate, endDate));
+    for(var j = 0; j < meters.length; j++) {
+      var series = getNewChartSeries(meters[j].Meters, showByArray[i], newCategories, dateFormat, startDate, endDate, meters[j].SeriesName);
+
+      if(series.length) {
+        newSeries.push(...series);
+      }
+      else {
+        newSeries.push(series);
+      }
+    }    
   }  
 
   var chartOptions = {
     chart: {
         type: getChartTypeFromCategoryCount(newCategories.length),
     },
-    yaxis: {
+    yaxis: [{
       title: {
         text: getChartYAxisTitle(chartId)
       },
@@ -145,7 +362,7 @@ function updateChart(dateRangeElement, timeSpanElement, showByArray, chartId) {
           return getYAxisLabelFormat(chartId, val);
         }
       }
-    },
+    }],
     xaxis: {
         type: getXAxisTypeFromTimeSpan(timeSpanElement.children[6].innerHTML),
         min: newCategories[0],
@@ -211,8 +428,8 @@ function refreshChart(newSeries, chartId, chartOptions) {
       onItemClick: {
         toggleDataSeries: true
       },
-      width: getLegendWidth(chartId),
-      offsetY: getLegendOffsetY(chartId),
+      width: 200,
+      offsetY: 25,
       formatter: function(seriesName) {
         return getLegendFormat(chartId, seriesName);
       }
@@ -223,28 +440,6 @@ function refreshChart(newSeries, chartId, chartOptions) {
   };  
 
   renderChart(chartId, options);
-}
-
-function getLegendWidth(chartId) {
-  switch(chartId) {
-    case '#usageChart':
-    case '#totalCostChart':
-    case '#capacityChart':
-      return 100;
-    default:
-      return 200;
-  }
-}
-
-function getLegendOffsetY(chartId) {
-  switch(chartId) {
-    case '#usageChart':
-    case '#totalCostChart':
-    case '#capacityChart':
-      return 250;
-    default:
-      return 0;
-  }
 }
 
 function getLegendFormat(chartId, seriesName) {
@@ -283,25 +478,60 @@ function getCommodityOption() {
 }
 
 function createTree(sites, functions) {
-    var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
-    
-    var ul = createBranchUl('siteDivSelector', false);
-    tree.appendChild(ul);
+  var div = document.getElementById('siteDiv');
+  var inputs = div.getElementsByTagName('input');
+  var checkboxes = getCheckedCheckBoxes(inputs);
+  var elements = div.getElementsByTagName("*");
 
-    buildSiteBranch(sites, getCommodityOption(), ul, functions);
+  var checkboxIds = [];
+  for(var i = 0; i < checkboxes.length; i++) {
+    checkboxIds.push(checkboxes[i].id);
+  }
 
-    var div = document.getElementById('siteDiv');
-    clearElement(div);
+  var elementClasses = [];
+  for(var i = 0; i < elements.length; i++) {
+    if(elements[i].id != '') {
+      var element = {
+        id: elements[i].id,
+        classList: elements[i].classList
+      }
+  
+      elementClasses.push(element);
+    }    
+  }
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="siteDivSelector"></i>';
+  clearElement(div);
+  
+  var tree = document.createElement('div');
+  tree.setAttribute('class', 'scrolling-wrapper');
+  
+  var ul = createBranchUl('siteDivSelector', false);
+  tree.appendChild(ul);
 
-    div.appendChild(header);
-    div.appendChild(tree);
+  buildSiteBranch(sites, getCommodityOption(), ul, functions);
 
-    addExpanderOnClickEvents();
+  var header = document.createElement('span');
+  header.style = "padding-left: 5px;";
+  header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="siteDivSelector"></i>';
+
+  div.appendChild(header);
+  div.appendChild(tree);
+
+  addExpanderOnClickEvents();
+
+  for(var i = 0; i < checkboxIds.length; i++) {
+    var checkbox = document.getElementById(checkboxIds[i]);
+    if(checkbox) {
+      checkbox.checked = true;
+    }
+  }
+
+  for(var i = 0; i < elementClasses.length; i++) {
+    var element = document.getElementById(elementClasses[i].id);
+    if(element) {
+      element.classList = elementClasses[i].classList;
+    }
+  }  
 }
 
 //build site
@@ -315,7 +545,7 @@ function buildSiteBranch(sites, commodityOption, elementToAppendTo, functions) {
       continue;
     }
 
-    var listItem = appendListItemChildren('Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes);
+    var listItem = appendListItemChildren('Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
     elementToAppendTo.appendChild(listItem);
 
     if(site.hasOwnProperty('Areas')) {
@@ -336,12 +566,12 @@ function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions, p
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + 'Area' + areaCount, area.hasOwnProperty('Commodities'), functions, area.Attributes);
+    var listItem = appendListItemChildren(previousId + '_Area' + areaCount, area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area');
     elementToAppendTo.appendChild(listItem);
 
     if(area.hasOwnProperty('Commodities')) {
       var ul = listItem.getElementsByTagName('ul')[0];
-      buildCommodityBranch(area.Commodities, commodityOption, ul, functions, previousId + 'Area' + areaCount);
+      buildCommodityBranch(area.Commodities, commodityOption, ul, functions, previousId + '_Area' + areaCount);
     }
   }
 }
@@ -357,12 +587,12 @@ function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, f
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + 'Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), functions, commodity.Attributes);
+    var listItem = appendListItemChildren(previousId + '_Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), functions, commodity.Attributes, 'Commodity');
     elementToAppendTo.appendChild(listItem);
 
     if(commodity.hasOwnProperty('Meters')) {
       var ul = listItem.getElementsByTagName('ul')[0];
-      buildMeterBranch(commodity.Meters, commodityOption, ul, functions, previousId + 'Commodity' + commodityCount);
+      buildMeterBranch(commodity.Meters, commodityOption, ul, functions, previousId + '_Commodity' + commodityCount);
     }
   }
 }
@@ -378,12 +608,12 @@ function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions,
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + 'Meter' + meterCount, meter.hasOwnProperty('SubAreas'), functions, meter.Attributes);
+    var listItem = appendListItemChildren(previousId + '_Meter' + meterCount, meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter');
     elementToAppendTo.appendChild(listItem);
 
     if(meter.hasOwnProperty('SubAreas')) {
       var ul = listItem.getElementsByTagName('ul')[0];
-      buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions, previousId + 'Meter' + meterCount);
+      buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions, previousId + '_Meter' + meterCount);
     }
   }
 }
@@ -399,12 +629,12 @@ function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functi
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + 'SubArea' + subAreaCount, subArea.hasOwnProperty('Assets'), functions, subArea.Attributes);
+    var listItem = appendListItemChildren(previousId + '_SubArea' + subAreaCount, subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea');
     elementToAppendTo.appendChild(listItem);
 
     if(subArea.hasOwnProperty('Assets')) {
       var ul = listItem.getElementsByTagName('ul')[0];
-      buildAssetBranch(subArea.Assets, commodityOption, ul, functions, previousId + 'SubArea' + subAreaCount);
+      buildAssetBranch(subArea.Assets, commodityOption, ul, functions, previousId + '_SubArea' + subAreaCount);
     }
   }
 }
@@ -420,12 +650,12 @@ function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions,
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + 'Asset' + assetCount, asset.hasOwnProperty('SubMeters'), functions, asset.Attributes);
+    var listItem = appendListItemChildren(previousId + '_Asset' + assetCount, asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset');
     elementToAppendTo.appendChild(listItem);
 
     if(asset.hasOwnProperty('SubMeters')) {
       var ul = listItem.getElementsByTagName('ul')[0];
-      buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions, previousId + 'Asset' + assetCount);
+      buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions, previousId + '_Asset' + assetCount);
     }
   }
 }
@@ -441,7 +671,7 @@ function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, func
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + 'SubMeter' + subMeterCount, false, functions, subMeter.Attributes);
+    var listItem = appendListItemChildren(previousId + '_SubMeter' + subMeterCount, false, functions, subMeter.Attributes, 'SubMeter');
     elementToAppendTo.appendChild(listItem);
   }
 }
@@ -452,13 +682,13 @@ function commodityMatch(entity, commodity) {
   }
 
   var entityCommodities = getAttribute(entity.Attributes, 'Commodities');
-  return entityCommodities && entityCommodities.contains(commodity);
+  return entityCommodities && entityCommodities.includes(commodity);
 }
 
-function appendListItemChildren(id, hasChildren, functions, attributes) {
+function appendListItemChildren(id, hasChildren, functions, attributes, branch) {
   var li = document.createElement('li');
   li.appendChild(createBranchDiv(id, hasChildren));
-  li.appendChild(createBranchCheckbox(id, functions));
+  li.appendChild(createBranchCheckbox(id, functions, branch));
   li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
   li.appendChild(createBranchSpan(id, getAttribute(attributes, 'Name')));
 
@@ -479,15 +709,16 @@ function createBranchUl(id, hideUl = true) {
 function createBranchDiv(branchDivId, hasChildren = true) {
     var branchDiv = document.createElement('div');
     branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', (hasChildren ? 'far fa-plus-square show-pointer' : 'far fa-times-circle'));
+    branchDiv.setAttribute('class', (hasChildren ? 'far fa-plus-square show-pointer' : 'far fa-times-circle') + ' expander');
     branchDiv.setAttribute('style', 'padding-right: 4px;');
     return branchDiv;
 }
 
-function createBranchCheckbox(id, functions) {
+function createBranchCheckbox(id, functions, branch) {
   var checkbox = document.createElement('input');
   checkbox.type = 'checkbox';  
   checkbox.id = id.concat('checkbox');
+  checkbox.setAttribute('branch', branch);
 
   var functionArray = functions.replace(')', '').split('(');
   var functionArrayLength = functionArray.length;
@@ -587,6 +818,7 @@ function addExpanderOnClickEvents() {
   updateClassOnClick('siteDivSelector', 'fa-plus-square', 'fa-minus-square');
   updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
   updateClassOnClick('usage', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('groupingSelector', 'fa-plus-square', 'fa-minus-square');  
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -640,6 +872,7 @@ function getCheckedCheckBoxes(inputs) {
       for(var i = 0; i < inputLength; i++) {
         if(inputs[i].type.toLowerCase() == 'checkbox') {
           if(inputs[i].getAttribute('branch') == 'Site') {
+            inputs[i].checked = true;
             checkBoxes.push(inputs[i]);
           }
         }
@@ -654,7 +887,6 @@ function getPeriodDateFormat(period) {
       case 'Half Hourly':
         return 'dd MMM yy hh:mm:ss';
       case 'Daily':
-      case "Weekly":
         return 'dd MMM yy';
       case "Monthly":
         return 'MMM yyyy';
@@ -670,7 +902,7 @@ function getCategoryTexts(startDate, endDate, dateFormat) {
   
     for(var newDate = new Date(startDate); newDate < new Date(endDate); newDate.setDate(newDate.getDate() + 1)) {
       for(var hh = 0; hh < 48; hh++) {
-        var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
+        var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat).toString();
   
         if(!newCategories.includes(newCategoryText)) {
           newCategories.push(newCategoryText);
@@ -732,174 +964,124 @@ function formatDate(dateToBeFormatted, format) {
 	}
 }
 
-function getNewChartSeries(checkBoxes, showBy, newCategories, commodity, dateFormat, startDate, endDate) {
-    var meters = [];
-    var newSeries = [];
-    var checkBoxesLength = checkBoxes.length;
-  
-    for(var checkboxCount = 0; checkboxCount < checkBoxesLength; checkboxCount++) {
-      var checkboxBranch = checkBoxes[checkboxCount].attributes['Branch'].nodeValue;
-      var linkedSite = checkBoxes[checkboxCount].attributes['LinkedSite'].nodeValue;
-      var span = document.getElementById(checkBoxes[checkboxCount].id.replace('checkbox', 'span'));
-      var seriesName = span.innerHTML;
-  
-      if(checkboxBranch == 'Site') {
-        meters = getSitesByAttribute('BaseName', linkedSite)[0].Meters;
-      }
-      else if(checkboxBranch == 'Meter') {
-        meters = getMetersByAttribute('Identifier', span.innerHTML, linkedSite);
-      }
-      else if(checkboxBranch == 'SubMeter') {
-        meters = getSubMetersByAttribute('Identifier', span.innerHTML, linkedSite);
-        seriesName = linkedSite.concat(' - ').concat(span.innerHTML);
-      }
-  
-      if(showBy == "MaxDemand") {
-        var meterLength = meters.length;
-
-        for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-          var meter = meters[meterCount];
-      
-          if(commodityMeterMatch(meter, commodity)) {
-            var meterData = meter['Capacity'];
-            
-            if(!meterData) {
-              continue;
-            }
-
-            var site = getSitesByAttribute('BaseName', linkedSite)[0];
-            var maxDemand = getAttribute(site.Attributes, 'MaxDemand');      
-            meter['MaxDemand'] = JSON.parse(JSON.stringify(meterData));
-
-            var meterDataLength = meterData.length;
-            for(var j = 0; j < meterDataLength; j++) {
-              meter['MaxDemand'][j].Value = maxDemand;
-            }
-          }
-        }
-      }
-      
-      newSeries.push(summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat, startDate, endDate));
-    }
-  
-    return newSeries;
-}
-
-function getSitesByAttribute(attribute, value) {
-    var sites = []
-    var dataLength = data.length;
-  
-    for(var siteCount = 0; siteCount < dataLength; siteCount++) {
-      var site = data[siteCount];
-  
-      if(getAttribute(site.Attributes, attribute) == value) {
-        sites.push(site);
-      }
-    }
-  
-    return sites;
-}
-  
-function getMetersByAttribute(attribute, value, linkedSite) {
-    var meters = [];
-    var dataLength = data.length;
-  
-    for(var siteCount = 0; siteCount < dataLength; siteCount++) {
-      var site = data[siteCount];
-      var meterLength = site.Meters.length;
-  
-      for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-        var meter = site.Meters[meterCount];
-  
-        if(getAttribute(meter.Attributes, attribute) == value) {
-          if(linkedSiteMatch(meter.GUID, 'Meter', linkedSite)) {
-            meters.push(meter);
-          }
-        }
-      }
-    }
-  
-    return meters;
-}
-
-function getSubMetersByAttribute(attribute, value, linkedSite) {
-  var subMeters = [];
-  var dataLength = data.length;
-
-  for(var siteCount = 0; siteCount < dataLength; siteCount++) {
-    var site = data[siteCount];
-    var meterLength = site.Meters.length;
-
-    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-      var meter = site.Meters[meterCount];
-
-      if(meter['SubMeters']){
-        var subMeterLength = meter.SubMeters.length;
-
-        for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++){
-          var subMeter = meter.SubMeters[subMeterCount];
-
-          if(getAttribute(subMeter.Attributes, attribute) == value) {
-            if(linkedSiteMatch(subMeter.GUID, 'SubMeter', linkedSite)) {
-              subMeters.push(subMeter);
-            }
-          }
-        }
-      }              
-    }			
-  }
-
-  return subMeters;
-}
-
-function linkedSiteMatch(identifier, meterType, linkedSite) {
-  var identifierCheckbox = document.getElementById(meterType.concat(identifier).concat('checkbox'));
-  var identifierLinkedSite = identifierCheckbox.attributes['linkedSite'].nodeValue;
-
-  return identifierLinkedSite == linkedSite;
-}
-
-function summedMeterSeries(meters, seriesName, showBy, newCategories, commodity, dateFormat, startDate, endDate) {
+function getNewChartSeries(meters, showBy, newCategories, dateFormat, startDate, endDate, seriesName) {
+  if(showBy == "MaxDemand") {
     var meterLength = meters.length;
-    var summedMeterSeries = {
-      name: seriesName.concat(' - ').concat(showBy),
-      data: [0]
-    };
-    
+
     for(var meterCount = 0; meterCount < meterLength; meterCount++) {
       var meter = meters[meterCount];
-  
-      if(commodityMeterMatch(meter, commodity)) {
-        var meterData = meter[showBy];
-        
-        if(!meterData) {
-          continue;
-        }
-  
-        var meterDataLength = meterData.length;
-        for(var j = 0; j < meterDataLength; j++) {
-          var meterDate = new Date(meterData[j].Date);
-
-          if(meterDate >= startDate && meterDate <= endDate) {
-            var formattedDate = formatDate(meterDate, dateFormat);
-            var i = newCategories.findIndex(n => n == formattedDate);
-            var value = meterData[j].Value;
-    
-            if(!value && !summedMeterSeries.data[i]){
-              summedMeterSeries.data[i] = null;
-            }
-            else if(value && !summedMeterSeries.data[i]) {
-              summedMeterSeries.data[i] = value;
-            }
-            else if(value && summedMeterSeries.data[i]) {
-              summedMeterSeries.data[i] += value;
-            }		
-          }          					     
-        }
+      var meterData = meter['Capacity'];
+      
+      if(!meterData) {
+        continue;
       }
-    } 
+
+      var maxDemand = getAttribute(meter.Attributes, 'MaxDemand');      
+      meter['MaxDemand'] = JSON.parse(JSON.stringify(meterData));
+
+      var meterDataLength = meterData.length;
+      for(var j = 0; j < meterDataLength; j++) {
+        meter['MaxDemand'][j].Value = maxDemand;
+      }
+    }
+  }
+
+  var summedMeterSeries = getSummedMeterSeries(meters, showBy, newCategories, dateFormat, startDate, endDate);
+  return finaliseData(summedMeterSeries, seriesName.concat(' - ').concat(showBy));
+}
+
+function finaliseData(summedMeterSeries, seriesName) {
+  var finalSeries = [];
+  var noGroupradio = document.getElementById('noGroupradio');
+
+  if(noGroupradio.checked) {
+    var series = {
+      name: seriesName,
+      data: summedMeterSeries.value
+    };
+
+    return series;
+  }
+  else {
+    var sumcheckbox = document.getElementById('sumcheckbox');
+    if(sumcheckbox.checked) {
+      var series = {
+        name: seriesName + ' - Sum',
+        data: summedMeterSeries.value
+      };
   
-    return summedMeterSeries;
+      finalSeries.push(series);
+    }
+
+    var averagecheckbox = document.getElementById('averagecheckbox');
+    if(averagecheckbox.checked) {
+      var series = {
+        name: seriesName + ' - Average',
+        data: []
+      };
+  
+      for(var i = 0; i < summedMeterSeries.value.length; i++) {
+        series.data.push(summedMeterSeries.value[i]/summedMeterSeries.count[i]);
+      }
+  
+      finalSeries.push(series);
+    }
+  }
+
+  var temp = [...finalSeries];
+  return temp;
+}
+
+function getSummedMeterSeries(meters, showBy, newCategories, dateFormat, startDate, endDate) {
+  var meterLength = meters.length;
+  var summedMeterSeries = {
+    value: [0],
+    count: [0]
+  }
+  
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = meters[meterCount];
+    var meterData = meter[showBy];
+    
+    if(!meterData) {
+      continue;
+    }
+
+    var meterDatesApplied = [];
+    var meterDataLength = meterData.length;
+    for(var j = 0; j < meterDataLength; j++) {
+      var meterDate = new Date(meterData[j].Date);
+
+      if(meterDate >= startDate && meterDate <= endDate) {
+        var formattedDate = formatDate(meterDate, dateFormat);
+        var i = newCategories.findIndex(n => n == formattedDate);
+        var value = meterData[j].Value;
+
+        if(!value && !summedMeterSeries.value[i]){
+          summedMeterSeries.value[i] = null;
+        }
+        else if(value && !summedMeterSeries.value[i]) {
+          summedMeterSeries.value[i] = value;
+        }
+        else if(value && summedMeterSeries.value[i]) {
+          summedMeterSeries.value[i] += value;
+        }  
+        
+        if(!meterDatesApplied.includes(formattedDate)) {
+          meterDatesApplied.push(formattedDate);
+
+          if(summedMeterSeries.count[i]) {
+            summedMeterSeries.count[i] += 1;
+          }
+          else {
+            summedMeterSeries.count[i] = 1;
+          }
+        }
+      }          					     
+    }
+  } 
+
+  return summedMeterSeries;
 }
 
 function getChartYAxisTitle(showBy) {

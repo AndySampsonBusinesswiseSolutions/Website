@@ -15,20 +15,20 @@
 	<div id="mySidenav" class="sidenav">
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="siteDiv" class="tree-div roundborder">
+			<div id="siteDiv" class="tree-div roundborder scrolling-wrapper">
 			</div>
 			<br>
 			<div class="tree-div roundborder">
 				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
-						<input type="radio" name="commoditySelector" id="allCommodityradio" checked guid="0" onclick=''><span id="allCommodityspan" style="padding-left: 1px;">All</span>
+						<input type="radio" name="commoditySelector" id="allCommodityradio" checked guid="0" onclick='createTree(sites, "updateCharts()"); updateCharts();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
 					</li>
 					<li>
-						<input type="radio" name="commoditySelector" id="electricityCommodityradio" guid="0" onclick=''><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+						<input type="radio" name="commoditySelector" id="electricityCommodityradio" guid="0" onclick='createTree(sites, "updateCharts()"); updateCharts();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
 					</li>
 					<li>
-						<input type="radio" name="commoditySelector" id="gasCommodityradio" guid="0" onclick=''><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
+						<input type="radio" name="commoditySelector" id="gasCommodityradio" guid="0" onclick='createTree(sites, "updateCharts()"); updateCharts();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
 					</li>
 				</ul>
 			</div>
@@ -37,19 +37,16 @@
 				<span style="padding-left: 5px;">Select Grouping Option <i class="far fa-plus-square show-pointer" id="groupingSelector"></i></span>
 				<ul class="format-listitem" id="groupingSelectorList">
 					<li>
-						<input type="radio" name="groupingSelector" id="noGroupradio" checked guid="0" onclick=''><span id="noGroupspan" style="padding-left: 1px;">No Grouping</span>
+						<input type="radio" name="groupingSelector" id="noGroupradio" checked guid="0" onclick='updateCharts();'><span id="noGroupspan" style="padding-left: 1px;">No Grouping</span>
 					</li>
 					<li>
-						<input type="radio" name="groupingSelector" id="groupradio" guid="0" onclick=''><span id="groupspan" style="padding-left: 1px;">Group <i class="far fa-plus-square show-pointer" id="mathematicalFunctionSelector"></i></span>
+						<input type="radio" name="groupingSelector" id="groupradio" guid="0" onclick='updateCharts();'><span id="groupspan" style="padding-left: 1px;">Group <i class="far fa-plus-square show-pointer" id="mathematicalFunctionSelector"></i></span>
 						<ul class="format-listitem listitem-hidden" id="mathematicalFunctionSelectorList">
 							<li>
-								<input type="checkbox" id="sumcheckbox" checked guid="0" onclick=''><span id="sumspan" style="padding-left: 1px;">Sum</span>
+								<input type="checkbox" id="sumcheckbox" checked guid="0" onclick='updateCharts();'><span id="sumspan" style="padding-left: 1px;">Sum</span>
 							</li>
 							<li>
-								<input type="checkbox" id="averagecheckbox" guid="0" onclick=''><span id="averagespan" style="padding-left: 1px;">Average</span>
-							</li>
-							<li>
-								<input type="checkbox" id="standardDeviationcheckbox" guid="0" onclick=''><span id="standardDeviationspan" style="padding-left: 1px;">Standard Deviation</span>
+								<input type="checkbox" id="averagecheckbox" guid="0" onclick='updateCharts();'><span id="averagespan" style="padding-left: 1px;">Average</span>
 							</li>
 						</ul>
 					</li>

@@ -9,7 +9,6 @@
         dates.push(new Date(2000, 0, i));
       }
       
-
       var dateToTimePeriod = function (date) {
         var day = date.getDate();
         switch(day) {
@@ -30,13 +29,11 @@
       
       // Date Range Slider
       var floorDate = new Date(2019, 10, 1).getTime();
-      var ceilDate = new Date(2019, 10, 26).getTime();
+      var ceilDate = new Date(2020, 0, 4).getTime();
       var minDate = new Date(floorDate).getTime();
       var maxDate = new Date(ceilDate).getTime();
       var millisInDay = 24*60*60*1000;
-        
-  
-  
+      
       var monthNames =
       [
         "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
@@ -47,7 +44,6 @@
         var date = new Date(date_millis);
         return date.getDate()+"-"+monthNames[date.getMonth()]+"-"+date.getFullYear();
       }
-  
   
       //Configs
       $scope.usageChartOptionsTimeSpan = {
@@ -61,7 +57,7 @@
             return '';
           },
           onEnd: function() {
-            updateUsageChart();
+            updateCharts();
           } 
         }
       };
@@ -76,7 +72,7 @@
             return '';
           },
           onEnd: function() {
-            updateTotalCostChart();
+            updateCharts();
           } 
         }
       };
@@ -91,7 +87,7 @@
             return '';
           },
           onEnd: function() {
-            updateCostBreakdownChart();
+            updateCharts();
           } 
         }
       };
@@ -106,7 +102,7 @@
             return '';
           },
           onEnd: function() {
-            updateCapacityChart();
+            updateCharts();
           }
         }
       };
@@ -129,7 +125,7 @@
             return '';
           },
           onEnd: function() {
-            updateUsageChart();
+            updateCharts();
           } 
         }
       };
@@ -151,7 +147,7 @@
             return '';
           },
           onEnd: function() {
-            updateTotalCostChart();
+            updateCharts();
           } 
         }
       };
@@ -173,7 +169,7 @@
             return '';
           },
           onEnd: function() {
-            updateCostBreakdownChart();
+            updateCharts();
           } 
         }
       };
@@ -195,7 +191,7 @@
             return '';
           },
           onEnd: function() {
-            updateCapacityChart();
+            updateCharts();
           } 
         }
       };
