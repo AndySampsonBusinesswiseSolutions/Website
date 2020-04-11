@@ -1,0 +1,111 @@
+.section-header {
+    background: #b62a51;
+    width: 100%;
+}
+.section-header-text {
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    font-weight:bold;
+}
+.tree-column {
+    float: left;
+    width: 385px;
+    padding-left: 15px;
+    padding-top: 50px;
+}
+.tree-div, .chart {
+    background-color: #e9eaee;
+    max-height: 650px;
+}
+.chart {
+    min-height: 650px;
+    width: calc(49.85%);
+    float: left;
+}
+.final-column {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.scrolling-wrapper {
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+.listitem-hidden {
+    display: none;
+}
+.format-listitem {
+    list-style-type: none; 
+    padding-left: 15px;
+}
+.roundborder, .tabDiv {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+}
+.roundborder, .card {
+    border: solid black 1px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+.sidenav-icon {
+    font-size: 30px; 
+    cursor: pointer; 
+    float: left; 
+    color: white;
+  }
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background-color: #505152;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    opacity: 95%;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 70px;
+    left: 370px;
+    font-size: 30px;
+  }
+/* Style the tab */
+.tabDiv {
+    overflow: hidden;
+    background-color: #e9eaee;
+  }
+  
+  /* Style the buttons inside the tab */
+  .tabDiv button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 5px 5px;
+    font-size: 10px;
+  }
+  
+  /* Change background color of buttons on hover */
+  .tabDiv button:hover {
+    background-color: #ddd;
+  }
+  
+  /* Create an active/current tablink class */
+  .tabDiv button.active {
+    background-color: #ccc;
+  }
+  
+  /* Style the tab content */
+  .card {
+    display: none;
+    padding: 5px 5px;
+    border-top: none;
+    background-color: #e9eaee;
+  }
