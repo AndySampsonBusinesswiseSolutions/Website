@@ -1,34 +1,78 @@
 function pageLoad() {
   createTree(sites, "updateCharts()");  
 
-  document.onmousemove=function(e) {
-    var mousecoords = getMousePos(e);
-    if(mousecoords.x <= 15) {
-      openNav();
-    }  
-    else if(mousecoords.x >= 400) {
-      closeNav();
-    }  
+  document.onmousemove = function(e) {
+    setupSidebar(e);
+  };
+
+  window.onscroll = function() {
+    var navBar = document.getElementsByClassName('fusion-header-wrapper')[0];
+    var footer = document.getElementsByClassName('footer')[0];
+    var sidebar = document.getElementById("mySidenav");
+    var navBarHeight = navBar.clientHeight;
+    var footerHeight = footer.clientHeight;
+    var reduction = (window.innerHeight + window.scrollY) - (document.body.offsetHeight - footerHeight);
+      
+    sidebar.style.height = "calc(100% - " + (reduction > 0 ? reduction : 0) + "px)";
+    sidebar.style.marginTop = window.pageYOffset >= navBarHeight ? '0px' : (navBarHeight - window.pageYOffset) + 'px';
   };
 
   window.onload = function() {
     updateCharts();
     hideSliders();
-  }
+  };
 }
 
 function getMousePos(e) {
 	return {x:e.clientX,y:e.clientY};
 }
 
-function openNav() {
-	document.getElementById("mySidenav").style.width = "400px";
-	document.getElementById("openNav").style.color = "#b62a51";
+function setupSidebar(e) {
+  var sidebar = document.getElementById("mySidenav");
+  var currentSidebarWidth = sidebar.style.width == '' ? 0 : parseInt(sidebar.style.width.replace('px', ''));
+  var newSidebarWidth = (sidebar.scrollHeight > sidebar.clientHeight ? 415 : 400);
+
+  if(currentSidebarWidth > 0 && newSidebarWidth != currentSidebarWidth) {
+    sidebar.style.width = newSidebarWidth + "px";
+  }
+
+  var mousecoords = getMousePos(e);
+  if(currentSidebarWidth == 0 && mousecoords.x <= 15) {
+    openNav(sidebar, newSidebarWidth);
+  }  
+  else if(currentSidebarWidth > 0 && mousecoords.x >= newSidebarWidth) {
+    closeNav(sidebar);
+  }  
 }
 
-function closeNav() {
-	document.getElementById("openNav").style.color = "white";
-	document.getElementById("mySidenav").style.width = "0px";
+function lockSidebar() {
+  updateClassOnClick('lock', 'fa-unlock', 'fa-lock'); 
+  var lock = document.getElementsByClassName('lock')[0];
+  var documentBody = document.getElementsByClassName('final-column')[0];
+  var sidebar = document.getElementById("mySidenav"); 
+
+  if(lock.classList.contains('fa-lock')) {
+    documentBody.style.marginLeft = sidebar.style.width;
+    lock.title = "Click To Unlock Sidebar";
+  }
+  else {
+    documentBody.style.marginLeft = "0px";
+    lock.title = "Click To Lock Sidebar";
+  }
+}
+
+function openNav(sidebar, newSidebarWidth) {
+	sidebar.style.width = newSidebarWidth + "px";
+  document.getElementById("openNav").style.color = "#b62a51";
+}
+
+function closeNav(sidebar) {
+  var lock = document.getElementsByClassName('lock')[0];
+
+  if(lock.classList.contains('fa-unlock')) {
+	  document.getElementById("openNav").style.color = "white";
+    sidebar.style.width = "0px";
+  }
 }
 
 function hideSliders() {
@@ -823,8 +867,9 @@ function addExpanderOnClickEvents() {
 
 function addExpanderOnClickEventsByElement(element) {
 	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
+		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square');
+    updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '');
+    setupSidebar(event);
 	});
 }
 

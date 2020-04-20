@@ -1,80 +1,14 @@
 @import "https://bossanova.uk/jexcel/v3/jexcel.css";
 @import "https://bossanova.uk/jsuites/v2/jsuites.css";
 
-.section-header {
-    background: #b62a51;
-    width: 100%;
-}
-.section-header-text {
-    color: white;
-    text-align: center;
-    font-size: 25px;
-    font-weight:bold;
-}
 .dashboard{
     background-color: #e9eaee;
-}
-.tree-column {
-    float: left;
-    width: 385px;
-    padding-left: 15px;
-    padding-top: 50px;
-}
-.final-column {
-    padding-left: 15px;
-    padding-right: 15px;
 }
 .tree-div {
     background-color: #e9eaee;
 	max-height: 650px;
 	padding: 10px;
 }
-.scrolling-wrapper {
-    overflow-x: auto;
-    overflow-y: auto;
-    white-space: nowrap;
-}
-.format-listitem {
-    list-style-type: none; 
-    padding-left: 15px;
-}
-.listitem-hidden {
-  display: none;
-}
-.roundborder {
-    border: solid black 1px;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px; 
-}
-.sidenav-icon {
-  font-size: 30px; 
-  cursor: pointer; 
-  float: left; 
-  color: white;
-}
-.sidenav {
-  height: 100%;
-  width: 0;
-  position: fixed;
-  z-index: 100;
-  top: 0;
-  left: 0;
-  background-color: #505152;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-  opacity: 95%;
-}
-
-.sidenav .closebtn {
-  position: absolute;
-  top: 70px;
-  left: 370px;
-  font-size: 30px;
-}
-
 
 /*
 jQuery.ganttView v.0.8.0

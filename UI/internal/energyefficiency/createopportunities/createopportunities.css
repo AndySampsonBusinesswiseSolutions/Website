@@ -1,16 +1,6 @@
 @import "https://bossanova.uk/jexcel/v3/jexcel.css";
 @import "https://bossanova.uk/jsuites/v2/jsuites.css";
 
-.section-header {
-    background: #b62a51;
-    width: 100%;
-}
-.section-header-text {
-    color: white;
-    text-align: center;
-    font-size: 25px;
-    font-weight:bold;
-}
 .divcolumn {
     background-color: #e9eaee;
     padding: 10px;
@@ -20,39 +10,16 @@
     width: 1%;
     min-height: 100px;
 }
-.tree-div, .roundborder {
-    border: solid black 1px;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px; 
-}
 .tree-div {
     background-color: #e9eaee;
     min-height: 183px;
     max-height: 183px;
-}
-.listitem-hidden {
-    display: none;
 }
 .approve {
     background-color: green;
 }
 .reject {
     background-color: red;
-}
-.format-listitem {
-    list-style-type: none; 
-    padding-left: 15px;
-}
-.scrolling-wrapper {
-    overflow-x: auto;
-    overflow-y: auto;
-    white-space: nowrap;
-}
-.final-column {
-    padding-left: 15px;
-    padding-right: 15px;
 }
 .popup {
     display: none;

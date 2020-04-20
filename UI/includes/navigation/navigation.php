@@ -31,6 +31,7 @@
                             <li style="padding-right: 25px;"><a href="#"><i class="fas fa-coins"></i><span class="fusion-caret"></span><span>Finance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/Internal/Finance/BillValidation/"><span>Bill Validation</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/Finance/BudgetManagement/"><span>Budget Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/Commissions/"><span>Commissions</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/VarianceAnalysis/"><span>Variance Analysis</span></a></li>
                                 </ul>
@@ -65,6 +66,13 @@
                                     <li class="submenu-item"><a href="/Internal/AccountManagement/MyDocuments/"><span>My Documents</span></a></li>
                                 </ul>
                             </li>
+                            <li style="padding-right: 15px;">
+                                <a href="/Internal/AccountManagement/MyDocuments/">
+                                    <i class="fas fa-shopping-basket" title="Download Basket (2 items)"></i>
+                                    <span style="font-size: 10px; padding-top: 15px;">(2)</span>
+                                </a>
+                            </li>
+                            <li style="padding-right: 35px;"></li>
                             <li><a href="/"><i class="fas fa-sign-out-alt" title="Logout"></i></a></li>
                         </ul>
                     </nav>

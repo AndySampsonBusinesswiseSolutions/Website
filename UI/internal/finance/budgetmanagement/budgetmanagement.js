@@ -1,5 +1,8 @@
 function pageLoad(){  
-	// createTree(billvalidation, "treeDiv", "createCardButton");
+	createBudgetTree(sites, "");
+	createTree(sites, "");
+	setupDataGrid();
+	displayCharts();
 
 	document.onmousemove=function(e) {
 		var mousecoords = getMousePos(e);
@@ -34,6 +37,13 @@ function addExpanderOnClickEvents() {
 	}
 
 	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('createReviewBudgetTreeDivSelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('createReviewBudget', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('timePeriod', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('budgetSelector', 'fa-plus-square', 'fa-minus-square');
+	// updateClassOnClick('createReviewBudgetOverride', 'fa-plus-square', 'fa-minus-square');
+	updateClassOnClick('charts', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
@@ -99,591 +109,767 @@ function hasClass(elem, className) {
 	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
 }
 
-var subBranchCount = 0;
+function createBudgetTree(sites, functions) {
+	var div = document.getElementById('createReviewBudgetTreeDiv');
+	clearElement(div);
 
-function createTree(baseData, divId, checkboxFunction) {
-    var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
-    
-	var ul = createUL();
-	ul.id = divId.concat('SelectorList');
-    tree.appendChild(ul);
+	var tree = document.createElement('div');
+	var ul = createBranchUl('createReviewBudgetTreeDivSelector', false);
+	tree.appendChild(ul);
 
-    subBranchCount = 0; 
+	buildSiteBranch(sites, '', ul, functions, true);
 
-    buildTree(baseData, ul, checkboxFunction);
+	var headerDiv = document.createElement('div');
+	headerDiv.setAttribute('class', 'expander-header');
 
-    var div = document.getElementById(divId);
-    clearElement(div);
+	var headerSpan = document.createElement('span');
+	headerSpan.style = "padding-left: 5px;";
+	headerSpan.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="createReviewBudgetTreeDivSelector"></i>';
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Bills <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+	headerDiv.appendChild(headerSpan);
+	div.appendChild(headerDiv);
 	div.appendChild(tree);
-	
-	document.getElementById('Period13checkbox').checked = true;
-	createCardButton(document.getElementById('Period13checkbox'));
-	openTab(document.getElementById('Bill15button'), 'Bill15div', '15');
-	addExpanderOnClickEvents();
+
+	var exclamationIcon1 = document.createElement('i');
+	var exclamationIcon2 = document.createElement('i');
+	exclamationIcon1.setAttribute('class', "fas fa-exclamation-circle");
+	exclamationIcon2.setAttribute('class', "fas fa-exclamation-circle");
+	exclamationIcon1.setAttribute('title', "Budget 2 for Leeds for period 01/04/2021 to 31/03/2022 will be overriden");
+	exclamationIcon2.setAttribute('title', "Budget 2 for Manchester for period 01/04/2021 to 31/03/2022 will be overriden");
+
+	var site = document.getElementById("Budget_Site0checkbox");
+	var span = document.getElementById("Budget_Site0span");
+	span.appendChild(exclamationIcon1);
+	site.checked = true;
+
+	site = document.getElementById("Budget_Site1checkbox");
+	span = document.getElementById("Budget_Site1span");
+	span.appendChild(exclamationIcon2);
+	site.checked = true;
 }
 
-function buildTree(baseData, baseElement, checkboxFunction) {
-    var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
-        var baseName = getAttribute(base.Attributes, 'Period');
-        var li = document.createElement('li');
-        var ul = createUL();
-
-        buildSite(base.Sites, ul, checkboxFunction, baseName);
-        appendListItemChildren(li, 'Period'.concat(base.GUID), checkboxFunction, 'Period', baseName, ul, baseName, base.GUID);
-
-        baseElement.appendChild(li);        
-    }
-}
-
-function buildSite(sites, baseElement, checkboxFunction, linkedSite) {
-    var sitesLength = sites.length;
-    for(var i = 0; i < sitesLength; i++) {
-        var site = sites[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        buildMeter(site.Meters, ul, checkboxFunction, linkedSite);
-        appendListItemChildren(li, 'Site'.concat(subBranchCount), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
-
-        baseElement.appendChild(li);
-        subBranchCount++;
-    }
-}
-
-function buildMeter(meters, baseElement, checkboxFunction, linkedSite) {
-    var metersLength = meters.length;
-    for(var i = 0; i < metersLength; i++){
-        var meter = meters[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        buildBill(meter.Bills, ul, checkboxFunction, linkedSite);
-        appendListItemChildren(li, 'Meter'.concat(meter.GUID), checkboxFunction, 'Meter', meter.Identifier, ul, linkedSite, '');
-
-        baseElement.appendChild(li); 
-    }
-}
-
-function buildBill(bills, baseElement, checkboxFunction, linkedSite) {
-    var billsLength = bills.length;
-    for(var i = 0; i < billsLength; i++){
-        var bill = bills[i];
-
-        var li = document.createElement('li');
-        var ul = createUL();
-        var branchId = 'Bill'.concat(bill.GUID);
-        appendListItemChildren(li, branchId, checkboxFunction, 'Bill'.concat(bill.Status), bill.BillNumber, ul, linkedSite, bill.GUID);
-
-        var branchDiv = li.children[branchId];
-        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
-        branchDiv.setAttribute('class', 'far fa-times-circle');
-
-        var branchIcon = li.children['Bill'.concat(bill.GUID).concat('span')];
-        branchIcon.style.color = getBillStatusColour(bill.Status);
-
-        baseElement.appendChild(li);         
-    }
-}
-
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
-    li.appendChild(createBranchDiv(id));
-    li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createTreeIcon(checkboxBranch));
-    li.appendChild(createSpan(id, branchOption));
-    li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
-}
-
-function createBranchListDiv(branchListDivId, ul) {
-    var branchListDiv = document.createElement('div');
-    branchListDiv.id = branchListDivId;
-    branchListDiv.setAttribute('class', 'listitem-hidden');
-    branchListDiv.appendChild(ul);
-    return branchListDiv;
-}
-
-function createUL() {
-    var ul = document.createElement('ul');
-    ul.setAttribute('class', 'format-listitem');
-    return ul;
-}
-
-function createTreeIcon(branch) {
-    var icon = document.createElement('i');
-    icon.setAttribute('class', getIconByBranch(branch));
-    icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
-    return icon;
-}
-
-function createSpan(spanId, innerHTML) {
-    var span = document.createElement('span');
-    span.id = spanId.concat('span');
-    span.innerHTML = innerHTML;
-    return span;
-}
-
-function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) {
-    var functionArray = checkboxFunction.replace(')', '').split('(');
-    var functionArrayLength = functionArray.length;
-    var functionName = functionArray[0];
-    var functionArguments = [];
-
-    var checkBox = document.createElement('input');
-    checkBox.type = 'checkbox';  
-    checkBox.id = checkboxId.concat('checkbox');
-    checkBox.setAttribute('Branch', branch);
-    checkBox.setAttribute('LinkedSite', linkedSite);
-	checkBox.setAttribute('GUID', guid);
-
-    functionArguments.push(checkBox.id);
-    if(functionArrayLength > 1) {
-        var functionArgumentLength = functionArray[1].split(',').length;
-        for(var i = 0; i < functionArgumentLength; i++) {
-            functionArguments.push(functionArray[1].split(',')[i]);
-        }
-    }
-    functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
-    
-    checkBox.setAttribute('onclick', functionName);
-    return checkBox;
-}
-
-function getIconByBranch(branch) {
-    switch(branch) {
-        case 'Period':
-            return "far fa-calendar-alt";
-        case "BillValid":
-            return "fas fa-check-circle";
-        case "BillInvestigation":
-            return "fas fa-question-circle";
-        case "BillInvalid":
-            return "fas fa-times-circle";
-    }    
-}
-
-function getBillStatusColour(status) {
-    switch(status) {
-        case "Valid":
-            return "green";
-        case "Investigation":
-            return "orange";
-        case "Invalid":
-            return "red";
-    }
-}
-
-function openTab(callingElement, tabName, guid) {
-	var tabLinks = document.getElementsByClassName("tablinks");
-	var tabLinksLength = tabLinks.length;
-	for (var i = 0; i < tabLinksLength; i++) {
-		tabLinks[i].className = tabLinks[i].className.replace(" active", "");
+function createTree(sites, functions) {
+	var div = document.getElementById('treeDiv');
+	var inputs = div.getElementsByTagName('input');
+	var checkboxes = getCheckedCheckBoxes(inputs);
+	var elements = div.getElementsByTagName("*");
+  
+	var checkboxIds = [];
+	for(var i = 0; i < checkboxes.length; i++) {
+	  checkboxIds.push(checkboxes[i].id);
 	}
-	callingElement.className += " active";
+  
+	var elementClasses = [];
+	for(var i = 0; i < elements.length; i++) {
+	  if(elements[i].id != '') {
+		var element = {
+		  id: elements[i].id,
+		  classList: elements[i].classList
+		}
 	
-	var newDiv = document.createElement('div');
-	newDiv.setAttribute('class', 'card');
-	newDiv.id = tabName;
-
-	var cardDiv = document.getElementById('cardDiv');
-	clearElement(cardDiv);
-	cardDiv.appendChild(newDiv);
-
-	createCard(guid, newDiv);
-
-	newDiv.style.display = "block";
+		elementClasses.push(element);
+	  }    
+	}
+  
+	clearElement(div);
+	
+	var tree = document.createElement('div');
+	tree.setAttribute('class', 'scrolling-wrapper');
+	
+	var ul = createBranchUl('treeDivSelector', false);
+	tree.appendChild(ul);
+  
+	buildSiteBranch(sites, getCommodityOption(), ul, functions);
+  
+	var header = document.createElement('span');
+	header.style = "padding-left: 5px;";
+	header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="treeDivSelector"></i>';
+  
+	div.appendChild(header);
+	div.appendChild(tree);
+  
+	addExpanderOnClickEvents();
+  
+	for(var i = 0; i < checkboxIds.length; i++) {
+	  var checkbox = document.getElementById(checkboxIds[i]);
+	  if(checkbox) {
+		checkbox.checked = true;
+	  }
+	}
+  
+	for(var i = 0; i < elementClasses.length; i++) {
+	  var element = document.getElementById(elementClasses[i].id);
+	  if(element) {
+		element.classList = elementClasses[i].classList;
+	  }
+	}  
 }
 
-function createCardButton(checkbox){
-	var tabDiv = document.getElementById('tabDiv');	
-	var id = checkbox.id.replace('checkbox', 'List');
-
-	switch(checkbox.getAttribute('branch')) {
-		case 'Period':
-			createPeriodButtons(id, tabDiv, checkbox.checked);
-			break;
-		case 'Site':
-			createSiteButtons(id, tabDiv, checkbox.checked);
-			break;
-		case 'Meter':
-			createMeterButtons(id, tabDiv, checkbox.checked);
-			break;
-		default:
-			createBillButton(checkbox, tabDiv);
-			break;
-	}	
-
-	updateTabDiv();
+//build site
+function buildSiteBranch(sites, commodityOption, elementToAppendTo, functions, isNewBudget) {
+	var siteLength = sites.length;
+  
+	for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+	  var site = sites[siteCount];
+  
+	  if(!commodityMatch(site, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren((isNewBudget ? 'Budget_' : '') + 'Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
+	  elementToAppendTo.appendChild(listItem);
+  
+	  if(site.hasOwnProperty('Areas')) {
+		var ul = listItem.getElementsByTagName('ul')[0];
+		buildAreaBranch(site.Areas, commodityOption, ul, functions, (isNewBudget ? 'Budget_' : '') + 'Site' + siteCount);
+	  }
+	}
 }
 
-function createPeriodButtons(id, tabDiv, isChecked) {
-	var listdiv = document.getElementById(id);
-	var inputs = listdiv.getElementsByTagName('input');
-	var inputLength = inputs.length;
+//build area
+function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions, previousId) {
+	var areaLength = areas.length;
+  
+	for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+	  var area = areas[areaCount];
+  
+	  if(!commodityMatch(area, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren(previousId + '_Area' + areaCount, area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area');
+	  elementToAppendTo.appendChild(listItem);
+  
+	  if(area.hasOwnProperty('Commodities')) {
+		var ul = listItem.getElementsByTagName('ul')[0];
+		buildCommodityBranch(area.Commodities, commodityOption, ul, functions, previousId + '_Area' + areaCount);
+	  }
+	}
+}
 
-    for(var i = 0; i < inputLength; i++) {
-		var input = inputs[i];
-		if(input.type.toLowerCase() == 'checkbox'
-		&& input.getAttribute('branch') == 'Site') {
-			input.checked = isChecked;
-			createSiteButtons(input.id.replace('checkbox', 'List'), tabDiv, isChecked);
+//build commodity
+function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions, previousId) {
+	var commodityLength = commodities.length;
+  
+	for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
+	  var commodity = commodities[commodityCount];
+  
+	  if(!commodityMatch(commodity, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren(previousId + '_Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), functions, commodity.Attributes, 'Commodity');
+	  elementToAppendTo.appendChild(listItem);
+  
+	  if(commodity.hasOwnProperty('Meters')) {
+		var ul = listItem.getElementsByTagName('ul')[0];
+		buildMeterBranch(commodity.Meters, commodityOption, ul, functions, previousId + '_Commodity' + commodityCount);
+	  }
+	}
+}
+
+//build meter
+function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions, previousId) {
+	var meterLength = meters.length;
+  
+	for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+	  var meter = meters[meterCount];
+  
+	  if(!commodityMatch(meter, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren(previousId + '_Meter' + meterCount, meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter');
+	  elementToAppendTo.appendChild(listItem);
+  
+	  if(meter.hasOwnProperty('SubAreas')) {
+		var ul = listItem.getElementsByTagName('ul')[0];
+		buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions, previousId + '_Meter' + meterCount);
+	  }
+	}
+}
+
+//build sub area
+function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions, previousId) {
+	var subAreaLength = subAreas.length;
+  
+	for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
+	  var subArea = subAreas[subAreaCount];
+  
+	  if(!commodityMatch(subArea, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren(previousId + '_SubArea' + subAreaCount, subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea');
+	  elementToAppendTo.appendChild(listItem);
+  
+	  if(subArea.hasOwnProperty('Assets')) {
+		var ul = listItem.getElementsByTagName('ul')[0];
+		buildAssetBranch(subArea.Assets, commodityOption, ul, functions, previousId + '_SubArea' + subAreaCount);
+	  }
+	}
+}
+
+//build asset
+function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions, previousId) {
+	var assetLength = assets.length;
+  
+	for(var assetCount = 0; assetCount < assetLength; assetCount++) {
+	  var asset = assets[assetCount];
+  
+	  if(!commodityMatch(asset, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren(previousId + '_Asset' + assetCount, asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset');
+	  elementToAppendTo.appendChild(listItem);
+  
+	  if(asset.hasOwnProperty('SubMeters')) {
+		var ul = listItem.getElementsByTagName('ul')[0];
+		buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions, previousId + '_Asset' + assetCount);
+	  }
+	}
+}
+
+//build sub meter
+function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions, previousId) {
+	var subMeterLength = subMeters.length;
+  
+	for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
+	  var subMeter = subMeters[subMeterCount];
+  
+	  if(!commodityMatch(subMeter, commodityOption)) {
+		continue;
+	  }
+  
+	  var listItem = appendListItemChildren(previousId + '_SubMeter' + subMeterCount, false, functions, subMeter.Attributes, 'SubMeter');
+	  elementToAppendTo.appendChild(listItem);
+	}
+}
+
+function commodityMatch(entity, commodity) {
+	if(commodity == '') {
+		return true;
+	}
+  
+	var entityCommodities = getAttribute(entity.Attributes, 'Commodities');
+	return entityCommodities && entityCommodities.includes(commodity);
+}
+
+function appendListItemChildren(id, hasChildren, functions, attributes, branch) {
+	var li = document.createElement('li');
+	li.appendChild(createBranchDiv(id, hasChildren));
+	li.appendChild(createBranchCheckbox(id, functions, branch));
+	li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
+	li.appendChild(createBranchSpan(id, getAttribute(attributes, 'Name')));
+  
+	if(hasChildren) {
+	  li.appendChild(createBranchUl(id));
+	}
+  
+	return li;
+}
+
+function createBranchUl(id, hideUl = true) {
+	var ul = document.createElement('ul');
+	ul.id = id.concat('List');
+	ul.setAttribute('class', 'format-listitem' + (hideUl ? ' listitem-hidden' : ''));
+	return ul;
+}
+
+function createBranchDiv(branchDivId, hasChildren = true) {
+	  var branchDiv = document.createElement('div');
+	  branchDiv.id = branchDivId;
+	  branchDiv.setAttribute('class', (hasChildren ? 'far fa-plus-square show-pointer' : 'far fa-times-circle') + ' expander');
+	  branchDiv.setAttribute('style', 'padding-right: 4px;');
+	  return branchDiv;
+}
+
+function createBranchCheckbox(id, functions, branch) {
+	var checkbox = document.createElement('input');
+	checkbox.type = 'checkbox';  
+	checkbox.id = id.concat('checkbox');
+	checkbox.setAttribute('branch', branch);
+  
+	var functionArray = functions.replace(')', '').split('(');
+	var functionArrayLength = functionArray.length;
+	var functionName = functionArray[0];
+	var functionArguments = [];
+  
+	functionArguments.push(checkbox.id);
+	if(functionArrayLength > 1) {
+		var functionArgumentLength = functionArray[1].split(',').length;
+		for(var i = 0; i < functionArgumentLength; i++) {
+			functionArguments.push(functionArray[1].split(',')[i]);
 		}
 	}
+	functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
+	
+	checkbox.setAttribute('onclick', functionName);
+	return checkbox;
 }
 
-function createSiteButtons(id, tabDiv, isChecked) {
-	var listdiv = document.getElementById(id);
-	var inputs = listdiv.getElementsByTagName('input');
-	var inputLength = inputs.length;
+function getAttribute(attributes, attributeRequired) {
+	  for (var attribute in attributes) {
+		  var array = attributes[attribute];
+  
+		  for(var key in array) {
+			  if(key == attributeRequired) {
+				  return array[key];
+			  }
+		  }
+	  }
+  
+	  return null;
+}
+
+function createBranchIcon(iconClass) {
+	var icon = document.createElement('i');
+	icon.setAttribute('class', iconClass);
+	icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
+	return icon;
+}
+
+function createBranchSpan(id, innerHTML) {
+	var span = document.createElement('span');
+	span.id = id.concat('span');
+	span.innerHTML = innerHTML;
+	return span;
+}
+
+function getCheckedCheckBoxes(inputs) {
+    var checkBoxes = [];
+    var inputLength = inputs.length;
   
     for(var i = 0; i < inputLength; i++) {
-		var input = inputs[i];
-		if(input.type.toLowerCase() == 'checkbox'
-		&& input.getAttribute('branch') == 'Meter') {
-			input.checked = isChecked;
-			createMeterButtons(input.id.replace('checkbox', 'List'), tabDiv, isChecked);
-		}
-	}
+      if(inputs[i].type.toLowerCase() == 'checkbox') {
+        if(inputs[i].checked) {
+          checkBoxes.push(inputs[i]);
+        }
+      }
+    }
+
+    if(checkBoxes.length == 0) {
+      for(var i = 0; i < inputLength; i++) {
+        if(inputs[i].type.toLowerCase() == 'checkbox') {
+          if(inputs[i].getAttribute('branch') == 'Site') {
+            inputs[i].checked = true;
+            checkBoxes.push(inputs[i]);
+          }
+        }
+      }
+    }
+  
+    return checkBoxes;
 }
 
-function createMeterButtons(id, tabDiv, isChecked) {
-	var listdiv = document.getElementById(id);
-	var inputs = listdiv.getElementsByTagName('input');
+function getCommodityOption() {
+	var commodity = '';
+	var electricityCommodityradio = document.getElementById('electricityCommodityradio');
+	if(electricityCommodityradio.checked) {
+	  commodity = 'Electricity';
+	}
+	else {
+	  var gasCommodityradio = document.getElementById('gasCommodityradio');
+	  if(gasCommodityradio.checked) {
+		commodity = 'Gas';
+	  }
+	}
+	return commodity;
+}
+
+function deleteBudgets() {
+	var budgets = getBudgets().join("<br>");
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Delete Budget(s)";
+	text.innerHTML = "Are you sure you want to delete the following budgets?<br>" + budgets;
+
+    finalisePopup(title, 'Delete Budget?<br><br>', modal, span);
+}
+
+function reinstateBudgets() {
+	var budgets = getBudgets();
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Reinstate Budget(s)";
+	button.classList.replace('reject', 'approve');
+
+	text.innerHTML = "Please select budgets to reinstate:<br>";
+	budgets.forEach(function(budget, i) {
+		var checkbox = document.createElement('input');
+		checkbox.type = 'checkbox';
+		checkbox.id = 'reinstateBudget' + i + 'checkbox';
+		checkbox.setAttribute('budgetValue', budget);
+
+		text.innerHTML += checkbox.outerHTML + budget + '<br>';
+	});
+
+    finalisePopup(title, 'Reinstate Budget?<br><br>', modal, span);
+}
+
+function getBudgets() {
+	var div = document.getElementById('budgetList');
+	var inputs = div.getElementsByTagName('input');
 	var inputLength = inputs.length;
+	var budgets = [];
 
-    for(var i = 0; i < inputLength; i++) {
+	for(var i = 0; i < inputLength; i++) {
 		var input = inputs[i];
-		if(input.type.toLowerCase() == 'checkbox') {
-			input.checked = isChecked;
-			createBillButton(input, tabDiv);
-		}
-	}	
-}
 
-function createBillButton(checkbox, tabDiv) {
-	var span = document.getElementById(checkbox.id.replace('checkbox', 'span'));
-	var button = document.getElementById(span.id.replace('span', 'button'));
+		if(input.type.toLowerCase() == 'checkbox' && input.checked) {
+			var span = document.getElementById(input.id.replace('checkbox', 'span'));
 
-	if(checkbox.checked) {	
-		if(!button) {
-			button = document.createElement('button');
-			button.setAttribute('class', 'tablinks');
-			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '")');
-		
-			var meterTypeNode = span.parentNode.parentNode.parentNode.parentNode.children[3];
-			var siteNode = meterTypeNode.parentNode.parentNode.parentNode.parentNode.children[3];
-			var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
-		
-			button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
-			button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Bill To Download Basket"></div>'
-							  + '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Bill"></div>';
-	
-			button.id = span.id.replace('span', 'button');
-			tabDiv.appendChild(button);
-		}		
-	}
-	else {
-		if(button) {
-			tabDiv.removeChild(button);
-		}		
-	}
-}
-
-function updateTabDiv() {
-	var tabDiv = document.getElementById('tabDiv');
-	var tabDivChildren = tabDiv.children;
-	var tabDivChildrenLength = tabDivChildren.length;
-
-	if(tabDivChildrenLength == 0) {
-		var cardDiv = document.getElementById('cardDiv');
-		clearElement(cardDiv);
-
-		document.getElementById('Period13checkbox').checked = true;
-		createCardButton(document.getElementById('Period13checkbox'));
-		openTab(document.getElementById('Bill15button'), 'Bill15div', '15');
-	}
-	else {
-		var percentage = (1 / tabDivChildrenLength) * 100;
-		tabDivChildren[0].setAttribute('style', 'width: '.concat(percentage).concat('%;'));
-		for(var i = 1; i < tabDivChildrenLength; i++) {
-			tabDivChildren[i].setAttribute('style', 'width: '.concat(percentage).concat('%; border-left: solid black 1px;'));
-		}
-		
-		tabDiv.style.display = '';
-
-		for(var i = 0; i < tabDivChildrenLength; i++) {
-			if(hasClass(tabDivChildren[i], 'active')) {
-				cardDiv.style.display = '';
-				return;
-			}
-		}
-
-		var lastChild = tabDivChildren[i - 1];
-		lastChild.className += " active";
-		lastChild.dispatchEvent(new Event('click'));
-	}	
-}
-
-function createCard(guid, divToAppendTo) {
-	var dataLength = billvalidation.length;
-	for(var i = 0; i < dataLength; i++) {
-		var datum = billvalidation[i];
-		var sites = datum.Sites;
-
-		var siteLength = sites.length;
-		for(var j = 0; j < siteLength; j++) {
-			var site = sites[j];
-			var meters = site.Meters;
-
-			var meterLength = meters.length;
-			for(var k = 0; k < meterLength; k++) {
-				var meter = meters[k];
-				var bills = meter.Bills;
-
-				var billLength = bills.length;
-				for(var l = 0; l < billLength; l++) {
-					var bill = bills[l];
-
-					if(bill.GUID == guid) {
-						populateCard(bill, divToAppendTo);
-						return;
-					}
-				}
+			if(!span.innerText.startsWith('Add New')) {
+				var button = document.getElementById(input.id.replace('checkbox', 'button'));
+				budgets.push(button.innerText);
 			}
 		}
 	}
+
+	return budgets;
 }
 
-function populateCard(bill, divToAppendTo) {
-	if(bill.Status == "Valid")  {
-		buildBillChart(bill, divToAppendTo);
+function finalisePopup(title, titleHTML, modal, span) {
+    title.innerHTML = titleHTML;
+
+	modal.style.display = "block";
+
+	span.onclick = function() {
+		modal.style.display = "none";
 	}
-
-	buildBillDataTable(bill, divToAppendTo);
 }
 
-function buildBillChart(bill, divToAppendTo) {
-	var containerDiv = document.createElement('div');
-	containerDiv.setAttribute('style', 'text-align: center; border-bottom: solid black 1px;');
-	divToAppendTo.appendChild(containerDiv);
+function setupDataGrid() {
+	var datagrid = document.getElementById('adjustmentsSpreadsheet');
+	clearElement(datagrid);
 
-	var containerDivSpan = document.createElement('span');
-	containerDivSpan.innerText = 'Charts';
-	containerDiv.appendChild(containerDivSpan);
+	var displayData = [];
+	var row = {
+		area:'Usage', 
+		type:'Uplifting',
+		amount:'-5',
+		amounttype:'%',
+		datefrom:'01/04/2021',
+		dateto:'31/03/2022',
+		actions:'<i class="fas fa-trash-alt show-pointer" title="Delete Adjustment" style="margin-right: 5px;"></i>'
+				+ '<i class="fas fa-save show-pointer" title="Save Changes" style="margin-right: 5px;"></i>'
+				+ '<i class="fas fa-undo show-pointer" title="Undo Changes" style="margin-right: 5px;"></i>'
+	}
+	displayData.push(row);
 
-	var containerDivIcon = document.createElement('i');
-	containerDivIcon.id = 'billChart';
-	containerDivIcon.setAttribute('class', 'far fa-plus-square show-pointer');
-	containerDivIcon.setAttribute('style', 'margin-left: 5px;');
-	containerDiv.appendChild(containerDivIcon);
+	row = {
+		area:'Cost', 
+		type:'Set',
+		amount:'50,000',
+		amounttype:'£',
+		datefrom:'01/04/2021',
+		dateto:'31/03/2022',
+		actions:'<i class="fas fa-trash-alt show-pointer" title="Delete Adjustment" style="margin-right: 5px;"></i>'
+				+ '<i class="fas fa-save show-pointer" title="Save Changes" style="margin-right: 5px;"></i>'
+				+ '<i class="fas fa-undo show-pointer" title="Undo Changes" style="margin-right: 5px;"></i>'
+	}
+	displayData.push(row);
 
-	var containerListDiv = document.createElement('div');
-	containerListDiv.id = 'billChartList';
-	containerListDiv.setAttribute('style', 'margin-top: 5px;');
-	divToAppendTo.appendChild(containerListDiv);
+	jexcel(datagrid, {
+		pagination:10,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: displayData,
+		columns: [
+			{type:'text', width:'125px', name:'type', title:'Type'},
+			{type:'text', width:'125px', name:'area', title:'Area'},
+			{type:'text', width:'125px', name:'amounttype', title:'Amount Type'},
+			{type:'text', width:'125px', name:'amount', title:'Amount'},
+			{type:'text', width:'125px', name:'datefrom', title:'Date From'},
+			{type:'text', width:'125px', name:'dateto', title:'Date To'},
+			{type:'text', width:'125px', name:'actions', title:'<i class="fas fa-trash-alt show-pointer" title="Delete All Adjustments"></i>'},
+		 ],
+		}); 
+}
 
-	var firstChartDiv = document.createElement('div');
-	firstChartDiv.id = "firstChartDiv";
-	firstChartDiv.setAttribute('class', 'roundborder chart');
-	firstChartDiv.setAttribute('style', 'margin-right: 5px;');
-	containerListDiv.appendChild(firstChartDiv);
+function displayBudget2V2Popup() {
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
 
-	var secondChartDiv = document.createElement('div');
-	secondChartDiv.id = "secondChartDiv";
-	secondChartDiv.setAttribute('class', 'roundborder chart');
-	containerListDiv.appendChild(secondChartDiv);
+	button.style.display = "none";
 
-	var firstChart = document.createElement('div');
-	firstChart.id = "firstChart";
-	firstChartDiv.appendChild(firstChart);
+	text.innerHTML = "Budget Period: 01/04/2021 to 31/03/2023<br>"
+					+ "Created Date: 06/04/2020 12:53:27<br>"
+					+ "Sites/Meters:<br>"
+					+ "<span style='margin-left: 10px;'>Leeds</span><br>"
+					+ "<span style='margin-left: 10px;'>Manchester</span>"
 
-	var secondChart = document.createElement('div');
-	secondChart.id = "secondChart";
-	secondChartDiv.appendChild(secondChart);
+    finalisePopup(title, 'Budget Details<br><br>', modal, span);
+}
 
-	var clearDiv = document.createElement('div');
-	clearDiv.setAttribute('style', 'clear: left;');
-	divToAppendTo.appendChild(clearDiv);
+function displayBudget2V1Popup() {
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var button = document.getElementById('button');
 
-	var options = {
-		series: [{
-			name: "Expected Usage",
-			data: [getAttribute(bill.Details, "Expected Usage")]
+	button.style.display = "none";
+
+	text.innerHTML = "Budget Period: 01/04/2021 to 31/03/2023<br>"
+					+ "Created Date: 01/04/2020 12:53:27<br>"
+					+ "Sites/Meters:<br>"
+					+ "<span style='margin-left: 10px;'>Leeds</span><br>"
+					+ "<span style='margin-left: 10px;'>Manchester</span>"
+
+    finalisePopup(title, 'Budget Details<br><br>', modal, span);
+}
+
+function displayBudget1Popup() {
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var button = document.getElementById('button');
+
+	button.style.display = "none";
+
+	text.innerHTML = "Budget Period: 01/04/2021 to 31/03/2023<br>"
+					+ "Created Date: 25/03/2020 12:53:27<br>"
+					+ "Sites/Meters:<br>"
+					+ "<span style='margin-left: 10px;'>987650</span>"
+
+    finalisePopup(title, 'Budget Details<br><br>', modal, span);
+}
+
+function displayCharts()
+{
+	loadCostChart();
+	loadUsageChart();
+}
+
+function loadCostChart() {
+	var electricityCostSeries = [{
+		name: 'Latest BWS Forecast',
+		data: [
+				45000, 43000, 41000, 39000, 37000, 38000,
+				39000, 40000, 41000, 42000, 43000, 44000,
+				45000, 46000, 47000, 48000, 49000, 50000,
+				51000, 52000, 53000, 54000, 55000, 56000
+			  ]
+	  }, {
+		name: 'Adjusted',
+		data: [
+				50000, 50000, 50000, 50000, 50000, 50000,
+				50000, 50000, 50000, 50000, 50000, 50000,
+				45000, 46000, 47000, 48000, 49000, 50000,
+				51000, 52000, 53000, 54000, 55000, 56000
+			  ]
+	  }];
+	  var electricityCategories = [
+		'04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
+		'01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
+		'01 2023', '02 2023', '03 2023'
+		];
+	  var electricityCostOptions = {
+		  chart: {
+			type: 'line',
+			stacked: false
 		  },
-		  {
-			name: "Actual Usage",
-			data: [getAttribute(bill.Details, "Actual Usage")]
-	  	}],
-	  	chart: {
-		height: '100%',
-		width: '100%',
-		type: 'bar',
-		stacked: false,
-		zoom: {
-			type: 'x',
-			enabled: true,
-			autoScaleYaxis: true
-		},
-		animations: {
-			enabled: true,
-			easing: 'easeout',
-			speed: 800,
-			animateGradually: {
-				enabled: true,
-				delay: 150
-			},
-			dynamicAnimation: {
-				enabled: true,
-				speed: 350
-			}
-		},
-		toolbar: {
-			autoSelected: 'zoom',
-			tools: {
-				download: false
-			}
-		}
-		},
-		dataLabels: {
-			enabled: false
-		},
-	  	title: {
-			text: 'Expected Usage v Actual Usage',
+		  title: {
+			text: 'Cost',
 			align: 'center'
-		},
-		legend: {
-			show: true,
-			showForSingleSeries: true,
-			showForNullSeries: true,
-			showForZeroSeries: true,
-			floating: false,
-			position: 'right',
-			onItemClick: {
-				toggleDataSeries: true
-			},
-			width: 100,
-			offsetY: 150,
-			formatter: function(seriesName) {
-				return seriesName + '<br><br>';
-			}
-		},
-		yaxis: [{
-			axisTicks: {
-				show: true
-			},
-				axisBorder: {
-				show: true,
+		  },
+		  tooltip: {
+			  x: {
+			  format: 'dd/MM/yyyy'
+			  }
+		  },
+		  xaxis: {
+			  title: {
+			  text: ''
+			  },
+			  labels: {
+			  format: 'dd/MM/yyyy'
+			  },
+			  categories: electricityCategories
+		  },
+		  yaxis: [{
+			title: {
+			  text: '£'
 			},
 			forceNiceScale: true,
-			title: {
-				text: 'kWh Usage',
-			},
-			show: true,
-			decimalsInFloat: 0,
 			labels: {
-				formatter: function(val) {
-					return val.toLocaleString();
-				}
+			  formatter: function(val) {
+				return val.toLocaleString();
+			  }
 			}
-		}],
-		xaxis: {
-			type: 'category',
-			categories: ["Expected Usage", "Actual Usage"]
-		}
-	};
-
-	var secondaryChartOptions = JSON.parse(JSON.stringify(options));
-	secondaryChartOptions.series = [{
-		name: "Expected Spend",
-		data: [getAttribute(bill.Details, "Expected Spend")]
-	  },
-	  {
-		name: "Actual Spend",
-		data: [getAttribute(bill.Details, "Actual Spend")]
-	  }]
-	secondaryChartOptions.title.text = 'Expected Spend v Actual Spend';
-	secondaryChartOptions.legend.formatter = function(seriesName) {
-		return seriesName + '<br><br>';
-	}
-	secondaryChartOptions.yaxis[0].title.text = '£ Spend';
-	secondaryChartOptions.yaxis[0].labels.formatter = function(val) {
-		return '£' + val.toLocaleString();
-	}
-	secondaryChartOptions.xaxis.categories = ["Expected Spend", "Actual Spend"];
-
-	renderChart('#firstChart', options);
-	renderChart('#secondChart', secondaryChartOptions);
-
-	addExpanderOnClickEventsByElement(containerDivIcon);
-	updateClassOnClick(containerDivIcon.id, 'fa-plus-square', 'fa-minus-square');
+		  }]
+		};
+	  refreshChart(electricityCostSeries, "#rightHandChart", electricityCostOptions);
 }
+  
+function loadUsageChart() {
+	var electricityUsageSeries = [{
+	  name: 'Latest BWS Forecast',
+	  data: [
+				3700, 3800, 3900, 4000, 4100, 4100,
+				4000, 3900, 3800, 3700, 3800, 3900,
+				4000, 4100, 4200, 4300, 4200, 4100,
+				4000, 3900, 3800, 3700, 3800, 3900,
+			]
+	}, {
+	  name: 'Adjusted',
+	  data: [
+				3515, 3610, 3705, 3800, 3895, 3895,
+				3800, 3705, 3610, 3515, 3610, 3705,
+				4000, 4100, 4200, 4300, 4200, 4100,
+				4000, 3900, 3800, 3700, 3800, 3900,
+			]
+	}];
+	var electricityCategories = [
+	  '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
+	  '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
+	  '01 2023', '02 2023', '03 2023'
+	  ];
+	var electricityUsageOptions = {
+		chart: {
+		  type: 'line',
+		  stacked: false
+		},
+		title: {
+		  text: 'Usage',
+		  align: 'center'
+		},
+		tooltip: {
+			x: {
+			format: 'dd/MM/yyyy'
+			}
+		},
+		xaxis: {
+			title: {
+			text: ''
+			},
+			labels: {
+			format: 'dd/MM/yyyy'
+			},
+			categories: electricityCategories
+		},
+		yaxis: [{
+		  title: {
+			text: 'kWh'
+		  },
+		  forceNiceScale: true,
+		  labels: {
+			formatter: function(val) {
+			  return val.toLocaleString();
+			}
+		  }
+		}]
+	  };
+	refreshChart(electricityUsageSeries, "#leftHandChart", electricityUsageOptions);
+}
+
+function refreshChart(newSeries, chartId, chartOptions) {
+	var options = {
+	  chart: {
+		  height: '100%',
+		  width: '100%',
+		type: chartOptions.chart.type,
+		stacked: chartOptions.chart.stacked,
+		zoom: {
+		  type: 'x',
+		  enabled: true,
+		  autoScaleYaxis: true
+		},
+		animations: {
+		  enabled: true,
+		  easing: 'easeout',
+		  speed: 800,
+		  animateGradually: {
+			  enabled: true,
+			  delay: 150
+		  },
+		  dynamicAnimation: {
+			  enabled: true,
+			  speed: 350
+		  }
+		},
+		toolbar: {
+		  autoSelected: 'zoom',
+		  tools: {
+			download: false
+		  }
+		}
+	  },
+	  title: chartOptions.title,
+	  dataLabels: {
+		enabled: false
+	  },
+	  tooltip: {
+		x: {
+		  format: chartOptions.tooltip.x.format
+		}
+	  },
+	  legend: {
+		show: true,
+		showForSingleSeries: true,
+		showForNullSeries: true,
+		showForZeroSeries: true,
+		position: 'right',
+		onItemClick: {
+		  toggleDataSeries: true
+		},
+		formatter: function(seriesName) {
+		  return seriesName + '<br><br>';
+		}
+	  },
+	  series: newSeries,
+	  yaxis: chartOptions.yaxis,
+	  xaxis: chartOptions.xaxis
+	};  
+  
+	renderChart(chartId, options);
+  }
 
 function renderChart(chartId, options) {
-	var chart = new ApexCharts(document.querySelector(chartId), options);
-	chart.render();
+    var chart = new ApexCharts(document.querySelector(chartId), options);
+    chart.render();
 }
 
-function buildBillDataTable(entity, divToAppendTo){
-	var div = document.createElement('div');
-	div.id = 'displayAttributes';
-	div.setAttribute('style', 'margin-top: 5px;');
-	divToAppendTo.appendChild(div);
-
-	var table = document.createElement('table');
-	table.id = 'dataTable';
-	table.setAttribute('style', 'width: 100%;');
-
-	displayAttributes(entity.Details, table);
-
-	div.appendChild(table);
+function getChartTooltipXFormat(period) {
+    switch(period) {
+      case 'Daily':
+      case "Weekly":
+      case "Monthly":
+        return 'dd/MM/yyyy HH:mm';
+      case "Yearly":
+        return 'dd/MM/yyyy';
+    }
 }
 
-function displayAttributes(attributes, table) {
-	if(!attributes) {
-		return;
-	}
-
-	var attributesLength = attributes.length;
-	for(var i = 0; i < attributesLength; i++) {
-		var tableRow = document.createElement('tr');
-
-		for(var j = 0; j < 2; j++) {
-			var tableDatacell = document.createElement('td');
-			tableDatacell.setAttribute('style', 'border: solid black 1px;');
-
-			switch(j) {
-				case 0:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = key;
-						break;
-					}	
-					break;
-				case 1:
-					for(var key in attributes[i]) {
-						tableDatacell.innerHTML = attributes[i][key];
-						break;
-					}
-					break;
-			}
-
-			tableRow.appendChild(tableDatacell);
-		}
-
-		tableRow.appendChild(tableDatacell);
-
-		table.appendChild(tableRow);
-	}	
+function getChartXAxisLabelFormat(period) {
+    switch(period) {
+      case 'Daily':
+        return 'HH:mm';
+      case "Weekly":
+        return 'dd/MM/yyyy';
+      case "Monthly":
+        return 'dd';
+      case "Yearly":
+        return 'MMM';
+    }
 }

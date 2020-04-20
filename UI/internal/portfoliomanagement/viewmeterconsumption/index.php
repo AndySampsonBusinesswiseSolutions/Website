@@ -13,7 +13,10 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
+		</div>
 		<div class="tree-column">
 			<div id="siteDiv" class="tree-div roundborder scrolling-wrapper">
 			</div>
@@ -202,11 +205,12 @@
 					</li>
 				</ul>
 			</div>
+			<br>
 		</div>
 	</div>
 
 	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+		<i id="openNav" class="fas fa-angle-double-right sidenav-icon"></i>
 		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 	</div>
 	<br>
