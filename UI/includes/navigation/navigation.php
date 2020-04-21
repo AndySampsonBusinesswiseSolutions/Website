@@ -34,7 +34,7 @@
                                     <li class="submenu-item"><a href="/Internal/Finance/BudgetManagement/"><span>Budget Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/Commissions/"><span>Commissions</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/DataAnalysis/"><span>Eagle Eye <i class="far fa-copyright"></i></span></a></li>
-                                    <li class="submenu-item"><a href="/Internal/Finance/VarianceAnalysis/"><span>Variance Analysis</span></a></li>
+                                    <!-- <li class="submenu-item"><a href="/Internal/Finance/VarianceAnalysis/"><span>Variance Analysis</span></a></li> -->
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#"><i class="fas fa-cog"></i><span class="fusion-caret"></span><span>Energy Efficiency</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
@@ -50,7 +50,7 @@
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/SiteManagement/"><span>Site Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/ContractManagement/"><span>Contract Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewFlexPosition/"><span>View Flex Position</span></a></li>
-                                    <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li>
+                                    <!-- <li class="submenu-item"><a href="/Internal/PortfolioManagement/ViewMeterConsumption/"><span>View Meter Consumption</span></a></li> -->
                                 </ul>
                             </li>
                             <li style="padding-right: 25px;"><a href="#"><i class="fas fa-lightbulb"></i><span class="fusion-caret"></span><span>Supplier Management</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
