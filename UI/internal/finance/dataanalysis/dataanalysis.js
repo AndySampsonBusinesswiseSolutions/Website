@@ -1,5 +1,5 @@
 function pageLoad() {
-  createTree(sites, "");
+  createTrees();  
 
   document.onmousemove = function(e) {
     setupSidebarHeight();
@@ -12,7 +12,7 @@ function pageLoad() {
 
   window.onload = function() {
     hideSliders();
-  };
+  }
 }
 
 function setupSidebarHeight() {
@@ -145,12 +145,12 @@ function addExpanderOnClickEventsByElement(element) {
 
 function getCommodityOption() {
   var commodity = '';
-  var electricityCommodityradio = document.getElementById('electricityCommodityradio');
+  var electricityCommodityradio = document.getElementById('electricityCommoditySelectorradio');
   if(electricityCommodityradio.checked) {
     commodity = 'Electricity';
   }
   else {
-    var gasCommodityradio = document.getElementById('gasCommodityradio');
+    var gasCommodityradio = document.getElementById('gasCommoditySelectorradio');
     if(gasCommodityradio.checked) {
       commodity = 'Gas';
     }
@@ -158,8 +158,157 @@ function getCommodityOption() {
   return commodity;
 }
 
-function createTree(sites, functions) {
-  var div = document.getElementById('siteDiv');
+function createTrees() {
+  createCommodityTree();
+  createDisplayTree();
+  createBudgetTree();
+  createSiteTree(sites, "updatePage()");
+  createInvoiceTree();
+  createGroupingOptionTree();
+  createTimePeriodTree();
+
+  addExpanderOnClickEvents();
+}
+
+function createDisplayTree() {
+  var div = document.getElementById('displayTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("displayHeader", "Select Display");
+  var ul = createBranchUl("displaySelector", false, true);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+
+  createDisplayListItems(ul);
+}
+
+function createDisplayListItems(ul) {
+  var costDisplayListItem = appendListItemChildren('costDisplaySelector', true, 'updatePage()', [{"Name" : "Cost"}], 'displaySelector', true, 'radio', 'displayGroup');
+  var usageDisplayListItem = appendListItemChildren('usageDisplaySelector', true, 'updatePage()', [{"Name" : "Usage"}], 'displaySelector', false, 'radio', 'displayGroup');
+  var rateDisplayListItem = appendListItemChildren('rateDisplaySelector', false, 'updatePage()', [{"Name" : "Rate"}], 'displaySelector', false, 'radio', 'displayGroup');
+  
+  var breakDisplayListItem = document.createElement('li');
+  breakDisplayListItem.innerHTML = '<br>';
+
+  var granularityDisplayListItem = document.createElement('li');
+  var granularityDisplaySpan = createBranchSpan('granularityDisplaySpan', "Granularity<br>");
+  var granularityDisplayRZSlider = document.createElement('rzslider');
+  granularityDisplayRZSlider.id = 'timePeriodOptionsTimeSpan';
+  granularityDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsTimeSpan.value');
+  granularityDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsTimeSpan.options');
+
+  granularityDisplayListItem.appendChild(granularityDisplaySpan);
+  granularityDisplayListItem.appendChild(granularityDisplayRZSlider);
+
+  ul.appendChild(costDisplayListItem);
+  ul.appendChild(usageDisplayListItem);
+  ul.appendChild(rateDisplayListItem);
+  ul.appendChild(breakDisplayListItem);
+  ul.appendChild(granularityDisplayListItem);
+
+  createCostDisplayListItems(costDisplayListItem);
+  createUsageDisplayListItems(usageDisplayListItem);
+}
+
+function createCostDisplayListItems(costDisplayListItem) {
+  var costDisplaySelectorListUl = costDisplayListItem.getElementsByTagName('ul')[0];
+  var allCostItemsListItem = appendListItemChildren('allCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "All Cost Items"}], 'costDisplaySelector', true, 'radio', 'costDisplayGroup');
+  var networkCostItemsListItem = appendListItemChildren('networkCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Network"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var renewablesCostItemsListItem = appendListItemChildren('renewablesCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Renewables"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var balancingCostItemsListItem = appendListItemChildren('balancingCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Balancing"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var otherCostItemsListItem = appendListItemChildren('otherCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Other"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+
+  costDisplaySelectorListUl.appendChild(allCostItemsListItem);
+  costDisplaySelectorListUl.appendChild(networkCostItemsListItem);
+  costDisplaySelectorListUl.appendChild(renewablesCostItemsListItem);
+  costDisplaySelectorListUl.appendChild(balancingCostItemsListItem);
+  costDisplaySelectorListUl.appendChild(otherCostItemsListItem);
+
+  createNetworkCostDisplayListItems(networkCostItemsListItem);
+  createRenewablesCostDisplayListItems(renewablesCostItemsListItem);
+  createBalancingCostDisplayListItems(balancingCostItemsListItem);
+  createOtherCostDisplayListItems(otherCostItemsListItem);
+}
+
+function createUsageDisplayListItems(usageDisplayListItem) {
+  var usageDisplaySelectorListUl = usageDisplayListItem.getElementsByTagName('ul')[0];
+  var consumptionUsageItemsListItem = appendListItemChildren('consumptionUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Consumption"}], 'usageDisplaySelector', false, 'checkbox', 'usageDisplayGroup');
+  var capacityUsageItemsListItem = appendListItemChildren('capacityUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity"}], 'usageDisplaySelector', false, 'checkbox', 'usageDisplayGroup');
+
+  usageDisplaySelectorListUl.appendChild(consumptionUsageItemsListItem);
+  usageDisplaySelectorListUl.appendChild(capacityUsageItemsListItem);
+}
+
+function createNetworkCostDisplayListItems(networkCostItemsListItem) {
+  var networkCostDisplaySelectorListUl = networkCostItemsListItem.getElementsByTagName('ul')[0];
+  var wholesaleNetworkCostItemsListItem = appendListItemChildren('wholesaleNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Wholesale"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var distributionNetworkCostItemsListItem = appendListItemChildren('distributionNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Distribution"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var transmissionNetworkCostItemsListItem = appendListItemChildren('transmissionNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Transmission"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+
+  networkCostDisplaySelectorListUl.appendChild(wholesaleNetworkCostItemsListItem);
+  networkCostDisplaySelectorListUl.appendChild(distributionNetworkCostItemsListItem);
+  networkCostDisplaySelectorListUl.appendChild(transmissionNetworkCostItemsListItem);
+}
+
+function createRenewablesCostDisplayListItems(renewablesCostItemsListItem) {
+  var renewablesCostDisplaySelectorListUl = renewablesCostItemsListItem.getElementsByTagName('ul')[0];
+  var renewablesObligationRenewablesCostItemsListItem = appendListItemChildren('renewablesObligationRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Renewables Obligation"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var feedInTariffRenewablesCostItemsListItem = appendListItemChildren('feedInTariffRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Feed In Tariff"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var contractsForDifferenceRenewablesCostItemsListItem = appendListItemChildren('contractsForDifferenceRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Contracts For Difference"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var energyIntensiveIndustryRenewablesCostItemsListItem = appendListItemChildren('energyIntensiveIndustryRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Energy Intensive Industry"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var capacityMarketRenewablesCostItemsListItem = appendListItemChildren('capacityMarketRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity Markets"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+
+  renewablesCostDisplaySelectorListUl.appendChild(renewablesObligationRenewablesCostItemsListItem);
+  renewablesCostDisplaySelectorListUl.appendChild(feedInTariffRenewablesCostItemsListItem);
+  renewablesCostDisplaySelectorListUl.appendChild(contractsForDifferenceRenewablesCostItemsListItem);
+  renewablesCostDisplaySelectorListUl.appendChild(energyIntensiveIndustryRenewablesCostItemsListItem);
+  renewablesCostDisplaySelectorListUl.appendChild(capacityMarketRenewablesCostItemsListItem);
+}
+
+function createBalancingCostDisplayListItems(balancingCostItemsListItem) {
+  var balancingCostDisplaySelectorListUl = balancingCostItemsListItem.getElementsByTagName('ul')[0];
+  var bsuosBalancingCostItemsListItem = appendListItemChildren('bsuosBalancingCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Balancing System Use Of System"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+  var rcrcBalancingCostItemsListItem = appendListItemChildren('rcrcBalancingCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Residual Cashflow Reallocation Cashflow"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+
+  balancingCostDisplaySelectorListUl.appendChild(bsuosBalancingCostItemsListItem);
+  balancingCostDisplaySelectorListUl.appendChild(rcrcBalancingCostItemsListItem);
+}
+
+function createOtherCostDisplayListItems(otherCostItemsListItem) {
+  var otherCostDisplaySelectorListUl = otherCostItemsListItem.getElementsByTagName('ul')[0];
+  var otherNetworkCostItemsListItem = appendListItemChildren('otherNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Other"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+
+  otherCostDisplaySelectorListUl.appendChild(otherNetworkCostItemsListItem);
+}
+
+function createBudgetTree() {
+  var div = document.getElementById('budgetTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("budgetHeader", "Select Budget");
+  var ul = createBranchUl("budgetSelector", false, true);
+
+  var budget2BudgetListItem = appendListItemChildren('budget2BudgetSelector', true, 'updatePage()', [{"Name" : "Budget 2"}], 'budgetSelector', false, 'radio', 'budgetGroup');
+  var budget1BudgetListItem = appendListItemChildren('budget1BudgetSelector', false, 'updatePage()', [{"Name" : "Budget 1"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
+
+  ul.appendChild(budget2BudgetListItem);
+  ul.appendChild(budget1BudgetListItem);
+
+
+  var budget2BudgetSelectorListUl = budget2BudgetListItem.getElementsByTagName('ul')[0];
+  var version2Budget2ListItem = appendListItemChildren('version2Budget2CostBudgetSelector', false, 'updatePage()', [{"Name" : "Version 2"}], 'budget2BudgetSelector', false, 'checkbox', 'budget2BudgetGroup');
+  var version1Budget2ListItem = appendListItemChildren('version1Budget2CostBudgetSelector', false, 'updatePage()', [{"Name" : "Version 1"}], 'budget2BudgetSelector', false, 'checkbox', 'budget2BudgetGroup');
+
+  budget2BudgetSelectorListUl.appendChild(version2Budget2ListItem);
+  budget2BudgetSelectorListUl.appendChild(version1Budget2ListItem);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+}
+
+function createSiteTree(sites, functions) {
+  var div = document.getElementById('siteTree');
   var inputs = div.getElementsByTagName('input');
   var checkboxes = getCheckedCheckBoxes(inputs);
   var elements = div.getElementsByTagName("*");
@@ -183,31 +332,13 @@ function createTree(sites, functions) {
 
   clearElement(div);
 
-  var headerDiv = document.createElement('div');
-  headerDiv.id = "siteHeader";
-  headerDiv.setAttribute('class', 'expander-header');
-
-  var header = document.createElement('span');
-  header.style = "padding-left: 5px;";
-  header.innerHTML = 'Select Sites/Meters';
-
-  var headerExpander = createBranchDiv("siteSelector", true);
-
-  headerDiv.appendChild(header);
-  headerDiv.appendChild(headerExpander);
-  
-  var tree = document.createElement('div');
-  tree.setAttribute('style', 'margin-top: 5px;');
-  
-  var ul = createBranchUl('siteSelector', false);
-  tree.appendChild(ul);
+  var headerDiv = createHeaderDiv("siteHeader", 'Select Sites/Meters');
+  var ul = createBranchUl("siteSelector", false, true);
 
   buildSiteBranch(sites, getCommodityOption(), ul, functions);  
 
   div.appendChild(headerDiv);
-  div.appendChild(tree);
-
-  addExpanderOnClickEvents();
+  div.appendChild(ul);
 
   for(var i = 0; i < checkboxIds.length; i++) {
     var checkbox = document.getElementById(checkboxIds[i]);
@@ -222,6 +353,123 @@ function createTree(sites, functions) {
       element.classList = elementClasses[i].classList;
     }
   }  
+}
+
+function createInvoiceTree() {
+  var div = document.getElementById('invoiceTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("invoiceHeader", "Select Invoice");
+  var ul = createBranchUl("invoiceSelector", true, true);
+
+  var invoice4InvoiceListItem = appendListItemChildren('invoice4InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0004"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
+  var invoice3InvoiceListItem = appendListItemChildren('invoice3InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0003"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
+  var invoice2InvoiceListItem = appendListItemChildren('invoice2InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0002"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
+  var invoice1InvoiceListItem = appendListItemChildren('invoice1InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0001"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
+
+  ul.appendChild(invoice4InvoiceListItem);
+  ul.appendChild(invoice3InvoiceListItem);
+  ul.appendChild(invoice2InvoiceListItem);
+  ul.appendChild(invoice1InvoiceListItem);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+}
+
+function createGroupingOptionTree() {
+  var div = document.getElementById('groupingOptionTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("groupingOptionHeader", "Select Grouping Option");
+  var ul = createBranchUl("groupingOptionSelector", true, true);
+
+  var groupingOption2GroupingOptionListItem = appendListItemChildren('groupingOption2GroupingOptionSelector', false, 'updatePage()', [{"Name" : "No Grouping"}], 'groupingOptionSelector', true, 'radio', 'groupingOptionGroup');
+  var groupingOption1GroupingOptionListItem = appendListItemChildren('groupingOption1GroupingOptionSelector', true, 'updatePage()', [{"Name" : "Group"}], 'groupingOptionSelector', false, 'radio', 'groupingOptionGroup');
+
+  ul.appendChild(groupingOption2GroupingOptionListItem);
+  ul.appendChild(groupingOption1GroupingOptionListItem);
+
+
+  var groupingOption1GroupingOptionSelectorListUl = groupingOption1GroupingOptionListItem.getElementsByTagName('ul')[0];
+  var sumGroupingOption1ListItem = appendListItemChildren('sumGroupingOption1CostGroupingOptionSelector', false, 'updatePage()', [{"Name" : "Sum"}], 'groupingOption1GroupingOptionSelector', false, 'checkbox', 'groupingOption1GroupingOptionGroup');
+  var averageGroupingOption1ListItem = appendListItemChildren('averageGroupingOption1CostGroupingOptionSelector', false, 'updatePage()', [{"Name" : "Average"}], 'groupingOption1GroupingOptionSelector', false, 'checkbox', 'groupingOption1GroupingOptionGroup');
+
+  groupingOption1GroupingOptionSelectorListUl.appendChild(sumGroupingOption1ListItem);
+  groupingOption1GroupingOptionSelectorListUl.appendChild(averageGroupingOption1ListItem);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+}
+
+function createCommodityTree() {
+  var div = document.getElementById('commodityTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("commodityHeader", "Filter By Commodity");
+  var ul = createBranchUl("commoditySelector", true, true);
+
+  var allCommodityListItem = appendListItemChildren('allCommoditySelector', false, 'updatePage()', [{"Name" : "All"}], 'commoditySelector', true, 'radio', 'commodityGroup');
+  var electricityCommodityListItem = appendListItemChildren('electricityCommoditySelector', false, 'updatePage()', [{"Name" : "Electricity"}], 'commoditySelector', false, 'radio', 'commodityGroup');
+  var gasCommodityListItem = appendListItemChildren('gasCommoditySelector', false, 'updatePage()', [{"Name" : "Gas"}], 'commoditySelector', false, 'radio', 'commodityGroup');
+
+  ul.appendChild(allCommodityListItem);
+  ul.appendChild(electricityCommodityListItem);
+  ul.appendChild(gasCommodityListItem);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+}
+
+function createTimePeriodTree() {
+  var div = document.getElementById('timePeriodTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("timePeriodHeader", "Filter By Time Period");
+  var ul = createBranchUl("timePeriodSelector", false, true);
+  ul.classList.add("slider-list");
+
+  var dateRangeDisplayListItem = document.createElement('li');
+  var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "Date Range");
+  var dateRangeDisplayRZSlider = document.createElement('rzslider');
+  dateRangeDisplayRZSlider.id = 'timePeriodOptionsDateRange';
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDateRange.minValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsDateRange.maxValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDateRange.options');
+
+  dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
+  dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
+
+  var createdDisplayListItem = document.createElement('li');
+  var createdDisplaySpan = createBranchSpan('createdDisplaySpan', "Created");
+  var createdDisplayRZSlider = document.createElement('rzslider');
+  createdDisplayRZSlider.id = 'timePeriodOptionsCreated';
+  createdDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsCreated.value');
+  createdDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsCreated.options');
+
+  createdDisplayListItem.appendChild(createdDisplaySpan);
+  createdDisplayListItem.appendChild(createdDisplayRZSlider);
+
+  ul.appendChild(dateRangeDisplayListItem);
+  ul.appendChild(createdDisplayListItem);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+}
+
+function createHeaderDiv(id, headerText) {
+  var headerDiv = document.createElement('div');
+  headerDiv.id = id;
+  headerDiv.setAttribute('class', 'expander-header');
+
+  var header = document.createElement('span');
+  header.innerText = headerText;
+
+  var headerExpander = createBranchDiv(id.replace('Header', 'Selector'), true);
+
+  headerDiv.appendChild(header);
+  headerDiv.appendChild(headerExpander);
+
+  return headerDiv;
 }
 
 //build site
@@ -375,11 +623,15 @@ function commodityMatch(entity, commodity) {
   return entityCommodities && entityCommodities.includes(commodity);
 }
 
-function appendListItemChildren(id, hasChildren, functions, attributes, branch) {
+function appendListItemChildren(id, hasChildren, functions, attributes, branch, isChecked = false, elementType = 'checkbox', groupName = '') {
   var li = document.createElement('li');
   li.appendChild(createBranchDiv(id, hasChildren));
-  li.appendChild(createBranchCheckbox(id, functions, branch));
-  li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
+  li.appendChild(createBranchCheckbox(id, functions, branch, elementType, groupName, isChecked));
+
+  if(getAttribute(attributes, 'Icon')) {
+    li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
+  }
+  
   li.appendChild(createBranchSpan(id, getAttribute(attributes, 'Name')));
 
   if(hasChildren) {
@@ -389,25 +641,29 @@ function appendListItemChildren(id, hasChildren, functions, attributes, branch) 
   return li;
 }
 
-function createBranchUl(id, hideUl = true) {
+function createBranchUl(id, hideUl = true, isTopUl = false) {
   var ul = document.createElement('ul');
-  ul.id = id.concat('List');
-  ul.setAttribute('class', 'format-listitem' + (hideUl ? ' listitem-hidden' : ''));
+  ul.id = id + 'List';
+  ul.setAttribute('class', 'format-listitem'
+   + (hideUl ? ' listitem-hidden' : '')
+   + (isTopUl ? ' topListItem' : ''));
   return ul;
 }
 
-function createBranchDiv(branchDivId, hasChildren = true) {
+function createBranchDiv(id, hasChildren = true) {
     var branchDiv = document.createElement('i');
-    branchDiv.id = branchDivId;
+    branchDiv.id = id;
     branchDiv.setAttribute('class', (hasChildren ? 'far fa-plus-square show-pointer' : 'far fa-times-circle') + ' expander');
     return branchDiv;
 }
 
-function createBranchCheckbox(id, functions, branch) {
+function createBranchCheckbox(id, functions, branch, elementType, groupName, isChecked) {
   var checkbox = document.createElement('input');
-  checkbox.type = 'checkbox';  
-  checkbox.id = id.concat('checkbox');
+  checkbox.type = elementType;  
+  checkbox.id = id.concat(elementType);
   checkbox.setAttribute('branch', branch);
+  checkbox.setAttribute('name', groupName);
+  checkbox.checked = isChecked;
 
   var functionArray = functions.replace(')', '').split('(');
   var functionArrayLength = functionArray.length;
@@ -443,8 +699,7 @@ function getAttribute(attributes, attributeRequired) {
 
 function createBranchIcon(iconClass) {
   var icon = document.createElement('i');
-  icon.setAttribute('class', iconClass);
-  icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
+  icon.setAttribute('class', iconClass + ' listitem-icon');
   return icon;
 }
 
@@ -485,4 +740,8 @@ function getCheckedCheckBoxes(inputs) {
   }
 
   return checkBoxes;
+}
+
+function updatePage(callingElement) {
+  alert(callingElement.id);
 }

@@ -884,7 +884,7 @@ ul {
     padding-right: 15px;
 }
 .scrolling-wrapper {
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: auto;
     white-space: nowrap;
 }
@@ -893,5 +893,10 @@ ul {
 }
 .format-listitem {
     list-style-type: none; 
-    padding-left: 10px;
+}
+.format-listitem:not(.topListItem) {
+    padding-left: 15px;
+}
+.topListItem {
+    padding-left: 0px;
 }

@@ -85,10 +85,19 @@
   background-color: red;
 }
 .expander {
-  width: 15px;
+  width: 18px;
 }
 .expander-header {
   text-align: center; 
   border-bottom: solid black 1px;
   margin-bottom: 5px;
+}
+.expander-container {
+  margin-top: 5px;
+}
+.listitem-icon {
+  padding-right: 3px;
+}
+ul>li>input {
+  width: 18px;
 }
