@@ -11,7 +11,7 @@ function pageLoad() {
   };
 
   window.onload = function() {
-    hideSliders();
+    hideSliders(); 
   }
 }
 
@@ -743,5 +743,29 @@ function getCheckedCheckBoxes(inputs) {
 }
 
 function updatePage(callingElement) {
-  alert(callingElement.id);
+  var branch = callingElement.getAttribute('branch');
+  
+  switch(branch) {
+    case 'invoiceSelector':
+      updatePageFromInvoice(callingElement);
+      break;
+  }
+}
+
+function updatePageFromInvoice(callingElement) {
+  var timePeriodOptionsTimeSpan = document.getElementById('timePeriodOptionsTimeSpan');
+  var granularity = timePeriodOptionsTimeSpan.children[6].innerHTML;
+
+  if(callingElement.checked) {
+    if(granularity == 'Half Hourly' || granularity == 'Daily') {
+      makeTimePeriodOptionsTimeSpanMonthly();
+    }
+  }  
+}
+
+function makeTimePeriodOptionsTimeSpanMonthly() {
+  var scope = angular.element(document.getElementById("timePeriodOptionsTimeSpan")).scope();
+  scope.$apply(function () {
+    scope.makeTimePeriodOptionsTimeSpanMonthly();
+  });
 }

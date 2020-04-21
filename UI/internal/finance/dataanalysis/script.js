@@ -108,5 +108,10 @@
         } 
       }
     };
+
+    $scope.makeTimePeriodOptionsTimeSpanMonthly = function () {
+      $scope.timePeriodOptionsTimeSpan.value = timeSpans[2];
+  };
+
   });
 })();
