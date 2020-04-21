@@ -131,7 +131,15 @@
 					<label for="createReviewBudgetDateFrom" style="width: 75px; text-align: right;">Period: </label>
 					<input type="date" id="createReviewBudgetDateFrom" style="width: calc(50% - 52px);"></input>
 					<label for="createReviewBudgetDateTo">To</label>
-					<input type="date" id="createReviewBudgetDateTo" style="width: calc(50% - 52px);"></input><br><br>
+					<input type="date" id="createReviewBudgetDateTo" style="width: calc(50% - 52px);"></input><br>
+					<label for="createReviewBudgetBaseType" style="width: 75px; text-align: right;">Status: </label>
+					<select id="createReviewBudgetBaseType" style="width: calc(100% - 80px);">
+						<option value="">Select Option</option>
+						<option value="Approved">Approved</option>
+						<option value="Rejected">Rejected</option>
+						<option value="Pending">Pending</option>
+						<option value="Overriden">Overriden</option>
+					</select><br><br>
 					<button class="reject show-pointer" style="width: calc(45%); margin-right: calc(10%);">Reset Budget</button><button class="approve show-pointer" style="width: calc(45%);">Save Budget</button>
 				</div>
 				<div id="createReviewBudgetAdjustAreaDiv" class="tree-div roundborder scrolling-wrapper" style="width: 950px; float: left; margin-right: 15px;">

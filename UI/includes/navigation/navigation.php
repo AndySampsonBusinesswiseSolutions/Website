@@ -33,6 +33,7 @@
                                     <li class="submenu-item"><a href="/Internal/Finance/BillValidation/"><span>Bill Validation</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/BudgetManagement/"><span>Budget Management</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/Commissions/"><span>Commissions</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/Finance/DataAnalysis/"><span>Eagle Eye <i class="far fa-copyright"></i></span></a></li>
                                     <li class="submenu-item"><a href="/Internal/Finance/VarianceAnalysis/"><span>Variance Analysis</span></a></li>
                                 </ul>
                             </li>
