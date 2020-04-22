@@ -52,10 +52,10 @@
     }
 
     //Configs
-    $scope.timePeriodOptionsTimeSpan = {
+    $scope.timePeriodOptionsDisplayTimeSpan = {
       value: timeSpans[1],
       options: {
-        id: 'timePeriodOptionsTimeSpan',
+        id: 'timePeriodOptionsDisplayTimeSpan',
         stepsArray: timeSpans,
         translate: function(date) {
           if (date !== null)
@@ -68,11 +68,11 @@
       }
     };
 
-    $scope.timePeriodOptionsDateRange = {
+    $scope.timePeriodOptionsDisplayDateRange = {
       minValue: minDate,
       maxValue: maxDate,
       options: {
-        id: 'timePeriodOptionsDateRange',
+        id: 'timePeriodOptionsDisplayDateRange',
         floor: floorDate,
         ceil: ceilDate,
         step: millisInDay,
@@ -91,10 +91,33 @@
       }
     };
 
-    $scope.timePeriodOptionsCreated = {
+    $scope.timePeriodOptionsFilterDateRange = {
+      minValue: minDate,
+      maxValue: maxDate,
+      options: {
+        id: 'timePeriodOptionsFilterDateRange',
+        floor: floorDate,
+        ceil: ceilDate,
+        step: millisInDay,
+        showTicks: false,
+        draggableRange: true,
+        translate: function(date_millis) {
+          if ((date_millis !== null)) {
+            var dateFromMillis = new Date(date_millis);
+            return formatDate(dateFromMillis);
+          }
+          return '';
+        },
+        onEnd: function() {
+          updatePage(timePeriodOptionsFilterDateRange);
+        } 
+      }
+    };
+
+    $scope.timePeriodOptionsFilteredCreated = {
       value: dates[dates.length - 1],
       options: {
-        id: 'timePeriodOptionsCreated',
+        id: 'timePeriodOptionsFilteredCreated',
         stepsArray: dates,
         translate: function(date_millis) {
           if ((date_millis !== null)) {
@@ -104,7 +127,7 @@
           return '';
         },
         onEnd: function() {
-          updateCharts();
+          updatePage(timePeriodOptionsFilteredCreated);
         } 
       }
     };

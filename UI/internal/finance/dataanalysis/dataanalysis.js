@@ -194,18 +194,31 @@ function createDisplayListItems(ul) {
   var granularityDisplayListItem = document.createElement('li');
   var granularityDisplaySpan = createBranchSpan('granularityDisplaySpan', "Granularity<br>");
   var granularityDisplayRZSlider = document.createElement('rzslider');
-  granularityDisplayRZSlider.id = 'timePeriodOptionsTimeSpan';
-  granularityDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsTimeSpan.value');
-  granularityDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsTimeSpan.options');
+  granularityDisplayRZSlider.id = 'timePeriodOptionsDisplayTimeSpan';
+  granularityDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDisplayTimeSpan.value');
+  granularityDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDisplayTimeSpan.options');
 
   granularityDisplayListItem.appendChild(granularityDisplaySpan);
   granularityDisplayListItem.appendChild(granularityDisplayRZSlider);
+
+  var dateRangeDisplayListItem = document.createElement('li');
+  var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "Date Range<br>");
+  var dateRangeDisplayRZSlider = document.createElement('rzslider');
+  dateRangeDisplayRZSlider.id = 'timePeriodOptionsDisplayDateRange';
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDisplayDateRange.minValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsDisplayDateRange.maxValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDisplayDateRange.options');
+
+  dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
+  dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
 
   ul.appendChild(costDisplayListItem);
   ul.appendChild(usageDisplayListItem);
   ul.appendChild(rateDisplayListItem);
   ul.appendChild(breakDisplayListItem);
   ul.appendChild(granularityDisplayListItem);
+  ul.appendChild(breakDisplayListItem);
+  ul.appendChild(dateRangeDisplayListItem);
 
   createCostDisplayListItems(costDisplayListItem);
   createUsageDisplayListItems(usageDisplayListItem);
@@ -311,6 +324,11 @@ function createSiteTree(sites, functions) {
   var div = document.getElementById('siteTree');
   var inputs = div.getElementsByTagName('input');
   var checkboxes = getCheckedCheckBoxes(inputs);
+
+  if(checkboxes.length == 0) {
+    checkboxes = getBranchCheckboxes(inputs, 'Site');
+  }
+
   var elements = div.getElementsByTagName("*");
 
   var checkboxIds = [];
@@ -431,10 +449,10 @@ function createTimePeriodTree() {
   var dateRangeDisplayListItem = document.createElement('li');
   var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "Date Range");
   var dateRangeDisplayRZSlider = document.createElement('rzslider');
-  dateRangeDisplayRZSlider.id = 'timePeriodOptionsDateRange';
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDateRange.minValue');
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsDateRange.maxValue');
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDateRange.options');
+  dateRangeDisplayRZSlider.id = 'timePeriodOptionsFilterDateRange';
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsFilterDateRange.minValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsFilterDateRange.maxValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsFilterDateRange.options');
 
   dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
   dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
@@ -442,9 +460,9 @@ function createTimePeriodTree() {
   var createdDisplayListItem = document.createElement('li');
   var createdDisplaySpan = createBranchSpan('createdDisplaySpan', "Created");
   var createdDisplayRZSlider = document.createElement('rzslider');
-  createdDisplayRZSlider.id = 'timePeriodOptionsCreated';
-  createdDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsCreated.value');
-  createdDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsCreated.options');
+  createdDisplayRZSlider.id = 'timePeriodOptionsFilteredCreated';
+  createdDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsFilteredCreated.value');
+  createdDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsFilteredCreated.options');
 
   createdDisplayListItem.appendChild(createdDisplaySpan);
   createdDisplayListItem.appendChild(createdDisplayRZSlider);
@@ -728,13 +746,18 @@ function getCheckedCheckBoxes(inputs) {
     }
   }
 
-  if(checkBoxes.length == 0) {
-    for(var i = 0; i < inputLength; i++) {
-      if(inputs[i].type.toLowerCase() == 'checkbox') {
-        if(inputs[i].getAttribute('branch') == 'Site') {
-          inputs[i].checked = true;
-          checkBoxes.push(inputs[i]);
-        }
+  return checkBoxes;
+}
+
+function getBranchCheckboxes(inputs, branch) {
+  var checkBoxes = [];
+  var inputLength = inputs.length;
+
+  for(var i = 0; i < inputLength; i++) {
+    if(inputs[i].type.toLowerCase() == 'checkbox') {
+      if(inputs[i].getAttribute('branch') == branch) {
+        inputs[i].checked = true;
+        checkBoxes.push(inputs[i]);
       }
     }
   }
@@ -749,6 +772,9 @@ function updatePage(callingElement) {
     case 'invoiceSelector':
       updatePageFromInvoice(callingElement);
       break;
+    default:
+      alert(callingElement.id);
+      break;
   }
 }
 
@@ -760,7 +786,9 @@ function updatePageFromInvoice(callingElement) {
     if(granularity == 'Half Hourly' || granularity == 'Daily') {
       makeTimePeriodOptionsTimeSpanMonthly();
     }
-  }  
+  }
+
+  updateCharts();
 }
 
 function makeTimePeriodOptionsTimeSpanMonthly() {
