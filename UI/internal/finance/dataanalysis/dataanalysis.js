@@ -753,10 +753,10 @@ function updatePage(callingElement) {
 }
 
 function updatePageFromInvoice(callingElement) {
-  var timePeriodOptionsTimeSpan = document.getElementById('timePeriodOptionsTimeSpan');
-  var granularity = timePeriodOptionsTimeSpan.children[6].innerHTML;
-
   if(callingElement.checked) {
+    var timePeriodOptionsTimeSpan = document.getElementById('timePeriodOptionsTimeSpan');
+    var granularity = timePeriodOptionsTimeSpan.children[6].innerHTML;
+
     if(granularity == 'Half Hourly' || granularity == 'Daily') {
       makeTimePeriodOptionsTimeSpanMonthly();
     }
@@ -768,4 +768,23 @@ function makeTimePeriodOptionsTimeSpanMonthly() {
   scope.$apply(function () {
     scope.makeTimePeriodOptionsTimeSpanMonthly();
   });
+}
+
+function updateCharts() {
+  checkTimePeriodOptionsTimeSpan();
+}
+
+function checkTimePeriodOptionsTimeSpan() {
+  var invoices = document.getElementById('invoiceTree');
+  var inputs = invoices.getElementsByTagName('input');
+  var checkboxes = getCheckedCheckBoxes(inputs);
+
+  var timePeriodOptionsTimeSpan = document.getElementById('timePeriodOptionsTimeSpan');
+  var granularity = timePeriodOptionsTimeSpan.children[6].innerHTML;
+
+  if(granularity == 'Half Hourly' || granularity == 'Daily') {
+    for(var i = 0; i < checkboxes.length; i++) {
+      checkboxes[i].checked = false;
+    }
+  }
 }
