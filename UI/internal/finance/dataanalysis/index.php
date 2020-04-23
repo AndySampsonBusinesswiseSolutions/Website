@@ -31,12 +31,12 @@
 			<div id="displayTree" class="sidebar-tree-div roundborder scrolling-wrapper">
 			</div>
 			<br>
-			<div id="budgetTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-			</div>
-			<br>
 			<div id="siteTree" class="sidebar-tree-div roundborder scrolling-wrapper">
 			</div>
 			<br>
+			<div id="budgetTree" class="sidebar-tree-div roundborder scrolling-wrapper">
+			</div>
+			<br>			
 			<div id="invoiceTree" class="sidebar-tree-div roundborder scrolling-wrapper">
 			</div>
 			<br>
@@ -54,7 +54,7 @@
 
 	<div class="section-header">
 		<i id="openNav" class="fas fa-angle-double-right sidenav-icon"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?> <i class="far fa-copyright"></i></div>
+		<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i></div>
 	</div>
 	<br>
 	<div class="final-column">
@@ -74,7 +74,7 @@
 				<span>Data</span>
 				<div id="dataHeader" class="far fa-plus-square expander show-pointer"></div>
 			</div>
-			<div id="dataHeaderList" class="roundborder chart listitem-hidden" style="margin-top: 5px;">
+			<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper" style="margin-top: 5px; overflow-x: auto;">
 				<div id="datagrid" style="margin: 5px;"></div>
 			</div>
 		</div>

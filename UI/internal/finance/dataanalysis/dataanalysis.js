@@ -1,3 +1,6 @@
+var categories;
+var chartSeries;
+
 function pageLoad() {
   createTrees();  
 
@@ -11,6 +14,7 @@ function pageLoad() {
   };
 
   window.onload = function() {
+    updateChart();
     hideSliders(); 
   }
 }
@@ -63,6 +67,8 @@ function lockSidebar() {
     documentBody.style.marginLeft = "0px";
     lock.title = "Click To Lock Sidebar";
   }
+
+  updateDataGrid(chartSeries, categories);
 }
 
 function openNav(sidebar, newSidebarWidth) {
@@ -128,19 +134,24 @@ function addExpanderOnClickEvents() {
 	for(var i = 0; i < expandersLength; i++){
 		addExpanderOnClickEventsByElement(expanders[i]);
   }
-  
-  updateClassOnClick('chartHeader', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('budgetSelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('siteSelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('displaySelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function addExpanderOnClickEventsByElement(element) {
+  element.setAttribute('click', null);
 	element.addEventListener('click', function (event) {
 		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square');
     updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '');
     setupSidebar(event);
+    setupSidebarHeight();
 	});
+}
+
+function setOpenExpanders() {
+  updateClassOnClick('chartHeader', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('dataHeader', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('budgetSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('siteSelector', 'fa-plus-square', 'fa-minus-square');
+  updateClassOnClick('displaySelector', 'fa-plus-square', 'fa-minus-square');
 }
 
 function getCommodityOption() {
@@ -168,6 +179,7 @@ function createTrees() {
   createTimePeriodTree();
 
   addExpanderOnClickEvents();
+  setOpenExpanders();
 }
 
 function createDisplayTree() {
@@ -184,9 +196,9 @@ function createDisplayTree() {
 }
 
 function createDisplayListItems(ul) {
-  var costDisplayListItem = appendListItemChildren('costDisplaySelector', true, 'updatePage()', [{"Name" : "Cost"}], 'displaySelector', true, 'radio', 'displayGroup');
-  var usageDisplayListItem = appendListItemChildren('usageDisplaySelector', true, 'updatePage()', [{"Name" : "Usage"}], 'displaySelector', false, 'radio', 'displayGroup');
-  var rateDisplayListItem = appendListItemChildren('rateDisplaySelector', false, 'updatePage()', [{"Name" : "Rate"}], 'displaySelector', false, 'radio', 'displayGroup');
+  var costDisplayListItem = appendListItemChildren('costDisplaySelector', true, 'updatePage()', [{"Name" : "Cost"}], 'displaySelector', false, 'radio', 'displayGroup');
+  var usageDisplayListItem = appendListItemChildren('usageDisplaySelector', true, 'updatePage()', [{"Name" : "Usage"}], 'displaySelector', true, 'radio', 'displayGroup');
+  var rateDisplayListItem = appendListItemChildren('rateDisplaySelector', true, 'updatePage()', [{"Name" : "Rate"}], 'displaySelector', false, 'radio', 'displayGroup');
   
   var breakDisplayListItem = document.createElement('li');
   breakDisplayListItem.innerHTML = '<br>';
@@ -220,79 +232,80 @@ function createDisplayListItems(ul) {
   ul.appendChild(breakDisplayListItem);
   ul.appendChild(dateRangeDisplayListItem);
 
-  createCostDisplayListItems(costDisplayListItem);
+  createCostRateDisplayListItems(costDisplayListItem, 'Cost');
   createUsageDisplayListItems(usageDisplayListItem);
+  createCostRateDisplayListItems(rateDisplayListItem, 'Rate');
 }
 
-function createCostDisplayListItems(costDisplayListItem) {
-  var costDisplaySelectorListUl = costDisplayListItem.getElementsByTagName('ul')[0];
-  var allCostItemsListItem = appendListItemChildren('allCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "All Cost Items"}], 'costDisplaySelector', true, 'radio', 'costDisplayGroup');
-  var networkCostItemsListItem = appendListItemChildren('networkCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Network"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var renewablesCostItemsListItem = appendListItemChildren('renewablesCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Renewables"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var balancingCostItemsListItem = appendListItemChildren('balancingCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Balancing"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var otherCostItemsListItem = appendListItemChildren('otherCostItemsCostDisplaySelector', true, 'updatePage()', [{"Name" : "Other"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+function createCostRateDisplayListItems(displayListItem, type) {
+  var displaySelectorListUl = displayListItem.getElementsByTagName('ul')[0];
+  var allItemsListItem = appendListItemChildren('all' + type + 'ItemsDisplaySelector', false, 'updatePage()', [{"Name" : "All " + type + " Items"}], type.toLowerCase() + 'DisplaySelector', true, 'radio', type.toLowerCase() + 'DisplayGroup');
+  var networkItemsListItem = appendListItemChildren('network' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Network"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var renewablesItemsListItem = appendListItemChildren('renewables' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Renewables"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var balancingItemsListItem = appendListItemChildren('balancing' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Balancing"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var otherItemsListItem = appendListItemChildren('other' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Other"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
 
-  costDisplaySelectorListUl.appendChild(allCostItemsListItem);
-  costDisplaySelectorListUl.appendChild(networkCostItemsListItem);
-  costDisplaySelectorListUl.appendChild(renewablesCostItemsListItem);
-  costDisplaySelectorListUl.appendChild(balancingCostItemsListItem);
-  costDisplaySelectorListUl.appendChild(otherCostItemsListItem);
+  displaySelectorListUl.appendChild(allItemsListItem);
+  displaySelectorListUl.appendChild(networkItemsListItem);
+  displaySelectorListUl.appendChild(renewablesItemsListItem);
+  displaySelectorListUl.appendChild(balancingItemsListItem);
+  displaySelectorListUl.appendChild(otherItemsListItem);
 
-  createNetworkCostDisplayListItems(networkCostItemsListItem);
-  createRenewablesCostDisplayListItems(renewablesCostItemsListItem);
-  createBalancingCostDisplayListItems(balancingCostItemsListItem);
-  createOtherCostDisplayListItems(otherCostItemsListItem);
+  createNetworkDisplayListItems(networkItemsListItem, type);
+  createRenewablesDisplayListItems(renewablesItemsListItem, type);
+  createBalancingDisplayListItems(balancingItemsListItem, type);
+  createOtherDisplayListItems(otherItemsListItem, type);
 }
 
 function createUsageDisplayListItems(usageDisplayListItem) {
   var usageDisplaySelectorListUl = usageDisplayListItem.getElementsByTagName('ul')[0];
-  var consumptionUsageItemsListItem = appendListItemChildren('consumptionUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Consumption"}], 'usageDisplaySelector', false, 'checkbox', 'usageDisplayGroup');
+  var consumptionUsageItemsListItem = appendListItemChildren('consumptionUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Consumption"}], 'usageDisplaySelector', true, 'checkbox', 'usageDisplayGroup');
   var capacityUsageItemsListItem = appendListItemChildren('capacityUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity"}], 'usageDisplaySelector', false, 'checkbox', 'usageDisplayGroup');
 
   usageDisplaySelectorListUl.appendChild(consumptionUsageItemsListItem);
   usageDisplaySelectorListUl.appendChild(capacityUsageItemsListItem);
 }
 
-function createNetworkCostDisplayListItems(networkCostItemsListItem) {
-  var networkCostDisplaySelectorListUl = networkCostItemsListItem.getElementsByTagName('ul')[0];
-  var wholesaleNetworkCostItemsListItem = appendListItemChildren('wholesaleNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Wholesale"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var distributionNetworkCostItemsListItem = appendListItemChildren('distributionNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Distribution"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var transmissionNetworkCostItemsListItem = appendListItemChildren('transmissionNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Transmission"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+function createNetworkDisplayListItems(networkItemsListItem, type) {
+  var networkDisplaySelectorListUl = networkItemsListItem.getElementsByTagName('ul')[0];
+  var wholesaleNetworkItemsListItem = appendListItemChildren('wholesale' + type + 'NetworkItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Wholesale"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var distributionNetworkItemsListItem = appendListItemChildren('distribution' + type + 'NetworkItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Distribution"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var transmissionNetworkItemsListItem = appendListItemChildren('transmission' + type + 'NetworkItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Transmission"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
 
-  networkCostDisplaySelectorListUl.appendChild(wholesaleNetworkCostItemsListItem);
-  networkCostDisplaySelectorListUl.appendChild(distributionNetworkCostItemsListItem);
-  networkCostDisplaySelectorListUl.appendChild(transmissionNetworkCostItemsListItem);
+  networkDisplaySelectorListUl.appendChild(wholesaleNetworkItemsListItem);
+  networkDisplaySelectorListUl.appendChild(distributionNetworkItemsListItem);
+  networkDisplaySelectorListUl.appendChild(transmissionNetworkItemsListItem);
 }
 
-function createRenewablesCostDisplayListItems(renewablesCostItemsListItem) {
-  var renewablesCostDisplaySelectorListUl = renewablesCostItemsListItem.getElementsByTagName('ul')[0];
-  var renewablesObligationRenewablesCostItemsListItem = appendListItemChildren('renewablesObligationRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Renewables Obligation"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var feedInTariffRenewablesCostItemsListItem = appendListItemChildren('feedInTariffRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Feed In Tariff"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var contractsForDifferenceRenewablesCostItemsListItem = appendListItemChildren('contractsForDifferenceRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Contracts For Difference"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var energyIntensiveIndustryRenewablesCostItemsListItem = appendListItemChildren('energyIntensiveIndustryRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Energy Intensive Industry"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var capacityMarketRenewablesCostItemsListItem = appendListItemChildren('capacityMarketRenewablesCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity Markets"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+function createRenewablesDisplayListItems(renewablesItemsListItem, type) {
+  var renewablesDisplaySelectorListUl = renewablesItemsListItem.getElementsByTagName('ul')[0];
+  var renewablesObligationRenewablesItemsListItem = appendListItemChildren('renewablesObligation' + type + 'RenewablesItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Renewables Obligation"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var feedInTariffRenewablesItemsListItem = appendListItemChildren('feedInTariff' + type + 'RenewablesItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Feed In Tariff"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var contractsForDifferenceRenewablesItemsListItem = appendListItemChildren('contractsForDifference' + type + 'RenewablesItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Contracts For Difference"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var energyIntensiveIndustryRenewablesItemsListItem = appendListItemChildren('energyIntensiveIndustry' + type + 'RenewablesItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Energy Intensive Industry"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var capacityMarketRenewablesItemsListItem = appendListItemChildren('capacity' + type + 'MarketRenewablesItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity Markets"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
 
-  renewablesCostDisplaySelectorListUl.appendChild(renewablesObligationRenewablesCostItemsListItem);
-  renewablesCostDisplaySelectorListUl.appendChild(feedInTariffRenewablesCostItemsListItem);
-  renewablesCostDisplaySelectorListUl.appendChild(contractsForDifferenceRenewablesCostItemsListItem);
-  renewablesCostDisplaySelectorListUl.appendChild(energyIntensiveIndustryRenewablesCostItemsListItem);
-  renewablesCostDisplaySelectorListUl.appendChild(capacityMarketRenewablesCostItemsListItem);
+  renewablesDisplaySelectorListUl.appendChild(renewablesObligationRenewablesItemsListItem);
+  renewablesDisplaySelectorListUl.appendChild(feedInTariffRenewablesItemsListItem);
+  renewablesDisplaySelectorListUl.appendChild(contractsForDifferenceRenewablesItemsListItem);
+  renewablesDisplaySelectorListUl.appendChild(energyIntensiveIndustryRenewablesItemsListItem);
+  renewablesDisplaySelectorListUl.appendChild(capacityMarketRenewablesItemsListItem);
 }
 
-function createBalancingCostDisplayListItems(balancingCostItemsListItem) {
-  var balancingCostDisplaySelectorListUl = balancingCostItemsListItem.getElementsByTagName('ul')[0];
-  var bsuosBalancingCostItemsListItem = appendListItemChildren('bsuosBalancingCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Balancing System Use Of System"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
-  var rcrcBalancingCostItemsListItem = appendListItemChildren('rcrcBalancingCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Residual Cashflow Reallocation Cashflow"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+function createBalancingDisplayListItems(balancingItemsListItem, type) {
+  var balancingDisplaySelectorListUl = balancingItemsListItem.getElementsByTagName('ul')[0];
+  var bsuosBalancingItemsListItem = appendListItemChildren('bsuos' + type + 'BalancingItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Balancing System Use Of System"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var rcrcBalancingItemsListItem = appendListItemChildren('rcrc' + type + 'BalancingItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Residual Cashflow Reallocation Cashflow"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
 
-  balancingCostDisplaySelectorListUl.appendChild(bsuosBalancingCostItemsListItem);
-  balancingCostDisplaySelectorListUl.appendChild(rcrcBalancingCostItemsListItem);
+  balancingDisplaySelectorListUl.appendChild(bsuosBalancingItemsListItem);
+  balancingDisplaySelectorListUl.appendChild(rcrcBalancingItemsListItem);
 }
 
-function createOtherCostDisplayListItems(otherCostItemsListItem) {
-  var otherCostDisplaySelectorListUl = otherCostItemsListItem.getElementsByTagName('ul')[0];
-  var otherNetworkCostItemsListItem = appendListItemChildren('otherNetworkCostItemsCostDisplaySelector', false, 'updatePage()', [{"Name" : "Other"}], 'costDisplaySelector', false, 'checkbox', 'costDisplayGroup');
+function createOtherDisplayListItems(otherItemsListItem, type) {
+  var otherDisplaySelectorListUl = otherItemsListItem.getElementsByTagName('ul')[0];
+  var otherNetworkItemsListItem = appendListItemChildren('other' + type + 'NetworkItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Other"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
 
-  otherCostDisplaySelectorListUl.appendChild(otherNetworkCostItemsListItem);
+  otherDisplaySelectorListUl.appendChild(otherNetworkItemsListItem);
 }
 
 function createBudgetTree() {
@@ -302,12 +315,11 @@ function createBudgetTree() {
   var headerDiv = createHeaderDiv("budgetHeader", "Select Budget");
   var ul = createBranchUl("budgetSelector", false, true);
 
-  var budget2BudgetListItem = appendListItemChildren('budget2BudgetSelector', true, 'updatePage()', [{"Name" : "Budget 2"}], 'budgetSelector', false, 'radio', 'budgetGroup');
+  var budget2BudgetListItem = appendListItemChildren('budget2BudgetSelector', true, 'updatePage()', [{"Name" : "Budget 2"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
   var budget1BudgetListItem = appendListItemChildren('budget1BudgetSelector', false, 'updatePage()', [{"Name" : "Budget 1"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
 
   ul.appendChild(budget2BudgetListItem);
   ul.appendChild(budget1BudgetListItem);
-
 
   var budget2BudgetSelectorListUl = budget2BudgetListItem.getElementsByTagName('ul')[0];
   var version2Budget2ListItem = appendListItemChildren('version2Budget2CostBudgetSelector', false, 'updatePage()', [{"Name" : "Version 2"}], 'budget2BudgetSelector', false, 'checkbox', 'budget2BudgetGroup');
@@ -323,7 +335,7 @@ function createBudgetTree() {
 function createSiteTree(sites, functions) {
   var div = document.getElementById('siteTree');
   var inputs = div.getElementsByTagName('input');
-  var checkboxes = getCheckedCheckBoxes(inputs);
+  var checkboxes = getCheckedElements(inputs);
 
   if(checkboxes.length == 0) {
     checkboxes = getBranchCheckboxes(inputs, 'Site');
@@ -353,10 +365,25 @@ function createSiteTree(sites, functions) {
   var headerDiv = createHeaderDiv("siteHeader", 'Select Sites/Meters');
   var ul = createBranchUl("siteSelector", false, true);
 
+  var breakDisplayListItem = document.createElement('li');
+  breakDisplayListItem.innerHTML = '<br>';
+  breakDisplayListItem.classList.add('format-listitem');
+
+  var recurseSelectionListItem = document.createElement('li');
+  recurseSelectionListItem.classList.add('format-listitem');
+  recurseSelectionListItem.classList.add('topListItem');
+
+  var recurseSelectionCheckbox = createBranchCheckbox('recuseSelectionCheckbox', '', 'recuseSelection', 'checkbox', 'recurseSelection', false);
+  var recurseSelectionSpan = createBranchSpan('recurseSelectionSpan', 'Recurse Selection?');
+  recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
+  recurseSelectionListItem.appendChild(recurseSelectionSpan);
+
   buildSiteBranch(sites, getCommodityOption(), ul, functions);  
 
   div.appendChild(headerDiv);
   div.appendChild(ul);
+  div.appendChild(breakDisplayListItem);
+  div.appendChild(recurseSelectionListItem);
 
   for(var i = 0; i < checkboxIds.length; i++) {
     var checkbox = document.getElementById(checkboxIds[i]);
@@ -380,15 +407,37 @@ function createInvoiceTree() {
   var headerDiv = createHeaderDiv("invoiceHeader", "Select Invoice");
   var ul = createBranchUl("invoiceSelector", true, true);
 
-  var invoice4InvoiceListItem = appendListItemChildren('invoice4InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0004"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
-  var invoice3InvoiceListItem = appendListItemChildren('invoice3InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0003"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
-  var invoice2InvoiceListItem = appendListItemChildren('invoice2InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0002"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
-  var invoice1InvoiceListItem = appendListItemChildren('invoice1InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0001"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
+  var selectAllInvoiceListItem = appendListItemChildren('selectAllInvoiceSelector', false, 'updatePage()', [{"Name" : "Show All Invoices"}], 'invoiceSelector', true, 'radio', 'invoiceGroup');
+  var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, 'updatePage()', [{"Name" : "Select Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
 
-  ul.appendChild(invoice4InvoiceListItem);
-  ul.appendChild(invoice3InvoiceListItem);
-  ul.appendChild(invoice2InvoiceListItem);
-  ul.appendChild(invoice1InvoiceListItem);
+  ul.appendChild(selectAllInvoiceListItem);
+  ul.appendChild(selectSpecificInvoiceListItem);
+
+  var selectSpecificInvoiceListUl = selectSpecificInvoiceListItem.getElementsByTagName('ul')[0];
+  var invoice4InvoiceListItem = appendListItemChildren('invoice4InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0004"}], 'invoiceSelector', true, 'checkbox', 'selectSpecificInvoiceGroup');
+  var invoice3InvoiceListItem = appendListItemChildren('invoice3InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0003"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
+  var invoice2InvoiceListItem = appendListItemChildren('invoice2InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0002"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
+  var invoice1InvoiceListItem = appendListItemChildren('invoice1InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0001"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
+
+  selectSpecificInvoiceListUl.appendChild(invoice4InvoiceListItem);
+  selectSpecificInvoiceListUl.appendChild(invoice3InvoiceListItem);
+  selectSpecificInvoiceListUl.appendChild(invoice2InvoiceListItem);
+  selectSpecificInvoiceListUl.appendChild(invoice1InvoiceListItem);
+
+  var breakDisplayListItem = document.createElement('li');
+  breakDisplayListItem.innerHTML = '<br>';
+
+  var showVarianceInvoiceListItem = document.createElement('li');
+  showVarianceInvoiceListItem.classList.add('format-listitem');
+  showVarianceInvoiceListItem.classList.add('topListItem');
+
+  var showVarianceCheckbox = createBranchCheckbox('showVarianceCheckbox', 'updatePage()', 'showVariance', 'checkbox', 'showVariance', false);
+  var showVarianceSpan = createBranchSpan('showVarianceSpan', 'Show Invoice Variances?');
+  showVarianceInvoiceListItem.appendChild(showVarianceCheckbox);
+  showVarianceInvoiceListItem.appendChild(showVarianceSpan);
+
+  ul.appendChild(breakDisplayListItem);
+  ul.appendChild(showVarianceInvoiceListItem);
 
   div.appendChild(headerDiv);
   div.appendChild(ul);
@@ -407,9 +456,8 @@ function createGroupingOptionTree() {
   ul.appendChild(groupingOption2GroupingOptionListItem);
   ul.appendChild(groupingOption1GroupingOptionListItem);
 
-
   var groupingOption1GroupingOptionSelectorListUl = groupingOption1GroupingOptionListItem.getElementsByTagName('ul')[0];
-  var sumGroupingOption1ListItem = appendListItemChildren('sumGroupingOption1CostGroupingOptionSelector', false, 'updatePage()', [{"Name" : "Sum"}], 'groupingOption1GroupingOptionSelector', false, 'checkbox', 'groupingOption1GroupingOptionGroup');
+  var sumGroupingOption1ListItem = appendListItemChildren('sumGroupingOption1CostGroupingOptionSelector', false, 'updatePage()', [{"Name" : "Sum"}], 'groupingOption1GroupingOptionSelector', true, 'checkbox', 'groupingOption1GroupingOptionGroup');
   var averageGroupingOption1ListItem = appendListItemChildren('averageGroupingOption1CostGroupingOptionSelector', false, 'updatePage()', [{"Name" : "Average"}], 'groupingOption1GroupingOptionSelector', false, 'checkbox', 'groupingOption1GroupingOptionGroup');
 
   groupingOption1GroupingOptionSelectorListUl.appendChild(sumGroupingOption1ListItem);
@@ -543,7 +591,7 @@ function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, f
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + '_Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), functions, commodity.Attributes, 'Commodity');
+    var listItem = appendListItemChildren(previousId + '_Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), null, commodity.Attributes, 'Commodity');
     elementToAppendTo.appendChild(listItem);
 
     if(commodity.hasOwnProperty('Meters')) {
@@ -644,7 +692,10 @@ function commodityMatch(entity, commodity) {
 function appendListItemChildren(id, hasChildren, functions, attributes, branch, isChecked = false, elementType = 'checkbox', groupName = '') {
   var li = document.createElement('li');
   li.appendChild(createBranchDiv(id, hasChildren));
-  li.appendChild(createBranchCheckbox(id, functions, branch, elementType, groupName, isChecked));
+
+  if(functions) {
+    li.appendChild(createBranchCheckbox(id, functions, branch, elementType, groupName, isChecked));
+  }  
 
   if(getAttribute(attributes, 'Icon')) {
     li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
@@ -734,19 +785,17 @@ function clearElement(element) {
 	}
 }
 
-function getCheckedCheckBoxes(inputs) {
-  var checkBoxes = [];
+function getCheckedElements(inputs) {
+  var elements = [];
   var inputLength = inputs.length;
 
   for(var i = 0; i < inputLength; i++) {
-    if(inputs[i].type.toLowerCase() == 'checkbox') {
-      if(inputs[i].checked) {
-        checkBoxes.push(inputs[i]);
-      }
+    if(inputs[i].checked) {
+      elements.push(inputs[i]);
     }
   }
 
-  return checkBoxes;
+  return elements;
 }
 
 function getBranchCheckboxes(inputs, branch) {
@@ -772,47 +821,901 @@ function updatePage(callingElement) {
     case 'invoiceSelector':
       updatePageFromInvoice(callingElement);
       break;
+    case 'commoditySelector':
+      createSiteTree(sites, "updatePage()"); 
+      addExpanderOnClickEvents();
+      break;
+    case 'groupingOptionSelector':
+    case 'groupingOption1GroupingOptionSelector':
+      break;
+    case 'Site':
+    case 'Area':
+    case 'Meter':
+    case 'SubArea':
+    case 'Asset':
+    case 'SubMeter':
+      recurseSelection(callingElement);
+      break;
     default:
-      alert(callingElement.id);
+      alert(branch);
       break;
   }
+
+  updateChart();
 }
 
 function updatePageFromInvoice(callingElement) {
   if(callingElement.checked) {
-    var timePeriodOptionsTimeSpan = document.getElementById('timePeriodOptionsTimeSpan');
-    var granularity = timePeriodOptionsTimeSpan.children[6].innerHTML;
+    var timePeriodOptionsDisplayTimeSpan = document.getElementById('timePeriodOptionsDisplayTimeSpan');
+    var granularity = timePeriodOptionsDisplayTimeSpan.children[6].innerHTML;
 
     if(granularity == 'Half Hourly' || granularity == 'Daily') {
       makeTimePeriodOptionsTimeSpanMonthly();
     }
   }
-
-  updateCharts();
 }
 
 function makeTimePeriodOptionsTimeSpanMonthly() {
-  var scope = angular.element(document.getElementById("timePeriodOptionsTimeSpan")).scope();
+  var scope = angular.element(document.getElementById("timePeriodOptionsDisplayTimeSpan")).scope();
   scope.$apply(function () {
     scope.makeTimePeriodOptionsTimeSpanMonthly();
   });
 }
 
-function updateCharts() {
+function updateChart() {
   checkTimePeriodOptionsTimeSpan();
+
+  var commodityOption = getCommodityOption();
+  var showByArray = determineShowByArray();
+  var startDate = getStartDate();
+  var endDate = getEndDate();
+  var dateFormat = getPeriodDateFormat()
+  categories = getCategoryTexts(startDate, endDate, dateFormat);
+  var displayType = getDisplayType();
+
+  var treeDiv = document.getElementById('siteTree');
+  var inputs = treeDiv.getElementsByTagName('input');
+  var checkboxes = getCheckedElements(inputs);
+  
+  if(checkboxes.length == 0) {
+    checkboxes = getBranchCheckboxes(inputs, 'Site');
+  }
+
+  var meters = getMeters(checkboxes, commodityOption);
+  chartSeries = getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate);
+  var chartOptions = getChartOptions(categories, displayType, getXAxisTypeFromTimeSpan());
+
+  clearElement(chart);
+  refreshChart(chartSeries, displayType, chartOptions);
+  updateDataGrid(chartSeries, categories);
 }
 
 function checkTimePeriodOptionsTimeSpan() {
   var invoices = document.getElementById('invoiceTree');
   var inputs = invoices.getElementsByTagName('input');
-  var checkboxes = getCheckedCheckBoxes(inputs);
+  var checkboxes = getCheckedElements(inputs);
 
-  var timePeriodOptionsTimeSpan = document.getElementById('timePeriodOptionsTimeSpan');
-  var granularity = timePeriodOptionsTimeSpan.children[6].innerHTML;
+  var timePeriodOptionsDisplayTimeSpan = document.getElementById('timePeriodOptionsDisplayTimeSpan');
+  var granularity = timePeriodOptionsDisplayTimeSpan.children[6].innerHTML;
 
   if(granularity == 'Half Hourly' || granularity == 'Daily') {
     for(var i = 0; i < checkboxes.length; i++) {
       checkboxes[i].checked = false;
+    }
+  }
+}
+
+function getMeters(checkboxes, commodityOption) {
+  var noGroupradio = document.getElementById('groupingOption2GroupingOptionSelectorradio');
+  var checkboxLength = checkboxes.length;
+  var tempMeters = [];
+  var commodities = [];
+  var branches = [];
+
+  if(commodityOption == '') {
+    commodities.push('Electricity');
+    commodities.push('Gas');
+  }
+  else {
+    commodities.push(commodityOption);
+  }
+
+  for(var i = 0; i < checkboxLength; i++) {
+    var hierarchy = checkboxes[i].id.replace('checkbox', '').split('_');
+    var lastRecord = hierarchy[hierarchy.length - 1];
+
+    for(var j = 0; j < commodities.length; j++) {
+      var meters = [];
+      var branch = '';
+      var seriesName = '';
+
+      if(lastRecord.includes('Site')) {
+        var site = sites[parseInt(lastRecord.replace('Site', ''))];
+        meters = getMetersBySite(site, commodities[j]);
+        branch = 'Site';
+        seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + commodities[j];
+      }
+      else if(lastRecord.includes('SubArea')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 5].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 4].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 3].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 2].replace('Meter', ''))];
+        var subArea = meter.SubAreas[parseInt(lastRecord.replace('SubArea', ''))];
+        meters = getSubMetersBySubArea(subArea, commodities[j]);
+        branch = 'SubArea';
+        seriesName = getAttribute(meter.Attributes, 'Name') + ' - ' + getAttribute(subArea.Attributes, 'Name');
+      }
+      else if(lastRecord.includes('Area')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
+        var area = site.Areas[parseInt(lastRecord.replace('Area', ''))];
+        meters = getMetersByArea(area, commodities[j]);
+        branch = 'Area';
+        seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + getAttribute(area.Attributes, 'Name') + ' - ' + commodities[j];
+      }
+      else if(lastRecord.includes('SubMeter')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 7].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 6].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 5].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 4].replace('Meter', ''))];
+        var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 3].replace('SubArea', ''))];
+        var asset = subArea.Assets[parseInt(hierarchy[hierarchy.length - 2].replace('Asset', ''))];
+        var subMeter = asset.SubMeters[parseInt(lastRecord.replace('SubMeter', ''))];
+        branch = 'SubMeter';
+        seriesName = getAttribute(meter.Attributes, 'Name')
+           + ' - ' + getAttribute(subArea.Attributes, 'Name')
+           + ' - ' + getAttribute(asset.Attributes, 'Name')
+           + ' - ' + getAttribute(subMeter.Attributes, 'Name');
+
+        if(getAttribute(subMeter.Attributes, 'Commodities').includes(commodities[j])) {
+          meters.push(subMeter);
+        }
+      }
+      else if(lastRecord.includes('Meter')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 4].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 3].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 2].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(lastRecord.replace('Meter', ''))];
+        branch = 'Meter';
+        seriesName = getAttribute(meter.Attributes, 'Name');
+
+        if(getAttribute(meter.Attributes, 'Commodities').includes(commodities[j])) {
+          meters.push(meter);
+        }
+      }
+      else if(lastRecord.includes('Asset')) {
+        var site = sites[parseInt(hierarchy[hierarchy.length - 6].replace('Site', ''))];
+        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 5].replace('Area', ''))];
+        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 4].replace('Commodity', ''))];
+        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 3].replace('Meter', ''))];
+        var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 2].replace('SubArea', ''))];
+        var asset = subArea.Assets[parseInt(lastRecord.replace('Asset', ''))];
+        meters = getSubMetersByAsset(asset, commodities[j]);
+        branch = 'Asset';
+        seriesName = getAttribute(meter.Attributes, 'Name')
+           + ' - ' + getAttribute(subArea.Attributes, 'Name')
+           + ' - ' + getAttribute(asset.Attributes, 'Name');
+      }
+  
+      if(meters.length > 0) {
+        var tempMeter = {
+          SeriesName: seriesName,
+          Commodity: commodities[j],
+          Branch: branch,
+          Meters: meters
+        }
+    
+        tempMeters.push(tempMeter);
+
+        if(!branches.includes(branch)) {
+          branches.push(branch);
+        }
+      }
+    }    
+  }
+
+  if(noGroupradio.checked) {
+    return tempMeters;
+  }
+
+  var series = [];
+  for(var i = 0; i < branches.length; i++) {
+    for(var j = 0; j < commodities.length; j++) {
+      var tempMeter = {
+        SeriesName: branches[i] + ' - ' + commodities[j],
+        Meters: []
+      }
+  
+      for(var k = 0; k < tempMeters.length; k++) {
+        if(tempMeters[k].Commodity == commodities[j] && tempMeters[k].Branch == branches[i]) {
+          tempMeter.Meters.push(...tempMeters[k].Meters);
+        }      
+      }
+  
+      if(tempMeter.Meters.length > 0) {
+        series.push(tempMeter);
+      }
+    }
+  }  
+
+  return series;
+}
+
+function getMetersBySite(site, commodityOption) {
+  var meters = [];
+
+  var areaLength = site.Areas.length;
+  for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+    var area = site.Areas[areaCount];
+
+    if(getAttribute(area.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(...getMetersByArea(area, commodityOption));
+    }
+  }
+
+  return [...meters];
+}
+
+function getMetersByArea(area, commodityOption) {
+  var meters = [];
+
+  var commodityLength = area.Commodities.length;
+  for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
+    var commodity = area.Commodities[commodityCount];
+
+    if(getAttribute(commodity.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(...getMetersByCommodity(commodity, commodityOption));
+    }
+  }
+
+  return [...meters];
+}
+
+function getMetersByCommodity(commodity, commodityOption) {
+  var meters = [];
+
+  var meterLength = commodity.Meters.length;
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = commodity.Meters[meterCount];
+
+    if(getAttribute(meter.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(meter);
+    }
+  }
+
+  return [...meters];
+}
+
+function getSubMetersBySubArea(subArea, commodityOption) {
+  var meters = [];
+
+  var assetLength = subArea.Assets.length;
+  for(var assetCount = 0; assetCount < assetLength; assetCount++) {
+    var asset = subArea.Assets[assetCount];
+
+    if(getAttribute(asset.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(...getSubMetersByAsset(asset, commodityOption));
+    }
+  }
+
+  return [...meters];
+}
+
+function getSubMetersByAsset(asset, commodityOption) {
+  var meters = [];
+
+  var subMeterLength = asset.SubMeters.length;
+  for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
+    var subMeter = asset.SubMeters[subMeterCount];
+
+    if(getAttribute(subMeter.Attributes, 'Commodities').includes(commodityOption)) {
+      meters.push(subMeter);
+    }
+  }
+
+  return [...meters];
+}
+
+function determineShowByArray() {
+  var div = document.getElementById('displayTree');
+  var inputs = div.getElementsByTagName('input');
+  var checkedElements = getCheckedElements(inputs);
+  var baseDisplayRadio = null;
+
+  for(var i = 0; i < checkedElements.length; i++) {
+    if(checkedElements[i].getAttribute('branch') == 'displaySelector') {
+      baseDisplayRadio = checkedElements[i];
+      break;
+    }
+  }
+
+  if(baseDisplayRadio.id == 'rateDisplaySelectorradio') {
+    alert('Determine rate show by array');
+    return ['Usage'];
+  }
+
+  var showByArray = [];
+  if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
+    for(var i = 0; i < checkedElements.length; i++) {
+      if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
+        if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorcheckbox') {
+          showByArray = ['Usage']
+        }
+        else {
+          showByArray = ['Capacity', 'MaxDemand']
+        }
+      }
+    }
+  }
+  else {
+    showByArray = ['Cost'];
+  }
+  
+  return ['Usage'];
+}
+
+function getStartDate() {
+  var timePeriodOptionsDisplayDateRange = document.getElementById('timePeriodOptionsDisplayDateRange');
+  var startDateMilliseconds = parseInt(timePeriodOptionsDisplayDateRange.getElementsByClassName('rz-pointer-min')[0].getAttribute('aria-valuenow'));
+  return new Date(startDateMilliseconds);
+}
+
+function getEndDate() {
+  var timePeriodOptionsDisplayDateRange = document.getElementById('timePeriodOptionsDisplayDateRange');
+  var endDateMilliseconds = parseInt(timePeriodOptionsDisplayDateRange.getElementsByClassName('rz-pointer-max')[0].getAttribute('aria-valuenow'));
+  return new Date(endDateMilliseconds + (24*60*60*1000));
+}
+
+function getPeriodDateFormat() {
+  var timePeriodOptionsDisplayTimeSpan = document.getElementById('timePeriodOptionsDisplayTimeSpan');
+  switch(timePeriodOptionsDisplayTimeSpan.children[6].innerHTML) {
+    case 'Half Hourly':
+      return 'dd MMM yy hh:mm:ss';
+    case 'Daily':
+      return 'dd MMM yy';
+    case "Monthly":
+      return 'MMM yyyy';
+    case "Quarterly":
+      return 'yyyy QQ';
+    case "Yearly":
+      return 'yyyy';
+  }
+}
+
+function getCategoryTexts(startDate, endDate, dateFormat) {
+  var categories = [];
+
+  for(var newDate = new Date(startDate); newDate < new Date(endDate); newDate.setDate(newDate.getDate() + 1)) {
+    for(var hh = 0; hh < 48; hh++) {
+      var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat).toString();
+
+      if(!categories.includes(newCategoryText)) {
+        categories.push(newCategoryText);
+      }      
+    }
+  }
+
+  return categories;
+}
+
+function formatDate(dateToBeFormatted, format) {
+	var baseDate = new Date(dateToBeFormatted);
+
+	switch(format) {
+		case 'dd MMM yy':
+			var aaaa = baseDate.getFullYear();
+			var gg = baseDate.getDate();
+			var mm = (baseDate.getMonth() + 1);
+		
+			if (gg < 10) {
+				gg = '0' + gg;
+			}				
+		
+			if (mm < 10) {
+				mm = '0' + mm;
+			}
+		
+			return gg + ' ' + convertMonthIdToShortCode(mm) + ' ' + aaaa;
+		case 'dd MMM yy hh:mm:ss':
+			var hours = baseDate.getHours()
+			var minutes = baseDate.getMinutes()
+			var seconds = baseDate.getSeconds();
+		
+			if (hours < 10) {
+				hours = '0' + hours;
+			}				
+		
+			if (minutes < 10) {
+				minutes = '0' + minutes;
+			}				
+		
+			if (seconds < 10) {
+				seconds = '0' + seconds;
+			}			
+		
+			return formatDate(baseDate, 'dd MMM yy') + ' ' + hours + ':' + minutes + ':' + seconds;
+		case 'MMM yyyy':
+			var aaaa = baseDate.getFullYear();
+			var mm = (baseDate.getMonth() + 1);
+
+			return convertMonthIdToShortCode(mm) + ' ' + aaaa;
+		case 'yyyy':
+			return baseDate.getFullYear();
+		case 'yyyy QQ':
+			var aaaa = baseDate.getFullYear();
+			var mm = (baseDate.getMonth() + 1);
+
+      return aaaa + ' ' + convertMonthIdToQuarter(mm);
+	}
+}
+
+function convertMonthIdToFullText(monthId) {
+	switch(monthId) {
+		case 1:
+			return 'January';
+		case 2:
+			return 'February';
+		case 3:
+			return 'March';
+		case 4:
+			return 'April';
+		case 5:
+			return 'May';
+		case 6:
+			return 'June';
+		case 7:
+			return 'July';
+		case 8:
+			return 'August';
+		case 9:
+			return 'September';
+		case 10:
+			return 'October';
+		case 11:
+			return 'November';
+		case 12:
+			return 'December';
+	}
+}
+
+function convertMonthIdToShortCode(monthId) {
+	return convertMonthIdToFullText(parseInt(monthId)).slice(0, 3).toUpperCase();
+}
+
+function convertMonthIdToQuarter(monthId) {
+  switch(monthId) {
+		case 1:
+		case 2:
+		case 3:
+			return 'Q1';
+		case 4:
+		case 5:
+		case 6:
+      return 'Q2';
+		case 7:
+		case 8:
+		case 9:
+      return 'Q3';
+		case 10:
+		case 11:
+		case 12:
+			return 'Q4';
+	}
+}
+
+function getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate) {
+  var newSeries = [];
+  var showByLength = showByArray.length;
+
+  for(var i = 0; i < showByLength; i++) {
+    for(var j = 0; j < meters.length; j++) {
+      var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName);
+
+      if(series.length) {
+        newSeries.push(...series);
+      }
+      else {
+        newSeries.push(series);
+      }
+    }    
+  }
+
+  return newSeries;
+}
+
+function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, endDate, seriesName) {
+  if(showBy == "MaxDemand") {
+    var meterLength = meters.length;
+
+    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+      var meter = meters[meterCount];
+      var meterData = meter['Capacity'];
+      
+      if(!meterData) {
+        continue;
+      }
+
+      var maxDemand = getAttribute(meter.Attributes, 'MaxDemand');      
+      meter['MaxDemand'] = JSON.parse(JSON.stringify(meterData));
+
+      var meterDataLength = meterData.length;
+      for(var j = 0; j < meterDataLength; j++) {
+        meter['MaxDemand'][j].Value = maxDemand;
+      }
+    }
+  }
+
+  var summedMeterSeries = getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate, endDate);
+  return finaliseData(summedMeterSeries, seriesName.concat(' - ').concat(showBy));
+}
+
+function getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate, endDate) {
+  var meterLength = meters.length;
+  var summedMeterSeries = {
+    value: [0],
+    count: [0]
+  }
+  
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = meters[meterCount];
+    var meterData = meter[showBy];
+    
+    if(!meterData) {
+      continue;
+    }
+
+    var meterDatesApplied = [];
+    var meterDataLength = meterData.length;
+    for(var j = 0; j < meterDataLength; j++) {
+      var meterDate = new Date(meterData[j].Date);
+
+      if(meterDate >= startDate && meterDate <= endDate) {
+        var formattedDate = formatDate(meterDate, dateFormat);
+        var i = categories.findIndex(n => n == formattedDate);
+        var value = meterData[j].Value;
+
+        if(!value && !summedMeterSeries.value[i]){
+          summedMeterSeries.value[i] = null;
+        }
+        else if(value && !summedMeterSeries.value[i]) {
+          summedMeterSeries.value[i] = value;
+        }
+        else if(value && summedMeterSeries.value[i]) {
+          summedMeterSeries.value[i] += value;
+        }  
+        
+        if(!meterDatesApplied.includes(formattedDate)) {
+          meterDatesApplied.push(formattedDate);
+
+          if(summedMeterSeries.count[i]) {
+            summedMeterSeries.count[i] += 1;
+          }
+          else {
+            summedMeterSeries.count[i] = 1;
+          }
+        }
+      }          					     
+    }
+  } 
+
+  return summedMeterSeries;
+}
+
+function finaliseData(summedMeterSeries, seriesName) {
+  var finalSeries = [];
+  var noGroupradio = document.getElementById('groupingOption2GroupingOptionSelectorradio');
+
+  if(noGroupradio.checked) {
+    var series = {
+      name: seriesName,
+      data: summedMeterSeries.value
+    };
+
+    return series;
+  }
+  else {
+    var sumcheckbox = document.getElementById('sumGroupingOption1CostGroupingOptionSelectorcheckbox');
+    if(sumcheckbox.checked) {
+      var series = {
+        name: seriesName + ' - Sum',
+        data: summedMeterSeries.value
+      };
+  
+      finalSeries.push(series);
+    }
+
+    var averagecheckbox = document.getElementById('averageGroupingOption1CostGroupingOptionSelectorcheckbox');
+    if(averagecheckbox.checked) {
+      var series = {
+        name: seriesName + ' - Average',
+        data: []
+      };
+  
+      for(var i = 0; i < summedMeterSeries.value.length; i++) {
+        series.data.push(summedMeterSeries.value[i]/summedMeterSeries.count[i]);
+      }
+  
+      finalSeries.push(series);
+    }
+  }
+
+  var temp = [...finalSeries];
+  return temp;
+}
+
+function getDisplayType() {
+  var div = document.getElementById('displayTree');
+  var inputs = div.getElementsByTagName('input');
+  var checkedElements = getCheckedElements(inputs);
+  var baseDisplayRadio = null;
+
+  for(var i = 0; i < checkedElements.length; i++) {
+    if(checkedElements[i].getAttribute('branch') == 'displaySelector') {
+      baseDisplayRadio = checkedElements[i];
+      break;
+    }
+  }
+
+  switch(baseDisplayRadio.id) {
+    case 'rateDisplaySelectorradio':
+      return 'Rate';
+    case 'costDisplaySelectorradio':
+      return 'Cost';
+    default:
+      for(var i = 0; i < checkedElements.length; i++) {
+        if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
+          if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorcheckbox') {
+            return 'Usage';
+          }
+          else {
+            return 'Capacity';
+          }
+        }
+      }
+  }
+}
+
+function getChartOptions(categories, displayType, xAxisType) {
+  return {
+    chart: {
+        type: getChartTypeFromCategoryCount(categories.length),
+    },
+    yaxis: [{
+      title: {
+        text: getChartYAxisTitle(displayType)
+      },
+      forceNiceScale: true,
+      labels: {
+        formatter: function(val) {
+          return getYAxisLabelFormat(displayType, val);
+        }
+      }
+    }],
+    xaxis: {
+        type: xAxisType,
+        min: categories[0],
+        max: categories[categories.length - 1],
+        categories: categories
+    }
+  };
+}
+
+function getChartTypeFromCategoryCount(categoryCount) {
+  return categoryCount == 1 ? 'bar' : 'line';
+}
+
+function getChartYAxisTitle(displayType) {
+  switch(displayType) {
+    case 'Usage':
+      return 'kWh';
+    case 'Capacity':
+      return 'kVa';
+    case 'Rate':
+      return 'p/kWh';
+    default:
+      return '£';
+  }
+}
+
+function getYAxisLabelFormat(displayType, val) {
+  switch(displayType) {
+    case 'Usage':
+    case 'Capacity':
+    case 'Rate':
+      return val.toLocaleString(); 
+    default:
+      return '£' + val.toLocaleString();
+  }
+}
+
+function getXAxisTypeFromTimeSpan() {
+  var timePeriodOptionsDisplayTimeSpan = document.getElementById('timePeriodOptionsDisplayTimeSpan');
+  switch(timePeriodOptionsDisplayTimeSpan.children[6].innerHTML) {
+    case 'Half Hourly':
+      return 'datetime';
+    default:
+      return 'category';
+  }
+}
+
+function refreshChart(newSeries, displayType, chartOptions) {
+  var options = {
+    chart: {
+        height: '100%',
+        width: '100%',
+      type: chartOptions.chart.type,
+      zoom: {
+        type: 'x',
+        enabled: true,
+        autoScaleYaxis: true
+      },
+      animations: {
+        enabled: true,
+        easing: 'easeout',
+        speed: 800,
+        animateGradually: {
+            enabled: true,
+            delay: 150
+        },
+        dynamicAnimation: {
+            enabled: true,
+            speed: 350
+        }
+      },
+      toolbar: {
+        autoSelected: 'zoom',
+        tools: {
+          download: false
+        }
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
+    legend: {
+      show: true,
+      showForSingleSeries: true,
+      showForNullSeries: true,
+      showForZeroSeries: true,
+      position: 'right',
+      onItemClick: {
+        toggleDataSeries: true
+      },
+      width: 200,
+      offsetY: 25,
+      formatter: function(seriesName) {
+        return getLegendFormat(displayType, seriesName);
+      }
+    },
+    series: newSeries,
+    yaxis: chartOptions.yaxis,
+    xaxis: chartOptions.xaxis
+  };  
+
+  renderChart(options);
+}
+
+function getLegendFormat(displayType, seriesName) {
+  switch(displayType) {
+    case 'Usage':
+    case 'Cost':
+    case 'Capacity':
+      return seriesName + '<br><br>';
+    default:
+      return seriesName;
+  }
+}
+
+function renderChart(options) {
+  var chart = new ApexCharts(document.querySelector('#chart'), options);
+  chart.render();
+}
+
+function updateDataGrid(chartSeries, categories) {
+  var datagrid = document.getElementById('datagrid');
+  var data = getDisplayData(chartSeries, categories);
+  var columns = getColumns(chartSeries, datagrid);
+
+  clearElement(datagrid);
+  
+  var options = {
+		pagination:50,
+		allowInsertRow: false,
+		allowManualInsertRow: false,
+		allowInsertColumn: false,
+		allowManualInsertColumn: false,
+		allowDeleteRow: false,
+		allowDeleteColumn: false,
+		allowRenameColumn: false,
+		wordWrap: true,
+		data: data,
+		columns: columns,
+  };
+
+	jexcel(datagrid, options); 
+}
+
+function getDisplayData(chartSeries, categories) {
+	var data = [];
+  var categoryLength = categories.length;
+
+  for(var i = 0; i < categoryLength; i++) {
+    var row = {
+      period: categories[i]
+    };
+
+    for(var j = 0; j < chartSeries.length; j++) {
+      row[convertChartSeriesNameToColumnName(chartSeries[j]["name"])] = (chartSeries[j]["data"][i] ?? 0).toLocaleString();
+    }
+    data.push(row);
+  }
+
+  return data;
+}
+
+function getColumns(chartSeries, datagrid) {
+  var divWidth = document.getElementById('dataHeaderList').clientWidth;
+  var periodWidth = Math.floor(document.getElementById('dataHeaderList').clientWidth/15);
+  var divWidthMinusPeriodColumnWidth = divWidth - periodWidth - 55;
+  var totalColumnWidth = 0;
+  var columns = [{type:'text', 
+    width:periodWidth, 
+    name:'period', 
+    title:'Period', 
+    readOnly: true},
+  ];
+
+  for(var i = 0; i < chartSeries.length; i++) {
+    var columnTitle = convertChartSeriesNameToColumnTitle(chartSeries[i]["name"]);
+    var columnWidth = calculateColumnTitleWidth(columnTitle, datagrid);
+    totalColumnWidth += columnWidth;
+
+    var column = {type:'text', 
+      width:columnWidth, 
+      name:convertChartSeriesNameToColumnName(chartSeries[i]["name"]), 
+      title:columnTitle, 
+      readOnly:true,
+    };
+    columns.push(column);
+  }
+
+  if(totalColumnWidth < divWidthMinusPeriodColumnWidth) {
+    var multiplier = (Math.floor((divWidthMinusPeriodColumnWidth / totalColumnWidth)*10)/10);
+
+    for(var i = 1; i < columns.length; i++) {
+      var currentColumnWidth = columns[i].width;
+      var newColumnWidth = currentColumnWidth * multiplier;
+      columns[i].width = newColumnWidth;
+    }
+  }
+
+  return columns;
+}
+
+function calculateColumnTitleWidth(columnTitle, datagrid) {
+  var div = document.createElement('span');
+  div.innerHTML = columnTitle;
+  div.setAttribute('style', 'position: absolute; visibility: hidden; height: auto; width: auto; white-space: nowrap;');
+  datagrid.appendChild(div);
+  return div.clientWidth*2;
+}
+
+function convertChartSeriesNameToColumnName(chartSeriesName) {
+  return chartSeriesName.split(' ').join('');
+}
+
+function convertChartSeriesNameToColumnTitle(chartSeriesName) {
+  return chartSeriesName.split(' - ').join('<br>');
+}
+
+function recurseSelection(callingElement) {
+  var isRecursive = document.getElementById('recuseSelectionCheckboxcheckbox').checked;
+
+  if(isRecursive) {
+    var isChecked = callingElement.checked;
+    var inputs = callingElement.parentElement.getElementsByTagName('input');
+
+    for(var i = 0; i < inputs.length; i++) {
+      inputs[i].checked = isChecked
     }
   }
 }

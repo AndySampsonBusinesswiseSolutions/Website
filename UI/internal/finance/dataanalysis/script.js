@@ -63,9 +63,13 @@
           return '';
         },
         onEnd: function() {
-          updateCharts();
+          updateChart();
         } 
       }
+    };
+
+    $scope.makeTimePeriodOptionsTimeSpanMonthly = function () {
+      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
     };
 
     $scope.timePeriodOptionsDisplayDateRange = {
@@ -86,7 +90,7 @@
           return '';
         },
         onEnd: function() {
-          updateCharts();
+          updateChart();
         } 
       }
     };
@@ -131,10 +135,5 @@
         } 
       }
     };
-
-    $scope.makeTimePeriodOptionsTimeSpanMonthly = function () {
-      $scope.timePeriodOptionsTimeSpan.value = timeSpans[2];
-  };
-
   });
 })();

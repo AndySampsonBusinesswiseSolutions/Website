@@ -4,7 +4,7 @@
 .dashboard{
   background-color: #e9eaee;
 }
-.tree-div, .chart {
+.tree-div, .chart, .datagrid {
   background-color: #e9eaee;
   max-height: 650px;
 }

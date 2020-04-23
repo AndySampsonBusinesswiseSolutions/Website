@@ -30,14 +30,14 @@
                             <li style="padding-right: 25px;"><a href="/Internal/Dashboard/"><i class="fas fa-home" title="Dashboard"></i></a></li>
                             <li style="padding-right: 25px;"><a href="#"><i class="fas fa-coins"></i><span class="fusion-caret"></span><span>Finance</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
-                                    <li class="submenu-item"><a href="/Internal/Finance/BillValidation/"><span>Bill Validation</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/Finance/DataAnalysis/"><span>Eagle Eye<i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i></span></a></li>    
                                     <li class="submenu-item"><a href="/Internal/Finance/BudgetManagement/"><span>Budget Management</span></a></li>
-                                    <li class="submenu-item"><a href="/Internal/Finance/Commissions/"><span>Commissions</span></a></li>
-                                    <li class="submenu-item"><a href="/Internal/Finance/DataAnalysis/"><span>Eagle Eye <i class="far fa-copyright"></i></span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/Finance/BillValidation/"><span>Invoice Management</span></a></li>
+                                    <li class="submenu-item"><a href="/Internal/Finance/Commissions/"><span>Revenue Management</span></a></li>                                    
                                     <!-- <li class="submenu-item"><a href="/Internal/Finance/VarianceAnalysis/"><span>Variance Analysis</span></a></li> -->
                                 </ul>
                             </li>
-                            <li style="padding-right: 25px;"><a href="#"><i class="fas fa-cog"></i><span class="fusion-caret"></span><span>Energy Efficiency</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
+                            <li style="padding-right: 25px;"><a href="#"><i class="fas fa-cog"></i><span class="fusion-caret"></span><span>Energy Opportunities</span><span class="fusion-caret"><i class="fas fa-chevron-down"></i></span></a>
                                 <ul class="sub-menu">
                                     <li class="submenu-item"><a href="/Internal/EnergyEfficiency/OpportunitiesDashboard/"><span>Opportunities Dashboard</span></a></li>
                                     <li class="submenu-item"><a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/"><span>Pending & Active Opportunities</span></a></li>
