@@ -60,7 +60,7 @@
 	<div class="final-column">
 		<div class="dashboard roundborder" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
-				<span>Chart</span>
+				<span id="chartHeaderSpan">Usage Chart</span>
 				<div id="chartHeader" class="far fa-plus-square expander show-pointer"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Chart To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Chart"></div>
@@ -91,8 +91,10 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
 <script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
-<script type="text/javascript" src="dataanalysis.json"></script>
 <script type="text/javascript" src="dataanalysis.js"></script>
+
+<script type="text/javascript" src="usage.json"></script>
+<script type="text/javascript" src="cost.json"></script>
 
 <script type="text/javascript"> 
 	pageLoad();

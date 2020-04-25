@@ -173,7 +173,7 @@ function createTrees() {
   createCommodityTree();
   createDisplayTree();
   createBudgetTree();
-  createSiteTree(sites, "updatePage()");
+  createSiteTree(usageSites, "updatePage()");
   createInvoiceTree();
   createGroupingOptionTree();
   createTimePeriodTree();
@@ -332,7 +332,7 @@ function createBudgetTree() {
   div.appendChild(ul);
 }
 
-function createSiteTree(sites, functions) {
+function createSiteTree(usageSites, functions) {
   var div = document.getElementById('siteTree');
   var inputs = div.getElementsByTagName('input');
   var checkboxes = getCheckedElements(inputs);
@@ -378,7 +378,7 @@ function createSiteTree(sites, functions) {
   recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
   recurseSelectionListItem.appendChild(recurseSelectionSpan);
 
-  buildSiteBranch(sites, getCommodityOption(), ul, functions);  
+  buildSiteBranch(usageSites, getCommodityOption(), ul, functions);  
 
   div.appendChild(headerDiv);
   div.appendChild(ul);
@@ -427,17 +427,17 @@ function createInvoiceTree() {
   var breakDisplayListItem = document.createElement('li');
   breakDisplayListItem.innerHTML = '<br>';
 
-  var showVarianceInvoiceListItem = document.createElement('li');
-  showVarianceInvoiceListItem.classList.add('format-listitem');
-  showVarianceInvoiceListItem.classList.add('topListItem');
-
-  var showVarianceCheckbox = createBranchCheckbox('showVarianceCheckbox', 'updatePage()', 'showVariance', 'checkbox', 'showVariance', false);
-  var showVarianceSpan = createBranchSpan('showVarianceSpan', 'Show Invoice Variances?');
-  showVarianceInvoiceListItem.appendChild(showVarianceCheckbox);
-  showVarianceInvoiceListItem.appendChild(showVarianceSpan);
-
   ul.appendChild(breakDisplayListItem);
+
+  var showVarianceInvoiceListItem = appendListItemChildren('showInvoiceVariancesSelector', true, '', [{"Name" : "Show Invoice Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
   ul.appendChild(showVarianceInvoiceListItem);
+
+  var showVarianceInvoiceListUl = showVarianceInvoiceListItem.getElementsByTagName('ul')[0];
+  var showBudgetVarianceInvoiceVariancesListItem = appendListItemChildren('showBudgetVarianceInvoiceVariancesSelector', false, 'updatePage()', [{"Name" : "Show Budget Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
+  var showForecastVarianceInvoiceVariancesListItem = appendListItemChildren('showForecastVarianceInvoiceVariancesSelector', false, 'updatePage()', [{"Name" : "Show Forecast Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
+
+  showVarianceInvoiceListUl.appendChild(showBudgetVarianceInvoiceVariancesListItem);
+  showVarianceInvoiceListUl.appendChild(showForecastVarianceInvoiceVariancesListItem);
 
   div.appendChild(headerDiv);
   div.appendChild(ul);
@@ -539,11 +539,11 @@ function createHeaderDiv(id, headerText) {
 }
 
 //build site
-function buildSiteBranch(sites, commodityOption, elementToAppendTo, functions) {
-  var siteLength = sites.length;
+function buildSiteBranch(usageSites, commodityOption, elementToAppendTo, functions) {
+  var siteLength = usageSites.length;
 
   for(var siteCount = 0; siteCount < siteLength; siteCount++) {
-    var site = sites[siteCount];
+    var site = usageSites[siteCount];
 
     if(!commodityMatch(site, commodityOption)) {
       continue;
@@ -818,11 +818,14 @@ function updatePage(callingElement) {
   var branch = callingElement.getAttribute('branch');
   
   switch(branch) {
+    case 'displaySelector':
+      updateChartHeader(callingElement);
+      break;
     case 'invoiceSelector':
       updatePageFromInvoice(callingElement);
       break;
     case 'commoditySelector':
-      createSiteTree(sites, "updatePage()"); 
+      createSiteTree(usageSites, "updatePage()"); 
       addExpanderOnClickEvents();
       break;
     case 'groupingOptionSelector':
@@ -842,6 +845,13 @@ function updatePage(callingElement) {
   }
 
   updateChart();
+}
+
+function updateChartHeader(callingElement) {
+  var span = document.getElementById(callingElement.id.replace('radio', 'span'));
+  var chartHeader = document.getElementById("chartHeaderSpan");
+
+  chartHeader.innerText = span.innerText + ' Chart';
 }
 
 function updatePageFromInvoice(callingElement) {
@@ -930,13 +940,13 @@ function getMeters(checkboxes, commodityOption) {
       var seriesName = '';
 
       if(lastRecord.includes('Site')) {
-        var site = sites[parseInt(lastRecord.replace('Site', ''))];
+        var site = usageSites[parseInt(lastRecord.replace('Site', ''))];
         meters = getMetersBySite(site, commodities[j]);
         branch = 'Site';
         seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + commodities[j];
       }
       else if(lastRecord.includes('SubArea')) {
-        var site = sites[parseInt(hierarchy[hierarchy.length - 5].replace('Site', ''))];
+        var site = usageSites[parseInt(hierarchy[hierarchy.length - 5].replace('Site', ''))];
         var area = site.Areas[parseInt(hierarchy[hierarchy.length - 4].replace('Area', ''))];
         var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 3].replace('Commodity', ''))];
         var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 2].replace('Meter', ''))];
@@ -946,14 +956,14 @@ function getMeters(checkboxes, commodityOption) {
         seriesName = getAttribute(meter.Attributes, 'Name') + ' - ' + getAttribute(subArea.Attributes, 'Name');
       }
       else if(lastRecord.includes('Area')) {
-        var site = sites[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
+        var site = usageSites[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
         var area = site.Areas[parseInt(lastRecord.replace('Area', ''))];
         meters = getMetersByArea(area, commodities[j]);
         branch = 'Area';
         seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + getAttribute(area.Attributes, 'Name') + ' - ' + commodities[j];
       }
       else if(lastRecord.includes('SubMeter')) {
-        var site = sites[parseInt(hierarchy[hierarchy.length - 7].replace('Site', ''))];
+        var site = usageSites[parseInt(hierarchy[hierarchy.length - 7].replace('Site', ''))];
         var area = site.Areas[parseInt(hierarchy[hierarchy.length - 6].replace('Area', ''))];
         var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 5].replace('Commodity', ''))];
         var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 4].replace('Meter', ''))];
@@ -971,7 +981,7 @@ function getMeters(checkboxes, commodityOption) {
         }
       }
       else if(lastRecord.includes('Meter')) {
-        var site = sites[parseInt(hierarchy[hierarchy.length - 4].replace('Site', ''))];
+        var site = usageSites[parseInt(hierarchy[hierarchy.length - 4].replace('Site', ''))];
         var area = site.Areas[parseInt(hierarchy[hierarchy.length - 3].replace('Area', ''))];
         var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 2].replace('Commodity', ''))];
         var meter = commodity.Meters[parseInt(lastRecord.replace('Meter', ''))];
@@ -983,7 +993,7 @@ function getMeters(checkboxes, commodityOption) {
         }
       }
       else if(lastRecord.includes('Asset')) {
-        var site = sites[parseInt(hierarchy[hierarchy.length - 6].replace('Site', ''))];
+        var site = usageSites[parseInt(hierarchy[hierarchy.length - 6].replace('Site', ''))];
         var area = site.Areas[parseInt(hierarchy[hierarchy.length - 5].replace('Area', ''))];
         var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 4].replace('Commodity', ''))];
         var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 3].replace('Meter', ''))];
@@ -1345,7 +1355,7 @@ function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, en
   }
 
   var summedMeterSeries = getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate, endDate);
-  return finaliseData(summedMeterSeries, seriesName.concat(' - ').concat(showBy));
+  return finaliseData(summedMeterSeries, seriesName);
 }
 
 function getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate, endDate) {
