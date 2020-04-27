@@ -239,7 +239,7 @@ function createDisplayListItems(ul) {
 
 function createCostRateDisplayListItems(displayListItem, type) {
   var displaySelectorListUl = displayListItem.getElementsByTagName('ul')[0];
-  var allItemsListItem = appendListItemChildren('all' + type + 'ItemsDisplaySelector', false, 'updatePage()', [{"Name" : "All " + type + " Items"}], type.toLowerCase() + 'DisplaySelector', true, 'radio', type.toLowerCase() + 'DisplayGroup');
+  var allItemsListItem = appendListItemChildren('all' + type + 'ItemsDisplaySelector', false, 'updatePage()', [{"Name" : "All " + type + " Items"}], type.toLowerCase() + 'DisplaySelector', true, 'checkbox', type.toLowerCase() + 'DisplayGroup');
   var networkItemsListItem = appendListItemChildren('network' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Network"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
   var renewablesItemsListItem = appendListItemChildren('renewables' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Renewables"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
   var balancingItemsListItem = appendListItemChildren('balancing' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Balancing"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
@@ -831,6 +831,8 @@ function updatePage(callingElement) {
       break;
     case 'groupingOptionSelector':
     case 'groupingOption1GroupingOptionSelector':
+    case 'costDisplaySelector':
+    case 'rateDisplaySelector':
       break;
     case 'Site':
     case 'Area':
@@ -1036,6 +1038,10 @@ function getMeters(showByArray, checkboxes, commodityOption) {
 
         for(var m = 0; m < meters.length; m++) {
           var meterData = meters[m][showByArray[s]];
+
+          if(showByArray[s] == "MaxDemand") {
+            meterData = meters[m]["Capacity"];
+          }
   
           if(meterData) {
             tempMeterMeters.push(meters[m]);
@@ -1186,8 +1192,8 @@ function determineShowByArray() {
   }
 
   var showByArray = [];
-  if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
-    for(var i = 0; i < checkedElements.length; i++) {
+  for(var i = 0; i < checkedElements.length; i++) {
+    if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
       if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
         if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorradio') {
           showByArray = ['Usage']
@@ -1197,10 +1203,30 @@ function determineShowByArray() {
         }
       }
     }
-  }
-  else {
-    showByArray = ['Cost'];
-  }
+    else {
+      if(checkedElements[i].getAttribute('branch') == 'costDisplaySelector') {
+        switch(checkedElements[i].id) {
+          case 'allCostItemsDisplaySelectorcheckbox':
+            showByArray.push('Cost');
+            break;
+          case 'networkCostItemsDisplaySelectorcheckbox':
+            showByArray.push('Wholesale Cost');
+            showByArray.push('Distribution Cost');
+            showByArray.push('Transmission Cost');
+            break;
+          case 'wholesaleCostNetworkItemsDisplaySelectorcheckbox':
+            showByArray.push('Wholesale Cost');
+            break;
+          case 'distributionCostNetworkItemsDisplaySelectorcheckbox':
+            showByArray.push('Transmission Cost');
+            break;
+          case 'transmissionCostNetworkItemsDisplaySelectorcheckbox':
+            showByArray.push('Transmission Cost');
+            break;
+        }
+      }
+    }
+  }  
   
   return showByArray;
 }
@@ -1371,7 +1397,7 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
 
     for(var j = 0; j < meters.length; j++) {
       if(meters[j].ShowBy == showByArray[i]) {
-        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 0);
+        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 1);
 
         if(series.length) {
           newSeries.push(...series);
@@ -1390,7 +1416,7 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
       if(newSeries[i].name.includes('Cost')) {
         for(var j = 0; j < newSeries.length; j++) {
           if(newSeries[j].name.includes('Usage')
-          && newSeries[j].name.replace('Usage', 'Cost') == newSeries[i].name) {
+          && compareUsageNameToCostName(newSeries[j].name, newSeries[i].name)) {
             for(var k = 0; k < newSeries[j].data.length; k++) {
               if(newSeries[i].data[k]) {
                 newSeries[j].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
@@ -1401,7 +1427,7 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
             }
 
             var series = {
-              name: newSeries[j].name.replace('Usage', 'Rate'),
+              name: newSeries[j].name.replace(' - Usage', ''),
               data: newSeries[j].data
             }
 
@@ -1415,6 +1441,15 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
   }
 
   return newSeries;
+}
+
+function compareUsageNameToCostName(usageName, costName) {
+  usageName = usageName.replace(' - Usage', '');
+
+  var lastIndex = costName.lastIndexOf(' - ');
+  var baseCostName = costName.substr(0, lastIndex);
+
+  return usageName == baseCostName;
 }
 
 function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, endDate, seriesName, appendShowByToSeriesName) {
@@ -1690,14 +1725,7 @@ function refreshChart(newSeries, displayType, chartOptions) {
 }
 
 function getLegendFormat(displayType, seriesName) {
-  switch(displayType) {
-    case 'Usage':
-    case 'Cost':
-    case 'Capacity':
-      return seriesName + '<br><br>';
-    default:
-      return seriesName;
-  }
+  return seriesName + '<br><br>';
 }
 
 function renderChart(options) {
