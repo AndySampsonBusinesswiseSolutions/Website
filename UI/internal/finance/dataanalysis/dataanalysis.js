@@ -129,21 +129,19 @@ function hasClass(elem, className) {
 }
 
 function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
+	var expanders = document.getElementsByClassName('expander');
 	var expandersLength = expanders.length;
 	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
+    addExpanderOnClickEventsByElement(expanders[i]);
   }
 }
 
 function addExpanderOnClickEventsByElement(element) {
-  element.setAttribute('click', null);
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square');
-    updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '');
-    setupSidebar(event);
-    setupSidebarHeight();
-	});
+  element.setAttribute('onclick',
+    "updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square'); " +
+    "updateClassOnClick(this.id.concat('List'), 'listitem-hidden', ''); " +
+    "setupSidebar(event); " +
+    "setupSidebarHeight();");
 }
 
 function setOpenExpanders() {
@@ -303,9 +301,9 @@ function createBalancingDisplayListItems(balancingItemsListItem, type) {
 
 function createOtherDisplayListItems(otherItemsListItem, type) {
   var otherDisplaySelectorListUl = otherItemsListItem.getElementsByTagName('ul')[0];
-  var otherNetworkItemsListItem = appendListItemChildren('other' + type + 'NetworkItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Other"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  var sundryOtherItemsListItem = appendListItemChildren('sundry' + type + 'OtherItemsDisplaySelector', false, 'updatePage()', [{"Name" : "Sundry"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
 
-  otherDisplaySelectorListUl.appendChild(otherNetworkItemsListItem);
+  otherDisplaySelectorListUl.appendChild(sundryOtherItemsListItem);
 }
 
 function createBudgetTree() {
@@ -381,9 +379,9 @@ function createSiteTree(usageSites, functions) {
   buildSiteBranch(usageSites, getCommodityOption(), ul, functions);  
 
   div.appendChild(headerDiv);
+  ul.appendChild(breakDisplayListItem);
+  ul.appendChild(recurseSelectionListItem);
   div.appendChild(ul);
-  div.appendChild(breakDisplayListItem);
-  div.appendChild(recurseSelectionListItem);
 
   for(var i = 0; i < checkboxIds.length; i++) {
     var checkbox = document.getElementById(checkboxIds[i]);
@@ -816,6 +814,7 @@ function getBranchCheckboxes(inputs, branch) {
 
 function updatePage(callingElement) {
   var branch = callingElement.getAttribute('branch');
+  var refreshChart = true;
   
   switch(branch) {
     case 'displaySelector':
@@ -831,8 +830,11 @@ function updatePage(callingElement) {
       break;
     case 'groupingOptionSelector':
     case 'groupingOption1GroupingOptionSelector':
+      break;
     case 'costDisplaySelector':
     case 'rateDisplaySelector':
+      var displayBranchElement = document.getElementById(branch + 'radio');
+      refreshChart = displayBranchElement.checked;
       break;
     case 'Site':
     case 'Area':
@@ -844,10 +846,13 @@ function updatePage(callingElement) {
       break;
     default:
       alert(branch);
+      refreshChart = false;
       break;
   }
 
-  updateChart();
+  if (refreshChart) {
+    updateChart();
+  }
 }
 
 function updateChartHeader(callingElement) {
@@ -952,6 +957,39 @@ function getMeters(showByArray, checkboxes, commodityOption) {
       case "Capacity":
       case "MaxDemand":
         data = capacitySites;
+        break;
+      case 'Cost - Wholesale':
+        data = wholesaleCostSites;
+        break;
+      case 'Cost - Distribution':
+        data = distributionCostSites;
+        break;
+      case 'Cost - Transmission':
+        data = transmissionCostSites;
+        break;
+      case 'Cost - Renewables Obligation':
+        data = renewablesobligationCostSites;
+        break;
+      case 'Cost - Feed In Tariff':
+        data = feedintariffCostSites;
+        break;
+      case 'Cost - Contracts For Difference':
+        data = contractsfordifferenceCostSites;
+        break;
+      case 'Cost - Energy Intensive Industry':
+        data = energyintensiveindustrieyCostSites;
+        break;
+      case 'Cost - Capacity Markets':
+        data = capacitymarketCostSites;
+        break;
+      case 'Cost - Balancing System Use Of System':
+        data = balancingsystemuseofsystemCostSites;
+        break;
+      case 'Cost - Residual Cashflow Reallocation Cashflow':
+        data = residualcashflowreallocationcashflowCostSites;
+        break;
+      case 'Cost - Sundry':
+        data = sundryCostSites;
         break;
       default:
         data = usageSites;
@@ -1187,10 +1225,6 @@ function determineShowByArray() {
     }
   }
 
-  if(baseDisplayRadio.id == 'rateDisplaySelectorradio') {
-    return ['Cost', 'Usage'];
-  }
-
   var showByArray = [];
   for(var i = 0; i < checkedElements.length; i++) {
     if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
@@ -1204,24 +1238,70 @@ function determineShowByArray() {
       }
     }
     else {
-      if(checkedElements[i].getAttribute('branch') == 'costDisplaySelector') {
-        switch(checkedElements[i].id) {
-          case 'allCostItemsDisplaySelectorcheckbox':
-            showByArray.push('Cost');
+      if(checkedElements[i].getAttribute('branch').concat('radio') == baseDisplayRadio.id) {
+        var branch = '';
+
+        if(baseDisplayRadio.id == 'rateDisplaySelectorradio') {
+          branch = 'Rate';
+          pushToArray('Usage', showByArray);
+        }
+        else {
+          branch = 'Cost';
+        }
+
+        switch(checkedElements[i].id.replace(branch, '')) {
+          case 'allItemsDisplaySelectorcheckbox':
+            pushToArray('Cost', showByArray);
             break;
-          case 'networkCostItemsDisplaySelectorcheckbox':
-            showByArray.push('Wholesale Cost');
-            showByArray.push('Distribution Cost');
-            showByArray.push('Transmission Cost');
+          case 'networkItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Wholesale', showByArray);
+            pushToArray('Cost - Distribution', showByArray);
+            pushToArray('Cost - Transmission', showByArray);
             break;
-          case 'wholesaleCostNetworkItemsDisplaySelectorcheckbox':
-            showByArray.push('Wholesale Cost');
+          case 'wholesaleNetworkItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Wholesale', showByArray);
             break;
-          case 'distributionCostNetworkItemsDisplaySelectorcheckbox':
-            showByArray.push('Transmission Cost');
+          case 'distributionNetworkItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Distribution', showByArray);
             break;
-          case 'transmissionCostNetworkItemsDisplaySelectorcheckbox':
-            showByArray.push('Transmission Cost');
+          case 'transmissionNetworkItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Transmission', showByArray);
+            break;
+          case 'renewablesItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Renewables Obligation', showByArray);
+            pushToArray('Cost - Feed In Tariff', showByArray);
+            pushToArray('Cost - Contracts For Difference', showByArray);
+            pushToArray('Cost - Energy Intensive Industry', showByArray);
+            pushToArray('Cost - Capacity Markets', showByArray);
+            break;
+          case 'renewablesObligationRenewablesItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Renewables Obligation', showByArray);
+            break;
+          case 'feedInTariffRenewablesItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Feed In Tariff', showByArray);
+            break;
+          case 'contractsForDifferenceRenewablesItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Contracts For Difference', showByArray);
+            break;
+          case 'energyIntensiveIndustryRenewablesItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Energy Intensive Industry', showByArray);
+            break;
+          case 'capacityMarketRenewablesItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Capacity Markets', showByArray);
+            break;
+          case 'balancingItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Balancing System Use Of System', showByArray);
+            pushToArray('Cost - Residual Cashflow Reallocation Cashflow', showByArray);
+            break;
+          case 'bsuosBalancingItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Balancing System Use Of System', showByArray);
+            break;
+          case 'rcrcBalancingItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Residual Cashflow Reallocation Cashflow', showByArray);
+            break;
+          case 'otherItemsDisplaySelectorcheckbox':
+          case 'sundryOtherItemsDisplaySelectorcheckbox':
+            pushToArray('Cost - Sundry', showByArray);
             break;
         }
       }
@@ -1229,6 +1309,12 @@ function determineShowByArray() {
   }  
   
   return showByArray;
+}
+
+function pushToArray(value, array) {
+  if(!array.includes(value)) {
+    array.push(value);
+  }
 }
 
 function getStartDate() {
@@ -1419,19 +1505,20 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
           && compareUsageNameToCostName(newSeries[j].name, newSeries[i].name)) {
             for(var k = 0; k < newSeries[j].data.length; k++) {
               if(newSeries[i].data[k]) {
-                newSeries[j].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
+                newSeries[i].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
               }
               else {
-                newSeries[j].data[k] = 0;
+                newSeries[i].data[k] = 0;
               }
             }
 
             var series = {
-              name: newSeries[j].name.replace(' - Usage', ''),
-              data: newSeries[j].data
+              name: newSeries[i].name.replace(' - Cost', ''),
+              data: newSeries[i].data
             }
 
             rateSeries.push(series);
+            break;
           }
         }
       }
@@ -1444,12 +1531,10 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
 }
 
 function compareUsageNameToCostName(usageName, costName) {
-  usageName = usageName.replace(' - Usage', '');
+  var index = usageName.indexOf(' - Usage');
+  usageName = usageName.substr(0, index);
 
-  var lastIndex = costName.lastIndexOf(' - ');
-  var baseCostName = costName.substr(0, lastIndex);
-
-  return usageName == baseCostName;
+  return costName.includes(usageName);
 }
 
 function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, endDate, seriesName, appendShowByToSeriesName) {
@@ -1668,6 +1753,10 @@ function getXAxisTypeFromTimeSpan() {
 }
 
 function refreshChart(newSeries, displayType, chartOptions) {
+  for(var i = 0; i < newSeries.length; i++) {
+    newSeries[i].name = newSeries[i].name.replace(' - Usage', '').replace(' - Rate', '').replace(' - Cost', '');
+  }
+
   var options = {
     chart: {
         height: '100%',

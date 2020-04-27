@@ -97,6 +97,18 @@
 <script type="text/javascript" src="cost.json"></script>
 <script type="text/javascript" src="capacity.json"></script>
 
+<script type="text/javascript" src="wholesale.json"></script>
+<script type="text/javascript" src="distribution.json"></script>
+<script type="text/javascript" src="transmission.json"></script>
+<script type="text/javascript" src="renewables obligation.json"></script>
+<script type="text/javascript" src="feed in tariff.json"></script>
+<script type="text/javascript" src="contracts for difference.json"></script>
+<script type="text/javascript" src="energy intensive industriey.json"></script>
+<script type="text/javascript" src="capacity market.json"></script>
+<script type="text/javascript" src="balancing system use of system.json"></script>
+<script type="text/javascript" src="residual cashflow reallocation cashflow.json"></script>
+<script type="text/javascript" src="sundry.json"></script>
+
 <script type="text/javascript"> 
 	pageLoad();
 </script>
