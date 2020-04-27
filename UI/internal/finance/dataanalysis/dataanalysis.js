@@ -259,8 +259,8 @@ function createCostRateDisplayListItems(displayListItem, type) {
 
 function createUsageDisplayListItems(usageDisplayListItem) {
   var usageDisplaySelectorListUl = usageDisplayListItem.getElementsByTagName('ul')[0];
-  var consumptionUsageItemsListItem = appendListItemChildren('consumptionUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Consumption"}], 'usageDisplaySelector', true, 'checkbox', 'usageDisplayGroup');
-  var capacityUsageItemsListItem = appendListItemChildren('capacityUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity"}], 'usageDisplaySelector', false, 'checkbox', 'usageDisplayGroup');
+  var consumptionUsageItemsListItem = appendListItemChildren('consumptionUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Consumption"}], 'usageDisplaySelector', true, 'radio', 'usageDisplayGroup');
+  var capacityUsageItemsListItem = appendListItemChildren('capacityUsageItemsUsageDisplaySelector', false, 'updatePage()', [{"Name" : "Capacity"}], 'usageDisplaySelector', false, 'radio', 'usageDisplayGroup');
 
   usageDisplaySelectorListUl.appendChild(consumptionUsageItemsListItem);
   usageDisplaySelectorListUl.appendChild(capacityUsageItemsListItem);
@@ -819,6 +819,7 @@ function updatePage(callingElement) {
   
   switch(branch) {
     case 'displaySelector':
+    case 'usageDisplaySelector':
       updateChartHeader(callingElement);
       break;
     case 'invoiceSelector':
@@ -850,8 +851,17 @@ function updatePage(callingElement) {
 function updateChartHeader(callingElement) {
   var span = document.getElementById(callingElement.id.replace('radio', 'span'));
   var chartHeader = document.getElementById("chartHeaderSpan");
+  var chartHeaderText = '';
 
-  chartHeader.innerText = span.innerText + ' Chart';
+  if(span.innerText == "Usage") {
+    chartHeaderText = document.getElementById('consumptionUsageItemsUsageDisplaySelectorradio').checked 
+      ? 'Usage Chart' : 'Capacity Chart';
+  }
+  else {
+    chartHeaderText = span.innerText + ' Chart';
+  }
+
+  chartHeader.innerText = chartHeaderText;
 }
 
 function updatePageFromInvoice(callingElement) {
@@ -891,7 +901,7 @@ function updateChart() {
     checkboxes = getBranchCheckboxes(inputs, 'Site');
   }
 
-  var meters = getMeters(checkboxes, commodityOption);
+  var meters = getMeters(showByArray, checkboxes, commodityOption);
   chartSeries = getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate);
   var chartOptions = getChartOptions(categories, displayType, getXAxisTypeFromTimeSpan());
 
@@ -915,7 +925,7 @@ function checkTimePeriodOptionsTimeSpan() {
   }
 }
 
-function getMeters(checkboxes, commodityOption) {
+function getMeters(showByArray, checkboxes, commodityOption) {
   var noGroupradio = document.getElementById('groupingOption2GroupingOptionSelectorradio');
   var checkboxLength = checkboxes.length;
   var tempMeters = [];
@@ -930,97 +940,125 @@ function getMeters(checkboxes, commodityOption) {
     commodities.push(commodityOption);
   }
 
-  for(var i = 0; i < checkboxLength; i++) {
-    var hierarchy = checkboxes[i].id.replace('checkbox', '').split('_');
-    var lastRecord = hierarchy[hierarchy.length - 1];
+  var data = null;
 
-    for(var j = 0; j < commodities.length; j++) {
-      var meters = [];
-      var branch = '';
-      var seriesName = '';
-
-      if(lastRecord.includes('Site')) {
-        var site = usageSites[parseInt(lastRecord.replace('Site', ''))];
-        meters = getMetersBySite(site, commodities[j]);
-        branch = 'Site';
-        seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + commodities[j];
-      }
-      else if(lastRecord.includes('SubArea')) {
-        var site = usageSites[parseInt(hierarchy[hierarchy.length - 5].replace('Site', ''))];
-        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 4].replace('Area', ''))];
-        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 3].replace('Commodity', ''))];
-        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 2].replace('Meter', ''))];
-        var subArea = meter.SubAreas[parseInt(lastRecord.replace('SubArea', ''))];
-        meters = getSubMetersBySubArea(subArea, commodities[j]);
-        branch = 'SubArea';
-        seriesName = getAttribute(meter.Attributes, 'Name') + ' - ' + getAttribute(subArea.Attributes, 'Name');
-      }
-      else if(lastRecord.includes('Area')) {
-        var site = usageSites[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
-        var area = site.Areas[parseInt(lastRecord.replace('Area', ''))];
-        meters = getMetersByArea(area, commodities[j]);
-        branch = 'Area';
-        seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + getAttribute(area.Attributes, 'Name') + ' - ' + commodities[j];
-      }
-      else if(lastRecord.includes('SubMeter')) {
-        var site = usageSites[parseInt(hierarchy[hierarchy.length - 7].replace('Site', ''))];
-        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 6].replace('Area', ''))];
-        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 5].replace('Commodity', ''))];
-        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 4].replace('Meter', ''))];
-        var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 3].replace('SubArea', ''))];
-        var asset = subArea.Assets[parseInt(hierarchy[hierarchy.length - 2].replace('Asset', ''))];
-        var subMeter = asset.SubMeters[parseInt(lastRecord.replace('SubMeter', ''))];
-        branch = 'SubMeter';
-        seriesName = getAttribute(meter.Attributes, 'Name')
-           + ' - ' + getAttribute(subArea.Attributes, 'Name')
-           + ' - ' + getAttribute(asset.Attributes, 'Name')
-           + ' - ' + getAttribute(subMeter.Attributes, 'Name');
-
-        if(getAttribute(subMeter.Attributes, 'Commodities').includes(commodities[j])) {
-          meters.push(subMeter);
-        }
-      }
-      else if(lastRecord.includes('Meter')) {
-        var site = usageSites[parseInt(hierarchy[hierarchy.length - 4].replace('Site', ''))];
-        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 3].replace('Area', ''))];
-        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 2].replace('Commodity', ''))];
-        var meter = commodity.Meters[parseInt(lastRecord.replace('Meter', ''))];
-        branch = 'Meter';
-        seriesName = getAttribute(meter.Attributes, 'Name');
-
-        if(getAttribute(meter.Attributes, 'Commodities').includes(commodities[j])) {
-          meters.push(meter);
-        }
-      }
-      else if(lastRecord.includes('Asset')) {
-        var site = usageSites[parseInt(hierarchy[hierarchy.length - 6].replace('Site', ''))];
-        var area = site.Areas[parseInt(hierarchy[hierarchy.length - 5].replace('Area', ''))];
-        var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 4].replace('Commodity', ''))];
-        var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 3].replace('Meter', ''))];
-        var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 2].replace('SubArea', ''))];
-        var asset = subArea.Assets[parseInt(lastRecord.replace('Asset', ''))];
-        meters = getSubMetersByAsset(asset, commodities[j]);
-        branch = 'Asset';
-        seriesName = getAttribute(meter.Attributes, 'Name')
-           + ' - ' + getAttribute(subArea.Attributes, 'Name')
-           + ' - ' + getAttribute(asset.Attributes, 'Name');
-      }
+  for(var s = 0; s < showByArray.length; s++) {
+    switch(showByArray[s]) {
+      case "Cost":
+        data = costSites;
+        break;
+      case "Capacity":
+      case "MaxDemand":
+        data = capacitySites;
+        break;
+      default:
+        data = usageSites;
+        break;
+    }
   
-      if(meters.length > 0) {
-        var tempMeter = {
-          SeriesName: seriesName,
-          Commodity: commodities[j],
-          Branch: branch,
-          Meters: meters
+    for(var i = 0; i < checkboxLength; i++) {
+      var hierarchy = checkboxes[i].id.replace('checkbox', '').split('_');
+      var lastRecord = hierarchy[hierarchy.length - 1];
+
+      for(var j = 0; j < commodities.length; j++) {
+        var meters = [];
+        var branch = '';
+        var seriesName = '';
+
+        if(lastRecord.includes('Site')) {
+          var site = data[parseInt(lastRecord.replace('Site', ''))];
+          meters = getMetersBySite(site, commodities[j]);
+          branch = 'Site';
+          seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + commodities[j];
+        }
+        else if(lastRecord.includes('SubArea')) {
+          var site = data[parseInt(hierarchy[hierarchy.length - 5].replace('Site', ''))];
+          var area = site.Areas[parseInt(hierarchy[hierarchy.length - 4].replace('Area', ''))];
+          var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 3].replace('Commodity', ''))];
+          var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 2].replace('Meter', ''))];
+          var subArea = meter.SubAreas[parseInt(lastRecord.replace('SubArea', ''))];
+          meters = getSubMetersBySubArea(subArea, commodities[j]);
+          branch = 'SubArea';
+          seriesName = getAttribute(meter.Attributes, 'Name') + ' - ' + getAttribute(subArea.Attributes, 'Name');
+        }
+        else if(lastRecord.includes('Area')) {
+          var site = data[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
+          var area = site.Areas[parseInt(lastRecord.replace('Area', ''))];
+          meters = getMetersByArea(area, commodities[j]);
+          branch = 'Area';
+          seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + getAttribute(area.Attributes, 'Name') + ' - ' + commodities[j];
+        }
+        else if(lastRecord.includes('SubMeter')) {
+          var site = data[parseInt(hierarchy[hierarchy.length - 7].replace('Site', ''))];
+          var area = site.Areas[parseInt(hierarchy[hierarchy.length - 6].replace('Area', ''))];
+          var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 5].replace('Commodity', ''))];
+          var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 4].replace('Meter', ''))];
+          var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 3].replace('SubArea', ''))];
+          var asset = subArea.Assets[parseInt(hierarchy[hierarchy.length - 2].replace('Asset', ''))];
+          var subMeter = asset.SubMeters[parseInt(lastRecord.replace('SubMeter', ''))];
+          branch = 'SubMeter';
+          seriesName = getAttribute(meter.Attributes, 'Name')
+            + ' - ' + getAttribute(subArea.Attributes, 'Name')
+            + ' - ' + getAttribute(asset.Attributes, 'Name')
+            + ' - ' + getAttribute(subMeter.Attributes, 'Name');
+
+          if(getAttribute(subMeter.Attributes, 'Commodities').includes(commodities[j])) {
+            meters.push(subMeter);
+          }
+        }
+        else if(lastRecord.includes('Meter')) {
+          var site = data[parseInt(hierarchy[hierarchy.length - 4].replace('Site', ''))];
+          var area = site.Areas[parseInt(hierarchy[hierarchy.length - 3].replace('Area', ''))];
+          var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 2].replace('Commodity', ''))];
+          var meter = commodity.Meters[parseInt(lastRecord.replace('Meter', ''))];
+          branch = 'Meter';
+          seriesName = getAttribute(meter.Attributes, 'Name');
+
+          if(getAttribute(meter.Attributes, 'Commodities').includes(commodities[j])) {
+            meters.push(meter);
+          }
+        }
+        else if(lastRecord.includes('Asset')) {
+          var site = data[parseInt(hierarchy[hierarchy.length - 6].replace('Site', ''))];
+          var area = site.Areas[parseInt(hierarchy[hierarchy.length - 5].replace('Area', ''))];
+          var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 4].replace('Commodity', ''))];
+          var meter = commodity.Meters[parseInt(hierarchy[hierarchy.length - 3].replace('Meter', ''))];
+          var subArea = meter.SubAreas[parseInt(hierarchy[hierarchy.length - 2].replace('SubArea', ''))];
+          var asset = subArea.Assets[parseInt(lastRecord.replace('Asset', ''))];
+          meters = getSubMetersByAsset(asset, commodities[j]);
+          branch = 'Asset';
+          seriesName = getAttribute(meter.Attributes, 'Name')
+            + ' - ' + getAttribute(subArea.Attributes, 'Name')
+            + ' - ' + getAttribute(asset.Attributes, 'Name');
+        }
+
+        var tempMeterMeters = [];
+
+        for(var m = 0; m < meters.length; m++) {
+          var meterData = meters[m][showByArray[s]];
+  
+          if(meterData) {
+            tempMeterMeters.push(meters[m]);
+          }
         }
     
-        tempMeters.push(tempMeter);
+        if(tempMeterMeters.length > 0) {
+          var tempMeter = {
+            SeriesName: seriesName,
+            Commodity: commodities[j],
+            Branch: branch,
+            Meters: tempMeterMeters,
+            ShowBy: showByArray[s]
+          }
+      
+          tempMeters.push(tempMeter);
 
-        if(!branches.includes(branch)) {
-          branches.push(branch);
+          if(!branches.includes(branch)) {
+            branches.push(branch);
+          }
         }
-      }
-    }    
+      }    
+    }
   }
 
   if(noGroupradio.checked) {
@@ -1030,19 +1068,24 @@ function getMeters(checkboxes, commodityOption) {
   var series = [];
   for(var i = 0; i < branches.length; i++) {
     for(var j = 0; j < commodities.length; j++) {
-      var tempMeter = {
-        SeriesName: branches[i] + ' - ' + commodities[j],
-        Meters: []
-      }
-  
-      for(var k = 0; k < tempMeters.length; k++) {
-        if(tempMeters[k].Commodity == commodities[j] && tempMeters[k].Branch == branches[i]) {
-          tempMeter.Meters.push(...tempMeters[k].Meters);
-        }      
-      }
-  
-      if(tempMeter.Meters.length > 0) {
-        series.push(tempMeter);
+      for(var s = 0; s < showByArray.length; s++) {
+        var tempMeter = {
+          SeriesName: branches[i] + ' - ' + commodities[j],
+          Meters: [],
+          ShowBy: showByArray[s]
+        }
+    
+        for(var k = 0; k < tempMeters.length; k++) {
+          if(tempMeters[k].Commodity == commodities[j] 
+            && tempMeters[k].Branch == branches[i]
+            && tempMeters[k].ShowBy == showByArray[s]) {
+            tempMeter.Meters.push(...tempMeters[k].Meters);
+          }      
+        }
+    
+        if(tempMeter.Meters.length > 0) {
+          series.push(tempMeter);
+        }
       }
     }
   }  
@@ -1139,15 +1182,14 @@ function determineShowByArray() {
   }
 
   if(baseDisplayRadio.id == 'rateDisplaySelectorradio') {
-    alert('Determine rate show by array');
-    return ['Usage'];
+    return ['Cost', 'Usage'];
   }
 
   var showByArray = [];
   if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
     for(var i = 0; i < checkedElements.length; i++) {
       if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
-        if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorcheckbox') {
+        if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorradio') {
           showByArray = ['Usage']
         }
         else {
@@ -1160,7 +1202,7 @@ function determineShowByArray() {
     showByArray = ['Cost'];
   }
   
-  return ['Usage'];
+  return showByArray;
 }
 
 function getStartDate() {
@@ -1315,24 +1357,67 @@ function convertMonthIdToQuarter(monthId) {
 function getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate) {
   var newSeries = [];
   var showByLength = showByArray.length;
+  var costDataUsed = false;
+  var usageDataUsed = false;
 
   for(var i = 0; i < showByLength; i++) {
-    for(var j = 0; j < meters.length; j++) {
-      var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName);
+    if(showByArray[i].includes('Cost')) {
+      costDataUsed = true;
+    }
 
-      if(series.length) {
-        newSeries.push(...series);
-      }
-      else {
-        newSeries.push(series);
+    if(showByArray[i] == 'Usage') {
+      usageDataUsed = true;
+    }
+
+    for(var j = 0; j < meters.length; j++) {
+      if(meters[j].ShowBy == showByArray[i]) {
+        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 0);
+
+        if(series.length) {
+          newSeries.push(...series);
+        }
+        else {
+          newSeries.push(series);
+        }
       }
     }    
+  }
+
+  if(costDataUsed && usageDataUsed) {
+    var rateSeries = [];
+
+    for(var i = 0; i < newSeries.length; i++) {
+      if(newSeries[i].name.includes('Cost')) {
+        for(var j = 0; j < newSeries.length; j++) {
+          if(newSeries[j].name.includes('Usage')
+          && newSeries[j].name.replace('Usage', 'Cost') == newSeries[i].name) {
+            for(var k = 0; k < newSeries[j].data.length; k++) {
+              if(newSeries[i].data[k]) {
+                newSeries[j].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
+              }
+              else {
+                newSeries[j].data[k] = 0;
+              }
+            }
+
+            var series = {
+              name: newSeries[j].name.replace('Usage', 'Rate'),
+              data: newSeries[j].data
+            }
+
+            rateSeries.push(series);
+          }
+        }
+      }
+    }
+
+    return rateSeries;
   }
 
   return newSeries;
 }
 
-function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, endDate, seriesName) {
+function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, endDate, seriesName, appendShowByToSeriesName) {
   if(showBy == "MaxDemand") {
     var meterLength = meters.length;
 
@@ -1355,7 +1440,7 @@ function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, en
   }
 
   var summedMeterSeries = getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate, endDate);
-  return finaliseData(summedMeterSeries, seriesName);
+  return finaliseData(summedMeterSeries, seriesName + (appendShowByToSeriesName ? ' - ' + showBy : ''));
 }
 
 function getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate, endDate) {
@@ -1473,7 +1558,7 @@ function getDisplayType() {
     default:
       for(var i = 0; i < checkedElements.length; i++) {
         if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
-          if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorcheckbox') {
+          if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorradio') {
             return 'Usage';
           }
           else {
@@ -1728,4 +1813,14 @@ function recurseSelection(callingElement) {
       inputs[i].checked = isChecked
     }
   }
+}
+
+function preciseRound(num, dec){
+	if ((typeof num !== 'number') || (typeof dec !== 'number')) {
+		return false; 
+	}	
+
+	var num_sign = num >= 0 ? 1 : -1;
+		
+	return Number((Math.round((num*Math.pow(10,dec))+(num_sign*0.0001))/Math.pow(10,dec)).toFixed(dec));
 }

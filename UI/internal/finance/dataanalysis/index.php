@@ -95,6 +95,7 @@
 
 <script type="text/javascript" src="usage.json"></script>
 <script type="text/javascript" src="cost.json"></script>
+<script type="text/javascript" src="capacity.json"></script>
 
 <script type="text/javascript"> 
 	pageLoad();
