@@ -493,6 +493,7 @@ function createTimePeriodTree() {
   ul.classList.add("slider-list");
 
   var dateRangeDisplayListItem = document.createElement('li');
+  var dateRangeDisplayCheckbox = createBranchCheckbox('dateRangeDisplayCheckbox', '', 'dateRangeDisplay', 'checkbox', 'dateRangeDisplay', false);
   var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "Date Range");
   var dateRangeDisplayRZSlider = document.createElement('rzslider');
   dateRangeDisplayRZSlider.id = 'timePeriodOptionsFilterDateRange';
@@ -500,16 +501,19 @@ function createTimePeriodTree() {
   dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsFilterDateRange.maxValue');
   dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsFilterDateRange.options');
 
+  dateRangeDisplayListItem.appendChild(dateRangeDisplayCheckbox);
   dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
   dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
 
   var createdDisplayListItem = document.createElement('li');
+  var createdDisplayCheckbox = createBranchCheckbox('createdDisplayCheckbox', '', 'createdDisplay', 'checkbox', 'createdDisplay', false);
   var createdDisplaySpan = createBranchSpan('createdDisplaySpan', "Created");
   var createdDisplayRZSlider = document.createElement('rzslider');
   createdDisplayRZSlider.id = 'timePeriodOptionsFilteredCreated';
   createdDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsFilteredCreated.value');
   createdDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsFilteredCreated.options');
 
+  createdDisplayListItem.appendChild(createdDisplayCheckbox);
   createdDisplayListItem.appendChild(createdDisplaySpan);
   createdDisplayListItem.appendChild(createdDisplayRZSlider);
 
