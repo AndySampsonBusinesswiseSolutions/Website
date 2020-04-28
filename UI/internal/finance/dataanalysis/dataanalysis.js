@@ -1116,7 +1116,7 @@ function getData(showBy) {
     case 'Cost - Contracts For Difference':
       return contractsfordifferenceCostSites;
     case 'Cost - Energy Intensive Industry':
-      return energyintensiveindustrieyCostSites;
+      return energyintensiveindustryCostSites;
     case 'Cost - Capacity Markets':
       return capacitymarketCostSites;
     case 'Cost - Balancing System Use Of System':
