@@ -14,7 +14,7 @@ function pageLoad() {
   };
 
   window.onload = function() {
-    updateChart();
+    updateChart(true);
     hideSliders(); 
   }
 }
@@ -151,6 +151,11 @@ function setOpenExpanders() {
   updateClassOnClick('budgetSelector', 'fa-plus-square', 'fa-minus-square');
   updateClassOnClick('siteSelector', 'fa-plus-square', 'fa-minus-square');
   updateClassOnClick('displaySelector', 'fa-plus-square', 'fa-minus-square');
+
+  var openExpanders = document.getElementsByClassName('openExpander');
+  for(var i = 0; i < openExpanders.length; i++) {
+    updateClassOnClick(openExpanders[i].id, 'fa-plus-square', 'fa-minus-square');
+  }
 }
 
 function getCommodityOption() {
@@ -406,7 +411,7 @@ function createInvoiceTree() {
   var headerDiv = createHeaderDiv("invoiceHeader", "Select Invoice");
   var ul = createBranchUl("invoiceSelector", true, true);
 
-  var selectAllInvoiceListItem = appendListItemChildren('selectAllInvoiceSelector', false, 'updatePage()', [{"Name" : "Show All Invoices"}], 'invoiceSelector', true, 'radio', 'invoiceGroup');
+  var selectAllInvoiceListItem = appendListItemChildren('selectAllInvoiceSelector', false, 'updatePage()', [{"Name" : "Show All Invoices"}], 'invoiceSelector', true, 'checkbox', 'invoiceGroup');
   var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, '', [{"Name" : "Select Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
 
   ul.appendChild(selectAllInvoiceListItem);
@@ -886,10 +891,26 @@ function updatePageFromInvoice(callingElement) {
     }
   }
 
-  if(callingElement.id == 'selectAllInvoiceSelectorradio') {
-    invoice3InvoiceSelectorcheckbox.checked = true;
-    invoice2InvoiceSelectorcheckbox.checked = true;
-    invoice1InvoiceSelectorcheckbox.checked = true;
+  switch(callingElement.id) {
+    case 'invoice1InvoiceSelectorcheckbox':
+    case 'invoice2InvoiceSelectorcheckbox':
+    case 'invoice3InvoiceSelectorcheckbox':
+      if(!callingElement.checked) {
+        selectAllInvoiceSelectorcheckbox.checked = false;
+      }
+      else {
+        if(invoice1InvoiceSelectorcheckbox.checked
+          && invoice2InvoiceSelectorcheckbox.checked
+          && invoice3InvoiceSelectorcheckbox.checked) {
+            selectAllInvoiceSelectorcheckbox.checked = true;
+          }
+      }
+      break;
+    case 'selectAllInvoiceSelectorcheckbox':
+      invoice3InvoiceSelectorcheckbox.checked = callingElement.checked;
+      invoice2InvoiceSelectorcheckbox.checked = callingElement.checked;
+      invoice1InvoiceSelectorcheckbox.checked = callingElement.checked;
+      break;
   }
 }
 
@@ -900,7 +921,7 @@ function makeTimePeriodOptionsTimeSpanMonthly() {
   });
 }
 
-function updateChart() {
+function updateChart(isPageLoading) {
   checkTimePeriodOptionsTimeSpan();
 
   var commodityOption = getCommodityOption();
@@ -915,7 +936,7 @@ function updateChart() {
   var inputs = treeDiv.getElementsByTagName('input');
   var checkboxes = getCheckedElements(inputs);
   
-  if(checkboxes.length == 0) {
+  if(isPageLoading) {
     checkboxes = getBranchCheckboxes(inputs, 'Site');
   }
 
@@ -984,7 +1005,7 @@ function getMeters(showByArray, checkboxes, commodityOption) {
           var subArea = meter.SubAreas[parseInt(lastRecord.replace('SubArea', ''))];
           meters = getSubMetersBySubArea(subArea, commodities[j]);
           branch = 'SubArea';
-          seriesName = getAttribute(meter.Attributes, 'Name') + ' - ' + getAttribute(subArea.Attributes, 'Name');
+          seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + getAttribute(meter.Attributes, 'Name') + ' - ' + getAttribute(subArea.Attributes, 'Name');
         }
         else if(lastRecord.includes('Area')) {
           var site = data[parseInt(hierarchy[hierarchy.length - 2].replace('Site', ''))];
@@ -1002,7 +1023,8 @@ function getMeters(showByArray, checkboxes, commodityOption) {
           var asset = subArea.Assets[parseInt(hierarchy[hierarchy.length - 2].replace('Asset', ''))];
           var subMeter = asset.SubMeters[parseInt(lastRecord.replace('SubMeter', ''))];
           branch = 'SubMeter';
-          seriesName = getAttribute(meter.Attributes, 'Name')
+          seriesName = getAttribute(site.Attributes, 'Name') 
+            + ' - ' + getAttribute(meter.Attributes, 'Name')
             + ' - ' + getAttribute(subArea.Attributes, 'Name')
             + ' - ' + getAttribute(asset.Attributes, 'Name')
             + ' - ' + getAttribute(subMeter.Attributes, 'Name');
@@ -1017,7 +1039,7 @@ function getMeters(showByArray, checkboxes, commodityOption) {
           var commodity = area.Commodities[parseInt(hierarchy[hierarchy.length - 2].replace('Commodity', ''))];
           var meter = commodity.Meters[parseInt(lastRecord.replace('Meter', ''))];
           branch = 'Meter';
-          seriesName = getAttribute(meter.Attributes, 'Name');
+          seriesName = getAttribute(site.Attributes, 'Name') + ' - ' + getAttribute(meter.Attributes, 'Name');
 
           if(getAttribute(meter.Attributes, 'Commodities').includes(commodities[j])) {
             meters.push(meter);
@@ -1032,7 +1054,8 @@ function getMeters(showByArray, checkboxes, commodityOption) {
           var asset = subArea.Assets[parseInt(lastRecord.replace('Asset', ''))];
           meters = getSubMetersByAsset(asset, commodities[j]);
           branch = 'Asset';
-          seriesName = getAttribute(meter.Attributes, 'Name')
+          seriesName = getAttribute(site.Attributes, 'Name') 
+            + ' - ' + getAttribute(meter.Attributes, 'Name')
             + ' - ' + getAttribute(subArea.Attributes, 'Name')
             + ' - ' + getAttribute(asset.Attributes, 'Name');
         }
@@ -2009,8 +2032,8 @@ function refreshChart(newSeries, displayType, chartOptions) {
       onItemClick: {
         toggleDataSeries: true
       },
-      width: 150,
-      fontSize: '10px',
+      width: 160,
+      fontSize: '9px',
       offsetY: 25,
       formatter: function(seriesName) {
         return getLegendFormat(displayType, seriesName);

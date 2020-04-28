@@ -28,25 +28,41 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
 		<div class="tree-column">
-			<div id="displayTree" class="sidebar-tree-div roundborder scrolling-wrapper">
+			<div class="dashboard roundborder" style="padding: 10px;">
+				<div style="text-align: center; border-bottom: solid black 1px;">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" style="margin-top: 5px;">
+					<div id="displayTree" class="sidebar-tree-div roundborder scrolling-wrapper">
+					</div>
+					<br>
+					<div id="siteTree" class="sidebar-tree-div roundborder scrolling-wrapper">
+					</div>
+					<br>
+					<div id="budgetTree" class="sidebar-tree-div roundborder scrolling-wrapper">
+					</div>
+					<br>			
+					<div id="invoiceTree" class="sidebar-tree-div roundborder scrolling-wrapper">
+					</div>
+					<br>
+					<div id="groupingOptionTree" class="sidebar-tree-div roundborder">
+					</div>
+				</div>
 			</div>
 			<br>
-			<div id="siteTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-			</div>
-			<br>
-			<div id="budgetTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-			</div>
-			<br>			
-			<div id="invoiceTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-			</div>
-			<br>
-			<div id="groupingOptionTree" class="sidebar-tree-div roundborder">
-			</div>
-			<br>
-			<div id="commodityTree" class="sidebar-tree-div roundborder">
-			</div>
-			<br>
-			<div id="timePeriodTree" class="sidebar-tree-div roundborder">
+			<div class="dashboard roundborder" style="padding: 10px;">
+				<div style="text-align: center; border-bottom: solid black 1px;">
+					<span id="filterOptionsSpan">Filter Options</span>
+					<div id="filterOptions" class="far fa-plus-square expander show-pointer"></div>
+				</div>
+				<div id="filterOptionsList" class="listitem-hidden" style="margin-top: 5px;">
+					<div id="commodityTree" class="sidebar-tree-div roundborder">
+					</div>
+					<br>
+					<div id="timePeriodTree" class="sidebar-tree-div roundborder">
+					</div>
+				</div>
 			</div>
 			<br>
 		</div>
