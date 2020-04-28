@@ -97,6 +97,13 @@
 <script type="text/javascript" src="cost.json"></script>
 <script type="text/javascript" src="capacity.json"></script>
 
+<script type="text/javascript" src="budget 1usage.json"></script>
+<script type="text/javascript" src="budget 2 v1usage.json"></script>
+<script type="text/javascript" src="budget 2 v2usage.json"></script>
+<script type="text/javascript" src="budget 1cost.json"></script>
+<script type="text/javascript" src="budget 2 v1cost.json"></script>
+<script type="text/javascript" src="budget 2 v2cost.json"></script>
+
 <script type="text/javascript" src="wholesale.json"></script>
 <script type="text/javascript" src="distribution.json"></script>
 <script type="text/javascript" src="transmission.json"></script>

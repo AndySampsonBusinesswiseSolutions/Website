@@ -834,6 +834,7 @@ function updatePage(callingElement) {
       break;
     case 'groupingOptionSelector':
     case 'groupingOption1GroupingOptionSelector':
+    case 'budgetSelector':
       break;
     case 'costDisplaySelector':
     case 'rateDisplaySelector':
@@ -951,54 +952,8 @@ function getMeters(showByArray, checkboxes, commodityOption) {
     commodities.push(commodityOption);
   }
 
-  var data = null;
-
   for(var s = 0; s < showByArray.length; s++) {
-    switch(showByArray[s]) {
-      case "Cost":
-        data = costSites;
-        break;
-      case "Capacity":
-      case "MaxDemand":
-        data = capacitySites;
-        break;
-      case 'Cost - Wholesale':
-        data = wholesaleCostSites;
-        break;
-      case 'Cost - Distribution':
-        data = distributionCostSites;
-        break;
-      case 'Cost - Transmission':
-        data = transmissionCostSites;
-        break;
-      case 'Cost - Renewables Obligation':
-        data = renewablesobligationCostSites;
-        break;
-      case 'Cost - Feed In Tariff':
-        data = feedintariffCostSites;
-        break;
-      case 'Cost - Contracts For Difference':
-        data = contractsfordifferenceCostSites;
-        break;
-      case 'Cost - Energy Intensive Industry':
-        data = energyintensiveindustrieyCostSites;
-        break;
-      case 'Cost - Capacity Markets':
-        data = capacitymarketCostSites;
-        break;
-      case 'Cost - Balancing System Use Of System':
-        data = balancingsystemuseofsystemCostSites;
-        break;
-      case 'Cost - Residual Cashflow Reallocation Cashflow':
-        data = residualcashflowreallocationcashflowCostSites;
-        break;
-      case 'Cost - Sundry':
-        data = sundryCostSites;
-        break;
-      default:
-        data = usageSites;
-        break;
-    }
+    var data = getData(showByArray[s]);
   
     for(var i = 0; i < checkboxLength; i++) {
       var hierarchy = checkboxes[i].id.replace('checkbox', '').split('_');
@@ -1139,6 +1094,52 @@ function getMeters(showByArray, checkboxes, commodityOption) {
   }  
 
   return series;
+}
+
+function getData(showBy) {
+  switch(showBy) {
+    case "Cost":
+      return costSites;
+    case "Capacity":
+    case "MaxDemand":
+      return capacitySites;
+    case 'Cost - Wholesale':
+      return wholesaleCostSites;
+    case 'Cost - Distribution':
+      return distributionCostSites;
+    case 'Cost - Transmission':
+      return transmissionCostSites;
+    case 'Cost - Renewables Obligation':
+      return renewablesobligationCostSites;
+    case 'Cost - Feed In Tariff':
+      return feedintariffCostSites;
+    case 'Cost - Contracts For Difference':
+      return contractsfordifferenceCostSites;
+    case 'Cost - Energy Intensive Industry':
+      return energyintensiveindustrieyCostSites;
+    case 'Cost - Capacity Markets':
+      return capacitymarketCostSites;
+    case 'Cost - Balancing System Use Of System':
+      return balancingsystemuseofsystemCostSites;
+    case 'Cost - Residual Cashflow Reallocation Cashflow':
+      return residualcashflowreallocationcashflowCostSites;
+    case 'Cost - Sundry':
+      return sundryCostSites;
+    case 'Usage - Budget 1':
+      return budget1UsageSites
+    case 'Cost - Budget 1':
+      return budget1CostSites
+    case 'Usage - Budget 2 V1':
+      return budget2v1UsageSites
+    case 'Cost - Budget 2 V1':
+      return budget2v1CostSites
+    case 'Usage - Budget 2 V2':
+      return budget2v2UsageSites
+    case 'Cost - Budget 2 V2':
+      return budget2v2CostSites
+    default:
+      return usageSites;
+  }
 }
 
 function getMetersBySite(site, commodityOption) {
@@ -1309,6 +1310,47 @@ function determineShowByArray() {
             break;
         }
       }
+    }
+  }
+
+  div = document.getElementById('budgetTree');
+  var inputs = div.getElementsByTagName('input');
+  var checkedElements = getCheckedElements(inputs);
+
+  for(var i = 0; i < checkedElements.length; i++) {
+    var budget = document.getElementById(checkedElements[i].id.replace('checkbox', 'span')).innerText;
+
+    switch(baseDisplayRadio.id) {
+      case 'usageDisplaySelectorradio':
+        if(budget == 'Budget 2') {
+          pushToArray('Usage - Budget 2 V1', showByArray);
+          pushToArray('Usage - Budget 2 V2', showByArray);
+        }
+        else {
+          pushToArray('Usage - ' + budget, showByArray);
+        }
+        break;
+      case 'costDisplaySelectorradio':
+        if(budget == 'Budget 2') {
+          pushToArray('Cost - Budget 2 V1', showByArray);
+          pushToArray('Cost - Budget 2 V2', showByArray);
+        }
+        else {
+          pushToArray('Cost - ' + budget, showByArray);
+        }
+        break;
+      case 'rateDisplaySelectorradio':
+        if(budget == 'Budget 2') {
+          pushToArray('Usage - Budget 2 V1', showByArray);
+          pushToArray('Usage - Budget 2 V2', showByArray);
+          pushToArray('Cost - Budget 2 V1', showByArray);
+          pushToArray('Cost - Budget 2 V2', showByArray);
+        }
+        else {
+          pushToArray('Usage - ' + budget, showByArray);
+          pushToArray('Cost - ' + budget, showByArray);
+        }
+        break;
     }
   }  
   
@@ -1535,10 +1577,22 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
 }
 
 function compareUsageNameToCostName(usageName, costName) {
-  var index = usageName.indexOf(' - Usage');
-  usageName = usageName.substr(0, index);
+  if(costName.includes('Budget')) {
+    if(!usageName.includes('Budget')) {
+      return false;
+    }
 
-  return costName.includes(usageName);
+    var budgetUsageName = usageName.replace(' - Usage', '');
+    var budgetCostName = costName.replace(' - Cost', '');
+
+    return budgetCostName.includes(budgetUsageName);
+  }
+  else {
+    var index = usageName.indexOf(' - Usage');
+    usageName = usageName.substr(0, index);
+  
+    return costName.includes(usageName);
+  }  
 }
 
 function getNewChartSeries(meters, showBy, categories, dateFormat, startDate, endDate, seriesName, appendShowByToSeriesName) {
@@ -1803,7 +1857,8 @@ function refreshChart(newSeries, displayType, chartOptions) {
       onItemClick: {
         toggleDataSeries: true
       },
-      width: 200,
+      width: 150,
+      fontSize: '10px',
       offsetY: 25,
       formatter: function(seriesName) {
         return getLegendFormat(displayType, seriesName);
