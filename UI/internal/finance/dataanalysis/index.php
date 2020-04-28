@@ -104,6 +104,13 @@
 <script type="text/javascript" src="budget 2 v1cost.json"></script>
 <script type="text/javascript" src="budget 2 v2cost.json"></script>
 
+<script type="text/javascript" src="invoice 0001usage.json"></script>
+<script type="text/javascript" src="invoice 0002usage.json"></script>
+<script type="text/javascript" src="invoice 0003usage.json"></script>
+<script type="text/javascript" src="invoice 0001cost.json"></script>
+<script type="text/javascript" src="invoice 0002cost.json"></script>
+<script type="text/javascript" src="invoice 0003cost.json"></script>
+
 <script type="text/javascript" src="wholesale.json"></script>
 <script type="text/javascript" src="distribution.json"></script>
 <script type="text/javascript" src="transmission.json"></script>

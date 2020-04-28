@@ -412,12 +412,10 @@ function createInvoiceTree() {
   ul.appendChild(selectSpecificInvoiceListItem);
 
   var selectSpecificInvoiceListUl = selectSpecificInvoiceListItem.getElementsByTagName('ul')[0];
-  var invoice4InvoiceListItem = appendListItemChildren('invoice4InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0004"}], 'invoiceSelector', true, 'checkbox', 'selectSpecificInvoiceGroup');
   var invoice3InvoiceListItem = appendListItemChildren('invoice3InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0003"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
   var invoice2InvoiceListItem = appendListItemChildren('invoice2InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0002"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
   var invoice1InvoiceListItem = appendListItemChildren('invoice1InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0001"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
 
-  selectSpecificInvoiceListUl.appendChild(invoice4InvoiceListItem);
   selectSpecificInvoiceListUl.appendChild(invoice3InvoiceListItem);
   selectSpecificInvoiceListUl.appendChild(invoice2InvoiceListItem);
   selectSpecificInvoiceListUl.appendChild(invoice1InvoiceListItem);
@@ -885,6 +883,12 @@ function updatePageFromInvoice(callingElement) {
       makeTimePeriodOptionsTimeSpanMonthly();
     }
   }
+
+  if(callingElement.id == 'selectAllInvoiceSelectorradio') {
+    invoice3InvoiceSelectorcheckbox.checked = true;
+    invoice2InvoiceSelectorcheckbox.checked = true;
+    invoice1InvoiceSelectorcheckbox.checked = true;
+  }
 }
 
 function makeTimePeriodOptionsTimeSpanMonthly() {
@@ -1137,6 +1141,18 @@ function getData(showBy) {
       return budget2v2UsageSites
     case 'Cost - Budget 2 V2':
       return budget2v2CostSites
+    case 'Usage - Invoice 0001':
+      return invoice0001UsageSites;
+    case 'Cost - Invoice 0001':
+      return invoice0001CostSites;
+    case 'Usage - Invoice 0002':
+      return invoice0002UsageSites;
+    case 'Cost - Invoice 0002':
+      return invoice0002CostSites;
+    case 'Usage - Invoice 0003':
+      return invoice0003UsageSites;
+    case 'Cost - Invoice 0003':
+      return invoice0003CostSites;
     default:
       return usageSites;
   }
@@ -1352,7 +1368,30 @@ function determineShowByArray() {
         }
         break;
     }
-  }  
+  }
+
+  div = document.getElementById('invoiceTree');
+  var inputs = div.getElementsByTagName('input');
+  var checkedElements = getCheckedElements(inputs);
+
+  for(var i = 0; i < checkedElements.length; i++) {
+    if(checkedElements[i].type == 'checkbox') {
+      var invoice = document.getElementById(checkedElements[i].id.replace('checkbox', 'span')).innerText;
+
+      switch(baseDisplayRadio.id) {
+        case 'usageDisplaySelectorradio':
+          pushToArray('Usage - ' + invoice, showByArray);
+          break;
+        case 'costDisplaySelectorradio':
+          pushToArray('Cost - ' + invoice, showByArray);
+          break;
+        case 'rateDisplaySelectorradio':
+          pushToArray('Usage - ' + invoice, showByArray);
+          pushToArray('Cost - ' + invoice, showByArray);
+          break;
+      }
+    }
+  }
   
   return showByArray;
 }
@@ -1587,6 +1626,16 @@ function compareUsageNameToCostName(usageName, costName) {
 
     return budgetCostName.includes(budgetUsageName);
   }
+  else if(costName.includes('Invoice')) {
+    if(!usageName.includes('Invoice')) {
+      return false;
+    }
+
+    var invoiceUsageName = usageName.replace(' - Usage', '');
+    var invoiceCostName = costName.replace(' - Cost', '');
+
+    return invoiceCostName.includes(invoiceUsageName);
+  }
   else {
     var index = usageName.indexOf(' - Usage');
     usageName = usageName.substr(0, index);
@@ -1670,7 +1719,24 @@ function getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate,
     }
   } 
 
-  return summedMeterSeries;
+  var cleanValue = [];
+  var cleanCount = [];
+
+  for(var i = 0; i < summedMeterSeries.count.length; i++) {
+    if(summedMeterSeries.count[i] > 0) {
+      cleanValue.push(summedMeterSeries.value[i]);
+      cleanCount.push(summedMeterSeries.count[i]);
+    }
+    else {
+      cleanValue.push(null);
+      cleanCount.push(null);
+    }
+  }
+
+  return {
+    value: cleanValue, 
+    count: cleanCount
+  };
 }
 
 function finaliseData(summedMeterSeries, seriesName) {
@@ -1680,7 +1746,8 @@ function finaliseData(summedMeterSeries, seriesName) {
   if(noGroupradio.checked) {
     var series = {
       name: seriesName,
-      data: summedMeterSeries.value
+      data: summedMeterSeries.value,
+      type: seriesName.includes('Invoice') ? 'bar' : 'line'
     };
 
     return series;
@@ -1690,7 +1757,8 @@ function finaliseData(summedMeterSeries, seriesName) {
     if(sumcheckbox.checked) {
       var series = {
         name: seriesName + ' - Sum',
-        data: summedMeterSeries.value
+        data: summedMeterSeries.value,
+        type: seriesName.includes('Invoice') ? 'bar' : 'line'
       };
   
       finalSeries.push(series);
@@ -1700,7 +1768,8 @@ function finaliseData(summedMeterSeries, seriesName) {
     if(averagecheckbox.checked) {
       var series = {
         name: seriesName + ' - Average',
-        data: []
+        data: [],
+        type: seriesName.includes('Invoice') ? 'bar' : 'line'
       };
   
       for(var i = 0; i < summedMeterSeries.value.length; i++) {
