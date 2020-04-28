@@ -68,6 +68,7 @@ function lockSidebar() {
     lock.title = "Click To Lock Sidebar";
   }
 
+  updateChart();
   updateDataGrid(chartSeries, categories);
 }
 
@@ -406,7 +407,7 @@ function createInvoiceTree() {
   var ul = createBranchUl("invoiceSelector", true, true);
 
   var selectAllInvoiceListItem = appendListItemChildren('selectAllInvoiceSelector', false, 'updatePage()', [{"Name" : "Show All Invoices"}], 'invoiceSelector', true, 'radio', 'invoiceGroup');
-  var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, 'updatePage()', [{"Name" : "Select Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
+  var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, '', [{"Name" : "Select Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
 
   ul.appendChild(selectAllInvoiceListItem);
   ul.appendChild(selectSpecificInvoiceListItem);
@@ -833,6 +834,7 @@ function updatePage(callingElement) {
     case 'groupingOptionSelector':
     case 'groupingOption1GroupingOptionSelector':
     case 'budgetSelector':
+    case 'invoiceVarianceSelector':
       break;
     case 'costDisplaySelector':
     case 'rateDisplaySelector':
@@ -919,7 +921,7 @@ function updateChart() {
 
   var meters = getMeters(showByArray, checkboxes, commodityOption);
   chartSeries = getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate);
-  var chartOptions = getChartOptions(categories, displayType, getXAxisTypeFromTimeSpan());
+  var chartOptions = getChartOptions(categories, displayType, getXAxisTypeFromTimeSpan(), dateFormat);
 
   clearElement(chart);
   refreshChart(chartSeries, displayType, chartOptions);
@@ -1153,6 +1155,30 @@ function getData(showBy) {
       return invoice0003UsageSites;
     case 'Cost - Invoice 0003':
       return invoice0003CostSites;
+    case 'Usage - Invoice 0001 - Budget 1 Variance':
+      return invoice0001budget1varianceUsageSites;
+    case 'Usage - Invoice 0001 - Forecast Variance':
+      return invoice0001forecastvarianceUsageSites;
+    case 'Cost - Invoice 0001 - Budget 1 Variance':
+      return invoice0001budget1varianceCostSites;
+    case 'Cost - Invoice 0001 - Forecast Variance':
+      return invoice0001forecastvarianceCostSites;
+    case 'Usage - Invoice 0002 - Budget 1 Variance':
+      return invoice0002budget1varianceUsageSites;
+    case 'Usage - Invoice 0002 - Forecast Variance':
+      return invoice0002forecastvarianceUsageSites;
+    case 'Cost - Invoice 0002 - Budget 1 Variance':
+      return invoice0002budget1varianceCostSites;
+    case 'Cost - Invoice 0002 - Forecast Variance':
+      return invoice0002forecastvarianceCostSites;
+    case 'Usage - Invoice 0003 - Budget 1 Variance':
+      return invoice0003budget1varianceUsageSites;
+    case 'Usage - Invoice 0003 - Forecast Variance':
+      return invoice0003forecastvarianceUsageSites;
+    case 'Cost - Invoice 0003 - Budget 1 Variance':
+      return invoice0003budget1varianceCostSites;
+    case 'Cost - Invoice 0003 - Forecast Variance':
+      return invoice0003forecastvarianceCostSites;
     default:
       return usageSites;
   }
@@ -1378,17 +1404,59 @@ function determineShowByArray() {
     if(checkedElements[i].type == 'checkbox') {
       var invoice = document.getElementById(checkedElements[i].id.replace('checkbox', 'span')).innerText;
 
-      switch(baseDisplayRadio.id) {
-        case 'usageDisplaySelectorradio':
-          pushToArray('Usage - ' + invoice, showByArray);
-          break;
-        case 'costDisplaySelectorradio':
-          pushToArray('Cost - ' + invoice, showByArray);
-          break;
-        case 'rateDisplaySelectorradio':
-          pushToArray('Usage - ' + invoice, showByArray);
-          pushToArray('Cost - ' + invoice, showByArray);
-          break;
+      if(invoice == 'Show Budget Variances') {
+        for(var j = 0; j < checkedElements.length; j++) {
+          invoice = document.getElementById(checkedElements[j].id.replace('checkbox', 'span')).innerText;
+
+          if(invoice.startsWith('Invoice ')) {
+            switch(baseDisplayRadio.id) {
+              case 'usageDisplaySelectorradio':
+                pushToArray('Usage - ' + invoice + ' - Budget 1 Variance', showByArray);
+                break;
+              case 'costDisplaySelectorradio':
+                pushToArray('Cost - ' + invoice + ' - Budget 1 Variance', showByArray);
+                break;
+              case 'rateDisplaySelectorradio':
+                pushToArray('Usage - ' + invoice + ' - Budget 1 Variance', showByArray);
+                pushToArray('Cost - ' + invoice + ' - Budget 1 Variance', showByArray);
+                break;
+            }
+          }
+        }
+      }
+      else if(invoice == 'Show Forecast Variances') {
+        for(var j = 0; j < checkedElements.length; j++) {
+          invoice = document.getElementById(checkedElements[j].id.replace('checkbox', 'span')).innerText;
+
+          if(invoice.startsWith('Invoice ')) {
+            switch(baseDisplayRadio.id) {
+              case 'usageDisplaySelectorradio':
+                pushToArray('Usage - ' + invoice + ' - Forecast Variance', showByArray);
+                break;
+              case 'costDisplaySelectorradio':
+                pushToArray('Cost - ' + invoice + ' - Forecast Variance', showByArray);
+                break;
+              case 'rateDisplaySelectorradio':
+                pushToArray('Usage - ' + invoice + ' - Forecast Variance', showByArray);
+                pushToArray('Cost - ' + invoice + ' - Forecast Variance', showByArray);
+                break;
+            }
+          }
+        }
+      }
+      else {
+        switch(baseDisplayRadio.id) {
+          case 'usageDisplaySelectorradio':
+            pushToArray('Usage - ' + invoice, showByArray);
+            break;
+          case 'costDisplaySelectorradio':
+            pushToArray('Cost - ' + invoice, showByArray);
+            break;
+          case 'rateDisplaySelectorradio':
+            pushToArray('Usage - ' + invoice, showByArray);
+            pushToArray('Cost - ' + invoice, showByArray);
+            break;
+        }
       }
     }
   }
@@ -1616,7 +1684,17 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
 }
 
 function compareUsageNameToCostName(usageName, costName) {
-  if(costName.includes('Budget')) {
+  if(costName.includes('Budget') && costName.includes('Invoice')) {
+    if(!usageName.includes('Budget') && !usageName.includes('Invoice')) {
+      return false;
+    }
+
+    var budgetUsageName = usageName.replace(' - Usage', '');
+    var budgetCostName = costName.replace(' - Cost', '');
+
+    return budgetCostName.includes(budgetUsageName);
+  }
+  else if(costName.includes('Budget')) {
     if(!usageName.includes('Budget')) {
       return false;
     }
@@ -1816,7 +1894,7 @@ function getDisplayType() {
   }
 }
 
-function getChartOptions(categories, displayType, xAxisType) {
+function getChartOptions(categories, displayType, xAxisType, dateFormat) {
   return {
     chart: {
         type: getChartTypeFromCategoryCount(categories.length),
@@ -1836,7 +1914,12 @@ function getChartOptions(categories, displayType, xAxisType) {
         type: xAxisType,
         min: categories[0],
         max: categories[categories.length - 1],
-        categories: categories
+        categories: categories,
+        axisTicks: {
+          show: true,
+          color: '#993333',
+        },
+        tickPlacement: dateFormat == 'dd MMM yy' ? 'on' : 'between'
     }
   };
 }
@@ -1931,8 +2014,9 @@ function refreshChart(newSeries, displayType, chartOptions) {
       offsetY: 25,
       formatter: function(seriesName) {
         return getLegendFormat(displayType, seriesName);
-      }
+      },
     },
+    colors: ['#993333','#996633','#993366','#000033','#6600FF','#66CC66','#FF3300','#FF00FF','#9999FF','#3300CC','#996600','#0099FF','#FF6600','#CCCC00','#99FF00','#CC3366','#33FFFF','#330066','#33CC66','#99CC99','#006699','#66FFCC','#FF0066','#993300','#996666','#0000FF','#333366','#FFCC66','#FF33FF','#33FF66','#336699','#333300','#6666FF','#339999','#000099','#009900','#CC6600','#330000','#FF9900','#660033','#00CC00','#9966CC','#6699FF','#003333','#6600CC','#3333FF','#FFCC00','#00CC66','#99CCFF','#330033','#FF66FF','#00FFFF','#66CCFF','#CC9999','#FFFF00','#CC9966','#00FF99','#009933','#990033','#0033FF','#CC00CC','#FF3333','#009966','#33FF33','#CC6666','#FF99FF','#99FFFF','#999933','#660000','#66FF00','#CC3300','#990099','#CCFF66','#006633','#999900','#6699CC','#CC6699','#006600','#999999','#9966FF','#FF66CC','#00FF33','#660099','#990066','#FF9966','#FF9999','#99CC00','#9933CC','#003300','#66CCCC','#9933FF','#66CC33','#CC66FF','#996699','#33CCFF','#66FF66','#333399','#33FF00','#FF6633','#663333','#3366CC','#663300','#CC99CC','#669900','#99CC66','#336633','#669966','#3333CC','#0000CC','#003399','#FF6699','#006666','#669933','#00FF00','#33CCCC','#99FF66','#003366','#CC0099','#00CC99','#999966','#FF6666','#000000','#663366','#CCCC66','#FF0099','#000066','#FF0000','#00CCCC','#66FFFF','#0033CC','#6666CC','#660066','#9900CC','#CCFF33','#3366FF','#666666','#6633FF','#CC0066','#339966','#9999CC','#99CCCC','#666600','#CCFF00','#FF3366','#CC33FF','#666633','#66CC99','#339900','#CC00FF','#33FFCC','#00CCFF','#669999','#CC3333','#FFFF33','#990000','#3399FF','#339933','#6633CC','#FF3399','#FF99CC','#FFCC33','#FF33CC','#99CC33','#9900FF','#0066FF','#009999','#333333','#330099','#CC9900','#99FF99','#CC3399','#33FF99','#CC0000','#3300FF','#3399CC','#33CC00','#CC99FF','#66CC00','#CC9933','#66FF99','#336600','#33CC33','#0066CC','#CC33CC','#00FFCC','#663399','#CCCC33','#CC66CC','#336666','#FFFF66','#FF0033','#00CC33','#0099CC','#CC6633','#CC0033','#993399','#FF9933','#666699','#00FF66','#FF00CC','#99FF33','#66FF33','#33CC99'],
     series: newSeries,
     yaxis: chartOptions.yaxis,
     xaxis: chartOptions.xaxis

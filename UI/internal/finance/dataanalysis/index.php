@@ -111,6 +111,19 @@
 <script type="text/javascript" src="invoice 0002cost.json"></script>
 <script type="text/javascript" src="invoice 0003cost.json"></script>
 
+<script type="text/javascript" src="invoice 0001 - budget 1 varianceusage.json"></script>
+<script type="text/javascript" src="invoice 0002 - budget 1 varianceusage.json"></script>
+<script type="text/javascript" src="invoice 0003 - budget 1 varianceusage.json"></script>
+<script type="text/javascript" src="invoice 0001 - budget 1 variancecost.json"></script>
+<script type="text/javascript" src="invoice 0002 - budget 1 variancecost.json"></script>
+<script type="text/javascript" src="invoice 0003 - budget 1 variancecost.json"></script>
+<script type="text/javascript" src="invoice 0001 - forecast varianceusage.json"></script>
+<script type="text/javascript" src="invoice 0002 - forecast varianceusage.json"></script>
+<script type="text/javascript" src="invoice 0003 - forecast varianceusage.json"></script>
+<script type="text/javascript" src="invoice 0001 - forecast variancecost.json"></script>
+<script type="text/javascript" src="invoice 0002 - forecast variancecost.json"></script>
+<script type="text/javascript" src="invoice 0003 - forecast variancecost.json"></script>
+
 <script type="text/javascript" src="wholesale.json"></script>
 <script type="text/javascript" src="distribution.json"></script>
 <script type="text/javascript" src="transmission.json"></script>
