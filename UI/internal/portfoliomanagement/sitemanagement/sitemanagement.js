@@ -1,29 +1,14 @@
 function pageLoad() {    
 	createTree(data, "Hierarchy", "treeDiv", "", "createCardButton", true);
 	
-	document.onmousemove=function(e) {
-		var mousecoords = getMousePos(e);
-		if(mousecoords.x <= 25) {
-			openNav();
-		}  
-		else if(mousecoords.x >= 400) {
-			closeNav();
-		}  
+	document.onmousemove = function(e) {
+		setupSidebarHeight();
+		setupSidebar(e);
 	};
-}
 
-function getMousePos(e) {
-	return {x:e.clientX,y:e.clientY};
-}
-
-function openNav() {
-	document.getElementById("mySidenav").style.width = "400px";
-	document.getElementById("openNav").style.color = "#b62a51";
-}
-
-function closeNav() {
-	document.getElementById("openNav").style.color = "white";
-	document.getElementById("mySidenav").style.width = "0px";
+	window.onscroll = function() {
+		setupSidebarHeight();
+	};
 }
 
 var branchCount = 0;
@@ -47,7 +32,7 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s) <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s) <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
 	div.appendChild(tree);
@@ -63,6 +48,7 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
 	createCardButton(document.getElementById('Site100checkbox'));
 
 	addExpanderOnClickEvents();
+	setOpenExpanders();
 }
 
 function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunction, showSubMeters) {
@@ -181,7 +167,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -209,7 +195,7 @@ function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, c
 
         var identifier = getAttribute(subMeter.Attributes, 'Identifier');
         var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
+        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
         branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
@@ -242,7 +228,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');
@@ -362,78 +348,6 @@ function getMatchedMeters(meters, attribute, branchOption, commodity) {
     }
 
     return matchedMeters;
-}
-
-function getAttribute(attributes, attributeRequired) {
-	for (var attribute in attributes) {
-		var array = attributes[attribute];
-
-		for(var key in array) {
-			if(key == attributeRequired) {
-				return array[key];
-			}
-		}
-	}
-
-	return null;
-}
-
-function clearElement(element) {
-	while (element.firstChild) {
-		element.removeChild(element.firstChild);
-	}
-}
-
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
-	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
-		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass) {
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
-		}
-		
-		element.classList.add(firstClass);
-	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-	}
-
-	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
 }
 
 function openTab(callingElement, tabName, guid, branch) {
@@ -793,16 +707,6 @@ function deleteRow(row) {
 	deleteRowText.innerText = "Are you sure you want to delete the '" + attribute.innerText + "' attribute with current value of '" + value.innerText + "'?";
 
     finalisePopup(title, 'Delete Attribute?<br><br>', modal, span);
-}
-
-function finalisePopup(title, titleHTML, modal, span) {
-    title.innerHTML = titleHTML;
-
-	modal.style.display = "block";
-
-	span.onclick = function() {
-		modal.style.display = "none";
-	}
 }
 
 function saveRow(row) {
