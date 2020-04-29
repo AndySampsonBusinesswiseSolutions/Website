@@ -1,6 +1,6 @@
 <?php 
 	if(!session_id()) session_start();
-	$PAGE_TITLE = "Commissions";
+	$PAGE_TITLE = "Revenue Management";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 

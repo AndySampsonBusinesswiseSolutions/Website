@@ -26,10 +26,11 @@
 		</div>
 	</div>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="budgetList" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Budget To Review <i class="far fa-plus-square show-pointer" id="budgetSelector"></i></span>
+				<span style="padding-left: 5px;">Select Budget To Review <i class="far fa-plus-square show-pointer expander openExpander" id="budgetSelector"></i></span>
 				<ul class="format-listitem" id="budgetSelectorList">
 					<li>
 						<i class="far fa-plus-square show-pointer" id="budget2Selector"></i>
@@ -60,11 +61,11 @@
 				<button style="width: 100%;">Review Selected Budget</button>
 			</div>
 			<br>
-			<div id="treeDiv" class="tree-div roundborder">
+			<div id="siteTree" class="tree-div roundborder">
 			</div>
 			<br>
 			<div id="commodityList" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
+				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer expander openExpander" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
 						<input type="radio" name="commoditySelector" id="allCommodityradio" checked><span id="allCommodityspan">All</span>
@@ -80,7 +81,7 @@
 			<br>
 			<div id="timePeriodDiv" class="tree-div roundborder">
 				<span id="timePeriodspan" style="padding-left: 5px;">Time Period</span>
-				<div id="timePeriod" class="far fa-plus-square show-pointer" style="margin-left: 5px;"></div>
+				<div id="timePeriod" class="far fa-plus-square show-pointer expander openExpander" style="margin-left: 5px;"></div>
 				<ul id="timePeriodList" class="format-listitem slider-list">
 					<li>
 						<span>Date Range</span>
@@ -113,7 +114,7 @@
 		<div class="dashboard roundborder" style="padding: 10px;">
 			<div class="expander-header">
 				<span>Create\Review Budget</span>
-				<i class="far fa-plus-square show-pointer" id="createReviewBudget"></i>
+				<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Budget To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Budget"></div>
 			</div>
@@ -169,7 +170,7 @@
 					<br>
 					<div class="expander-header">
 						<span>Budget Adjustments</span>
-						<div id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer"></div>
+						<div id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></div>
 					</div>
 					<div id="createReviewBudgetAdjustmentsList" class="roundborder datagrid listitem-hidden" style="margin-top: 5px; padding: 5px;">
 						<div id="adjustmentsSpreadsheet"></div>
@@ -181,7 +182,7 @@
 				<div class="dashboard roundborder" style="margin-top: 5px; padding: 10px;">
 					<div class="expander-header">
 						<span>Charts</span>
-						<i class="far fa-plus-square show-pointer" id="charts"></i>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
 					</div>
 					<div id="chartsList" style="margin-top: 5px;">
 						<div id="leftHandChartDiv" class="roundborder chart" style="margin-right: 5px;">
@@ -200,6 +201,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
 <script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>

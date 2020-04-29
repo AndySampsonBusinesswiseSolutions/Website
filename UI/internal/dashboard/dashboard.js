@@ -2,31 +2,17 @@ function pageLoad() {
   createTree(data, "siteDiv", "updateDashboard", "Site");
   createTree(dashboard, "dashboardDiv", "addDashboardItem", "Dashboard");
   
-  addExpanderOnClickEvents(); 
+  addExpanderOnClickEvents();
+  setOpenExpanders();
 
-  document.onmousemove=function(e) {
-    var mousecoords = getMousePos(e);
-    if(mousecoords.x <= 25) {
-      openNav();
-    }  
-    else if(mousecoords.x >= 400) {
-      closeNav();
-    }  
+  document.onmousemove = function(e) {
+    setupSidebarHeight();
+    setupSidebar(e);
   };
-}
 
-function getMousePos(e) {
-  return {x:e.clientX,y:e.clientY};
-}
-
-function openNav() {
-	document.getElementById("mySidenav").style.width = "400px";
-	document.getElementById("openNav").style.color = "#b62a51";
-}
-
-function closeNav() {
-	document.getElementById("openNav").style.color = "white";
-	document.getElementById("mySidenav").style.width = "0px";
+  window.onscroll = function() {
+    setupSidebarHeight();
+  };
 }
 
 function loadDatagrid(checkBoxes) {
@@ -163,7 +149,7 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
     header.style = "padding-left: 5px;";
 
     var headerText = dataName != "Dashboard" ? "Select Sites/Meters" : "Select Custom Dashboard Items";
-    header.innerHTML = headerText + ' <i class="far fa-plus-square show-pointer" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = headerText + ' <i class="far fa-plus-square show-pointer openExpander" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -799,31 +785,6 @@ function refreshChart(newSeries, chartId, chartOptions) {
   renderChart(chartId, options);
 }
 
-function renderChart(chartId, options) {
-  var chart = new ApexCharts(document.querySelector(chartId), options);
-  chart.render();
-}
-
-function getAttribute(attributes, attributeRequired) {
-	for (var attribute in attributes) {
-		var array = attributes[attribute];
-
-		for(var key in array) {
-			if(key == attributeRequired) {
-				return array[key];
-			}
-		}
-	}
-
-	return null;
-}
-
-function clearElement(element) {
-	while (element.firstChild) {
-		element.removeChild(element.firstChild);
-	}
-}
-
 function commoditySiteMatch(site, commodity) {
   if(commodity == '') {
       return true;
@@ -850,63 +811,6 @@ function commodityMeterMatch(meter, commodity) {
 
   var meterCommodity = getAttribute(meter.Attributes, 'Commodity');
   return meterCommodity.toLowerCase() == commodity.toLowerCase();
-}
-
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
-	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
-		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass)
-{
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
-		}
-		
-		element.classList.add(firstClass);
-	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-  }
-  
-  updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('siteDivSelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('dashboardDivSelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('mainDashboardSelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('customDashboardSelector', 'fa-plus-square', 'fa-minus-square');
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
 }
 
 function updateDashboard(callingElement) {

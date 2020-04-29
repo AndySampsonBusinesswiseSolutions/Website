@@ -1,112 +1,19 @@
 function pageLoad(){  
-	createBudgetTree(sites, "");
-	createTree(sites, "");
+	createBudgetTree(sites, "alertMessage()");
+	createSiteTree(sites, "alertMessage()");
 	setupDataGrid();
 	displayCharts();
+	addExpanderOnClickEvents();
+	setOpenExpanders();
 
-	document.onmousemove=function(e) {
-		var mousecoords = getMousePos(e);
-		if(mousecoords.x <= 25) {
-			openNav();
-		}  
-		else if(mousecoords.x >= 400) {
-			closeNav();
-		}  
-	};
-}
-
-function getMousePos(e) {
-	return {x:e.clientX,y:e.clientY};
-}
-
-function openNav() {
-	document.getElementById("mySidenav").style.width = "400px";
-	document.getElementById("openNav").style.color = "#b62a51";
-}
-
-function closeNav() {
-	document.getElementById("openNav").style.color = "white";
-	document.getElementById("mySidenav").style.width = "0px";
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-	}
-
-	updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('createReviewBudgetTreeDivSelector', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('createReviewBudget', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('timePeriod', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('budgetSelector', 'fa-plus-square', 'fa-minus-square');
-	// updateClassOnClick('createReviewBudgetOverride', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('charts', 'fa-plus-square', 'fa-minus-square');
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
-}
-
-function clearElement(element) {
-	while (element.firstChild) {
-		element.removeChild(element.firstChild);
-	}
-}
-
-function getAttribute(attributes, attributeRequired) {
-	for (var attribute in attributes) {
-		var array = attributes[attribute];
-
-		for(var key in array) {
-			if(key == attributeRequired) {
-				return array[key];
-			}
-		}
-	}
-
-	return null;
-}
-
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
-	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
-		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass)
-{
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
-		}
-		
-		element.classList.add(firstClass);
-	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
+	document.onmousemove = function(e) {
+		setupSidebarHeight();
+		setupSidebar(e);
+	  };
+	
+	  window.onscroll = function() {
+		setupSidebarHeight();
+	  };
 }
 
 function createBudgetTree(sites, functions) {
@@ -124,7 +31,7 @@ function createBudgetTree(sites, functions) {
 
 	var headerSpan = document.createElement('span');
 	headerSpan.style = "padding-left: 5px;";
-	headerSpan.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="createReviewBudgetTreeDivSelector"></i>';
+	headerSpan.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudgetTreeDivSelector"></i>';
 
 	headerDiv.appendChild(headerSpan);
 	div.appendChild(headerDiv);
@@ -148,10 +55,15 @@ function createBudgetTree(sites, functions) {
 	site.checked = true;
 }
 
-function createTree(sites, functions) {
-	var div = document.getElementById('treeDiv');
+function createSiteTree(sites, functions) {
+	var div = document.getElementById('siteTree');
 	var inputs = div.getElementsByTagName('input');
-	var checkboxes = getCheckedCheckBoxes(inputs);
+	var checkboxes = getCheckedElements(inputs);
+  
+	if(checkboxes.length == 0) {
+	  checkboxes = getBranchCheckboxes(inputs, 'Site');
+	}
+  
 	var elements = div.getElementsByTagName("*");
   
 	var checkboxIds = [];
@@ -172,23 +84,29 @@ function createTree(sites, functions) {
 	}
   
 	clearElement(div);
-	
-	var tree = document.createElement('div');
-	tree.setAttribute('class', 'scrolling-wrapper');
-	
-	var ul = createBranchUl('treeDivSelector', false);
-	tree.appendChild(ul);
   
-	buildSiteBranch(sites, getCommodityOption(), ul, functions);
+	var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+	var ul = createBranchUl("siteSelector", false, true);
   
-	var header = document.createElement('span');
-	header.style = "padding-left: 5px;";
-	header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="treeDivSelector"></i>';
+	var breakDisplayListItem = document.createElement('li');
+	breakDisplayListItem.innerHTML = '<br>';
+	breakDisplayListItem.classList.add('format-listitem');
   
-	div.appendChild(header);
-	div.appendChild(tree);
+	var recurseSelectionListItem = document.createElement('li');
+	recurseSelectionListItem.classList.add('format-listitem');
+	recurseSelectionListItem.classList.add('topListItem');
   
-	addExpanderOnClickEvents();
+	var recurseSelectionCheckbox = createBranchCheckbox('recuseSelectionCheckbox', '', 'recuseSelection', 'checkbox', 'recurseSelection', false);
+	var recurseSelectionSpan = createBranchSpan('recurseSelectionSpan', 'Recurse Selection?');
+	recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
+	recurseSelectionListItem.appendChild(recurseSelectionSpan);
+  
+	buildSiteBranch(sites, getCommodityOption(), ul, functions);  
+  
+	div.appendChild(headerDiv);
+	ul.appendChild(breakDisplayListItem);
+	ul.appendChild(recurseSelectionListItem);
+	div.appendChild(ul);
   
 	for(var i = 0; i < checkboxIds.length; i++) {
 	  var checkbox = document.getElementById(checkboxIds[i]);
@@ -203,7 +121,7 @@ function createTree(sites, functions) {
 		element.classList = elementClasses[i].classList;
 	  }
 	}  
-}
+  }
 
 //build site
 function buildSiteBranch(sites, commodityOption, elementToAppendTo, functions, isNewBudget) {
@@ -347,122 +265,6 @@ function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, func
 	}
 }
 
-function commodityMatch(entity, commodity) {
-	if(commodity == '') {
-		return true;
-	}
-  
-	var entityCommodities = getAttribute(entity.Attributes, 'Commodities');
-	return entityCommodities && entityCommodities.includes(commodity);
-}
-
-function appendListItemChildren(id, hasChildren, functions, attributes, branch) {
-	var li = document.createElement('li');
-	li.appendChild(createBranchDiv(id, hasChildren));
-	li.appendChild(createBranchCheckbox(id, functions, branch));
-	li.appendChild(createBranchIcon(getAttribute(attributes, 'Icon')));
-	li.appendChild(createBranchSpan(id, getAttribute(attributes, 'Name')));
-  
-	if(hasChildren) {
-	  li.appendChild(createBranchUl(id));
-	}
-  
-	return li;
-}
-
-function createBranchUl(id, hideUl = true) {
-	var ul = document.createElement('ul');
-	ul.id = id.concat('List');
-	ul.setAttribute('class', 'format-listitem' + (hideUl ? ' listitem-hidden' : ''));
-	return ul;
-}
-
-function createBranchDiv(branchDivId, hasChildren = true) {
-	  var branchDiv = document.createElement('div');
-	  branchDiv.id = branchDivId;
-	  branchDiv.setAttribute('class', (hasChildren ? 'far fa-plus-square show-pointer' : 'far fa-times-circle') + ' expander');
-	  branchDiv.setAttribute('style', 'padding-right: 4px;');
-	  return branchDiv;
-}
-
-function createBranchCheckbox(id, functions, branch) {
-	var checkbox = document.createElement('input');
-	checkbox.type = 'checkbox';  
-	checkbox.id = id.concat('checkbox');
-	checkbox.setAttribute('branch', branch);
-  
-	var functionArray = functions.replace(')', '').split('(');
-	var functionArrayLength = functionArray.length;
-	var functionName = functionArray[0];
-	var functionArguments = [];
-  
-	functionArguments.push(checkbox.id);
-	if(functionArrayLength > 1) {
-		var functionArgumentLength = functionArray[1].split(',').length;
-		for(var i = 0; i < functionArgumentLength; i++) {
-			functionArguments.push(functionArray[1].split(',')[i]);
-		}
-	}
-	functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
-	
-	checkbox.setAttribute('onclick', functionName);
-	return checkbox;
-}
-
-function getAttribute(attributes, attributeRequired) {
-	  for (var attribute in attributes) {
-		  var array = attributes[attribute];
-  
-		  for(var key in array) {
-			  if(key == attributeRequired) {
-				  return array[key];
-			  }
-		  }
-	  }
-  
-	  return null;
-}
-
-function createBranchIcon(iconClass) {
-	var icon = document.createElement('i');
-	icon.setAttribute('class', iconClass);
-	icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
-	return icon;
-}
-
-function createBranchSpan(id, innerHTML) {
-	var span = document.createElement('span');
-	span.id = id.concat('span');
-	span.innerHTML = innerHTML;
-	return span;
-}
-
-function getCheckedCheckBoxes(inputs) {
-    var checkBoxes = [];
-    var inputLength = inputs.length;
-  
-    for(var i = 0; i < inputLength; i++) {
-      if(inputs[i].type.toLowerCase() == 'checkbox') {
-        if(inputs[i].checked) {
-          checkBoxes.push(inputs[i]);
-        }
-      }
-    }
-
-    if(checkBoxes.length == 0) {
-      for(var i = 0; i < inputLength; i++) {
-        if(inputs[i].type.toLowerCase() == 'checkbox') {
-          if(inputs[i].getAttribute('branch') == 'Site') {
-            inputs[i].checked = true;
-            checkBoxes.push(inputs[i]);
-          }
-        }
-      }
-    }
-  
-    return checkBoxes;
-}
-
 function getCommodityOption() {
 	var commodity = '';
 	var electricityCommodityradio = document.getElementById('electricityCommodityradio');
@@ -538,16 +340,6 @@ function getBudgets() {
 	}
 
 	return budgets;
-}
-
-function finalisePopup(title, titleHTML, modal, span) {
-    title.innerHTML = titleHTML;
-
-	modal.style.display = "block";
-
-	span.onclick = function() {
-		modal.style.display = "none";
-	}
 }
 
 function setupDataGrid() {
@@ -843,11 +635,6 @@ function refreshChart(newSeries, chartId, chartOptions) {
 	};  
   
 	renderChart(chartId, options);
-  }
-
-function renderChart(chartId, options) {
-    var chart = new ApexCharts(document.querySelector(chartId), options);
-    chart.render();
 }
 
 function getChartTooltipXFormat(period) {

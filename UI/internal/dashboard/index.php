@@ -14,13 +14,14 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="siteDiv" class="tree-div roundborder">
 			</div>
 			<br>
 			<div class="roundborder" style="background-color: #e9eaee;">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
+				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer openExpander" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
 						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
@@ -48,7 +49,7 @@
 	<div class="final-column">
 		<div id="dashboardHeader" class="dashboard roundborder" style="text-align: center; overflow: auto;">
 			<div style="text-align: left; margin-left: 4.25px;">
-				<span>Main Dashboard <i class="far fa-plus-square show-pointer" id="mainDashboardSelector"></i></span>
+				<span>Main Dashboard <i class="far fa-plus-square show-pointer openExpander" id="mainDashboardSelector"></i></span>
 			</div>
 			<div id="mainDashboardSelectorList">
 				<a href="/Internal/PortfolioManagement/SiteManagement/" class="roundborder dashboard-item-small">
@@ -117,7 +118,7 @@
 		<div style="font-size: 10px;">*Predicted savings are approximate</div>
 		<div id="customDashboard" class="dashboard roundborder" style="text-align: center; overflow: auto; margin-top: 15px;">
 			<div style="text-align: left; margin-left: 4.25px;">
-				<span>Custom Dashboard <i class="far fa-plus-square show-pointer" id="customDashboardSelector"></i></span>
+				<span>Custom Dashboard <i class="far fa-plus-square show-pointer openExpander" id="customDashboardSelector"></i></span>
 			</div>
 			<div id="customDashboardSelectorList">
 				<div id="customDashboardItem4" class="roundborder custom-dashboard-item-large">
@@ -140,6 +141,8 @@
 		<br>
 	</div>	
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script src="dashboard.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

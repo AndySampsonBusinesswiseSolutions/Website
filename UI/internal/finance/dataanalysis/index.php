@@ -1,6 +1,6 @@
 <?php 
 	$PAGE_TITLE = "Eagle Eye";
-	 include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
+	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +13,7 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); updateChart(); updateDataGrid(chartSeries, categories);" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
 		<div class="tree-column">
 			<div class="dashboard roundborder" style="padding: 10px;">
@@ -65,7 +65,7 @@
 		<div class="dashboard roundborder" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="chartHeaderSpan">Usage Chart</span>
-				<div id="chartHeader" class="far fa-plus-square expander show-pointer"></div>
+				<div id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Chart To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Chart"></div>
 			</div>
@@ -76,7 +76,7 @@
 		<div class="dashboard roundborder" style="padding: 10px; margin-top: 5px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Data</span>
-				<div id="dataHeader" class="far fa-plus-square expander show-pointer"></div>
+				<div id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
 			</div>
 			<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper" style="margin-top: 5px; overflow-x: auto;">
 				<div id="datagrid" style="margin: 5px;"></div>
@@ -85,6 +85,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <link rel="stylesheet" href="rzslider.css" />
 <link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
