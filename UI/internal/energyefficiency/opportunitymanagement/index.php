@@ -120,7 +120,7 @@
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span id="opportunityDetailsSpan">Opportunity Details</span>
-						<div id="opportunityDetails" class="far fa-plus-square show-pointer"></div>
+						<div id="opportunityDetails" class="far fa-plus-square show-pointer expander"></div>
 					</div>
 					<br>
 					<div id="opportunityDetailsList" class="listitem-hidden">
@@ -146,24 +146,24 @@
 				<div class="roundborder divcolumn" style="float: left; width: 44%;">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span id="addNewTimelineStepSpan">Add New Timeline Step</span>
-						<div id="addNewTimelineStep" class="far fa-plus-square show-pointer"></div>
+						<div id="addNewTimelineStep" class="far fa-plus-square show-pointer expander"></div>
 					</div>
 					<br>
 					<div id="addNewTimelineStepList" class="listitem-hidden">
 						<div class="roundborder" style="float: left; width: 36%;">
 							<span id="addNewTimelineStepTreeSpan" style="padding-left: 5px;">Select Sites(s)/Meter(s)</span>
-							<div id="addNewTimelineStepTree" class="far fa-plus-square show-pointer"></div>
+							<div id="addNewTimelineStepTree" class="far fa-plus-square show-pointer expander openExpander"></div>
 							<div class="scrolling-wrapper">
 								<ul class="format-listitem" id="addNewTimelineStepTreeList">
 									<li>
-										<div id="Site0" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
-										<input type="checkbox" id="Site0checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site0span">Site X</span>
-										<div id="Site0List" class="listitem-hidden">
+										<div id="ManageOpportunitySite0" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<input type="checkbox" id="ManageOpportunitySite0checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite0span">Site X</span>
+										<div id="ManageOpportunitySite0List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="Meter14" style="padding-right: 4px;" class="far fa-times-circle"></div>
-													<input type="checkbox" id="Meter14checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Meter14span">1234567890123</span>
-													<div id="Meter14List" class="listitem-hidden">
+													<div id="ManageOpportunityMeter14" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<input type="checkbox" id="ManageOpportunityMeter14checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter14span">1234567890123</span>
+													<div id="ManageOpportunityMeter14List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
 													</div>
 												</li>
@@ -171,14 +171,14 @@
 										</div>
 									</li>
 									<li>
-										<div id="Site1" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
-										<input type="checkbox" id="Site1checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site1span">Site Y</span>
-										<div id="Site1List" class="listitem-hidden">
+										<div id="ManageOpportunitySite1" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<input type="checkbox" id="ManageOpportunitySite1checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite1span">Site Y</span>
+										<div id="ManageOpportunitySite1List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="Meter16" style="padding-right: 4px;" class="far fa-times-circle"></div>
-													<input type="checkbox" id="Meter16checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Meter16span">1234567890124</span>
-													<div id="Meter16List" class="listitem-hidden">
+													<div id="ManageOpportunityMeter16" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<input type="checkbox" id="ManageOpportunityMeter16checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter16span">1234567890124</span>
+													<div id="ManageOpportunityMeter16List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
 													</div>
 												</li>
@@ -186,21 +186,21 @@
 										</div>
 									</li>
 									<li>
-										<div id="Site2" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
-										<input type="checkbox" id="Site2checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site2span">Site Z</span>
-										<div id="Site2List" class="listitem-hidden">
+										<div id="ManageOpportunitySite2" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<input type="checkbox" id="ManageOpportunitySite2checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite2span">Site Z</span>
+										<div id="ManageOpportunitySite2List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="Meter18" style="padding-right: 4px;" class="far fa-times-circle"></div>
-													<input type="checkbox" id="Meter18checkbox" branch="Meter" linkedsite="LED Lighting" guid="" ><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Meter18span">1234567890125</span>
-													<div id="Meter18List" class="listitem-hidden">
+													<div id="ManageOpportunityMeter18" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<input type="checkbox" id="ManageOpportunityMeter18checkbox" branch="Meter" linkedsite="LED Lighting" guid="" ><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter18span">1234567890125</span>
+													<div id="ManageOpportunityMeter18List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
 													</div>
 												</li>
 												<li>
-													<div id="Meter20" style="padding-right: 4px;" class="far fa-times-circle"></div>
-													<input type="checkbox" id="Meter20checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Meter20span">1234567890126</span>
-													<div id="Meter20List" class="listitem-hidden">
+													<div id="ManageOpportunityMeter20" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<input type="checkbox" id="ManageOpportunityMeter20checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter20span">1234567890126</span>
+													<div id="ManageOpportunityMeter20List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
 													</div>
 												</li>
@@ -208,14 +208,14 @@
 										</div>
 									</li>
 									<li>
-										<div id="Site3" class="far fa-plus-square show-pointer" style="padding-right: 4px;"></div>
-										<input type="checkbox" id="Site3checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Site3span">Site A</span>
-										<div id="Site3List" class="listitem-hidden">
+										<div id="ManageOpportunitySite3" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<input type="checkbox" id="ManageOpportunitySite3checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite3span">Site A</span>
+										<div id="ManageOpportunitySite3List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="Meter22" style="padding-right: 4px;" class="far fa-times-circle"></div>
-													<input type="checkbox" id="Meter22checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="Meter22span">1234567890120</span>
-													<div id="Meter22List" class="listitem-hidden">
+													<div id="ManageOpportunityMeter22" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<input type="checkbox" id="ManageOpportunityMeter22checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter22span">1234567890120</span>
+													<div id="ManageOpportunityMeter22List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
 													</div>
 												</li>
@@ -285,7 +285,7 @@
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span id="editTimelineStepSpan">Edit Timeline Step</span>
-						<div id="editTimelineStep" class="far fa-plus-square show-pointer"></div>
+						<div id="editTimelineStep" class="far fa-plus-square show-pointer expander"></div>
 					</div>
 					<br>
 					<div id="editTimelineStepList" class="listitem-hidden">
@@ -333,13 +333,14 @@
 		</div>
 	</div>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="treeDiv" class="tree-div roundborder">
 			</div>
 			<br>
 			<div id="opportunityStatusDiv" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Opportunity Status <i class="far fa-plus-square show-pointer" id="opportunityStatusSelector"></i></span>
+				<span style="padding-left: 5px;">Select Opportunity Status <i class="far fa-plus-square show-pointer expander openExpander" id="opportunityStatusSelector"></i></span>
 				<ul class="format-listitem" id="opportunityStatusSelectorList">
 					<li>
 						<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
@@ -365,7 +366,7 @@
 			<div class="roundborder divcolumn left">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Requested Visits</span>
-					<div id="requestedVisits" class="far fa-plus-square show-pointer"></div>
+					<div id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></div>
 					<div class="fas fa-download show-pointer" style="float: right;" title="Download Requested Visits"></div>
 				</div>
@@ -378,7 +379,7 @@
 			<div class="roundborder divcolumn right">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Scheduled Visits</span>
-					<div id="scheduledVisits" class="far fa-plus-square show-pointer"></div>
+					<div id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></div>
 					<div class="fas fa-download show-pointer" style="float: right;" title="Download Scheduled Visits"></div>
 				</div>
@@ -394,7 +395,7 @@
 			<div class="roundborder divcolumn">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Rejected Opportunities</span>
-					<div id="rejectedOpportunities" class="far fa-plus-square show-pointer"></div>
+					<div id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></div>
 					<div class="fas fa-download show-pointer" style="float: right;" title="Download Rejected Opportunities"></div>
 				</div>
@@ -410,7 +411,7 @@
 			<div class="roundborder divcolumn">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Recommended Opportunities</span>
-					<div id="recommendedOpportunities" class="far fa-plus-square show-pointer"></div>
+					<div id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></div>
 					<div class="fas fa-download show-pointer" style="float: right;" title="Download Recommended Opportunities"></div>
 				</div>
@@ -426,7 +427,7 @@
 			<div class="roundborder divcolumn">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Pending & Active Opportunities</span>
-					<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer"></div>
+					<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
 					<div class="fas fa-download show-pointer" style="float: right;" title="Download Pending & Active Opportunities"></div>
 				</div>
@@ -440,6 +441,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="jquery-1.4.2.js"></script>
 <script type="text/javascript" src="opportunitymanagement.js"></script>
