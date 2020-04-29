@@ -1,6 +1,7 @@
 function pageLoad() {
     createTree(data, "treeDiv", "", "", true);
     addExpanderOnClickEvents();
+    setOpenExpanders();
     loadDataGrids();
 }
 
@@ -69,7 +70,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
         var branchDiv = createBranchDiv(branchId);
         
         if(!showSubMeters || !meter.hasOwnProperty('SubMeters')) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
+            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
             branchDiv.setAttribute('class', 'far fa-times-circle');
         }
 
@@ -113,7 +114,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
     }
 
     branchDiv.setAttribute('style', 'padding-right: 4px;');
@@ -220,80 +221,6 @@ function getIconByBranch(branch, commodity) {
     }
 }
 
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
-	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
-		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass)
-{
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
-		}
-		
-		element.classList.add(firstClass);
-	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-    }
-    
-    updateClassOnClick('identifiedOpportunities', 'fa-plus-square', 'fa-minus-square');
-    updateClassOnClick('createNewOpportunity', 'fa-plus-square', 'fa-minus-square');
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
-}
-
-function getAttribute(attributes, attributeRequired) {
-	for (var attribute in attributes) {
-		var array = attributes[attribute];
-
-		for(var key in array) {
-			if(key == attributeRequired) {
-				return array[key];
-			}
-		}
-	}
-
-	return null;
-}
-
-function clearElement(element) {
-	while (element.firstChild) {
-		element.removeChild(element.firstChild);
-	}
-}
-
 function displayContactPopup(type, row) {
     var modal = document.getElementById("popup");
 	var title = document.getElementById("title");
@@ -327,16 +254,6 @@ function displayTimePeriodPopup(type, row) {
     popupText.innerHTML = text;
     
     finalisePopup(title, 'Time Periods<br>', modal, span);
-}
-
-function finalisePopup(title, titleHTML, modal, span) {
-    title.innerHTML = titleHTML;
-
-	modal.style.display = "block";
-
-	span.onclick = function() {
-		modal.style.display = "none";
-	}
 }
 
 function loadDataGrids() {

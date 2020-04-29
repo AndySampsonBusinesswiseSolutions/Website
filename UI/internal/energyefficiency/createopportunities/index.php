@@ -28,7 +28,7 @@
         <div class="roundborder divcolumn">
             <div style="text-align: center; border-bottom: solid black 1px;">
                 <span>Identified Opportunities</span>
-                <div id="identifiedOpportunities" class="far fa-plus-square show-pointer"></div>
+                <div id="identifiedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
             </div>
             <div id="identifiedOpportunitiesList">
                 <div style="text-align: right;">
@@ -42,7 +42,7 @@
         <div class="roundborder divcolumn" style="margin-top: 5px;">
             <div style="text-align: center; border-bottom: solid black 1px;">
                 <span>Create New Opportunity</span>
-                <div id="createNewOpportunity" class="far fa-plus-square show-pointer"></div>
+                <div id="createNewOpportunity" class="far fa-plus-square show-pointer expander openExpander"></div>
             </div>
             <div id="createNewOpportunityList">
             <div>
@@ -87,7 +87,7 @@
                             <span id="timePeriodsDiv" style="padding-left: 5px;">Select Time Periods</span>
                             <ul class="format-listitem" id="timePeriodsDivSelectorList">
                                 <li>
-                                    <div id="monthOfYear" class="far fa-plus-square show-pointer"></div>
+                                    <div id="monthOfYear" class="far fa-plus-square show-pointer expander"></div>
                                     <span id="monthOfYearspan">Months</span>
                                     <div id="monthOfYearList"  class="listitem-hidden">
                                         <ul class="format-listitem">
@@ -96,7 +96,7 @@
                                                 <input type="checkbox" class="show-pointer" checked><span>All Year</span>
                                             </li>
                                             <li>
-                                                <div id="monthOfYearDetail" class="far fa-plus-square show-pointer"></div>
+                                                <div id="monthOfYearDetail" class="far fa-plus-square show-pointer expander"></div>
                                                 <span id="monthOfYearDetailspan">Select Specific Month(s)</span>
                                                 <div id="monthOfYearDetailList"  class="listitem-hidden">
                                                     <ul class="format-listitem">
@@ -155,7 +155,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div id="dayOfWeek" class="far fa-plus-square show-pointer"></div>
+                                    <div id="dayOfWeek" class="far fa-plus-square show-pointer expander"></div>
                                     <span id="dayOfWeekspan">Days Of The Week</span>
                                     <div id="dayOfWeekList"  class="listitem-hidden">
                                         <ul class="format-listitem">
@@ -164,7 +164,7 @@
                                                 <input type="checkbox" class="show-pointer" checked><span>All Week</span>
                                             </li>
                                             <li>
-                                                <div id="dayOfWeekDetail" class="far fa-plus-square show-pointer"></div>
+                                                <div id="dayOfWeekDetail" class="far fa-plus-square show-pointer expander"></div>
                                                 <span id="dayOfWeekDetailspan">Select Specific Day(s)</span>
                                                 <div id="dayOfWeekDetailList"  class="listitem-hidden">
                                                     <ul class="format-listitem">
@@ -203,7 +203,7 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <div id="timePeriod" class="far fa-plus-square show-pointer"></div>
+                                    <div id="timePeriod" class="far fa-plus-square show-pointer expander"></div>
                                     <span id="timePeriodspan">Time Periods</span>
                                     <div id="timePeriodList"  class="listitem-hidden">
                                         <ul class="format-listitem">
@@ -212,7 +212,7 @@
                                                 <input type="checkbox" class="show-pointer" checked><span>All Day</span>
                                             </li>
                                             <li>
-                                                <div id="timePeriodDetail" class="far fa-plus-square show-pointer"></div>
+                                                <div id="timePeriodDetail" class="far fa-plus-square show-pointer expander"></div>
                                                 <span id="timePeriodDetailspan">Select Specific Time Period(s)</span>
                                                 <div id="timePeriodDetailList"  class="listitem-hidden">
                                                     <ul class="format-listitem">
@@ -318,6 +318,8 @@
     </div>
     <br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="createopportunities.js"></script>
 <script type="text/javascript" src="createopportunities.json"></script>
