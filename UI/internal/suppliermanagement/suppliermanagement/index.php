@@ -25,6 +25,7 @@
 		</div>
 	</div>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="treeDiv" class="tree-div roundborder">
@@ -44,6 +45,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="suppliermanagement.js"></script>
 <script type="text/javascript" src="suppliermanagement.json"></script>
