@@ -15,10 +15,11 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
+    <i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="treeDiv" class="tree-div roundborder">
-        <span style="padding-left: 5px;">Select Items To Display <i class="far fa-plus-square show-pointer" id="itemsToDisplaySelector"></i></span>
+        <span style="padding-left: 5px;">Select Items To Display <i class="far fa-plus-square show-pointer expander openExpander" id="itemsToDisplaySelector"></i></span>
 				<ul class="format-listitem" id="itemsToDisplaySelectorList">
 					<li>
 						<input type="checkbox" id="electricityVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Volume</span>
@@ -52,7 +53,7 @@
     <div id="electricityVolumeContainer" class="roundborder tree-div">
         <div style="text-align: center; border-bottom: solid black 1px;">
           <span>Electricity Volume</span>
-          <div id="electricityVolume" class="far fa-plus-square show-pointer"></div>
+          <div id="electricityVolume" class="far fa-plus-square show-pointer expander openExpander"></div>
 				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Electricity Flex Volume To Download Basket"></div>
 				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Electricity Flex Volume"></div>
         </div>
@@ -63,7 +64,7 @@
     <div id="electricityPriceContainer" class="roundborder tree-div" style="margin-top: 5px;">
         <div style="text-align: center; border-bottom: solid black 1px;">
           <span>Electricity Price</span>
-          <div id="electricityPrice" class="far fa-plus-square show-pointer"></div>
+          <div id="electricityPrice" class="far fa-plus-square show-pointer expander"></div>
 				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Electricity Flex Prices To Download Basket"></div>
 				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Electricity Flex Prices"></div>
         </div>
@@ -74,7 +75,7 @@
     <div id="gasVolumeContainer" class="roundborder tree-div" style="margin-top: 5px;">
         <div style="text-align: center; border-bottom: solid black 1px;">
           <span>Gas Volume</span>
-          <div id="gasVolume" class="far fa-plus-square show-pointer"></div>
+          <div id="gasVolume" class="far fa-plus-square show-pointer expander"></div>
 				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Gas Flex Volume To Download Basket"></div>
 				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Gas Flex Volume"></div>
         </div>
@@ -85,7 +86,7 @@
     <div id="gasPriceContainer" class="roundborder tree-div" style="margin-top: 5px;">
         <div style="text-align: center; border-bottom: solid black 1px;">
             <span>Gas Price</span>
-            <div id="gasPrice" class="far fa-plus-square show-pointer"></div>
+            <div id="gasPrice" class="far fa-plus-square show-pointer expander"></div>
 				  <div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Gas Flex Prices To Download Basket"></div>
 				  <div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Gas Flex Prices"></div>
         </div>
@@ -96,7 +97,7 @@
     <div id="electricityDatagridsContainer" class="roundborder tree-div" style="margin-top: 5px;">
         <div style="text-align: center; border-bottom: solid black 1px;">
             <span>Electricity Datagrids</span>
-            <div id="electricityDatagrids" class="far fa-plus-square show-pointer"></div>
+            <div id="electricityDatagrids" class="far fa-plus-square show-pointer expander"></div>
         </div>
         <div id="electricityDatagridsList" class="roundborder chart listitem-hidden">
           <div class="first"></div>
@@ -113,7 +114,7 @@
     <div id="gasDatagridsContainer" class="roundborder tree-div" style="margin-top: 5px;">
         <div style="text-align: center; border-bottom: solid black 1px;">
             <span>Gas Datagrids</span>
-            <div id="gasDatagrids" class="far fa-plus-square show-pointer"></div>
+            <div id="gasDatagrids" class="far fa-plus-square show-pointer expander"></div>
         </div>
         <div id="gasDatagridsList" class="roundborder chart listitem-hidden">
           <div class="first"></div>
@@ -130,6 +131,8 @@
   </div> 
   <br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="viewflexposition.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
