@@ -14,13 +14,14 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="treeDiv" class="tree-div roundborder">
+			<div id="siteTree" class="tree-div roundborder">
 			</div>
 			<br>
 			<div class="roundborder" style="background-color: #e9eaee;">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer" id="commoditySelector"></i></span>
+				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer expander openExpander" id="commoditySelector"></i></span>
 				<ul class="format-listitem" id="commoditySelectorList">
 					<li>
 						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
@@ -47,7 +48,7 @@
 			<div class="dashboard roundborder" style="padding: 10px;">
 				<div style="text-align: center; border-bottom: solid black 1px;">
 					<span>Commission Chart</span>
-					<i class="far fa-plus-square show-pointer" id="commissionsChart"></i>
+					<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
 					<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Commission Chart To Download Basket"></div>
 					<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Commission Chart"></div>
 				</div>
@@ -64,6 +65,8 @@
 	</div>	
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script src="commissions.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

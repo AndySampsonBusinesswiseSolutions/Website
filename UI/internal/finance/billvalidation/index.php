@@ -1,6 +1,6 @@
 <?php 
 	if(!session_id()) session_start();
-	$PAGE_TITLE = "Budget Management";
+	$PAGE_TITLE = "Invoice Management";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 

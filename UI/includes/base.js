@@ -304,6 +304,106 @@ function getBranchCheckboxes(inputs, branch) {
     return checkBoxes;
 }
 
+function formatDate(dateToBeFormatted, format) {
+	var baseDate = new Date(dateToBeFormatted);
+
+	switch(format) {
+		case 'yyyy-MM-dd':
+			var aaaa = baseDate.getFullYear();
+			var gg = baseDate.getDate();
+			var mm = (baseDate.getMonth() + 1);
+		
+			if (gg < 10) {
+				gg = '0' + gg;
+			}				
+		
+			if (mm < 10) {
+				mm = '0' + mm;
+			}
+		
+			return aaaa + '-' + mm + '-' + gg;
+		case 'yyyy-MM-dd hh:mm:ss':
+			var hours = baseDate.getHours()
+			var minutes = baseDate.getMinutes()
+			var seconds = baseDate.getSeconds();
+		
+			if (hours < 10) {
+				hours = '0' + hours;
+			}				
+		
+			if (minutes < 10) {
+				minutes = '0' + minutes;
+			}				
+		
+			if (seconds < 10) {
+				seconds = '0' + seconds;
+			}			
+		
+			return formatDate(baseDate, 'yyyy-MM-dd') + ' ' + hours + ':' + minutes + ':' + seconds;
+		case 'MMM yyyy':
+			var aaaa = baseDate.getFullYear();
+			var mm = (baseDate.getMonth() + 1);
+
+			return convertMonthIdToShortCode(mm) + ' ' + aaaa;
+		case 'yyyy':
+			return baseDate.getFullYear();
+		case 'yyyy-MM-dd to yyyy-MM-dd':
+			var startDate = getMonday(baseDate);
+			var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 6);
+
+			return formatDate(startDate, 'yyyy-MM-dd') + ' to ' + formatDate(endDate, 'yyyy-MM-dd')
+	}
+}
+
+function convertMonthIdToShortCode(monthId) {
+	return convertMonthIdToFullText(monthId).slice(0, 3).toUpperCase();
+}
+
+function convertMonthIdToFullText(monthId) {
+	switch(monthId) {
+		case 1:
+			return 'January';
+		case 2:
+			return 'February';
+		case 3:
+			return 'March';
+		case 4:
+			return 'April';
+		case 5:
+			return 'May';
+		case 6:
+			return 'June';
+		case 7:
+			return 'July';
+		case 8:
+			return 'August';
+		case 9:
+			return 'September';
+		case 10:
+			return 'October';
+		case 11:
+			return 'November';
+		case 12:
+			return 'December';
+	}
+}
+
+function getCategoryTexts(startDate, endDate, dateFormat) {
+    var newCategories = [];
+  
+    for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+      for(var hh = 0; hh < 48; hh++) {
+        var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
+  
+        if(!newCategories.includes(newCategoryText)) {
+          newCategories.push(newCategoryText);
+        }      
+      }
+    }
+  
+    return newCategories;
+  }
+
 function alertMessage() {
     alert('Something needs to happen here when you click this thing......what is it??');
 }

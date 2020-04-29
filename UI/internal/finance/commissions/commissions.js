@@ -1,30 +1,16 @@
 function pageLoad() {
-  createTree(data, "treeDiv", "", "updateChart(commissionChart)");
+  createTree(data, "siteTree", "", "updateChart(commissionChart)");
   addExpanderOnClickEvents();
+  setOpenExpanders();
 
-  document.onmousemove=function(e) {
-    var mousecoords = getMousePos(e);
-    if(mousecoords.x <= 25) {
-      openNav();
-    }  
-    else if(mousecoords.x >= 400) {
-      closeNav();
-    }  
+  document.onmousemove = function(e) {
+    setupSidebarHeight();
+    setupSidebar(e);
   };
-}
 
-function getMousePos(e) {
-  return {x:e.clientX,y:e.clientY};
-}
-
-function openNav() {
-	document.getElementById("mySidenav").style.width = "400px";
-	document.getElementById("openNav").style.color = "#b62a51";
-}
-
-function closeNav() {
-	document.getElementById("openNav").style.color = "white";
-	document.getElementById("mySidenav").style.width = "0px";
+  window.onscroll = function() {
+    setupSidebarHeight();
+  };
 }
 
 var branchCount = 0;
@@ -48,7 +34,7 @@ function createTree(baseData, divId, commodity, checkboxFunction) {
 
     var header = document.createElement('span');
     header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer"" id="' + divId.concat('Selector') + '"></i>';
+    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
 
     div.appendChild(header);
     div.appendChild(tree);
@@ -130,7 +116,7 @@ function createBranchDiv(branchDivId, childrenCreated = true) {
     branchDiv.id = branchDivId;
 
     if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
+        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
     }
     else {
         branchDiv.setAttribute('class', 'far fa-times-circle');
@@ -260,8 +246,8 @@ function getCommodity() {
 }
 
 function updateChart(callingElement, chart) {
-    var treeDiv = document.getElementById('treeDiv');
-    var inputs = treeDiv.getElementsByTagName('input');
+    var siteTree = document.getElementById('siteTree');
+    var inputs = siteTree.getElementsByTagName('input');
     var commodity = getCommodity();
     var checkBoxes = getCheckedCheckBoxes(inputs);
     var chartTitle = "Previous 12 Months " + (commodity == '' ? '' : (commodity + ' ')) + "Commission";
@@ -354,9 +340,7 @@ function updateChart(callingElement, chart) {
       }
     };
 
-    var chart = new ApexCharts(document.querySelector('#commissionChart'), chartOptions);
-    chart.render();
-    
+    renderChart('#commissionChart', chartOptions);
     updateDataGrid(newSeries, newCategories);
   }
   
@@ -577,22 +561,6 @@ function updateDataGrid(newSeries, newCategories) {
     return getCategoryTexts(new Date(2018, 12, 1), new Date(2019, 12, 1), 'MMM yyyy');
   }
   
-  function getCategoryTexts(startDate, endDate, dateFormat) {
-    var newCategories = [];
-  
-    for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
-      for(var hh = 0; hh < 48; hh++) {
-        var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
-  
-        if(!newCategories.includes(newCategoryText)) {
-          newCategories.push(newCategoryText);
-        }      
-      }
-    }
-  
-    return newCategories;
-  }
-  
   function getChartXAxisLabelFormat() {
     return 'MMM yyyy';
   }
@@ -624,172 +592,3 @@ function updateDataGrid(newSeries, newCategories) {
         return 'Cost (£)';
     }
   }
-
-  function getAttribute(attributes, attributeRequired) {
-	for (var attribute in attributes) {
-		var array = attributes[attribute];
-
-		for(var key in array) {
-			if(key == attributeRequired) {
-				return array[key];
-			}
-		}
-	}
-
-	return null;
-}
-
-function clearElement(element) {
-	while (element.firstChild) {
-		element.removeChild(element.firstChild);
-	}
-}
-
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
-	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
-		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass)
-{
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
-		}
-		
-		element.classList.add(firstClass);
-	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-  }
-  
-  updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('commoditySelector', 'fa-plus-square', 'fa-minus-square');
-  updateClassOnClick('commissionsChart', 'fa-plus-square', 'fa-minus-square');
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
-}
-
-function formatDate(dateToBeFormatted, format) {
-	var baseDate = new Date(dateToBeFormatted);
-
-	switch(format) {
-		case 'yyyy-MM-dd':
-			var aaaa = baseDate.getFullYear();
-			var gg = baseDate.getDate();
-			var mm = (baseDate.getMonth() + 1);
-		
-			if (gg < 10) {
-				gg = '0' + gg;
-			}				
-		
-			if (mm < 10) {
-				mm = '0' + mm;
-			}
-		
-			return aaaa + '-' + mm + '-' + gg;
-		case 'yyyy-MM-dd hh:mm:ss':
-			var hours = baseDate.getHours()
-			var minutes = baseDate.getMinutes()
-			var seconds = baseDate.getSeconds();
-		
-			if (hours < 10) {
-				hours = '0' + hours;
-			}				
-		
-			if (minutes < 10) {
-				minutes = '0' + minutes;
-			}				
-		
-			if (seconds < 10) {
-				seconds = '0' + seconds;
-			}			
-		
-			return formatDate(baseDate, 'yyyy-MM-dd') + ' ' + hours + ':' + minutes + ':' + seconds;
-		case 'MMM yyyy':
-			var aaaa = baseDate.getFullYear();
-			var mm = (baseDate.getMonth() + 1);
-
-			return convertMonthIdToShortCode(mm) + ' ' + aaaa;
-		case 'yyyy':
-			return baseDate.getFullYear();
-		case 'yyyy-MM-dd to yyyy-MM-dd':
-			var startDate = getMonday(baseDate);
-			var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 6);
-
-			return formatDate(startDate, 'yyyy-MM-dd') + ' to ' + formatDate(endDate, 'yyyy-MM-dd')
-	}
-}
-
-function convertMonthIdToShortCode(monthId) {
-	return convertMonthIdToFullText(monthId).slice(0, 3).toUpperCase();
-}
-
-function convertMonthIdToFullText(monthId) {
-	switch(monthId) {
-		case 1:
-			return 'January';
-		case 2:
-			return 'February';
-		case 3:
-			return 'March';
-		case 4:
-			return 'April';
-		case 5:
-			return 'May';
-		case 6:
-			return 'June';
-		case 7:
-			return 'July';
-		case 8:
-			return 'August';
-		case 9:
-			return 'September';
-		case 10:
-			return 'October';
-		case 11:
-			return 'November';
-		case 12:
-			return 'December';
-	}
-}
-
-function preciseRound(num, dec){
-	if ((typeof num !== 'number') || (typeof dec !== 'number')) {
-		return false; 
-	}	
-
-	var num_sign = num >= 0 ? 1 : -1;
-		
-	return Number((Math.round((num*Math.pow(10,dec))+(num_sign*0.0001))/Math.pow(10,dec)).toFixed(dec));
-}
