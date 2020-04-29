@@ -900,3 +900,25 @@ ul {
 .topListItem {
     padding-left: 0px;
 }
+.chart {
+    background-color: #e9eaee;
+    max-height: 650px;
+    min-height: 650px;
+}
+.expander {
+    width: 18px;
+  }
+  .expander-header {
+    text-align: center; 
+    border-bottom: solid black 1px;
+    margin-bottom: 5px;
+  }
+  .expander-container {
+    margin-top: 5px;
+  }
+  .listitem-icon {
+    padding-right: 3px;
+  }
+  ul>li>input {
+    width: 18px;
+  }

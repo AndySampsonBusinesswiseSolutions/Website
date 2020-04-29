@@ -12,18 +12,6 @@
 </head>
 
 <body>
-	<div id="popup" class="popup">
-		<div class="modal-content">
-			<span class="close" title="Close">&times;</span>
-			<div class="title">
-				<span id="title"></span>
-			</div>
-			<br>
-			<span id="text" style="font-size: 15px;"></span><br><br>
-			<button style="float: right;" class="reject" id="button">Delete Attribute</button>
-			<br>
-		</div>
-	</div>
 	<div id="mySidenav" class="sidenav">
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
@@ -56,7 +44,7 @@
 					<span id="filterOptionsSpan">Filter Options</span>
 					<div id="filterOptions" class="far fa-plus-square expander show-pointer"></div>
 				</div>
-				<div id="filterOptionsList" class="listitem-hidden" style="margin-top: 5px;">
+				<div id="filterOptionsList" class="slider-list" style="margin-top: 5px;">
 					<div id="commodityTree" class="sidebar-tree-div roundborder">
 					</div>
 					<br>

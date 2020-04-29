@@ -190,7 +190,7 @@ function createDisplayTree() {
   var div = document.getElementById('displayTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("displayHeader", "Select Display");
+  var headerDiv = createHeaderDiv("displayHeader", "Display");
   var ul = createBranchUl("displaySelector", false, true);
 
   div.appendChild(headerDiv);
@@ -316,7 +316,7 @@ function createBudgetTree() {
   var div = document.getElementById('budgetTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("budgetHeader", "Select Budget");
+  var headerDiv = createHeaderDiv("budgetHeader", "Budget");
   var ul = createBranchUl("budgetSelector", false, true);
 
   var budget2BudgetListItem = appendListItemChildren('budget2BudgetSelector', true, 'updatePage()', [{"Name" : "Budget 2"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
@@ -366,7 +366,7 @@ function createSiteTree(usageSites, functions) {
 
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("siteHeader", 'Select Sites/Meters');
+  var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters');
   var ul = createBranchUl("siteSelector", false, true);
 
   var breakDisplayListItem = document.createElement('li');
@@ -408,11 +408,11 @@ function createInvoiceTree() {
   var div = document.getElementById('invoiceTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("invoiceHeader", "Select Invoice");
+  var headerDiv = createHeaderDiv("invoiceHeader", "Invoice");
   var ul = createBranchUl("invoiceSelector", true, true);
 
   var selectAllInvoiceListItem = appendListItemChildren('selectAllInvoiceSelector', false, 'updatePage()', [{"Name" : "Show All Invoices"}], 'invoiceSelector', true, 'checkbox', 'invoiceGroup');
-  var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, '', [{"Name" : "Select Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
+  var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, '', [{"Name" : "Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
 
   ul.appendChild(selectAllInvoiceListItem);
   ul.appendChild(selectSpecificInvoiceListItem);
@@ -449,7 +449,7 @@ function createGroupingOptionTree() {
   var div = document.getElementById('groupingOptionTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("groupingOptionHeader", "Select Grouping Option");
+  var headerDiv = createHeaderDiv("groupingOptionHeader", "Grouping Option");
   var ul = createBranchUl("groupingOptionSelector", true, true);
 
   var groupingOption2GroupingOptionListItem = appendListItemChildren('groupingOption2GroupingOptionSelector', false, 'updatePage()', [{"Name" : "No Grouping"}], 'groupingOptionSelector', true, 'radio', 'groupingOptionGroup');
@@ -473,7 +473,7 @@ function createCommodityTree() {
   var div = document.getElementById('commodityTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("commodityHeader", "Filter By Commodity");
+  var headerDiv = createHeaderDiv("commodityHeader", "Commodity");
   var ul = createBranchUl("commoditySelector", true, true);
 
   var allCommodityListItem = appendListItemChildren('allCommoditySelector', false, 'updatePage()', [{"Name" : "All"}], 'commoditySelector', true, 'radio', 'commodityGroup');
@@ -492,7 +492,7 @@ function createTimePeriodTree() {
   var div = document.getElementById('timePeriodTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("timePeriodHeader", "Filter By Time Period");
+  var headerDiv = createHeaderDiv("timePeriodHeader", "Time Period");
   var ul = createBranchUl("timePeriodSelector", false, true);
   ul.classList.add("slider-list");
 
