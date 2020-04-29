@@ -12,12 +12,13 @@
 </head>
 
 <body>
-	<div id="mySidenav" class="sidenav">	
+	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div class="tree-div roundborder">
 				<span style="padding-left: 5px;">Select Tree Display Order</span>
-				<div id="treeDisplayOrder" class="far fa-plus-square show-pointer"></div>
+				<div id="treeDisplayOrder" class="far fa-plus-square show-pointer expander openExpander"></div>
 				<ul id="treeDisplayOrderList" class="format-listitem">
 					<li>
 						<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "treeDiv", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
@@ -46,18 +47,18 @@
 		<div class="roundborder dashboard" style="padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
-				<div id="cumulativeSaving" class="far fa-plus-square show-pointer"></div>
+				<div id="cumulativeSaving" class="far fa-plus-square show-pointer expander openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="float: right;" title="Download Cumulative Saving Chart"></div>
 			</div>
-			<div id="cumulativeSavingList" class="listitem-hidden tree-div roundborder" style="margin-top: 5px;">
+			<div id="cumulativeSavingList" class="tree-div roundborder" style="margin-top: 5px;">
 				<div id="cumulativeSavingChart"></div>
 			</div>
 		</div>
 		<div class="roundborder dashboard" style="margin-top: 5px; padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="costSavingspan">Cost Saving Chart</span>
-				<div id="costSaving" class="far fa-plus-square show-pointer"></div>
+				<div id="costSaving" class="far fa-plus-square show-pointer expander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="float: right;" title="Download Cost Saving Chart"></div>
 			</div>
@@ -68,7 +69,7 @@
 		<div class="roundborder dashboard" style="margin-top: 5px; padding: 10px;">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span id="volumeSavingspan">Volume Saving Chart</span>
-				<div id="volumeSaving" class="far fa-plus-square show-pointer"></div>
+				<div id="volumeSaving" class="far fa-plus-square show-pointer expander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="float: right;" title="Download Volume Saving Chart"></div>
 			</div>
@@ -79,6 +80,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="jquery-1.4.2.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
