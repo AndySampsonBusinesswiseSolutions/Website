@@ -1,6 +1,6 @@
 <?php 
 	if(!session_id()) session_start();
-	$PAGE_TITLE = "Bill Validation";
+	$PAGE_TITLE = "Budget Management";
 	include($_SERVER['DOCUMENT_ROOT']."/includes/navigation/navigation.php");
 ?>
 
@@ -14,9 +14,10 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="treeDiv" class="tree-div roundborder">
+			<div id="billTree" class="tree-div roundborder">
 			</div>
 		</div>
 	</div>
@@ -33,6 +34,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script src="billvalidation.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
