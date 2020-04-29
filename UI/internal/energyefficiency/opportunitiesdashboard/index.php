@@ -138,7 +138,7 @@
 		<div class="roundborder divcolumn" style="overflow: auto">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Recommended Opportunities</span>
-				<i class="far fa-plus-square show-pointer" id="recommendedOpportunities"></i>
+				<i class="far fa-plus-square show-pointer expander openExpander" id="recommendedOpportunities"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Recommended Opportunities To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Recommended Opportunities"></div>
 			</div>
@@ -163,7 +163,7 @@
 					<div>
 						<div class="divider-column"></div>
 						<div class="opportunity-column" style="padding-top: 10px;">
-							<div id="Project1" class="far fa-plus-square show-pointer"></div>
+							<div id="Project1" class="far fa-plus-square show-pointer expander"></div>
 							<span id="Project1span">LED Lighting Installation</span>
 						</div>
 						<div class="divider-column"></div>
@@ -252,7 +252,7 @@
 					<div>
 						<div class="divider-column"></div>
 						<div class="opportunity-column" style="padding-top: 10px;">
-							<div id="Project2" class="far fa-plus-square show-pointer"></div>
+							<div id="Project2" class="far fa-plus-square show-pointer expander"></div>
 							<span id="Project2span">LED Lighting Installation 2</span>
 						</div>
 						<div class="divider-column"></div>
@@ -345,7 +345,7 @@
 		<div class="roundborder divcolumn">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Visits</span>
-				<i class="far fa-plus-square show-pointer" id="siteVisits"></i>
+				<i class="far fa-plus-square show-pointer expander openExpander" id="siteVisits"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Visits To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Visits"></div>
 			</div>
@@ -353,7 +353,7 @@
 				<div class="divcolumn" style="float: left;">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span>Future Site Visits</span>
-						<i class="far fa-plus-square show-pointer" id="futureSiteVisits"></i>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="futureSiteVisits"></i>
 						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Future Site Visits To Download Basket"></div>
 						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Future Site Visits"></div>
 					</div>
@@ -365,7 +365,7 @@
 				<div class="divcolumn" style="float: left;">
 					<div style="text-align: center; border-bottom: solid black 1px;">
 						<span>Historical Site Visits</span>
-						<i class="far fa-plus-square show-pointer" id="historicalSiteVisits"></i>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="historicalSiteVisits"></i>
 						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Historical Site Visits To Download Basket"></div>
 						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Historical Site Visits"></div>
 					</div>
@@ -381,7 +381,7 @@
 		<div class="roundborder divcolumn">
 			<div style="text-align: center; border-bottom: solid black 1px;">
 				<span>Site Ranking</span>
-				<i class="far fa-plus-square show-pointer" id="siteRanking"></i>
+				<i class="far fa-plus-square show-pointer expander openExpander" id="siteRanking"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Ranking To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Ranking"></div>
 			</div>
@@ -393,6 +393,8 @@
 	<div style="clear: both;"></div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script src="opportunitiesdashboard.json"></script>
 <script src="opportunitiesdashboard.js"></script>

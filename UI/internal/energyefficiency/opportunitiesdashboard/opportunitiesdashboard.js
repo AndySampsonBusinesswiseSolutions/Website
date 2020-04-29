@@ -1,5 +1,6 @@
 function pageLoad() {
 	addExpanderOnClickEvents();
+	setOpenExpanders();
 	loadDataGrids();
 	setupRequestVisitPopup();
 }
@@ -287,26 +288,6 @@ function displaySiteRankingPopup(row) {
 	
 	span.onclick = function() {
 		modal.style.display = "none";
-	}
-}
-
-function getAttribute(attributes, attributeRequired) {
-	for (var attribute in attributes) {
-		var array = attributes[attribute];
-
-		for(var key in array) {
-			if(key == attributeRequired) {
-				return array[key];
-			}
-		}
-	}
-
-	return null;
-}
-
-function clearElement(element) {
-	while (element.firstChild) {
-		element.removeChild(element.firstChild);
 	}
 }
 
@@ -613,61 +594,4 @@ function resetRating(el, val) {
 			el.children[j - 1].setAttribute('class', '');
 		}
 	}
-}
-
-function updateClassOnClick(elementId, firstClass, secondClass){
-	var elements = document.getElementsByClassName(elementId);
-
-	if(elements.length == 0) {
-		var element = document.getElementById(elementId);
-		updateClass(element, firstClass, secondClass);
-	}
-	else {
-		for(var i = 0; i< elements.length; i++) {
-			updateClass(elements[i], firstClass, secondClass)
-		}
-	}
-}
-
-function updateClass(element, firstClass, secondClass)
-{
-	if(hasClass(element, firstClass)){
-		element.classList.remove(firstClass);
-
-		if(secondClass != ''){
-			element.classList.add(secondClass);
-		}
-	}
-	else {
-		if(secondClass != ''){
-			element.classList.remove(secondClass);
-		}
-		
-		element.classList.add(firstClass);
-	}
-}
-  
-function hasClass(elem, className) {
-	return new RegExp(' ' + className + ' ').test(' ' + elem.className + ' ');
-}
-
-function addExpanderOnClickEvents() {
-	var expanders = document.getElementsByClassName('fa-plus-square');
-	var expandersLength = expanders.length;
-	for(var i = 0; i < expandersLength; i++){
-		addExpanderOnClickEventsByElement(expanders[i]);
-	}
-
-	updateClassOnClick('recommendedOpportunities', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('siteVisits', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('futureSiteVisits', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('historicalSiteVisits', 'fa-plus-square', 'fa-minus-square');
-	updateClassOnClick('siteRanking', 'fa-plus-square', 'fa-minus-square');
-}
-
-function addExpanderOnClickEventsByElement(element) {
-	element.addEventListener('click', function (event) {
-		updateClassOnClick(this.id, 'fa-plus-square', 'fa-minus-square')
-		updateClassOnClick(this.id.concat('List'), 'listitem-hidden', '')
-	});
 }
