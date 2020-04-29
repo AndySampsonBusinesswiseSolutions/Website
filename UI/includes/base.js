@@ -126,6 +126,51 @@ function setOpenExpanders() {
     }
 }
 
+function updateAdditionalControls(element) {
+	var additionalcontrols = element.getAttribute('additionalcontrols');
+
+	if(!additionalcontrols) {
+		return;
+	}
+
+	var listToHide = element.id.concat('List');
+	var clickEventFunction = function (event) {
+		updateClassOnClick(listToHide, 'listitem-hidden', '')
+	};
+
+	var controlArray = additionalcontrols.split(',');
+	for(var j = 0; j < controlArray.length; j++) {
+		var controlId = controlArray[j];	
+
+		element.addEventListener('click', function (event) {
+			var controlElement = document.getElementById(controlId);
+			if(hasClass(this, 'fa-minus-square')) {				
+				controlElement.addEventListener('click', clickEventFunction, false);
+			}
+			else {
+				controlElement.removeEventListener('click', clickEventFunction);
+			}
+		});
+	}	
+}
+
+function expandAdditionalLists(element) {
+	var additionalLists = element.getAttribute('additionallists');
+
+	if(!additionalLists) {
+		return;
+	}
+
+	element.addEventListener('click', function (event) {
+		var controlArray = additionalLists.split(',');
+		for(var j = 0; j < controlArray.length; j++) {
+			var controlId = controlArray[j];
+			var controlElement = document.getElementById(controlId);
+			updateClass(controlElement, 'listitem-hidden', '');
+		}
+	});		
+}
+
 function preciseRound(num, dec){
 	if ((typeof num !== 'number') || (typeof dec !== 'number')) {
 		return false; 

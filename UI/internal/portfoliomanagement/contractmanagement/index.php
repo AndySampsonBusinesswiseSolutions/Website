@@ -39,6 +39,7 @@
 		</div>
 	</div>
 	<div id="mySidenav" class="sidenav">
+		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
 			<div id="treeDiv" class="tree-div roundborder">
@@ -57,7 +58,7 @@
 		<div class="roundborder divcolumn">
             <div style="text-align: center; border-bottom: solid black 1px;">
                 <span>Out Of Contract Meters</span>
-                <div id="outOfContractMeters" class="far fa-plus-square show-pointer"></div>
+                <div id="outOfContractMeters" class="far fa-plus-square show-pointer expander openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Out Of Contract Meters To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Out Of Contract Meters"></div>
             </div>
@@ -68,7 +69,7 @@
 		<div class="roundborder divcolumn" style="margin-top: 5px;">
             <div style="text-align: center; border-bottom: solid black 1px;">
                 <span>Active Contracts</span>
-                <div id="activeContracts" class="far fa-plus-square show-pointer"></div>
+                <div id="activeContracts" class="far fa-plus-square show-pointer expander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Active Contracts To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Active Contracts"></div>
             </div>
@@ -79,7 +80,7 @@
 		<div class="roundborder divcolumn" style="margin-top: 5px;">
             <div style="text-align: center; border-bottom: solid black 1px;">
                 <span>Pending Contracts</span>
-                <div id="pendingContracts" class="far fa-plus-square show-pointer"></div>
+                <div id="pendingContracts" class="far fa-plus-square show-pointer expander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Pending Contracts To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Pending Contracts"></div>
             </div>
@@ -90,7 +91,7 @@
 		<div class="roundborder divcolumn" style="margin-top: 5px;">
             <div style="text-align: center; border-bottom: solid black 1px;">
                 <span>Finished Contracts</span>
-                <div id="finishedContracts" class="far fa-plus-square show-pointer"></div>
+                <div id="finishedContracts" class="far fa-plus-square show-pointer expander openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Finished Contracts To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Finished Contracts"></div>
             </div>
@@ -101,6 +102,8 @@
 	</div>
 	<br>
 </body>
+
+<script src="/includes/base.js"></script>
 
 <script type="text/javascript" src="contractmanagement.js"></script>
 <script type="text/javascript" src="contractmanagement.json"></script>
