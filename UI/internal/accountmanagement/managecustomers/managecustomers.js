@@ -1,5 +1,5 @@
 function pageLoad() {    
-	createTree(managecustomers, "treeDiv", "createCardButton");
+	createTree(managecustomers, "customerTree", "createCardButton");
 	
 	document.onmousemove = function(e) {
 		setupSidebarHeight();
@@ -194,8 +194,8 @@ function buildCustomerDataTable(entity, divToAppendTo){
 	div.setAttribute('style', 'display: none');
 	divToAppendTo.appendChild(div);
 	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
+	var customerTree = document.getElementById('displayAttributes');
+	clearElement(customerTree);
 
 	var table = document.createElement('table');
 	table.id = 'dataTable';
@@ -211,7 +211,7 @@ function buildCustomerDataTable(entity, divToAppendTo){
     table.appendChild(tableRow);
 	displayAttributes(entity.Attributes, table, 'Customer');
 
-	treeDiv.appendChild(table);
+	customerTree.appendChild(table);
 }
 
 function displayChildCustomerDataTable() {
@@ -234,8 +234,8 @@ function buildChildCustomerDataTable(entity, divToAppendTo){
 	div.setAttribute('style', 'margin-top: 5px; display: none');
 	divToAppendTo.appendChild(div);
 	
-	var treeDiv = document.getElementById('displayChildCustomers');
-	clearElement(treeDiv);
+	var customerTree = document.getElementById('displayChildCustomers');
+	clearElement(customerTree);
 
 	var table = document.createElement('table');
 	table.id = 'dataTable';
@@ -251,7 +251,7 @@ function buildChildCustomerDataTable(entity, divToAppendTo){
     table.appendChild(tableRow);
 	displayAttributes(entity.ChildCustomers, table, 'ChildCustomer');
 
-	treeDiv.appendChild(table);
+	customerTree.appendChild(table);
 }
 
 function displayAttributes(attributes, table, type) {
@@ -476,8 +476,9 @@ function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-	var ul = createUL();
-	ul.id = divId.concat('SelectorList');
+	var headerDiv = createHeaderDiv("siteHeader", 'Customers', true);
+	var ul = createBranchUl("siteSelector", false, true);
+	  
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -488,11 +489,7 @@ function createTree(baseData, divId, checkboxFunction) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Customer(s) <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
 	document.getElementById('Customer4checkbox').checked = true;
@@ -547,22 +544,6 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
     li.appendChild(createTreeIcon(branchOption));
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId, hasChildren) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-
-    if(hasChildren) {
-        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
-    }
-    else {
-        branchDiv.setAttribute('class', 'far fa-times-circle');
-    }
-    
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {

@@ -118,7 +118,7 @@
 			</div>
 			<div style="margin-top: 5px;">
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
-					<div style="text-align: center; border-bottom: solid black 1px;">
+					<div class="expander-header">
 						<span id="opportunityDetailsSpan">Opportunity Details</span>
 						<div id="opportunityDetails" class="far fa-plus-square show-pointer expander"></div>
 					</div>
@@ -144,7 +144,7 @@
 				</div>
 				<div class="middle"></div>
 				<div class="roundborder divcolumn" style="float: left; width: 44%;">
-					<div style="text-align: center; border-bottom: solid black 1px;">
+					<div class="expander-header">
 						<span id="addNewTimelineStepSpan">Add New Timeline Step</span>
 						<div id="addNewTimelineStep" class="far fa-plus-square show-pointer expander"></div>
 					</div>
@@ -283,7 +283,7 @@
 				</div>
 				<div class="middle"></div>
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
-					<div style="text-align: center; border-bottom: solid black 1px;">
+					<div class="expander-header">
 						<span id="editTimelineStepSpan">Edit Timeline Step</span>
 						<div id="editTimelineStep" class="far fa-plus-square show-pointer expander"></div>
 					</div>
@@ -336,22 +336,35 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="treeDiv" class="tree-div roundborder">
-			</div>
-			<br>
-			<div id="opportunityStatusDiv" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Opportunity Status <i class="far fa-plus-square show-pointer expander openExpander" id="opportunityStatusSelector"></i></span>
-				<ul class="format-listitem" id="opportunityStatusSelectorList">
-					<li>
-						<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
-					</li>
-					<li>
-						<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
-					</li>
-					<li>
-						<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
-					</li>
-				</ul>
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" class="expander-container">
+					<div id="siteDiv" class="tree-div roundborder">
+					</div>
+					<br>
+					<div class="dashboard roundborder outer-container">
+						<div class="expander-header">
+							<span id="opportunityStatusSpan">Opportunity Status</span>
+							<div id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></div>
+						</div>
+						<div id="opportunityStatusList" class="expander-container">
+							<ul class="format-listitem toplistitem">
+								<li>
+									<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
+								</li>
+								<li>
+									<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
+								</li>
+								<li>
+									<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -364,7 +377,7 @@
 	<div class="final-column">
 		<div>
 			<div class="roundborder divcolumn left">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+				<div class="expander-header">
 					<span>Requested Visits</span>
 					<div id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></div>
@@ -377,7 +390,7 @@
 			</div>
 			<div class="middle"></div>
 			<div class="roundborder divcolumn right">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+				<div class="expander-header">
 					<span>Scheduled Visits</span>
 					<div id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></div>
@@ -393,7 +406,7 @@
 		<br>
 		<div id="rejectedOpportunitiesDiv" class="listitem-hidden">
 			<div class="roundborder divcolumn">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+				<div class="expander-header">
 					<span>Rejected Opportunities</span>
 					<div id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></div>
@@ -409,7 +422,7 @@
 		</div>
 		<div id="recommendedOpportunitiesDiv">
 			<div class="roundborder divcolumn">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+				<div class="expander-header">
 					<span>Recommended Opportunities</span>
 					<div id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></div>
@@ -425,7 +438,7 @@
 		</div>
 		<div id="pendingActiveOpportunitiesDiv">
 			<div class="roundborder divcolumn">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+				<div class="expander-header">
 					<span>Pending & Active Opportunities</span>
 					<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
 					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>

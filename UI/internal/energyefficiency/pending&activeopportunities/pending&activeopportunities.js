@@ -1,5 +1,5 @@
 function pageLoad() {
-    createTree(activeopportunity, "treeDiv", "updateGanttChartAndDataGrid()", true);
+    createTree(activeopportunity, "siteTree", "updateGanttChartAndDataGrid()", true);
     updateGanttChartAndDataGrid();
     setOpenExpanders();
 
@@ -19,9 +19,10 @@ var subBranchCount = 0;
 function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
-    
-    var ul = createUL();
-    ul.id = divId.concat('SelectorList');
+
+    var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+    var ul = createBranchUl("siteSelector", false, true);
+
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -38,17 +39,13 @@ function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Projects/Sites <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
     div.appendChild(tree);
 
     addExpanderOnClickEvents();
 
     if(!isPageLoading) {
-        updateClassOnClick('treeDivSelector', 'fa-plus-square', 'fa-minus-square');
+        updateClassOnClick('siteTreeSelector', 'fa-plus-square', 'fa-minus-square');
     }    
 }
 
@@ -167,14 +164,6 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
     li.appendChild(createTreeIcon(checkboxBranch));
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {

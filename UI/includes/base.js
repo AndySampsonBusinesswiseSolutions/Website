@@ -317,7 +317,7 @@ function finalisePopup(title, titleHTML, modal, span) {
 	}
 }
 
-function createHeaderDiv(id, headerText, isOpen = false) {
+function createHeaderDiv(id, headerText, isOpen = false, hasChildren = true) {
     var headerDiv = document.createElement('div');
     headerDiv.id = id;
     headerDiv.setAttribute('class', 'expander-header');
@@ -325,7 +325,7 @@ function createHeaderDiv(id, headerText, isOpen = false) {
     var header = document.createElement('span');
     header.innerText = headerText;
   
-    var headerExpander = createBranchDiv(id.replace('Header', 'Selector'), true, isOpen);
+    var headerExpander = createBranchDiv(id.replace('Header', 'Selector'), hasChildren, isOpen);
   
     headerDiv.appendChild(header);
     headerDiv.appendChild(headerExpander);

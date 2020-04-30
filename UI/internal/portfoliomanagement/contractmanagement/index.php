@@ -42,9 +42,18 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="treeDiv" class="tree-div roundborder">
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" class="expander-container">
+					<div id="siteTree" class="tree-div roundborder">
+					</div>
+				</div>
 			</div>
-			<button style="width: 100%; margin-top: 5px;" onclick="displayUploadContract();">Upload Contract</button>
+			<br>
+			<button style="width: 100%;" onclick="displayUploadContract();">Upload Contract</button>
 		</div>
 	</div>
 
@@ -56,46 +65,46 @@
 	<div class="final-column">
 		<br>
 		<div class="roundborder divcolumn">
-            <div style="text-align: center; border-bottom: solid black 1px;">
+            <div class="expander-header">
                 <span>Out Of Contract Meters</span>
                 <div id="outOfContractMeters" class="far fa-plus-square show-pointer expander openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Out Of Contract Meters To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Out Of Contract Meters"></div>
             </div>
-            <div id="outOfContractMetersList" style="margin-top: 5px;">
+            <div id="outOfContractMetersList" class="expander-container">
                 <div id="outOfContract"></div>
             </div>
         </div>
-		<div class="roundborder divcolumn" style="margin-top: 5px;">
-            <div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="roundborder divcolumn expander-container">
+            <div class="expander-header">
                 <span>Active Contracts</span>
                 <div id="activeContracts" class="far fa-plus-square show-pointer expander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Active Contracts To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Active Contracts"></div>
             </div>
-            <div id="activeContractsList" class="listitem-hidden" style="margin-top: 5px;">
+            <div id="activeContractsList" class="listitem-hidden expander-container">
                 <div id="active"></div>
             </div>
         </div>
-		<div class="roundborder divcolumn" style="margin-top: 5px;">
-            <div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="roundborder divcolumn expander-container">
+            <div class="expander-header">
                 <span>Pending Contracts</span>
                 <div id="pendingContracts" class="far fa-plus-square show-pointer expander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Pending Contracts To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Pending Contracts"></div>
             </div>
-            <div id="pendingContractsList" class="listitem-hidden" style="margin-top: 5px;">
+            <div id="pendingContractsList" class="listitem-hidden expander-container">
                 <div id="pending"></div>
             </div>
         </div>
-		<div class="roundborder divcolumn" style="margin-top: 5px;">
-            <div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="roundborder divcolumn expander-container">
+            <div class="expander-header">
                 <span>Finished Contracts</span>
                 <div id="finishedContracts" class="far fa-plus-square show-pointer expander openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Finished Contracts To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Finished Contracts"></div>
             </div>
-            <div id="finishedContractsList" style="margin-top: 5px;">
+            <div id="finishedContractsList" class="expander-container">
                 <div id="finished"></div>
             </div>
         </div>

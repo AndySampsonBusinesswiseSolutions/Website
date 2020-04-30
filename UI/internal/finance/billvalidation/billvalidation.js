@@ -17,10 +17,11 @@ var subBranchCount = 0;
 
 function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
-    
-	var ul = createUL();
-	ul.id = divId.concat('SelectorList');
+	tree.setAttribute('class', 'scrolling-wrapper');
+	
+	var headerDiv = createHeaderDiv("siteHeader", 'Bills', true);
+  	var ul = createBranchUl("siteSelector", false, true);
+
     tree.appendChild(ul);
 
     subBranchCount = 0; 
@@ -30,11 +31,7 @@ function createTree(baseData, divId, checkboxFunction) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Bills <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
 	document.getElementById('Period13checkbox').checked = true;
@@ -111,14 +108,6 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
     li.appendChild(createTreeIcon(checkboxBranch));
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {

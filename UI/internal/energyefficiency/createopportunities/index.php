@@ -26,7 +26,7 @@
     <br>
     <div class="final-column">
         <div class="roundborder divcolumn">
-            <div style="text-align: center; border-bottom: solid black 1px;">
+            <div class="expander-header">
                 <span>Identified Opportunities</span>
                 <div id="identifiedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
             </div>
@@ -39,14 +39,14 @@
                 <div id="identifiedOpportunitiesSpreadsheet"></div>
             </div>
         </div>
-        <div class="roundborder divcolumn" style="margin-top: 5px;">
-            <div style="text-align: center; border-bottom: solid black 1px;">
+        <div class="roundborder divcolumn expander-container">
+            <div class="expander-header">
                 <span>Create New Opportunity</span>
                 <div id="createNewOpportunity" class="far fa-plus-square show-pointer expander openExpander"></div>
             </div>
             <div id="createNewOpportunityList">
             <div>
-                <div style="margin-top: 5px;">
+                <div class="expander-container">
                     <div style="float: left;">
                         <div class="tree-div roundborder" style="padding: 5px; text-align: right;">
                             <label for="opportunityType">Select Opportunity Type:</label>
@@ -78,14 +78,14 @@
                     </div>
                     <div class="middle"></div>
                     <div style="float: left;">
-                        <div id="treeDiv" class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
+                        <div id="siteTree" class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
                         </div>
                     </div>
                     <div class="middle"></div>
                     <div style="float: left;">
                         <div class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
-                            <span id="timePeriodsDiv" style="padding-left: 5px;">Select Time Periods</span>
-                            <ul class="format-listitem" id="timePeriodsDivSelectorList">
+                            <span id="timePeriodsDiv">Select Time Periods</span>
+                            <ul class="format-listitem toplistitem" id="timePeriodsDivSelectorList">
                                 <li>
                                     <div id="monthOfYear" class="far fa-plus-square show-pointer expander"></div>
                                     <span id="monthOfYearspan">Months</span>
@@ -286,7 +286,7 @@
                 </div>
             </div>
             <div style="clear: both;"></div>
-            <div style="margin-top: 5px;">
+            <div class="expander-container">
                 <div class="roundborder" style="text-align: center; float: left; width: 1375px;">
                     <div style="padding: 5px;">
                         <label for="applyPercentage">Percentage Saving</label>

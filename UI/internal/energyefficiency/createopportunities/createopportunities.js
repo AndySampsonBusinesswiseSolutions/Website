@@ -1,5 +1,5 @@
 function pageLoad() {
-    createTree(data, "treeDiv", "", "", true);
+    createTree(data, "siteTree", "", "", true);
     addExpanderOnClickEvents();
     setOpenExpanders();
     loadDataGrids();
@@ -12,7 +12,7 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
+    var ul = createBranchUl("siteSelector", false, true);
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -24,7 +24,6 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
     clearElement(div);
 
     var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
     header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s)';
 
     div.appendChild(header);

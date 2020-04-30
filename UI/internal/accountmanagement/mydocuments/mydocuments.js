@@ -1,5 +1,5 @@
 function pageLoad() {    
-	createTree(documents, "treeDiv", "createCardButton");
+	createTree(documents, "documentTree", "createCardButton");
 	
 	document.onmousemove = function(e) {
 		setupSidebarHeight();
@@ -199,8 +199,9 @@ function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-	var ul = createUL();
-	ul.id = divId.concat('SelectorList');
+	var headerDiv = createHeaderDiv("siteHeader", 'Document Type', true);
+  	var ul = createBranchUl("siteSelector", false, true);
+
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -211,11 +212,7 @@ function createTree(baseData, divId, checkboxFunction) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Document Type(s) <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
 	for(var i = 0; i < 6; i++) {
@@ -249,13 +246,6 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
     li.appendChild(createTreeIcon());
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {

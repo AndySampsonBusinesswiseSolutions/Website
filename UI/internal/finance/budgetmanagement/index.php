@@ -29,72 +29,94 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="budgetList" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Budget To Review <i class="far fa-plus-square show-pointer expander openExpander" id="budgetSelector"></i></span>
-				<ul class="format-listitem" id="budgetSelectorList">
-					<li>
-						<i class="far fa-plus-square show-pointer" id="budget2Selector"></i>
-						<span id="allCommodityspan">Budget 2</span>
-						<ul class="format-listitem listitem-hidden" id="budget2SelectorList">
-							<li>
-								<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
-								<input type="radio" name="budgetSelector" id="allCommodityradio">
-								<span id="allCommodityspan">Version 2</span>
-								<i class="far fa-question-circle show-pointer" onclick="displayBudget2V2Popup();"></i>
-							</li>
-							<li>
-								<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
-								<input type="radio" name="budgetSelector" id="allCommodityradio">
-								<span id="allCommodityspan">Version 1</span>
-								<i class="far fa-question-circle show-pointer" onclick="displayBudget2V1Popup();"></i>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<i class="far fa-times-circle show-pointer" id="budget1Selector"></i>
-						<input type="radio" name="budgetSelector" id="allCommodityradio">
-						<span id="allCommodityspan">Budget 1</span>
-						<i class="far fa-question-circle show-pointer" onclick="displayBudget1Popup();"></i>
-					</li>
-				</ul>
-				<br>
-				<button style="width: 100%;">Review Selected Budget</button>
-			</div>
-			<br>
-			<div id="siteTree" class="tree-div roundborder">
-			</div>
-			<br>
-			<div id="commodityList" class="tree-div roundborder">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer expander openExpander" id="commoditySelector"></i></span>
-				<ul class="format-listitem" id="commoditySelectorList">
-					<li>
-						<input type="radio" name="commoditySelector" id="allCommodityradio" checked><span id="allCommodityspan">All</span>
-					</li>
-					<li>
-						<input type="radio" name="commoditySelector" id="electricityCommodityradio"><span id="electricityCommodityspan">Electricity</span>
-					</li>
-					<li>
-						<input type="radio" name="commoditySelector" id="gasCommodityradio"><span id="gasCommodityspan">Gas</span>
-					</li>
-				</ul>
-			</div>
-			<br>
-			<div id="timePeriodDiv" class="tree-div roundborder">
-				<span id="timePeriodspan" style="padding-left: 5px;">Time Period</span>
-				<div id="timePeriod" class="far fa-plus-square show-pointer expander openExpander" style="margin-left: 5px;"></div>
-				<ul id="timePeriodList" class="format-listitem slider-list">
-					<li>
-						<span>Date Range</span>
-						<rzslider id="timePeriodDateRange"
-							rz-slider-model="timePeriodDateRange.minValue" 
-							rz-slider-high="timePeriodDateRange.maxValue" 
-							rz-slider-options="timePeriodDateRange.options">
-						</rzslider>
-					</li>
-					<li>
-					<input type="radio" name="timePeriodSelector" checked><span style="padding-left: 1px; margin-right: 10px;">Budget Period</span><input type="radio" name="timePeriodSelector"><span id="allCommodityspan">Creation Date</span>
-					</li>
-				</ul>
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" class="expander-container">
+					<div id="budgetList" class="sidebar-tree-div roundborder dashboard">
+						<div class="expander-header">
+							<span id="budgetSelectorSpan">Budget</span>
+							<div id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+						</div>
+						<div id="budgetSelectorList" class="expander-container">
+							<ul class="format-listitem toplistitem">
+								<li>
+									<i class="far fa-plus-square show-pointer" id="budget2Selector"></i>
+									<span id="allCommodityspan">Budget 2</span>
+									<ul class="format-listitem listitem-hidden" id="budget2SelectorList">
+										<li>
+											<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
+											<input type="radio" name="budgetSelector" id="allCommodityradio">
+											<span id="allCommodityspan">Version 2</span>
+											<i class="far fa-question-circle show-pointer" onclick="displayBudget2V2Popup();"></i>
+										</li>
+										<li>
+											<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
+											<input type="radio" name="budgetSelector" id="allCommodityradio">
+											<span id="allCommodityspan">Version 1</span>
+											<i class="far fa-question-circle show-pointer" onclick="displayBudget2V1Popup();"></i>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<i class="far fa-times-circle show-pointer" id="budget1Selector"></i>
+									<input type="radio" name="budgetSelector" id="allCommodityradio">
+									<span id="allCommodityspan">Budget 1</span>
+									<i class="far fa-question-circle show-pointer" onclick="displayBudget1Popup();"></i>
+								</li>
+							</ul>
+							<br>
+							<button style="width: 100%;">Review Selected Budget</button>
+						</div>
+					</div>
+					<br>
+					<div id="siteTree" class="sidebar-tree-div roundborder">
+					</div>
+					<br>
+					<div id="commodityList" class="sidebar-tree-div roundborder dashboard">
+						<div class="expander-header">
+							<span id="commoditySelectorSpan">Commodity</span>
+							<div id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+						</div>
+						<div id="commoditySelectorList" class="expander-container">
+							<ul class="format-listitem toplistitem">
+								<li>
+									<input type="radio" name="commoditySelector" id="allCommodityradio" checked><span id="allCommodityspan">All</span>
+								</li>
+								<li>
+									<input type="radio" name="commoditySelector" id="electricityCommodityradio"><span id="electricityCommodityspan">Electricity</span>
+								</li>
+								<li>
+									<input type="radio" name="commoditySelector" id="gasCommodityradio"><span id="gasCommodityspan">Gas</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<br>
+					<div id="timePeriodList" class="sidebar-tree-div roundborder dashboard">
+						<div class="expander-header">
+							<span id="timePeriodSelectorSpan">Time Period</span>
+							<div id="timePeriodSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+						</div>
+						<div id="timePeriodSelectorList" class="expander-container">
+							<ul class="format-listitem slider-list toplistitem">
+								<li>
+									<span>Date Range</span>
+									<rzslider id="timePeriodDateRange"
+										rz-slider-model="timePeriodDateRange.minValue" 
+										rz-slider-high="timePeriodDateRange.maxValue" 
+										rz-slider-options="timePeriodDateRange.options">
+									</rzslider>
+								</li>
+								<li>
+								<input type="radio" name="timePeriodSelector" checked><span style="padding-left: 1px; margin-right: 10px;">Budget Period</span><input type="radio" name="timePeriodSelector"><span id="allCommodityspan">Creation Date</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 			<br>
 			<button style="width: 100%" onclick="deleteBudgets();">Delete Selected Budgets</button>
@@ -111,14 +133,14 @@
 
 	<div class="final-column">
 		<br>
-		<div class="dashboard roundborder" style="padding: 10px;">
+		<div class="dashboard roundborder outer-container">
 			<div class="expander-header">
 				<span>Create\Review Budget</span>
 				<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Budget To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Budget"></div>
 			</div>
-			<div id="createReviewBudgetList" style="margin-top: 5px;">
+			<div id="createReviewBudgetList" class="expander-container">
 				<div id="createReviewBudgetDetailDiv" class="tree-div roundborder" style="float: left; margin-left: 45px; margin-right: 15px;">
 					<label for="createReviewBudgetName" style="width: 75px; text-align: right;">Name: </label>
 					<input id="createReviewBudgetName" style="width: calc(100% - 80px);"></input><br>
@@ -172,19 +194,19 @@
 						<span>Budget Adjustments</span>
 						<div id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></div>
 					</div>
-					<div id="createReviewBudgetAdjustmentsList" class="roundborder datagrid listitem-hidden" style="margin-top: 5px; padding: 5px;">
+					<div id="createReviewBudgetAdjustmentsList" class="roundborder datagrid listitem-hidden expander-container" style="padding: 5px;">
 						<div id="adjustmentsSpreadsheet"></div>
 					</div>				
 				</div>
 				<div id="createReviewBudgetTreeDiv" class="tree-div roundborder scrolling-wrapper" style="float: left; width: 385px;">
 				</div>
 				<div style="clear: both;"></div>
-				<div class="dashboard roundborder" style="margin-top: 5px; padding: 10px;">
+				<div class="dashboard roundborder expander-container" style="padding: 10px;">
 					<div class="expander-header">
 						<span>Charts</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
 					</div>
-					<div id="chartsList" style="margin-top: 5px;">
+					<div id="chartsList" class="expander-container">
 						<div id="leftHandChartDiv" class="roundborder chart" style="margin-right: 5px;">
 							<div id="leftHandChart">
 							</div>

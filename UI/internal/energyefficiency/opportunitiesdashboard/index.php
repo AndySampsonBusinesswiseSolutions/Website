@@ -136,13 +136,13 @@
 		</div>
 		<div class="divider-column"></div>
 		<div class="roundborder divcolumn" style="overflow: auto">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+			<div class="expander-header">
 				<span>Recommended Opportunities</span>
 				<i class="far fa-plus-square show-pointer expander openExpander" id="recommendedOpportunities"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Recommended Opportunities To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Recommended Opportunities"></div>
 			</div>
-			<div id="recommendedOpportunitiesList" style="margin-top: 5px;">
+			<div id="recommendedOpportunitiesList" class="expander-container">
 				<div>
 					<div class="divider-column"></div>
 					<div class="opportunity-column">
@@ -159,7 +159,7 @@
 					<div class="divider-column"></div>
 				</div>
 				<br>
-				<div class="roundborder" style="margin-top: 5px;">
+				<div class="roundborder expander-container">
 					<div>
 						<div class="divider-column"></div>
 						<div class="opportunity-column" style="padding-top: 10px;">
@@ -343,49 +343,49 @@
 	<br>
 	<div class="final-column">
 		<div class="roundborder divcolumn">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+			<div class="expander-header">
 				<span>Site Visits</span>
 				<i class="far fa-plus-square show-pointer expander openExpander" id="siteVisits"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Visits To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Visits"></div>
 			</div>
-			<div id="siteVisitsList" style="margin-top: 5px;">
+			<div id="siteVisitsList" class="expander-container">
 				<div class="divcolumn" style="float: left;">
-					<div style="text-align: center; border-bottom: solid black 1px;">
+					<div class="expander-header">
 						<span>Future Site Visits</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="futureSiteVisits"></i>
 						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Future Site Visits To Download Basket"></div>
 						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Future Site Visits"></div>
 					</div>
-					<div id="futureSiteVisitsList" style="margin-top: 5px;">
+					<div id="futureSiteVisitsList" class="expander-container">
 						<div id="futureSiteVisitSpreadsheet"></div>
 					</div>
 				</div>
 				<div class="divider-column"></div>
 				<div class="divcolumn" style="float: left;">
-					<div style="text-align: center; border-bottom: solid black 1px;">
+					<div class="expander-header">
 						<span>Historical Site Visits</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="historicalSiteVisits"></i>
 						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Historical Site Visits To Download Basket"></div>
 						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Historical Site Visits"></div>
 					</div>
-					<div id="historicalSiteVisitsList" style="margin-top: 5px;">
+					<div id="historicalSiteVisitsList" class="expander-container">
 						<div id="historicalSiteVisitSpreadsheet"></div>
 					</div>
-					<div style="margin-top: 5px;"></div>
+					<div class="expander-container"></div>
 					<button id="requestVisitButton" class="show-pointer" style="width: 100%; float: right;">Request Visit</button>
 				</div>
 			</div>
 		</div>
 		<div class="divider-column"></div>
 		<div class="roundborder divcolumn">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+			<div class="expander-header">
 				<span>Site Ranking</span>
 				<i class="far fa-plus-square show-pointer expander openExpander" id="siteRanking"></i>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Ranking To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Ranking"></div>
 			</div>
-			<div id="siteRankingList" style="margin-top: 5px;">
+			<div id="siteRankingList" class="expander-container">
 				<div id="siteRankingSpreadsheet"></div>
 			</div>
 		</div>

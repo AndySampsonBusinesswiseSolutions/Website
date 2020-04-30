@@ -1,5 +1,7 @@
 @import "https://use.fontawesome.com/releases/v5.11.2/css/all.css";
 @import "https://use.fontawesome.com/releases/v5.11.2/css/v4-shims.css";
+@import "https://bossanova.uk/jexcel/v3/jexcel.css";
+@import "https://bossanova.uk/jsuites/v2/jsuites.css";
 
 * {box-sizing: border-box;}
  
@@ -878,7 +880,6 @@ ul {
     padding-left: 15px;
     padding-top: 50px;
 }
-
 .final-column {
     padding-left: 15px;
     padding-right: 15px;
@@ -900,25 +901,103 @@ ul {
 .topListItem {
     padding-left: 0px;
 }
-.chart {
-    background-color: #e9eaee;
-    max-height: 650px;
-    min-height: 650px;
-}
-.expander {
-    width: 18px;
-  }
-  .expander-header {
+.expander-header {
     text-align: center; 
     border-bottom: solid black 1px;
     margin-bottom: 5px;
-  }
-  .expander-container {
+}
+.expander-container {
     margin-top: 5px;
-  }
-  .listitem-icon {
+}
+.listitem-icon {
     padding-right: 3px;
-  }
-  ul>li>input {
+}
+ul>li>input, .expander {
     width: 18px;
-  }
+}
+.outer-container {
+    padding: 10px;
+}
+.sidebar-tree-div {
+    max-height: 300px;
+    padding: 10px;
+}
+.dashboard {
+    background-color: #e9eaee;
+}
+.tree-div, .datagrid, .chart {
+    max-height: 650px;
+}
+.chart {
+    min-height: 650px;
+}
+.popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 100000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 125%; /* Full width */
+    height: 135%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content, .modal-content-wide {
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    color: black;
+    margin-top: 100px;
+    margin-left: 30%;
+    width: 500px;
+}
+.modal-content-wide {
+    margin-left: calc(4%);
+    width: 75%;
+}
+.title {
+    text-align: center;
+    font-size: 20px;
+}
+.approve {
+    background-color: green;
+}
+.reject {
+    background-color: red;
+}
+.tabDiv {
+    border: solid black 1px;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
+}
+.card {
+    border: solid black 1px;
+    border-bottom-left-radius: 5px; 
+    border-bottom-right-radius: 5px; 
+}
+.tabDiv {
+    overflow: hidden;
+    background-color: #e9eaee;
+}
+.tabDiv button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 5px 5px;
+    font-size: 10px;
+}
+.tabDiv button:hover {
+    background-color: #ddd;
+}
+.tabDiv button.active {
+    background-color: #ccc;
+}
+.card {
+    display: none;
+    padding: 5px 5px;
+    border-top: none;
+    background-color: #e9eaee;
+}

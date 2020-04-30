@@ -1,5 +1,5 @@
 function pageLoad() {    
-	createTree(myprofile, "treeDiv", "createCardButton");
+	createTree(myprofile, "sectionTree", "createCardButton");
 	
 	document.onmousemove = function(e) {
 		setupSidebarHeight();
@@ -15,8 +15,9 @@ function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-	var ul = createUL();
-	ul.id = divId.concat('SelectorList');
+	var headerDiv = createHeaderDiv("sectionHeader", 'Sections', true);
+	var ul = createBranchUl("sectionSelector", false, true);
+	  
     tree.appendChild(ul);
 
     buildTree(baseData, ul, checkboxFunction);
@@ -24,11 +25,7 @@ function createTree(baseData, divId, checkboxFunction) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Section(s) <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
 	for(var i = 0; i < 3; i++) {
@@ -62,13 +59,6 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
     li.appendChild(createTreeIcon());
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {
@@ -277,8 +267,8 @@ function buildUserDataTable(entity, divToAppendTo){
 	div.id = 'displayAttributes';
 	divToAppendTo.appendChild(div);
 	
-	var treeDiv = document.getElementById('displayAttributes');
-	clearElement(treeDiv);
+	var sectionTree = document.getElementById('displayAttributes');
+	clearElement(sectionTree);
 
 	var table = document.createElement('table');
 	table.id = 'dataTable';
@@ -293,7 +283,7 @@ function buildUserDataTable(entity, divToAppendTo){
     table.appendChild(tableRow);
 	displayAttributes(entity.Details, table, 'User');
 
-	treeDiv.appendChild(table);
+	sectionTree.appendChild(table);
 }
 
 function displayAttributes(attributes, table) {

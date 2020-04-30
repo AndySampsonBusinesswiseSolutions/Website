@@ -16,12 +16,12 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); updateChart(); updateDataGrid(chartSeries, categories);" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
 		<div class="tree-column">
-			<div class="dashboard roundborder" style="padding: 10px;">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
 					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
 				</div>
-				<div id="selectOptionsList" style="margin-top: 5px;">
+				<div id="selectOptionsList" class="expander-container">
 					<div id="displayTree" class="sidebar-tree-div roundborder scrolling-wrapper">
 					</div>
 					<br>
@@ -39,12 +39,12 @@
 				</div>
 			</div>
 			<br>
-			<div class="dashboard roundborder" style="padding: 10px;">
-				<div style="text-align: center; border-bottom: solid black 1px;">
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
 					<span id="filterOptionsSpan">Filter Options</span>
 					<div id="filterOptions" class="far fa-plus-square expander show-pointer"></div>
 				</div>
-				<div id="filterOptionsList" class="slider-list" style="margin-top: 5px;">
+				<div id="filterOptionsList" class="slider-list expander-container">
 					<div id="commodityTree" class="sidebar-tree-div roundborder">
 					</div>
 					<br>
@@ -62,23 +62,23 @@
 	</div>
 	<br>
 	<div class="final-column">
-		<div class="dashboard roundborder" style="padding: 10px;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="dashboard roundborder outer-container">
+			<div class="expander-header">
 				<span id="chartHeaderSpan">Usage Chart</span>
 				<div id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
 				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Chart To Download Basket"></div>
 				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Chart"></div>
 			</div>
-			<div id="chartHeaderList" class="roundborder chart" style="margin-top: 5px;">
+			<div id="chartHeaderList" class="roundborder chart expander-container">
 				<div id="chart"></div>
 			</div>
 		</div>
-		<div class="dashboard roundborder" style="padding: 10px; margin-top: 5px;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="dashboard roundborder outer-container expander-container">
+			<div class="expander-header">
 				<span>Data</span>
 				<div id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
 			</div>
-			<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper" style="margin-top: 5px; overflow-x: auto;">
+			<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">
 				<div id="datagrid" style="margin: 5px;"></div>
 			</div>
 		</div>

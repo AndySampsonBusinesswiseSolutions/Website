@@ -1,5 +1,5 @@
 function pageLoad() {
-	createTree(data, "Hierarchy", "treeDiv", "", "filterContractsByStatus()");
+	createTree(data, "siteTree", "", "filterContractsByStatus()");
 	filterContractsByStatus(null);
 	addExpanderOnClickEvents();	
 	setOpenExpanders();
@@ -378,7 +378,7 @@ function filterContractsByStatus(element) {
 var branchCount = 0;
 var subBranchCount = 0;
 
-function createTree(baseData, groupByOption, divId, commodity, checkboxFunction, showSubMeters) {
+function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
 	
@@ -391,14 +391,14 @@ function createTree(baseData, groupByOption, divId, commodity, checkboxFunction,
     branchCount = 0;
     subBranchCount = 0; 
 
-    buildTree(baseData, groupByOption, ul, commodity, checkboxFunction, showSubMeters);
+    buildTree(baseData, ul, commodity, checkboxFunction, showSubMeters);
 
     var div = document.getElementById(divId);
     clearElement(div);
     div.appendChild(tree);
 }
 
-function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunction, showSubMeters) {
+function buildTree(baseData, baseElement, commodity, checkboxFunction, showSubMeters) {
     var dataLength = baseData.length;
     for(var i = 0; i < dataLength; i++){
         var base = baseData[i];
@@ -412,17 +412,11 @@ function buildTree(baseData, groupByOption, baseElement, commodity, checkboxFunc
         var ul = createUL();
         var childrenCreated = false;
         
-        if(groupByOption == 'Hierarchy') {
-            if(base.hasOwnProperty('Meters')) {
-                buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, showSubMeters);
-                childrenCreated = true;
-            }
+		if(base.hasOwnProperty('Meters')) {
+			buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, showSubMeters);
+			childrenCreated = true;
+		}
 
-        }
-        else {
-            buildBranch(base.Meters, groupByOption, ul, commodity, checkboxFunction, baseName, showSubMeters);
-            childrenCreated = true;
-        }
         appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
 
         baseElement.appendChild(li);        

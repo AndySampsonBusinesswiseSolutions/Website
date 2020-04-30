@@ -42,9 +42,18 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="treeDiv" class="tree-div roundborder">
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" class="expander-container">
+					<div id="documentTree" class="tree-div roundborder">
+					</div>
+				</div>
 			</div>
-			<button style="margin-top: 5px; margin-bottom: 5px; width: 100%;" onclick='uploadDocument()'>Upload Document</button>
+			<br>
+			<button style="width: 100%;" onclick='uploadDocument()'>Upload Document</button>
 		</div>
 	</div>
 
@@ -55,8 +64,8 @@
 
 	<div class="final-column">
 		<br>
-		<div class="tree-div roundborder scrolling-wrapper" style="padding: 10px;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="dashboard tree-div roundborder scrolling-wrapper outer-container">
+			<div class="expander-header">
 				<span>Your Current LOA Details</span>
 				<i class="far fa-plus-square show-pointer expander openExpander" id="loaDetails"></i>
 			</div>
@@ -66,8 +75,8 @@
 			</div>
 		</div>
 		<br>
-		<div class="tree-div roundborder scrolling-wrapper" style="padding: 10px;">
-			<div style="text-align: center; border-bottom: solid black 1px;">
+		<div class="dashboard tree-div roundborder scrolling-wrapper outer-container">
+			<div class="expander-header">
 				<span>Download Basket</span>
 				<i class="far fa-plus-square show-pointer expander" id="downloadBasket"></i>
 			</div>

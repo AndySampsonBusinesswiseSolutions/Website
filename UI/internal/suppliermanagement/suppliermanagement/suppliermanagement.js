@@ -1,5 +1,5 @@
 function pageLoad() {    
-	createTree(supplier, "treeDiv", "createCardButton");
+	createTree(supplier, "supplierTree", "createCardButton");
 	
 	document.onmousemove = function(e) {
 		setupSidebarHeight();
@@ -15,8 +15,9 @@ function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-	var ul = createUL();
-	ul.id = divId.concat('SelectorList');
+	var headerDiv = createHeaderDiv("supplierHeader", 'Suppliers', true, true);
+  	var ul = createBranchUl("supplierSelector", false, true);
+
     tree.appendChild(ul);
 
     buildTree(baseData, ul, checkboxFunction);
@@ -24,11 +25,7 @@ function createTree(baseData, divId, checkboxFunction) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Supplier(s) <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
 	for(var i = 0; i < 3; i++) {
@@ -57,18 +54,11 @@ function buildTree(baseData, baseElement, checkboxFunction) {
 }
 
 function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
-    li.appendChild(createBranchDiv(id));
+    li.appendChild(createBranchDiv(id, false));
     li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
     li.appendChild(createTreeIcon());
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
-
-function createBranchDiv(branchDivId) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {

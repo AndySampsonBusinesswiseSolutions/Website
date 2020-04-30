@@ -7,8 +7,6 @@
 <html>
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
-
-	<link rel="stylesheet" href="suppliermanagement.css">
 </head>
 
 <body>
@@ -28,7 +26,15 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="treeDiv" class="tree-div roundborder">
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" class="expander-container">
+						<div id="supplierTree" class="tree-div roundborder">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

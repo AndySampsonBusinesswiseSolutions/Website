@@ -1,15 +1,3 @@
-@import "https://bossanova.uk/jexcel/v3/jexcel.css";
-@import "https://bossanova.uk/jsuites/v2/jsuites.css";
-
-.dashboard{
-    background-color: #e9eaee;
-}
-.tree-div {
-    background-color: #e9eaee;
-	max-height: 650px;
-	padding: 10px;
-}
-
 /*
 jQuery.ganttView v.0.8.0
 Copyright (c) 2010 JC Grubbs - jc.grubbs@devmynd.com

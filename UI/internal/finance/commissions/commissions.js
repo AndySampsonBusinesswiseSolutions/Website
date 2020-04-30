@@ -19,9 +19,10 @@ var subBranchCount = 0;
 function createTree(baseData, divId, commodity, checkboxFunction) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
-    
-    var ul = createUL();
-    ul.id = divId.concat('SelectorList');
+
+    var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+    var ul = createBranchUl("siteSelector", false, true);
+
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -32,11 +33,7 @@ function createTree(baseData, divId, commodity, checkboxFunction) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-    header.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer expander openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
     div.appendChild(tree);
 
     updateChart(null, commissionChart);
@@ -109,21 +106,6 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
 
         baseElement.appendChild(li); 
     }
-}
-
-function createBranchDiv(branchDivId, childrenCreated = true) {
-    var branchDiv = document.createElement('div');
-    branchDiv.id = branchDivId;
-
-    if(childrenCreated) {
-        branchDiv.setAttribute('class', 'far fa-plus-square show-pointer expander');
-    }
-    else {
-        branchDiv.setAttribute('class', 'far fa-times-circle');
-    }
-
-    branchDiv.setAttribute('style', 'padding-right: 4px;');
-    return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {

@@ -1,14 +1,3 @@
-.tree-div, .chart {
-    background-color: #e9eaee;
-}
-.tree-div {
-    padding: 10px;
-}
-.chart {
-    max-height: 650px;
-    min-height: 650px;
-    margin-top: 5px;
-}
 .left, .right {
     float: left;
     width: 46%;

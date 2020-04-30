@@ -17,25 +17,38 @@
 		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		<div class="tree-column">
-			<div id="siteDiv" class="tree-div roundborder">
-			</div>
-			<br>
-			<div class="roundborder" style="background-color: #e9eaee;">
-				<span style="padding-left: 5px;">Select Commodity <i class="far fa-plus-square show-pointer openExpander" id="commoditySelector"></i></span>
-				<ul class="format-listitem" id="commoditySelectorList">
-					<li>
-						<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
-					</li>
-					<li>
-						<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='pageLoad();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
-					</li>
-					<li>
-						<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='pageLoad();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
-					</li>
-				</ul>
-			</div>
-			<br>
-			<div id="dashboardDiv" class="tree-div roundborder">
+			<div class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="selectOptionsSpan">Select Options</span>
+					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+				</div>
+				<div id="selectOptionsList" class="expander-container">
+					<div id="siteDiv" class="tree-div roundborder">
+					</div>
+					<br>
+					<div class="sidebar-tree-div roundborder scrolling-wrapper">
+						<div class="expander-header">
+							<span id="commoditySelectorSpan">Commodity</span>
+							<div id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+						</div>
+						<div id="commoditySelectorList" class="expander-container">
+							<ul class="format-listitem toplistitem">
+								<li>
+									<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
+								</li>
+								<li>
+									<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='pageLoad();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
+								</li>
+								<li>
+									<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='pageLoad();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<br>
+					<div id="dashboardDiv" class="tree-div roundborder">
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -47,9 +60,10 @@
 
 	<br>
 	<div class="final-column">
-		<div id="dashboardHeader" class="dashboard roundborder" style="text-align: center; overflow: auto;">
-			<div style="text-align: left; margin-left: 4.25px;">
-				<span>Main Dashboard <i class="far fa-plus-square show-pointer openExpander" id="mainDashboardSelector"></i></span>
+		<div id="dashboardHeader" class="dashboard roundborder outer-container" style="text-align: center; overflow: auto;">
+			<div class="expander-header">
+				<span id="mainDashboardSelectorSpan">Main Dashboard</span>
+				<div id="mainDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
 			</div>
 			<div id="mainDashboardSelectorList">
 				<a href="/Internal/PortfolioManagement/SiteManagement/" class="roundborder dashboard-item-small">
@@ -116,9 +130,10 @@
 			</div>
 		</div>
 		<div style="font-size: 10px;">*Predicted savings are approximate</div>
-		<div id="customDashboard" class="dashboard roundborder" style="text-align: center; overflow: auto; margin-top: 15px;">
-			<div style="text-align: left; margin-left: 4.25px;">
-				<span>Custom Dashboard <i class="far fa-plus-square show-pointer openExpander" id="customDashboardSelector"></i></span>
+		<div id="customDashboard" class="dashboard roundborder outer-container" style="text-align: center; overflow: auto; margin-top: 15px;">
+			<div class="expander-header">
+				<span id="customDashboardSelectorSpan">Custom Dashboard</span>
+				<div id="customDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
 			</div>
 			<div id="customDashboardSelectorList">
 				<div id="customDashboardItem4" class="roundborder custom-dashboard-item-large">

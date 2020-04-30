@@ -133,8 +133,9 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
-    var ul = createUL();
-    ul.id = divId.concat('SelectorList');
+    var headerDiv = createHeaderDiv(divId.concat('Header'), dataName != "Dashboard" ? "Sites/Meters" : "Custom Dashboard Items", true);
+    var ul = createBranchUl(divId.concat('Selector'), false, true);
+
     tree.appendChild(ul);
 
     branchCount = 0;
@@ -145,13 +146,7 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
     var div = document.getElementById(divId);
     clearElement(div);
 
-    var header = document.createElement('span');
-    header.style = "padding-left: 5px;";
-
-    var headerText = dataName != "Dashboard" ? "Select Sites/Meters" : "Select Custom Dashboard Items";
-    header.innerHTML = headerText + ' <i class="far fa-plus-square show-pointer openExpander" id="' + divId.concat('Selector') + '"></i>';
-
-    div.appendChild(header);
+    div.appendChild(headerDiv);
     div.appendChild(tree);
 
     if(dataName != "Dashboard") {
@@ -214,7 +209,7 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
       var branchDiv = createBranchDiv(branchId);
       
       if(!showSubMeters || !hasSubMeters) {
-          branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer');
+          branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
           branchDiv.setAttribute('class', 'far fa-times-circle');
       }
 
@@ -239,18 +234,6 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
   }    
-}
-
-function createBranchDiv(branchDivId, childrenCreated = true) {
-  var branchDiv = document.createElement('div');
-  branchDiv.id = branchDivId;
-
-  if(childrenCreated) {
-      branchDiv.setAttribute('class', 'far fa-plus-square show-pointer');
-  }
-
-  branchDiv.setAttribute('style', 'padding-right: 4px;');
-  return branchDiv;
 }
 
 function createBranchListDiv(branchListDivId, ul) {
