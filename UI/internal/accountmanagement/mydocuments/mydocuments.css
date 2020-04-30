@@ -4,39 +4,3 @@
 .table-cell {
     text-align: center;
 }
-#drop-area {
-    border: 2px dashed #ccc;
-    border-radius: 20px;
-    padding: 5px;
-}
-#drop-area.highlight {
-    border-color: purple;
-}
-p {
-    margin-top: 0;
-}
-#gallery {
-    margin-top: 10px;
-}
-#gallery img {
-    width: 150px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    vertical-align: middle;
-}
-.button {
-    display: inline-block;
-    padding: 10px;
-    background: #ccc;
-    cursor: pointer;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: 100%;
-    text-align: center;
-}
-.button:hover {
-    background: #ddd;
-}
-#fileElem {
-    display: none;
-}

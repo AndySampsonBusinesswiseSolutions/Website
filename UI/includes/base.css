@@ -3,7 +3,9 @@
 @import "https://bossanova.uk/jexcel/v3/jexcel.css";
 @import "https://bossanova.uk/jsuites/v2/jsuites.css";
 
-* {box-sizing: border-box;}
+* {
+    box-sizing: border-box;
+}
  
 .fusion-clearfix {
     clear: both;
@@ -54,6 +56,7 @@ input[type=image] {
 html {
     overflow-x: hidden;
     overflow-y: scroll;
+    height: 100%;
 }
 
 html.no-overflow-y {
@@ -122,6 +125,7 @@ input[type=submit] {
     position: relative;
     z-index: 10010;
     background-color: #505152;
+    height: 69px!important;
 }
 
 .fusion-header {
@@ -276,11 +280,13 @@ input[type=submit] {
     backface-visibility: hidden;
     background-repeat: no-repeat;
     background-position: center center;
-    padding-top: 43px;
+    padding-top: 10px;
     border-top-width: 0px;
-    border-color: #e9eaee;
     background-size: initial;
     background-position: center center;
+    margin-top: -190px;
+    height: 190px!important;
+    clear: both;
 }
 
 .fusion-footer-widget-area .widget-title {
@@ -820,6 +826,7 @@ body {
     line-height: 1.42857143!important;
     color: #333!important;
     background-color: #fff!important;
+    height: 100%!important;
 }
 ul {
     margin-top: 0px!important;
@@ -843,6 +850,7 @@ ul {
     cursor: pointer; 
     float: left; 
     color: white;
+    padding-top: 2px;
 }
 .sidenav {
     height: 100%;
@@ -854,8 +862,8 @@ ul {
     background-color: #505152;
     overflow-x: hidden;
     transition: 0.25s;
-    margin-top: 69px;
     opacity: 95%;
+    padding-top: 2px;
 }
 .sidenav .closebtn {
     position: absolute;
@@ -923,7 +931,7 @@ ul>li>input, .expander {
     padding: 10px;
 }
 .dashboard {
-    background-color: #e9eaee;
+    background-color: white;
 }
 .tree-div, .datagrid, .chart {
     max-height: 650px;
@@ -970,15 +978,13 @@ ul>li>input, .expander {
     border: solid black 1px;
     border-top-left-radius: 5px; 
     border-top-right-radius: 5px;
+    overflow: hidden;
+    background-color: white;
 }
 .card {
     border: solid black 1px;
     border-bottom-left-radius: 5px; 
     border-bottom-right-radius: 5px; 
-}
-.tabDiv {
-    overflow: hidden;
-    background-color: #e9eaee;
 }
 .tabDiv button {
     background-color: inherit;
@@ -999,5 +1005,47 @@ ul>li>input, .expander {
     display: none;
     padding: 5px 5px;
     border-top: none;
-    background-color: #e9eaee;
+    background-color: white;
+}
+#outerContainer {
+    min-height: calc(100% - 69px);
+}
+#mainContainer {
+    padding-bottom: 190px;
+}
+#drop-area {
+    border: 2px dashed #ccc;
+    border-radius: 20px;
+    padding: 5px;
+}
+#drop-area.highlight {
+    border-color: purple;
+}
+p {
+    margin-top: 0;
+}
+#gallery {
+    margin-top: 10px;
+}
+#gallery img {
+    width: 150px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.button {
+    display: inline-block;
+    padding: 10px;
+    background: #ccc;
+    cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    text-align: center;
+}
+.button:hover {
+    background: #ddd;
+}
+#fileElem {
+    display: none;
 }

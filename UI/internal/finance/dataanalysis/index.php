@@ -55,35 +55,38 @@
 			<br>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i></div>
-	</div>
-	<br>
-	<div class="final-column">
-		<div class="dashboard roundborder outer-container">
-			<div class="expander-header">
-				<span id="chartHeaderSpan">Usage Chart</span>
-				<div id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
-				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Chart To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Chart"></div>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i></div>
 			</div>
-			<div id="chartHeaderList" class="roundborder chart expander-container">
-				<div id="chart"></div>
+			<br>
+			<div class="final-column">
+				<div class="dashboard roundborder outer-container">
+					<div class="expander-header">
+						<span id="chartHeaderSpan">Usage Chart</span>
+						<div id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
+						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Chart To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Chart"></div>
+					</div>
+					<div id="chartHeaderList" class="roundborder chart expander-container">
+						<div id="chart"></div>
+					</div>
+				</div>
+				<div class="dashboard roundborder outer-container expander-container">
+					<div class="expander-header">
+						<span>Data</span>
+						<div id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
+					</div>
+					<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">
+						<div id="datagrid" style="margin: 5px;"></div>
+					</div>
+				</div>
 			</div>
+			<br>
 		</div>
-		<div class="dashboard roundborder outer-container expander-container">
-			<div class="expander-header">
-				<span>Data</span>
-				<div id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
-			</div>
-			<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">
-				<div id="datagrid" style="margin: 5px;"></div>
-			</div>
-		</div>
 	</div>
-	<br>
 </body>
 
 <script src="/includes/base.js"></script>

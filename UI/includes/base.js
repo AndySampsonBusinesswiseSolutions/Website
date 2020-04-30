@@ -11,7 +11,7 @@ function setupSidebarHeight() {
     var footerHeight = footer.clientHeight;
     var reduction = (window.innerHeight + window.scrollY) - (document.body.offsetHeight - footerHeight);
       
-    sidebar.style.height = "calc(100% - " + (reduction > 0 ? reduction : 0) + "px)";
+    // sidebar.style.height = "calc(100% - " + (reduction > 0 ? 0 : 0) + "px)";
     sidebar.style.marginTop = window.pageYOffset >= navBarHeight ? '0px' : (navBarHeight - window.pageYOffset) + 'px';
 }
   

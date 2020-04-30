@@ -47,34 +47,36 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
-	</div>
-
-	<div class="final-column">
-		<div>
-			<br>
-			<div class="dashboard roundborder outer-container">
-				<div style="text-align: center; border-bottom: solid black 1px;">
-					<span>Commission Chart</span>
-					<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
-					<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Commission Chart To Download Basket"></div>
-					<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Commission Chart"></div>
-				</div>
-				<div id="commissionsChartList" class="roundborder chart expander-container">
-					<div id="commissionChart">
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+			</div>
+			<div class="final-column">
+				<div>
+					<br>
+					<div class="dashboard roundborder outer-container">
+						<div style="text-align: center; border-bottom: solid black 1px;">
+							<span>Commission Chart</span>
+							<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
+							<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Commission Chart To Download Basket"></div>
+							<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Commission Chart"></div>
+						</div>
+						<div id="commissionsChartList" class="roundborder chart expander-container">
+							<div id="commissionChart">
+							</div>
+						</div>
+					</div>
+					<div class="dashboard roundborder scrolling-wrapper expander-container">
+						<div id="commissionDatagrid" style="margin: 5px;">
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="dashboard roundborder scrolling-wrapper expander-container">
-				<div id="commissionDatagrid" style="margin: 5px;">
-				</div>
-			</div>
+			</div>	
+			<br>
 		</div>
-	</div>	
-	<br>
+	</div>
 </body>
 
 <script src="/includes/base.js"></script>

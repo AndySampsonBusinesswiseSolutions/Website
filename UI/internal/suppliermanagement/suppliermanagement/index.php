@@ -38,18 +38,20 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+			</div>
+			<div class="final-column">
+				<br>
+				<div class="tabDiv" id="tabDiv"></div>
+				<div id="cardDiv"></div>
+			</div>
+			<br>
+		</div>
 	</div>
-
-	<div class="final-column">
-		<br>
-		<div class="tabDiv" id="tabDiv"></div>
-		<div id="cardDiv"></div>
-	</div>
-	<br>
 </body>
 
 <script src="/includes/base.js"></script>

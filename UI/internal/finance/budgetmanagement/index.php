@@ -125,103 +125,105 @@
 			<br>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
-	</div>
-
-	<div class="final-column">
-		<br>
-		<div class="dashboard roundborder outer-container">
-			<div class="expander-header">
-				<span>Create\Review Budget</span>
-				<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
-				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Budget To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Budget"></div>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
-			<div id="createReviewBudgetList" class="expander-container">
-				<div id="createReviewBudgetDetailDiv" class="tree-div roundborder" style="float: left; margin-left: 45px; margin-right: 15px;">
-					<label for="createReviewBudgetName" style="width: 75px; text-align: right;">Name: </label>
-					<input id="createReviewBudgetName" style="width: calc(100% - 80px);"></input><br>
-					<label for="createReviewBudgetBaseType" style="width: 75px; text-align: right;">Base Type: </label>
-					<select id="createReviewBudgetBaseType" style="width: calc(100% - 80px);">
-						<option value="">Select Option</option>
-						<option value="LatestBWSForecast">Latest BWS Forecast</option>
-						<option value="LatestActuals">Latest Actuals</option>
-						<option value="UploadedFile">Uploaded File</option>
-					</select><br>
-					<label for="createReviewBudgetDateFrom" style="width: 75px; text-align: right;">Period: </label>
-					<input type="date" id="createReviewBudgetDateFrom" style="width: calc(50% - 52px);"></input>
-					<label for="createReviewBudgetDateTo">To</label>
-					<input type="date" id="createReviewBudgetDateTo" style="width: calc(50% - 52px);"></input><br>
-					<label for="createReviewBudgetBaseType" style="width: 75px; text-align: right;">Status: </label>
-					<select id="createReviewBudgetBaseType" style="width: calc(100% - 80px);">
-						<option value="">Select Option</option>
-						<option value="Approved">Approved</option>
-						<option value="Rejected">Rejected</option>
-						<option value="Pending">Pending</option>
-						<option value="Overriden">Overriden</option>
-					</select><br><br>
-					<button class="reject show-pointer" style="width: calc(45%); margin-right: calc(10%);">Reset Budget</button><button class="approve show-pointer" style="width: calc(45%);">Save Budget</button>
-				</div>
-				<div id="createReviewBudgetAdjustAreaDiv" class="tree-div roundborder scrolling-wrapper" style="width: 950px; float: left; margin-right: 15px;">
-					<label for="createReviewBudgetAdjustArea" style="margin-left: 50px;">Adjust </label>
-					<select id="createReviewBudgetAdjustArea">
-						<option value="">Select Option</option>
-						<option value="Cost">Cost</option>
-						<option value="Usage">Usage</option>
-					</select>
-					<label for="createReviewBudgetAdjustType">by</label>
-					<select id="createReviewBudgetAdjustType">
-						<option value="Uplift">Uplifting</option>
-						<option value="Set">Setting</option>
-					</select>
-					<label for="createReviewBudgetAdjustAmount">by</label>
-					<input type="number" id="createReviewBudgetAdjustAmount" style="width: 7.5%;"></input>
-					<select id="createReviewBudgetAdjustAmountType">
-						<option value="Percent">%</option>
-						<option value="Usage">kWh</option>
-						<option value="Cost">£</option>
-					</select>
-					<label for="createReviewBudgetAdjustDateFrom">between</label>
-					<input type="date" id="createReviewBudgetAdjustDateFrom"></input>
-					<label for="createReviewBudgetAdjustDateTo">and</label>
-					<input type="date" id="createReviewBudgetAdjustDateTo"></input>
-					<button class="approve show-pointer roundborder" title="Add Adjustment">+</button>
-					<br>
+			<div class="final-column">
+				<br>
+				<div class="dashboard roundborder outer-container">
 					<div class="expander-header">
-						<span>Budget Adjustments</span>
-						<div id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></div>
+						<span>Create\Review Budget</span>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
+						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Budget To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Budget"></div>
 					</div>
-					<div id="createReviewBudgetAdjustmentsList" class="roundborder datagrid listitem-hidden expander-container" style="padding: 5px;">
-						<div id="adjustmentsSpreadsheet"></div>
-					</div>				
-				</div>
-				<div id="createReviewBudgetTreeDiv" class="tree-div roundborder scrolling-wrapper" style="float: left; width: 385px;">
-				</div>
-				<div style="clear: both;"></div>
-				<div class="dashboard roundborder expander-container" style="padding: 10px;">
-					<div class="expander-header">
-						<span>Charts</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
+					<div id="createReviewBudgetList" class="expander-container">
+						<div id="createReviewBudgetDetailDiv" class="tree-div roundborder" style="float: left; margin-left: 45px; margin-right: 15px;">
+							<label for="createReviewBudgetName" style="width: 75px; text-align: right;">Name: </label>
+							<input id="createReviewBudgetName" style="width: calc(100% - 80px);"></input><br>
+							<label for="createReviewBudgetBaseType" style="width: 75px; text-align: right;">Base Type: </label>
+							<select id="createReviewBudgetBaseType" style="width: calc(100% - 80px);">
+								<option value="">Select Option</option>
+								<option value="LatestBWSForecast">Latest BWS Forecast</option>
+								<option value="LatestActuals">Latest Actuals</option>
+								<option value="UploadedFile">Uploaded File</option>
+							</select><br>
+							<label for="createReviewBudgetDateFrom" style="width: 75px; text-align: right;">Period: </label>
+							<input type="date" id="createReviewBudgetDateFrom" style="width: calc(50% - 52px);"></input>
+							<label for="createReviewBudgetDateTo">To</label>
+							<input type="date" id="createReviewBudgetDateTo" style="width: calc(50% - 52px);"></input><br>
+							<label for="createReviewBudgetBaseType" style="width: 75px; text-align: right;">Status: </label>
+							<select id="createReviewBudgetBaseType" style="width: calc(100% - 80px);">
+								<option value="">Select Option</option>
+								<option value="Approved">Approved</option>
+								<option value="Rejected">Rejected</option>
+								<option value="Pending">Pending</option>
+								<option value="Overriden">Overriden</option>
+							</select><br><br>
+							<button class="reject show-pointer" style="width: calc(45%); margin-right: calc(10%);">Reset Budget</button><button class="approve show-pointer" style="width: calc(45%);">Save Budget</button>
+						</div>
+						<div id="createReviewBudgetAdjustAreaDiv" class="tree-div roundborder scrolling-wrapper" style="width: 950px; float: left; margin-right: 15px;">
+							<label for="createReviewBudgetAdjustArea" style="margin-left: 50px;">Adjust </label>
+							<select id="createReviewBudgetAdjustArea">
+								<option value="">Select Option</option>
+								<option value="Cost">Cost</option>
+								<option value="Usage">Usage</option>
+							</select>
+							<label for="createReviewBudgetAdjustType">by</label>
+							<select id="createReviewBudgetAdjustType">
+								<option value="Uplift">Uplifting</option>
+								<option value="Set">Setting</option>
+							</select>
+							<label for="createReviewBudgetAdjustAmount">by</label>
+							<input type="number" id="createReviewBudgetAdjustAmount" style="width: 7.5%;"></input>
+							<select id="createReviewBudgetAdjustAmountType">
+								<option value="Percent">%</option>
+								<option value="Usage">kWh</option>
+								<option value="Cost">£</option>
+							</select>
+							<label for="createReviewBudgetAdjustDateFrom">between</label>
+							<input type="date" id="createReviewBudgetAdjustDateFrom"></input>
+							<label for="createReviewBudgetAdjustDateTo">and</label>
+							<input type="date" id="createReviewBudgetAdjustDateTo"></input>
+							<button class="approve show-pointer roundborder" title="Add Adjustment">+</button>
+							<br>
+							<div class="expander-header">
+								<span>Budget Adjustments</span>
+								<div id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></div>
+							</div>
+							<div id="createReviewBudgetAdjustmentsList" class="roundborder datagrid listitem-hidden expander-container" style="padding: 5px;">
+								<div id="adjustmentsSpreadsheet"></div>
+							</div>				
+						</div>
+						<div id="createReviewBudgetTreeDiv" class="tree-div roundborder scrolling-wrapper" style="float: left; width: 385px;">
+						</div>
+						<div style="clear: both;"></div>
+						<div class="dashboard roundborder expander-container" style="padding: 10px;">
+							<div class="expander-header">
+								<span>Charts</span>
+								<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
+							</div>
+							<div id="chartsList" class="expander-container">
+								<div id="leftHandChartDiv" class="roundborder chart" style="margin-right: 5px;">
+									<div id="leftHandChart">
+									</div>
+								</div>
+								<div id="rightHandChartDiv" class="roundborder chart">
+									<div id="rightHandChart">
+									</div>
+								</div>
+							</div>			
+							<div style="clear: left;"></div>
+						</div>
 					</div>
-					<div id="chartsList" class="expander-container">
-						<div id="leftHandChartDiv" class="roundborder chart" style="margin-right: 5px;">
-							<div id="leftHandChart">
-							</div>
-						</div>
-						<div id="rightHandChartDiv" class="roundborder chart">
-							<div id="rightHandChart">
-							</div>
-						</div>
-					</div>			
-					<div style="clear: left;"></div>
 				</div>
 			</div>
+			<br>
 		</div>
 	</div>
-	<br>
 </body>
 
 <script src="/includes/base.js"></script>

@@ -65,30 +65,32 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
-	</div>
-
-	<br>
-	<div class="final-column">
-		<div class="dashboard roundborder tree-div scrolling-wrapper">
-			<div id="spreadsheet"></div>
-		</div>
-		<div class="dashboard roundborder tree-div scrolling-wrapper expander-container">
-			<div class="expander-header">
-				<span>Pending & Active Opportunities Chart</span>
-				<i class="far fa-plus-square show-pointer expander openExpander" id="pendingAndActiveOpportunities"></i>
-				<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></div>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
-			<div id="pendingAndActiveOpportunitiesList" class="expander-container">
-				<div id="ganttChart"></div>
+			<br>
+			<div class="final-column">
+				<div class="dashboard roundborder tree-div scrolling-wrapper">
+					<div id="spreadsheet"></div>
+				</div>
+				<div class="dashboard roundborder tree-div scrolling-wrapper expander-container">
+					<div class="expander-header">
+						<span>Pending & Active Opportunities Chart</span>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="pendingAndActiveOpportunities"></i>
+						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></div>
+					</div>
+					<div id="pendingAndActiveOpportunitiesList" class="expander-container">
+						<div id="ganttChart"></div>
+					</div>
+				</div>
 			</div>
+			<br>
 		</div>
 	</div>
-	<br>
 </body>
 
 <script src="/includes/base.js"></script>

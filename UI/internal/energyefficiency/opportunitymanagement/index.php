@@ -368,91 +368,94 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
-	</div>
-	<br>
-	<div class="final-column">
-		<div>
-			<div class="roundborder divcolumn left">
-				<div class="expander-header">
-					<span>Requested Visits</span>
-					<div id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
-					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></div>
-					<div class="fas fa-download show-pointer" style="float: right;" title="Download Requested Visits"></div>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+			</div>
+			<br>
+			<div class="final-column">
+				<div>
+					<div class="roundborder divcolumn left">
+						<div class="expander-header">
+							<span>Requested Visits</span>
+							<div id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
+							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></div>
+							<div class="fas fa-download show-pointer" style="float: right;" title="Download Requested Visits"></div>
+						</div>
+						<br>
+						<div id="requestedVisitsList">
+							<div id="requestedVisitsSpreadsheet"></div>
+						</div>
+					</div>
+					<div class="middle"></div>
+					<div class="roundborder divcolumn right">
+						<div class="expander-header">
+							<span>Scheduled Visits</span>
+							<div id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
+							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></div>
+							<div class="fas fa-download show-pointer" style="float: right;" title="Download Scheduled Visits"></div>
+						</div>
+						<br>
+						<div id="scheduledVisitsList">
+							<div id="scheduledVisitsSpreadsheet"></div>
+						</div>
+					</div>
 				</div>
+				<div style="clear: left;"></div>
 				<br>
-				<div id="requestedVisitsList">
-					<div id="requestedVisitsSpreadsheet"></div>
+				<div id="rejectedOpportunitiesDiv" class="listitem-hidden">
+					<div class="roundborder divcolumn">
+						<div class="expander-header">
+							<span>Rejected Opportunities</span>
+							<div id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
+							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></div>
+							<div class="fas fa-download show-pointer" style="float: right;" title="Download Rejected Opportunities"></div>
+						</div>
+						<br>
+						<div id="rejectedOpportunitiesList">
+							<div id="rejectedOpportunitiesSpreadsheet"></div>
+						</div>
+					</div>
+					<div style="clear: left;"></div>
+					<br>
+				</div>
+				<div id="recommendedOpportunitiesDiv">
+					<div class="roundborder divcolumn">
+						<div class="expander-header">
+							<span>Recommended Opportunities</span>
+							<div id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
+							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></div>
+							<div class="fas fa-download show-pointer" style="float: right;" title="Download Recommended Opportunities"></div>
+						</div>
+						<br>
+						<div id="recommendedOpportunitiesList">
+							<div id="recommendedOpportunitiesSpreadsheet"></div>
+						</div>
+					</div>
+					<div style="clear: left;"></div>
+					<br>
+				</div>
+				<div id="pendingActiveOpportunitiesDiv">
+					<div class="roundborder divcolumn">
+						<div class="expander-header">
+							<span>Pending & Active Opportunities</span>
+							<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
+							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
+							<div class="fas fa-download show-pointer" style="float: right;" title="Download Pending & Active Opportunities"></div>
+						</div>
+						<br>
+						<div id="pendingActiveOpportunitiesList">
+							<div id="pendingActiveOpportunitiesSpreadsheet"></div>
+						</div>
+					</div>
+					<div style="clear: left;"></div>
 				</div>
 			</div>
-			<div class="middle"></div>
-			<div class="roundborder divcolumn right">
-				<div class="expander-header">
-					<span>Scheduled Visits</span>
-					<div id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
-					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></div>
-					<div class="fas fa-download show-pointer" style="float: right;" title="Download Scheduled Visits"></div>
-				</div>
-				<br>
-				<div id="scheduledVisitsList">
-					<div id="scheduledVisitsSpreadsheet"></div>
-				</div>
-			</div>
-		</div>
-		<div style="clear: left;"></div>
-		<br>
-		<div id="rejectedOpportunitiesDiv" class="listitem-hidden">
-			<div class="roundborder divcolumn">
-				<div class="expander-header">
-					<span>Rejected Opportunities</span>
-					<div id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
-					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></div>
-					<div class="fas fa-download show-pointer" style="float: right;" title="Download Rejected Opportunities"></div>
-				</div>
-				<br>
-				<div id="rejectedOpportunitiesList">
-					<div id="rejectedOpportunitiesSpreadsheet"></div>
-				</div>
-			</div>
-			<div style="clear: left;"></div>
 			<br>
 		</div>
-		<div id="recommendedOpportunitiesDiv">
-			<div class="roundborder divcolumn">
-				<div class="expander-header">
-					<span>Recommended Opportunities</span>
-					<div id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
-					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></div>
-					<div class="fas fa-download show-pointer" style="float: right;" title="Download Recommended Opportunities"></div>
-				</div>
-				<br>
-				<div id="recommendedOpportunitiesList">
-					<div id="recommendedOpportunitiesSpreadsheet"></div>
-				</div>
-			</div>
-			<div style="clear: left;"></div>
-			<br>
-		</div>
-		<div id="pendingActiveOpportunitiesDiv">
-			<div class="roundborder divcolumn">
-				<div class="expander-header">
-					<span>Pending & Active Opportunities</span>
-					<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
-					<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
-					<div class="fas fa-download show-pointer" style="float: right;" title="Download Pending & Active Opportunities"></div>
-				</div>
-				<br>
-				<div id="pendingActiveOpportunitiesList">
-					<div id="pendingActiveOpportunitiesSpreadsheet"></div>
-				</div>
-			</div>
-			<div style="clear: left;"></div>
-		</div>
 	</div>
-	<br>
 </body>
 
 <script src="/includes/base.js"></script>

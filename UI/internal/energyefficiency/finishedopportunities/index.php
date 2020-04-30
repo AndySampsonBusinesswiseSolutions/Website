@@ -43,51 +43,54 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="section-header">
-		<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-		<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+			</div>
+			<br>
+			<div class="final-column">
+				<div class="roundborder dashboard scrolling-wrapper outer-container">
+					<div id="spreadsheet"></div>
+				</div>
+				<div class="roundborder dashboard outer-container expander-container">
+					<div class="expander-header">
+						<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
+						<div id="cumulativeSaving" class="far fa-plus-square show-pointer expander openExpander"></div>
+						<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="float: right;" title="Download Cumulative Saving Chart"></div>
+					</div>
+					<div id="cumulativeSavingList" class="tree-div roundborder expander-container">
+						<div id="cumulativeSavingChart"></div>
+					</div>
+				</div>
+				<div class="roundborder dashboard expander-container outer-container">
+					<div class="expander-header">
+						<span id="costSavingspan">Cost Saving Chart</span>
+						<div id="costSaving" class="far fa-plus-square show-pointer expander"></div>
+						<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="float: right;" title="Download Cost Saving Chart"></div>
+					</div>
+					<div id="costSavingList"  class="listitem-hidden tree-div roundborder expander-container">
+						<div id="costSavingChart"></div>
+					</div>
+				</div>
+				<div class="roundborder dashboard expander-container outer-container">
+					<div class="expander-header">
+						<span id="volumeSavingspan">Volume Saving Chart</span>
+						<div id="volumeSaving" class="far fa-plus-square show-pointer expander"></div>
+						<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></div>
+						<div class="fas fa-download show-pointer" style="float: right;" title="Download Volume Saving Chart"></div>
+					</div>
+					<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder expander-container">
+						<div id="volumeSavingChart"></div>
+					</div>
+				</div>
+			</div>
+			<br>
+		</div>
 	</div>
-	<br>
-	<div class="final-column">
-		<div class="roundborder dashboard scrolling-wrapper outer-container">
-			<div id="spreadsheet"></div>
-		</div>
-		<div class="roundborder dashboard outer-container expander-container">
-			<div class="expander-header">
-				<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
-				<div id="cumulativeSaving" class="far fa-plus-square show-pointer expander openExpander"></div>
-				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="float: right;" title="Download Cumulative Saving Chart"></div>
-			</div>
-			<div id="cumulativeSavingList" class="tree-div roundborder expander-container">
-				<div id="cumulativeSavingChart"></div>
-			</div>
-		</div>
-		<div class="roundborder dashboard expander-container outer-container">
-			<div class="expander-header">
-				<span id="costSavingspan">Cost Saving Chart</span>
-				<div id="costSaving" class="far fa-plus-square show-pointer expander"></div>
-				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="float: right;" title="Download Cost Saving Chart"></div>
-			</div>
-			<div id="costSavingList"  class="listitem-hidden tree-div roundborder expander-container">
-				<div id="costSavingChart"></div>
-			</div>
-		</div>
-		<div class="roundborder dashboard expander-container outer-container">
-			<div class="expander-header">
-				<span id="volumeSavingspan">Volume Saving Chart</span>
-				<div id="volumeSaving" class="far fa-plus-square show-pointer expander"></div>
-				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="float: right;" title="Download Volume Saving Chart"></div>
-			</div>
-			<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder expander-container">
-				<div id="volumeSavingChart"></div>
-			</div>
-		</div>
-	</div>
-	<br>
 </body>
 
 <script src="/includes/base.js"></script>
