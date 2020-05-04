@@ -18,16 +18,16 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
 					<div id="siteTree" class="sidebar-tree-div roundborder">
 					</div>
 					<br>
-					<div id="commodityList" class="sidebar-tree-div roundborder dashboard">
+					<div id="commodityList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="commoditySelectorSpan">Commodity</span>
-							<div id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="commoditySelectorList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -57,11 +57,11 @@
 				<div>
 					<br>
 					<div class="dashboard roundborder outer-container">
-						<div style="text-align: center; border-bottom: solid black 1px;">
+						<div class="expander-header">
 							<span>Commission Chart</span>
 							<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
-							<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Commission Chart To Download Basket"></div>
-							<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Commission Chart"></div>
+							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Commission Chart To Download Basket"></i>
+							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Commission Chart"></i>
 						</div>
 						<div id="commissionsChartList" class="roundborder chart expander-container">
 							<div id="commissionChart">

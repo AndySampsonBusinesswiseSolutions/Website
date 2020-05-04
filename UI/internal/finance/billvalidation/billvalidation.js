@@ -290,8 +290,8 @@ function createBillButton(checkbox, tabDiv) {
 			var periodNode = siteNode.parentNode.parentNode.parentNode.parentNode.children[3];
 		
 			button.innerHTML = periodNode.innerText.concat(' - ').concat(siteNode.innerText.concat(' - ').concat(meterTypeNode.innerText.concat(' - ').concat(span.innerHTML)));
-			button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Bill To Download Basket"></div>'
-							  + '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Bill"></div>';
+			button.innerHTML += '<i class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Bill To Download Basket"></i>'
+							  + '<i class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Bill"></i>';
 	
 			button.id = span.id.replace('span', 'button');
 			tabDiv.appendChild(button);

@@ -105,7 +105,7 @@
 			<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 			<br>
 			<div class="final-column" style="text-align: center;">
-				<div class="roundborder divcolumn">
+				<div class="roundborder divcolumn dashboard">
 					<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank"   class="roundborder dashboard-item-small">
 						<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 						<span>Pending Opportunities</span><br>
@@ -137,12 +137,12 @@
 					</div>
 				</div>
 				<div class="divider-column"></div>
-				<div class="roundborder divcolumn" style="overflow: auto">
+				<div class="roundborder divcolumn dashboard" style="overflow: auto">
 					<div class="expander-header">
 						<span>Recommended Opportunities</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="recommendedOpportunities"></i>
-						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Recommended Opportunities To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Recommended Opportunities"></div>
+						<i class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Recommended Opportunities To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Recommended Opportunities"></i>
 					</div>
 					<div id="recommendedOpportunitiesList" class="expander-container">
 						<div>
@@ -161,11 +161,11 @@
 							<div class="divider-column"></div>
 						</div>
 						<br>
-						<div class="roundborder expander-container">
+						<div class="tree-div roundborder expander-container">
 							<div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column" style="padding-top: 10px;">
-									<div id="Project1" class="far fa-plus-square show-pointer expander"></div>
+									<i id="Project1" class="far fa-plus-square show-pointer expander"></i>
 									<span id="Project1span">LED Lighting Installation</span>
 								</div>
 								<div class="divider-column"></div>
@@ -187,7 +187,7 @@
 								<div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column" style="padding-top: 10px;">
-										<div id="Site1" class="far fa-times-circle"></div>
+										<i id="Site1" class="far fa-times-circle"></i>
 										<span id="Site1span">Site X</span>
 									</div>
 									<div class="divider-column"></div>
@@ -208,7 +208,7 @@
 								<div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column" style="padding-top: 10px;">
-										<div id="Site2" class="far fa-times-circle"></div>
+										<i id="Site2" class="far fa-times-circle"></i>
 										<span id="Site2span">Site Y</span>
 									</div>
 									<div class="divider-column"></div>
@@ -229,7 +229,7 @@
 								<div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column" style="padding-top: 10px;">
-										<div id="Site3" class="far fa-times-circle"></div>
+										<i id="Site3" class="far fa-times-circle"></i>
 										<span id="Site3span">Site Z</span>
 									</div>
 									<div class="divider-column"></div>
@@ -249,12 +249,11 @@
 								<br><br>
 							</div>
 						</div>
-						<br>
-						<div class="roundborder">
+						<div class="tree-div roundborder expander-container">
 							<div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column" style="padding-top: 10px;">
-									<div id="Project2" class="far fa-plus-square show-pointer expander"></div>
+									<i id="Project2" class="far fa-plus-square show-pointer expander"></i>
 									<span id="Project2span">LED Lighting Installation 2</span>
 								</div>
 								<div class="divider-column"></div>
@@ -276,7 +275,7 @@
 								<div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column" style="padding-top: 10px;">
-										<div id="Site1" class="far fa-times-circle"></div>
+										<i id="Site1" class="far fa-times-circle"></i>
 										<span id="Site1span">Site X</span>
 									</div>
 									<div class="divider-column"></div>
@@ -297,7 +296,7 @@
 								<div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column" style="padding-top: 10px;">
-										<div id="Site2" class="far fa-times-circle"></div>
+										<i id="Site2" class="far fa-times-circle"></i>
 										<span id="Site2span">Site Y</span>
 									</div>
 									<div class="divider-column"></div>
@@ -318,7 +317,7 @@
 								<div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column" style="padding-top: 10px;">
-										<div id="Site3" class="far fa-times-circle"></div>
+										<i id="Site3" class="far fa-times-circle"></i>
 										<span id="Site3span">Site Z</span>
 									</div>
 									<div class="divider-column"></div>
@@ -344,20 +343,20 @@
 			<div style="clear: both;"></div>
 			<br>
 			<div class="final-column">
-				<div class="roundborder divcolumn">
+				<div class="roundborder divcolumn dashboard">
 					<div class="expander-header">
 						<span>Site Visits</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="siteVisits"></i>
-						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Visits To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Visits"></div>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Site Visits To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Site Visits"></i>
 					</div>
 					<div id="siteVisitsList" class="expander-container">
 						<div class="divcolumn" style="float: left;">
 							<div class="expander-header">
 								<span>Future Site Visits</span>
 								<i class="far fa-plus-square show-pointer expander openExpander" id="futureSiteVisits"></i>
-								<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Future Site Visits To Download Basket"></div>
-								<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Future Site Visits"></div>
+								<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Future Site Visits To Download Basket"></i>
+								<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Future Site Visits"></i>
 							</div>
 							<div id="futureSiteVisitsList" class="expander-container">
 								<div id="futureSiteVisitSpreadsheet"></div>
@@ -368,8 +367,8 @@
 							<div class="expander-header">
 								<span>Historical Site Visits</span>
 								<i class="far fa-plus-square show-pointer expander openExpander" id="historicalSiteVisits"></i>
-								<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Historical Site Visits To Download Basket"></div>
-								<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Historical Site Visits"></div>
+								<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Historical Site Visits To Download Basket"></i>
+								<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Historical Site Visits"></i>
 							</div>
 							<div id="historicalSiteVisitsList" class="expander-container">
 								<div id="historicalSiteVisitSpreadsheet"></div>
@@ -380,12 +379,12 @@
 					</div>
 				</div>
 				<div class="divider-column"></div>
-				<div class="roundborder divcolumn">
+				<div class="roundborder divcolumn dashboard">
 					<div class="expander-header">
 						<span>Site Ranking</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="siteRanking"></i>
-						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Site Ranking To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Site Ranking"></div>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Site Ranking To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Site Ranking"></i>
 					</div>
 					<div id="siteRankingList" class="expander-container">
 						<div id="siteRankingSpreadsheet"></div>

@@ -1,5 +1,4 @@
 .divcolumn {
-    background-color: white;
     padding: 10px;
 }
 .middle {
@@ -8,7 +7,6 @@
     min-height: 100px;
 }
 .tree-div {
-    background-color: white;
     min-height: 183px;
     max-height: 183px;
 }

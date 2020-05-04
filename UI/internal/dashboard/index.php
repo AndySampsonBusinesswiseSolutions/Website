@@ -20,16 +20,16 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
 					<div id="siteDiv" class="tree-div roundborder">
 					</div>
 					<br>
-					<div class="sidebar-tree-div roundborder scrolling-wrapper">
+					<div class="tree-div roundborder scrolling-wrapper">
 						<div class="expander-header">
 							<span id="commoditySelectorSpan">Commodity</span>
-							<div id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="commoditySelectorList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -63,7 +63,7 @@
 				<div id="dashboardHeader" class="dashboard roundborder outer-container" style="text-align: center; overflow: auto;">
 					<div class="expander-header">
 						<span id="mainDashboardSelectorSpan">Main Dashboard</span>
-						<div id="mainDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+						<i id="mainDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 					</div>
 					<div id="mainDashboardSelectorList">
 						<a href="/Internal/PortfolioManagement/SiteManagement/" class="roundborder dashboard-item-small">
@@ -82,8 +82,8 @@
 						</div>
 						<div class="roundborder dashboard-item-large" style="overflow: auto;">
 							<div id="spreadsheet" style="margin: 2px; float: left;"></div>
-							<div class="fas fa-download show-pointer" style="margin-top: 5px; float: left;" title="Download Site List"></div>
-							<div class="fas fa-cart-arrow-down show-pointer" style="margin-top: 5px; float: left;" title="Add Site List To Download Basket"></div>
+							<i class="fas fa-download show-pointer" style="margin-top: 5px; float: left;" title="Download Site List"></i>
+							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 5px; float: left;" title="Add Site List To Download Basket"></i>
 						</div>
 						<div id="map-canvas" class="roundborder dashboard-item-small"></div>
 						<div class="roundborder dashboard-item-small">
@@ -133,7 +133,7 @@
 				<div id="customDashboard" class="dashboard roundborder outer-container" style="text-align: center; overflow: auto; margin-top: 15px;">
 					<div class="expander-header">
 						<span id="customDashboardSelectorSpan">Custom Dashboard</span>
-						<div id="customDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+						<i id="customDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 					</div>
 					<div id="customDashboardSelectorList">
 						<div id="customDashboardItem4" class="roundborder custom-dashboard-item-large">

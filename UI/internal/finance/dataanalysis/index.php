@@ -19,7 +19,7 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
 					<div id="displayTree" class="sidebar-tree-div roundborder scrolling-wrapper">
@@ -42,7 +42,7 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="filterOptionsSpan">Filter Options</span>
-					<div id="filterOptions" class="far fa-plus-square expander show-pointer"></div>
+					<i id="filterOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
 				<div id="filterOptionsList" class="slider-list expander-container">
 					<div id="commodityTree" class="sidebar-tree-div roundborder">
@@ -66,9 +66,9 @@
 				<div class="dashboard roundborder outer-container">
 					<div class="expander-header">
 						<span id="chartHeaderSpan">Usage Chart</span>
-						<div id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
-						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Chart To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Chart"></div>
+						<i id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Chart To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Chart"></i>
 					</div>
 					<div id="chartHeaderList" class="roundborder chart expander-container">
 						<div id="chart"></div>
@@ -77,7 +77,7 @@
 				<div class="dashboard roundborder outer-container expander-container">
 					<div class="expander-header">
 						<span>Data</span>
-						<div id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></div>
+						<i id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></i>
 					</div>
 					<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">
 						<div id="datagrid" style="margin: 5px;"></div>

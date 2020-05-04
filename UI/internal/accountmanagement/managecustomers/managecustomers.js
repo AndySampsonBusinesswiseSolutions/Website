@@ -53,8 +53,8 @@ function createCardButton(checkbox){
 			}
 
 			if(!span.innerText.includes('Add New')) {
-				button.innerHTML += '<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add ' + span.innerText + ' To Download Basket"></div>'
-				+ '<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download ' + span.innerText + '"></div>';
+				button.innerHTML += '<i class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add ' + span.innerText + ' To Download Basket"></i>'
+				+ '<i class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download ' + span.innerText + '"></i>';
 			}
 			
 			button.id = span.id.replace('span', 'button');

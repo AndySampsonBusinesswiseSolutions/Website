@@ -25,7 +25,6 @@
     padding: 10px;
     min-height: 100px;
     max-height: 500px;
-    background-color: white;
     width: 49%;
 }
 .divider-column {
@@ -43,7 +42,7 @@
     width: 23.75%; 
     margin: 5px; 
     float: left;
-    background-color: lightblue;
+    background-color: rgb(233, 233, 233);
 }
 .approve, .reject {
     width: 45%; 

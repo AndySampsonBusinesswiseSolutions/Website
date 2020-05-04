@@ -124,7 +124,7 @@ input[type=submit] {
 .fusion-header-wrapper {
     position: relative;
     z-index: 10010;
-    background-color: #505152;
+    background-color: white;
     height: 69px!important;
 }
 
@@ -209,11 +209,10 @@ input[type=submit] {
     -webkit-font-smoothing: subpixel-antialiased;
     border-color: transparent;
     font-family: "Open Sans";
-    font-weight: 700;
     font-size: 15px;
     letter-spacing: 0px;
     font-style: normal;
-    color: #ffffff
+    color: black
 }
 
 .fusion-main-menu li:hover>.sub-menu {
@@ -274,8 +273,8 @@ input[type=submit] {
 .fusion-footer-widget-area {
     overflow: hidden;
     position: relative;
-    background-color: #505152;
-    color: #8c8989;
+    background-color: grey;
+    color: white;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     background-repeat: no-repeat;
@@ -287,6 +286,7 @@ input[type=submit] {
     margin-top: -190px;
     height: 190px!important;
     clear: both;
+    z-index: 100;
 }
 
 .fusion-footer-widget-area .widget-title {
@@ -298,8 +298,15 @@ input[type=submit] {
     letter-spacing: 0px;
 }
 
+.fusion-standard-logo {
+    width: 200;
+    height: 50;
+    alt: "Businesswise Solutions Logo";
+    margin-top: -10px;
+}
+
 .fusion-footer-widget-area a {
-    color: #bfbfbf
+    color: white;
 }
 
 .fusion-footer-widget-area ul {
@@ -354,7 +361,7 @@ a:hover {
 }
 
 .fusion-header .fusion-logo {
-    margin: 20px 40px 0px 0px
+    margin: 20px 0px 0px 0px
 }
 
 .fusion-main-menu>ul>li>a:not(.fusion-logo-link):not(.fusion-icon-sliding-bar):hover {
@@ -362,7 +369,7 @@ a:hover {
 }
 
 .fusion-main-menu>ul>li>a:not(.fusion-logo-link):hover {
-    color: #ffffff
+    color: black
 }
 
 .fusion-main-menu .sub-menu li a {
@@ -370,24 +377,24 @@ a:hover {
     font-weight: 400;
     padding-top: 14px;
     padding-bottom: 14px;
-    color: white;
-    background-color: #505152;
+    color: black;
+    background-color: white;
     font-size: 12px;
-    border-bottom: solid white 1px;
+    border-bottom: solid black 1px;
 }
 
 .fusion-main-menu ul li {
-    border-top: solid #505152 5px;
+    border-top: solid white 5px;
 }
 
 .fusion-main-menu ul li:hover{
-    border-top: solid white 5px;
+    border-top: solid black 5px;
     padding-bottom: 0px;
 }
 
 .fusion-main-menu .sub-menu li a:hover {
-    background-color: black;
-    border-bottom: solid white 5px;
+    background-color: lightgray;
+    border-bottom: solid black 5px;
 }
 
 body:not(.fusion-top-header) .fusion-main-menu>ul>li>a {
@@ -834,22 +841,21 @@ ul {
 }
 .tree-div {
     padding: 5px!important;
+    background-color: rgb(233, 233, 233);
 }
 .section-header {
-    background: #b62a51;
+    background: rgb(233, 233, 233);
     width: 100%;
 }
 .section-header-text {
-    color: white;
+    color: black;
     text-align: center;
     font-size: 25px;
-    font-weight:bold;
 }
 .sidenav-icon {
     font-size: 30px; 
     cursor: pointer; 
     float: left; 
-    color: white;
     padding-top: 2px;
 }
 .sidenav {
@@ -859,7 +865,7 @@ ul {
     z-index: 100;
     top: 0;
     left: 0;
-    background-color: #505152;
+    background-color: rgb(233, 233, 233);
     overflow-x: hidden;
     transition: 0.25s;
     opacity: 95%;
@@ -913,6 +919,10 @@ ul {
     text-align: center; 
     border-bottom: solid black 1px;
     margin-bottom: 5px;
+    background-color: #b62a51;
+    color: white;
+    border-top-left-radius: 5px; 
+    border-top-right-radius: 5px;
 }
 .expander-container {
     margin-top: 5px;
@@ -929,6 +939,7 @@ ul>li>input, .expander {
 .sidebar-tree-div {
     max-height: 300px;
     padding: 10px;
+    background-color: rgb(233, 233, 233);
 }
 .dashboard {
     background-color: white;
@@ -969,10 +980,10 @@ ul>li>input, .expander {
     font-size: 20px;
 }
 .approve {
-    background-color: green;
+    background-color: lightgreen;
 }
 .reject {
-    background-color: red;
+    background-color: lightcoral;
 }
 .tabDiv {
     border: solid black 1px;
@@ -985,9 +996,13 @@ ul>li>input, .expander {
     border: solid black 1px;
     border-bottom-left-radius: 5px; 
     border-bottom-right-radius: 5px; 
+    display: none;
+    padding: 5px 5px;
+    border-top: none;
+    background-color: white;
 }
 .tabDiv button {
-    background-color: inherit;
+    background-color: lightgray;
     float: left;
     border: none;
     outline: none;
@@ -999,13 +1014,7 @@ ul>li>input, .expander {
     background-color: #ddd;
 }
 .tabDiv button.active {
-    background-color: #ccc;
-}
-.card {
-    display: none;
-    padding: 5px 5px;
-    border-top: none;
-    background-color: white;
+    background-color: lightblue;
 }
 #outerContainer {
     min-height: calc(100% - 69px);
@@ -1048,4 +1057,7 @@ p {
 }
 #fileElem {
     display: none;
+}
+i {
+    color: black;
 }

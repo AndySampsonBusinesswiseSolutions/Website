@@ -19,13 +19,13 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
-					<div id="treeDisplayList" class="sidebar-tree-div roundborder dashboard">
+					<div id="treeDisplayList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="treeDisplayOrderSpan">Tree Display Order</span>
-							<div id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="treeDisplayOrderList" class="expander-container">
 							<ul id="treeDisplayOrderList" class="format-listitem toplistitem">
@@ -42,10 +42,10 @@
 					<div id="siteTree" class="sidebar-tree-div roundborder">
 					</div>
 					<br>
-					<div id="projectList" class="sidebar-tree-div roundborder dashboard">
+					<div id="projectList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="projectStatusSpan">Project Status</span>
-							<div id="projectStatus" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="projectStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="projectStatusList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -80,8 +80,8 @@
 					<div class="expander-header">
 						<span>Pending & Active Opportunities Chart</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="pendingAndActiveOpportunities"></i>
-						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></div>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></i>
 					</div>
 					<div id="pendingAndActiveOpportunitiesList" class="expander-container">
 						<div id="ganttChart"></div>

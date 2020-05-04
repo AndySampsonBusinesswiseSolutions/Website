@@ -17,13 +17,13 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
-					<div id="treeDisplayList" class="sidebar-tree-div roundborder dashboard">
+					<div id="treeDisplayList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="treeDisplayOrderSpan">Tree Display Order</span>
-							<div id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="treeDisplayOrderList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -57,33 +57,33 @@
 				<div class="roundborder dashboard outer-container expander-container">
 					<div class="expander-header">
 						<span id="cumulativeSavingspan">Cumulative Saving Chart</span>
-						<div id="cumulativeSaving" class="far fa-plus-square show-pointer expander openExpander"></div>
-						<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="float: right;" title="Download Cumulative Saving Chart"></div>
+						<i id="cumulativeSaving" class="far fa-plus-square show-pointer expander openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Cumulative Saving Chart"></i>
 					</div>
-					<div id="cumulativeSavingList" class="tree-div roundborder expander-container">
+					<div id="cumulativeSavingList" class="chart roundborder expander-container">
 						<div id="cumulativeSavingChart"></div>
 					</div>
 				</div>
 				<div class="roundborder dashboard expander-container outer-container">
 					<div class="expander-header">
 						<span id="costSavingspan">Cost Saving Chart</span>
-						<div id="costSaving" class="far fa-plus-square show-pointer expander"></div>
-						<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="float: right;" title="Download Cost Saving Chart"></div>
+						<i id="costSaving" class="far fa-plus-square show-pointer expander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Cost Saving Chart"></i>
 					</div>
-					<div id="costSavingList"  class="listitem-hidden tree-div roundborder expander-container">
+					<div id="costSavingList"  class="listitem-hidden chart roundborder expander-container">
 						<div id="costSavingChart"></div>
 					</div>
 				</div>
 				<div class="roundborder dashboard expander-container outer-container">
 					<div class="expander-header">
 						<span id="volumeSavingspan">Volume Saving Chart</span>
-						<div id="volumeSaving" class="far fa-plus-square show-pointer expander"></div>
-						<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="float: right;" title="Download Volume Saving Chart"></div>
+						<i id="volumeSaving" class="far fa-plus-square show-pointer expander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Volume Saving Chart"></i>
 					</div>
-					<div id="volumeSavingList"  class="listitem-hidden tree-div roundborder expander-container">
+					<div id="volumeSavingList"  class="listitem-hidden chart roundborder expander-container">
 						<div id="volumeSavingChart"></div>
 					</div>
 				</div>

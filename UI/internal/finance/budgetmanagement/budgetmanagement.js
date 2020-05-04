@@ -21,7 +21,7 @@ function createBudgetTree(sites, functions) {
 	clearElement(div);
 
 	var tree = document.createElement('div');
-	var ul = createBranchUl('createReviewBudgetTreeDivSelector', false);
+	var ul = createBranchUl('createReviewBudgetTreeDivSelector', false, true);
 	tree.appendChild(ul);
 
 	buildSiteBranch(sites, '', ul, functions, true);

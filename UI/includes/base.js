@@ -55,14 +55,14 @@ function lockSidebar() {
   
 function openNav(sidebar, newSidebarWidth) {
     sidebar.style.width = newSidebarWidth + "px";
-    document.getElementById("openNav").style.color = "#b62a51";
+    document.getElementById("openNav").style.color = "rgb(233, 233, 233)";
 }
   
 function closeNav(sidebar) {
     var lock = document.getElementsByClassName('lock')[0];
 
     if(lock.classList.contains('fa-unlock')) {
-        document.getElementById("openNav").style.color = "white";
+        document.getElementById("openNav").style.color = "black";
         sidebar.style.width = "0px";
     }
 }

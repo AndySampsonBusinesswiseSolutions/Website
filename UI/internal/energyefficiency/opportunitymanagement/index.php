@@ -112,15 +112,15 @@
 			<div class="title">
 				<span id="manageOpportunityTitle"></span>
 				<br>
-				<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Opportunity To Download Basket"></div>
-				<div class="fas fa-download show-pointer" style="float: right;" title="Download Opportunity"></div>
+				<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Opportunity To Download Basket"></i>
+				<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Opportunity"></i>
 				<br>
 			</div>
 			<div style="margin-top: 5px;">
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
 					<div class="expander-header">
 						<span id="opportunityDetailsSpan">Opportunity Details</span>
-						<div id="opportunityDetails" class="far fa-plus-square show-pointer expander"></div>
+						<i id="opportunityDetails" class="far fa-plus-square show-pointer expander"></i>
 					</div>
 					<br>
 					<div id="opportunityDetailsList" class="listitem-hidden">
@@ -146,22 +146,22 @@
 				<div class="roundborder divcolumn" style="float: left; width: 44%;">
 					<div class="expander-header">
 						<span id="addNewTimelineStepSpan">Add New Timeline Step</span>
-						<div id="addNewTimelineStep" class="far fa-plus-square show-pointer expander"></div>
+						<i id="addNewTimelineStep" class="far fa-plus-square show-pointer expander"></i>
 					</div>
 					<br>
 					<div id="addNewTimelineStepList" class="listitem-hidden">
 						<div class="roundborder" style="float: left; width: 36%;">
 							<span id="addNewTimelineStepTreeSpan" style="padding-left: 5px;">Select Sites(s)/Meter(s)</span>
-							<div id="addNewTimelineStepTree" class="far fa-plus-square show-pointer expander openExpander"></div>
+							<i id="addNewTimelineStepTree" class="far fa-plus-square show-pointer expander openExpander"></i>
 							<div class="scrolling-wrapper">
 								<ul class="format-listitem" id="addNewTimelineStepTreeList">
 									<li>
-										<div id="ManageOpportunitySite0" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<i id="ManageOpportunitySite0" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></i>
 										<input type="checkbox" id="ManageOpportunitySite0checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite0span">Site X</span>
 										<div id="ManageOpportunitySite0List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="ManageOpportunityMeter14" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<i id="ManageOpportunityMeter14" style="padding-right: 4px;" class="far fa-times-circle"></i>
 													<input type="checkbox" id="ManageOpportunityMeter14checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter14span">1234567890123</span>
 													<div id="ManageOpportunityMeter14List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
@@ -171,12 +171,12 @@
 										</div>
 									</li>
 									<li>
-										<div id="ManageOpportunitySite1" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<i id="ManageOpportunitySite1" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></i>
 										<input type="checkbox" id="ManageOpportunitySite1checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite1span">Site Y</span>
 										<div id="ManageOpportunitySite1List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="ManageOpportunityMeter16" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<i id="ManageOpportunityMeter16" style="padding-right: 4px;" class="far fa-times-circle"></i>
 													<input type="checkbox" id="ManageOpportunityMeter16checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter16span">1234567890124</span>
 													<div id="ManageOpportunityMeter16List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
@@ -186,19 +186,19 @@
 										</div>
 									</li>
 									<li>
-										<div id="ManageOpportunitySite2" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<i id="ManageOpportunitySite2" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></i>
 										<input type="checkbox" id="ManageOpportunitySite2checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite2span">Site Z</span>
 										<div id="ManageOpportunitySite2List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="ManageOpportunityMeter18" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<i id="ManageOpportunityMeter18" style="padding-right: 4px;" class="far fa-times-circle"></i>
 													<input type="checkbox" id="ManageOpportunityMeter18checkbox" branch="Meter" linkedsite="LED Lighting" guid="" ><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter18span">1234567890125</span>
 													<div id="ManageOpportunityMeter18List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
 													</div>
 												</li>
 												<li>
-													<div id="ManageOpportunityMeter20" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<i id="ManageOpportunityMeter20" style="padding-right: 4px;" class="far fa-times-circle"></i>
 													<input type="checkbox" id="ManageOpportunityMeter20checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter20span">1234567890126</span>
 													<div id="ManageOpportunityMeter20List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
@@ -208,12 +208,12 @@
 										</div>
 									</li>
 									<li>
-										<div id="ManageOpportunitySite3" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></div>
+										<i id="ManageOpportunitySite3" class="far fa-plus-square show-pointer expander" style="padding-right: 4px;"></i>
 										<input type="checkbox" id="ManageOpportunitySite3checkbox" branch="Site" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunitySite3span">Site A</span>
 										<div id="ManageOpportunitySite3List" class="listitem-hidden">
 											<ul class="format-listitem">
 												<li>
-													<div id="ManageOpportunityMeter22" style="padding-right: 4px;" class="far fa-times-circle"></div>
+													<i id="ManageOpportunityMeter22" style="padding-right: 4px;" class="far fa-times-circle"></i>
 													<input type="checkbox" id="ManageOpportunityMeter22checkbox" branch="Meter" linkedsite="LED Lighting" guid=""><i class="undefined" style="padding-left: 3px; padding-right: 3px;"></i><span id="ManageOpportunityMeter22span">1234567890120</span>
 													<div id="ManageOpportunityMeter22List" class="listitem-hidden">
 														<ul class="format-listitem"></ul>
@@ -285,7 +285,7 @@
 				<div class="roundborder divcolumn" style="float: left; width: 26%;">
 					<div class="expander-header">
 						<span id="editTimelineStepSpan">Edit Timeline Step</span>
-						<div id="editTimelineStep" class="far fa-plus-square show-pointer expander"></div>
+						<i id="editTimelineStep" class="far fa-plus-square show-pointer expander"></i>
 					</div>
 					<br>
 					<div id="editTimelineStepList" class="listitem-hidden">
@@ -339,16 +339,16 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
 					<div id="siteDiv" class="tree-div roundborder">
 					</div>
 					<br>
-					<div class="dashboard roundborder outer-container">
+					<div class="tree-div roundborder outer-container">
 						<div class="expander-header">
 							<span id="opportunityStatusSpan">Opportunity Status</span>
-							<div id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="opportunityStatusList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -377,12 +377,12 @@
 			<br>
 			<div class="final-column">
 				<div>
-					<div class="roundborder divcolumn left">
+					<div class="roundborder divcolumn left dashboard">
 						<div class="expander-header">
 							<span>Requested Visits</span>
-							<div id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
-							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></div>
-							<div class="fas fa-download show-pointer" style="float: right;" title="Download Requested Visits"></div>
+							<i id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
+							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></i>
+							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
 						</div>
 						<br>
 						<div id="requestedVisitsList">
@@ -390,12 +390,12 @@
 						</div>
 					</div>
 					<div class="middle"></div>
-					<div class="roundborder divcolumn right">
+					<div class="roundborder divcolumn right dashboard">
 						<div class="expander-header">
 							<span>Scheduled Visits</span>
-							<div id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></div>
-							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></div>
-							<div class="fas fa-download show-pointer" style="float: right;" title="Download Scheduled Visits"></div>
+							<i id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
+							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></i>
+							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
 						</div>
 						<br>
 						<div id="scheduledVisitsList">
@@ -405,50 +405,44 @@
 				</div>
 				<div style="clear: left;"></div>
 				<br>
-				<div id="rejectedOpportunitiesDiv" class="listitem-hidden">
-					<div class="roundborder divcolumn">
-						<div class="expander-header">
-							<span>Rejected Opportunities</span>
-							<div id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
-							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></div>
-							<div class="fas fa-download show-pointer" style="float: right;" title="Download Rejected Opportunities"></div>
-						</div>
-						<br>
-						<div id="rejectedOpportunitiesList">
-							<div id="rejectedOpportunitiesSpreadsheet"></div>
-						</div>
+				<div id="rejectedOpportunitiesDiv" class="listitem-hidden roundborder divcolumn dashboard">
+					<div class="expander-header">
+						<span>Rejected Opportunities</span>
+						<i id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Rejected Opportunities"></i>
+					</div>
+					<br>
+					<div id="rejectedOpportunitiesList">
+						<div id="rejectedOpportunitiesSpreadsheet"></div>
+					</div>
+					<div style="clear: left;"></div>					
+				</div>
+				<br>
+				<div id="recommendedOpportunitiesDiv" class="roundborder divcolumn dashboard">
+					<div class="expander-header">
+						<span>Recommended Opportunities</span>
+						<i id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Recommended Opportunities"></i>
+					</div>
+					<br>
+					<div id="recommendedOpportunitiesList">
+						<div id="recommendedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>
-					<br>
 				</div>
-				<div id="recommendedOpportunitiesDiv">
-					<div class="roundborder divcolumn">
-						<div class="expander-header">
-							<span>Recommended Opportunities</span>
-							<div id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
-							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></div>
-							<div class="fas fa-download show-pointer" style="float: right;" title="Download Recommended Opportunities"></div>
-						</div>
-						<br>
-						<div id="recommendedOpportunitiesList">
-							<div id="recommendedOpportunitiesSpreadsheet"></div>
-						</div>
+				<br>
+				<div id="pendingActiveOpportunitiesDiv" class="roundborder divcolumn dashboard">
+					<div class="expander-header">
+						<span>Pending & Active Opportunities</span>
+						<i id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></i>
 					</div>
-					<div style="clear: left;"></div>
 					<br>
-				</div>
-				<div id="pendingActiveOpportunitiesDiv">
-					<div class="roundborder divcolumn">
-						<div class="expander-header">
-							<span>Pending & Active Opportunities</span>
-							<div id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></div>
-							<div class="fas fa-cart-arrow-down show-pointer" style="margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></div>
-							<div class="fas fa-download show-pointer" style="float: right;" title="Download Pending & Active Opportunities"></div>
-						</div>
-						<br>
-						<div id="pendingActiveOpportunitiesList">
-							<div id="pendingActiveOpportunitiesSpreadsheet"></div>
-						</div>
+					<div id="pendingActiveOpportunitiesList">
+						<div id="pendingActiveOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>
 				</div>

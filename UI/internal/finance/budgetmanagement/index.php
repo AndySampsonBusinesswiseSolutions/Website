@@ -32,13 +32,13 @@
 			<div class="dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="selectOptionsSpan">Select Options</span>
-					<div id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></div>
+					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
 				<div id="selectOptionsList" class="expander-container">
-					<div id="budgetList" class="sidebar-tree-div roundborder dashboard">
+					<div id="budgetList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="budgetSelectorSpan">Budget</span>
-							<div id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="budgetSelectorList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -75,10 +75,10 @@
 					<div id="siteTree" class="sidebar-tree-div roundborder">
 					</div>
 					<br>
-					<div id="commodityList" class="sidebar-tree-div roundborder dashboard">
+					<div id="commodityList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="commoditySelectorSpan">Commodity</span>
-							<div id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="commoditySelectorList" class="expander-container">
 							<ul class="format-listitem toplistitem">
@@ -95,10 +95,10 @@
 						</div>
 					</div>
 					<br>
-					<div id="timePeriodList" class="sidebar-tree-div roundborder dashboard">
+					<div id="timePeriodList" class="sidebar-tree-div roundborder">
 						<div class="expander-header">
 							<span id="timePeriodSelectorSpan">Time Period</span>
-							<div id="timePeriodSelector" class="far fa-plus-square expander show-pointer openExpander"></div>
+							<i id="timePeriodSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
 						<div id="timePeriodSelectorList" class="expander-container">
 							<ul class="format-listitem slider-list toplistitem">
@@ -137,8 +137,8 @@
 					<div class="expander-header">
 						<span>Create\Review Budget</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
-						<div class="fas fa-cart-arrow-down show-pointer" style="float: right;" title="Add Budget To Download Basket"></div>
-						<div class="fas fa-download show-pointer" style="margin-right: 5px; float: right;" title="Download Budget"></div>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Budget To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Budget"></i>
 					</div>
 					<div id="createReviewBudgetList" class="expander-container">
 						<div id="createReviewBudgetDetailDiv" class="tree-div roundborder" style="float: left; margin-left: 45px; margin-right: 15px;">
@@ -188,11 +188,11 @@
 							<input type="date" id="createReviewBudgetAdjustDateFrom"></input>
 							<label for="createReviewBudgetAdjustDateTo">and</label>
 							<input type="date" id="createReviewBudgetAdjustDateTo"></input>
-							<button class="approve show-pointer roundborder" title="Add Adjustment">+</button>
+							<button class="show-pointer roundborder" title="Add Adjustment">+</button>
 							<br>
 							<div class="expander-header">
 								<span>Budget Adjustments</span>
-								<div id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></div>
+								<i id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></i>
 							</div>
 							<div id="createReviewBudgetAdjustmentsList" class="roundborder datagrid listitem-hidden expander-container" style="padding: 5px;">
 								<div id="adjustmentsSpreadsheet"></div>
