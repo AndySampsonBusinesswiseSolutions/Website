@@ -15,7 +15,7 @@
 	<div id="outerContainer">
 		<div id="mainContainer">
 			<div style="text-align: center;">
-				<img src="/images/EMaaS.PNG" style="width: 100%; height: 72.7%;">
+				<img src="/images/EMaaS.PNG" style="width: 100%; height: 100%;">
 			</div>
 		</div>
 	</div>
