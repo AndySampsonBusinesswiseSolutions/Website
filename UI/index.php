@@ -14,13 +14,11 @@
 <body>
 	<div id="outerContainer">
 		<div id="mainContainer">
-			<div class="section-header">
-				<div class="section-header-text">Welcome To The Businesswise Solutions Energy Portal</div>
+			<div style="text-align: center;">
+				<img src="/images/EMaaS.PNG" style="width: 100%; height: 72.7%;">
 			</div>
-			<span>In here we're going to have lots of lovely marketing things</span>
 		</div>
 	</div>
-	<br>
 </body>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>
