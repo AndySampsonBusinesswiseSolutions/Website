@@ -14,10 +14,10 @@
                     <div class="topnav">
                         <div class="login-container">
                             <form method="post" action='/Internal/Dashboard/'>
-                                <input type="text" placeholder="Email Address" name="username" required>
-                                <input type="text" placeholder="Password" name="psw" required>
-                                <button type="submit" class="login-button">Login</button>
-                                <a href="/Internal/ForgottenPassword/" style="color: white;">Forgotten Password?</a>
+                                <input type="text" placeholder="Email Address" name="username" required style="margin-right: 5px;">
+                                <input type="text" placeholder="Password" name="psw" required style="margin-right: 5px;">
+                                <button type="submit" class="login-button" style="margin-right: 5px;">Login</button>
+                                <a href="/Internal/ForgottenPassword/" style="margin-right: 5px;">Forgotten Password?</a>
                             </form>
                         </div>
                     </div>

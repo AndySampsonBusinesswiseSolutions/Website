@@ -9,12 +9,16 @@
 <html>
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
-	<link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
-	<div style="min-height: 800px;">
-		<span>In here we're going to have lots of lovely marketing things</span>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<div class="section-header-text">Welcome To The Businesswise Solutions Energy Portal</div>
+			</div>
+			<span>In here we're going to have lots of lovely marketing things</span>
+		</div>
 	</div>
 	<br>
 </body>
