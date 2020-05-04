@@ -17,7 +17,7 @@
 
 .topnav .login-container button {
   margin-right: 16px;
-  background-color: #555;
+  background-color: #b62a51;
   color: white;
   font-size: 17px;
   border: none;
@@ -27,6 +27,8 @@
 .login-button {
   margin-top: 5px;
   margin-bottom: -5px;
+  width:200px;
+  height: 34px;
 }
 
 .topnav .login-container button:hover {
