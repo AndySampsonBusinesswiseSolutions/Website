@@ -27,27 +27,24 @@ function hideSliders() {
 }
 
 function getCommodityOption() {
-  var commodity = '';
-  var electricityCommodityradio = document.getElementById('electricityCommoditySelectorradio');
-  if(electricityCommodityradio.checked) {
-    commodity = 'Electricity';
+  if(electricityCommoditycheckbox.checked && gasCommoditycheckbox.checked) {
+    return '';
   }
-  else {
-    var gasCommodityradio = document.getElementById('gasCommoditySelectorradio');
-    if(gasCommodityradio.checked) {
-      commodity = 'Gas';
-    }
+  else if(electricityCommoditycheckbox.checked) {
+    return 'Electricity';
   }
-  return commodity;
+  else if(gasCommoditycheckbox.checked) {
+    return 'Gas';
+  }
+
+  return 'None';
 }
 
 function createTrees() {
-  createCommodityTree();
   createDisplayTree();
-  createBudgetTree();
   createSiteTree(usageSites, "updatePage()");
-  createInvoiceTree();
   createGroupingOptionTree();
+  createInvoiceVarianceTree();
   createTimePeriodTree();
 
   addExpanderOnClickEvents();
@@ -71,10 +68,74 @@ function createDisplayListItems(ul) {
   var costDisplayListItem = appendListItemChildren('costDisplaySelector', true, 'updatePage()', [{"Name" : "Cost"}], 'displaySelector', false, 'radio', 'displayGroup');
   var usageDisplayListItem = appendListItemChildren('usageDisplaySelector', true, 'updatePage()', [{"Name" : "Usage"}], 'displaySelector', true, 'radio', 'displayGroup');
   var rateDisplayListItem = appendListItemChildren('rateDisplaySelector', true, 'updatePage()', [{"Name" : "Rate"}], 'displaySelector', false, 'radio', 'displayGroup');
-  
+
+  var displayListItemTitle = createBranchSpan('displayListItemTitle', 'Energy Unit');
+  var displayListItemAdditionalTitle = createBranchSpan('displayListItemAdditionalTitle', 'Energy Unit Instance');
+
+  ul.appendChild(displayListItemTitle);
+  ul.appendChild(costDisplayListItem);
+  ul.appendChild(usageDisplayListItem);
+  ul.appendChild(rateDisplayListItem);
+  ul.appendChild(createBreakDisplayListItem());
+  ul.appendChild(displayListItemAdditionalTitle);
+  ul.appendChild(createForecastTree());
+  ul.appendChild(createBudgetTree());
+  ul.appendChild(createInvoiceTree());
+  ul.appendChild(createBreakDisplayListItem());
+  ul.appendChild(createCommodityListItem());
+  ul.appendChild(createBreakDisplayListItem());
+  ul.appendChild(createDateRangeDisplayListItem());
+  ul.appendChild(createBreakDisplayListItem());
+  ul.appendChild(createGranularityDisplayListItem());
+
+  createCostRateDisplayListItems(costDisplayListItem, 'Cost');
+  createUsageDisplayListItems(usageDisplayListItem);
+  createCostRateDisplayListItems(rateDisplayListItem, 'Rate');
+}
+
+function createBreakDisplayListItem() {
   var breakDisplayListItem = document.createElement('li');
   breakDisplayListItem.innerHTML = '<br>';
 
+  return breakDisplayListItem;
+}
+
+function createCommodityListItem() {
+  var commodityListItem = document.createElement('li');
+  commodityListItem.innerHTML = '<div class="scrolling-wrapper">'
+    +'<div id="configureCommoditySelectorList" class="expander-container">'
+    +'<div style="width: 45%; text-align: center; float: left;">'
+    +'<span>Electricity</span>'
+    +'<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick="updatePage(this)" branch="commoditySelector"></input><div class="switch-btn"></div></label>'
+    +'</div>'
+    +'<div style="width: 10%; text-align: center; float: left; height: 1px;">'
+    +'</div>'
+    +'<div style="width: 45%; text-align: center; float: left;">'
+    +'<span>Gas</span>'
+    +'<label class="switch"><input type="checkbox" id="gasCommoditycheckbox" checked onclick="updatePage(this)" branch="commoditySelector"></input><div class="switch-btn"></div></label>'
+    +'</div>'
+    +'</div>'
+    +'</div>'
+
+  return commodityListItem;
+}
+
+function createDateRangeDisplayListItem() {
+  var dateRangeDisplayListItem = document.createElement('li');
+  var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "<br>Date Range<br>");
+  var dateRangeDisplayRZSlider = document.createElement('rzslider');
+  dateRangeDisplayRZSlider.id = 'timePeriodOptionsDisplayDateRange';
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDisplayDateRange.minValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsDisplayDateRange.maxValue');
+  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDisplayDateRange.options');
+
+  dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
+  dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
+
+  return dateRangeDisplayListItem;
+}
+
+function createGranularityDisplayListItem() {
   var granularityDisplayListItem = document.createElement('li');
   var granularityDisplaySpan = createBranchSpan('granularityDisplaySpan', "Granularity<br>");
   var granularityDisplayRZSlider = document.createElement('rzslider');
@@ -85,28 +146,7 @@ function createDisplayListItems(ul) {
   granularityDisplayListItem.appendChild(granularityDisplaySpan);
   granularityDisplayListItem.appendChild(granularityDisplayRZSlider);
 
-  var dateRangeDisplayListItem = document.createElement('li');
-  var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "Date Range<br>");
-  var dateRangeDisplayRZSlider = document.createElement('rzslider');
-  dateRangeDisplayRZSlider.id = 'timePeriodOptionsDisplayDateRange';
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDisplayDateRange.minValue');
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsDisplayDateRange.maxValue');
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDisplayDateRange.options');
-
-  dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
-  dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
-
-  ul.appendChild(costDisplayListItem);
-  ul.appendChild(usageDisplayListItem);
-  ul.appendChild(rateDisplayListItem);
-  ul.appendChild(breakDisplayListItem);
-  ul.appendChild(granularityDisplayListItem);
-  ul.appendChild(breakDisplayListItem);
-  ul.appendChild(dateRangeDisplayListItem);
-
-  createCostRateDisplayListItems(costDisplayListItem, 'Cost');
-  createUsageDisplayListItems(usageDisplayListItem);
-  createCostRateDisplayListItems(rateDisplayListItem, 'Rate');
+  return granularityDisplayListItem;
 }
 
 function createCostRateDisplayListItems(displayListItem, type) {
@@ -116,12 +156,22 @@ function createCostRateDisplayListItems(displayListItem, type) {
   var renewablesItemsListItem = appendListItemChildren('renewables' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Renewables"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
   var balancingItemsListItem = appendListItemChildren('balancing' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Balancing"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
   var otherItemsListItem = appendListItemChildren('other' + type + 'ItemsDisplaySelector', true, 'updatePage()', [{"Name" : "Other"}], type.toLowerCase() + 'DisplaySelector', false, 'checkbox', type.toLowerCase() + 'DisplayGroup');
+  
+  var resetButton = document.createElement('button');
+  resetButton.id = 'reset' + type + 'Button';
+  resetButton.innerText = 'Reset ' + type + ' Items';
+  resetButton.style.float = 'right';
+
+  var clearDiv = document.createElement('div');
+  clearDiv.style.clear = 'both';
 
   displaySelectorListUl.appendChild(allItemsListItem);
   displaySelectorListUl.appendChild(networkItemsListItem);
   displaySelectorListUl.appendChild(renewablesItemsListItem);
   displaySelectorListUl.appendChild(balancingItemsListItem);
   displaySelectorListUl.appendChild(otherItemsListItem);
+  displaySelectorListUl.appendChild(resetButton);
+  displaySelectorListUl.appendChild(clearDiv);
 
   createNetworkDisplayListItems(networkItemsListItem, type);
   createRenewablesDisplayListItems(renewablesItemsListItem, type);
@@ -181,17 +231,16 @@ function createOtherDisplayListItems(otherItemsListItem, type) {
 }
 
 function createBudgetTree() {
-  var div = document.getElementById('budgetTree');
-  clearElement(div);
+  var budgetListItem = appendListItemChildren('budgetSelector', true, 'updatePage()', [{"Name" : "Budget"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
+  budgetListItem.id = "budgetTree";
 
-  var headerDiv = createHeaderDiv("budgetHeader", "Budget", true);
-  var ul = createBranchUl("budgetSelector", false, true);
+  var budgetSelectorListUl = budgetListItem.getElementsByTagName('ul')[0];
 
   var budget2BudgetListItem = appendListItemChildren('budget2BudgetSelector', true, 'updatePage()', [{"Name" : "Budget 2"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
   var budget1BudgetListItem = appendListItemChildren('budget1BudgetSelector', false, 'updatePage()', [{"Name" : "Budget 1"}], 'budgetSelector', false, 'checkbox', 'budgetGroup');
 
-  ul.appendChild(budget2BudgetListItem);
-  ul.appendChild(budget1BudgetListItem);
+  budgetSelectorListUl.appendChild(budget2BudgetListItem);
+  budgetSelectorListUl.appendChild(budget1BudgetListItem);
 
   var budget2BudgetSelectorListUl = budget2BudgetListItem.getElementsByTagName('ul')[0];
   var version2Budget2ListItem = appendListItemChildren('version2Budget2CostBudgetSelector', false, 'updatePage()', [{"Name" : "Version 2"}], 'budget2BudgetSelector', false, 'checkbox', 'budget2BudgetGroup');
@@ -200,8 +249,7 @@ function createBudgetTree() {
   budget2BudgetSelectorListUl.appendChild(version2Budget2ListItem);
   budget2BudgetSelectorListUl.appendChild(version1Budget2ListItem);
 
-  div.appendChild(headerDiv);
-  div.appendChild(ul);
+  return budgetListItem;
 }
 
 function createSiteTree(usageSites, functions) {
@@ -234,7 +282,7 @@ function createSiteTree(usageSites, functions) {
 
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+  var headerDiv = createHeaderDiv("siteHeader", 'Locations', true);
   var ul = createBranchUl("siteSelector", false, true);
 
   var breakDisplayListItem = document.createElement('li');
@@ -243,9 +291,9 @@ function createSiteTree(usageSites, functions) {
 
   var recurseSelectionListItem = document.createElement('li');
   recurseSelectionListItem.classList.add('format-listitem');
-  recurseSelectionListItem.classList.add('topListItem');
+  recurseSelectionListItem.classList.add('listItemWithoutPadding');
 
-  var recurseSelectionCheckbox = createBranchCheckbox('recuseSelectionCheckbox', '', 'recuseSelection', 'checkbox', 'recurseSelection', false);
+  var recurseSelectionCheckbox = createBranchCheckbox('recurseSelectionCheckbox', '', 'recurseSelection', 'checkbox', 'recurseSelection', false);
   var recurseSelectionSpan = createBranchSpan('recurseSelectionSpan', 'Recurse Selection?');
   recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
   recurseSelectionListItem.appendChild(recurseSelectionSpan);
@@ -273,44 +321,47 @@ function createSiteTree(usageSites, functions) {
 }
 
 function createInvoiceTree() {
-  var div = document.getElementById('invoiceTree');
-  clearElement(div);
+  var invoiceListItem = appendListItemChildren('invoiceSelector', true, 'updatePage()', [{"Name" : "Invoice"}], 'invoiceSelector', false, 'checkbox', 'invoiceGroup');
+  invoiceListItem.id = "invoiceTree";
 
-  var headerDiv = createHeaderDiv("invoiceHeader", "Invoice");
-  var ul = createBranchUl("invoiceSelector", true, true);
-
-  var selectAllInvoiceListItem = appendListItemChildren('selectAllInvoiceSelector', false, 'updatePage()', [{"Name" : "Show All Invoices"}], 'invoiceSelector', true, 'checkbox', 'invoiceGroup');
-  var selectSpecificInvoiceListItem = appendListItemChildren('selectSpecificInvoiceSelector', true, '', [{"Name" : "Specific Invoices"}], 'invoiceSelector', false, 'radio', 'invoiceGroup');
-
-  ul.appendChild(selectAllInvoiceListItem);
-  ul.appendChild(selectSpecificInvoiceListItem);
-
-  var selectSpecificInvoiceListUl = selectSpecificInvoiceListItem.getElementsByTagName('ul')[0];
+  var invoiceSelectorListUl = invoiceListItem.getElementsByTagName('ul')[0];
   var invoice3InvoiceListItem = appendListItemChildren('invoice3InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0003"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
   var invoice2InvoiceListItem = appendListItemChildren('invoice2InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0002"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
   var invoice1InvoiceListItem = appendListItemChildren('invoice1InvoiceSelector', false, 'updatePage()', [{"Name" : "Invoice 0001"}], 'invoiceSelector', false, 'checkbox', 'selectSpecificInvoiceGroup');
 
-  selectSpecificInvoiceListUl.appendChild(invoice3InvoiceListItem);
-  selectSpecificInvoiceListUl.appendChild(invoice2InvoiceListItem);
-  selectSpecificInvoiceListUl.appendChild(invoice1InvoiceListItem);
+  invoiceSelectorListUl.appendChild(invoice3InvoiceListItem);
+  invoiceSelectorListUl.appendChild(invoice2InvoiceListItem);
+  invoiceSelectorListUl.appendChild(invoice1InvoiceListItem);
 
   var breakDisplayListItem = document.createElement('li');
   breakDisplayListItem.innerHTML = '<br>';
 
-  ul.appendChild(breakDisplayListItem);
+  invoiceSelectorListUl.appendChild(breakDisplayListItem);
 
-  var showVarianceInvoiceListItem = appendListItemChildren('showInvoiceVariancesSelector', true, '', [{"Name" : "Show Invoice Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
-  ul.appendChild(showVarianceInvoiceListItem);
+  return invoiceListItem;
+}
 
-  var showVarianceInvoiceListUl = showVarianceInvoiceListItem.getElementsByTagName('ul')[0];
+function createInvoiceVarianceTree() {
+  var div = document.getElementById('invoiceVarianceTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("invoiceVarianceHeader", "Invoice Variance");
+  var ul = createBranchUl("invoiceVarianceSelector", true, true);
+
   var showBudgetVarianceInvoiceVariancesListItem = appendListItemChildren('showBudgetVarianceInvoiceVariancesSelector', false, 'updatePage()', [{"Name" : "Show Budget Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
   var showForecastVarianceInvoiceVariancesListItem = appendListItemChildren('showForecastVarianceInvoiceVariancesSelector', false, 'updatePage()', [{"Name" : "Show Forecast Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
 
-  showVarianceInvoiceListUl.appendChild(showBudgetVarianceInvoiceVariancesListItem);
-  showVarianceInvoiceListUl.appendChild(showForecastVarianceInvoiceVariancesListItem);
+  ul.appendChild(showBudgetVarianceInvoiceVariancesListItem);
+  ul.appendChild(showForecastVarianceInvoiceVariancesListItem);
 
   div.appendChild(headerDiv);
   div.appendChild(ul);
+}
+
+function createForecastTree() {
+  var forecastListItem = appendListItemChildren('forecastSelector', false, 'updatePage()', [{"Name" : "BWS Forecast"}], 'forecastSelector', true, 'checkbox', 'forecastGroup');
+
+  return forecastListItem;
 }
 
 function createGroupingOptionTree() {
@@ -332,25 +383,6 @@ function createGroupingOptionTree() {
 
   groupingOption1GroupingOptionSelectorListUl.appendChild(sumGroupingOption1ListItem);
   groupingOption1GroupingOptionSelectorListUl.appendChild(averageGroupingOption1ListItem);
-
-  div.appendChild(headerDiv);
-  div.appendChild(ul);
-}
-
-function createCommodityTree() {
-  var div = document.getElementById('commodityTree');
-  clearElement(div);
-
-  var headerDiv = createHeaderDiv("commodityHeader", "Commodity");
-  var ul = createBranchUl("commoditySelector", true, true);
-
-  var allCommodityListItem = appendListItemChildren('allCommoditySelector', false, 'updatePage()', [{"Name" : "All"}], 'commoditySelector', true, 'radio', 'commodityGroup');
-  var electricityCommodityListItem = appendListItemChildren('electricityCommoditySelector', false, 'updatePage()', [{"Name" : "Electricity"}], 'commoditySelector', false, 'radio', 'commodityGroup');
-  var gasCommodityListItem = appendListItemChildren('gasCommoditySelector', false, 'updatePage()', [{"Name" : "Gas"}], 'commoditySelector', false, 'radio', 'commodityGroup');
-
-  ul.appendChild(allCommodityListItem);
-  ul.appendChild(electricityCommodityListItem);
-  ul.appendChild(gasCommodityListItem);
 
   div.appendChild(headerDiv);
   div.appendChild(ul);
@@ -378,8 +410,8 @@ function createTimePeriodTree() {
   dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
 
   var createdDisplayListItem = document.createElement('li');
-  var createdDisplayCheckbox = createBranchCheckbox('createdDisplayCheckbox', '', 'createdDisplay', 'checkbox', 'createdDisplay', false);
-  var createdDisplaySpan = createBranchSpan('createdDisplaySpan', "Created");
+  var createdDisplayCheckbox = createBranchCheckbox('createdDisplayCheckbox', '', 'createdDisplay', 'checkbox', 'createdDisplay', true);
+  var createdDisplaySpan = createBranchSpan('createdDisplaySpan', "Latest Created");
   var createdDisplayRZSlider = document.createElement('rzslider');
   createdDisplayRZSlider.id = 'timePeriodOptionsFilteredCreated';
   createdDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsFilteredCreated.value');
@@ -390,6 +422,7 @@ function createTimePeriodTree() {
   createdDisplayListItem.appendChild(createdDisplayRZSlider);
 
   ul.appendChild(dateRangeDisplayListItem);
+  ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(createdDisplayListItem);
 
   div.appendChild(headerDiv);
@@ -400,46 +433,98 @@ function createTimePeriodTree() {
 function buildSiteBranch(usageSites, commodityOption, elementToAppendTo, functions) {
   var siteLength = usageSites.length;
 
-  for(var siteCount = 0; siteCount < siteLength; siteCount++) {
-    var site = usageSites[siteCount];
+  if(siteLocationcheckbox.checked) {
+    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+      var site = usageSites[siteCount];
 
-    if(!commodityMatch(site, commodityOption)) {
-      continue;
+      if(!commodityMatch(site, commodityOption)) {
+        continue;
+      }
+
+      var listItem = appendListItemChildren(getAttribute(site.Attributes, "GUID"), site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
+      elementToAppendTo.appendChild(listItem);
+
+      if(site.hasOwnProperty('Areas')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildAreaBranch(site.Areas, commodityOption, ul, functions);
+      }
+    }
+  }
+  else {
+    var areas = [];
+    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+      var site = usageSites[siteCount];
+
+      if(!commodityMatch(site, commodityOption)) {
+        continue;
+      }
+
+      areas.push(...site.Areas);
     }
 
-    var listItem = appendListItemChildren('Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
-    elementToAppendTo.appendChild(listItem);
-
-    if(site.hasOwnProperty('Areas')) {
-      var ul = listItem.getElementsByTagName('ul')[0];
-      buildAreaBranch(site.Areas, commodityOption, ul, functions, 'Site' + siteCount);
-    }
+    buildAreaBranch(areas, commodityOption, elementToAppendTo, functions);
   }
 }
 
 //build area
-function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions, previousId) {
+function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions) {
   var areaLength = areas.length;
 
-  for(var areaCount = 0; areaCount < areaLength; areaCount++) {
-    var area = areas[areaCount];
+  if(areaLocationcheckbox.checked) {
+    for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+      var area = areas[areaCount];
 
-    if(!commodityMatch(area, commodityOption)) {
-      continue;
+      if(!commodityMatch(area, commodityOption)) {
+        continue;
+      }
+
+      var listItem = appendListItemChildren(getAttribute(area.Attributes, "GUID"), area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area')
+      elementToAppendTo.appendChild(listItem);
+
+      if(area.hasOwnProperty('Commodities')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildCommodityBranch(area.Commodities, commodityOption, ul, functions);
+      }
+    }
+  }
+  else {
+    var commodities = [];
+    var commodityNames = [];
+
+    for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+      var area = areas[areaCount];
+
+      if(!commodityMatch(area, commodityOption)) {
+        continue;
+      }
+
+      var commodityLength = area.Commodities.length;
+
+      for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
+        var commodity = area.Commodities[commodityCount];
+
+        if(!commodityMatch(commodity, commodityOption)) {
+          continue;
+        }
+
+        var commodityName = getAttribute(commodity.Attributes, "Name");
+        var commodityIndex = commodityNames.indexOf(commodityName);
+        if(!commodityNames.includes(commodityName)) {
+          commodityNames.push(commodityName);
+          commodities.push(JSON.parse(JSON.stringify(commodity)));
+        }
+        else {
+          commodities[commodityIndex].Meters.push(...commodity.Meters);
+        }
+      }
     }
 
-    var listItem = appendListItemChildren(previousId + '_Area' + areaCount, area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area');
-    elementToAppendTo.appendChild(listItem);
-
-    if(area.hasOwnProperty('Commodities')) {
-      var ul = listItem.getElementsByTagName('ul')[0];
-      buildCommodityBranch(area.Commodities, commodityOption, ul, functions, previousId + '_Area' + areaCount);
-    }
+    buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions);
   }
 }
 
 //build commodity
-function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions, previousId) {
+function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions) {
   var commodityLength = commodities.length;
 
   for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
@@ -449,39 +534,79 @@ function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, f
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + '_Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), null, commodity.Attributes, 'Commodity');
-    elementToAppendTo.appendChild(listItem);
+    if(commodityLocationcheckbox.checked) {
+      var listItem = appendListItemChildren(getAttribute(commodity.Attributes, "GUID"), commodity.hasOwnProperty('Meters'), null, commodity.Attributes, 'Commodity')
+      elementToAppendTo.appendChild(listItem);
+    }
 
     if(commodity.hasOwnProperty('Meters')) {
-      var ul = listItem.getElementsByTagName('ul')[0];
-      buildMeterBranch(commodity.Meters, commodityOption, ul, functions, previousId + '_Commodity' + commodityCount);
+      var ul = commodityLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
+      buildMeterBranch(commodity.Meters, commodityOption, ul, functions);
     }
   }
 }
 
 //build meter
-function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions, previousId) {
+function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions) {
   var meterLength = meters.length;
 
-  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-    var meter = meters[meterCount];
+  if(meterLocationcheckbox.checked) {
+    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+      var meter = meters[meterCount];
 
-    if(!commodityMatch(meter, commodityOption)) {
-      continue;
+      if(!commodityMatch(meter, commodityOption)) {
+        continue;
+      }
+
+      var listItem = appendListItemChildren(getAttribute(meter.Attributes, "GUID"), meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter')
+      elementToAppendTo.appendChild(listItem);
+
+      if(meter.hasOwnProperty('SubAreas')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions);
+      }
+    }
+  }
+  else {
+    var subAreas = [];
+    var subAreaNames = [];
+
+    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+      var meter = meters[meterCount];
+
+      if(!commodityMatch(meter, commodityOption)) {
+        continue;
+      }
+
+      if(meter.SubAreas) {
+        var subAreaLength = meter.SubAreas.length;
+
+        for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
+          var subArea = meter.SubAreas[subAreaCount];
+
+          if(!commodityMatch(subArea, commodityOption)) {
+            continue;
+          }
+
+          var subAreaName = getAttribute(subArea.Attributes, "Name");
+          var subAreaIndex = subAreaNames.indexOf(subAreaName);
+          if(!subAreaNames.includes(subAreaName)) {
+            subAreaNames.push(subAreaName);
+            subAreas.push(JSON.parse(JSON.stringify(subArea)));
+          }
+          else {
+            subAreas[subAreaIndex].Assets.push(...subArea.Assets);
+          }
+        }
+      }
     }
 
-    var listItem = appendListItemChildren(previousId + '_Meter' + meterCount, meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter');
-    elementToAppendTo.appendChild(listItem);
-
-    if(meter.hasOwnProperty('SubAreas')) {
-      var ul = listItem.getElementsByTagName('ul')[0];
-      buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions, previousId + '_Meter' + meterCount);
-    }
+    buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions);
   }
 }
 
 //build sub area
-function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions, previousId) {
+function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions) {
   var subAreaLength = subAreas.length;
 
   for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
@@ -491,18 +616,20 @@ function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functi
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + '_SubArea' + subAreaCount, subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea');
-    elementToAppendTo.appendChild(listItem);
+    if(subareaLocationcheckbox.checked) {
+      var listItem = appendListItemChildren(getAttribute(subArea.Attributes, "GUID"), subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea')
+      elementToAppendTo.appendChild(listItem);
+    }
 
     if(subArea.hasOwnProperty('Assets')) {
-      var ul = listItem.getElementsByTagName('ul')[0];
-      buildAssetBranch(subArea.Assets, commodityOption, ul, functions, previousId + '_SubArea' + subAreaCount);
+      var ul = subareaLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
+      buildAssetBranch(subArea.Assets, commodityOption, ul, functions);
     }
   }
 }
 
 //build asset
-function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions, previousId) {
+function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions) {
   var assetLength = assets.length;
 
   for(var assetCount = 0; assetCount < assetLength; assetCount++) {
@@ -512,18 +639,24 @@ function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions,
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + '_Asset' + assetCount, asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset');
-    elementToAppendTo.appendChild(listItem);
+    if(assetLocationcheckbox.checked) {
+      var listItem = appendListItemChildren(getAttribute(asset.Attributes, "GUID"), asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset')
+      elementToAppendTo.appendChild(listItem);
+    }
 
     if(asset.hasOwnProperty('SubMeters')) {
-      var ul = listItem.getElementsByTagName('ul')[0];
-      buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions, previousId + '_Asset' + assetCount);
+      var ul = assetLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
+      buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions);
     }
   }
 }
 
 //build sub meter
-function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions, previousId) {
+function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions) {
+  if(!submeterLocationcheckbox.checked) {
+    return;
+  }
+
   var subMeterLength = subMeters.length;
 
   for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
@@ -533,7 +666,7 @@ function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, func
       continue;
     }
 
-    var listItem = appendListItemChildren(previousId + '_SubMeter' + subMeterCount, false, functions, subMeter.Attributes, 'SubMeter');
+    var listItem = appendListItemChildren(getAttribute(subMeter.Attributes, "GUID"), false, functions, subMeter.Attributes, 'SubMeter');
     elementToAppendTo.appendChild(listItem);
   }
 }
@@ -551,6 +684,7 @@ function updatePage(callingElement) {
       updatePageFromInvoice(callingElement);
       break;
     case 'commoditySelector':
+    case 'locationSelector':
       createSiteTree(usageSites, "updatePage()"); 
       addExpanderOnClickEvents();
       break;
@@ -558,6 +692,7 @@ function updatePage(callingElement) {
     case 'groupingOption1GroupingOptionSelector':
     case 'budgetSelector':
     case 'invoiceVarianceSelector':
+    case 'forecastSelector':
       break;
     case 'costDisplaySelector':
     case 'rateDisplaySelector':
@@ -570,7 +705,7 @@ function updatePage(callingElement) {
     case 'SubArea':
     case 'Asset':
     case 'SubMeter':
-      recurseSelection(callingElement);
+      recurseSelection(callingElement, 'recurseSelectionCheckboxcheckbox');
       break;
     default:
       alert(branch);
@@ -1014,83 +1149,85 @@ function determineShowByArray() {
   }
 
   var showByArray = [];
-  for(var i = 0; i < checkedElements.length; i++) {
-    if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
-      if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
-        if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorradio') {
-          showByArray = ['Usage']
-        }
-        else {
-          showByArray = ['Capacity', 'MaxDemand']
+  if(forecastSelectorcheckbox.checked) {
+    for(var i = 0; i < checkedElements.length; i++) {
+      if(baseDisplayRadio.id == 'usageDisplaySelectorradio') {
+        if(checkedElements[i].getAttribute('branch') == 'usageDisplaySelector') {
+          if(checkedElements[i].id == 'consumptionUsageItemsUsageDisplaySelectorradio') {
+            showByArray = ['Usage']
+          }
+          else {
+            showByArray = ['Capacity', 'MaxDemand']
+          }
         }
       }
-    }
-    else {
-      if(checkedElements[i].getAttribute('branch').concat('radio') == baseDisplayRadio.id) {
-        var branch = '';
-
-        if(baseDisplayRadio.id == 'rateDisplaySelectorradio') {
-          branch = 'Rate';
-          pushToArray('Usage', showByArray);
-        }
-        else {
-          branch = 'Cost';
-        }
-
-        switch(checkedElements[i].id.replace(branch, '')) {
-          case 'allItemsDisplaySelectorcheckbox':
-            pushToArray('Cost', showByArray);
-            break;
-          case 'networkItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Wholesale', showByArray);
-            pushToArray('Cost - Distribution', showByArray);
-            pushToArray('Cost - Transmission', showByArray);
-            break;
-          case 'wholesaleNetworkItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Wholesale', showByArray);
-            break;
-          case 'distributionNetworkItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Distribution', showByArray);
-            break;
-          case 'transmissionNetworkItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Transmission', showByArray);
-            break;
-          case 'renewablesItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Renewables Obligation', showByArray);
-            pushToArray('Cost - Feed In Tariff', showByArray);
-            pushToArray('Cost - Contracts For Difference', showByArray);
-            pushToArray('Cost - Energy Intensive Industry', showByArray);
-            pushToArray('Cost - Capacity Markets', showByArray);
-            break;
-          case 'renewablesObligationRenewablesItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Renewables Obligation', showByArray);
-            break;
-          case 'feedInTariffRenewablesItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Feed In Tariff', showByArray);
-            break;
-          case 'contractsForDifferenceRenewablesItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Contracts For Difference', showByArray);
-            break;
-          case 'energyIntensiveIndustryRenewablesItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Energy Intensive Industry', showByArray);
-            break;
-          case 'capacityMarketRenewablesItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Capacity Markets', showByArray);
-            break;
-          case 'balancingItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Balancing System Use Of System', showByArray);
-            pushToArray('Cost - Residual Cashflow Reallocation Cashflow', showByArray);
-            break;
-          case 'bsuosBalancingItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Balancing System Use Of System', showByArray);
-            break;
-          case 'rcrcBalancingItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Residual Cashflow Reallocation Cashflow', showByArray);
-            break;
-          case 'otherItemsDisplaySelectorcheckbox':
-          case 'sundryOtherItemsDisplaySelectorcheckbox':
-            pushToArray('Cost - Sundry', showByArray);
-            break;
+      else {
+        if(checkedElements[i].getAttribute('branch').concat('radio') == baseDisplayRadio.id) {
+          var branch = '';
+  
+          if(baseDisplayRadio.id == 'rateDisplaySelectorradio') {
+            branch = 'Rate';
+            pushToArray('Usage', showByArray);
+          }
+          else {
+            branch = 'Cost';
+          }
+  
+          switch(checkedElements[i].id.replace(branch, '')) {
+            case 'allItemsDisplaySelectorcheckbox':
+              pushToArray('Cost', showByArray);
+              break;
+            case 'networkItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Wholesale', showByArray);
+              pushToArray('Cost - Distribution', showByArray);
+              pushToArray('Cost - Transmission', showByArray);
+              break;
+            case 'wholesaleNetworkItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Wholesale', showByArray);
+              break;
+            case 'distributionNetworkItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Distribution', showByArray);
+              break;
+            case 'transmissionNetworkItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Transmission', showByArray);
+              break;
+            case 'renewablesItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Renewables Obligation', showByArray);
+              pushToArray('Cost - Feed In Tariff', showByArray);
+              pushToArray('Cost - Contracts For Difference', showByArray);
+              pushToArray('Cost - Energy Intensive Industry', showByArray);
+              pushToArray('Cost - Capacity Markets', showByArray);
+              break;
+            case 'renewablesObligationRenewablesItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Renewables Obligation', showByArray);
+              break;
+            case 'feedInTariffRenewablesItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Feed In Tariff', showByArray);
+              break;
+            case 'contractsForDifferenceRenewablesItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Contracts For Difference', showByArray);
+              break;
+            case 'energyIntensiveIndustryRenewablesItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Energy Intensive Industry', showByArray);
+              break;
+            case 'capacityMarketRenewablesItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Capacity Markets', showByArray);
+              break;
+            case 'balancingItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Balancing System Use Of System', showByArray);
+              pushToArray('Cost - Residual Cashflow Reallocation Cashflow', showByArray);
+              break;
+            case 'bsuosBalancingItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Balancing System Use Of System', showByArray);
+              break;
+            case 'rcrcBalancingItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Residual Cashflow Reallocation Cashflow', showByArray);
+              break;
+            case 'otherItemsDisplaySelectorcheckbox':
+            case 'sundryOtherItemsDisplaySelectorcheckbox':
+              pushToArray('Cost - Sundry', showByArray);
+              break;
+          }
         }
       }
     }
@@ -1109,6 +1246,11 @@ function determineShowByArray() {
           pushToArray('Usage - Budget 2 V1', showByArray);
           pushToArray('Usage - Budget 2 V2', showByArray);
         }
+        else if(budget == 'Budget') {
+          pushToArray('Usage - Budget 2 V1', showByArray);
+          pushToArray('Usage - Budget 2 V2', showByArray);
+          pushToArray('Usage - Budget 1', showByArray);
+        }
         else {
           pushToArray('Usage - ' + budget, showByArray);
         }
@@ -1117,6 +1259,11 @@ function determineShowByArray() {
         if(budget == 'Budget 2') {
           pushToArray('Cost - Budget 2 V1', showByArray);
           pushToArray('Cost - Budget 2 V2', showByArray);
+        }
+        else if(budget == 'Budget') {
+          pushToArray('Cost - Budget 2 V1', showByArray);
+          pushToArray('Cost - Budget 2 V2', showByArray);
+          pushToArray('Cost - Budget 1', showByArray);
         }
         else {
           pushToArray('Cost - ' + budget, showByArray);
@@ -1128,6 +1275,14 @@ function determineShowByArray() {
           pushToArray('Usage - Budget 2 V2', showByArray);
           pushToArray('Cost - Budget 2 V1', showByArray);
           pushToArray('Cost - Budget 2 V2', showByArray);
+        }
+        else if(budget == 'Budget') {
+          pushToArray('Usage - Budget 2 V1', showByArray);
+          pushToArray('Usage - Budget 2 V2', showByArray);
+          pushToArray('Usage - Budget 1', showByArray);
+          pushToArray('Cost - Budget 2 V1', showByArray);
+          pushToArray('Cost - Budget 2 V2', showByArray);
+          pushToArray('Cost - Budget 1', showByArray);
         }
         else {
           pushToArray('Usage - ' + budget, showByArray);
@@ -1186,18 +1341,43 @@ function determineShowByArray() {
         }
       }
       else {
-        switch(baseDisplayRadio.id) {
-          case 'usageDisplaySelectorradio':
-            pushToArray('Usage - ' + invoice, showByArray);
-            break;
-          case 'costDisplaySelectorradio':
-            pushToArray('Cost - ' + invoice, showByArray);
-            break;
-          case 'rateDisplaySelectorradio':
-            pushToArray('Usage - ' + invoice, showByArray);
-            pushToArray('Cost - ' + invoice, showByArray);
-            break;
+        if(invoice == 'Invoice') {
+          switch(baseDisplayRadio.id) {
+            case 'usageDisplaySelectorradio':
+              pushToArray('Usage - Invoice 0001', showByArray);
+              pushToArray('Usage - Invoice 0002', showByArray);
+              pushToArray('Usage - Invoice 0003', showByArray);
+              break;
+            case 'costDisplaySelectorradio':
+              pushToArray('Cost - Invoice 0001', showByArray);
+              pushToArray('Cost - Invoice 0002', showByArray);
+              pushToArray('Cost - Invoice 0003', showByArray);
+              break;
+            case 'rateDisplaySelectorradio':
+              pushToArray('Usage - Invoice 0001', showByArray);
+              pushToArray('Usage - Invoice 0002', showByArray);
+              pushToArray('Usage - Invoice 0003', showByArray);
+              pushToArray('Cost - Invoice 0001', showByArray);
+              pushToArray('Cost - Invoice 0002', showByArray);
+              pushToArray('Cost - Invoice 0003', showByArray);
+              break;
+          }
         }
+        else {
+          switch(baseDisplayRadio.id) {
+            case 'usageDisplaySelectorradio':
+              pushToArray('Usage - ' + invoice, showByArray);
+              break;
+            case 'costDisplaySelectorradio':
+              pushToArray('Cost - ' + invoice, showByArray);
+              break;
+            case 'rateDisplaySelectorradio':
+              pushToArray('Usage - ' + invoice, showByArray);
+              pushToArray('Cost - ' + invoice, showByArray);
+              break;
+          }
+        }
+        
       }
     }
   }
@@ -1371,7 +1551,7 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
       costDataUsed = true;
     }
 
-    if(showByArray[i] == 'Usage') {
+    if(showByArray[i].includes('Usage')) {
       usageDataUsed = true;
     }
 
@@ -1402,7 +1582,7 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
                 newSeries[i].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
               }
               else {
-                newSeries[i].data[k] = 0;
+                newSeries[i].data[k] = null;
               }
             }
 
@@ -1865,17 +2045,4 @@ function convertChartSeriesNameToColumnName(chartSeriesName) {
 
 function convertChartSeriesNameToColumnTitle(chartSeriesName) {
   return chartSeriesName.split(' - ').join('<br>');
-}
-
-function recurseSelection(callingElement) {
-  var isRecursive = document.getElementById('recuseSelectionCheckboxcheckbox').checked;
-
-  if(isRecursive) {
-    var isChecked = callingElement.checked;
-    var inputs = callingElement.parentElement.getElementsByTagName('input');
-
-    for(var i = 0; i < inputs.length; i++) {
-      inputs[i].checked = isChecked
-    }
-  }
 }

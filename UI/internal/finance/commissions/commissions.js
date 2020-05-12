@@ -1,7 +1,5 @@
 function pageLoad() {
-  createTree(data, "siteTree", "", "updateChart(commissionChart)");
-  addExpanderOnClickEvents();
-  setOpenExpanders();
+  createTree(data, "siteTree", "updateChart(commissionChart)");
 
   document.onmousemove = function(e) {
     setupSidebarHeight();
@@ -13,46 +11,93 @@ function pageLoad() {
   };
 }
 
-var branchCount = 0;
-var subBranchCount = 0;
+function getCommodityOption() {
+  var commodity = 'None';
+  var electricityCommodityradio = document.getElementById('electricityCommoditycheckbox');
+  var gasCommodityradio = document.getElementById('gasCommoditycheckbox');
 
-function createTree(baseData, divId, commodity, checkboxFunction) {
-    var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
+  if(electricityCommodityradio.checked && gasCommodityradio.checked) {
+    commodity = '';
+  }
+  else if(electricityCommodityradio.checked) {
+    commodity = 'Electricity';
+  }
+  else if(gasCommodityradio.checked) {
+    commodity = 'Gas';
+  }
 
-    var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
-    var ul = createBranchUl("siteSelector", false, true);
+  return commodity;
+}
 
-    tree.appendChild(ul);
+function createTree(baseData, divId, checkboxFunction) {
+  var commodity = getCommodityOption();
+  var tree = document.createElement('div');
+  tree.setAttribute('class', 'scrolling-wrapper');
 
-    branchCount = 0;
-    subBranchCount = 0; 
+  var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+  var ul = createBranchUl("siteSelector", false, true);
 
-    buildTree(baseData, ul, commodity, checkboxFunction);
+  var breakDisplayListItem = document.createElement('li');
+  breakDisplayListItem.innerHTML = '<br>';
+  breakDisplayListItem.classList.add('format-listitem');
 
-    var div = document.getElementById(divId);
-    clearElement(div);
+  var recurseSelectionListItem = document.createElement('li');
+  recurseSelectionListItem.classList.add('format-listitem');
+  recurseSelectionListItem.classList.add('listItemWithoutPadding');
 
-    div.appendChild(headerDiv);
-    div.appendChild(tree);
+  var recurseSelectionCheckbox = createBranchCheckbox('recurseSelection', '', 'recurseSelection', 'checkbox', 'recurseSelection', false);
+  var recurseSelectionSpan = createBranchSpan('recurseSelectionSpan', 'Recurse Selection?');
+  recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
+  recurseSelectionListItem.appendChild(recurseSelectionSpan);
 
-    updateChart(null, commissionChart);
+  tree.appendChild(ul);
+
+  buildTree(baseData, ul, commodity, checkboxFunction);
+
+  var div = document.getElementById(divId);
+  clearElement(div);
+
+  div.appendChild(headerDiv);
+  ul.appendChild(breakDisplayListItem);
+  ul.appendChild(recurseSelectionListItem);
+  div.appendChild(tree);
+
+  updateChart(null, commissionChart);
+  addExpanderOnClickEvents();
+  setOpenExpanders();
 }
 
 function buildTree(baseData, baseElement, commodity, checkboxFunction) {
-    var dataLength = baseData.length;
+  var dataLength = baseData.length;
+
+  if(supplierLocationcheckbox.checked) {
     for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
-        
-        var baseName = getAttribute(base.Attributes, 'BaseName');
-        var li = document.createElement('li');
-        var ul = createUL();
+      var base = baseData[i];
+      
+      var baseName = getAttribute(base.Attributes, 'BaseName');
+      var li = document.createElement('li');
+      var ul = createUL();
 
-        buildCustomerHierarchy(base.Customers, ul, commodity, checkboxFunction, baseName);
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID);
+      buildCustomerHierarchy(base.Customers, ul, commodity, checkboxFunction, baseName);
+      appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID);
 
-        baseElement.appendChild(li);        
+      baseElement.appendChild(li);        
     }
+  }
+  else {
+    var customers = [];
+    for(var dataCount = 0; dataCount < dataLength; dataCount++) {
+      var data = baseData[dataCount];
+
+      if(!commodityMatch(data, commodity)) {
+        continue;
+      }
+
+      customers.push(...data.Customers);
+    }
+
+    buildCustomerHierarchy(customers, baseElement, commodity, checkboxFunction, baseName);
+  }
 }
 
 function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, linkedCustomer) {
@@ -64,7 +109,9 @@ function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branch
 }
 
 function buildCustomerHierarchy(customers, baseElement, commodity, checkboxFunction, linkedSite) {
-    var customersLength = customers.length;
+  var customersLength = customers.length;
+
+  if(customerLocationcheckbox.checked)
     for(var i = 0; i < customersLength; i++){
         var customer = customers[i];
         if(!commoditySiteMatch(customer, commodity)) {
@@ -81,31 +128,50 @@ function buildCustomerHierarchy(customers, baseElement, commodity, checkboxFunct
 
         baseElement.appendChild(li); 
     }
+  else {
+    var meters = [];
+    for(var customerCount = 0; customerCount < customersLength; customerCount++) {
+      var customer = customers[customerCount];
+
+      if(!commodityMatch(customer, commodity)) {
+        continue;
+      }
+
+      meters.push(...customer.Meters);
+    }
+
+    var identifier = getAttribute(customers[0].Attributes, 'CustomerName');
+    buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, identifier);
+  }
 }
 
 function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, linkedCustomer) {
-    var metersLength = meters.length;
-    for(var i = 0; i < metersLength; i++){
-        var meter = meters[i];
-        if(!commodityMeterMatch(meter, commodity)) {
-            continue;
-        }
+  if(!meterLocationcheckbox.checked) {
+    return;
+  }
+  
+  var metersLength = meters.length;
+  for(var i = 0; i < metersLength; i++){
+      var meter = meters[i];
+      if(!commodityMeterMatch(meter, commodity)) {
+          continue;
+      }
 
-        var meterAttributes = meter.Attributes;
-        var identifier = getAttribute(meterAttributes, 'Identifier');
-        var meterCommodity = getAttribute(meterAttributes, 'Commodity');
-        var deviceType = getAttribute(meterAttributes, 'DeviceType');
-        var li = document.createElement('li');
-        var branchId = 'Meter'.concat(meter.GUID);
-        var branchDiv = createBranchDiv(branchId, false);
+      var meterAttributes = meter.Attributes;
+      var identifier = getAttribute(meterAttributes, 'Identifier');
+      var meterCommodity = getAttribute(meterAttributes, 'Commodity');
+      var deviceType = getAttribute(meterAttributes, 'DeviceType');
+      var li = document.createElement('li');
+      var branchId = 'Meter'.concat(meter.GUID);
+      var branchDiv = createBranchDiv(branchId, false);
 
-        li.appendChild(branchDiv);
-        li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID, linkedCustomer));
-        li.appendChild(createTreeIcon(deviceType, meterCommodity));
-        li.appendChild(createSpan(branchId, identifier));
+      li.appendChild(branchDiv);
+      li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID, linkedCustomer));
+      li.appendChild(createTreeIcon(deviceType, meterCommodity));
+      li.appendChild(createSpan(branchId, identifier));
 
-        baseElement.appendChild(li); 
-    }
+      baseElement.appendChild(li); 
+  }
 }
 
 function createBranchListDiv(branchListDivId, ul) {
@@ -160,7 +226,9 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid, 
             functionArguments.push(functionArray[1].split(',')[i]);
         }
     }
+
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
+    functionName = "recurseSelection(" + checkBox.id + ", 'recurseSelectioncheckbox');" + functionName;
     
     checkBox.setAttribute('onclick', functionName);
     return checkBox;
@@ -213,18 +281,17 @@ function getIconByBranch(branch, commodity) {
 }
 
 function getCommodity() {
-  var commodity = '';
-  var electricityCommodityradio = document.getElementById('electricityCommodityradio');
-  if(electricityCommodityradio.checked) {
-    commodity = 'Electricity';
+  if(electricityCommoditycheckbox.checked && gasCommoditycheckbox.checked) {
+    return '';
   }
-  else {
-    var gasCommodityradio = document.getElementById('gasCommodityradio');
-    if(gasCommodityradio.checked) {
-      commodity = 'Gas';
-    }
+  else if(electricityCommoditycheckbox.checked) {
+    return 'Electricity';
   }
-  return commodity;
+  else if(gasCommoditycheckbox.checked) {
+    return 'Gas';
+  }
+
+  return 'None';
 }
 
 function updateChart(callingElement, chart) {

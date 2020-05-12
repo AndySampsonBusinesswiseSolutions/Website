@@ -13,42 +13,68 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); updateChart(); updateDataGrid(chartSeries, categories);" title="Click To Lock Sidebar"></i>
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
+		<div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); updateChart(); updateDataGrid(chartSeries, categories);" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
+		</div>
 		<div class="tree-column">
-			<div class="dashboard roundborder outer-container">
-				<div class="expander-header">
-					<span id="selectOptionsSpan">Select Options</span>
-					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
-				</div>
-				<div id="selectOptionsList" class="expander-container">
-					<div id="displayTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-					</div>
-					<br>
-					<div id="siteTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-					</div>
-					<br>
-					<div id="budgetTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-					</div>
-					<br>			
-					<div id="invoiceTree" class="sidebar-tree-div roundborder scrolling-wrapper">
-					</div>
-					<br>
-					<div id="groupingOptionTree" class="sidebar-tree-div roundborder">
-					</div>
-				</div>
+			<div id="displayTree" class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
 			</div>
 			<br>
-			<div class="dashboard roundborder outer-container">
-				<div class="expander-header">
-					<span id="filterOptionsSpan">Filter Options</span>
-					<i id="filterOptions" class="far fa-plus-square expander show-pointer"></i>
+			<div id="configureContainer" class="dashboard roundborder outer-container">
+				<div class="sidebar-expander-header">
+					<span id="configureOptionsSpan">Configure</span>
+					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
-				<div id="filterOptionsList" class="slider-list expander-container">
-					<div id="commodityTree" class="sidebar-tree-div roundborder">
+				<div id="configureOptionsList" class="slider-list expander-container">
+					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
+						<div class="sidebar-expander-header">
+							<span id="configureLocationSelectorSpan">Location</span>
+							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+						</div>
+						<div id="configureLocationSelectorList" class="expander-container">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Sites</span>
+								<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Areas</span>
+								<label class="switch"><input type="checkbox" id="areaLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Commodities</span>
+								<label class="switch"><input type="checkbox" id="commodityLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Meters</span>
+								<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>SubAreas</span>
+								<label class="switch"><input type="checkbox" id="subareaLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Assets</span>
+								<label class="switch"><input type="checkbox" id="assetLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>SubMeters</span>
+								<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+						</div>
 					</div>
 					<br>
-					<div id="timePeriodTree" class="sidebar-tree-div roundborder">
+					<div id="siteTree" class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
+					</div>
+					<br>
+					<div id="groupingOptionTree" class="sidebar-tree-div dashboard roundborder">
+					</div>
+					<br>
+					<div id="invoiceVarianceTree" class="sidebar-tree-div dashboard roundborder">
+					</div>
+					<br>
+					<div id="timePeriodTree" class="sidebar-tree-div dashboard roundborder">
 					</div>
 				</div>
 			</div>

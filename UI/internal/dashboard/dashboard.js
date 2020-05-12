@@ -1,9 +1,11 @@
-function pageLoad() {
+function pageLoad(isPageLoad) {
   createTree(data, "siteDiv", "updateDashboard", "Site");
   createTree(dashboard, "dashboardDiv", "addDashboardItem", "Dashboard");
   
   addExpanderOnClickEvents();
-  setOpenExpanders();
+  if(isPageLoad) {
+    setOpenExpanders();
+  }
 
   document.onmousemove = function(e) {
     setupSidebarHeight();
@@ -22,23 +24,53 @@ function loadDatagrid(checkBoxes) {
 
   var checkBoxLength = checkBoxes.length;
   for(var i = 0; i < checkBoxLength; i++) {
+    if(!checkBoxes[i].attributes['LinkedSite']) {
+      continue;
+    }
+
     var guid = checkBoxes[i].getAttribute("guid");
-    var meter = getMeterByGUID(guid);
-
     var linkedSite = checkBoxes[i].attributes['LinkedSite'].nodeValue;
-    var siteAttributes = getSiteAttributesByName(linkedSite);
-    var siteAddress = getAttribute(siteAttributes, 'GoogleAddress');
-    var meterPointIdentifier = getAttribute(meter.Attributes, 'Identifier');
-    var meterPointAnnualVolume = getAttribute(meter.Attributes, 'AnnualVolume');
-    var meterPointAnnualCost = getAttribute(meter.Attributes, 'AnnualCost');
-    var meterPointCarbon = getAttribute(meter.Attributes, 'Carbon');
+    var branch = checkBoxes[i].getAttribute('Branch');
+    var row = null;
 
-    var row = {address:siteAddress,	meterpoint:meterPointIdentifier.toLocaleString(), annualvolume:meterPointAnnualVolume.toLocaleString(), annualcost:meterPointAnnualCost.toLocaleString(), carbon:meterPointCarbon.toLocaleString()};
-    displayData.push(row);
+    if(sitesLocationcheckbox.checked && metersLocationcheckbox.checked) {
+      if(branch == 'Meter') {
+        row = getDatagridRow(guid, linkedSite);
+        displayData.push(row);
+      }
+    }
+    else if(metersLocationcheckbox.checked) {
+      row = getDatagridRow(guid, linkedSite);
+      displayData.push(row);
+    }
+    else {
+      for(var j= 0; j < data.length; j++) {
+        if(data[j]["GUID"] == guid) {
+          var meters = data[j].Meters;
+
+          if(meters) {
+            for(var k = 0; k < meters.length; k++) {
+              row = getDatagridRow(meters[k]["GUID"], linkedSite);
+              displayData.push(row);
+            }
+          }
+
+          break;
+        }
+      }
+    }
   }
 
+  var displayColumns = [
+    {type:'text', width:'215px', name:'address', title:'Address', readOnly: true},
+    {type:'text', width:'150px', name:'meterpoint', title:'Meter Point', readOnly: true},
+    {type:'text', width:'125px', name:'annualvolume', title:'Annual Volume<br>(kWh)', readOnly: true},
+    {type:'text', width:'125px', name:'annualcost', title:'Annual Cost<br>(£)', readOnly: true},
+    {type:'text', width:'115px', name:'carbon', title:'Carbon<br>(tonnes)', readOnly: true},
+  ];
+
   jexcel(document.getElementById('spreadsheet'), {
-    pagination:5,
+    pagination:10,
     allowInsertRow: false,
     allowManualInsertRow: false,
     allowInsertColumn: false,
@@ -48,21 +80,27 @@ function loadDatagrid(checkBoxes) {
     allowRenameColumn: false,
     wordWrap: true,
     data: displayData,
-    columns: [
-        {type:'text', width:'150px', name:'address', title:'Address', readOnly: true},
-        {type:'text', width:'130px', name:'meterpoint', title:'Meter Point', readOnly: true},
-        {type:'text', width:'175px', name:'annualvolume', title:'Annual Volume (kWh)', readOnly: true},
-        {type:'text', width:'175px', name:'annualcost', title:'Annual Cost (£)', readOnly: true},
-        {type:'text', width:'175px', name:'carbon', title:'Carbon (tonnes)', readOnly: true},
-     ]
+    columns: displayColumns
   }); 
+}
+
+function getDatagridRow(meterGuid, linkedSite) {
+  var meter = getMeterByGUID(meterGuid);
+  var siteAttributes = getSiteAttributesByName(linkedSite);
+  var siteAddress = getAttribute(siteAttributes, 'GoogleAddress');
+  var meterPointIdentifier = getAttribute(meter.Attributes, 'Identifier');
+  var meterPointAnnualVolume = getAttribute(meter.Attributes, 'AnnualVolume');
+  var meterPointAnnualCost = getAttribute(meter.Attributes, 'AnnualCost');
+  var meterPointCarbon = getAttribute(meter.Attributes, 'Carbon');
+
+  return {address:siteAddress,	meterpoint:meterPointIdentifier.toLocaleString(), annualvolume:meterPointAnnualVolume.toLocaleString(), annualcost:meterPointAnnualCost.toLocaleString(), carbon:meterPointCarbon.toLocaleString()};
 }
 
 function loadMap(checkBoxes) {
   clearElement(document.getElementById('map-canvas'));
     var mapOptions = {
-      zoom: 3.75,
-      center: new google.maps.LatLng(56, -5),
+      zoom: 5,
+      center: new google.maps.LatLng(55, -5),
       mapTypeId: google.maps.MapTypeId.SATELLITE
     }
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -72,6 +110,10 @@ function loadMap(checkBoxes) {
 
     var checkBoxLength = checkBoxes.length;
     for(var i = 0; i < checkBoxLength; i++) {
+      if(!checkBoxes[i].attributes['LinkedSite']) {
+        continue;
+      }
+
       var linkedSite = checkBoxes[i].attributes['LinkedSite'].nodeValue;
       var siteAttributes = getSiteAttributesByName(linkedSite);
 
@@ -126,32 +168,86 @@ function getMeterByGUID(guid) {
 	return null;
 }
 
-var branchCount = 0;
-var subBranchCount = 0;
-
 function createTree(baseData, divId, checkboxFunction, dataName) {
-    var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
-    
-    var headerDiv = createHeaderDiv(divId.concat('Header'), dataName != "Dashboard" ? "Sites/Meters" : "Custom Dashboard Items", true);
-    var ul = createBranchUl(divId.concat('Selector'), false, true);
+  var div = document.getElementById(divId);
+  clearElement(div);
 
-    tree.appendChild(ul);
+  var tree = document.createElement('div');
+  tree.setAttribute('class', 'scrolling-wrapper');
+  
+  var headerDiv = createHeaderDiv(divId.concat('Header'), dataName != "Dashboard" ? "Location" : "Custom Dashboard Items", true);
+  var ul = createBranchUl(divId.concat('Selector'), false, true);
 
-    branchCount = 0;
-    subBranchCount = 0; 
+  tree.appendChild(ul);
 
-    buildTree(baseData, ul, checkboxFunction, dataName);
+  buildTree(baseData, ul, checkboxFunction, dataName);
 
-    var div = document.getElementById(divId);
-    clearElement(div);
+  div.appendChild(headerDiv);
+  div.appendChild(tree);
 
-    div.appendChild(headerDiv);
-    div.appendChild(tree);
+  var breakDisplayListItem = document.createElement('li');
+  breakDisplayListItem.innerHTML = '<br>';
+  breakDisplayListItem.classList.add('format-listitem');
+  ul.appendChild(breakDisplayListItem);
 
-    if(dataName != "Dashboard") {
-      updateDashboard();
+  var selectButtonsListItem = document.createElement('li');
+  selectButtonsListItem.classList.add('format-listitem');
+  selectButtonsListItem.classList.add('listItemWithoutPadding');
+  selectButtonsListItem.innerHTML = '<div>'
+    +'<button id="selectAll"' + divId + ' style="width: 45%; float: left;" onclick="' + camelize('select ' + divId.replace('Div', '')) + '(true)">Select All</button>'
+    +'<button id="selectAll"' + divId + ' style="width: 45%; float: right;" onclick="' + camelize('select ' + divId.replace('Div', '')) + '(false)">Deselect All</button>'
+    +'</div>'
+    +'<div style="clear: both;"></div>';
+  ul.appendChild(selectButtonsListItem);
+
+  if(dataName != "Dashboard") {
+    var inputs = ul.getElementsByTagName('input');
+    [...inputs].forEach(input => {
+      if(input.type == 'checkbox') {
+        input.checked = true;
+      }
+    });
+
+    updateDashboard();
+
+    var recurseSelectionListItem = document.createElement('li');
+    recurseSelectionListItem.classList.add('format-listitem');
+    recurseSelectionListItem.classList.add('listItemWithoutPadding');
+
+    var recurseSelectionCheckbox = createBranchCheckbox('recurse' + divId + 'Selection', '', 'recurseSelection', 'checkbox', 'recurseSelection', false);
+    var recurseSelectionSpan = createBranchSpan('recurse' + divId + 'SelectionSpan', 'Recurse Selection?');
+    recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
+    recurseSelectionListItem.appendChild(recurseSelectionSpan);
+
+    ul.appendChild(breakDisplayListItem.cloneNode(true));
+    ul.appendChild(recurseSelectionListItem);
+  }
+}
+
+function selectSite(checked) {
+  var inputs = siteDiv.getElementsByTagName('input');
+  [...inputs].forEach(input => {
+    if(input.type == 'checkbox') {
+      input.checked = checked;
     }
+  });
+  updateDashboard();
+}
+
+function selectDashboard(checked) {
+  var inputs = dashboardDiv.getElementsByTagName('input');
+  [...inputs].forEach(input => {
+    if(input.type == 'checkbox') {
+      input.checked = checked;
+      addDashboardItem(input)
+    }
+  });
+}
+
+function camelize(str) {
+  return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
+    return index === 0 ? word.toLowerCase() : word.toUpperCase();
+  }).replace(/\s+/g, '');
 }
 
 function buildTree(baseData, baseElement, checkboxFunction, dataName) {
@@ -163,14 +259,19 @@ function buildTree(baseData, baseElement, checkboxFunction, dataName) {
       var ul = createUL();
 
       if(dataName == "Dashboard") {
-        appendListItemChildren(li, 'Dashboard'.concat(base.GUID), checkboxFunction, 'Dashboard', baseName, '', '', baseName, base.GUID, false);
+        buildDashboardHierarchy(base.Charts, ul, commodity, checkboxFunction, baseName);
+        appendListItemChildren(li, 'Dashboard'.concat(base.GUID), '', 'Dashboard', baseName, commodity, ul, baseName, base.GUID, true, base.GUID == '0' || base.GUID == '1');
       }
       else {
-        var commodity = '';
-        if (document.getElementById('electricityCommodityradio').checked) {
+        var commodity = 'None';
+        if (document.getElementById('electricityCommoditycheckbox').checked
+          && document.getElementById('gasCommoditycheckbox').checked) {
+          commodity = '';
+        }
+        else if (document.getElementById('electricityCommoditycheckbox').checked) {
           commodity = 'Electricity';
         }
-        else if (document.getElementById('gasCommodityradio').checked) {
+        else if (document.getElementById('gasCommoditycheckbox').checked) {
           commodity = 'Gas';
         }
 
@@ -178,20 +279,44 @@ function buildTree(baseData, baseElement, checkboxFunction, dataName) {
           continue;
         }
 
-        var childrenCreated = false;
-        if(base.hasOwnProperty('Meters')) {
-          buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, false);
-          childrenCreated = true;
+        if(sitesLocationcheckbox.checked && metersLocationcheckbox.checked) {
+          if(base.hasOwnProperty('Meters')) {
+            buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName);
+            appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, true);
+          }
         }
-
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
+        else if(sitesLocationcheckbox.checked) {
+          appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, false);
+        }
+        else if(metersLocationcheckbox.checked) {
+          buildIdentifierHierarchy(base.Meters, baseElement, commodity, checkboxFunction, baseName);
+        }
       }
 
       baseElement.appendChild(li);        
   }
 }
 
-function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
+function buildDashboardHierarchy(charts, baseElement, commodity, checkboxFunction, linkedSite) {
+  var chartsLength = charts.length;
+  for(var i = 0; i < chartsLength; i++){
+      var chart = charts[i];
+      var chartAttributes = chart.Attributes;
+      var identifier = getAttribute(chartAttributes, 'BaseName');
+      var li = document.createElement('li');
+      var branchId = 'Chart'.concat(chart.GUID);
+      var branchDiv = createBranchDiv(branchId, false);
+
+      li.appendChild(branchDiv);
+      li.appendChild(createCheckbox(branchId, checkboxFunction, 'Chart', linkedSite, chart.GUID));
+      li.appendChild(createTreeIcon('Chart', commodity));
+      li.appendChild(createSpan(branchId, identifier));  
+
+      baseElement.appendChild(li); 
+  }
+}
+
+function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite) {
   var metersLength = meters.length;
   for(var i = 0; i < metersLength; i++){
       var meter = meters[i];
@@ -203,15 +328,9 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
       var identifier = getAttribute(meterAttributes, 'Identifier');
       var meterCommodity = getAttribute(meterAttributes, 'Commodity');
       var deviceType = getAttribute(meterAttributes, 'DeviceType');
-      var hasSubMeters = meter.hasOwnProperty('SubMeters');
       var li = document.createElement('li');
       var branchId = 'Meter'.concat(meter.GUID);
-      var branchDiv = createBranchDiv(branchId);
-      
-      if(!showSubMeters || !hasSubMeters) {
-          branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
-          branchDiv.setAttribute('class', 'far fa-times-circle');
-      }
+      var branchDiv = createBranchDiv(branchId, false);
 
       li.appendChild(branchDiv);
       li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
@@ -222,24 +341,26 @@ function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFuncti
   }
 }
 
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, childrenCreated) {
-  li.appendChild(createBranchDiv(id, childrenCreated));
-  li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
+function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, childrenCreated, isOpen = false) {
+  li.appendChild(createBranchDiv(id, childrenCreated, isOpen));
 
-  if(checkboxBranch == 'Dashboard') {
-    li.appendChild(createSpan(id, branchOption));
+  if(checkboxFunction != '') {
+    li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
   }
-  else {
-    li.appendChild(createTreeIcon(branchOption, commodity));
-    li.appendChild(createSpan(id, branchOption));
-    li.appendChild(createBranchListDiv(id.concat('List'), ul));
-  }    
+  
+  li.appendChild(createTreeIcon(branchOption, commodity));
+  li.appendChild(createSpan(id, branchOption));
+  li.appendChild(createBranchListDiv(id.concat('List'), ul, isOpen));
 }
 
-function createBranchListDiv(branchListDivId, ul) {
+function createBranchListDiv(branchListDivId, ul, isOpen = false) {
   var branchListDiv = document.createElement('div');
   branchListDiv.id = branchListDivId;
-  branchListDiv.setAttribute('class', 'listitem-hidden');
+
+  if(!isOpen) {
+    branchListDiv.setAttribute('class', 'listitem-hidden');
+  }
+  
   branchListDiv.appendChild(ul);
   return branchListDiv;
 }
@@ -259,19 +380,26 @@ function createTreeIcon(branch, commodity) {
 
 function getIconByBranch(branch, commodity) {
   switch (branch) {
-      case 'Mains':
-          if(commodity == 'Gas') {
-              return 'fas fa-burn';
-          }
-          else {
-              return 'fas fa-plug';
-          }
-      case 'Lighting':
-          return 'fas fa-lightbulb';
-      case 'Unknown':
-          return 'fas fa-question-circle';
-      default:
-          return 'fas fa-map-marker-alt';
+    case 'Mains':
+      if(commodity == 'Gas') {
+          return 'fas fa-burn';
+      }
+      else {
+          return 'fas fa-plug';
+      }
+    case 'Lighting':
+      return 'fas fa-lightbulb';
+    case 'Unknown':
+      return 'fas fa-question-circle';
+    case 'Chart':
+    case 'Flexible Purchasing':
+    case 'Monthly Usage':
+    case 'Monthly Cost':
+    case 'Monthly Rate':
+    case 'Monthly Savings':
+      return 'fas fa-chart-bar';
+    default:
+      return 'fas fa-map-marker-alt';
   }
 }
 
@@ -296,7 +424,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     checkBox.setAttribute('GUID', guid);
     checkBox.setAttribute('class', 'show-pointer');
 
-    if(checkBox.id == 'Dashboard4checkbox') {
+    if(checkBox.id == 'Chart11checkbox' || checkBox.id == 'Chart00checkbox') {
       checkBox.setAttribute('checked', true);
     }
 
@@ -313,6 +441,7 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     }
 
     functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
+    functionName = "recurseSelection(" + checkBox.id + ", 'recursesiteDivSelectioncheckbox');" + functionName;
     
     checkBox.setAttribute('onclick', functionName);
     return checkBox;
@@ -344,13 +473,50 @@ function loadUsageChart(checkBoxes) {
 
   var checkBoxLength = checkBoxes.length;
   for(var i = 0; i < checkBoxLength; i++) {
+    if(!checkBoxes[i].attributes['LinkedSite']) {
+      continue;
+    }
+
     var guid = checkBoxes[i].getAttribute("guid");
-    var meter = getMeterByGUID(guid);
+    var branch = checkBoxes[i].getAttribute('Branch');
 
-    var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
+    if(sitesLocationcheckbox.checked && metersLocationcheckbox.checked) {
+      if(branch == 'Meter') {
+        var meter = getMeterByGUID(guid);
+        var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
 
-    for(var j = 0; j < electricityCategoriesLength; j++) {
-      forecastVolume[j] += meterUsage[j][electricityCategories[j]];
+        for(var j = 0; j < electricityCategoriesLength; j++) {
+          forecastVolume[j] += meterUsage[j][electricityCategories[j]];
+        }
+      }
+    }
+    else if(metersLocationcheckbox.checked) {
+      var meter = getMeterByGUID(guid);
+      var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
+
+      for(var j = 0; j < electricityCategoriesLength; j++) {
+        forecastVolume[j] += meterUsage[j][electricityCategories[j]];
+      }
+    }
+    else {
+      for(var j= 0; j < data.length; j++) {
+        if(data[j]["GUID"] == guid) {
+          var meters = data[j].Meters;
+
+          if(meters) {
+            for(var k = 0; k < meters.length; k++) {
+              var meter = getMeterByGUID(meters[k]["GUID"]);
+              var meterUsage = getAttribute(meter.Attributes, "MonthlyUsage");
+
+              for(var j = 0; j < electricityCategoriesLength; j++) {
+                forecastVolume[j] += meterUsage[j][electricityCategories[j]];
+              }
+            }
+          }
+
+          break;
+        }
+      }
     }
   }
 
@@ -679,7 +845,18 @@ function loadGasUsageChart() {
 function addDashboardItem(checkbox) {
   var guid = checkbox.getAttribute('guid');
   var dashboardItemId = 'customDashboardItem'.concat(guid);
-  updateClassOnClick(dashboardItemId, 'listitem-hidden', '')
+  var dashboardItem = document.getElementById(dashboardItemId);
+
+  if(!dashboardItem) {
+    return;
+  }
+
+  if(checkbox.checked && dashboardItem.classList.contains('listitem-hidden')) {
+    updateClassOnClick(dashboardItemId, 'listitem-hidden', '');
+  }
+  else if(!checkbox.checked && !dashboardItem.classList.contains('listitem-hidden')) {
+    updateClassOnClick(dashboardItemId, 'listitem-hidden', '');
+  }
 }
 
 function getChartTooltipXFormat(period) {
@@ -765,6 +942,7 @@ function refreshChart(newSeries, chartId, chartOptions) {
     xaxis: chartOptions.xaxis
   };  
 
+  clearElement(document.getElementById(chartId.replace('#', '')));
   renderChart(chartId, options);
 }
 
@@ -797,7 +975,7 @@ function commodityMeterMatch(meter, commodity) {
 }
 
 function updateDashboard(callingElement) {
-  var checkBoxes = getCheckedCheckBoxes();
+  var checkBoxes = getCheckedElements(document.getElementById("siteDiv").getElementsByTagName('input'));
 
   loadMap(checkBoxes);
   loadDatagrid(checkBoxes);
@@ -809,59 +987,17 @@ function updateDashboard(callingElement) {
   addCustomDashboardItems(checkBoxes);
 }
 
-function getCheckedCheckBoxes() {
-  var inputs = document.getElementById("siteDiv").getElementsByTagName('input');
-  var checkBoxes = [];
-  var inputLength = inputs.length;
-  
-  for(var i = 0; i < inputLength; i++) {
-    var input = inputs[i];
-    if(input.type.toLowerCase() == 'checkbox') {
-      if(input.checked) {
-        if(input.attributes['Branch'].nodeValue == 'Meter') {
-          if(!checkBoxes.includes(input)) {
-            checkBoxes.push(input);
-          }          
-        }
-  
-        if(input.attributes['Branch'].nodeValue == 'Site') {
-          var linkedSite = input.attributes['LinkedSite'].nodeValue;
-  
-          for(var j = 0; j< inputLength; j++) {
-            var meterInput = inputs[j];
-  
-            if(meterInput.type.toLowerCase() == 'checkbox'
-            && meterInput.attributes['Branch'].nodeValue == 'Meter'
-            && meterInput.attributes['LinkedSite'].nodeValue == linkedSite) {
-              if(!checkBoxes.includes(meterInput)) {
-                checkBoxes.push(meterInput);
-              } 
-            }
-          }
-        }
-      }
-    }
-  }
-  
-  if(checkBoxes.length == 0) {
-    for(var i = 0; i < inputLength; i++) {
-      var input = inputs[i];
-      if(input.type.toLowerCase() == 'checkbox') {
-        if(input.attributes['Branch'].nodeValue == 'Meter') {
-          checkBoxes.push(input);
-        }
-      }
-    }
-  }
-  
-  return checkBoxes;
-}
-
 function loadDashboardHeaderNumberOfSites(checkBoxes) {
   var addresses = [];
+  var meters = 0;
+  var sites = 0;
 
   var checkBoxLength = checkBoxes.length;
   for(var i = 0; i < checkBoxLength; i++) {
+    if(!checkBoxes[i].attributes['LinkedSite']) {
+      continue;
+    }
+
     var linkedSite = checkBoxes[i].attributes['LinkedSite'].nodeValue;
     var siteAttributes = getSiteAttributesByName(linkedSite);
 
@@ -869,10 +1005,25 @@ function loadDashboardHeaderNumberOfSites(checkBoxes) {
     if(address && !addresses.includes(address)) {
       addresses.push(address);
     }
+
+    if(checkBoxes[i].attributes['Branch'].nodeValue == 'Meter') {
+      meters++;
+    }
+    else if(checkBoxes[i].attributes['Branch'].nodeValue == 'Site') {
+      sites++;
+    }
   }
 
   var element = document.getElementById("dashboardHeaderNumberOfSites");
-  element.innerHTML = addresses.length;
+  var siteText = sites == 0 ? '' : (sites + ' Site' + (sites == 1 ? '' : 's') + (sites == 0 ? '' : '<br>'));
+  var meterText = meters == 0 ? '' : (meters + ' Meter' + (meters == 1 ? '' : 's'));
+
+  if(sites == 0 && meters == 0) {
+    element.innerHTML = 'No Sites or Meters selected';
+  }
+  else {
+    element.innerHTML = siteText + meterText;
+  }
 }
 
 function loadDashboardHeaderPortfolioAnnualisedEnergy(checkBoxes) {
@@ -881,21 +1032,58 @@ function loadDashboardHeaderPortfolioAnnualisedEnergy(checkBoxes) {
 
   var checkBoxLength = checkBoxes.length;
   for(var i = 0; i < checkBoxLength; i++) {
+    if(!checkBoxes[i].attributes['LinkedSite']) {
+      continue;
+    }
+
     var guid = checkBoxes[i].getAttribute("guid");
-    var meter = getMeterByGUID(guid);
+    var branch = checkBoxes[i].getAttribute('Branch');
 
-    var meterUsage = getAttribute(meter.Attributes, "AnnualVolume");
-    var meterCost = getAttribute(meter.Attributes, "AnnualCost");
+    if(sitesLocationcheckbox.checked && metersLocationcheckbox.checked) {
+      if(branch == 'Meter') {
+        var meter = getMeterByGUID(guid);
+        var meterUsage = getAttribute(meter.Attributes, "AnnualVolume");
+        var meterCost = getAttribute(meter.Attributes, "AnnualCost");
 
-    usage += meterUsage;
-    cost += meterCost;
+        usage += meterUsage;
+        cost += meterCost;
+      }
+    }
+    else if(metersLocationcheckbox.checked) {
+      var meter = getMeterByGUID(guid);
+      var meterUsage = getAttribute(meter.Attributes, "AnnualVolume");
+      var meterCost = getAttribute(meter.Attributes, "AnnualCost");
+
+      usage += meterUsage;
+      cost += meterCost;
+    }
+    else {
+      for(var j= 0; j < data.length; j++) {
+        if(data[j]["GUID"] == guid) {
+          var meters = data[j].Meters;
+
+          if(meters) {
+            for(var k = 0; k < meters.length; k++) {
+              var meter = getMeterByGUID(meters[k]["GUID"]);
+              var meterUsage = getAttribute(meter.Attributes, "AnnualVolume");
+              var meterCost = getAttribute(meter.Attributes, "AnnualCost");
+
+              usage += meterUsage;
+              cost += meterCost;
+            }
+          }
+
+          break;
+        }
+      }
+    }
   }
 
   var usageElement = document.getElementById("dashboardHeaderPortfolioAnnualisedEnergyUsage");
-  usageElement.innerHTML = "Usage: ".concat(usage.toLocaleString().concat(" kWh"));
+  usageElement.innerHTML = usage.toLocaleString().concat(" kWh");
 
   var costElement = document.getElementById("dashboardHeaderPortfolioAnnualisedEnergyCost");
-  costElement.innerHTML = "Cost: £".concat(cost.toLocaleString());
+  costElement.innerHTML = "£".concat(cost.toLocaleString());
 }
 
 function loadDashboardHeaderCarbon(checkBoxes) {
@@ -903,16 +1091,49 @@ function loadDashboardHeaderCarbon(checkBoxes) {
 
   var checkBoxLength = checkBoxes.length;
   for(var i = 0; i < checkBoxLength; i++) {
+    if(!checkBoxes[i].attributes['LinkedSite']) {
+      continue;
+    }
+
     var guid = checkBoxes[i].getAttribute("guid");
-    var meter = getMeterByGUID(guid);
+    var branch = checkBoxes[i].getAttribute('Branch');
 
-    var meterCarbon = getAttribute(meter.Attributes, "Carbon");
+    if(sitesLocationcheckbox.checked && metersLocationcheckbox.checked) {
+      if(branch == 'Meter') {
+        var meter = getMeterByGUID(guid);
+        var meterCarbon = getAttribute(meter.Attributes, "Carbon");
 
-    carbon += meterCarbon;
+        carbon += meterCarbon;
+      }
+    }
+    else if(metersLocationcheckbox.checked) {
+      var meter = getMeterByGUID(guid);
+      var meterCarbon = getAttribute(meter.Attributes, "Carbon");
+
+      carbon += meterCarbon;
+    }
+    else {
+      for(var j= 0; j < data.length; j++) {
+        if(data[j]["GUID"] == guid) {
+          var meters = data[j].Meters;
+
+          if(meters) {
+            for(var k = 0; k < meters.length; k++) {
+              var meter = getMeterByGUID(meters[k]["GUID"]);
+              var meterCarbon = getAttribute(meter.Attributes, "Carbon");
+
+              carbon += meterCarbon;
+            }
+          }
+
+          break;
+        }
+      }
+    }
   }
 
   var carbonElement = document.getElementById("dashboardHeaderCarbon");
-  carbonElement.innerHTML = carbon.toLocaleString().concat(" tonnes");
+  carbonElement.innerHTML = carbon.toLocaleString().concat(" tonnes per annum");
 }
 
 function loadDashboardHeaderOpportunities(checkBoxes) {
@@ -923,44 +1144,71 @@ function loadDashboardHeaderOpportunities(checkBoxes) {
 
   var checkBoxLength = checkBoxes.length;
   for(var i = 0; i < checkBoxLength; i++) {
+    if(!checkBoxes[i].attributes['LinkedSite']) {
+      continue;
+    }
+
     var guid = checkBoxes[i].getAttribute("guid");
-    var meter = getMeterByGUID(guid);
+    var branch = checkBoxes[i].getAttribute('Branch');
 
-    var meterPendingOpportunities = getAttribute(meter.Attributes, "PendingOpportunities");
-    var meterActiveOpportunities = getAttribute(meter.Attributes, "ActiveOpportunities");
-    var meterFinishedOpportunities = getAttribute(meter.Attributes, "FinishedOpportunities");
+    if(sitesLocationcheckbox.checked && metersLocationcheckbox.checked) {
+      if(branch == 'Meter') {
+        var meter = getMeterByGUID(guid);
+        var meterPendingOpportunities = getAttribute(meter.Attributes, "PendingOpportunities");
+        var meterActiveOpportunities = getAttribute(meter.Attributes, "ActiveOpportunities");
+        var meterFinishedOpportunities = getAttribute(meter.Attributes, "FinishedOpportunities");
 
-    for(var j = 0; j < 3; j++) {
-      pendingOpportunities[j] += meterPendingOpportunities[j][headers[j]];
-      activeOpportunities[j] += meterActiveOpportunities[j][headers[j]];
-      finishedOpportunities[j] += meterFinishedOpportunities[j][headers[j]];
-    }    
+        for(var j = 0; j < 3; j++) {
+          pendingOpportunities[j] += meterPendingOpportunities[j][headers[j]];
+          activeOpportunities[j] += meterActiveOpportunities[j][headers[j]];
+          finishedOpportunities[j] += meterFinishedOpportunities[j][headers[j]];
+        }
+      }
+    }
+    else if(metersLocationcheckbox.checked) {
+      var meter = getMeterByGUID(guid);
+      var meterPendingOpportunities = getAttribute(meter.Attributes, "PendingOpportunities");
+      var meterActiveOpportunities = getAttribute(meter.Attributes, "ActiveOpportunities");
+      var meterFinishedOpportunities = getAttribute(meter.Attributes, "FinishedOpportunities");
+
+      for(var j = 0; j < 3; j++) {
+        pendingOpportunities[j] += meterPendingOpportunities[j][headers[j]];
+        activeOpportunities[j] += meterActiveOpportunities[j][headers[j]];
+        finishedOpportunities[j] += meterFinishedOpportunities[j][headers[j]];
+      }
+    }
+    else {
+      for(var j= 0; j < data.length; j++) {
+        if(data[j]["GUID"] == guid) {
+          var meters = data[j].Meters;
+
+          if(meters) {
+            for(var k = 0; k < meters.length; k++) {
+              var meter = getMeterByGUID(meters[k]["GUID"]);
+              var meterPendingOpportunities = getAttribute(meter.Attributes, "PendingOpportunities");
+              var meterActiveOpportunities = getAttribute(meter.Attributes, "ActiveOpportunities");
+              var meterFinishedOpportunities = getAttribute(meter.Attributes, "FinishedOpportunities");
+
+              for(var j = 0; j < 3; j++) {
+                pendingOpportunities[j] += meterPendingOpportunities[j][headers[j]];
+                activeOpportunities[j] += meterActiveOpportunities[j][headers[j]];
+                finishedOpportunities[j] += meterFinishedOpportunities[j][headers[j]];
+              }
+            }
+          }
+
+          break;
+        }
+      }
+    }
   }
-
-  var pendingOpportunitiesCountElement = document.getElementById("dashboardHeaderPendingOpportunitiesCount");
-  pendingOpportunitiesCountElement.innerHTML = "Count: ".concat(pendingOpportunities[0].toLocaleString());
-
-  var pendingOpportunitiesUsageElement = document.getElementById("dashboardHeaderPendingOpportunitiesUsage");
-  pendingOpportunitiesUsageElement.innerHTML = "Usage Saving: ".concat(pendingOpportunities[1].toLocaleString().concat(" kWh"));
-
-  var pendingOpportunitiesCostElement = document.getElementById("dashboardHeaderPendingOpportunitiesCost");
-  pendingOpportunitiesCostElement.innerHTML = "Cost Saving: £".concat(pendingOpportunities[2].toLocaleString());
 
   var activeOpportunitiesCountElement = document.getElementById("dashboardHeaderActiveOpportunitiesCount");
   activeOpportunitiesCountElement.innerHTML = "Count: ".concat(activeOpportunities[0].toLocaleString());
 
   var activeOpportunitiesUsageElement = document.getElementById("dashboardHeaderActiveOpportunitiesUsage");
-  activeOpportunitiesUsageElement.innerHTML = "Usage Saving: ".concat(activeOpportunities[1].toLocaleString().concat(" kWh"));
+  activeOpportunitiesUsageElement.innerHTML = "Saving: ".concat(activeOpportunities[1].toLocaleString().concat(" kWh"));
 
   var activeOpportunitiesCostElement = document.getElementById("dashboardHeaderActiveOpportunitiesCost");
-  activeOpportunitiesCostElement.innerHTML = "Cost Saving: £".concat(activeOpportunities[2].toLocaleString());
-
-  var finishedOpportunitiesCountElement = document.getElementById("dashboardHeaderFinishedOpportunitiesCount");
-  finishedOpportunitiesCountElement.innerHTML = "Count: ".concat(finishedOpportunities[0].toLocaleString());
-
-  var finishedOpportunitiesUsageElement = document.getElementById("dashboardHeaderFinishedOpportunitiesUsage");
-  finishedOpportunitiesUsageElement.innerHTML = "Usage Saving: ".concat(finishedOpportunities[1].toLocaleString().concat(" kWh"));
-
-  var finishedOpportunitiesCostElement = document.getElementById("dashboardHeaderFinishedOpportunitiesCost");
-  finishedOpportunitiesCostElement.innerHTML = "Cost Saving: £".concat(finishedOpportunities[2].toLocaleString());
+  activeOpportunitiesCostElement.innerHTML = "Saving: £".concat(activeOpportunities[2].toLocaleString());
 }

@@ -122,7 +122,9 @@ function addExpanderOnClickEventsByElement(element) {
 function setOpenExpanders() {
     var openExpanders = document.getElementsByClassName('openExpander');
     for(var i = 0; i < openExpanders.length; i++) {
-      updateClassOnClick(openExpanders[i].id, 'fa-plus-square', 'fa-minus-square');
+      if(openExpanders[i].classList.contains('fa-plus-square')) {
+        updateClassOnClick(openExpanders[i].id, 'fa-plus-square', 'fa-minus-square');
+      }
     }
 }
 
@@ -254,7 +256,7 @@ function createBranchUl(id, hideUl = true, isTopUl = false) {
     ul.id = id + 'List';
     ul.setAttribute('class', 'format-listitem'
      + (hideUl ? ' listitem-hidden' : '')
-     + (isTopUl ? ' topListItem' : ''));
+     + (isTopUl ? ' listItemWithoutPadding' : ''));
     return ul;
 }
   
@@ -320,7 +322,7 @@ function finalisePopup(title, titleHTML, modal, span) {
 function createHeaderDiv(id, headerText, isOpen = false, hasChildren = true) {
     var headerDiv = document.createElement('div');
     headerDiv.id = id;
-    headerDiv.setAttribute('class', 'expander-header');
+    headerDiv.setAttribute('class', 'sidebar-expander-header');
   
     var header = document.createElement('span');
     header.innerText = headerText;
@@ -434,20 +436,63 @@ function convertMonthIdToFullText(monthId) {
 }
 
 function getCategoryTexts(startDate, endDate, dateFormat) {
-    var newCategories = [];
-  
-    for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
-      for(var hh = 0; hh < 48; hh++) {
-        var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
-  
-        if(!newCategories.includes(newCategoryText)) {
-          newCategories.push(newCategoryText);
-        }      
+  var newCategories = [];
+
+  for(var newDate = startDate; newDate < endDate; newDate.setDate(newDate.getDate() + 1)) {
+    for(var hh = 0; hh < 48; hh++) {
+      var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat);
+
+      if(!newCategories.includes(newCategoryText)) {
+        newCategories.push(newCategoryText);
+      }      
+    }
+  }
+
+  return newCategories;
+}
+
+function recurseSelection(callingElement, recurseCheckboxId) {
+  var recurseCheckbox = document.getElementById(recurseCheckboxId);
+  var isRecursive = recurseCheckbox.checked;
+
+  if(isRecursive) {
+    var isChecked = callingElement.checked;
+    var inputs = callingElement.parentElement.getElementsByTagName('input');
+
+    for(var i = 0; i < inputs.length; i++) {
+      inputs[i].checked = isChecked
+    }
+
+    //check if all the inputs under this elements parent checkbox are the same checked status
+    //if so, then set the checked status on the parent and call this function again on the parent
+    var parentUl = callingElement.parentElement.parentElement;
+    if(parentUl) {
+      var parentUlInputs = parentUl.getElementsByTagName('input');
+
+      var inputs = [];
+      [...parentUlInputs].forEach(input => {
+        if(input.id != recurseCheckboxId) {
+          inputs.push(input);
+        }
+      });
+
+      var checkedElements = getCheckedElements(inputs);
+
+      if(checkedElements.length == 0 || checkedElements.length == inputs.length) {
+        var parentUlParentId = parentUl.parentElement.id;
+
+        if(parentUlParentId.endsWith('checkbox')) {
+          var parentCheckbox = document.getElementById(parentUlParentId.replace('List', 'checkbox'));
+
+          if(parentCheckbox) {
+            parentCheckbox.checked = isChecked;
+            recurseSelection(parentCheckbox, recurseCheckboxId);
+          }
+        }
       }
     }
-  
-    return newCategories;
   }
+}
 
 function alertMessage() {
     alert('Something needs to happen here when you click this thing......what is it??');

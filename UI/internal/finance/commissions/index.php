@@ -12,35 +12,56 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Select Options</span>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		</div>
 		<div class="tree-column">
-			<div class="dashboard roundborder outer-container">
-				<div class="expander-header">
-					<span id="selectOptionsSpan">Select Options</span>
-					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
+			<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
+			</div>
+			<br>
+			<div id="configureContainer" class="dashboard roundborder outer-container">
+				<div class="sidebar-expander-header">
+					<span id="configureOptionsSpan">Configure</span>
+					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
-				<div id="selectOptionsList" class="expander-container">
-					<div id="siteTree" class="sidebar-tree-div roundborder">
+				<div id="configureOptionsList" class="slider-list expander-container listitem-hidden">
+					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
+						<div class="sidebar-expander-header">
+							<span id="configureLocationSelectorSpan">Location</span>
+							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer"></i>
+						</div>
+						<div id="configureLocationSelectorList" class="expander-container listitem-hidden">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Suppliers</span>
+								<label class="switch"><input type="checkbox" id="supplierLocationcheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Customers</span>
+								<label class="switch"><input type="checkbox" id="customerLocationcheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Meters</span>
+								<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
+							</div>
+						</div>
 					</div>
 					<br>
-					<div id="commodityList" class="sidebar-tree-div roundborder">
-						<div class="expander-header">
+					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
+						<div class="sidebar-expander-header">
 							<span id="commoditySelectorSpan">Commodity</span>
-							<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+							<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
-						<div id="commoditySelectorList" class="expander-container">
-							<ul class="format-listitem toplistitem">
-								<li>
-									<input type="radio" name="commoditySelector" id="allCommodityradio" checked><span id="allCommodityspan">All</span>
-								</li>
-								<li>
-									<input type="radio" name="commoditySelector" id="electricityCommodityradio"><span id="electricityCommodityspan">Electricity</span>
-								</li>
-								<li>
-									<input type="radio" name="commoditySelector" id="gasCommodityradio"><span id="gasCommodityspan">Gas</span>
-								</li>
-							</ul>
+						<div id="commoditySelectorList" class="expander-container listitem-hidden">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Electricity</span>
+								<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Gas</span>
+								<label class="switch"><input type="checkbox" id="gasCommoditycheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -68,8 +89,14 @@
 							</div>
 						</div>
 					</div>
-					<div class="dashboard roundborder scrolling-wrapper expander-container">
-						<div id="commissionDatagrid" style="margin: 5px;">
+					<div class="dashboard roundborder outer-container expander-container">
+						<div class="expander-header">
+							<span>Commission Data</span>
+							<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsData"></i>
+						</div>
+						<div id="commissionsDataList" class="roundborder chart expander-container">
+							<div id="commissionDatagrid" style="margin: 5px;">
+							</div>
 						</div>
 					</div>
 				</div>

@@ -11,35 +11,30 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		</div>
 		<div class="tree-column">
-			<div class="dashboard roundborder outer-container">
+			<div id="treeDisplayList" class="sidebar-tree-div dashboard roundborder">
 				<div class="expander-header">
-					<span id="selectOptionsSpan">Select Options</span>
-					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
+					<span id="treeDisplayOrderSpan">Tree Display Order</span>
+					<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
-				<div id="selectOptionsList" class="expander-container">
-					<div id="treeDisplayList" class="sidebar-tree-div roundborder">
-						<div class="expander-header">
-							<span id="treeDisplayOrderSpan">Tree Display Order</span>
-							<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="treeDisplayOrderList" class="expander-container">
-							<ul class="format-listitem toplistitem">
-								<li>
-									<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "siteTree", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
-								</li>
-								<li>
-									<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "siteTree", "");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<br>
-					<div id="siteTree" class="sidebar-tree-div roundborder">
-					</div>
+				<div id="treeDisplayOrderList" class="expander-container">
+					<ul class="format-listitem listItemWithoutPadding">
+						<li>
+							<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "siteTree", "");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
+						</li>
+						<li>
+							<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "siteTree", "");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
+						</li>
+					</ul>
 				</div>
+			</div>
+			<br>
+			<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
 			</div>
 		</div>
 	</div>

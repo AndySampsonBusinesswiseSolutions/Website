@@ -1,34 +1,126 @@
 var dashboard = [
     {
-        "GUID" : "4",
-        "Attributes" :[
-            {"BaseName" : "Total Usage"}
-        ]
-    },
-    {
         "GUID" : "0",
-        "Attributes" :[
-            {"BaseName" : "Flex Electricity Price"}
+        "Attributes" : 
+        [
+            {"BaseName" : "Flexible Purchasing"},
+        ],
+        "Charts" :
+        [
+            {
+                "GUID" : "00",
+                "Attributes" :[
+                    {"BaseName" : "Flex Electricity Price"}
+                ]
+            },
+            {
+                "GUID" : "01",
+                "Attributes" :[
+                    {"BaseName" : "Flex Electricity Position"}
+                ]
+            },
+            {
+                "GUID" : "02",
+                "Attributes" :[
+                    {"BaseName" : "Flex Gas Price"}
+                ]
+            },
+            {
+                "GUID" : "03",
+                "Attributes" :[
+                    {"BaseName" : "Flex Gas Position"}
+                ]
+            }
         ]
     },
     {
         "GUID" : "1",
-        "Attributes" :[
-            {"BaseName" : "Flex Electricity Position"}
+        "Attributes" : 
+        [
+            {"BaseName" : "Monthly Usage"},
+        ],
+        "Charts" :
+        [
+            {
+                "GUID" : "10",
+                "Attributes" :[
+                    {"BaseName" : "Actuals"}
+                ]
+            },
+            {
+                "GUID" : "11",
+                "Attributes" :[
+                    {"BaseName" : "Forecast"}
+                ]
+            },
         ]
     },
     {
         "GUID" : "2",
-        "Attributes" :[
-            {"BaseName" : "Flex Gas Price"}
+        "Attributes" : 
+        [
+            {"BaseName" : "Monthly Cost"},
+        ],
+        "Charts" :
+        [
+            {
+                "GUID" : "20",
+                "Attributes" :[
+                    {"BaseName" : "Actuals"}
+                ]
+            },
+            {
+                "GUID" : "21",
+                "Attributes" :[
+                    {"BaseName" : "Forecast"}
+                ]
+            },
         ]
     },
     {
         "GUID" : "3",
-        "Attributes" :[
-            {"BaseName" : "Flex Gas Position"}
+        "Attributes" : 
+        [
+            {"BaseName" : "Monthly Rate"},
+        ],
+        "Charts" :
+        [
+            {
+                "GUID" : "30",
+                "Attributes" :[
+                    {"BaseName" : "Actuals"}
+                ]
+            },
+            {
+                "GUID" : "31",
+                "Attributes" :[
+                    {"BaseName" : "Forecast"}
+                ]
+            },
         ]
-    }
+    },
+    {
+        "GUID" : "4",
+        "Attributes" : 
+        [
+            {"BaseName" : "Monthly Savings"},
+        ],
+        "Charts" :
+        [
+            {
+                "GUID" : "40",
+                "Attributes" :[
+                    {"BaseName" : "Actuals"}
+                ]
+            },
+            {
+                "GUID" : "41",
+                "Attributes" :[
+                    {"BaseName" : "Forecast"}
+                ]
+            },
+        ]
+    },
 ];
 
 var data = [

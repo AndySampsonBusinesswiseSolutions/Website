@@ -14,39 +14,56 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); updateDashboard(this);" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		</div>
 		<div class="tree-column">
-			<div class="dashboard roundborder outer-container">
-				<div class="expander-header">
-					<span id="selectOptionsSpan">Select Options</span>
-					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
+			<div id="siteDiv" class="tree-div dashboard roundborder">
+			</div>
+			<br>
+			<div class="tree-div dashboard roundborder scrolling-wrapper">
+				<div class="sidebar-expander-header">
+					<span id="commoditySelectorSpan">Commodity</span>
+					<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
-				<div id="selectOptionsList" class="expander-container">
-					<div id="siteDiv" class="tree-div roundborder">
+				<div id="commoditySelectorList" class="expander-container">
+					<div style="width: 45%; text-align: center; float: left;">
+						<span>Electricity</span>
+						<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='pageLoad();'></input><div class="switch-btn"></div></label>
 					</div>
-					<br>
-					<div class="tree-div roundborder scrolling-wrapper">
-						<div class="expander-header">
-							<span id="commoditySelectorSpan">Commodity</span>
-							<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="commoditySelectorList" class="expander-container">
-							<ul class="format-listitem toplistitem">
-								<li>
-									<input type="radio" name="group1" id="allCommodityradio" checked guid="0" onclick='pageLoad();'><span id="allCommodityspan" style="padding-left: 1px;">All</span>
-								</li>
-								<li>
-									<input type="radio" name="group1" id="electricityCommodityradio" guid="0" onclick='pageLoad();'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity</span>
-								</li>
-								<li>
-									<input type="radio" name="group1" id="gasCommodityradio" guid="0" onclick='pageLoad();'><span id="gasCommodityspan" style="padding-left: 1px;">Gas</span>
-								</li>
-							</ul>
-						</div>
+					<div style="width: 45%; text-align: center; float: right;">
+						<span>Gas</span>
+						<label class="switch"><input type="checkbox" id="gasCommoditycheckbox" checked onclick='pageLoad();'></input><div class="switch-btn"></div></label>
 					</div>
-					<br>
-					<div id="dashboardDiv" class="tree-div roundborder">
+				</div>
+			</div>
+			<br>
+			<div id="dashboardDiv" class="tree-div dashboard roundborder">
+			</div>
+			<br>
+			<div class="tree-div dashboard roundborder scrolling-wrapper">
+				<div class="sidebar-expander-header">
+					<span id="configureSelectorSpan">Configure</span>
+					<i id="configureSelector" class="far fa-plus-square expander show-pointer"></i>
+				</div>
+				<div id="configureSelectorList" class="expander-container listitem-hidden">
+					<div class="tree-div dashboard roundborder scrolling-wrapper">
+						<div class="sidebar-expander-header">
+							<span id="locationSelectorSpan">Location</span>
+							<i id="locationSelector" class="far fa-plus-square expander show-pointer"></i>
+						</div>
+						<div id="locationSelectorList" class="expander-container listitem-hidden">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Show Sites</span>
+								<label class="switch"><input type="checkbox" id="sitesLocationcheckbox" checked onclick='pageLoad();'></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Show Meters</span>
+								<label class="switch"><input type="checkbox" id="metersLocationcheckbox" onclick='pageLoad();'></input><div class="switch-btn"></div></label>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -58,102 +75,83 @@
 				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
-			<br>
 			<div class="final-column">
-				<div id="dashboardHeader" class="dashboard roundborder outer-container" style="text-align: center; overflow: auto;">
+				<div id="dashboardHeader" class="dashboard outer-container" style="text-align: center; overflow: auto;">
 					<div class="expander-header">
-						<span id="mainDashboardSelectorSpan">Main Dashboard</span>
+						<span id="mainDashboardSelectorSpan">Main</span>
 						<i id="mainDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 					</div>
 					<div id="mainDashboardSelectorList">
-						<a href="/Internal/PortfolioManagement/SiteManagement/" class="roundborder dashboard-item-small">
-							<i class="fas fa-industry fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Number of Sites</span><br><br><br><span id="dashboardHeaderNumberOfSites" style="font-size: 50px;"></span>
-						</a>
-						<a href="/Internal/PortfolioManagement/ViewMeterConsumption/"  class="roundborder dashboard-item-small">
-							<i class="fas fa-bolt fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Portfolio Annualised Energy</span><br><br><br>
-							<span id="dashboardHeaderPortfolioAnnualisedEnergyUsage" style="font-size: 15px;"></span><br>
-							<span id="dashboardHeaderPortfolioAnnualisedEnergyCost" style="font-size: 15px;"></span>
-						</a>
-						<div class="roundborder dashboard-item-small">
-							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Extrapolated Spend</span><br><br><br><span style="font-size: 15px;">£93,306</span><br><span style="font-size: 15px;">over 3 years</span>
+						<div style="width: 40%; float: left;">
+							<a href="/Internal/PortfolioManagement/SiteManagement/" class="roundborder dashboard-item-small" style="background-color: #02601e;">
+								<i class="fas fa-map-marker-alt fa-6x" style="color: white; padding: 5px;"></i><br>
+								<span style="font-size: 19px;">Number of Locations Selected</span><br>
+								<span id="dashboardHeaderNumberOfSites" style="font-size: 25px;"></span>
+							</a>
+							<a href="/Internal/Finance/DataAnalysis/"  class="roundborder dashboard-item-small" style="background-color: #663399;">
+								<i class="fas fa-bolt fa-6x" style="color: white; padding: 5px;"></i><br>
+								<span style="font-size: 19px;">Portfolio Annualised Usage</span><br>
+								<span id="dashboardHeaderPortfolioAnnualisedEnergyUsage" style="font-size: 25px;"></span>
+							</a>
+							<a href="/Internal/Finance/DataAnalysis/"  class="roundborder dashboard-item-small" style="background-color: #CC3333;">
+								<i class="fas fa-bolt fa-6x" style="color: white; padding: 5px;"></i><br>
+								<span style="font-size: 19px;">Portfolio Annualised Cost</span><br>
+								<span id="dashboardHeaderPortfolioAnnualisedEnergyCost" style="font-size: 25px;"></span>
+							</a>
+							<div class="roundborder dashboard-item-small" style="background-color: #CC66CC;">
+								<i class="fas fa-pound-sign fa-6x" style="color: white; padding: 5px;"></i><br>
+								<span style="font-size: 19px;">Savings (£)</span><br>
+								<span style="font-size: 20px;">£10,571 to date</span><br>
+								<span style="font-size: 20px;">£3,083 per annum</span><br>
+								<span style="font-size: 20px;">£9,249 over next 3 years</span>
+							</div>
+							<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="roundborder dashboard-item-small" style="background-color: #6699CC;">
+								<i class="fas fa-tools fa-6x" style="color: white; padding: 5px;"></i><br>
+								<span style="font-size: 19px;">Active Opportunities</span><br>
+								<span id="dashboardHeaderActiveOpportunitiesCount" style="font-size: 20px;">1</span><br>
+								<span id="dashboardHeaderActiveOpportunitiesUsage" style="font-size: 19px;">100,000kWh</span><br>
+								<span id="dashboardHeaderActiveOpportunitiesCost" style="font-size: 20px;">£10,000</span>
+							</a>
+							<div class="roundborder dashboard-item-small" style="background-color: #676762;">
+								<i class="fas fa-cloud fa-6x" style="color: white; padding: 5px;"></i><br>
+								<span style="font-size: 19px;">Carbon</span><br>
+								<span id="dashboardHeaderCarbon" style="font-size: 25px;">1,550 tonnes per annum</span>
+							</div>
 						</div>
-						<div class="roundborder dashboard-item-large" style="overflow: auto;">
-							<div id="spreadsheet" style="margin: 2px; float: left;"></div>
-							<i class="fas fa-download show-pointer" style="margin-top: 5px; float: left;" title="Download Site List"></i>
-							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 5px; float: left;" title="Add Site List To Download Basket"></i>
+						<div style="width: 42.5%; float: left;">
+							<div id="spreadsheetContainer" class="roundborder dashboard-item-large" style="overflow: auto;">
+								<div id="spreadsheet" style="margin: 2px; float: left;"></div>
+							</div>
 						</div>
-						<div id="map-canvas" class="roundborder dashboard-item-small"></div>
-						<div class="roundborder dashboard-item-small">
-							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Predicted Savings (£)</span><br><br><br><span style="font-size: 15px;">£9,249</span><br><span style="font-size: 15px;">over 3 years</span>
+						<div style="width: 17.5%; float: right;">
+							<div id="map-canvas" class="roundborder dashboard-item-large"></div>
 						</div>
-						<div class="roundborder dashboard-item-small">
-							<i class="fas fa-pound-sign fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Predicted Savings (£)</span><br><br><br><span style="font-size: 15px;">£3,083</span><br><span style="font-size: 15px;">per annum</span>
-						</div>
-						<div class="roundborder dashboard-item-small">
-							<i class="fas fa-percent fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Predicted Savings (%)</span><br><br><br><span style="font-size: 15px;">10%</span><br><span style="font-size: 15px;">per annum</span>
-						</div>
-						<div class="roundborder dashboard-item-small">
-							<i class="far fa-lightbulb fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Good Practice Savings</span><br><br><br><span style="font-size: 15px;">3% </span><br><span style="font-size: 15px;">per annum</span>
-						</div>
-						<div class="roundborder dashboard-item-small">
-							<i class="fas fa-cloud fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Carbon</span><br><br><br><span id="dashboardHeaderCarbon" style="font-size: 15px;">1,550 tonnes</span><br><span style="font-size: 15px;">per annum</span>
-						</div>
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="roundborder dashboard-item-small">
-							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Pending Opportunities</span><br><br><br>
-							<span id="dashboardHeaderPendingOpportunitiesCount" style="font-size: 15px;">1</span><br>
-							<span id="dashboardHeaderPendingOpportunitiesUsage" style="font-size: 15px;">100,000kWh</span><br>
-							<span id="dashboardHeaderPendingOpportunitiesCost" style="font-size: 15px;">£10,000</span>
-						</a>
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="roundborder dashboard-item-small">
-							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Active Opportunities</span><br><br><br>
-							<span id="dashboardHeaderActiveOpportunitiesCount" style="font-size: 15px;">1</span><br>
-							<span id="dashboardHeaderActiveOpportunitiesUsage" style="font-size: 15px;">100,000kWh</span><br>
-							<span id="dashboardHeaderActiveOpportunitiesCost" style="font-size: 15px;">£10,000</span>
-						</a>
-						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" class="roundborder dashboard-item-small">
-							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
-							<span>Finished Opportunities</span><br><br><br>
-							<span id="dashboardHeaderFinishedOpportunitiesCount" style="font-size: 15px;">1</span><br>
-							<span id="dashboardHeaderFinishedOpportunitiesUsage" style="font-size: 15px;">100,000kWh</span><br>
-							<span id="dashboardHeaderFinishedOpportunitiesCost" style="font-size: 15px;">£10,000</span>
-						</a>				
 					</div>
 				</div>
-				<div style="font-size: 10px;">*Predicted savings are approximate</div>
-				<div id="customDashboard" class="dashboard roundborder outer-container" style="text-align: center; overflow: auto; margin-top: 15px;">
+				<div style="clear: both;"></div>
+				<div id="customDashboard" class="dashboard outer-container" style="text-align: center;">
 					<div class="expander-header">
-						<span id="customDashboardSelectorSpan">Custom Dashboard</span>
+						<span id="customDashboardSelectorSpan">Custom</span>
 						<i id="customDashboardSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 					</div>
 					<div id="customDashboardSelectorList">
-						<div id="customDashboardItem4" class="roundborder custom-dashboard-item-large">
+						<div id="customDashboardItem11" class="roundborder custom-dashboard-item-large">
 							<div id="totalUsageChart"></div>
 						</div>
-						<div id="customDashboardItem0" class="roundborder custom-dashboard-item-large listitem-hidden">
+						<div id="customDashboardItem00" class="roundborder custom-dashboard-item-large">
 							<div id="electricityPriceChart"></div>
 						</div>	
-						<div id="customDashboardItem1" class="roundborder custom-dashboard-item-large listitem-hidden">
+						<div id="customDashboardItem01" class="roundborder custom-dashboard-item-large listitem-hidden">
 							<div id="electricityUsageChart"></div>
 						</div>	
-						<div id="customDashboardItem2" class="roundborder custom-dashboard-item-large listitem-hidden">
+						<div id="customDashboardItem02" class="roundborder custom-dashboard-item-large listitem-hidden">
 							<div id="gasPriceChart"></div>
 						</div>	
-						<div id="customDashboardItem3" class="roundborder custom-dashboard-item-large listitem-hidden">
+						<div id="customDashboardItem03" class="roundborder custom-dashboard-item-large listitem-hidden">
 							<div id="gasUsageChart"></div>
 						</div>	
 					</div>
 				</div>
-				<br>
 			</div>
 		</div>
 	</div>
@@ -169,7 +167,7 @@
 <script type="text/javascript" src="dashboard.json"></script>
 
 <script>
-	pageLoad();
+	pageLoad(true);
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

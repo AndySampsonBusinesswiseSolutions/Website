@@ -13,20 +13,25 @@ function pageLoad() {
     };
 }
 
-var branchCount = 0;
-var subBranchCount = 0;
+function setGanttChartWidth() {
+    var lock = document.getElementsByClassName('fa-lock');
+    var ganttChart = document.getElementsByClassName('ganttview-slide-container')[0];
+    if(lock.length == 0) {
+        ganttChart.style.width = '84.5%';
+    }
+    else {
+        ganttChart.style.width = '80%';
+    }
+}
 
 function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
 
-    var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+    var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
     var ul = createBranchUl("siteSelector", false, true);
 
     tree.appendChild(ul);
-
-    branchCount = 0;
-    subBranchCount = 0; 
 
     var order = $("input[type='radio'][name='group1']:checked").val();
     if(order == "Project") {
@@ -134,10 +139,9 @@ function buildSite(sites, baseElement, checkboxFunction, linkedSite) {
         var li = document.createElement('li');
         var ul = createUL();
         buildMeter(site.Meters, ul, checkboxFunction, linkedSite);
-        appendListItemChildren(li, 'Site'.concat(subBranchCount), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
+        appendListItemChildren(li, 'Site'.concat(i), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
 
         baseElement.appendChild(li);
-        subBranchCount++;
     }
 }
 

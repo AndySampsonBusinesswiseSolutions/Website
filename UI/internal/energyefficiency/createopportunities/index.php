@@ -87,7 +87,7 @@
                             <div style="float: left;">
                                 <div class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
                                     <span id="timePeriodsDiv">Select Time Periods</span>
-                                    <ul class="format-listitem toplistitem" id="timePeriodsDivSelectorList">
+                                    <ul class="format-listitem listItemWithoutPadding" id="timePeriodsDivSelectorList">
                                         <li>
                                             <i id="monthOfYear" class="far fa-plus-square show-pointer expander"></i>
                                             <span id="monthOfYearspan">Months</span>

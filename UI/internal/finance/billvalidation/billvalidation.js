@@ -379,7 +379,7 @@ function populateCard(bill, divToAppendTo) {
 
 function buildBillChart(bill, divToAppendTo) {
 	var containerDiv = document.createElement('div');
-	containerDiv.setAttribute('style', 'text-align: center; border-bottom: solid black 1px;');
+	containerDiv.setAttribute('class', 'expander-header');
 	divToAppendTo.appendChild(containerDiv);
 
 	var containerDivSpan = document.createElement('span');
@@ -400,12 +400,13 @@ function buildBillChart(bill, divToAppendTo) {
 	var firstChartDiv = document.createElement('div');
 	firstChartDiv.id = "firstChartDiv";
 	firstChartDiv.setAttribute('class', 'roundborder chart');
-	firstChartDiv.setAttribute('style', 'margin-right: 5px;');
+	firstChartDiv.setAttribute('style', 'float: left;');
 	containerListDiv.appendChild(firstChartDiv);
 
 	var secondChartDiv = document.createElement('div');
 	secondChartDiv.id = "secondChartDiv";
 	secondChartDiv.setAttribute('class', 'roundborder chart');
+	firstChartDiv.setAttribute('style', 'float: right;');
 	containerListDiv.appendChild(secondChartDiv);
 
 	var firstChart = document.createElement('div');

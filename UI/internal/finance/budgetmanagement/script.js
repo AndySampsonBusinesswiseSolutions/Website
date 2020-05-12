@@ -44,6 +44,29 @@
           } 
         }
       };
+
+      $scope.timePeriodCreationDateRange = {
+        minValue: minDate,
+        maxValue: maxDate,
+        options: {
+          id: 'timePeriodCreationDateRange',
+          floor: floorDate,
+          ceil: ceilDate,
+          step: millisInDay,
+          showTicks: false,
+          draggableRange: true,
+          translate: function(date_millis) {
+            if ((date_millis !== null)) {
+              var dateFromMillis = new Date(date_millis);
+              return formatDate(dateFromMillis);
+            }
+            return '';
+          },
+          onEnd: function() {
+            // updateCharts();
+          } 
+        }
+      };
     });
   })();
   

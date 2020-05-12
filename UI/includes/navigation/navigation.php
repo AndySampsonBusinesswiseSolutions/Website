@@ -10,18 +10,18 @@
                         <img class="fusion-standard-logo" srcset="https://cdn.foleon.com/upload/28150/unknown-10.3e4603022681.jpeg">
                     </a>
                 </div>
-                <?php if ($PAGE_TITLE == "Login") { ?>
+                <!-- <?php if ($PAGE_TITLE == "Login") { ?>
                     <div class="topnav">
-                        <div class="login-container">
-                            <form method="post" action='/Internal/Dashboard/'>
-                                <input type="text" placeholder="Email Address" name="username" required style="margin-right: 5px;">
+                        <div class="login-container"> -->
+                            <!-- <form method="post" action='/Internal/Dashboard/'> -->
+                                <!-- <input type="text" placeholder="Email Address" name="username" required style="margin-right: 5px;">
                                 <input type="text" placeholder="Password" name="psw" required style="margin-right: 5px;">
-                                <button type="submit" class="login-button" style="margin-right: 5px;">Login</button>
-                                <a href="/Internal/ForgottenPassword/" style="margin-right: 5px;">Forgotten Password?</a>
-                            </form>
-                        </div>
+                                <button type="submit" class="login-button" style="margin-right: 5px;" onclick="getItems()">Login</button>
+                                <a href="/Internal/ForgottenPassword/" style="margin-right: 5px;">Forgotten Password?</a> -->
+                            <!-- </form> -->
+                        <!-- </div>
                     </div>
-                <?php } ?>
+                <?php } ?> -->
                 <?php if ($PAGE_TITLE == "Forgotten Password") { ?>
                 <?php } ?>
                 <?php if ($PAGE_TITLE != "Login" && $PAGE_TITLE != "Forgotten Password") { ?>
@@ -68,7 +68,7 @@
                             <li style="padding-right: 15px;">
                                 <a href="/Internal/AccountManagement/MyDocuments/">
                                     <i class="fas fa-shopping-basket" title="Download Basket (2 items)"></i>
-                                    <span style="font-size: 10px; padding-top: 15px; color: white;">(2)</span>
+                                    <span style="font-size: 10px; padding-top: 15px; color: black;">(2)</span>
                                 </a>
                             </li>
                             <li style="padding-right: 35px;"></li>
@@ -81,3 +81,5 @@
     </div>
     <div class="fusion-clearfix"></div>
 </header>
+
+<script src="/login.js"></script>

@@ -106,15 +106,10 @@ var data = [
         "GUID" : "0",
         "Attributes" : 
         [
-            {"BaseName" : "Leeds"},
-            {"Address Line 1" : "Manor Mill Ln"},
-            {"Address Line 2" : "Leeds"},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : ""},
-            {"Postcode" : "LS11 8BR"},
-            {"Contact Name" : "David Ford"},
-            {"Contact Telephone Number" : "0113 270 1244"},
-            {"Sq. ft" : "100"}
+            {"BaseName" : "39-41 Buckingham Palace Road, London"},
+            {"lat" : 51.4981763},
+            {"lng" : -0.1435512},
+            {"GoogleAddress" : "39-41 Buckingham Palace Rd, Westminster, London SW1W 0PS, UK"},
         ],
         "Meters" :
         [
@@ -122,122 +117,129 @@ var data = [
                 "GUID" : "1",
                 "Attributes" : 
                     [
-                        {"Identifier" : "987654"},
+                        {"Identifier" : "1200050469869"},
                         {"DeviceType" : "Mains"},
-                        {"DeviceSubType" : "Mains"},
-                        {"Zone" : "Test Zone 1"},
-                        {"Panel" : "Test Panel 1"},
-                        {"SensorType" : "Test Sensor Type 1"},
-                        {"Commodity" : "Gas"}
-                    ],
-            },
-            {
-                "GUID" : "2",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "1234567890123"},
-                        {"DeviceType" : "Mains"},
-                        {"DeviceSubType" : "Mains"},
-                        {"Zone" : "Test Zone 1"},
-                        {"Panel" : "Test Panel 1"},
-                        {"SensorType" : "Test Sensor Type 1"},
-                        {"Commodity" : "Electricity"}
-                    ],
-                "SubMeters" :
-                [
-                    {
-                        "GUID" : "3",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 1"},
-                            {"Commodity" : "Electricity"}
-                        ],
-                    },
-                    {
-                        "GUID" : "4",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 2"},
-                            {"Commodity" : "Electricity"}
-                        ],
-                    }
-                ],
-            },
-            {
-                "GUID" : "5",
-                "Attributes" : 
-                    [
-                        {"Identifier" : "1234567890124"},
-                        {"DeviceType" : "Lighting"},
-                        {"DeviceSubType" : "Unknown"},
-                        {"Zone" : "Test Zone 1"},
-                        {"Panel" : "Test Panel 1"},
-                        {"SensorType" : "Test Sensor Type 1"},
-                        {"Commodity" : "Electricity"}
-                    ],
+                        {"Commodity" : "Electricity"},
+                    ]
             }
         ]
     },
     {
-        "GUID" : "6",
+        "GUID" : "2",
         "Attributes" : 
         [
-            {"BaseName" : "Manchester"},
-            {"Address Line 1" : "Bury"},
-            {"Address Line 2" : "Greater Manchester"},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : ""},
-            {"Postcode" : "BL9 6BS"},
-            {"Contact Name" : "David Ford"},
-            {"Contact Telephone Number" : "0113 270 1244"},
-            {"Sq. ft" : "100"}
+            {"BaseName" : "35 Charles Street, London"},
+            {"lat" : 51.507668},
+            {"lng" : -0.1470636},
+            {"GoogleAddress" : "35 Charles St, Mayfair, London W1J 5EB, UK"},
         ],
         "Meters" :
         [
             {
-                "GUID" : "7",
+                "GUID" : "3",
                 "Attributes" : 
                     [
-                        {"Identifier" : "987650"},
-                        {"DeviceType" : "Mains"},
-                        {"DeviceSubType" : "Mains"},
-                        {"Zone" : "Test Zone 1"},
-                        {"Panel" : "Test Panel 1"},
-                        {"SensorType" : "Test Sensor Type 1"},
-                        {"Commodity" : "Gas"}
-                    ],
+                        {"Identifier" : "1200010064476"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
             },
+            {
+                "GUID" : "4",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200051256079"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "5",
+        "Attributes" : 
+        [
+            {"BaseName" : "Montague Street, London"},
+            {"lat" : 51.5201642},
+            {"lng" : -0.1258781},
+            {"GoogleAddress" : "Montague St, Holborn, London WC1B 5BJ, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "6",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200050071348"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "7",
+        "Attributes" : 
+        [
+            {"BaseName" : "1-3 1-2 Kensington Court, London"},
+            {"lat" : 51.5020072},
+            {"lng" : -0.1866267},
+            {"GoogleAddress" : "1-3 Kensington Ct, Kensington, London W8 5DL, UK"},
+        ],
+        "Meters" :
+        [
             {
                 "GUID" : "8",
                 "Attributes" : 
                     [
-                        {"Identifier" : "1234567890120"},
+                        {"Identifier" : "1200010015159"},
                         {"DeviceType" : "Lighting"},
-                        {"DeviceSubType" : "Security Light"},
-                        {"Zone" : "Test Zone 1"},
-                        {"Panel" : "Test Panel 1"},
-                        {"SensorType" : "Unknown"},
-                        {"Commodity" : "Electricity"}
-                    ],
-                "SubMeters" :
-                [
-                    {
-                        "GUID" : "9",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 1"},
-                            {"Commodity" : "Electricity"}
-                        ],
-                    },
-                    {
-                        "GUID" : "10",
-                        "Attributes" : 
-                        [
-                            {"Identifier" : "Sub Meter 2"},
-                            {"Commodity" : "Electricity"}
-                        ],
-                    }
-                ],
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "9",
+        "Attributes" : 
+        [
+            {"BaseName" : "9 Fore Street, Evershot, Dorchester"},
+            {"lat" : 50.8382807},
+            {"lng" : -2.6056457},
+            {"GoogleAddress" : "9 Fore St, Evershot, Dorchester DT2 0JR, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "10",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "2000027480903"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "11",
+        "Attributes" : 
+        [
+            {"BaseName" : "17-19 Egerton Terrace, London"},
+            {"lat" : 51.4968423},
+            {"lng" : -0.167588},
+            {"GoogleAddress" : "17-19 Egerton Terrace, Chelsea, London SW3 2BX, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "12",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010016808"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
             }
         ]
     }

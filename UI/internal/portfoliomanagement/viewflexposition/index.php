@@ -13,43 +13,38 @@
 
 <body>
   <div id="mySidenav" class="sidenav">
-    <i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-    <i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+    <div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
+      <i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+      <i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+    </div>
     <div class="tree-column">
       <div class="dashboard roundborder outer-container">
         <div class="expander-header">
-          <span id="selectOptionsSpan">Select Options</span>
-          <i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
+          <span id="itemsToDisplaySelectorSpan">Items To Display</span>
+          <i id="itemsToDisplaySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
         </div>
-        <div id="selectOptionsList" class="expander-container">
-          <div class="sidebar-tree-div roundborder scrolling-wrapper">
-            <div class="expander-header">
-              <span id="itemsToDisplaySelectorSpan">Items To Display</span>
-              <i id="itemsToDisplaySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
-            </div>
-            <div id="itemsToDisplaySelectorList" class="expander-container">
-              <ul class="format-listitem toplistitem">
-                <li>
-                  <input type="checkbox" id="electricityVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Volume</span>
-                </li>
-                <li>
-                  <input type="checkbox" id="electricityPriceCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity Price</span>
-                </li>
-                <li>
-                  <input type="checkbox" id="gasVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Gas Volume</span>
-                </li>
-                <li>
-                  <input type="checkbox" id="gasPriceCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Gas Price</span>
-                </li>
-                <li>
-                  <input type="checkbox" id="electricityDatagridsCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Datagrids</span>
-                </li>
-                <li>
-                  <input type="checkbox" id="gasDatagridsCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Gas Datagrids</span>
-                </li>
-              </ul>
-            </div>
-          </div>
+        <div id="itemsToDisplaySelectorList" class="expander-container">
+          <ul class="format-listitem listItemWithoutPadding">
+            <li>
+              <input type="checkbox" id="electricityVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Volume</span>
+            </li>
+            <li>
+              <input type="checkbox" id="electricityPriceCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity Price</span>
+            </li>
+            <li>
+              <input type="checkbox" id="gasVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Gas Volume</span>
+            </li>
+            <li>
+              <input type="checkbox" id="gasPriceCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Gas Price</span>
+            </li>
+            <li>
+              <input type="checkbox" id="electricityDatagridsCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Datagrids</span>
+            </li>
+            <li>
+              <input type="checkbox" id="gasDatagridsCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Gas Datagrids</span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

@@ -892,14 +892,13 @@ ul {
     float: left;
     width: 385px;
     padding-left: 15px;
-    padding-top: 50px;
+    padding-top: 5px;
 }
 .final-column {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0px;
 }
 .scrolling-wrapper {
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     white-space: nowrap;
 }
@@ -909,20 +908,18 @@ ul {
 .format-listitem {
     list-style-type: none; 
 }
-.format-listitem:not(.topListItem) {
+.format-listitem:not(.listItemWithoutPadding) {
     padding-left: 15px;
 }
-.topListItem {
+.listItemWithoutPadding {
     padding-left: 0px;
 }
-.expander-header {
+.expander-header, .sidebar-expander-header {
     text-align: center; 
     border-bottom: solid black 1px;
     margin-bottom: 5px;
-    background-color: #b62a51;
+    background-color: darkslategray;
     color: white;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
 }
 .expander-container {
     margin-top: 5px;
@@ -934,7 +931,7 @@ ul>li>input, .expander {
     width: 18px;
 }
 .outer-container {
-    padding: 10px;
+    padding: 5px;
 }
 .sidebar-tree-div {
     max-height: 300px;
@@ -1011,10 +1008,11 @@ ul>li>input, .expander {
     font-size: 10px;
 }
 .tabDiv button:hover {
-    background-color: #ddd;
+    background-color: lightblue;
 }
 .tabDiv button.active {
-    background-color: lightblue;
+    background-color: darkslategray;
+    color: white;
 }
 #outerContainer {
     min-height: calc(100% - 69px);
@@ -1060,4 +1058,36 @@ p {
 }
 i {
     color: black;
+}
+.switch-btn {
+    width: 100%;
+    height: 40px;
+    background: #b62a51;
+    position: relative;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: inset 0 3px 10px rgba(0,0,0,.3);
+}
+.switch-btn:before {
+    content: '';
+    position: absolute;
+    height: 36px;
+    width: 36px;
+    background: linear-gradient(#FFF,#f2f2f2);
+    left: 2px;
+    top: 2px;
+    cursor: pointer;
+    transition: all 500ms ease-out;
+    border-radius: 50%;
+    box-shadow: 0 8px 6px -4px rgba(0,0,0,.25);
+}
+input[type=checkbox]:checked + .switch-btn:before {
+    left: calc(100% - 38px);
+}
+.switch {
+    opacity: 0;
+    display: inline;
+}
+input[type=checkbox]:checked + .switch-btn {
+    background: darkgreen;
 }

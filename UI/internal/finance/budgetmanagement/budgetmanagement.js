@@ -1,19 +1,23 @@
 function pageLoad(){  
 	createBudgetTree(sites, "alertMessage()");
+	setupPage();
+
+	document.onmousemove = function(e) {
+		setupSidebarHeight();
+		setupSidebar(e);
+	};
+
+	window.onscroll = function() {
+		setupSidebarHeight();
+	};
+}
+
+function setupPage() {
 	createSiteTree(sites, "alertMessage()");
 	setupDataGrid();
 	displayCharts();
 	addExpanderOnClickEvents();
 	setOpenExpanders();
-
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	  };
-	
-	  window.onscroll = function() {
-		setupSidebarHeight();
-	  };
 }
 
 function createBudgetTree(sites, functions) {
@@ -85,7 +89,7 @@ function createSiteTree(sites, functions) {
   
 	clearElement(div);
   
-	var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+	var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
 	var ul = createBranchUl("siteSelector", false, true);
   
 	var breakDisplayListItem = document.createElement('li');
@@ -94,9 +98,9 @@ function createSiteTree(sites, functions) {
   
 	var recurseSelectionListItem = document.createElement('li');
 	recurseSelectionListItem.classList.add('format-listitem');
-	recurseSelectionListItem.classList.add('topListItem');
+	recurseSelectionListItem.classList.add('listItemWithoutPadding');
   
-	var recurseSelectionCheckbox = createBranchCheckbox('recuseSelectionCheckbox', '', 'recuseSelection', 'checkbox', 'recurseSelection', false);
+	var recurseSelectionCheckbox = createBranchCheckbox('recurseSelectionCheckbox', '', 'recurseSelection', 'checkbox', 'recurseSelection', false);
 	var recurseSelectionSpan = createBranchSpan('recurseSelectionSpan', 'Recurse Selection?');
 	recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
 	recurseSelectionListItem.appendChild(recurseSelectionSpan);
@@ -124,49 +128,101 @@ function createSiteTree(sites, functions) {
   }
 
 //build site
-function buildSiteBranch(sites, commodityOption, elementToAppendTo, functions, isNewBudget) {
-	var siteLength = sites.length;
+function buildSiteBranch(usageSites, commodityOption, elementToAppendTo, functions, isNewBudget) {
+	var siteLength = usageSites.length;
   
-	for(var siteCount = 0; siteCount < siteLength; siteCount++) {
-	  var site = sites[siteCount];
+	if(siteLocationcheckbox.checked) {
+	  for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+		var site = usageSites[siteCount];
   
-	  if(!commodityMatch(site, commodityOption)) {
-		continue;
+		if(!commodityMatch(site, commodityOption)) {
+		  continue;
+		}
+  
+		var listItem = appendListItemChildren((isNewBudget ? 'Budget_' : '') + 'Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
+		elementToAppendTo.appendChild(listItem);
+  
+		if(site.hasOwnProperty('Areas')) {
+		  var ul = listItem.getElementsByTagName('ul')[0];
+		  buildAreaBranch(site.Areas, commodityOption, ul, functions);
+		}
+	  }
+	}
+	else {
+	  var areas = [];
+	  for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+		var site = usageSites[siteCount];
+  
+		if(!commodityMatch(site, commodityOption)) {
+		  continue;
+		}
+  
+		areas.push(...site.Areas);
 	  }
   
-	  var listItem = appendListItemChildren((isNewBudget ? 'Budget_' : '') + 'Site' + siteCount, site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
-	  elementToAppendTo.appendChild(listItem);
-  
-	  if(site.hasOwnProperty('Areas')) {
-		var ul = listItem.getElementsByTagName('ul')[0];
-		buildAreaBranch(site.Areas, commodityOption, ul, functions, (isNewBudget ? 'Budget_' : '') + 'Site' + siteCount);
-	  }
+	  buildAreaBranch(areas, commodityOption, elementToAppendTo, functions);
 	}
 }
 
 //build area
-function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions, previousId) {
+function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions) {
 	var areaLength = areas.length;
   
-	for(var areaCount = 0; areaCount < areaLength; areaCount++) {
-	  var area = areas[areaCount];
+	if(areaLocationcheckbox.checked) {
+	  for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+		var area = areas[areaCount];
   
-	  if(!commodityMatch(area, commodityOption)) {
-		continue;
+		if(!commodityMatch(area, commodityOption)) {
+		  continue;
+		}
+  
+		var listItem = appendListItemChildren(getAttribute(area.Attributes, "GUID"), area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area')
+		elementToAppendTo.appendChild(listItem);
+  
+		if(area.hasOwnProperty('Commodities')) {
+		  var ul = listItem.getElementsByTagName('ul')[0];
+		  buildCommodityBranch(area.Commodities, commodityOption, ul, functions);
+		}
+	  }
+	}
+	else {
+	  var commodities = [];
+	  var commodityNames = [];
+  
+	  for(var areaCount = 0; areaCount < areaLength; areaCount++) {
+		var area = areas[areaCount];
+  
+		if(!commodityMatch(area, commodityOption)) {
+		  continue;
+		}
+  
+		var commodityLength = area.Commodities.length;
+  
+		for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
+		  var commodity = area.Commodities[commodityCount];
+  
+		  if(!commodityMatch(commodity, commodityOption)) {
+			continue;
+		  }
+  
+		  var commodityName = getAttribute(commodity.Attributes, "Name");
+		  var commodityIndex = commodityNames.indexOf(commodityName);
+		  if(!commodityNames.includes(commodityName)) {
+			commodityNames.push(commodityName);
+			commodities.push(JSON.parse(JSON.stringify(commodity)));
+		  }
+		  else {
+			commodities[commodityIndex].Meters.push(...commodity.Meters);
+		  }
+		}
 	  }
   
-	  var listItem = appendListItemChildren(previousId + '_Area' + areaCount, area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area');
-	  elementToAppendTo.appendChild(listItem);
-  
-	  if(area.hasOwnProperty('Commodities')) {
-		var ul = listItem.getElementsByTagName('ul')[0];
-		buildCommodityBranch(area.Commodities, commodityOption, ul, functions, previousId + '_Area' + areaCount);
-	  }
+	  buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions);
 	}
 }
 
 //build commodity
-function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions, previousId) {
+function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions) {
 	var commodityLength = commodities.length;
   
 	for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
@@ -176,39 +232,79 @@ function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, f
 		continue;
 	  }
   
-	  var listItem = appendListItemChildren(previousId + '_Commodity' + commodityCount, commodity.hasOwnProperty('Meters'), functions, commodity.Attributes, 'Commodity');
-	  elementToAppendTo.appendChild(listItem);
+	  if(commodityLocationcheckbox.checked) {
+		var listItem = appendListItemChildren(getAttribute(commodity.Attributes, "GUID"), commodity.hasOwnProperty('Meters'), null, commodity.Attributes, 'Commodity')
+		elementToAppendTo.appendChild(listItem);
+	  }
   
 	  if(commodity.hasOwnProperty('Meters')) {
-		var ul = listItem.getElementsByTagName('ul')[0];
-		buildMeterBranch(commodity.Meters, commodityOption, ul, functions, previousId + '_Commodity' + commodityCount);
+		var ul = commodityLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
+		buildMeterBranch(commodity.Meters, commodityOption, ul, functions);
 	  }
 	}
 }
 
 //build meter
-function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions, previousId) {
+function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions) {
 	var meterLength = meters.length;
   
-	for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-	  var meter = meters[meterCount];
+	if(meterLocationcheckbox.checked) {
+	  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+		var meter = meters[meterCount];
   
-	  if(!commodityMatch(meter, commodityOption)) {
-		continue;
+		if(!commodityMatch(meter, commodityOption)) {
+		  continue;
+		}
+  
+		var listItem = appendListItemChildren(getAttribute(meter.Attributes, "GUID"), meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter')
+		elementToAppendTo.appendChild(listItem);
+  
+		if(meter.hasOwnProperty('SubAreas')) {
+		  var ul = listItem.getElementsByTagName('ul')[0];
+		  buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions);
+		}
+	  }
+	}
+	else {
+	  var subAreas = [];
+	  var subAreaNames = [];
+  
+	  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+		var meter = meters[meterCount];
+  
+		if(!commodityMatch(meter, commodityOption)) {
+		  continue;
+		}
+  
+		if(meter.SubAreas) {
+		  var subAreaLength = meter.SubAreas.length;
+  
+		  for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
+			var subArea = meter.SubAreas[subAreaCount];
+  
+			if(!commodityMatch(subArea, commodityOption)) {
+			  continue;
+			}
+  
+			var subAreaName = getAttribute(subArea.Attributes, "Name");
+			var subAreaIndex = subAreaNames.indexOf(subAreaName);
+			if(!subAreaNames.includes(subAreaName)) {
+			  subAreaNames.push(subAreaName);
+			  subAreas.push(JSON.parse(JSON.stringify(subArea)));
+			}
+			else {
+			  subAreas[subAreaIndex].Assets.push(...subArea.Assets);
+			}
+		  }
+		}
 	  }
   
-	  var listItem = appendListItemChildren(previousId + '_Meter' + meterCount, meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter');
-	  elementToAppendTo.appendChild(listItem);
-  
-	  if(meter.hasOwnProperty('SubAreas')) {
-		var ul = listItem.getElementsByTagName('ul')[0];
-		buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions, previousId + '_Meter' + meterCount);
-	  }
+	  buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions);
 	}
 }
 
 //build sub area
-function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions, previousId) {
+function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions) {
 	var subAreaLength = subAreas.length;
   
 	for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
@@ -218,18 +314,20 @@ function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functi
 		continue;
 	  }
   
-	  var listItem = appendListItemChildren(previousId + '_SubArea' + subAreaCount, subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea');
-	  elementToAppendTo.appendChild(listItem);
+	  if(subareaLocationcheckbox.checked) {
+		var listItem = appendListItemChildren(getAttribute(subArea.Attributes, "GUID"), subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea')
+		elementToAppendTo.appendChild(listItem);
+	  }
   
 	  if(subArea.hasOwnProperty('Assets')) {
-		var ul = listItem.getElementsByTagName('ul')[0];
-		buildAssetBranch(subArea.Assets, commodityOption, ul, functions, previousId + '_SubArea' + subAreaCount);
+		var ul = subareaLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
+		buildAssetBranch(subArea.Assets, commodityOption, ul, functions);
 	  }
 	}
 }
 
 //build asset
-function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions, previousId) {
+function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions) {
 	var assetLength = assets.length;
   
 	for(var assetCount = 0; assetCount < assetLength; assetCount++) {
@@ -239,18 +337,24 @@ function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions,
 		continue;
 	  }
   
-	  var listItem = appendListItemChildren(previousId + '_Asset' + assetCount, asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset');
-	  elementToAppendTo.appendChild(listItem);
+	  if(assetLocationcheckbox.checked) {
+		var listItem = appendListItemChildren(getAttribute(asset.Attributes, "GUID"), asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset')
+		elementToAppendTo.appendChild(listItem);
+	  }
   
 	  if(asset.hasOwnProperty('SubMeters')) {
-		var ul = listItem.getElementsByTagName('ul')[0];
-		buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions, previousId + '_Asset' + assetCount);
+		var ul = assetLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
+		buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions);
 	  }
 	}
 }
 
 //build sub meter
-function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions, previousId) {
+function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions) {
+	if(!submeterLocationcheckbox.checked) {
+	  return;
+	}
+  
 	var subMeterLength = subMeters.length;
   
 	for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
@@ -260,24 +364,23 @@ function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, func
 		continue;
 	  }
   
-	  var listItem = appendListItemChildren(previousId + '_SubMeter' + subMeterCount, false, functions, subMeter.Attributes, 'SubMeter');
+	  var listItem = appendListItemChildren(getAttribute(subMeter.Attributes, "GUID"), false, functions, subMeter.Attributes, 'SubMeter');
 	  elementToAppendTo.appendChild(listItem);
 	}
 }
 
 function getCommodityOption() {
-	var commodity = '';
-	var electricityCommodityradio = document.getElementById('electricityCommodityradio');
-	if(electricityCommodityradio.checked) {
-	  commodity = 'Electricity';
+	if(electricityCommoditycheckbox.checked && gasCommoditycheckbox.checked) {
+		return '';
 	}
-	else {
-	  var gasCommodityradio = document.getElementById('gasCommodityradio');
-	  if(gasCommodityradio.checked) {
-		commodity = 'Gas';
-	  }
+	else if(electricityCommoditycheckbox.checked) {
+		return 'Electricity';
 	}
-	return commodity;
+	else if(gasCommoditycheckbox.checked) {
+		return 'Gas';
+	}
+
+	return 'None';
 }
 
 function deleteBudgets() {
@@ -511,7 +614,9 @@ function loadCostChart() {
 			}
 		  }]
 		};
-	  refreshChart(electricityCostSeries, "#rightHandChart", electricityCostOptions);
+
+	clearElement(rightHandChart);
+	refreshChart(electricityCostSeries, "#rightHandChart", electricityCostOptions);
 }
   
 function loadUsageChart() {
@@ -572,6 +677,8 @@ function loadUsageChart() {
 		  }
 		}]
 	  };
+
+	clearElement(leftHandChart);
 	refreshChart(electricityUsageSeries, "#leftHandChart", electricityUsageOptions);
 }
 

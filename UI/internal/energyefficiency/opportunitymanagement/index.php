@@ -333,37 +333,32 @@
 		</div>
 	</div>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		</div>
 		<div class="tree-column">
-			<div class="dashboard roundborder outer-container">
+			<div id="siteDiv" class="sidebar-tree-div dashboard roundborder">
+			</div>
+			<br>
+			<div class="sidebar-tree-div dashboard roundborder outer-container">
 				<div class="expander-header">
-					<span id="selectOptionsSpan">Select Options</span>
-					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
+					<span id="opportunityStatusSpan">Opportunity Status</span>
+					<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
-				<div id="selectOptionsList" class="expander-container">
-					<div id="siteDiv" class="tree-div roundborder">
-					</div>
-					<br>
-					<div class="tree-div roundborder outer-container">
-						<div class="expander-header">
-							<span id="opportunityStatusSpan">Opportunity Status</span>
-							<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="opportunityStatusList" class="expander-container">
-							<ul class="format-listitem toplistitem">
-								<li>
-									<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
-								</li>
-								<li>
-									<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
-								</li>
-								<li>
-									<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
-								</li>
-							</ul>
-						</div>
-					</div>
+				<div id="opportunityStatusList" class="expander-container">
+					<ul class="format-listitem listItemWithoutPadding">
+						<li>
+							<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
+						</li>
+						<li>
+							<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
+						</li>
+						<li>
+							<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -385,7 +380,7 @@
 							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
 						</div>
 						<br>
-						<div id="requestedVisitsList">
+						<div id="requestedVisitsList" class="scrolling-wrapper">
 							<div id="requestedVisitsSpreadsheet"></div>
 						</div>
 					</div>
@@ -398,7 +393,7 @@
 							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
 						</div>
 						<br>
-						<div id="scheduledVisitsList">
+						<div id="scheduledVisitsList" class="scrolling-wrapper">
 							<div id="scheduledVisitsSpreadsheet"></div>
 						</div>
 					</div>
@@ -413,7 +408,7 @@
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Rejected Opportunities"></i>
 					</div>
 					<br>
-					<div id="rejectedOpportunitiesList">
+					<div id="rejectedOpportunitiesList" class="scrolling-wrapper">
 						<div id="rejectedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>					
@@ -427,7 +422,7 @@
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Recommended Opportunities"></i>
 					</div>
 					<br>
-					<div id="recommendedOpportunitiesList">
+					<div id="recommendedOpportunitiesList" class="scrolling-wrapper">
 						<div id="recommendedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>
@@ -441,7 +436,7 @@
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></i>
 					</div>
 					<br>
-					<div id="pendingActiveOpportunitiesList">
+					<div id="pendingActiveOpportunitiesList" class="scrolling-wrapper">
 						<div id="pendingActiveOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>

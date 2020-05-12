@@ -49,7 +49,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -1258,7 +1258,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -2466,7 +2466,7 @@ var energyintensiveindustryCostSites = [
                                         ]
                                     },
                                 ],
-                                "Cost - Energy Intensive Industriey" : [
+                                "Cost - Energy Intensive Industry" : [
                                     {"Date" :"2019-11-01 00:30:00", "Value" : 0.51},
                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.59},
                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.59},
@@ -3697,7 +3697,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -4906,7 +4906,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -6124,7 +6124,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -7333,7 +7333,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -8551,7 +8551,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -9760,7 +9760,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -10978,7 +10978,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -12187,7 +12187,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                                         {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                                         {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -13395,7 +13395,7 @@ var energyintensiveindustryCostSites = [
                                         ]
                                     },
                                 ],
-                                "Cost - Energy Intensive Industriey" : [
+                                "Cost - Energy Intensive Industry" : [
                                     {"Date" :"2019-11-01 00:30:00", "Value" : 0.21},
                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.29},
                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.29},
@@ -14613,7 +14613,7 @@ var energyintensiveindustryCostSites = [
                                         {"Commodities" : "Gas"},
                                         {"Icon" : "fas fa-stopwatch"}
                                 ],
-                                "Cost - Energy Intensive Industriey" : [
+                                "Cost - Energy Intensive Industry" : [
                                     {"Date" :"2019-11-01 00:30:00", "Value" : 0.02},
                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.07},
                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.08},
@@ -15850,7 +15850,7 @@ var energyintensiveindustryCostSites = [
                                         {"Commodities" : "Gas"},
                                         {"Icon" : "fas fa-stopwatch"}
                                 ],
-                                "Cost - Energy Intensive Industriey" : [
+                                "Cost - Energy Intensive Industry" : [
                                     {"Date" :"2019-11-01 00:30:00", "Value" : 0.32},
                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.37},
                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.38},
@@ -17099,7 +17099,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.36},
                                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.36},
                                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.38},
@@ -18308,7 +18308,7 @@ var energyintensiveindustryCostSites = [
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
-                                                        "Cost - Energy Intensive Industriey" : [
+                                                        "Cost - Energy Intensive Industry" : [
                                                             {"Date" :"2019-11-01 00:30:00", "Value" : 0.32},
                                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.34},
                                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.32},
@@ -19516,7 +19516,7 @@ var energyintensiveindustryCostSites = [
                                         ]
                                     },
                                 ],
-                                "Cost - Energy Intensive Industriey" : [
+                                "Cost - Energy Intensive Industry" : [
                                     {"Date" :"2019-11-01 00:30:00", "Value" : 0.51},
                 {"Date" :"2019-11-01 01:00:00", "Value" : 0.59},
                 {"Date" :"2019-11-01 01:30:00", "Value" : 0.59},

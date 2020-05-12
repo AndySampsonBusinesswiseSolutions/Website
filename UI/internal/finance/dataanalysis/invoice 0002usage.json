@@ -2,6 +2,7 @@ var invoice0002UsageSites = [
     {
         "Attributes" :[
             {"Name" : "Leeds"},
+            {"GUID" : "Site0"},
             {"MaxDemand" : 300},
             {"Icon" : "fas fa-map-marker-alt"},
             {"Commodities" : "Electricity, Gas"},
@@ -10,6 +11,7 @@ var invoice0002UsageSites = [
             {
                 "Attributes" :[
                     {"Name" : "Factory"},
+                    {"GUID" : "Site0_Area0"},
                     {"Icon" : "fas fa-industry"},
                     {"Commodities" : "Electricity, Gas"},
                 ],
@@ -17,21 +19,24 @@ var invoice0002UsageSites = [
                     {
                         "Attributes" :[
                             {"Name" : "Electricity"},
+                            {"GUID" : "Site0_Area0_Commodity0"},
                             {"Icon" : "fas fa-bolt"},
                             {"Commodities" : "Electricity"},
                         ],
                         "Meters" :[
                             {
                                 "Attributes" :[
-                                        {"Name" : "1234567890123"},
-                                        {"Commodities" : "Electricity"},
-                                        {"MaxDemand" : 300},
-                                        {"Icon" : "fas fa-stopwatch"}
+                                    {"Name" : "1234567890123"},
+                                    {"GUID" : "Site0_Area0_Commodity0_Meter0"},
+                                    {"Commodities" : "Electricity"},
+                                    {"MaxDemand" : 300},
+                                    {"Icon" : "fas fa-stopwatch"}
                                 ],
                                 "SubAreas" :[
                                     {
                                         "Attributes" :[
                                             {"Name" : "Lighting"},
+                                            {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0"},
                                             {"Commodities" : "Electricity"},
                                             {"Icon" : "fas fa-industry"}
                                         ],
@@ -39,6 +44,7 @@ var invoice0002UsageSites = [
                                             {
                                                 "Attributes" :[
                                                     {"Name" : "Light 1"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0_Asset0"},
                                                     {"Commodities" : "Electricity"},
                                                     {"Icon" : "fas fa-industry"}
                                                 ],
@@ -46,6 +52,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "Light 1 Phase 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0_Asset0_SubMeter0"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
@@ -1543,6 +1550,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "Light 1 Phase 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0_Asset0_SubMeter1"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
@@ -4537,6 +4545,7 @@ var invoice0002UsageSites = [
                             {
                                 "Attributes" :[
                                         {"Name" : "1234567890124"},
+                                        {"GUID" : "Site0_Area0_Commodity0_Meter1"},
                                         {"Commodities" : "Electricity"},
                                         {"MaxDemand" : 300},
                                         {"Icon" : "fas fa-stopwatch"}
@@ -4545,6 +4554,7 @@ var invoice0002UsageSites = [
                                     {
                                         "Attributes" :[
                                             {"Name" : "Security Lighting"},
+                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0"},
                                             {"Commodities" : "Electricity"},
                                             {"Icon" : "fas fa-user-secret"}
                                         ],
@@ -4552,6 +4562,7 @@ var invoice0002UsageSites = [
                                             {
                                                 "Attributes" :[
                                                     {"Name" : "North Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset0"},
                                                     {"Commodities" : "Electricity"},
                                                     {"Icon" : "fas fa-user-secret"}
                                                 ],
@@ -4559,6 +4570,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "North Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset0_SubMeter0"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -6056,6 +6068,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "North Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset0_SubMeter1"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -7555,6 +7568,7 @@ var invoice0002UsageSites = [
                                             {
                                                 "Attributes" :[
                                                     {"Name" : "East Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset1"},
                                                     {"Commodities" : "Electricity"},
                                                     {"Icon" : "fas fa-user-secret"}
                                                 ],
@@ -7562,6 +7576,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "East Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset1_SubMeter0"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -9059,6 +9074,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "East Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset1_SubMeter1"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -10558,6 +10574,7 @@ var invoice0002UsageSites = [
                                             {
                                                 "Attributes" :[
                                                     {"Name" : "South Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset2"},
                                                     {"Commodities" : "Electricity"},
                                                     {"Icon" : "fas fa-user-secret"}
                                                 ],
@@ -10565,6 +10582,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "South Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset2_SubMeter0"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -12062,6 +12080,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "South Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset2_SubMeter1"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -13561,6 +13580,7 @@ var invoice0002UsageSites = [
                                             {
                                                 "Attributes" :[
                                                     {"Name" : "West Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset3"},
                                                     {"Commodities" : "Electricity"},
                                                     {"Icon" : "fas fa-user-secret"}
                                                 ],
@@ -13568,6 +13588,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "West Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset3_SubMeter0"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -15065,6 +15086,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "West Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset3_SubMeter1"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-user-secret"}
                                                         ],
@@ -18060,6 +18082,7 @@ var invoice0002UsageSites = [
                     {
                         "Attributes" :[
                             {"Name" : "Gas"},
+                            {"GUID" : "Site0_Area0_Commodity1"},
                             {"Icon" : "fas fa-burn"},
                             {"Commodities" : "Gas"},
                         ],
@@ -18067,6 +18090,7 @@ var invoice0002UsageSites = [
                             {
                                 "Attributes" :[
                                         {"Name" : "987654"},
+                                        {"GUID" : "Site0_Area0_Commodity1_Meter1"},
                                         {"Commodities" : "Gas"},
                                         {"Icon" : "fas fa-stopwatch"}
                                 ],
@@ -19570,6 +19594,7 @@ var invoice0002UsageSites = [
     {
         "Attributes" :[
             {"Name" : "Manchester"},
+            {"GUID" : "Site1"},
             {"MaxDemand" : 1200},
             {"Icon" : "fas fa-map-marker-alt"},
             {"Commodities" : "Electricity, Gas"},
@@ -19578,6 +19603,7 @@ var invoice0002UsageSites = [
             {
                 "Attributes" :[
                     {"Name" : "Office Mains"},
+                    {"GUID" : "Site1_Area0"},
                     {"Icon" : "fas fa-home"},
                     {"Commodities" : "Gas"},
                 ],
@@ -19585,6 +19611,7 @@ var invoice0002UsageSites = [
                     {
                         "Attributes" :[
                             {"Name" : "Gas"},
+                            {"GUID" : "Site1_Area0_Commodity0"},
                             {"Icon" : "fas fa-burn"},
                             {"Commodities" : "Gas"},
                         ],
@@ -19592,6 +19619,7 @@ var invoice0002UsageSites = [
                             {
                                 "Attributes" :[
                                         {"Name" : "987650"},
+                                        {"GUID" : "Site1_Area0_Commodity0_Meter0"},
                                         {"Commodities" : "Gas"},
                                         {"Icon" : "fas fa-stopwatch"}
                                 ],
@@ -21093,6 +21121,7 @@ var invoice0002UsageSites = [
             {
                 "Attributes" :[
                     {"Name" : "Factory Mains"},
+                    {"GUID" : "Site1_Area1"},
                     {"Icon" : "fas fa-lightbulb"},
                     {"Commodities" : "Electricity"},
                 ],
@@ -21100,21 +21129,24 @@ var invoice0002UsageSites = [
                     {
                         "Attributes" :[
                             {"Name" : "Electricity"},
+                            {"GUID" : "Site1_Area1_Commodity0"},
                             {"Icon" : "fas fa-bolt"},
                             {"Commodities" : "Electricity"},
                         ],
                         "Meters" :[
                             {
                                 "Attributes" :[
-                                        {"Name" : "1234567890120"},
-                                        {"Commodities" : "Electricity"},
-                                        {"MaxDemand" : 1200},
-                                        {"Icon" : "fas fa-stopwatch"}
+                                    {"Name" : "1234567890120"},
+                                    {"GUID" : "Site1_Area1_Commodity0_Meter0"},
+                                    {"Commodities" : "Electricity"},
+                                    {"MaxDemand" : 1200},
+                                    {"Icon" : "fas fa-stopwatch"}
                                 ],
                                 "SubAreas" :[
                                     {
                                         "Attributes" :[
                                             {"Name" : "Lighting"},
+                                            {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0"},
                                             {"Commodities" : "Electricity"},
                                             {"Icon" : "fas fa-user-secret"}
                                         ],
@@ -21122,6 +21154,7 @@ var invoice0002UsageSites = [
                                             {
                                                 "Attributes" :[
                                                     {"Name" : "Factory Lighting"},
+                                                    {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0_Asset0"},
                                                     {"Commodities" : "Electricity"},
                                                     {"Icon" : "fas fa-industry"}
                                                 ],
@@ -21129,6 +21162,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "Factory Lighting Sub Meter 1"},
+                                                            {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0_Asset0_SubMeter0"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],
@@ -22626,6 +22660,7 @@ var invoice0002UsageSites = [
                                                     {
                                                         "Attributes" :[
                                                             {"Name" : "Factory Lighting Sub Meter 2"},
+                                                            {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0_Asset0_SubMeter1"},
                                                             {"Commodities" : "Electricity"},
                                                             {"Icon" : "fas fa-industry"}
                                                         ],

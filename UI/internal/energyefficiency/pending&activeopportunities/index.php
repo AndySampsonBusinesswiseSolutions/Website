@@ -13,54 +13,49 @@
 
 <body>
 	<div id="mySidenav" class="sidenav">
-		<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-		<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		<div style="text-align: center;">
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
+			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); setGanttChartWidth()" title="Click To Lock Sidebar"></i>
+			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
+		</div>
 		<div class="tree-column">
-			<div class="dashboard roundborder outer-container">
+			<div id="treeDisplayList" class="sidebar-tree-div dashboard roundborder">
 				<div class="expander-header">
-					<span id="selectOptionsSpan">Select Options</span>
-					<i id="selectOptions" class="far fa-plus-square expander show-pointer openExpander"></i>
+					<span id="treeDisplayOrderSpan">Tree Display Order</span>
+					<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
-				<div id="selectOptionsList" class="expander-container">
-					<div id="treeDisplayList" class="sidebar-tree-div roundborder">
-						<div class="expander-header">
-							<span id="treeDisplayOrderSpan">Tree Display Order</span>
-							<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="treeDisplayOrderList" class="expander-container">
-							<ul id="treeDisplayOrderList" class="format-listitem toplistitem">
-								<li>
-									<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "siteTree", "updateGanttChartAndDataGrid()");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
-								</li>
-								<li>
-									<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "siteTree", "updateGanttChartAndDataGrid()");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
-								</li>
-							</ul>
-						</div>
-					</div>
-					<br>
-					<div id="siteTree" class="sidebar-tree-div roundborder">
-					</div>
-					<br>
-					<div id="projectList" class="sidebar-tree-div roundborder">
-						<div class="expander-header">
-							<span id="projectStatusSpan">Project Status</span>
-							<i id="projectStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="projectStatusList" class="expander-container">
-							<ul class="format-listitem toplistitem">
-								<li>
-									<input type="radio" name="group2" value="All" id="allStatusradio" checked onclick='updateGanttChartAndDataGrid()'><span id="allStatusspan" style="padding-left: 1px;">All</span>
-								</li>
-								<li>
-									<input type="radio" name="group2" value="Pending" id="pendingStatusradio" onclick='updateGanttChartAndDataGrid()'><span id="pendingStatusspan" style="padding-left: 1px;">Pending</span>
-								</li>
-								<li>
-									<input type="radio" name="group2" value="Active" id="activeStatusradio" onclick='updateGanttChartAndDataGrid()'><span id="activeStatusspan" style="padding-left: 1px;">Active</span>
-								</li>
-							</ul>
-						</div>
-					</div>
+				<div id="treeDisplayOrderList" class="expander-container">
+					<ul id="treeDisplayOrderList" class="format-listitem listItemWithoutPadding">
+						<li>
+							<input type="radio" name="group1" value="Project" id="projectOrderradio" checked onclick='createTree(activeopportunity, "siteTree", "updateGanttChartAndDataGrid()");'><span id="projectOrderspan" style="padding-left: 1px;">Project -> Site -> Meter</span>
+						</li>
+						<li>
+							<input type="radio" name="group1" value="Site" id="siteOrderradio" onclick='createTree(activeopportunity, "siteTree", "updateGanttChartAndDataGrid()");'><span id="siteOrderspan" style="padding-left: 1px;">Site -> Project -> Meter</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<br>
+			<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
+			</div>
+			<br>
+			<div id="projectList" class="sidebar-tree-div dashboard roundborder">
+				<div class="expander-header">
+					<span id="projectStatusSpan">Project Status</span>
+					<i id="projectStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
+				</div>
+				<div id="projectStatusList" class="expander-container">
+					<ul class="format-listitem listItemWithoutPadding">
+						<li>
+							<input type="radio" name="group2" value="All" id="allStatusradio" checked onclick='updateGanttChartAndDataGrid()'><span id="allStatusspan" style="padding-left: 1px;">All</span>
+						</li>
+						<li>
+							<input type="radio" name="group2" value="Pending" id="pendingStatusradio" onclick='updateGanttChartAndDataGrid()'><span id="pendingStatusspan" style="padding-left: 1px;">Pending</span>
+						</li>
+						<li>
+							<input type="radio" name="group2" value="Active" id="activeStatusradio" onclick='updateGanttChartAndDataGrid()'><span id="activeStatusspan" style="padding-left: 1px;">Active</span>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>
