@@ -55,9 +55,8 @@
         <i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
         <div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
       </div>
-      <br>
       <div class="final-column">
-        <div id="electricityVolumeContainer" class="dashboard roundborder outer-container">
+        <div id="electricityVolumeContainer" class="dashboard outer-container">
           <div class="expander-header">
             <span>Electricity Volume</span>
               <i id="electricityVolume" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -68,7 +67,7 @@
             <div id="electricityVolumeChart"></div>
           </div>
         </div>
-        <div id="electricityPriceContainer" class="dashboard roundborder outer-container expander-container">
+        <div id="electricityPriceContainer" class="dashboard outer-container expander-container">
             <div class="expander-header">
               <span>Electricity Price</span>
               <i id="electricityPrice" class="far fa-plus-square show-pointer expander"></i>
@@ -79,7 +78,7 @@
                 <div id="electricityPriceChart"></div>
             </div>
         </div>
-        <div id="gasVolumeContainer" class="dashboard roundborder outer-container expander-container">
+        <div id="gasVolumeContainer" class="dashboard outer-container expander-container">
             <div class="expander-header">
               <span>Gas Volume</span>
               <i id="gasVolume" class="far fa-plus-square show-pointer expander"></i>
@@ -90,7 +89,7 @@
                 <div id="gasVolumeChart"></div>
             </div>
         </div>
-        <div id="gasPriceContainer" class="dashboard roundborder outer-container expander-container">
+        <div id="gasPriceContainer" class="dashboard outer-container expander-container">
             <div class="expander-header">
                 <span>Gas Price</span>
                 <i id="gasPrice" class="far fa-plus-square show-pointer expander"></i>
@@ -101,7 +100,7 @@
                 <div id="gasPriceChart"></div>
             </div>
         </div>
-        <div id="electricityDatagridsContainer" class="dashboard roundborder outer-container expander-container">
+        <div id="electricityDatagridsContainer" class="dashboard outer-container expander-container">
             <div class="expander-header">
                 <span>Electricity Datagrids</span>
                 <i id="electricityDatagrids" class="far fa-plus-square show-pointer expander"></i>
@@ -118,7 +117,7 @@
               <div class="last"></div>
             </div>
         </div>
-        <div id="gasDatagridsContainer" class="dashboard roundborder outer-container expander-container">
+        <div id="gasDatagridsContainer" class="dashboard outer-container expander-container">
             <div class="expander-header">
                 <span>Gas Datagrids</span>
                 <i id="gasDatagrids" class="far fa-plus-square show-pointer expander"></i>
@@ -136,7 +135,6 @@
             </div>
         </div>
       </div> 
-      <br>
     </div>
   </div>
 </body>

@@ -1,8 +1,7 @@
 function pageLoad() {
-  createTree(activeopportunity, "siteTree", "", true);
-  setOpenExpanders();
+  createGroupingOptionTree();
+  createTree("updateGraphs()");
   updateGraphs();
-  loadDataGrid();
 
   document.onmousemove = function(e) {
     setupSidebarHeight();
@@ -14,46 +13,74 @@ function pageLoad() {
   };
 }
 
+function createGroupingOptionTree() {
+  var div = document.getElementById('groupingOptionTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("groupingOptionHeader", "Grouping Option", true);
+  var ul = createBranchUl("groupingOptionSelector", false, true);
+
+  var groupingOption2GroupingOptionListItem = appendListItemChildren('groupingOption2GroupingOptionSelector', false, 'updateGraphs()', [{"Name" : "No Grouping"}], 'groupingOptionSelector', false, 'radio', 'groupingOptionGroup');
+  var groupingOption1GroupingOptionListItem = appendListItemChildren('groupingOption1GroupingOptionSelector', false, 'updateGraphs()', [{"Name" : "Group"}], 'groupingOptionSelector', true, 'radio', 'groupingOptionGroup');
+
+  ul.appendChild(groupingOption2GroupingOptionListItem);
+  ul.appendChild(groupingOption1GroupingOptionListItem);
+
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
+}
+
 function loadDataGrid() {
+  clearElement(document.getElementById('spreadsheet'));
 	var opportunities = [];
 
-	var row = {
-		projectName:'LED Lighting',
-    site:'Site X',
-    meter:'N/A',
-    engineer:'En Gineer',
-    startDate:'01/01/2017',
-    finishDate:'28/02/2017',
-    cost:'£55,000',
-    actualVolumeSavings:'10,000',
-    actualCostSavings:'£65,000',
-    estimatedVolumeSavings: '9,000',
-    estimatedCostSavings:'£60,000',
-    netVolumeSavings:'45,000',
-    netCostSavings:'£140,000',
-    totalROIMonths:'9',
-    remainingROIMonths:'0'
-	}
-  opportunities.push(row);
+  var row = null;
   
-  row = {
-		projectName:'LED Lighting 2',
-    site:'Site Y',
-    meter:'N/A',
-    engineer:'En Gineer',
-    startDate:'01/08/2019',
-    finishDate:'15/08/2019',
-    cost:'£10,000',
-    actualVolumeSavings:'5,000',
-    actualCostSavings:'£60,000',
-    estimatedVolumeSavings: '9,000',
-    estimatedCostSavings:'£160,000',
-    netVolumeSavings:'45,000',
-    netCostSavings:'£120,000',
-    totalROIMonths:'2',
-    remainingROIMonths:'0'
-	}
-	opportunities.push(row);
+  if(Project13checkbox.checked 
+    || Site114checkbox.checked
+    || Meter14checkbox.checked) {
+    row = {
+      projectName:'LED Lighting',
+      site:'Site X',
+      meter:'1234567890123',
+      engineer:'En Gineer',
+      startDate:'01/01/2017',
+      finishDate:'28/02/2017',
+      cost:'£55,000',
+      actualVolumeSavings:'10,000',
+      actualCostSavings:'£65,000',
+      estimatedVolumeSavings: '9,000',
+      estimatedCostSavings:'£60,000',
+      netVolumeSavings:'45,000',
+      netCostSavings:'£140,000',
+      totalROIMonths:'9',
+      remainingROIMonths:'0'
+    }
+    opportunities.push(row);
+  }
+  
+  if(Project15checkbox.checked 
+    || Site116checkbox.checked
+    || Meter16checkbox.checked) {
+    row = {
+      projectName:'LED Lighting 2',
+      site:'Site A',
+      meter:'1234567890124',
+      engineer:'En Gineer',
+      startDate:'01/08/2019',
+      finishDate:'15/08/2019',
+      cost:'£10,000',
+      actualVolumeSavings:'5,000',
+      actualCostSavings:'£60,000',
+      estimatedVolumeSavings: '9,000',
+      estimatedCostSavings:'£160,000',
+      netVolumeSavings:'45,000',
+      netCostSavings:'£120,000',
+      totalROIMonths:'2',
+      remainingROIMonths:'0'
+    }
+    opportunities.push(row);
+  }  
 
 	jexcel(document.getElementById('spreadsheet'), {
 		pagination:10,
@@ -69,7 +96,7 @@ function loadDataGrid() {
 		columns: [
       {type:'text', width:'150px', name:'projectName', title:'Project Name', readOnly: true},
       {type:'text', width:'118px', name:'site', title:'Site', readOnly: true},
-      {type:'text', width:'118px', name:'meter', title:'Meter', readOnly: true},
+      {type:'text', width:'128px', name:'meter', title:'Meter', readOnly: true},
       {type:'text', width:'118px', name:'engineer', title:'Engineer', readOnly: true},
       {type:'text', width:'118px', name:'startDate', title:'Start Date', readOnly: true},
       {type:'text', width:'118px', name:'finishDate', title:'Finish Date', readOnly: true},
@@ -87,446 +114,449 @@ function loadDataGrid() {
 }
 
 function updateGraphs() {
-  var cumulativeSavingSeries = [{
-    name: 'CAPEX/OPEX',
-    type: 'bar',
+  var cumulativeSavingSeries = [];
+
+  if(capexFinancialsSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('CAPEX', 'bar', 'CAPEX'));
+  }
+
+  if(opexFinancialsSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('OPEX', 'bar', 'OPEX'));
+  }
+
+  if(savingsFinancialsSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('Savings', 'line', 'Savings'));
+  }
+
+  if(cumulativeSavingsFinancialsSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('Cumulative Savings', 'line', 'CumulativeSavings'));
+  }
+
+  if(includeCAPEXCumulativeSavingSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('Cumulative Savings Inc CAPEX', 'line', 'CumulativeSavingsIncludingCAPEX'));
+  }
+
+  if(includeOPEXCumulativeSavingSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('Cumulative Savings Inc OPEX', 'line', 'CumulativeSavingsIncludingOPEX'));
+  }
+
+  if(includeCAPEXCumulativeSavingSelectorcheckbox.checked && includeOPEXCumulativeSavingSelectorcheckbox.checked) {
+    cumulativeSavingSeries.push(...createDisplayData('Cumulative Savings Inc CAPEX & OPEX', 'line', 'CumulativeSavingsIncludingCAPEXAndOPEX'));
+  }
+
+  var costSavingSeries = [{
+      name: 'Estimated Cost Saving',
       data: [
-              -55000, 0, 0, 0, 0, 0, 
-              0, 0, 0, 0, 0, 0, 
-              0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0,
-              -10000, 0, 0, 0, 0, 0
+                4718,4718,4718,4718,4718,4718,4718,4718,
+                3888,3888,3888,3888,3888,3888,3888,3888,
+                4536,4536,4536,4536,4536,4536,4536,4536,
+                3905,3905,3905,3905,3905,3905,3905,3905,
+                4558,4558,4558,4558,4558,4558,4558,4558,
+                3907,3907,3907,3907,3907,3907,3907,3907,
+              ]
+    },{
+      name: 'Actual Cost Saving',
+      data: [
+                5718,5718,5718,5718,5718,5718,
+                4888,4888,4888,4888,4888,4888,
+                5536,5536,5536,5536,5536,5536,
+                4905,4905,4905,4905,4905,4905,
+                5558,5558,5558,5558,5558,5558,
+                4907,4907,4907,4907,4907,4907
+              ]
+    }];
+
+  var volumeSavingSeries = [
+    {
+      name: 'Estimated kWh Saving',
+      data: [
+                3990,3990,3990,3990,3990,3990,3990,3990,
+                3310,3310,3310,3310,3310,3310,3310,3310,
+                4030,4030,4030,4030,4030,4030,4030,4030,
+                3340,3340,3340,3340,3340,3340,3340,3340,
+                4010,4010,4010,4010,4010,4010,4010,4010,
+                3350,3350,3350,3350,3350,3350,3350,3350,
             ]
     }, {
-    name: 'Cumulative £ Saving',
-    type: 'line',
+      name: 'Actual kWh Saving',
       data: [
-      -49583.3333333333,-44166.6666666667,-38750,-33333.3333333333,-27916.6666666667,-22500,
-  -17083.3333333333,-11666.6666666667,-6250,-833.333333333338,4583.33333333333,10000,
-  15416.6666666667,20833.3333333333,26250,31666.6666666667,37083.3333333333,42500,
-  47916.6666666667,53333.3333333333,58750,64166.6666666667,69583.3333333333,75000,
-  80416.6666666667,85833.3333333333,91250,96666.6666666667,102083.333333333,107500,
-  107916.666666667,118333.333333333,128750,139166.666666667,149583.333333333,160000
-  
-            ]
-    }, {
-    name: 'LED Lighting - Site X',
-    type: 'line',
-      data: [
-      -49583.33,-44166.66,-38749.99,-33333.32,-27916.65,-22499.98,
-  -17083.31,-11666.64,-6249.97,-833.300000000003,4583.37,10000.04,
-  15416.71,20833.38,26250.05,31666.72,37083.39,42500.06,
-  47916.73,53333.4,58750.07,64166.74,69583.41,75000.08,
-  80416.75,85833.42,91250.09,96666.76,102083.43,107500.1,
-  112916.77,118333.44,123750.11,129166.78,134583.45,140000.12
-            ]
-    }, {
-    name: 'LED Lighting - Site Y',
-    type: 'line',
-      data: [
-      null,null,null,null,null,null,
-      null,null,null,null,null,null,
-      null,null,null,null,null,null,
-      null,null,null,null,null,null,
-      null,null,null,null,null,null,
-      -5000,0,5000,10000,15000,20000
+                4990,4990,4990,4990,4990,4990,
+                4310,4310,4310,4310,4310,4310,
+                5030,5030,5030,5030,5030,5030,
+                4340,4340,4340,4340,4340,4340,
+                5010,5010,5010,5010,5010,5010,
+                4350,4350,4350,4350,4350,4350,
             ]
     }];
+
+  var electricityCategories = [
+    '02 2017', '03 2017', '04 2017', '05 2017', '06 2017', '07 2017', 
+    '08 2017', '09 2017', '10 2017', '11 2017', '12 2017', '01 2018', 
+    '02 2018', '03 2018', '04 2018', '05 2018', '06 2018', '07 2018', 
+    '08 2018', '09 2018', '10 2018', '11 2018', '12 2018', '01 2019', 
+    '02 2019', '03 2019', '04 2019', '05 2019', '06 2019', '07 2019', 
+    '08 2019', '09 2019', '10 2019', '11 2019', '12 2019', '01 2020', 
+    '02 2020', '03 2020', '04 2020', '05 2020', '06 2020', '07 2020', 
+    '08 2020', '09 2020', '10 2020', '11 2020', '12 2020', '01 2021'
+    ];
     
-    var costSavingSeries = [{
-        name: 'Estimated Cost Saving',
-        data: [
-                  4718,4718,4718,4718,4718,4718,4718,4718,
-                  3888,3888,3888,3888,3888,3888,3888,3888,
-                  4536,4536,4536,4536,4536,4536,4536,4536,
-                  3905,3905,3905,3905,3905,3905,3905,3905,
-                  4558,4558,4558,4558,4558,4558,4558,4558,
-                  3907,3907,3907,3907,3907,3907,3907,3907,
-                ]
-      },{
-        name: 'Actual Cost Saving',
-        data: [
-                  5718,5718,5718,5718,5718,5718,
-                  4888,4888,4888,4888,4888,4888,
-                  5536,5536,5536,5536,5536,5536,
-                  4905,4905,4905,4905,4905,4905,
-                  5558,5558,5558,5558,5558,5558,
-                  4907,4907,4907,4907,4907,4907
-                ]
-      }];
-  
-    var volumeSavingSeries = [
-      {
-        name: 'Estimated kWh Saving',
-        data: [
-                  3990,3990,3990,3990,3990,3990,3990,3990,
-                  3310,3310,3310,3310,3310,3310,3310,3310,
-                  4030,4030,4030,4030,4030,4030,4030,4030,
-                  3340,3340,3340,3340,3340,3340,3340,3340,
-                  4010,4010,4010,4010,4010,4010,4010,4010,
-                  3350,3350,3350,3350,3350,3350,3350,3350,
-              ]
-      }, {
-        name: 'Actual kWh Saving',
-        data: [
-                  4990,4990,4990,4990,4990,4990,
-                  4310,4310,4310,4310,4310,4310,
-                  5030,5030,5030,5030,5030,5030,
-                  4340,4340,4340,4340,4340,4340,
-                  5010,5010,5010,5010,5010,5010,
-                  4350,4350,4350,4350,4350,4350,
-              ]
-      }];
-  
-    var electricityCategories = [
-      '02 2017', '03 2017', '04 2017',
-      '05 2017', '06 2017', '07 2017', '08 2017', '09 2017', '10 2017', '11 2017', '12 2017', '01 2018', '02 2018', '03 2018', '04 2018',
-      '05 2018', '06 2018', '07 2018', '08 2018', '09 2018', '10 2018', '11 2018', '12 2018', '01 2019', '02 2019', '03 2019', '04 2019',
-      '05 2019', '06 2019', '07 2019', '08 2019', '09 2019', '10 2019', '11 2019', '12 2019', '01 2020', '02 2020', '03 2020', '04 2020',
-      '05 2020', '06 2020', '07 2020', '08 2020', '09 2020', '10 2020', '11 2020', '12 2020', '01 2021'
-      ];
-      
-    var cumulativeSavingOptions = {
-      chart: {
-        type: 'line'
-      },
-      tooltip: {
-          x: {
-          format: getChartTooltipXFormat("Yearly")
-          }
-      },
-      xaxis: {
-          title: {
-          text: ''
-          },
-          labels: {
-          format: getChartXAxisLabelFormat('Weekly')
-          },
-          categories: electricityCategories
-      },
-      yaxis: [{
+  var cumulativeSavingOptions = {
+    chart: {
+      type: 'line'
+    },
+    tooltip: {
+        x: {
+        format: getChartTooltipXFormat("Yearly")
+        }
+    },
+    xaxis: {
         title: {
-          text: '£'
+        text: ''
         },
-        forceNiceScale: true,
-      labels: {
-        formatter: function(val) {
-          return '£' + val.toLocaleString();
-        }
-      },
-      decimalsInFloat: 0
-      }]
-    };
-  
-    var costSavingOptions = {
-      chart: {
-        type: 'bar',
-        stacked: false
-      },
-      tooltip: {
-          x: {
-          format: getChartTooltipXFormat("Yearly")
-          }
-      },
-      xaxis: {
-          title: {
-          text: ''
-          },
-          labels: {
-          format: getChartXAxisLabelFormat('Weekly')
-          },
-          categories: electricityCategories
-      },
-      yaxis: [
-      {
-      show: true,
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        style: {
-        color: '#00E396',
-        }
-      },
+        labels: {
+        format: getChartXAxisLabelFormat('Weekly')
+        },
+        categories: electricityCategories
+    },
+    yaxis: [{
       title: {
-        text: "£"
+        text: '£'
       },
       forceNiceScale: true,
-      labels: {
-        formatter: function(val) {
-          return '£' + val.toLocaleString();
+    labels: {
+      formatter: function(val) {
+        return '£' + val.toLocaleString();
+      }
+    },
+    decimalsInFloat: 0
+    }]
+  };
+
+  var costSavingOptions = {
+    chart: {
+      type: 'bar',
+      stacked: false
+    },
+    tooltip: {
+        x: {
+        format: getChartTooltipXFormat("Yearly")
         }
-      },
-      }]
-    };
+    },
+    xaxis: {
+        title: {
+        text: ''
+        },
+        labels: {
+        format: getChartXAxisLabelFormat('Weekly')
+        },
+        categories: electricityCategories
+    },
+    yaxis: [
+    {
+    show: true,
+    axisTicks: {
+      show: false,
+    },
+    labels: {
+      style: {
+      color: '#00E396',
+      }
+    },
+    title: {
+      text: "£"
+    },
+    forceNiceScale: true,
+    labels: {
+      formatter: function(val) {
+        return '£' + val.toLocaleString();
+      }
+    },
+    }]
+  };
+
+  var volumeSavingOptions = {
+    chart: {
+      type: 'bar',
+      stacked: false
+    },
+    tooltip: {
+        x: {
+        format: getChartTooltipXFormat("Yearly")
+        }
+    },
+    xaxis: {
+        title: {
+        text: ''
+        },
+        labels: {
+        format: getChartXAxisLabelFormat('Weekly')
+        },
+        categories: electricityCategories
+    },
+    yaxis: [
+    {
+    show: true,
+    axisTicks: {
+      show: false,
+    },
+    labels: {
+      style: {
+      color: '#00E396',
+      }
+    },
+    title: {
+      text: "kWh"
+    },
+    forceNiceScale: true,
+    labels: {
+      formatter: function(val) {
+        return val.toLocaleString();
+      }
+    },
+    }]
+  };
   
-    var volumeSavingOptions = {
-      chart: {
-        type: 'bar',
-        stacked: false
-      },
-      tooltip: {
-          x: {
-          format: getChartTooltipXFormat("Yearly")
+  refreshChart(cumulativeSavingSeries, "#cumulativeSavingChart", cumulativeSavingOptions);
+  refreshChart(costSavingSeries, "#costSavingChart", costSavingOptions);
+  refreshChart(volumeSavingSeries, "#volumeSavingChart", volumeSavingOptions);
+
+  loadDataGrid();
+}
+
+function createDisplayData(name, type, attribute) {
+  var displayData = [];
+
+  var site1Selected = Project13checkbox.checked 
+  || Site114checkbox.checked
+  || Meter14checkbox.checked;
+  var site2Selected = Project15checkbox.checked 
+  || Site116checkbox.checked
+  || Meter16checkbox.checked;
+
+  if(groupingOption1GroupingOptionSelectorradio.checked) {
+    var data = [];
+
+    if(site1Selected && !site2Selected) {
+      data = JSON.parse(JSON.stringify(finishedopportunitySite[0].Projects[0].Meters[0][attribute]));
+    }
+    else if(!site1Selected && site2Selected) {
+      data = JSON.parse(JSON.stringify(finishedopportunitySite[1].Projects[0].Meters[0][attribute]));
+    }
+    else if(site1Selected && site2Selected) {
+      data = JSON.parse(JSON.stringify(finishedopportunitySite[0].Projects[0].Meters[0][attribute]));
+
+      for(var i = 0; i < finishedopportunitySite[1].Projects[0].Meters[0][attribute].length; i++) {
+        if(finishedopportunitySite[1].Projects[0].Meters[0][attribute][i] != null) {
+          if(data[i] == null) {
+            data[i] = JSON.parse(JSON.stringify(finishedopportunitySite[1].Projects[0].Meters[0][attribute][i]));
           }
-      },
-      xaxis: {
-          title: {
-          text: ''
-          },
-          labels: {
-          format: getChartXAxisLabelFormat('Weekly')
-          },
-          categories: electricityCategories
-      },
-      yaxis: [
-      {
-      show: true,
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        style: {
-        color: '#00E396',
-        }
-      },
-      title: {
-        text: "kWh"
-      },
-      forceNiceScale: true,
-      labels: {
-        formatter: function(val) {
-          return val.toLocaleString();
-        }
-      },
-      }]
-    };
-    
-    refreshChart(cumulativeSavingSeries, "#cumulativeSavingChart", cumulativeSavingOptions);
-    refreshChart(costSavingSeries, "#costSavingChart", costSavingOptions);
-    refreshChart(volumeSavingSeries, "#volumeSavingChart", volumeSavingOptions);
-}
-
-var branchCount = 0;
-var subBranchCount = 0;
-
-function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
-    var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
-
-    var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
-    var ul = createBranchUl("siteSelector", false, true);
-
-    tree.appendChild(ul);
-
-    branchCount = 0;
-    subBranchCount = 0; 
-
-    var order = $("input[type='radio'][name='group1']:checked").val();
-    if(order == "Project") {
-        buildTree(baseData, ul, checkboxFunction);
-    }
-    else {
-        buildSiteProjectTree(baseData, ul, checkboxFunction);
-    }
-
-    var div = document.getElementById(divId);
-    clearElement(div);
-
-    div.appendChild(headerDiv);
-    div.appendChild(tree);
-
-    addExpanderOnClickEvents();
-
-    if(!isPageLoading) {
-      updateClassOnClick('siteTreeSelector', 'fa-plus-square', 'fa-minus-square');
-    }
-}
-
-function buildTree(baseData, baseElement, checkboxFunction) {
-    var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
-        var baseName = getAttribute(base.Attributes, 'ProjectName');
-        var li = document.createElement('li');
-        var ul = createUL();
-
-        buildSite(base.Sites, ul, checkboxFunction, baseName);
-        appendListItemChildren(li, 'ProjectName'.concat(base.GUID), checkboxFunction, 'ProjectName', baseName, ul, baseName, base.GUID);
-
-        baseElement.appendChild(li);        
-    }
-}
-
-function buildSiteProjectTree(baseData, baseElement, checkboxFunction) {
-  var siteNames = [];
-  var sites = [];
-
-  var dataLength = baseData.length;
-  for(var i = 0; i < dataLength; i++){
-      var project = baseData[i];
-      var siteLength = project.Sites.length;
-
-      for(var j = 0; j < siteLength; j++) {
-          if(!siteNames.includes(project.Sites[j].SiteName)) {
-              siteNames.push(project.Sites[j].SiteName);
-              sites.push(project.Sites[j]);
+          else {
+            data[i] += JSON.parse(JSON.stringify(finishedopportunitySite[1].Projects[0].Meters[0][attribute][i]));
           }
+        }
       }
+    }
+
+    displayData.push({
+      name: name,
+      type: type,
+      data: data
+    });
+  }
+  else {
+    if(site1Selected) {
+      displayData.push({
+        name: name + ' - LED Lighting - Site X',
+        type: type,
+        data: JSON.parse(JSON.stringify(finishedopportunitySite[0].Projects[0].Meters[0][attribute]))
+      });
+    }
+
+    if(site2Selected) {
+      displayData.push({
+        name: name + ' - LED Lighting 2 - Site A',
+        type: type,
+        data: JSON.parse(JSON.stringify(finishedopportunitySite[1].Projects[0].Meters[0][attribute]))
+      });
+    }
   }
 
-  dataLength = sites.length;
-  for(var i = 0; i < dataLength; i++) {
-      var base = sites[i];
-      var li = document.createElement('li');
-      var ul = createUL();
-      
-      var projectNames = [];
-      var projects = [];
+  return displayData;
+}
 
-      for(var j = 0; j < baseData.length; j++){
-          var project = baseData[j];
-          var projectName = getAttribute(project.Attributes, 'ProjectName');
-          var siteLength = project.Sites.length;
+function createTree(functions) {
+  var div = document.getElementById("siteTree");
+  clearElement(div);
+  
+  var tree = document.createElement('div');
+  tree.setAttribute('class', 'scrolling-wrapper');
 
-          for(var k = 0; k < siteLength; k++) {
-              if(project.Sites[k].SiteName == base.SiteName) {
-                  if(!projectNames.includes(projectName)) {
-                      projectNames.push(projectName);
-                      projects.push({project: project, meters: project.Sites[k].Meters});
-                  }
-              }
-          }
+  var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
+  var ul = createBranchUl("siteSelector", false, true);
+
+  tree.appendChild(ul);
+
+  var order = $("input[type='radio'][name='group1']:checked").val();
+  if(order == "Project") {
+    buildProjectSiteProjectBranch(finishedopportunityProject, ul, functions);
+  }
+  else {
+    buildSiteProjectSiteBranch(finishedopportunitySite, ul, functions);
+  }
+
+  var breakDisplayListItem = document.createElement('li');
+  breakDisplayListItem.innerHTML = '<br>';
+
+  ul.appendChild(breakDisplayListItem);
+  ul.appendChild(buildFinancialsBranch());  
+
+  div.appendChild(headerDiv);
+  div.appendChild(tree);
+
+  addExpanderOnClickEvents();
+  setOpenExpanders();
+}
+
+function buildFinancialsBranch() {
+  var financialsListItem = appendListItemChildren('financialsSelector', true, '', [{"Name" : "Project Financials"}], 'financialsSelector', true, 'checkbox', 'financialsGroup');
+  financialsListItem.id = "financialsTree";
+
+  var financialsSelectorListUl = financialsListItem.getElementsByTagName('ul')[0];
+  var capexFinancialsListItem = appendListItemChildren('capexFinancialsSelector', false, 'updateGraphs()', [{"Name" : "CAPEX"}], 'financialsSelector', true, 'checkbox', 'selectSpecificFinancialsGroup');
+  var opexFinancialsListItem = appendListItemChildren('opexFinancialsSelector', false, 'updateGraphs()', [{"Name" : "OPEX"}], 'financialsSelector', true, 'checkbox', 'selectSpecificFinancialsGroup');
+  var savingsFinancialsListItem = appendListItemChildren('savingsFinancialsSelector', false, 'updateGraphs()', [{"Name" : "Savings"}], 'financialsSelector', true, 'checkbox', 'selectSpecificFinancialsGroup');
+  var cumulativeSavingsFinancialsListItem = appendListItemChildren('cumulativeSavingsFinancialsSelector', true, 'updateGraphs()', [{"Name" : "Cumulative Savings"}], 'financialsSelector', true, 'checkbox', 'selectSpecificFinancialsGroup');
+  
+  financialsSelectorListUl.appendChild(capexFinancialsListItem);
+  financialsSelectorListUl.appendChild(opexFinancialsListItem);
+  financialsSelectorListUl.appendChild(savingsFinancialsListItem);
+  financialsSelectorListUl.appendChild(cumulativeSavingsFinancialsListItem);
+
+  var cumulativeSavingsFinancialsSelectorListUl = cumulativeSavingsFinancialsListItem.getElementsByTagName('ul')[0];
+  var includeCAPEXCumulativeSavingListItem = appendListItemChildren('includeCAPEXCumulativeSavingSelector', false, 'updateGraphs()', [{"Name" : "Include CAPEX"}], 'invoiceSelector', true, 'checkbox', 'selectSpecificInvoiceGroup');
+  var includeOPEXCumulativeSavingListItem = appendListItemChildren('includeOPEXCumulativeSavingSelector', false, 'updateGraphs()', [{"Name" : "Include OPEX"}], 'invoiceSelector', true, 'checkbox', 'selectSpecificInvoiceGroup');
+
+  cumulativeSavingsFinancialsSelectorListUl.appendChild(includeCAPEXCumulativeSavingListItem);
+  cumulativeSavingsFinancialsSelectorListUl.appendChild(includeOPEXCumulativeSavingListItem);
+
+  return financialsListItem;
+}
+
+function buildProjectSiteProjectBranch(projects, elementToAppendTo, functions) {
+  var projectLength = projects.length;
+
+  if(projectLocationcheckbox.checked) {
+    for(var projectCount = 0; projectCount < projectLength; projectCount++) {
+      var project = projects[projectCount];
+      var listItem = appendListItemChildren('Project' + getAttribute(project.Attributes, "GUID"), project.hasOwnProperty('Sites'), functions, project.Attributes, 'Project', true);
+      elementToAppendTo.appendChild(listItem);
+
+      if(project.hasOwnProperty('Sites')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildProjectSiteSiteBranch(project.Sites, ul, functions);
       }
+    }
+  }
+  else {
+    var sites = [];
+    for(var projectCount = 0; projectCount < projectLength; projectCount++) {
+      var project = projects[projectCount];
+      sites.push(...project.Sites);
+    }
 
-      buildProject(projects, ul, checkboxFunction, base.SiteName);        
-      appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', siteNames[i], ul, siteNames[i], base.GUID);
-
-      baseElement.appendChild(li); 
+    buildProjectSiteSiteBranch(sites, elementToAppendTo, functions);
   }
 }
 
-function buildProject(projects, baseElement, checkboxFunction, linkedSite) {
-  var projectsLength = projects.length;
-  for(var j = 0; j < projectsLength; j++){
-      var project = projects[j].project;
-      var projectName = getAttribute(project.Attributes, 'ProjectName');
-      var li = document.createElement('li');
-      var ul = createUL();
-      var branchId = 'Project'.concat(project.GUID).concat(linkedSite.replace(' ', ''));
+function buildProjectSiteSiteBranch(sites, elementToAppendTo, functions) {
+  var siteLength = sites.length;
 
-      buildMeter(projects[j].meters, ul, checkboxFunction, linkedSite);
-      appendListItemChildren(li, branchId, checkboxFunction, 'Project', projectName, ul, linkedSite, '');
+  if(siteLocationcheckbox.checked) {
+    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+      var site = sites[siteCount];
+      var listItem = appendListItemChildren('Site' + getAttribute(site.Attributes, "GUID"), site.hasOwnProperty('Meters'), functions, site.Attributes, 'Site', true);
+      elementToAppendTo.appendChild(listItem);
 
-      baseElement.appendChild(li); 
+      if(site.hasOwnProperty('Meters')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildMeterBranch(site.Meters, ul, functions);
+      }
+    }
+  }
+  else {
+    var meters = [];
+    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+      var site = sites[siteCount];
+      meters.push(...site.Meters);
+    }
+
+    buildMeterBranch(meters, elementToAppendTo, functions);
   }
 }
 
-function buildSite(sites, baseElement, checkboxFunction, linkedSite) {
-    var sitesLength = sites.length;
-    for(var i = 0; i < sitesLength; i++) {
-        var site = sites[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        buildMeter(site.Meters, ul, checkboxFunction, linkedSite);
-        appendListItemChildren(li, 'Site'.concat(subBranchCount), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
+function buildSiteProjectSiteBranch(sites, elementToAppendTo, functions) {
+  var siteLength = sites.length;
 
-        baseElement.appendChild(li);
-        subBranchCount++;
+  if(siteLocationcheckbox.checked) {
+    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+      var site = sites[siteCount];
+      var listItem = appendListItemChildren('Site' + getAttribute(site.Attributes, "GUID"), site.hasOwnProperty('Projects'), functions, site.Attributes, 'Site', true);
+      elementToAppendTo.appendChild(listItem);
+
+      if(site.hasOwnProperty('Projects')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildSiteProjectProjectBranch(site.Projects, ul, functions);
+      }
     }
-}
-
-function buildMeter(meters, baseElement, checkboxFunction, linkedSite) {
-    var metersLength = meters.length;
-    for(var i = 0; i < metersLength; i++){
-        var meter = meters[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        var branchId = 'Meter'.concat(meter.GUID);
-        appendListItemChildren(li, branchId, checkboxFunction, 'Meter', meter.Identifier, ul, linkedSite, '');
-
-        var branchDiv = li.children[branchId];
-        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
-        branchDiv.setAttribute('class', 'far fa-times-circle');
-
-        baseElement.appendChild(li); 
+  }
+  else {
+    var projects = [];
+    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
+      var site = sites[siteCount];
+      projects.push(...site.Projects);
     }
+
+    buildSiteProjectProjectBranch(projects, elementToAppendTo, functions);
+  }
 }
 
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid) {
-    li.appendChild(createBranchDiv(id));
-    li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createTreeIcon(checkboxBranch));
-    li.appendChild(createSpan(id, branchOption));
-    li.appendChild(createBranchListDiv(id.concat('List'), ul));
-}
+function buildSiteProjectProjectBranch(projects, elementToAppendTo, functions) {
+  var projectLength = projects.length;
 
-function createBranchListDiv(branchListDivId, ul) {
-    var branchListDiv = document.createElement('div');
-    branchListDiv.id = branchListDivId;
-    branchListDiv.setAttribute('class', 'listitem-hidden');
-    branchListDiv.appendChild(ul);
-    return branchListDiv;
-}
+  if(projectLocationcheckbox.checked) {
+    for(var projectCount = 0; projectCount < projectLength; projectCount++) {
+      var project = projects[projectCount];
+      var listItem = appendListItemChildren('Project' + getAttribute(project.Attributes, "GUID"), project.hasOwnProperty('Meters'), functions, project.Attributes, 'Project', true);
+      elementToAppendTo.appendChild(listItem);
 
-function createUL() {
-    var ul = document.createElement('ul');
-    ul.setAttribute('class', 'format-listitem');
-    return ul;
-}
-
-function createTreeIcon(branch) {
-    var icon = document.createElement('i');
-    icon.setAttribute('class', getIconByBranch(branch));
-    icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
-    return icon;
-}
-
-function createSpan(spanId, innerHTML) {
-    var span = document.createElement('span');
-    span.id = spanId.concat('span');
-    span.innerHTML = innerHTML;
-    return span;
-}
-
-function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) {
-    var functionArray = checkboxFunction.replace(')', '').split('(');
-    var functionArrayLength = functionArray.length;
-    var functionName = functionArray[0];
-    var functionArguments = [];
-
-    var checkBox = document.createElement('input');
-    checkBox.type = 'checkbox';  
-    checkBox.id = checkboxId.concat('checkbox');
-    checkBox.setAttribute('Branch', branch);
-    checkBox.setAttribute('LinkedSite', linkedSite);
-    checkBox.setAttribute('GUID', guid);
-
-    functionArguments.push(checkBox.id);
-    if(functionArrayLength > 1) {
-        var functionArgumentLength = functionArray[1].split(',').length;
-        for(var i = 0; i < functionArgumentLength; i++) {
-            functionArguments.push(functionArray[1].split(',')[i]);
-        }
+      if(project.hasOwnProperty('Meters')) {
+        var ul = listItem.getElementsByTagName('ul')[0];
+        buildMeterBranch(project.Meters, ul, functions);
+      }
     }
-    functionName = functionName.concat('(').concat(functionArguments.join(',').concat(')'));
-    
-    checkBox.setAttribute('onclick', functionName);
-    return checkBox;
+  }
+  else {
+    var meters = [];
+    for(var projectCount = 0; projectCount < projectLength; projectCount++) {
+      var project = projects[projectCount];
+      meters.push(...project.Meters);
+    }
+
+    buildMeterBranch(meters, elementToAppendTo, functions);
+  }
 }
 
-function getIconByBranch(branch) {
-    switch(branch) {
-        case 'Period':
-            return "far fa-calendar-alt";
-        case "BillValid":
-            return "fas fa-check-circle";
-        case "BillInvestigation":
-            return "fas fa-question-circle";
-        case "BillInvalid":
-            return "fas fa-times-circle";
-    }    
+function buildMeterBranch(meters, elementToAppendTo, functions) {
+  if(!meterLocationcheckbox.checked) {
+    return;
+  }
+
+  var meterLength = meters.length;
+  for(var meterCount = 0; meterCount < meterLength; meterCount++) {
+    var meter = meters[meterCount];
+    var listItem = appendListItemChildren('Meter' + getAttribute(meter.Attributes, "GUID"), false, functions, meter.Attributes, 'Meter', true)
+    elementToAppendTo.appendChild(listItem);
+  }
 }
 
 function getChartTooltipXFormat(period) {
@@ -538,9 +568,9 @@ function getChartTooltipXFormat(period) {
       case "Yearly":
         return 'dd/MM/yyyy';
     }
-  }
+}
 
-  function getChartXAxisLabelFormat(period) {
+function getChartXAxisLabelFormat(period) {
     switch(period) {
       case 'Daily':
         return 'HH:mm';
@@ -551,9 +581,9 @@ function getChartTooltipXFormat(period) {
       case "Yearly":
         return 'MMM';
     }
-  }
+}
 
-  function refreshChart(newSeries, chartId, chartOptions) {
+function refreshChart(newSeries, chartId, chartOptions) {
     var options = {
       chart: {
           height: '100%',
@@ -602,7 +632,6 @@ function getChartTooltipXFormat(period) {
         onItemClick: {
           toggleDataSeries: true
         },
-        offsetY: 250,
         formatter: function(seriesName) {
           return seriesName + '<br><br>';
         }
@@ -613,4 +642,4 @@ function getChartTooltipXFormat(period) {
     };  
   
     renderChart(chartId, options);
-  }
+}

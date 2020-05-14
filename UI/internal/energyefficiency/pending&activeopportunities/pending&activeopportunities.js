@@ -13,27 +13,16 @@ function pageLoad() {
     };
 }
 
-function setGanttChartWidth() {
-    var lock = document.getElementsByClassName('fa-lock');
-    var ganttChart = document.getElementsByClassName('ganttview-slide-container')[0];
-    if(lock.length == 0) {
-        ganttChart.style.width = '84.5%';
-    }
-    else {
-        ganttChart.style.width = '80%';
-    }
-}
-
 function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
 
-    var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
+    var order = $("input[type='radio'][name='group1']:checked").val();
+    var headerDiv = createHeaderDiv("siteHeader", order == "Project" ? 'Project' : 'Location', true);
     var ul = createBranchUl("siteSelector", false, true);
 
     tree.appendChild(ul);
 
-    var order = $("input[type='radio'][name='group1']:checked").val();
     if(order == "Project") {
         buildTree(baseData, ul, checkboxFunction);
     }
@@ -41,6 +30,7 @@ function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
         buildSiteProjectTree(baseData, ul, checkboxFunction);
     }
 
+    document.getElementById("locationSelectorSpan").innerText = order == "Project" ? 'Project' : 'Location';
     var div = document.getElementById(divId);
     clearElement(div);
 
@@ -56,15 +46,27 @@ function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
 
 function buildTree(baseData, baseElement, checkboxFunction) {
     var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        var baseName = getAttribute(base.Attributes, 'ProjectName');
-        buildSite(base.Sites, ul, checkboxFunction, baseName);
-        appendListItemChildren(li, 'ProjectName'.concat(base.GUID), checkboxFunction, 'ProjectName', baseName, ul, baseName, base.GUID);
 
-        baseElement.appendChild(li);        
+    if(projectsLocationcheckbox.checked) {
+        for(var i = 0; i < dataLength; i++){
+            var base = baseData[i];
+            var li = document.createElement('li');
+            var ul = createUL();
+            var baseName = getAttribute(base.Attributes, 'ProjectName');
+            buildSite(base.Sites, ul, checkboxFunction, baseName);
+            appendListItemChildren(li, 'ProjectName'.concat(base.GUID), checkboxFunction, 'ProjectName', baseName, ul, baseName, base.GUID);
+    
+            baseElement.appendChild(li);        
+        }
+    }
+    else {
+        var sites = [];
+        for(var i = 0; i < dataLength; i++){
+            var project = baseData[i];
+            sites.push(...project.Sites);
+        }
+
+        buildSite(sites, baseElement, checkboxFunction, baseName);
     }
 }
 
@@ -73,79 +75,111 @@ function buildSiteProjectTree(baseData, baseElement, checkboxFunction) {
     var sites = [];
 
     var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var project = baseData[i];
-        var siteLength = project.Sites.length;
-
-        for(var j = 0; j < siteLength; j++) {
-            if(!siteNames.includes(project.Sites[j].SiteName)) {
-                siteNames.push(project.Sites[j].SiteName);
-                sites.push(project.Sites[j]);
-            }
-        }
-    }
-
-    dataLength = sites.length;
-    for(var i = 0; i < dataLength; i++) {
-        var base = sites[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        
-        var projectNames = [];
-        var projects = [];
-
-        for(var j = 0; j < baseData.length; j++){
-            var project = baseData[j];
-            var projectName = getAttribute(project.Attributes, 'ProjectName');
+    if(sitesLocationcheckbox.checked) {
+        for(var i = 0; i < dataLength; i++){
+            var project = baseData[i];
             var siteLength = project.Sites.length;
 
-            for(var k = 0; k < siteLength; k++) {
-                if(project.Sites[k].SiteName == base.SiteName) {
-                    if(!projectNames.includes(projectName)) {
-                        projectNames.push(projectName);
-                        projects.push({project: project, meters: project.Sites[k].Meters});
-                    }
+            for(var j = 0; j < siteLength; j++) {
+                if(!siteNames.includes(project.Sites[j].SiteName)) {
+                    siteNames.push(project.Sites[j].SiteName);
+                    sites.push(project.Sites[j]);
                 }
             }
         }
 
-        buildProject(projects, ul, checkboxFunction, base.SiteName);        
-        appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', siteNames[i], ul, siteNames[i], base.GUID);
+        dataLength = sites.length;
+        for(var i = 0; i < dataLength; i++) {
+            var base = sites[i];
+            var li = document.createElement('li');
+            var ul = createUL();
+            
+            var projectNames = [];
+            var projects = [];
 
-        baseElement.appendChild(li); 
+            for(var j = 0; j < baseData.length; j++){
+                var project = baseData[j];
+                var projectName = getAttribute(project.Attributes, 'ProjectName');
+                var siteLength = project.Sites.length;
+
+                for(var k = 0; k < siteLength; k++) {
+                    if(project.Sites[k].SiteName == base.SiteName) {
+                        if(!projectNames.includes(projectName)) {
+                            projectNames.push(projectName);
+                            projects.push({project: project, meters: project.Sites[k].Meters});
+                        }
+                    }
+                }
+            }
+
+            buildProject(projects, ul, checkboxFunction, base.SiteName);        
+            appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', siteNames[i], ul, siteNames[i], base.GUID);
+
+            baseElement.appendChild(li); 
+        }
+    }
+    else {
+        buildTree(baseData, baseElement, checkboxFunction);
     }
 }
 
 function buildProject(projects, baseElement, checkboxFunction, linkedSite) {
     var projectsLength = projects.length;
-    for(var j = 0; j < projectsLength; j++){
-        var project = projects[j].project;
-        var projectName = getAttribute(project.Attributes, 'ProjectName');
-        var li = document.createElement('li');
-        var ul = createUL();
-        var branchId = 'Project'.concat(project.GUID).concat(linkedSite.replace(' ', ''));
+    if(projectsLocationcheckbox.checked) {
+        for(var j = 0; j < projectsLength; j++){
+            var project = projects[j].project;
+            var projectName = getAttribute(project.Attributes, 'ProjectName');
+            var li = document.createElement('li');
+            var ul = createUL();
+            var branchId = 'Project'.concat(project.GUID).concat(linkedSite.replace(' ', ''));
 
-        buildMeter(projects[j].meters, ul, checkboxFunction, linkedSite);
-        appendListItemChildren(li, branchId, checkboxFunction, 'Project', projectName, ul, linkedSite, '');
+            buildMeter(projects[j].meters, ul, checkboxFunction, linkedSite);
+            appendListItemChildren(li, branchId, checkboxFunction, 'Project', projectName, ul, linkedSite, '');
 
-        baseElement.appendChild(li); 
+            baseElement.appendChild(li); 
+        }
+    }
+    else {
+        var meters = [];
+        for(var j = 0; j < projectsLength; j++){
+            var project = projects[j];
+            meters.push(...project.meters);
+        }
+
+        buildMeter(meters, baseElement, checkboxFunction, linkedSite);
     }
 }
 
 function buildSite(sites, baseElement, checkboxFunction, linkedSite) {
     var sitesLength = sites.length;
-    for(var i = 0; i < sitesLength; i++) {
-        var site = sites[i];
-        var li = document.createElement('li');
-        var ul = createUL();
-        buildMeter(site.Meters, ul, checkboxFunction, linkedSite);
-        appendListItemChildren(li, 'Site'.concat(i), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
 
-        baseElement.appendChild(li);
+    if(sitesLocationcheckbox.checked) {
+        for(var i = 0; i < sitesLength; i++) {
+            var site = sites[i];
+            var li = document.createElement('li');
+            var ul = createUL();
+            buildMeter(site.Meters, ul, checkboxFunction, linkedSite);
+            appendListItemChildren(li, 'Site'.concat(i), checkboxFunction, 'Site', site.SiteName, ul, linkedSite, '');
+    
+            baseElement.appendChild(li);
+        }
+    }
+    else {
+        var meters = [];
+        for(var i = 0; i < sitesLength; i++){
+            var site = sites[i];
+            meters.push(...site.Meters);
+        }
+
+        buildMeter(meters, baseElement, checkboxFunction, linkedSite);
     }
 }
 
 function buildMeter(meters, baseElement, checkboxFunction, linkedSite) {
+    if(!metersLocationcheckbox.checked) {
+        return;
+    }
+
     var metersLength = meters.length;
     for(var i = 0; i < metersLength; i++){
         var meter = meters[i];
@@ -500,11 +534,14 @@ function buildGanttChart() {
 	var Chart = function(div, opts) {
 		
 		function render() {
-			addVtHeader(div, opts.data, opts.cellHeight);
-
+            addVtHeader(div, opts.data, opts.cellHeight);
+            
+            
+            var lock = document.getElementsByClassName('fa-lock');
+            var ganttWidth = lock.length == 0 ? '84.5%' : '80%';
             var slideDiv = jQuery("<div>", {
                 "class": "ganttview-slide-container",
-                "css": { "width": "84.5%" }
+                "css": { "width": ganttWidth }
             });
 			
             dates = getDates(opts.start, opts.end);

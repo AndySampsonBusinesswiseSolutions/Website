@@ -29,7 +29,7 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="supplierTree" class="sidebar-tree-div dashboard roundborder">
+			<div id="supplierTree" class="tree-div dashboard roundborder">
 			</div>
 		</div>
 	</div>
@@ -40,11 +40,11 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<br>
-				<div class="tabDiv" id="tabDiv"></div>
-				<div id="cardDiv"></div>
+				<div class="outer-container">
+					<div class="tabDiv" id="tabDiv"></div>
+					<div id="cardDiv"></div>
+				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>

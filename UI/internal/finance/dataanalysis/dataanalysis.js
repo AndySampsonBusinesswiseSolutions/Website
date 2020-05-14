@@ -44,7 +44,6 @@ function createTrees() {
   createDisplayTree();
   createSiteTree(usageSites, "updatePage()");
   createGroupingOptionTree();
-  createInvoiceVarianceTree();
   createTimePeriodTree();
 
   addExpanderOnClickEvents();
@@ -81,6 +80,7 @@ function createDisplayListItems(ul) {
   ul.appendChild(createForecastTree());
   ul.appendChild(createBudgetTree());
   ul.appendChild(createInvoiceTree());
+  ul.appendChild(createVarianceTree());
   ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(createCommodityListItem());
   ul.appendChild(createBreakDisplayListItem());
@@ -341,21 +341,8 @@ function createInvoiceTree() {
   return invoiceListItem;
 }
 
-function createInvoiceVarianceTree() {
-  var div = document.getElementById('invoiceVarianceTree');
-  clearElement(div);
-
-  var headerDiv = createHeaderDiv("invoiceVarianceHeader", "Invoice Variance");
-  var ul = createBranchUl("invoiceVarianceSelector", true, true);
-
-  var showBudgetVarianceInvoiceVariancesListItem = appendListItemChildren('showBudgetVarianceInvoiceVariancesSelector', false, 'updatePage()', [{"Name" : "Show Budget Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
-  var showForecastVarianceInvoiceVariancesListItem = appendListItemChildren('showForecastVarianceInvoiceVariancesSelector', false, 'updatePage()', [{"Name" : "Show Forecast Variances"}], 'invoiceVarianceSelector', false, 'checkbox', 'invoiceVariance');
-
-  ul.appendChild(showBudgetVarianceInvoiceVariancesListItem);
-  ul.appendChild(showForecastVarianceInvoiceVariancesListItem);
-
-  div.appendChild(headerDiv);
-  div.appendChild(ul);
+function createVarianceTree() {
+  return appendListItemChildren('varianceSelector', false, 'updatePage()', [{"Name" : "Show Variances"}], 'varianceSelector', false, 'checkbox', 'varianceGroup');
 }
 
 function createForecastTree() {
@@ -407,6 +394,7 @@ function createTimePeriodTree() {
 
   dateRangeDisplayListItem.appendChild(dateRangeDisplayCheckbox);
   dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
+  dateRangeDisplayListItem.appendChild(createBreakDisplayListItem());
   dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
 
   var createdDisplayListItem = document.createElement('li');
@@ -419,6 +407,7 @@ function createTimePeriodTree() {
 
   createdDisplayListItem.appendChild(createdDisplayCheckbox);
   createdDisplayListItem.appendChild(createdDisplaySpan);
+  createdDisplayListItem.appendChild(createBreakDisplayListItem());
   createdDisplayListItem.appendChild(createdDisplayRZSlider);
 
   ul.appendChild(dateRangeDisplayListItem);
@@ -691,7 +680,7 @@ function updatePage(callingElement) {
     case 'groupingOptionSelector':
     case 'groupingOption1GroupingOptionSelector':
     case 'budgetSelector':
-    case 'invoiceVarianceSelector':
+    case 'varianceSelector':
     case 'forecastSelector':
       break;
     case 'costDisplaySelector':
@@ -1995,7 +1984,7 @@ function getDisplayData(chartSeries, categories) {
 function getColumns(chartSeries, datagrid) {
   var divWidth = document.getElementById('dataHeaderList').clientWidth;
   var periodWidth = Math.floor(document.getElementById('dataHeaderList').clientWidth/15);
-  var divWidthMinusPeriodColumnWidth = divWidth - periodWidth - 55;
+  var divWidthMinusPeriodColumnWidth = divWidth - periodWidth - 58;
   var totalColumnWidth = 0;
   var columns = [{type:'text', 
     width:periodWidth, 

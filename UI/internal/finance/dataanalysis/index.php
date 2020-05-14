@@ -19,17 +19,17 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav(mySidenav)"></i>
 		</div>
 		<div class="tree-column">
-			<div id="displayTree" class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
+			<div id="displayTree" class="tree-div dashboard roundborder outer-container scrolling-wrapper">
 			</div>
 			<br>
-			<div id="configureContainer" class="dashboard roundborder outer-container">
-				<div class="sidebar-expander-header">
+			<div id="configureContainer" class="tree-div dashboard roundborder outer-container scrolling-wrapper">
+				<div class="expander-header">
 					<span id="configureOptionsSpan">Configure</span>
 					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
 				<div id="configureOptionsList" class="slider-list expander-container">
-					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+					<div class="dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
 							<span id="configureLocationSelectorSpan">Location</span>
 							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
@@ -65,20 +65,16 @@
 						</div>
 					</div>
 					<br>
-					<div id="siteTree" class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
+					<div id="siteTree" class="dashboard roundborder outer-container scrolling-wrapper">
 					</div>
 					<br>
-					<div id="groupingOptionTree" class="sidebar-tree-div dashboard roundborder">
+					<div id="groupingOptionTree" class="dashboard roundborder outer-container">
 					</div>
 					<br>
-					<div id="invoiceVarianceTree" class="sidebar-tree-div dashboard roundborder">
-					</div>
-					<br>
-					<div id="timePeriodTree" class="sidebar-tree-div dashboard roundborder">
+					<div id="timePeriodTree" class="dashboard roundborder outer-container">
 					</div>
 				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 	<div id="outerContainer">
@@ -87,9 +83,8 @@
 				<i id="openNav" class="fas fa-angle-double-right sidenav-icon"></i>
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i></div>
 			</div>
-			<br>
 			<div class="final-column">
-				<div class="dashboard roundborder outer-container">
+				<div class="dashboard outer-container">
 					<div class="expander-header">
 						<span id="chartHeaderSpan">Usage Chart</span>
 						<i id="chartHeader" class="far fa-plus-square expander show-pointer openExpander"></i>
@@ -100,28 +95,27 @@
 						<div id="chart"></div>
 					</div>
 				</div>
-				<div class="dashboard roundborder outer-container expander-container">
+				<div class="dashboard outer-container expander-container">
 					<div class="expander-header">
 						<span>Data</span>
 						<i id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></i>
 					</div>
-					<div id="dataHeaderList" class="roundborder datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">
+					<div id="dataHeaderList" class="datagrid roundborder scrolling-wrapper expander-container" style="overflow-x: auto;">
 						<div id="datagrid" style="margin: 5px;"></div>
 					</div>
 				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>
 
 <script src="/includes/base.js"></script>
 
-<link rel="stylesheet" href="rzslider.css" />
+<link rel="stylesheet" href="/includes/rzslider/rzslider.css" />
 <link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
 <script data-require="ui-bootstrap@*" data-semver="2.2.0" src="https://cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-2.2.0.js"></script>
-<script src="rzslider.js"></script>
+<script src="/includes/rzslider/rzslider.js"></script>
 <script src="script.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>

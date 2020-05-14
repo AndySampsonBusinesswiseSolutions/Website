@@ -914,7 +914,7 @@ ul {
 .listItemWithoutPadding {
     padding-left: 0px;
 }
-.expander-header, .sidebar-expander-header {
+.expander-header {
     text-align: center; 
     border-bottom: solid black 1px;
     margin-bottom: 5px;
@@ -932,11 +932,6 @@ ul>li>input, .expander {
 }
 .outer-container {
     padding: 5px;
-}
-.sidebar-tree-div {
-    max-height: 300px;
-    padding: 10px;
-    background-color: rgb(233, 233, 233);
 }
 .dashboard {
     background-color: white;
@@ -1090,4 +1085,22 @@ input[type=checkbox]:checked + .switch-btn:before {
 }
 input[type=checkbox]:checked + .switch-btn {
     background: darkgreen;
+}
+.tooltip {
+    border-bottom: 1px dotted black;
+}
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 25%;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1000;
+    opacity: 0.75;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }

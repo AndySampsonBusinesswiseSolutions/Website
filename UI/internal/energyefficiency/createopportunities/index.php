@@ -25,9 +25,8 @@
     <div id="outerContainer">
 		<div id="mainContainer">
             <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
-            <br>
             <div class="final-column">
-                <div class="roundborder divcolumn dashboard">
+                <div class="divcolumn dashboard">
                     <div class="expander-header">
                         <span>Identified Opportunities</span>
                         <i id="identifiedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -38,10 +37,12 @@
                             <button class="reject show-pointer">Reject Selected Opportunities</button>
                         </div>
                         <br>
-                        <div id="identifiedOpportunitiesSpreadsheet"></div>
+                        <div style="text-align: center;">
+                            <div id="identifiedOpportunitiesSpreadsheet"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="roundborder divcolumn expander-container dashboard">
+                <div class="divcolumn expander-container dashboard">
                     <div class="expander-header">
                         <span>Create New Opportunity</span>
                         <i id="createNewOpportunity" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -318,7 +319,6 @@
                     </div>
                 </div>
             </div>
-            <br>
         </div>
     </div>
 </body>

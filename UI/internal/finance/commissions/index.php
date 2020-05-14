@@ -13,22 +13,22 @@
 <body>
 	<div id="mySidenav" class="sidenav">
 		<div style="text-align: center;">
-			<span id="selectOptionsSpan" style="font-size: 25px;">Select Options</span>
+			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
 			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
+			<div id="siteTree" class="tree-div dashboard roundborder outer-container">
 			</div>
 			<br>
 			<div id="configureContainer" class="dashboard roundborder outer-container">
-				<div class="sidebar-expander-header">
+				<div class="expander-header">
 					<span id="configureOptionsSpan">Configure</span>
 					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
 				<div id="configureOptionsList" class="slider-list expander-container listitem-hidden">
-					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
 							<span id="configureLocationSelectorSpan">Location</span>
 							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
@@ -48,8 +48,8 @@
 						</div>
 					</div>
 					<br>
-					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
 							<span id="commoditySelectorSpan">Commodity</span>
 							<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
@@ -75,28 +75,25 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<div>
-					<br>
-					<div class="dashboard roundborder outer-container">
-						<div class="expander-header">
-							<span>Commission Chart</span>
-							<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
-							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Commission Chart To Download Basket"></i>
-							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Commission Chart"></i>
-						</div>
-						<div id="commissionsChartList" class="roundborder chart expander-container">
-							<div id="commissionChart">
-							</div>
+				<div class="dashboard outer-container">
+					<div class="expander-header">
+						<span>Commission Chart</span>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Commission Chart To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Commission Chart"></i>
+					</div>
+					<div id="commissionsChartList" class="roundborder chart expander-container">
+						<div id="commissionChart">
 						</div>
 					</div>
-					<div class="dashboard roundborder outer-container expander-container">
-						<div class="expander-header">
-							<span>Commission Data</span>
-							<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsData"></i>
-						</div>
-						<div id="commissionsDataList" class="roundborder chart expander-container">
-							<div id="commissionDatagrid" style="margin: 5px;">
-							</div>
+				</div>
+				<div class="dashboard outer-container expander-container">
+					<div class="expander-header">
+						<span>Commission Data</span>
+						<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsData"></i>
+					</div>
+					<div id="commissionsDataList" class="roundborder chart expander-container scrolling-wrapper">
+						<div id="commissionDatagrid" style="margin: 5px;">
 						</div>
 					</div>
 				</div>

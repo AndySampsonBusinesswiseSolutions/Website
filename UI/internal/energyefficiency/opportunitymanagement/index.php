@@ -339,10 +339,10 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="siteDiv" class="sidebar-tree-div dashboard roundborder">
+			<div id="siteDiv" class="tree-div dashboard roundborder">
 			</div>
 			<br>
-			<div class="sidebar-tree-div dashboard roundborder outer-container">
+			<div class="tree-div dashboard roundborder outer-container">
 				<div class="expander-header">
 					<span id="opportunityStatusSpan">Opportunity Status</span>
 					<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
@@ -369,10 +369,9 @@
 				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
-			<br>
 			<div class="final-column">
 				<div>
-					<div class="roundborder divcolumn left dashboard">
+					<div class="divcolumn left dashboard">
 						<div class="expander-header">
 							<span>Requested Visits</span>
 							<i id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -380,12 +379,12 @@
 							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
 						</div>
 						<br>
-						<div id="requestedVisitsList" class="scrolling-wrapper">
+						<div id="requestedVisitsList" class="scrolling-wrapper" style="text-align: center;">
 							<div id="requestedVisitsSpreadsheet"></div>
 						</div>
 					</div>
 					<div class="middle"></div>
-					<div class="roundborder divcolumn right dashboard">
+					<div class="divcolumn right dashboard">
 						<div class="expander-header">
 							<span>Scheduled Visits</span>
 							<i id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -393,14 +392,14 @@
 							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
 						</div>
 						<br>
-						<div id="scheduledVisitsList" class="scrolling-wrapper">
+						<div id="scheduledVisitsList" class="scrolling-wrapper" style="text-align: center;">
 							<div id="scheduledVisitsSpreadsheet"></div>
 						</div>
 					</div>
 				</div>
 				<div style="clear: left;"></div>
 				<br>
-				<div id="rejectedOpportunitiesDiv" class="listitem-hidden roundborder divcolumn dashboard">
+				<div id="rejectedOpportunitiesDiv" class="listitem-hidden divcolumn dashboard">
 					<div class="expander-header">
 						<span>Rejected Opportunities</span>
 						<i id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -408,13 +407,13 @@
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Rejected Opportunities"></i>
 					</div>
 					<br>
-					<div id="rejectedOpportunitiesList" class="scrolling-wrapper">
+					<div id="rejectedOpportunitiesList" class="scrolling-wrapper" style="text-align: center;">
 						<div id="rejectedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>					
 				</div>
 				<br>
-				<div id="recommendedOpportunitiesDiv" class="roundborder divcolumn dashboard">
+				<div id="recommendedOpportunitiesDiv" class="divcolumn dashboard">
 					<div class="expander-header">
 						<span>Recommended Opportunities</span>
 						<i id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -422,13 +421,13 @@
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Recommended Opportunities"></i>
 					</div>
 					<br>
-					<div id="recommendedOpportunitiesList" class="scrolling-wrapper">
+					<div id="recommendedOpportunitiesList" class="scrolling-wrapper" style="text-align: center;">
 						<div id="recommendedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>
 				</div>
 				<br>
-				<div id="pendingActiveOpportunitiesDiv" class="roundborder divcolumn dashboard">
+				<div id="pendingActiveOpportunitiesDiv" class="divcolumn dashboard">
 					<div class="expander-header">
 						<span>Pending & Active Opportunities</span>
 						<i id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -436,13 +435,12 @@
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></i>
 					</div>
 					<br>
-					<div id="pendingActiveOpportunitiesList" class="scrolling-wrapper">
+					<div id="pendingActiveOpportunitiesList" class="scrolling-wrapper" style="text-align: center;">
 						<div id="pendingActiveOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>
 				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>

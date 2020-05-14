@@ -32,8 +32,8 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="budgetList" class="sidebar-tree-div dashboard roundborder">
-				<div class="sidebar-expander-header">
+			<div id="budgetList" class="tree-div dashboard roundborder outer-container">
+				<div class="expander-header">
 					<span id="budgetSelectorSpan">Budget</span>
 					<i id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
@@ -74,13 +74,13 @@
 			</div>
 			<br>
 			<div id="configureContainer" class="dashboard roundborder outer-container">
-				<div class="sidebar-expander-header">
+				<div class="expander-header">
 					<span id="configureOptionsSpan">Configure</span>
 					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
 				<div id="configureOptionsList" class="slider-list expander-container">
-					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
 							<span id="configureLocationSelectorSpan">Location</span>
 							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 						</div>
@@ -116,15 +116,15 @@
 						</div>
 					</div>
 					<br>
-					<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
+					<div id="siteTree" class="tree-div dashboard roundborder outer-container">
 					</div>
 					<br>
-					<div class="sidebar-tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
 							<span id="commoditySelectorSpan">Commodity</span>
 							<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
-						<div id="commoditySelectorList" class="expander-container">
+						<div id="commoditySelectorList" class="expander-container listitem-hidden">
 							<div style="width: 45%; text-align: center; float: left;">
 								<span>Electricity</span>
 								<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
@@ -136,13 +136,13 @@
 						</div>
 					</div>
 					<br>
-					<div id="timePeriodList" class="sidebar-tree-div dashboard roundborder">
-						<div class="sidebar-expander-header">
+					<div id="timePeriodList" class="tree-div dashboard roundborder outer-container">
+						<div class="expander-header">
 							<span id="timePeriodSelectorSpan">Time Period</span>
 							<i id="timePeriodSelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
-						<div id="timePeriodSelectorList" class="expander-container">
-							<ul class="format-listitem slider-list listItemWithoutPadding">
+						<div id="timePeriodSelectorList" class="slider-list expander-container">
+							<ul class="format-listitem listItemWithoutPadding">
 								<li>
 									<span>Budget Created Date Range</span>
 									<rzslider id="timePeriodCreationDateRange"
@@ -175,8 +175,7 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<br>
-				<div class="dashboard roundborder outer-container">
+				<div class="dashboard outer-container">
 					<div class="expander-header">
 						<span>Create\Review Budget</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
@@ -244,7 +243,7 @@
 						<div id="createReviewBudgetTreeDiv" class="tree-div roundborder scrolling-wrapper" style="float: right; width: 20%;">
 						</div>
 						<div style="clear: both;"></div>
-						<div class="dashboard roundborder expander-container" style="padding: 10px;">
+						<div class="dashboard expander-container">
 							<div class="expander-header">
 								<span>Charts</span>
 								<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
@@ -264,7 +263,6 @@
 					</div>
 				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>
@@ -273,11 +271,11 @@
 
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
 <script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
-<link rel="stylesheet" href="rzslider.css" />
+<link rel="stylesheet" href="/includes/rzslider/rzslider.css" />
 <link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
 <script data-require="ui-bootstrap@*" data-semver="2.2.0" src="https://cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-2.2.0.js"></script>
-<script src="rzslider.js"></script>
+<script src="/includes/rzslider/rzslider.js"></script>
 <script src="script.js"></script>
 <script src="budgetmanagement.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

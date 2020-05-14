@@ -31,11 +31,11 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<br>
-				<div class="tabDiv" id="tabDiv"></div>
-				<div id="cardDiv"></div>
+				<div class="outer-container">
+					<div class="tabDiv" id="tabDiv"></div>
+					<div id="cardDiv"></div>
+				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>

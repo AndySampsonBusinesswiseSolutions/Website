@@ -47,10 +47,35 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
+			<div id="siteTree" class="tree-div dashboard roundborder">
 			</div>
 			<br>
 			<button style="width: 100%;" onclick="displayUploadUsage();">Upload Usage</button>
+			<br><br>
+			<div class="tree-div dashboard roundborder scrolling-wrapper">
+				<div class="expander-header">
+					<span id="configureSelectorSpan">Configure</span>
+					<i id="configureSelector" class="far fa-plus-square expander show-pointer"></i>
+				</div>
+				<div id="configureSelectorList" class="expander-container listitem-hidden">
+					<div class="tree-div dashboard roundborder scrolling-wrapper">
+						<div class="expander-header">
+							<span id="locationSelectorSpan">Location</span>
+							<i id="locationSelector" class="far fa-plus-square expander show-pointer"></i>
+						</div>
+						<div id="locationSelectorList" class="expander-container listitem-hidden">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Show Sites</span>
+								<label class="switch"><input type="checkbox" id="sitesLocationcheckbox" checked onclick='createTree("createCardButton");'></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Show Meters</span>
+								<label class="switch"><input type="checkbox" id="metersLocationcheckbox" checked onclick='createTree("createCardButton");'></input><div class="switch-btn"></div></label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div id="outerContainer">
@@ -60,11 +85,11 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<br>
-				<div class="tabDiv" id="tabDiv"></div>
-				<div id="cardDiv"></div>
+				<div class="outer-container">
+					<div class="tabDiv" id="tabDiv"></div>
+					<div id="cardDiv"></div>
+				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>

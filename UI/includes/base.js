@@ -184,6 +184,7 @@ function preciseRound(num, dec){
 }
 
 function renderChart(chartId, options) {
+  clearElement(document.getElementById(chartId.replace('#', '')));
     var chart = new ApexCharts(document.querySelector(chartId), options);
     chart.render();
 }
@@ -322,7 +323,7 @@ function finalisePopup(title, titleHTML, modal, span) {
 function createHeaderDiv(id, headerText, isOpen = false, hasChildren = true) {
     var headerDiv = document.createElement('div');
     headerDiv.id = id;
-    headerDiv.setAttribute('class', 'sidebar-expander-header');
+    headerDiv.setAttribute('class', 'expander-header');
   
     var header = document.createElement('span');
     header.innerText = headerText;

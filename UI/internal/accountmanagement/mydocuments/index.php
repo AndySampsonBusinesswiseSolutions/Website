@@ -45,7 +45,7 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="documentTree" class="sidebar-tree-div dashboard roundborder">
+			<div id="documentTree" class="tree-div dashboard roundborder">
 			</div>
 			<br>
 			<button style="width: 100%;" onclick='uploadDocument()'>Upload Document</button>
@@ -57,10 +57,8 @@
 				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
-
 			<div class="final-column">
-				<br>
-				<div class="dashboard tree-div roundborder scrolling-wrapper outer-container">
+				<div class="dashboard tree-div scrolling-wrapper outer-container">
 					<div class="expander-header">
 						<span>Your Current LOA Details</span>
 						<i class="far fa-plus-square show-pointer expander openExpander" id="loaDetails"></i>
@@ -71,7 +69,7 @@
 					</div>
 				</div>
 				<br>
-				<div class="dashboard tree-div roundborder scrolling-wrapper outer-container">
+				<div class="dashboard tree-div scrolling-wrapper outer-container">
 					<div class="expander-header">
 						<span>Download Basket</span>
 						<i class="far fa-plus-square show-pointer expander" id="downloadBasket"></i>
@@ -100,8 +98,10 @@
 					</div>
 				</div>
 				<br>
-				<div class="tabDiv" id="tabDiv"></div>
-				<div id="cardDiv"></div>
+				<div class="outer-container">
+					<div class="tabDiv" id="tabDiv"></div>
+					<div id="cardDiv"></div>
+				</div>
 			</div>
 			<br>
 		</div>

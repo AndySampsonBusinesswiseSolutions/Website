@@ -10,6 +10,10 @@ function pageLoad(){
 	window.onscroll = function() {
 		setupSidebarHeight();
 	};
+
+	window.onload = function() {
+		hideSliders(); 
+	}
 }
 
 function setupPage() {
@@ -19,6 +23,13 @@ function setupPage() {
 	addExpanderOnClickEvents();
 	setOpenExpanders();
 }
+
+function hideSliders() {
+	var sliders = document.getElementsByClassName('slider-list');
+	[...sliders].forEach(slider => {
+	  slider.classList.add('listitem-hidden');
+	});
+  }
 
 function createBudgetTree(sites, functions) {
 	var div = document.getElementById('createReviewBudgetTreeDiv');
@@ -35,7 +46,7 @@ function createBudgetTree(sites, functions) {
 
 	var headerSpan = document.createElement('span');
 	headerSpan.style = "padding-left: 5px;";
-	headerSpan.innerHTML = 'Select Sites/Meters <i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudgetTreeDivSelector"></i>';
+	headerSpan.innerHTML = 'Select Locations <i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudgetTreeDivSelector"></i>';
 
 	headerDiv.appendChild(headerSpan);
 	div.appendChild(headerDiv);

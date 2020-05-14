@@ -29,7 +29,7 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="customerTree" class="sidebar-tree-div dashboard roundborder">
+			<div id="customerTree" class="tree-div dashboard roundborder">
 			</div>
 			<br>
 			<button style="width: 100%;" onclick='deleteCustomers()'>Delete Selected Customers</button><br><br>
@@ -44,11 +44,11 @@
 			</div>
 
 			<div class="final-column">
-				<br>
-				<div class="tabDiv" id="tabDiv"></div>
-				<div id="cardDiv"></div>
+				<div class="outer-container">
+					<div class="tabDiv" id="tabDiv"></div>
+					<div id="cardDiv"></div>
+				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>

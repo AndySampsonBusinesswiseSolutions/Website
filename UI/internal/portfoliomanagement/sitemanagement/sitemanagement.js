@@ -1,5 +1,5 @@
 function pageLoad() {    
-	createTree(data, "siteTree", "", "createCardButton", true);
+	createTree("createCardButton", true);
 	
 	document.onmousemove = function(e) {
 		setupSidebarHeight();
@@ -11,207 +11,113 @@ function pageLoad() {
 	};
 }
 
-var branchCount = 0;
-var subBranchCount = 0;
-
-function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters) {
+function createTree(checkboxFunction, isPageLoading = false) {
     var tree = document.createElement('div');
 	tree.setAttribute('class', 'scrolling-wrapper');
 	
-	var headerDiv = createHeaderDiv("siteHeader", 'Sites/Meters', true);
+	var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
   	var ul = createBranchUl("siteSelector", false, true);
 
     tree.appendChild(ul);
 
-    branchCount = 0;
-    subBranchCount = 0; 
+    buildTree(data, ul, checkboxFunction);
 
-    buildTree(baseData, ul, commodity, checkboxFunction, showSubMeters);
-
-    var div = document.getElementById(divId);
+    var div = document.getElementById("siteTree");
     clearElement(div);
 
     div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
-	document.getElementById('Site0checkbox').checked = true;
-	createCardButton(document.getElementById('Site0checkbox'));
-	openTab(document.getElementById('Site0button'), 'Site0button', '0', 'Site');
+	clearElement(tabDiv);
+	clearElement(cardDiv);
 
-	document.getElementById('Site6checkbox').checked = true;
-	createCardButton(document.getElementById('Site6checkbox'));
+	if(isPageLoading || sitesLocationcheckbox.checked) {
+		document.getElementById('Site0checkbox').checked = true;
+		createCardButton(document.getElementById('Site0checkbox'));
+		openTab(document.getElementById('Site0button'), 'Site0button', '0', 'Site');
 
-	document.getElementById('Site100checkbox').checked = true;
-	createCardButton(document.getElementById('Site100checkbox'));
+		document.getElementById('Site6checkbox').checked = true;
+		createCardButton(document.getElementById('Site6checkbox'));
+
+		document.getElementById('Site100checkbox').checked = true;
+		createCardButton(document.getElementById('Site100checkbox'));
+	}
+	else if(metersLocationcheckbox.checked) {
+		document.getElementById('Meter101checkbox').checked = true;
+		createCardButton(document.getElementById('Meter101checkbox'));
+		openTab(document.getElementById('Meter101button'), 'Meter101button', '101', 'Meter');
+	}
 
 	addExpanderOnClickEvents();
 	setOpenExpanders();
 }
 
-function buildTree(baseData, baseElement, commodity, checkboxFunction, showSubMeters) {
-    var dataLength = baseData.length;
-    for(var i = 0; i < dataLength; i++){
-        var base = baseData[i];
+function buildTree(baseData, baseElement, checkboxFunction) {
+	var dataLength = baseData.length;
+	
+	if(sitesLocationcheckbox.checked) {
+		for(var i = 0; i < dataLength; i++){
+			var base = baseData[i];
+			var baseName = getAttribute(base.Attributes, 'Name');
+			var li = document.createElement('li');
+			var ul = createUL();
+			var childrenCreated = false;
+			
+			if(base.hasOwnProperty('Meters')) {
+				buildIdentifierHierarchy(base.Meters, ul, checkboxFunction, baseName);
+				childrenCreated = true;
+			}
+	
+			appendListItemChildren(li, 'Site'.concat(base.GUID), checkboxFunction, 'Site', baseName, ul, baseName, base.GUID, childrenCreated);
+	
+			baseElement.appendChild(li);        
+		}
+	}
+	else {
+		var meters = [];
+		for(var i = 0; i < dataLength; i++){
+			var base = baseData[i];
 
-        if(!commoditySiteMatch(base, commodity)) {
-            continue;
-        }
-        
-        var baseName = getAttribute(base.Attributes, 'Name');
-        var li = document.createElement('li');
-        var ul = createUL();
-        var childrenCreated = false;
-        
-		if(base.hasOwnProperty('Meters')) {
-			buildIdentifierHierarchy(base.Meters, ul, commodity, checkboxFunction, baseName, showSubMeters);
-			childrenCreated = true;
+			if(base.Meters) {
+				meters.push(...base.Meters);
+			}
 		}
 
-        appendListItemChildren(li, commodity.concat('Site').concat(base.GUID), checkboxFunction, 'Site', baseName, commodity, ul, baseName, base.GUID, childrenCreated);
-
-        baseElement.appendChild(li);        
-    }
+		buildIdentifierHierarchy(meters, baseElement, checkboxFunction, '');
+	}    
 }
 
-function buildBranch(meters, groupByOption, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
-    var branchOptions = getBranchOptions(meters, groupByOption, commodity);
-    var branchId;
-    var groupBySubOption;
-
-    switch (groupByOption) {
-        case 'DeviceType':
-            branchId = commodity.concat('DeviceType');
-            groupBySubOption = 'DeviceSubType';
-            break;
-        case 'Zone':
-            branchId = commodity.concat('Zone');
-            groupBySubOption = 'Panel';
-            break;
-    }
-
-    var branchOptionsLength = branchOptions.length;
-    for(var i = 0; i < branchOptionsLength; i++) {
-        var branchOption = branchOptions[i];
-        var li = document.createElement('li');
-
-        var matchedMeters = getMatchedMeters(meters, groupByOption, branchOption, commodity);
-        var ul = createUL();
-        buildSubBranch(matchedMeters, ul, groupBySubOption, commodity, checkboxFunction, linkedSite, showSubMeters);
-        appendListItemChildren(li, branchId.concat(branchCount), checkboxFunction, 'GroupByOption|'.concat(groupByOption), branchOption, commodity, ul, linkedSite, '');
-
-        baseElement.appendChild(li);
-        branchCount++;
-    }
-}
-
-function buildSubBranch(meters, baseElement, groupBySubOption, commodity, checkboxFunction, linkedSite, showSubMeters) {
-    var branchOptions = getBranchOptions(meters, groupBySubOption, commodity);
-    var branchId; 
-
-    switch (groupBySubOption) {
-        case 'DeviceSubType':
-            branchId = commodity.concat('DeviceSubType');
-            break;
-        case 'Panel':
-            branchId = commodity.concat('Panel');
-            break;
-    }
-
-    var branchOptionsLength = branchOptions.length;
-    for(var i = 0; i < branchOptionsLength; i++) {
-        var branchOption = branchOptions[i];
-        var li = document.createElement('li');
-
-        var matchedMeters = getMatchedMeters(meters, groupBySubOption, branchOption, commodity);
-        var ul = createUL();
-        buildIdentifierHierarchy(matchedMeters, ul, commodity, checkboxFunction, linkedSite, showSubMeters);
-        appendListItemChildren(li, branchId.concat(subBranchCount), checkboxFunction, 'GroupBySubOption|'.concat(groupBySubOption), branchOption, commodity, ul, linkedSite, '');
-
-        baseElement.appendChild(li);
-        subBranchCount++;
-    }
-}
-
-function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, commodity, ul, linkedSite, guid, childrenCreated) {
+function appendListItemChildren(li, id, checkboxFunction, checkboxBranch, branchOption, ul, linkedSite, guid, childrenCreated) {
     li.appendChild(createBranchDiv(id, childrenCreated));
     li.appendChild(createCheckbox(id, checkboxFunction, checkboxBranch, linkedSite, guid));
-    li.appendChild(createTreeIcon(branchOption, commodity));
+    li.appendChild(createTreeIcon());
     li.appendChild(createSpan(id, branchOption));
     li.appendChild(createBranchListDiv(id.concat('List'), ul));
 }
 
-function buildIdentifierHierarchy(meters, baseElement, commodity, checkboxFunction, linkedSite, showSubMeters) {
+function buildIdentifierHierarchy(meters, baseElement, checkboxFunction, linkedSite, ) {
+	if(!metersLocationcheckbox.checked) {
+		return;
+	}
+
     var metersLength = meters.length;
     for(var i = 0; i < metersLength; i++){
         var meter = meters[i];
-        if(!commodityMeterMatch(meter, commodity)) {
-            continue;
-        }
-
         var meterAttributes = meter.Attributes;
         var identifier = getAttribute(meterAttributes, 'Identifier');
-        var meterCommodity = getAttribute(meterAttributes, 'Commodity');
-        var deviceType = getAttribute(meterAttributes, 'DeviceType');
-        var hasSubMeters = meter.hasOwnProperty('SubMeters');
         var li = document.createElement('li');
         var branchId = 'Meter'.concat(meter.GUID);
         var branchDiv = createBranchDiv(branchId);
-        
-        if(!showSubMeters || !hasSubMeters) {
-            branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
-            branchDiv.setAttribute('class', 'far fa-times-circle');
-        }
+		branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
+		branchDiv.setAttribute('class', 'far fa-times-circle');
 
         li.appendChild(branchDiv);
         li.appendChild(createCheckbox(branchId, checkboxFunction, 'Meter', linkedSite, meter.GUID));
-        li.appendChild(createTreeIcon(deviceType, meterCommodity));
+        li.appendChild(createTreeIcon());
         li.appendChild(createSpan(branchId, identifier));
 
-        if(showSubMeters && hasSubMeters) {
-            var ul = createUL();
-            buildSubMeterHierarchy(meter['SubMeters'], ul, deviceType, meterCommodity, checkboxFunction, linkedSite);
-
-            li.appendChild(createBranchListDiv(branchId.concat('List'), ul));
-        }        
-
         baseElement.appendChild(li); 
     }
-}
-
-function buildSubMeterHierarchy(subMeters, baseElement, deviceType, commodity, checkboxFunction, linkedSite) {
-    var subMetersLength = subMeters.length;
-    for(var i = 0; i < subMetersLength; i++){
-        var subMeter = subMeters[i];
-        var li = document.createElement('li');
-
-        var identifier = getAttribute(subMeter.Attributes, 'Identifier');
-        var branchDiv = createBranchDiv(subMeter.GUID);
-        branchDiv.removeAttribute('class', 'far fa-plus-square show-pointer expander');
-        branchDiv.setAttribute('class', 'far fa-times-circle');
-
-        li.appendChild(branchDiv);
-        li.appendChild(createCheckbox('SubMeter'.concat(subMeter.GUID), checkboxFunction, 'SubMeter', linkedSite, subMeter.GUID));
-        li.appendChild(createTreeIcon(deviceType, commodity));
-        li.appendChild(createSpan('SubMeter'.concat(subMeter.GUID), identifier));   
-
-        baseElement.appendChild(li); 
-    }
-}
-
-function getBranchOptions(meters, property, commodity) {
-    var branchOptions = [];
-    var metersLength = meters.length;
-
-    for(var i = 0; i < metersLength; i++) {
-        var meter = meters[i];
-        var attribute = getAttribute(meter.Attributes, property);
-        if(!branchOptions.includes(attribute)
-            && commodityMeterMatch(meter, commodity)) {
-            branchOptions.push(attribute);
-        }        
-    }
-
-    return branchOptions;
 }
 
 function createBranchListDiv(branchListDivId, ul) {
@@ -228,9 +134,9 @@ function createUL() {
     return ul;
 }
 
-function createTreeIcon(branch, commodity) {
+function createTreeIcon() {
     var icon = document.createElement('i');
-    icon.setAttribute('class', getIconByBranch(branch, commodity));
+    icon.setAttribute('class', getIconByBranch());
     icon.setAttribute('style', 'padding-left: 3px; padding-right: 3px;');
     return icon;
 }
@@ -268,65 +174,8 @@ function createCheckbox(checkboxId, checkboxFunction, branch, linkedSite, guid) 
     return checkBox;
 }
 
-function commoditySiteMatch(site, commodity) {
-    if(commodity == '') {
-        return true;
-    }
-
-    if(!site.hasOwnProperty('Meters')) {
-        return false;
-    }
-
-    var metersLength = site.Meters.length;
-    for(var i = 0; i < metersLength; i++) {
-        if(commodityMeterMatch(site.Meters[i], commodity)) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-function commodityMeterMatch(meter, commodity) {
-    if(commodity == '') {
-        return true;
-    }
-
-    var meterCommodity = getAttribute(meter.Attributes, 'Commodity');
-    return meterCommodity.toLowerCase() == commodity.toLowerCase();
-}
-
-function getIconByBranch(branch, commodity) {
-    switch (branch) {
-        case 'Mains':
-            if(commodity == 'Gas') {
-                return 'fas fa-burn';
-            }
-            else {
-                return 'fas fa-plug';
-            }
-        case 'Lighting':
-            return 'fas fa-lightbulb';
-        case 'Unknown':
-            return 'fas fa-question-circle';
-        default:
-            return 'fas fa-map-marker-alt';
-    }
-}
-
-function getMatchedMeters(meters, attribute, branchOption, commodity) {
-    var matchedMeters = [];
-    var metersLength = meters.length;
-
-    for(var i = 0; i < metersLength; i++){
-        var meter = meters[i];
-        if(getAttribute(meter.Attributes, attribute) == branchOption
-            && commodityMeterMatch(meter, commodity)) {
-            matchedMeters.push(meter);
-        }
-    }
-
-    return matchedMeters;
+function getIconByBranch() {
+	return 'fas fa-map-marker-alt';
 }
 
 function openTab(callingElement, tabName, guid, branch) {
@@ -372,7 +221,7 @@ function createCardButton(checkbox){
 			button.setAttribute('class', 'tablinks');
 			button.setAttribute('onclick', 'openTab(this, "' + span.id.replace('span', 'div') +'", "' + checkbox.getAttribute('guid') + '", "' + checkbox.getAttribute('branch') + '")');
 
-			if(branch == "Site") {
+			if(branch == "Site" || !sitesLocationcheckbox.checked) {
 				button.innerHTML = span.innerHTML;
 			}
 			else {
@@ -403,9 +252,8 @@ function updateTabDiv() {
 	var tabDivChildrenLength = tabDivChildren.length;
 
 	if(tabDivChildrenLength == 0) {
-		document.getElementById('Site100checkbox').checked = true;
-		createCardButton(document.getElementById('Site100checkbox'));
-		openTab(document.getElementById('Site100button'), 'Site100div', '100', 'Site');
+		var cardDiv = document.getElementById('cardDiv');
+		clearElement(cardDiv);
 	}
 	else {
 		var percentage = (1 / tabDivChildrenLength) * 100;

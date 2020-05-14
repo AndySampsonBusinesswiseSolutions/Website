@@ -45,17 +45,19 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="siteTree" class="sidebar-tree-div dashboard roundborder">
+			<div id="siteTree" class="tree-div dashboard roundborder">
 			</div>
 			<br>
+			<button style="width: 100%;" onclick="displayUploadContract();">Upload Contract</button>
+			<br><br>
 			<div class="tree-div dashboard roundborder scrolling-wrapper">
-				<div class="sidebar-expander-header">
+				<div class="expander-header">
 					<span id="configureSelectorSpan">Configure</span>
 					<i id="configureSelector" class="far fa-plus-square expander show-pointer"></i>
 				</div>
 				<div id="configureSelectorList" class="expander-container listitem-hidden">
 					<div class="tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+						<div class="expander-header">
 							<span id="locationSelectorSpan">Location</span>
 							<i id="locationSelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
@@ -72,8 +74,6 @@
 					</div>
 				</div>
 			</div>
-			<br>
-			<button style="width: 100%;" onclick="displayUploadContract();">Upload Contract</button>
 		</div>
 	</div>
 	<div id="outerContainer">
@@ -83,8 +83,7 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<br>
-				<div class="roundborder divcolumn dashboard">
+				<div class="divcolumn dashboard">
 					<div class="expander-header">
 						<span>Out Of Contract Meters</span>
 						<i id="outOfContractMeters" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -95,7 +94,7 @@
 						<div id="outOfContract"></div>
 					</div>
 				</div>
-				<div class="roundborder divcolumn expander-container dashboard">
+				<div class="divcolumn expander-container dashboard">
 					<div class="expander-header">
 						<span>Active Contracts</span>
 						<i id="activeContracts" class="far fa-plus-square show-pointer expander"></i>
@@ -106,7 +105,7 @@
 						<div id="active"></div>
 					</div>
 				</div>
-				<div class="roundborder divcolumn expander-container dashboard">
+				<div class="divcolumn expander-container dashboard">
 					<div class="expander-header">
 						<span>Pending Contracts</span>
 						<i id="pendingContracts" class="far fa-plus-square show-pointer expander"></i>
@@ -117,7 +116,7 @@
 						<div id="pending"></div>
 					</div>
 				</div>
-				<div class="roundborder divcolumn expander-container dashboard">
+				<div class="divcolumn expander-container dashboard">
 					<div class="expander-header">
 						<span>Finished Contracts</span>
 						<i id="finishedContracts" class="far fa-plus-square show-pointer expander openExpander"></i>
@@ -129,7 +128,6 @@
 					</div>
 				</div>
 			</div>
-			<br>
 		</div>
 	</div>
 </body>

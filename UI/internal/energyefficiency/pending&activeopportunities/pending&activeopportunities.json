@@ -5,40 +5,6 @@ var activeopportunity = [
             {"ProjectName" : "LED Lighting"}
         ],
         "Sites": [
-            {
-                "GUID" : 1,
-                "SiteName": "Site X",
-                "Meters":[
-                    {
-                        "GUID": 14,
-                        "Identifier": 1234567890123
-                    }
-                ]
-			},
-			{
-                "GUID" : 2,
-                "SiteName": "Site Y",
-                "Meters":[
-                    {
-                        "GUID": 16,
-                        "Identifier": 1234567890124
-                    }
-                ]
-			},
-			{
-                "GUID" : 3,
-                "SiteName": "Site Z",
-                "Meters":[
-                    {
-                        "GUID": 18,
-                        "Identifier": 1234567890125
-					},
-					{
-                        "GUID": 20,
-                        "Identifier": 1234567890126
-                    }
-                ]
-            },
 			{
                 "GUID" : 4,
                 "SiteName": "Site A",
@@ -82,6 +48,10 @@ var activeopportunity = [
                 "SiteName": "Site Z",
                 "Meters":[
 					{
+                        "GUID": 18,
+                        "Identifier": 1234567890125
+					},
+					{
                         "GUID": 20,
                         "Identifier": 1234567890126
                     }
@@ -93,7 +63,7 @@ var activeopportunity = [
 
 var ganttData = [
 	{
-		id: 1, name: "LED Lighting", status: "Pending",
+		id: 1, name: "LED Lighting 2", status: "Pending",
 		sites: [
 			{name: "Site X", meters: [{identifier: 1234567890123}]},
 			{name: "Site Y", meters: [{identifier: 1234567890124}]},

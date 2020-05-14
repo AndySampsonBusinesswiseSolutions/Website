@@ -24,7 +24,7 @@
 			</div>
 			<br>
 			<div class="tree-div dashboard roundborder scrolling-wrapper">
-				<div class="sidebar-expander-header">
+				<div class="expander-header">
 					<span id="commoditySelectorSpan">Commodity</span>
 					<i id="commoditySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
 				</div>
@@ -44,13 +44,13 @@
 			</div>
 			<br>
 			<div class="tree-div dashboard roundborder scrolling-wrapper">
-				<div class="sidebar-expander-header">
+				<div class="expander-header">
 					<span id="configureSelectorSpan">Configure</span>
 					<i id="configureSelector" class="far fa-plus-square expander show-pointer"></i>
 				</div>
 				<div id="configureSelectorList" class="expander-container listitem-hidden">
 					<div class="tree-div dashboard roundborder scrolling-wrapper">
-						<div class="sidebar-expander-header">
+						<div class="expander-header">
 							<span id="locationSelectorSpan">Location</span>
 							<i id="locationSelector" class="far fa-plus-square expander show-pointer"></i>
 						</div>
@@ -84,47 +84,47 @@
 					<div id="mainDashboardSelectorList">
 						<div style="width: 40%; float: left;">
 							<a href="/Internal/PortfolioManagement/SiteManagement/" class="roundborder dashboard-item-small" style="background-color: #02601e;">
-								<i class="fas fa-map-marker-alt fa-6x" style="color: white; padding: 5px;"></i><br>
+								<i class="fas fa-map-marker-alt fa-6x icon"></i><br>
 								<span style="font-size: 19px;">Number of Locations Selected</span><br>
 								<span id="dashboardHeaderNumberOfSites" style="font-size: 25px;"></span>
 							</a>
 							<a href="/Internal/Finance/DataAnalysis/"  class="roundborder dashboard-item-small" style="background-color: #663399;">
-								<i class="fas fa-bolt fa-6x" style="color: white; padding: 5px;"></i><br>
+								<i class="fas fa-bolt fa-6x icon"></i><br>
 								<span style="font-size: 19px;">Portfolio Annualised Usage</span><br>
 								<span id="dashboardHeaderPortfolioAnnualisedEnergyUsage" style="font-size: 25px;"></span>
 							</a>
 							<a href="/Internal/Finance/DataAnalysis/"  class="roundborder dashboard-item-small" style="background-color: #CC3333;">
-								<i class="fas fa-bolt fa-6x" style="color: white; padding: 5px;"></i><br>
+								<i class="fas fa-bolt fa-6x icon"></i><br>
 								<span style="font-size: 19px;">Portfolio Annualised Cost</span><br>
 								<span id="dashboardHeaderPortfolioAnnualisedEnergyCost" style="font-size: 25px;"></span>
 							</a>
 							<div class="roundborder dashboard-item-small" style="background-color: #CC66CC;">
-								<i class="fas fa-pound-sign fa-6x" style="color: white; padding: 5px;"></i><br>
+								<i class="fas fa-pound-sign fa-6x icon"></i><br>
 								<span style="font-size: 19px;">Savings (£)</span><br>
 								<span style="font-size: 20px;">£10,571 to date</span><br>
 								<span style="font-size: 20px;">£3,083 per annum</span><br>
 								<span style="font-size: 20px;">£9,249 over next 3 years</span>
 							</div>
 							<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="roundborder dashboard-item-small" style="background-color: #6699CC;">
-								<i class="fas fa-tools fa-6x" style="color: white; padding: 5px;"></i><br>
+								<i class="fas fa-tools fa-6x icon"></i><br>
 								<span style="font-size: 19px;">Active Opportunities</span><br>
 								<span id="dashboardHeaderActiveOpportunitiesCount" style="font-size: 20px;">1</span><br>
 								<span id="dashboardHeaderActiveOpportunitiesUsage" style="font-size: 19px;">100,000kWh</span><br>
 								<span id="dashboardHeaderActiveOpportunitiesCost" style="font-size: 20px;">£10,000</span>
 							</a>
 							<div class="roundborder dashboard-item-small" style="background-color: #676762;">
-								<i class="fas fa-cloud fa-6x" style="color: white; padding: 5px;"></i><br>
+								<i class="fas fa-cloud fa-6x icon"></i><br>
 								<span style="font-size: 19px;">Carbon</span><br>
 								<span id="dashboardHeaderCarbon" style="font-size: 25px;">1,550 tonnes per annum</span>
 							</div>
 						</div>
-						<div style="width: 42.5%; float: left;">
+						<div style="width: 17.5%; float: right;">
+							<div id="map-canvas" class="roundborder dashboard-item-large"></div>
+						</div>
+						<div style="width: 42.5%; float: right;">
 							<div id="spreadsheetContainer" class="roundborder dashboard-item-large" style="overflow: auto;">
 								<div id="spreadsheet" style="margin: 2px; float: left;"></div>
 							</div>
-						</div>
-						<div style="width: 17.5%; float: right;">
-							<div id="map-canvas" class="roundborder dashboard-item-large"></div>
 						</div>
 					</div>
 				</div>
