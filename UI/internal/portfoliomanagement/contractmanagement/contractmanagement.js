@@ -12,6 +12,66 @@ function pageLoad() {
 	};
 }
 
+function deleteContracts() {
+	var contracts = getContracts().join("<br>");
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Delete Contract(s)";
+	text.innerHTML = "Are you sure you want to delete the following contracts?<br>" + contracts;
+
+    finalisePopup(title, 'Delete Contract?<br><br>', modal, span);
+}
+
+function reinstateContracts() {
+	var contracts = getContracts();
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Reinstate Contract(s)";
+	button.classList.replace('reject', 'approve');
+
+	text.innerHTML = "Please select contracts to reinstate:<br>";
+	contracts.forEach(function(contract, i) {
+		var checkbox = document.createElement('input');
+		checkbox.type = 'checkbox';
+		checkbox.id = 'reinstateContract' + i + 'checkbox';
+		checkbox.setAttribute('contractValue', contract);
+
+		text.innerHTML += checkbox.outerHTML + contract + '<br>';
+	});
+
+    finalisePopup(title, 'Reinstate Contract?<br><br>', modal, span);
+}
+
+function getContracts() {
+	var inputs = siteTree.getElementsByTagName('input');
+	var inputLength = inputs.length;
+	var contracts = [];
+
+	for(var i = 0; i < inputLength; i++) {
+		var input = inputs[i];
+
+		if(input.type.toLowerCase() == 'checkbox' && input.checked) {
+			var span = document.getElementById(input.id.replace('checkbox', 'span'));
+
+			if(!span.innerText.startsWith('Add New')) {
+				contracts.push(span.innerText);
+			}
+		}
+	}
+
+	return contracts;
+}
+
 function showRates(contractType, contractIndex, contractDetailIndex, mpxnIndex) {
 	var table = document.createElement('table');
 	table.setAttribute('style', 'width: 100%;');

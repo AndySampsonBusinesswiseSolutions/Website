@@ -24,7 +24,7 @@ function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters)
     clearElement(div);
 
     var header = document.createElement('span');
-    header.innerHTML = 'Select Site(s)/Meter(s)/Sub Meter(s)';
+    header.innerHTML = 'Select Locations';
 
     div.appendChild(header);
     div.appendChild(tree);

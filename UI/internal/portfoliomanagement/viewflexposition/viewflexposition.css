@@ -1,10 +1,4 @@
-.left, .right {
-    float: left;
-    width: 46%;
-    min-height: 100px;
-}
-.middle, .first, .last {
-    float: left;
-    width: 2%;
-    min-height: 100px;
-}
+.chart {
+    width: calc(49.5%);
+  }
+  

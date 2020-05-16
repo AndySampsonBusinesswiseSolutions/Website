@@ -80,12 +80,12 @@
                                 </div>
                             </div>
                             <div class="middle"></div>
-                            <div style="float: left;">
+                            <div style="float: left; width: 15%;">
                                 <div id="siteTree" class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
                                 </div>
                             </div>
                             <div class="middle"></div>
-                            <div style="float: left;">
+                            <div style="float: left; width: 15%;">
                                 <div class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
                                     <span id="timePeriodsDiv">Select Time Periods</span>
                                     <ul class="format-listitem listItemWithoutPadding" id="timePeriodsDivSelectorList">
@@ -280,8 +280,23 @@
                                 </div>
                             </div>
                             <div class="middle"></div>
-                            <div style="float: left;">
-                                <div class="tree-div roundborder" style="padding: 5px; width: 918px;">
+                            <div style="float: right;">
+                                <button class="show-pointer approve" style="width: 48%;">Add Opportunity</button>&nbsp;
+                                <button class="show-pointer reject" style="width: 48%;">Reset Opportunity</button>
+                                <br><br>
+                                <div class="roundborder" style="text-align: center; float: left;">
+                                    <span style="border-bottom: solid black 1px;">Estimated Savings<br></span>
+                                    <br>
+                                    <div style="padding: 5px;">
+                                        <span>Number of new sub meters required: 1</span><br>
+                                        <span>Estimated Annual kWh Savings on Existing Devices: 10,000</span><br>
+                                        <span>Estimated Annual £ Savings on Existing Devices: £1,000</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="middle" style="float: right;"></div>
+                            <div style="float: right; width: 25%;">
+                                <div class="tree-div roundborder" style="padding: 5px;">
                                     <label for="opportunityNotes">Notes:</label>
                                     <textarea id="opportunityNotes" style="height: 15%; resize: none;"></textarea>
                                 </div>
@@ -290,29 +305,13 @@
                     </div>
                     <div style="clear: both;"></div>
                     <div class="expander-container">
-                        <div class="roundborder" style="text-align: center; float: left; width: 1375px;">
+                        <div class="roundborder" style="text-align: center; float: left; width: 100%;">
                             <div style="padding: 5px;">
                                 <label for="applyPercentage">Percentage Saving</label>
                                 <input id="applyPercentage"></input>
                                 <button class="show-pointer">Apply Percentage Saving</button>
                             </div>
                             <div id="createNewOpportunitySpreadsheet"></div>
-                        </div>
-                        <div class="middle"></div>
-                        <div class="roundborder" style="text-align: center; float: left;">
-                            <span style="border-bottom: solid black 1px;">Estimated Savings<br></span>
-                            <br>
-                            <div style="padding: 5px;">
-                                <span>Number of new sub meters required: 1</span><br>
-                                <span>Estimated Annual kWh Savings on Existing Devices: 10,000</span><br>
-                                <span>Estimated Annual £ Savings on Existing Devices: £1,000</span>
-                            </div>
-                        </div>
-                        <div class="middle"></div>
-                        <div style="float: right;">
-                            <br><br>
-                            <button class="show-pointer approve" style="width: 100%;">Add Opportunity</button>
-                            <button class="show-pointer reject" style="width: 100%;">Reset Opportunity</button>
                         </div>
                     </div>
                     <div style="clear: both;"></div>

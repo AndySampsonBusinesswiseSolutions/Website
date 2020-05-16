@@ -339,26 +339,71 @@
 			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
 		</div>
 		<div class="tree-column">
-			<div id="siteDiv" class="tree-div dashboard roundborder">
+			<div id="siteTree" class="dashboard roundborder outer-container scrolling-wrapper">
 			</div>
 			<br>
-			<div class="tree-div dashboard roundborder outer-container">
+			<div id="configureContainer" class="tree-div dashboard roundborder outer-container scrolling-wrapper">
 				<div class="expander-header">
-					<span id="opportunityStatusSpan">Opportunity Status</span>
-					<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
+					<span id="configureOptionsSpan">Configure</span>
+					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
 				</div>
-				<div id="opportunityStatusList" class="expander-container">
-					<ul class="format-listitem listItemWithoutPadding">
-						<li>
-							<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
-						</li>
-						<li>
-							<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
-						</li>
-						<li>
-							<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
-						</li>
-					</ul>
+				<div id="configureOptionsList" class="slider-list expander-container">
+					<div class="dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
+							<span id="configureLocationSelectorSpan">Location</span>
+							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+						</div>
+						<div id="configureLocationSelectorList" class="expander-container">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Sites</span>
+								<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Areas</span>
+								<label class="switch"><input type="checkbox" id="areaLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Commodities</span>
+								<label class="switch"><input type="checkbox" id="commodityLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Meters</span>
+								<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>SubAreas</span>
+								<label class="switch"><input type="checkbox" id="subareaLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Assets</span>
+								<label class="switch"><input type="checkbox" id="assetLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>SubMeters</span>
+								<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="tree-div dashboard roundborder outer-container">
+						<div class="expander-header">
+							<span id="opportunityStatusSpan">Opportunity Status</span>
+							<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
+						</div>
+						<div id="opportunityStatusList" class="expander-container">
+							<ul class="format-listitem listItemWithoutPadding">
+								<li>
+									<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
+								</li>
+								<li>
+									<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
+								</li>
+								<li>
+									<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -370,31 +415,29 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
 			</div>
 			<div class="final-column">
-				<div>
-					<div class="divcolumn left dashboard">
-						<div class="expander-header">
-							<span>Requested Visits</span>
-							<i id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
-							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></i>
-							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
-						</div>
-						<br>
-						<div id="requestedVisitsList" class="scrolling-wrapper" style="text-align: center;">
-							<div id="requestedVisitsSpreadsheet"></div>
-						</div>
+				<div class="divcolumn left dashboard">
+					<div class="expander-header">
+						<span>Requested Visits</span>
+						<i id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
 					</div>
-					<div class="middle"></div>
-					<div class="divcolumn right dashboard">
-						<div class="expander-header">
-							<span>Scheduled Visits</span>
-							<i id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
-							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></i>
-							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
-						</div>
-						<br>
-						<div id="scheduledVisitsList" class="scrolling-wrapper" style="text-align: center;">
-							<div id="scheduledVisitsSpreadsheet"></div>
-						</div>
+					<br>
+					<div id="requestedVisitsList" class="scrolling-wrapper" style="text-align: center;">
+						<div id="requestedVisitsSpreadsheet"></div>
+					</div>
+				</div>
+				<div class="middle"></div>
+				<div class="divcolumn right dashboard">
+					<div class="expander-header">
+						<span>Scheduled Visits</span>
+						<i id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
+						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></i>
+						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
+					</div>
+					<br>
+					<div id="scheduledVisitsList" class="scrolling-wrapper" style="text-align: center;">
+						<div id="scheduledVisitsSpreadsheet"></div>
 					</div>
 				</div>
 				<div style="clear: left;"></div>
@@ -447,7 +490,7 @@
 
 <script src="/includes/base.js"></script>
 
-<script type="text/javascript" src="jquery-1.4.2.js"></script>
+<script type="text/javascript" src="/includes/jquery-1.4.2.js"></script>
 <script type="text/javascript" src="opportunitymanagement.js"></script>
 <script type="text/javascript" src="opportunitymanagement.json"></script>
 <script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>

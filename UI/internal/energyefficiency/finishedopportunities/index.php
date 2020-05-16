@@ -76,7 +76,6 @@
 				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
 				<div class="section-header-text"><span class="tooltip"><?php echo $PAGE_TITLE ?><span class="tooltiptext">Opportunities that have been completed</span></span></div>
 			</div>
-			<br>
 			<div class="final-column">
 				<div class="dashboard outer-container tree-div">
 					<div class="expander-header">

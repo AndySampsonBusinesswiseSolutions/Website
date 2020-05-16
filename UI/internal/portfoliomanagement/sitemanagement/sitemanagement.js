@@ -11,6 +11,67 @@ function pageLoad() {
 	};
 }
 
+function deleteLocations() {
+	var locations = getLocations().join("<br>");
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Delete Location(s)";
+	text.innerHTML = "Are you sure you want to delete the following locations?<br>" + locations;
+
+    finalisePopup(title, 'Delete Location?<br><br>', modal, span);
+}
+
+function reinstateLocations() {
+	var locations = getLocations();
+
+	var modal = document.getElementById("popup");
+	var title = document.getElementById("title");
+	var span = modal.getElementsByClassName("close")[0];
+	var text = document.getElementById('text');
+	var button = document.getElementById('button');
+
+	button.innerText = "Reinstate Location(s)";
+	button.classList.replace('reject', 'approve');
+
+	text.innerHTML = "Please select locations to reinstate:<br>";
+	locations.forEach(function(location, i) {
+		var checkbox = document.createElement('input');
+		checkbox.type = 'checkbox';
+		checkbox.id = 'reinstateLocation' + i + 'checkbox';
+		checkbox.setAttribute('locationValue', location);
+
+		text.innerHTML += checkbox.outerHTML + location + '<br>';
+	});
+
+    finalisePopup(title, 'Reinstate Location?<br><br>', modal, span);
+}
+
+function getLocations() {
+	var inputs = siteTree.getElementsByTagName('input');
+	var inputLength = inputs.length;
+	var locations = [];
+
+	for(var i = 0; i < inputLength; i++) {
+		var input = inputs[i];
+
+		if(input.type.toLowerCase() == 'checkbox' && input.checked) {
+			var span = document.getElementById(input.id.replace('checkbox', 'span'));
+
+			if(!span.innerText.startsWith('Add New')) {
+				var button = document.getElementById(input.id.replace('checkbox', 'button'));
+				locations.push(button.innerText);
+			}
+		}
+	}
+
+	return locations;
+}
+
 function createTree(checkboxFunction, isPageLoading = false) {
     var tree = document.createElement('div');
 	tree.setAttribute('class', 'scrolling-wrapper');

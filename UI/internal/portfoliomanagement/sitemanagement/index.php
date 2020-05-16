@@ -40,6 +40,18 @@
 			<br>
 		</div>
 	</div>
+	<div id="popup" class="popup">
+		<div class="modal-content">
+			<span class="close" title="Close">&times;</span>
+			<div class="title">
+				<span id="title"></span><br><br>
+			</div>
+			<br>
+			<span id="text" style="font-size: 15px;"></span><br><br>
+			<button style="float: right;" class="reject" id="button">Delete Attribute</button>
+			<br>
+		</div>
+	</div>
 	<div id="mySidenav" class="sidenav">
 		<div style="text-align: center;">
 			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
@@ -50,7 +62,9 @@
 			<div id="siteTree" class="tree-div dashboard roundborder">
 			</div>
 			<br>
-			<button style="width: 100%;" onclick="displayUploadUsage();">Upload Usage</button>
+			<button style="width: 100%;" onclick="displayUploadUsage();">Upload Usage</button><br><br>
+			<button style="width: 100%;" onclick='deleteLocations()'>Delete Selected Locations</button><br><br>
+			<button style="width: 100%;" onclick='reinstateLocations()'>Reinstate Deleted Locations</button>
 			<br><br>
 			<div class="tree-div dashboard roundborder scrolling-wrapper">
 				<div class="expander-header">

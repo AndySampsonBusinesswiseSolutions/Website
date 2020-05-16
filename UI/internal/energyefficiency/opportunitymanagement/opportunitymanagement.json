@@ -1,42 +1,332 @@
-var customer = [
+var usageSites = [
     {
-        "GUID" : "0",
-        "Attributes" : 
-        [
-            {"CustomerName" : "David Ford Trading Ltd"},
-            {"Address Line 1" : "32"},
-            {"Address Line 2" : "The Havens"},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : "Ipswich"},
-            {"Postcode" : "IP3 9SJ"},
-            {"Contact Name" : "David Ford"},
-            {"Contact Telephone Number" : "01473 277556"},
-            {"Email" : "contact.us@havenpower.com"}
+        "Attributes" :[
+            {"Name" : "Leeds"},
+            {"GUID" : "Site0"},
+            {"MaxDemand" : 300},
+            {"Icon" : "fas fa-map-marker-alt"},
+            {"Commodities" : "Electricity, Gas"},
         ],
-        "ChildCustomers" :[
-            {"CustomerName" : "Site X"}
+        "Areas" :[
+            {
+                "Attributes" :[
+                    {"Name" : "Factory"},
+                    {"GUID" : "Site0_Area0"},
+                    {"Icon" : "fas fa-industry"},
+                    {"Commodities" : "Electricity, Gas"},
+                ],
+                "Commodities" :[
+                    {
+                        "Attributes" :[
+                            {"Name" : "Electricity"},
+                            {"GUID" : "Site0_Area0_Commodity0"},
+                            {"Icon" : "fas fa-bolt"},
+                            {"Commodities" : "Electricity"},
+                        ],
+                        "Meters" :[
+                            {
+                                "Attributes" :[
+                                    {"Name" : "1234567890123"},
+                                    {"GUID" : "Site0_Area0_Commodity0_Meter0"},
+                                    {"Commodities" : "Electricity"},
+                                    {"MaxDemand" : 300},
+                                    {"Icon" : "fas fa-stopwatch"}
+                                ],
+                                "SubAreas" :[
+                                    {
+                                        "Attributes" :[
+                                            {"Name" : "Lighting"},
+                                            {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0"},
+                                            {"Commodities" : "Electricity"},
+                                            {"Icon" : "fas fa-industry"}
+                                        ],
+                                        "Assets" :[
+                                            {
+                                                "Attributes" :[
+                                                    {"Name" : "Light 1"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0_Asset0"},
+                                                    {"Commodities" : "Electricity"},
+                                                    {"Icon" : "fas fa-industry"}
+                                                ],
+                                                "SubMeters" :[
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "Light 1 Phase 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0_Asset0_SubMeter0"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-industry"}
+                                                        ],
+                                                    },
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "Light 1 Phase 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter0_SubArea0_Asset0_SubMeter1"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-industry"}
+                                                        ],
+                                                    },
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                ],
+                            },
+                            {
+                                "Attributes" :[
+                                        {"Name" : "1234567890124"},
+                                        {"GUID" : "Site0_Area0_Commodity0_Meter1"},
+                                        {"Commodities" : "Electricity"},
+                                        {"MaxDemand" : 300},
+                                        {"Icon" : "fas fa-stopwatch"}
+                                ],
+                                "SubAreas" :[
+                                    {
+                                        "Attributes" :[
+                                            {"Name" : "Security Lighting"},
+                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0"},
+                                            {"Commodities" : "Electricity"},
+                                            {"Icon" : "fas fa-user-secret"}
+                                        ],
+                                        "Assets" :[
+                                            {
+                                                "Attributes" :[
+                                                    {"Name" : "North Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset0"},
+                                                    {"Commodities" : "Electricity"},
+                                                    {"Icon" : "fas fa-user-secret"}
+                                                ],
+                                                "SubMeters" :[
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "North Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset0_SubMeter0"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "North Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset0_SubMeter1"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                ]
+                                            },
+                                            {
+                                                "Attributes" :[
+                                                    {"Name" : "East Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset1"},
+                                                    {"Commodities" : "Electricity"},
+                                                    {"Icon" : "fas fa-user-secret"}
+                                                ],
+                                                "SubMeters" :[
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "East Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset1_SubMeter0"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "East Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset1_SubMeter1"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                ]
+                                            },
+                                            {
+                                                "Attributes" :[
+                                                    {"Name" : "South Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset2"},
+                                                    {"Commodities" : "Electricity"},
+                                                    {"Icon" : "fas fa-user-secret"}
+                                                ],
+                                                "SubMeters" :[
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "South Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset2_SubMeter0"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "South Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset2_SubMeter1"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                ]
+                                            },
+                                            {
+                                                "Attributes" :[
+                                                    {"Name" : "West Wall"},
+                                                    {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset3"},
+                                                    {"Commodities" : "Electricity"},
+                                                    {"Icon" : "fas fa-user-secret"}
+                                                ],
+                                                "SubMeters" :[
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "West Wall Security Light 1"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset3_SubMeter0"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "West Wall Security Light 2"},
+                                                            {"GUID" : "Site0_Area0_Commodity0_Meter1_SubArea0_Asset3_SubMeter1"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-user-secret"}
+                                                        ],
+                                                    },
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    {
+                        "Attributes" :[
+                            {"Name" : "Gas"},
+                            {"GUID" : "Site0_Area0_Commodity1"},
+                            {"Icon" : "fas fa-burn"},
+                            {"Commodities" : "Gas"},
+                        ],
+                        "Meters" :[
+                            {
+                                "Attributes" :[
+                                        {"Name" : "987654"},
+                                        {"GUID" : "Site0_Area0_Commodity1_Meter1"},
+                                        {"Commodities" : "Gas"},
+                                        {"Icon" : "fas fa-stopwatch"}
+                                ],
+                            },
+                        ],
+                    },
+                ]
+            },
         ]
     },
     {
-        "GUID" : "1",
-        "Attributes" : 
-        [
-            {"CustomerName" : "Businesswise Solutions"},
-            {"Address Line 1" : "3rd floor"},
-            {"Address Line 2" : "Elder House"},
-            {"Address Line 3" : "586-592 Elder Gate"},
-            {"Address Line 4" : "Milton Keynes"},
-            {"Postcode" : "MK9 1LR"},
-            {"Contact Name" : "David Ford"},
-            {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"}
-        ]
-        ,
-        "ChildCustomers" :[
-            {"CustomerName" : "Site Y"}
+        "Attributes" :[
+            {"Name" : "Manchester"},
+            {"GUID" : "Site1"},
+            {"MaxDemand" : 1200},
+            {"Icon" : "fas fa-map-marker-alt"},
+            {"Commodities" : "Electricity, Gas"},
+        ],
+        "Areas" :[
+            {
+                "Attributes" :[
+                    {"Name" : "Office Mains"},
+                    {"GUID" : "Site1_Area0"},
+                    {"Icon" : "fas fa-home"},
+                    {"Commodities" : "Gas"},
+                ],
+                "Commodities" :[
+                    {
+                        "Attributes" :[
+                            {"Name" : "Gas"},
+                            {"GUID" : "Site1_Area0_Commodity0"},
+                            {"Icon" : "fas fa-burn"},
+                            {"Commodities" : "Gas"},
+                        ],
+                        "Meters" :[
+                            {
+                                "Attributes" :[
+                                        {"Name" : "987650"},
+                                        {"GUID" : "Site1_Area0_Commodity0_Meter0"},
+                                        {"Commodities" : "Gas"},
+                                        {"Icon" : "fas fa-stopwatch"}
+                                ],
+                            },
+                        ],
+                    },
+                ]
+            },
+            {
+                "Attributes" :[
+                    {"Name" : "Factory Mains"},
+                    {"GUID" : "Site1_Area1"},
+                    {"Icon" : "fas fa-lightbulb"},
+                    {"Commodities" : "Electricity"},
+                ],
+                "Commodities" :[
+                    {
+                        "Attributes" :[
+                            {"Name" : "Electricity"},
+                            {"GUID" : "Site1_Area1_Commodity0"},
+                            {"Icon" : "fas fa-bolt"},
+                            {"Commodities" : "Electricity"},
+                        ],
+                        "Meters" :[
+                            {
+                                "Attributes" :[
+                                    {"Name" : "1234567890120"},
+                                    {"GUID" : "Site1_Area1_Commodity0_Meter0"},
+                                    {"Commodities" : "Electricity"},
+                                    {"MaxDemand" : 1200},
+                                    {"Icon" : "fas fa-stopwatch"}
+                                ],
+                                "SubAreas" :[
+                                    {
+                                        "Attributes" :[
+                                            {"Name" : "Lighting"},
+                                            {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0"},
+                                            {"Commodities" : "Electricity"},
+                                            {"Icon" : "fas fa-user-secret"}
+                                        ],
+                                        "Assets" :[
+                                            {
+                                                "Attributes" :[
+                                                    {"Name" : "Factory Lighting"},
+                                                    {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0_Asset0"},
+                                                    {"Commodities" : "Electricity"},
+                                                    {"Icon" : "fas fa-industry"}
+                                                ],
+                                                "SubMeters" :[
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "Factory Lighting Sub Meter 1"},
+                                                            {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0_Asset0_SubMeter0"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-industry"}
+                                                        ],
+                                                    },
+                                                    {
+                                                        "Attributes" :[
+                                                            {"Name" : "Factory Lighting Sub Meter 2"},
+                                                            {"GUID" : "Site1_Area1_Commodity0_Meter0_SubArea0_Asset0_SubMeter1"},
+                                                            {"Commodities" : "Electricity"},
+                                                            {"Icon" : "fas fa-industry"}
+                                                        ],
+                                                    },
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ]
+            },
         ]
     }
-];
+]
 
 var ganttData = [
 	{

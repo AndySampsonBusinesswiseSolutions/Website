@@ -15,38 +15,34 @@
   <div id="mySidenav" class="sidenav">
     <div style="text-align: center;">
 			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
-      <i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
+      <i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar(); updatePage()" title="Click To Lock Sidebar"></i>
       <i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
     </div>
     <div class="tree-column">
-      <div class="dashboard roundborder outer-container">
-        <div class="expander-header">
-          <span id="itemsToDisplaySelectorSpan">Items To Display</span>
-          <i id="itemsToDisplaySelector" class="far fa-plus-square expander show-pointer openExpander"></i>
-        </div>
-        <div id="itemsToDisplaySelectorList" class="expander-container">
-          <ul class="format-listitem listItemWithoutPadding">
-            <li>
-              <input type="checkbox" id="electricityVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Volume</span>
-            </li>
-            <li>
-              <input type="checkbox" id="electricityPriceCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Electricity Price</span>
-            </li>
-            <li>
-              <input type="checkbox" id="gasVolumeCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Gas Volume</span>
-            </li>
-            <li>
-              <input type="checkbox" id="gasPriceCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Gas Price</span>
-            </li>
-            <li>
-              <input type="checkbox" id="electricityDatagridsCheckbox" checked onclick='showHideContainer(this);'><span id="allCommodityspan" style="padding-left: 1px;">Electricity Datagrids</span>
-            </li>
-            <li>
-              <input type="checkbox" id="gasDatagridsCheckbox" checked onclick='showHideContainer(this);'><span id="electricityCommodityspan" style="padding-left: 1px;">Gas Datagrids</span>
-            </li>
-          </ul>
-        </div>
-      </div>
+			<div id="configureContainer" class="dashboard roundborder outer-container">
+				<div class="expander-header">
+					<span id="configureOptionsSpan">Configure</span>
+					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
+				</div>
+				<div id="configureOptionsList" class="slider-list expander-container listitem-hidden">
+					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
+						<div class="expander-header">
+							<span id="commoditySelectorSpan">Commodity</span>
+							<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
+						</div>
+						<div id="commoditySelectorList" class="expander-container listitem-hidden">
+							<div style="width: 45%; text-align: center; float: left;">
+								<span>Electricity</span>
+								<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='showHideContainer(this);'></input><div class="switch-btn"></div></label>
+							</div>
+							<div style="width: 45%; text-align: center; float: right;">
+								<span>Gas</span>
+								<label class="switch"><input type="checkbox" id="gasCommoditycheckbox" checked onclick='showHideContainer(this);'></input><div class="switch-btn"></div></label>
+              </div>
+						</div>
+					</div>
+				</div>
+			</div>
     </div>
   </div>
   <div id="outerContainer">
@@ -56,83 +52,79 @@
         <div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
       </div>
       <div class="final-column">
-        <div id="electricityVolumeContainer" class="dashboard outer-container">
+        <div id="electricityVolumeContainer" class="dashboard expander-container outer-container">
           <div class="expander-header">
-            <span>Electricity Volume</span>
-              <i id="electricityVolume" class="far fa-plus-square show-pointer expander openExpander"></i>
-              <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Electricity Flex Volume To Download Basket"></i>
-              <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Electricity Flex Volume"></i>
+            <span>Electricity</span>
+            <i id="electricityVolume" class="far fa-plus-square show-pointer expander openExpander"></i>
+            <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Electricity Flex To Download Basket"></i>
+            <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Electricity Flex"></i>
           </div>
-          <div id="electricityVolumeList" class="roundborder chart expander-container">
-            <div id="electricityVolumeChart"></div>
-          </div>
-        </div>
-        <div id="electricityPriceContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-              <span>Electricity Price</span>
-              <i id="electricityPrice" class="far fa-plus-square show-pointer expander"></i>
-              <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Electricity Flex Prices To Download Basket"></i>
-              <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Electricity Flex Prices"></i>
+          <div id="electricityVolumeList" class="expander-container">
+            <div id="leftHandChartDiv" class="roundborder chart" style="float: left;">
+              <div id="electricityVolumeChart"></div>
             </div>
-            <div id="electricityPriceList" class="roundborder chart expander-container listitem-hidden">
-                <div id="electricityPriceChart"></div>
+            <div id="rightHandChartDiv" class="roundborder chart" style="float: right;">
+              <div id="electricityPriceChart"></div>
             </div>
-        </div>
-        <div id="gasVolumeContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-              <span>Gas Volume</span>
-              <i id="gasVolume" class="far fa-plus-square show-pointer expander"></i>
-              <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Gas Flex Volume To Download Basket"></i>
-              <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Gas Flex Volume"></i>
-            </div>
-            <div id="gasVolumeList" class="roundborder chart expander-container listitem-hidden">
-                <div id="gasVolumeChart"></div>
-            </div>
-        </div>
-        <div id="gasPriceContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-                <span>Gas Price</span>
-                <i id="gasPrice" class="far fa-plus-square show-pointer expander"></i>
-              <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Gas Flex Prices To Download Basket"></i>
-              <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Gas Flex Prices"></i>
-            </div>
-            <div id="gasPriceList" class="roundborder chart expander-container listitem-hidden">
-                <div id="gasPriceChart"></div>
-            </div>
-        </div>
-        <div id="electricityDatagridsContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-                <span>Electricity Datagrids</span>
-                <i id="electricityDatagrids" class="far fa-plus-square show-pointer expander"></i>
-            </div>
-            <div id="electricityDatagridsList" class="roundborder chart expander-container listitem-hidden">
-              <div class="first"></div>
-              <div class="left">
+            <div style="clear: both;"></div>
+            <div id="electricityDataContainer" class="dashboard expander-container outer-container">
+              <div class="expander-header">
+                <span>Electricity Data</span>
+                <i id="electricityData" class="far fa-plus-square show-pointer expander"></i>
+              </div>
+              <div id="electricityDataList" class="expander-container listitem-hidden" style="text-align: center;">
                 <div id="spreadsheet3" class="expander-container"></div>
               </div>
-              <div class="middle"></div>
-              <div class="right">
-                <div id="spreadsheet4" class="expander-container"></div>
-              </div>
-              <div class="last"></div>
             </div>
+          </div>			
         </div>
-        <div id="gasDatagridsContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-                <span>Gas Datagrids</span>
-                <i id="gasDatagrids" class="far fa-plus-square show-pointer expander"></i>
+        <div id="gasVolumeContainer" class="dashboard expander-container outer-container">
+          <div class="expander-header">
+            <span>Gas</span>
+            <i id="gasVolume" class="far fa-plus-square show-pointer expander"></i>
+            <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Gas Flex To Download Basket"></i>
+            <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Gas Flex"></i>
+          </div>
+          <div id="gasVolumeList" class="expander-container listitem-hidden">
+            <div id="leftHandChartDiv" class="roundborder chart" style="float: left;">
+              <div id="gasVolumeChart"></div>
             </div>
-            <div id="gasDatagridsList" class="roundborder chart expander-container listitem-hidden">
-              <div class="first"></div>
-              <div class="left">
+            <div id="rightHandChartDiv" class="roundborder chart" style="float: right;">
+              <div id="gasPriceChart"></div>
+            </div>
+            <div style="clear: both;"></div>
+            <div id="gasDataContainer" class="dashboard expander-container outer-container">
+              <div class="expander-header">
+                <span>Gas Data</span>
+                <i id="gasData" class="far fa-plus-square show-pointer expander"></i>
+              </div>
+              <div id="gasDataList" class="expander-container listitem-hidden" style="text-align: center;">
                 <div id="spreadsheet5" class="expander-container"></div>
               </div>
-              <div class="middle"></div>
-              <div class="right">
-                <div id="spreadsheet6" class="expander-container"></div>
-              </div>
-              <div class="last"></div>
             </div>
+          </div>			
+        </div>
+        <div id="leftHandTradeDiv" style="float: left; width: 49.5%;">
+          <div id="electricityDatagridContainer" class="dashboard outer-container expander-container">
+            <div class="expander-header">
+                <span>Electricity Trade Information</span>
+                <i id="electricityDatagrid" class="far fa-plus-square show-pointer expander"></i>
+            </div>
+            <div id="electricityDatagridList" class="roundborder expander-container listitem-hidden" style="text-align: center;">
+              <div id="spreadsheet4" class="expander-container"></div>
+            </div>
+          </div>
+        </div>
+        <div id="rightHandTradeDiv" style="float: right; width: 49.5%;">
+          <div id="gasDatagridContainer" class="dashboard outer-container expander-container">
+            <div class="expander-header">
+                <span>Gas Trade Information</span>
+                <i id="gasDatagrid" class="far fa-plus-square show-pointer expander"></i>
+            </div>
+            <div id="gasDatagridList" class="roundborder expander-container listitem-hidden" style="text-align: center;">
+              <div id="spreadsheet6" class="expander-container"></div>
+            </div>
+          </div>
         </div>
       </div> 
     </div>
