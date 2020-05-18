@@ -157,12 +157,12 @@
 	</div>
 </body>
 
-<script src="/includes/base.js"></script>
+<script type="text/javascript" src="/includes/base/base.js"></script>
 
 <script src="dashboard.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
-<script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
+<script type="text/javascript" src="/includes/apexcharts/apexcharts.js"></script>
+<script type="text/javascript" src="/includes/jexcel/jexcel.js"></script>
+<script type="text/javascript" src="/includes/jsuites/jsuites.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"></script>
 <script type="text/javascript" src="dashboard.json"></script>
 

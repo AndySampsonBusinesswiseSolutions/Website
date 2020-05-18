@@ -267,10 +267,10 @@
 	</div>
 </body>
 
-<script src="/includes/base.js"></script>
+<script type="text/javascript" src="/includes/base/base.js"></script>
 
-<script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
-<script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
+<script type="text/javascript" src="/includes/jexcel/jexcel.js"></script>
+<script type="text/javascript" src="/includes/jsuites/jsuites.js"></script>
 <link rel="stylesheet" href="/includes/rzslider/rzslider.css" />
 <link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
@@ -278,7 +278,7 @@
 <script src="/includes/rzslider/rzslider.js"></script>
 <script src="script.js"></script>
 <script src="budgetmanagement.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script type="text/javascript" src="/includes/apexcharts/apexcharts.js"></script>
 <script type="text/javascript" src="budgetmanagement.json"></script>
 <script type="text/javascript"> 
 	pageLoad();

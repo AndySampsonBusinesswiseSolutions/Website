@@ -53,8 +53,7 @@
 	</div>
 </body>
 
-<script src="/includes/base.js"></script>
-
+<script type="text/javascript" src="/includes/base/base.js"></script>
 <script type="text/javascript" src="managecustomers.js"></script>
 <script type="text/javascript" src="managecustomers.json"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEzl4cfd2OyotR5jHTowAoxwRzOyX8jws"></script>

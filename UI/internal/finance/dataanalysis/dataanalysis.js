@@ -1226,6 +1226,7 @@ function determineShowByArray() {
   var inputs = div.getElementsByTagName('input');
   var checkedElements = getCheckedElements(inputs);
 
+  var budgetSelected = checkedElements.length > 0;
   for(var i = 0; i < checkedElements.length; i++) {
     var budget = document.getElementById(checkedElements[i].id.replace('checkbox', 'span')).innerText;
 
@@ -1289,7 +1290,7 @@ function determineShowByArray() {
     if(checkedElements[i].type == 'checkbox') {
       var invoice = document.getElementById(checkedElements[i].id.replace('checkbox', 'span')).innerText;
 
-      if(invoice == 'Show Budget Variances') {
+      if(varianceSelectorcheckbox.checked && forecastSelectorcheckbox.checked) {
         for(var j = 0; j < checkedElements.length; j++) {
           invoice = document.getElementById(checkedElements[j].id.replace('checkbox', 'span')).innerText;
 
@@ -1304,12 +1305,35 @@ function determineShowByArray() {
               case 'rateDisplaySelectorradio':
                 pushToArray('Usage - ' + invoice + ' - Budget 1 Variance', showByArray);
                 pushToArray('Cost - ' + invoice + ' - Budget 1 Variance', showByArray);
+                break;
+            }
+          }
+          else {
+            switch(baseDisplayRadio.id) {
+              case 'usageDisplaySelectorradio':
+                pushToArray('Usage - Invoice 0001 - Budget 1 Variance', showByArray);
+                pushToArray('Usage - Invoice 0002 - Budget 1 Variance', showByArray);
+                pushToArray('Usage - Invoice 0003 - Budget 1 Variance', showByArray);
+                break;
+              case 'costDisplaySelectorradio':
+                pushToArray('Cost - Invoice 0001 - Budget 1 Variance', showByArray);
+                pushToArray('Cost - Invoice 0002 - Budget 1 Variance', showByArray);
+                pushToArray('Cost - Invoice 0003 - Budget 1 Variance', showByArray);
+                break;
+              case 'rateDisplaySelectorradio':
+                pushToArray('Usage - Invoice 0001 - Budget 1 Variance', showByArray);
+                pushToArray('Usage - Invoice 0002 - Budget 1 Variance', showByArray);
+                pushToArray('Usage - Invoice 0003 - Budget 1 Variance', showByArray);
+                pushToArray('Cost - Invoice 0001 - Budget 1 Variance', showByArray);
+                pushToArray('Cost - Invoice 0002 - Budget 1 Variance', showByArray);
+                pushToArray('Cost - Invoice 0003 - Budget 1 Variance', showByArray);
                 break;
             }
           }
         }
       }
-      else if(invoice == 'Show Forecast Variances') {
+      
+      if(varianceSelectorcheckbox.checked && budgetSelected) {
         for(var j = 0; j < checkedElements.length; j++) {
           invoice = document.getElementById(checkedElements[j].id.replace('checkbox', 'span')).innerText;
 
@@ -1327,46 +1351,66 @@ function determineShowByArray() {
                 break;
             }
           }
+          else {
+            switch(baseDisplayRadio.id) {
+              case 'usageDisplaySelectorradio':
+                pushToArray('Usage - Invoice 0001 - Forecast Variance', showByArray);
+                pushToArray('Usage - Invoice 0002 - Forecast Variance', showByArray);
+                pushToArray('Usage - Invoice 0003 - Forecast Variance', showByArray);
+                break;
+              case 'costDisplaySelectorradio':
+                pushToArray('Cost - Invoice 0001 - Forecast Variance', showByArray);
+                pushToArray('Cost - Invoice 0002 - Forecast Variance', showByArray);
+                pushToArray('Cost - Invoice 0003 - Forecast Variance', showByArray);
+                break;
+              case 'rateDisplaySelectorradio':
+                pushToArray('Usage - Invoice 0001 - Forecast Variance', showByArray);
+                pushToArray('Usage - Invoice 0002 - Forecast Variance', showByArray);
+                pushToArray('Usage - Invoice 0003 - Forecast Variance', showByArray);
+                pushToArray('Cost - Invoice 0001 - Forecast Variance', showByArray);
+                pushToArray('Cost - Invoice 0002 - Forecast Variance', showByArray);
+                pushToArray('Cost - Invoice 0003 - Forecast Variance', showByArray);
+                break;
+            }
+          }
+        }
+      }
+
+      if(invoice == 'Invoice') {
+        switch(baseDisplayRadio.id) {
+          case 'usageDisplaySelectorradio':
+            pushToArray('Usage - Invoice 0001', showByArray);
+            pushToArray('Usage - Invoice 0002', showByArray);
+            pushToArray('Usage - Invoice 0003', showByArray);
+            break;
+          case 'costDisplaySelectorradio':
+            pushToArray('Cost - Invoice 0001', showByArray);
+            pushToArray('Cost - Invoice 0002', showByArray);
+            pushToArray('Cost - Invoice 0003', showByArray);
+            break;
+          case 'rateDisplaySelectorradio':
+            pushToArray('Usage - Invoice 0001', showByArray);
+            pushToArray('Usage - Invoice 0002', showByArray);
+            pushToArray('Usage - Invoice 0003', showByArray);
+            pushToArray('Cost - Invoice 0001', showByArray);
+            pushToArray('Cost - Invoice 0002', showByArray);
+            pushToArray('Cost - Invoice 0003', showByArray);
+            break;
         }
       }
       else {
-        if(invoice == 'Invoice') {
-          switch(baseDisplayRadio.id) {
-            case 'usageDisplaySelectorradio':
-              pushToArray('Usage - Invoice 0001', showByArray);
-              pushToArray('Usage - Invoice 0002', showByArray);
-              pushToArray('Usage - Invoice 0003', showByArray);
-              break;
-            case 'costDisplaySelectorradio':
-              pushToArray('Cost - Invoice 0001', showByArray);
-              pushToArray('Cost - Invoice 0002', showByArray);
-              pushToArray('Cost - Invoice 0003', showByArray);
-              break;
-            case 'rateDisplaySelectorradio':
-              pushToArray('Usage - Invoice 0001', showByArray);
-              pushToArray('Usage - Invoice 0002', showByArray);
-              pushToArray('Usage - Invoice 0003', showByArray);
-              pushToArray('Cost - Invoice 0001', showByArray);
-              pushToArray('Cost - Invoice 0002', showByArray);
-              pushToArray('Cost - Invoice 0003', showByArray);
-              break;
-          }
+        switch(baseDisplayRadio.id) {
+          case 'usageDisplaySelectorradio':
+            pushToArray('Usage - ' + invoice, showByArray);
+            break;
+          case 'costDisplaySelectorradio':
+            pushToArray('Cost - ' + invoice, showByArray);
+            break;
+          case 'rateDisplaySelectorradio':
+            pushToArray('Usage - ' + invoice, showByArray);
+            pushToArray('Cost - ' + invoice, showByArray);
+            break;
         }
-        else {
-          switch(baseDisplayRadio.id) {
-            case 'usageDisplaySelectorradio':
-              pushToArray('Usage - ' + invoice, showByArray);
-              break;
-            case 'costDisplaySelectorradio':
-              pushToArray('Cost - ' + invoice, showByArray);
-              break;
-            case 'rateDisplaySelectorradio':
-              pushToArray('Usage - ' + invoice, showByArray);
-              pushToArray('Cost - ' + invoice, showByArray);
-              break;
-          }
-        }
-        
       }
     }
   }

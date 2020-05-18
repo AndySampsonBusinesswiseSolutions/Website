@@ -40,10 +40,10 @@
 	</div>
 </body>
 
-<script src="/includes/base.js"></script>
+<script type="text/javascript" src="/includes/base/base.js"></script>
 
 <script src="billvalidation.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script type="text/javascript" src="/includes/apexcharts/apexcharts.js"></script>
 <script type="text/javascript" src="billvalidation.json"></script>
 <script type="text/javascript"> 
 	pageLoad();

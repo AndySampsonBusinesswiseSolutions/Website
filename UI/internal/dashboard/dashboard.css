@@ -19,6 +19,7 @@
   height: 458.5px;
   width: calc(50% - 4.25px); 
   background-color: white;
+  color: black;
 }
 
 .icon {

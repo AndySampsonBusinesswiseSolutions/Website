@@ -5,18 +5,12 @@ function pageLoad() {
     loadDataGrids();
 }
 
-var branchCount = 0;
-var subBranchCount = 0;
-
 function createTree(baseData, divId, commodity, checkboxFunction, showSubMeters) {
     var tree = document.createElement('div');
     tree.setAttribute('class', 'scrolling-wrapper');
     
     var ul = createBranchUl("siteSelector", false, true);
     tree.appendChild(ul);
-
-    branchCount = 0;
-    subBranchCount = 0; 
 
     buildTree(baseData, ul, commodity, checkboxFunction, showSubMeters);
 

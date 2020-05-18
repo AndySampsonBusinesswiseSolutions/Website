@@ -322,12 +322,12 @@
     </div>
 </body>
 
-<script src="/includes/base.js"></script>
+<script type="text/javascript" src="/includes/base/base.js"></script>
 
 <script type="text/javascript" src="createopportunities.js"></script>
 <script type="text/javascript" src="createopportunities.json"></script>
-<script type="text/javascript" src="https://bossanova.uk/jexcel/v3/jexcel.js"></script>
-<script type="text/javascript" src="https://bossanova.uk/jsuites/v2/jsuites.js"></script>
+<script type="text/javascript" src="/includes/jexcel/jexcel.js"></script>
+<script type="text/javascript" src="/includes/jsuites/jsuites.js"></script>
 
 <script type="text/javascript"> 
 	pageLoad();

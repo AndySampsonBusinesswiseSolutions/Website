@@ -52,7 +52,7 @@
 	</div>
 </body>
 
-<script src="/includes/base.js"></script>
+<script type="text/javascript" src="/includes/base/base.js"></script>
 
 <script type="text/javascript" src="supplierproductmanagement.js"></script>
 <script type="text/javascript" src="supplierproductmanagement.json"></script>
