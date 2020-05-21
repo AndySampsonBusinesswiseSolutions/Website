@@ -1,32 +1,48 @@
-const uri = 'https://localhost:5000/api/WeatherForecast';
-let todos = [];
+const uri = 'https://localhost:5001/Website';
 
-function getItems() {
-  fetch(uri)
-    .then(response => response.json())
-    .then(data => _displayItems(data))
-    .catch(error => console.error('Unable to get items.', error));
+function login(event) {
+  errorMessage.style.display = 'none';
+  event.preventDefault();
+
+  return postData({ Page: "Login", Process: "Login", Data: {EmailAddress: "test", Password: "test"} })
+  .then(response => {
+    processResponse(response);
+  });
 }
 
-function _displayItems(data) {
-    const tBody = document.getElementById('todos');
-    tBody.innerHTML = '';
+function showLoader(show) {
+  overlay.style.display = show ? '' : 'none';
+}
 
-    data.forEach(item => {
-      let tr = tBody.insertRow();
-      let textNode1 = document.createTextNode(item.date);
-      let textNode2 = document.createTextNode(item.temperatureC);
-      let textNode3 = document.createTextNode(item.summary);
-      
-      let td1 = tr.insertCell(0);
-      td1.appendChild(textNode1);
+function processResponse(response) {
+  if(response && response.ok) {
+    window.location.href = "http://energyportal/Internal/Dashboard/";
+    return true;
+  }
   
-      let td2 = tr.insertCell(1);
-      td2.appendChild(textNode2);
-  
-      let td3 = tr.insertCell(2);
-      td3.appendChild(textNode3);
+  errorMessage.style.display = '';
+  showLoader(false);
+  return false;
+}
+
+async function postData(data) {
+  try {
+    const response = await fetch(uri, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
     });
   
-    todos = data;
+    return response;
   }
+  catch {
+    return null;
+  }
+}

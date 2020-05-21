@@ -10,18 +10,6 @@
                         <img class="fusion-standard-logo" srcset="https://cdn.foleon.com/upload/28150/unknown-10.3e4603022681.jpeg">
                     </a>
                 </div>
-                <!-- <?php if ($PAGE_TITLE == "Login") { ?>
-                    <div class="topnav">
-                        <div class="login-container"> -->
-                            <!-- <form method="post" action='/Internal/Dashboard/'> -->
-                                <!-- <input type="text" placeholder="Email Address" name="username" required style="margin-right: 5px;">
-                                <input type="text" placeholder="Password" name="psw" required style="margin-right: 5px;">
-                                <button type="submit" class="login-button" style="margin-right: 5px;" onclick="getItems()">Login</button>
-                                <a href="/Internal/ForgottenPassword/" style="margin-right: 5px;">Forgotten Password?</a> -->
-                            <!-- </form> -->
-                        <!-- </div>
-                    </div>
-                <?php } ?> -->
                 <?php if ($PAGE_TITLE == "Forgotten Password") { ?>
                 <?php } ?>
                 <?php if ($PAGE_TITLE != "Login" && $PAGE_TITLE != "Forgotten Password") { ?>
