@@ -22,7 +22,8 @@ CREATE TABLE [System].[ProcessQueue]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
-	APIId int NOT NULL
+	APIId int NOT NULL,
+	HasError bit NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
@@ -33,6 +34,9 @@ ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
 GO
 ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
 	DF_ProcessQueue_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+GO
+ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
+	DF_ProcessQueue_HasError DEFAULT 0 FOR HasError
 GO
 ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
 	FK_ProcessQueue_CreatedByUserId FOREIGN KEY

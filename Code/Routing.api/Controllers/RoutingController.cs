@@ -1,6 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using databaseInteraction;
+using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Routing.api.Controllers
 {
@@ -16,17 +23,34 @@ namespace Routing.api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Route([FromBody] Routing data)
+        public void Route([FromBody] Routing data)
         {
-            var db = new DatabaseInteraction();
-            db.userId = "Routing.api";
-            
+            //connect to database
+            var databaseInteraction = new DatabaseInteraction();
+            databaseInteraction.userId = "Routing.api";
+            databaseInteraction.password = @"E{*Jj5&nLfC}@Q$:";
 
-            if(data.Page == "Login") {
-                return Ok();
+            //Set up stored procedure parameters
+            var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@Page", SqlValue = data.Page},
+                    new SqlParameter {ParameterName = "@Process", SqlValue = data.Process},
+                    new SqlParameter {ParameterName = "@EffectiveDate", SqlValue = DateTime.Now}
+                };
+
+            //Get APIs
+            var apiDataTable = databaseInteraction.Get("[System].[GetAPIListFromPageAndProcess]", sqlParameters);
+            List<string> apiList = apiDataTable.AsEnumerable()
+                           .Select(r => r.Field<string>(0))
+                           .ToList();
+
+            foreach(var api in apiList)
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri($"{api}/");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.PostAsJsonAsync("ValidateEmailAddress", data);
             }
-            
-            return null;
         }
     }
 }

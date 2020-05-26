@@ -53,3 +53,11 @@ C:\wamp64\www\Website\Code\Routing.api\obj\Debug\netcoreapp3.1\Routing.api.dll
 C:\wamp64\www\Website\Code\Routing.api\obj\Debug\netcoreapp3.1\Routing.api.pdb
 C:\wamp64\www\Website\Code\Routing.api\obj\Debug\netcoreapp3.1\Routing.api.genruntimeconfig.cache
 C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.Certificate.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\databaseInteraction.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\databaseInteraction.pdb
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll

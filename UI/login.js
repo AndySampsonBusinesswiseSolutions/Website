@@ -1,4 +1,4 @@
-const uri = 'https://localhost:5001/Website';
+const uri = 'http://localhost:5000/Website';
 
 function login(event) {
   errorMessage.style.display = 'none';
