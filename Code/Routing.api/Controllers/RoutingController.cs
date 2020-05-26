@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using databaseInteraction;
 
 namespace Routing.api.Controllers
 {
@@ -15,8 +16,12 @@ namespace Routing.api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Validate([FromBody] Routing data)
+        public IActionResult Route([FromBody] Routing data)
         {
+            var db = new DatabaseInteraction();
+            db.userId = "Routing.api";
+            
+
             if(data.Page == "Login") {
                 return Ok();
             }

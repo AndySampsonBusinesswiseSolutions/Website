@@ -12,38 +12,38 @@ SET ANSI_WARNINGS ON
 COMMIT
 BEGIN TRANSACTION
 GO
-IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[Mapping].[APIToProcess]') AND type in (N'U'))
-DROP TABLE [Mapping].[APIToProcess]
+IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[Mapping].[APIToPageToProcess]') AND type in (N'U'))
+DROP TABLE [Mapping].[APIToPageToProcess]
 GO
-CREATE TABLE [Mapping].[APIToProcess]
+CREATE TABLE [Mapping].[APIToPageToProcess]
 	(
-	APIToProcessId bigint IDENTITY(1,1) NOT NULL,
+	APIToPageToProcessId bigint IDENTITY(1,1) NOT NULL,
 	EffectiveFromDateTime datetime NOT NULL,
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
 	APIId bigint NOT NULL,
-	ProcessId bigint NOT NULL
+	PageToProcessId bigint NOT NULL
 	)  ON Mapping
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	PK_APIToProcess PRIMARY KEY CLUSTERED 
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	PK_APIToPageToProcess PRIMARY KEY CLUSTERED 
 	(
-	APIToProcessId
+	APIToPageToProcessId
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
 
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	DF_APIToProcess_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	DF_APIToPageToProcess_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	DF_APIToProcess_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	DF_APIToPageToProcess_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	DF_APIToProcess_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	DF_APIToPageToProcess_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	FK_APIToProcess_CreatedByUserId FOREIGN KEY
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	FK_APIToPageToProcess_CreatedByUserId FOREIGN KEY
 	(
 	CreatedByUserId
 	) REFERENCES [Administration.User].[User]
@@ -54,26 +54,26 @@ ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
 	
 GO
 DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Mapping].[APIToProcess].CreatedByUserId to [Administration.User].[User].UserId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'APIToProcess', N'CONSTRAINT', N'FK_APIToProcess_CreatedByUserId'
+SET @v = N'Foreign Key constraint joining [Mapping].[APIToPageToProcess].CreatedByUserId to [Administration.User].[User].UserId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'APIToPageToProcess', N'CONSTRAINT', N'FK_APIToPageToProcess_CreatedByUserId'
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	FK_APIToProcess_ProcessId FOREIGN KEY
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	FK_APIToPageToProcess_PageToProcessId FOREIGN KEY
 	(
-	ProcessId
-	) REFERENCES [System].[Process]
+	PageToProcessId
+	) REFERENCES [Mapping].[PageToProcess]
 	(
-	ProcessId
+	PageToProcessId
 	) ON UPDATE  NO ACTION 
 	 ON DELETE  NO ACTION 
 	
 GO
 DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Mapping].[APIToProcess].ProcessId to [Administration.Process].[Process].ProcessId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'APIToProcess', N'CONSTRAINT', N'FK_APIToProcess_ProcessId'
+SET @v = N'Foreign Key constraint joining [Mapping].[APIToPageToProcess].PageToProcessId to [Mapping].[PageToProcess].PageToProcessId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'APIToPageToProcess', N'CONSTRAINT', N'FK_APIToPageToProcess_PageToProcessId'
 GO
-ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
-	FK_APIToProcess_APIId FOREIGN KEY
+ALTER TABLE [Mapping].[APIToPageToProcess] ADD CONSTRAINT
+	FK_APIToPageToProcess_APIId FOREIGN KEY
 	(
 	APIId
 	) REFERENCES [System].[API]
@@ -84,9 +84,9 @@ ALTER TABLE [Mapping].[APIToProcess] ADD CONSTRAINT
 	
 GO
 DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Mapping].[APIToProcess].APIId to [System].[API].APIId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'APIToProcess', N'CONSTRAINT', N'FK_APIToProcess_APIId'
+SET @v = N'Foreign Key constraint joining [Mapping].[APIToPageToProcess].APIId to [System].[API].APIId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'APIToPageToProcess', N'CONSTRAINT', N'FK_APIToPageToProcess_APIId'
 GO
-ALTER TABLE [Mapping].[APIToProcess] SET (LOCK_ESCALATION = TABLE)
+ALTER TABLE [Mapping].[APIToPageToProcess] SET (LOCK_ESCALATION = TABLE)
 GO
 COMMIT
