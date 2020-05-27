@@ -22,6 +22,7 @@ CREATE TABLE [Mapping].[RoleToUser]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	RoleId bigint NOT NULL,
 	UserId bigint NOT NULL
 	)  ON Mapping
@@ -86,6 +87,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Mapping].[RoleToUser].RoleId to [Administration.Role].[Role].RoleId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'RoleToUser', N'CONSTRAINT', N'FK_RoleToUser_RoleId'
+GO
+ALTER TABLE [Mapping].[RoleToUser] ADD CONSTRAINT
+	FK_RoleToUser_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Mapping].[RoleToUser].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'RoleToUser', N'CONSTRAINT', N'FK_RoleToUser_SourceId'
 GO
 ALTER TABLE [Mapping].[RoleToUser] SET (LOCK_ESCALATION = TABLE)
 GO

@@ -22,6 +22,7 @@ CREATE TABLE [System].[PageAttribute]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	PageAttributeDescription varchar(200) NOT NULL
 	)  ON [System]
 GO
@@ -55,6 +56,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [System].[PageAttribute].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'System', N'TABLE', N'PageAttribute', N'CONSTRAINT', N'FK_PageAttribute_CreatedByUserId'
+GO
+ALTER TABLE [System].[PageAttribute] ADD CONSTRAINT
+	FK_PageAttribute_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [System].[PageAttribute].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'System', N'TABLE', N'PageAttribute', N'CONSTRAINT', N'FK_PageAttribute_SourceId'
 GO
 ALTER TABLE [System].[PageAttribute] SET (LOCK_ESCALATION = TABLE)
 GO

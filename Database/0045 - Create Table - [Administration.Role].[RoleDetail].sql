@@ -22,6 +22,7 @@ CREATE TABLE [Administration.Role].[RoleDetail]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	RoleId bigint NOT NULL,
 	RoleAttributeId bigint NOT NULL,
 	RoleDetailDescription varchar(200) NOT NULL
@@ -87,6 +88,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Administration.Role].[RoleDetail].RoleAttributeId to [Administration.Role].[RoleAttribute].RoleAttributeId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.Role', N'TABLE', N'RoleDetail', N'CONSTRAINT', N'FK_RoleDetail_RoleAttributeId'
+GO
+ALTER TABLE [Administration.RoleDetail].[RoleDetail] ADD CONSTRAINT
+	FK_RoleDetail_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Administration.Role].[RoleDetail].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.Role', N'TABLE', N'RoleDetail', N'CONSTRAINT', N'FK_RoleDetail_SourceId'
 GO
 ALTER TABLE [Administration.Role].[RoleDetail] SET (LOCK_ESCALATION = TABLE)
 GO

@@ -22,6 +22,7 @@ CREATE TABLE [Communication].[Communication]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	CommunicationTypeId bigint NOT NULL,
 	CommunicationTypeEntityId bigint NOT NULL
 	)  ON Communication
@@ -71,6 +72,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Communication].[Communication].CommunicationTypeId to [Communication].[CommunicationType].CommunicationTypeId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Communication', N'TABLE', N'Communication', N'CONSTRAINT', N'FK_Communication_CommunicationTypeId'
+GO
+ALTER TABLE [Communication].[Communication] ADD CONSTRAINT
+	FK_Communication_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Communication].[Communication].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Communication', N'TABLE', N'Communication', N'CONSTRAINT', N'FK_Communication_SourceId'
 GO
 ALTER TABLE [Communication].[Communication] SET (LOCK_ESCALATION = TABLE)
 GO

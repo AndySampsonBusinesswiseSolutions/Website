@@ -22,6 +22,7 @@ CREATE TABLE [Administration.User].[UserDetail]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	UserId bigint NOT NULL,
 	UserAttributeId bigint NOT NULL,
 	UserDetailDescription varchar(200) NOT NULL
@@ -87,6 +88,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Administration.User].[UserDetail].UserAttributeId to [Administration.User].[UserAttribute].UserAttributeId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.User', N'TABLE', N'UserDetail', N'CONSTRAINT', N'FK_UserDetail_UserAttributeId'
+GO
+ALTER TABLE [Administration.User].[UserDetail] ADD CONSTRAINT
+	FK_UserDetail_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Administration.User].[UserDetail].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.User', N'TABLE', N'UserDetail', N'CONSTRAINT', N'FK_UserDetail_SourceId'
 GO
 ALTER TABLE [Administration.User].[UserDetail] SET (LOCK_ESCALATION = TABLE)
 GO

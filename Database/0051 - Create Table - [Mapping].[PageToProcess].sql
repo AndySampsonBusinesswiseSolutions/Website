@@ -22,6 +22,7 @@ CREATE TABLE [Mapping].[PageToProcess]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	PageId bigint NOT NULL,
 	ProcessId bigint NOT NULL
 	)  ON Mapping
@@ -86,6 +87,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Mapping].[PageToProcess].PageId to [System].[Page].PageId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PageToProcess', N'CONSTRAINT', N'FK_PageToProcess_PageId'
+GO
+ALTER TABLE [Mapping].[PageToProcess] ADD CONSTRAINT
+	FK_PageToProcess_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Mapping].[PageToProcess].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PageToProcess', N'CONSTRAINT', N'FK_PageToProcess_SourceId'
 GO
 ALTER TABLE [Mapping].[PageToProcess] SET (LOCK_ESCALATION = TABLE)
 GO

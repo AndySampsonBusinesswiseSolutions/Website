@@ -22,6 +22,7 @@ CREATE TABLE [Mapping].[EmailToVerification]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	EmailId bigint NOT NULL,
 	VerificationId bigint NOT NULL
 	)  ON Mapping
@@ -86,6 +87,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Mapping].[EmailToVerification].EmailId to [Communication].[Email].EmailId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'EmailToVerification', N'CONSTRAINT', N'FK_EmailToVerification_EmailId'
+GO
+ALTER TABLE [Mapping].[EmailToVerification] ADD CONSTRAINT
+	FK_EmailToVerification_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Mapping].[EmailToVerification].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'EmailToVerification', N'CONSTRAINT', N'FK_EmailToVerification_SourceId'
 GO
 ALTER TABLE [Mapping].[EmailToVerification] SET (LOCK_ESCALATION = TABLE)
 GO

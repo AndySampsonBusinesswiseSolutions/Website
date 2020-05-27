@@ -22,7 +22,8 @@ CREATE TABLE [Information].[SourceType]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
-	SourceTypeDescription varchar(200) NOT NULL
+	SourceId bigint NULL,
+	SourceTypeDescription varchar(200) NOT NULL,
 	)  ON Information
 GO
 ALTER TABLE [Information].[SourceType] ADD CONSTRAINT
@@ -55,7 +56,6 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Information].[SourceType].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Information', N'TABLE', N'SourceType', N'CONSTRAINT', N'FK_SourceType_CreatedByUserId'
-GO
 ALTER TABLE [Information].[SourceType] SET (LOCK_ESCALATION = TABLE)
 GO
 COMMIT

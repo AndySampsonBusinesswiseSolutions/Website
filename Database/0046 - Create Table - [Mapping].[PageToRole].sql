@@ -22,6 +22,7 @@ CREATE TABLE [Mapping].[PageToRole]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	PageId bigint NOT NULL,
 	RoleId bigint NOT NULL
 	)  ON Mapping
@@ -86,6 +87,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Mapping].[PageToRole].PageId to [System].[Page].PageId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PageToRole', N'CONSTRAINT', N'FK_PageToRole_PageId'
+GO
+ALTER TABLE [Mapping].[PageToRole] ADD CONSTRAINT
+	FK_PageToRole_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Mapping].[PageToRole].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PageToRole', N'CONSTRAINT', N'FK_PageToRole_SourceId'
 GO
 ALTER TABLE [Mapping].[PageToRole] SET (LOCK_ESCALATION = TABLE)
 GO

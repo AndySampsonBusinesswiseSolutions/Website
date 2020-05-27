@@ -22,6 +22,7 @@ CREATE TABLE [Mapping].[PasswordToUser]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	UserId bigint NOT NULL,
 	PasswordId bigint NOT NULL
 	)  ON Mapping
@@ -86,6 +87,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Mapping].[PasswordToUser].PasswordId to [Administration.User].[Password].PasswordId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PasswordToUser', N'CONSTRAINT', N'FK_PasswordToUser_PasswordId'
+GO
+ALTER TABLE [Mapping].[PasswordToUser] ADD CONSTRAINT
+	FK_PasswordToUser_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Mapping].[PasswordToUser].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PasswordToUser', N'CONSTRAINT', N'FK_PasswordToUser_SourceId'
 GO
 ALTER TABLE [Mapping].[PasswordToUser] SET (LOCK_ESCALATION = TABLE)
 GO

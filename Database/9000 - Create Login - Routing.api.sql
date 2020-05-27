@@ -16,16 +16,11 @@ IF NOT EXISTS(SELECT TOP 1 1 FROM sys.database_principals WHERE type = 'S' AND n
     END
 GO
 
-USE [EMaaS]
-GO
-
 ALTER USER [Routing.api] WITH DEFAULT_SCHEMA=[System]
 GO
 
-USE [EMaaS]
+ALTER ROLE [db_denydatareader] ADD MEMBER [Routing.api]
 GO
 
-ALTER ROLE [db_datareader] ADD MEMBER [Routing.api]
+ALTER ROLE [db_denydatawriter] ADD MEMBER [Routing.api]
 GO
-
-GRANT EXECUTE ON [System].[GetAPIListFromPageAndProcess] TO [Routing.api]

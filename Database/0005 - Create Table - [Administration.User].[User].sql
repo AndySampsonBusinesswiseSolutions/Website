@@ -22,7 +22,8 @@ CREATE TABLE [Administration.User].[User]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NULL,
-	SourceId bigint NULL
+	SourceId bigint NULL,
+	GUID UNIQUEIDENTIFIER NOT NULL,
 	)  ON Administration
 GO
 ALTER TABLE [Administration.User].[User] ADD CONSTRAINT

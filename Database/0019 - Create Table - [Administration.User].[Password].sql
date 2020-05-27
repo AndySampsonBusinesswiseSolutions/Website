@@ -22,6 +22,7 @@ CREATE TABLE [Administration.User].[Password]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	Password varchar(200) NOT NULL
 	)  ON Administration
 GO
@@ -55,6 +56,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Administration.User].[Password].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.User', N'TABLE', N'Password', N'CONSTRAINT', N'FK_Password_CreatedByUserId'
+GO
+ALTER TABLE [Administration.User].[Password] ADD CONSTRAINT
+	FK_Password_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Administration.User].[Password].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.User', N'TABLE', N'Password', N'CONSTRAINT', N'FK_Password_SourceId'
 GO
 ALTER TABLE [Administration.User].[Password] SET (LOCK_ESCALATION = TABLE)
 GO

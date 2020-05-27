@@ -16,14 +16,11 @@ IF NOT EXISTS(SELECT TOP 1 1 FROM sys.database_principals WHERE type = 'S' AND n
     END
 GO
 
-USE [EMaaS]
-GO
-
 ALTER USER [ValidateEmailAddress.api] WITH DEFAULT_SCHEMA=[System]
 GO
 
-USE [EMaaS]
+ALTER ROLE [db_denydatareader] ADD MEMBER [ValidateEmailAddress.api]
 GO
 
-ALTER ROLE [db_datareader] ADD MEMBER [ValidateEmailAddress.api]
+ALTER ROLE [db_denydatawriter] ADD MEMBER [ValidateEmailAddress.api]
 GO

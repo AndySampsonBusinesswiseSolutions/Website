@@ -22,6 +22,7 @@ CREATE TABLE [Administration.User].[Verification]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	VerificationDescription varchar(200) NOT NULL,
 	ExpiryDateTime datetime NOT NULL,
 	)  ON Administration
@@ -59,6 +60,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Administration.User].[Verification].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.User', N'TABLE', N'Verification', N'CONSTRAINT', N'FK_Verification_CreatedByUserId'
+GO
+ALTER TABLE [Administration.User].[Verification] ADD CONSTRAINT
+	FK_Verification_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Administration.User].[Verification].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.User', N'TABLE', N'Verification', N'CONSTRAINT', N'FK_Verification_SourceId'
 GO
 ALTER TABLE [Administration.User].[Verification] SET (LOCK_ESCALATION = TABLE)
 GO

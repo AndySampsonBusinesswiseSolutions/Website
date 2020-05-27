@@ -5,18 +5,18 @@ DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE 
 DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId AND CreatedByUserId = @UserId)
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[PageAttribute] WHERE PageAttributeDescription = 'PageName')
+IF NOT EXISTS(SELECT TOP 1 1 FROM System.ProcessAttribute WHERE ProcessAttributeDescription = 'ProcessName')
     BEGIN
-        INSERT INTO [System].[PageAttribute]
+        INSERT INTO [System].ProcessAttribute
         (
             CreatedByUserId,
             SourceId,
-            PageAttributeDescription
+            ProcessAttributeDescription
         )
         VALUES
         (
             @UserId,
             @SourceId,
-            'PageName'
+            'ProcessName'
         )
     END

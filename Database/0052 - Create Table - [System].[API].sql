@@ -22,6 +22,8 @@ CREATE TABLE [System].[API]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
+	GUID UNIQUEIDENTIFIER NOT NULL,
 	)  ON [System]
 GO
 ALTER TABLE [System].[API] ADD CONSTRAINT
@@ -54,6 +56,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [System].[API].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'System', N'TABLE', N'API', N'CONSTRAINT', N'FK_API_CreatedByUserId'
+GO
+ALTER TABLE [System].[API] ADD CONSTRAINT
+	FK_API_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [System].[API].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'System', N'TABLE', N'API', N'CONSTRAINT', N'FK_API_SourceId'
 GO
 ALTER TABLE [System].[API] SET (LOCK_ESCALATION = TABLE)
 GO

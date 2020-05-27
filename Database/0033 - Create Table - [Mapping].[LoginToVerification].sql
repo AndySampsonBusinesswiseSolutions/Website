@@ -22,6 +22,7 @@ CREATE TABLE [Mapping].[LoginToVerification]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	LoginId bigint NOT NULL,
 	VerificationId bigint NOT NULL
 	)  ON Mapping
@@ -86,6 +87,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Mapping].[LoginToVerification].LoginId to [Administration.User].[Login].LoginId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'LoginToVerification', N'CONSTRAINT', N'FK_LoginToVerification_LoginId'
+GO
+ALTER TABLE [Mapping].[LoginToVerification] ADD CONSTRAINT
+	FK_LoginToVerification_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Mapping].[LoginToVerification].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'LoginToVerification', N'CONSTRAINT', N'FK_LoginToVerification_SourceId'
 GO
 ALTER TABLE [Mapping].[LoginToVerification] SET (LOCK_ESCALATION = TABLE)
 GO

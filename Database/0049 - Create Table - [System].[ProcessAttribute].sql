@@ -22,6 +22,7 @@ CREATE TABLE [System].[ProcessAttribute]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	ProcessAttributeDescription varchar(200) NOT NULL
 	)  ON [System]
 GO
@@ -55,6 +56,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [System].[ProcessAttribute].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'System', N'TABLE', N'ProcessAttribute', N'CONSTRAINT', N'FK_ProcessAttribute_CreatedByUserId'
+GO
+ALTER TABLE [System].[ProcessAttribute] ADD CONSTRAINT
+	FK_ProcessAttribute_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [System].[ProcessAttribute].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'System', N'TABLE', N'ProcessAttribute', N'CONSTRAINT', N'FK_ProcessAttribute_SourceId'
 GO
 ALTER TABLE [System].[ProcessAttribute] SET (LOCK_ESCALATION = TABLE)
 GO

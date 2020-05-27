@@ -22,6 +22,7 @@ CREATE TABLE [Communication].[Email]
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
+	SourceId bigint NOT NULL,
 	CommunicationId bigint NOT NULL
 	)  ON Communication
 GO
@@ -70,6 +71,21 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Communication].[Email].CommunicationId to [Communication].[Communication].CommunicationId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Communication', N'TABLE', N'Email', N'CONSTRAINT', N'FK_Email_CommunicationId'
+GO
+ALTER TABLE [Communication].[Email] ADD CONSTRAINT
+	FK_Email_SourceId FOREIGN KEY
+	(
+	SourceId
+	) REFERENCES [Information].[Source]
+	(
+	SourceId
+	) ON UPDATE  NO ACTION 
+	 ON DELETE  NO ACTION 
+	
+GO
+DECLARE @v sql_variant 
+SET @v = N'Foreign Key constraint joining [Communication].[Email].SourceId to [Information].[Source].SourceId'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Communication', N'TABLE', N'Email', N'CONSTRAINT', N'FK_Email_SourceId'
 GO
 ALTER TABLE [Communication].[Email] SET (LOCK_ESCALATION = TABLE)
 GO
