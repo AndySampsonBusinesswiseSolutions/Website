@@ -50,6 +50,17 @@ function setupDatagrids() {
     pagination: 12,
         data:[
             {date:'15/02/2018',	tradereference:'00001',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00003',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00005',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00007',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00009',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00011',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00013',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00015',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00017',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00019',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00021',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00023',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
         ],
         columns: [
             {type:'text', width:'115px', name:'date', title:'Date'},
@@ -91,6 +102,17 @@ function setupDatagrids() {
     pagination: 12,
         data:[
             {date:'15/02/2018',	tradereference:'00002',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00004',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00006',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00008',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00010',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00012',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00014',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00016',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00018',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00020',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00022',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
+            {date:'15/02/2018',	tradereference:'00024',	period:'Winter 2020',	volume:'1MW',	price:'£40/MWh'},
         ],
         columns: [
             {type:'text', width:'115px', name:'date', title:'Date'},
@@ -366,11 +388,9 @@ function showHideContainer(checkbox) {
 
   if(commodity == "electricity") {
     electricityVolumeContainer.style.display = checkbox.checked ? "" : "none"
-    leftHandTradeDiv.style.display = checkbox.checked ? "" : "none"
   }
   else {
     gasVolumeContainer.style.display = checkbox.checked ? "" : "none"
-    rightHandTradeDiv.style.display = checkbox.checked ? "" : "none"
   }
 }
 

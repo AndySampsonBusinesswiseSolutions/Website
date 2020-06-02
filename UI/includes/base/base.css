@@ -3,10 +3,6 @@
 @import "/includes/jexcel/jexcel.css";
 @import "/includes/jsuites/jsuites.css";
 
-* {
-    box-sizing: border-box;
-}
- 
 .fusion-clearfix {
     clear: both;
     zoom: 1
@@ -124,8 +120,8 @@ input[type=submit] {
 .fusion-header-wrapper {
     position: relative;
     z-index: 10010;
-    background-color: white;
     height: 69px!important;
+    background-color: white;
 }
 
 .fusion-header {
@@ -208,7 +204,6 @@ input[type=submit] {
     line-height: 1;
     -webkit-font-smoothing: subpixel-antialiased;
     border-color: transparent;
-    font-family: "Open Sans";
     font-size: 15px;
     letter-spacing: 0px;
     font-style: normal;
@@ -227,7 +222,6 @@ input[type=submit] {
     opacity: 0;
     z-index: 1;
     transition: opacity .2s ease-in;
-    font-family: Overpass;
     font-weight: 400;
     width: 301px;
 }
@@ -332,7 +326,7 @@ input[type=submit] {
 
 .fusion-footer-widget-area a:hover,
 a:hover {
-    color: #b8264a
+    color: black
 }
 
 .fusion-footer footer .fusion-row .fusion-columns {
@@ -373,7 +367,6 @@ a:hover {
 }
 
 .fusion-main-menu .sub-menu li a {
-    font-family: Overpass;
     font-weight: 400;
     padding-top: 14px;
     padding-bottom: 14px;
@@ -404,7 +397,6 @@ body:not(.fusion-top-header) .fusion-main-menu>ul>li>a {
 .fusion-main-menu .sub-menu,
 .fusion-main-menu .sub-menu li a,
 body {
-    font-family: Overpass;
     font-weight: 400;
     letter-spacing: 0px;
     font-style: normal
@@ -423,7 +415,6 @@ body {
 }
 
 table th {
-    font-family: Overpass;
     font-weight: 400;
     line-height: 1.5;
     letter-spacing: 0px;
@@ -832,7 +823,7 @@ body {
     font-size: 14px!important;
     line-height: 1.42857143!important;
     color: #333!important;
-    background-color: #fff!important;
+    background-color: #e5e4eb!important;
     height: 100%!important;
 }
 ul {
@@ -840,59 +831,75 @@ ul {
     margin-bottom: 0px!important;
 }
 .tree-div {
-    padding: 5px!important;
-    background-color: rgb(233, 233, 233);
+    padding-bottom: 5px;
+    background-color: white;
+    min-width: 350px;
+    margin-bottom: 15px;
 }
 .section-header {
-    background: rgb(233, 233, 233);
+    background: #3d3c3e;
     width: 100%;
 }
 .section-header-text {
-    color: black;
+    color: white;
     text-align: center;
     font-size: 25px;
 }
-.sidenav-icon {
-    font-size: 30px; 
-    cursor: pointer; 
+.sidenav-icon, .sidenav-icon-close {
+    font-size: 25px; 
     float: left; 
-    padding-top: 2px;
+    padding-top: 5px;
+    left: 95%;
+    color: white;
+    cursor: pointer;
+}
+.sidenav-icon {
+    margin-left: 10px;
+}
+.sidenav-icon-close {
+    float: right; 
+    padding-right: 5px;
+    margin-top: -3px;
 }
 .sidenav {
-    height: 100%;
-    width: 0;
+    max-height: 75%;
+    min-height: 10%;
+    max-width: 75%;
+    min-width: 600px;
     position: fixed;
     z-index: 100;
-    top: 0;
     left: 0;
     background-color: rgb(233, 233, 233);
     overflow-x: hidden;
-    transition: 0.25s;
-    opacity: 95%;
-    padding-top: 2px;
 }
-.sidenav .closebtn {
+
+.sidenav .closebtn, .sidenav .resetbtn, .sidenav .applybtn {
     position: absolute;
-    left: 370px;
-    font-size: 30px;
+    background-color: red; 
+    color: white;
+    border: none;
 }
-.sidenav .lock {
-    position: absolute;
+.sidenav .resetbtn {
     left: 15px;
-    font-size: 30px;
+    bottom: 5px;
 }
-.roundborder {
-    border: solid black 1px;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px; 
+.sidenav .applybtn {
+    right: 15px;
+    bottom: 5px;
+    background-color: #12B887; 
+}
+.sidenav .header {
+    background-color: darkslategray; 
+    height: 30px; 
+    padding-top: 5px; 
+    padding-left: 5px;
+}
+.fa-question-circle {
+    margin-left: 5px;
+    color: #bbb9cc;
 }
 .tree-column {
-    float: left;
-    width: 385px;
-    padding-left: 15px;
-    padding-top: 5px;
+    padding: 15px;
 }
 .final-column {
     padding: 0px;
@@ -916,13 +923,14 @@ ul {
 }
 .expander-header {
     text-align: center; 
-    border-bottom: solid black 1px;
-    margin-bottom: 5px;
-    background-color: darkslategray;
+    background-color: #B82549;
     color: white;
 }
 .expander-container {
-    margin-top: 5px;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
 }
 .listitem-icon {
     padding-right: 3px;
@@ -930,11 +938,14 @@ ul {
 ul>li>input, .expander {
     width: 18px;
 }
-.outer-container {
-    padding: 5px;
+.expander-container-control {
+    float: right;
+    margin-top: 3px; 
+    margin-right: 5px;
+    width: 18px;
 }
-.dashboard {
-    background-color: white;
+.outer-container {
+    padding-left: 9px;
 }
 .tree-div, .datagrid, .chart {
     max-height: 650px;
@@ -1036,6 +1047,14 @@ p {
     margin-right: 10px;
     vertical-align: middle;
 }
+button {
+    font-size: 14px;
+    cursor: pointer; 
+    height: 25px;
+    background-color: #3d3c3e;
+    border: none;
+    color: white;
+}
 .button {
     display: inline-block;
     padding: 10px;
@@ -1058,7 +1077,7 @@ i {
 .switch-btn {
     width: 100%;
     height: 40px;
-    background: #b62a51;
+    background: lightgrey;
     position: relative;
     border-radius: 20px;
     cursor: pointer;
@@ -1085,7 +1104,7 @@ input[type=checkbox]:checked + .switch-btn:before {
     display: inline;
 }
 input[type=checkbox]:checked + .switch-btn {
-    background: darkgreen;
+    background: #3d3c3e;
 }
 .tooltip {
     border-bottom: 1px dotted black;
@@ -1107,7 +1126,7 @@ input[type=checkbox]:checked + .switch-btn {
 }
 
 .loader {
-    position: relative;
+    position: absolute;
     border: 16px solid #f3f3f3;
     border-radius: 50%;
     border-top: 16px solid #3498db;
@@ -1119,8 +1138,8 @@ input[type=checkbox]:checked + .switch-btn {
     animation: spin 2s linear infinite;
   }
   #overlay{
-      position: absolute;
-      top:0px;
+      position: fixed;
+      top: 0px;
       left:0px;
       width: 100%;
       height: 100%;

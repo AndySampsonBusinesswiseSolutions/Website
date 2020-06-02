@@ -339,8 +339,8 @@ function setupRecommendedOpportunitiesDataGrid() {
         estimatedCost:'<div id="recommendedOpportunitiesEstimatedCost1">£100,000</div>',
         estimatedSavings:'<div id="recommendedOpportunitiesEstimatedSavings1">kWh: 10,000<br>£: £15,000</div>',
         roi:'<div id="recommendedOpportunitiesROI1">Total: 84<br>Remaining: 84</div>',
-        approveReject: '<button class="show-pointer btn approve" onclick="displayApproveOpportunityPopup(1)">Approve Opportunity</button>'
-                          +'<button class="show-pointer btn reject" onclick="displayRejectOpportunityPopup(1)">Reject Opportunity</button>',
+        approveReject: '<button class="show-pointer btn approve" onclick="displayApproveOpportunityPopup(1)">Approve</button>'
+                          +'<button class="show-pointer btn reject" onclick="displayRejectOpportunityPopup(1)">Reject</button>',
         manageOpportunity: '<button class="show-pointer btn" onclick="displayManageOpportunityPopup(' + "'recommended'" +', 1)">Manage Opportunity</button>'
                           +'<button class="show-pointer btn" onclick="approveScheduledVisit()">Add Opportunities</button>'
 	}
@@ -390,7 +390,7 @@ function setupPendingActiveOpportunitiesDataGrid() {
         estimatedCost:'<div id="pendingActiveOpportunitiesEstimatedCost1">£150,000</div>',
         estimatedSavings:'<div id="pendingActiveOpportunitiesEstimatedSavings1">kWh: 20,000<br>£: £25,000</div>',
         roi:'<div id="pendingActiveOpportunitiesROI1">Total: 72<br>Remaining: 72</div>',
-        close: '<button class="show-pointer btn reject" onclick="displayCloseOpportunityPopup(1)">Close Opportunity</button>',
+        close: '<button class="show-pointer btn reject" onclick="displayCloseOpportunityPopup(1)">Close</button>',
         manageOpportunity: '<button class="show-pointer btn" onclick="displayManageOpportunityPopup(' + "'pendingActive'" +', 1)">Manage Opportunity</button>'
                           +'<button class="show-pointer btn" onclick="approveScheduledVisit()">Add Opportunities</button>'
 	}

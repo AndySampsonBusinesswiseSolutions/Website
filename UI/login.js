@@ -4,10 +4,13 @@ function login(event) {
   errorMessage.style.display = 'none';
   event.preventDefault();
 
-  return postData({ Page: "Login", Process: "Login", Data: {EmailAddress: "test", Password: "test"} })
-  .then(response => {
-    processResponse(response);
-  });
+  window.location.href = "http://energyportal/Internal/Dashboard/";
+    return true;
+
+  // return postData({ PageGUID: "6641A1BF-84C8-48F8-9D79-70D0AB2BB787", Process: "Login", Data: {EmailAddress: "test", Password: "test"} })
+  // .then(response => {
+  //   processResponse(response);
+  // });
 }
 
 function showLoader(show) {
@@ -27,7 +30,7 @@ function processResponse(response) {
 
 async function postData(data) {
   try {
-    const response = await fetch(uri, {
+    const response = await fetch(uri + '/Validate', {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',

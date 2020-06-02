@@ -42,6 +42,8 @@ function getCommodityOption() {
 
 function createTrees() {
   createDisplayTree();
+  createEnergyUnitListItem();
+  createEnergyUnitInstanceListItem();
   createSiteTree(usageSites, "updatePage()");
   createGroupingOptionTree();
   createTimePeriodTree();
@@ -64,33 +66,58 @@ function createDisplayTree() {
 }
 
 function createDisplayListItems(ul) {
-  var costDisplayListItem = appendListItemChildren('costDisplaySelector', true, 'updatePage()', [{"Name" : "Cost"}], 'displaySelector', false, 'radio', 'displayGroup');
-  var usageDisplayListItem = appendListItemChildren('usageDisplaySelector', true, 'updatePage()', [{"Name" : "Usage"}], 'displaySelector', true, 'radio', 'displayGroup');
-  var rateDisplayListItem = appendListItemChildren('rateDisplaySelector', true, 'updatePage()', [{"Name" : "Rate"}], 'displaySelector', false, 'radio', 'displayGroup');
-
   var displayListItemTitle = createBranchSpan('displayListItemTitle', 'Energy Unit');
   var displayListItemAdditionalTitle = createBranchSpan('displayListItemAdditionalTitle', 'Energy Unit Instance');
+  var locationListItemTitle = createBranchSpan('siteTree', 'Locations');
 
   ul.appendChild(displayListItemTitle);
-  ul.appendChild(costDisplayListItem);
-  ul.appendChild(usageDisplayListItem);
-  ul.appendChild(rateDisplayListItem);
   ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(displayListItemAdditionalTitle);
-  ul.appendChild(createForecastTree());
-  ul.appendChild(createBudgetTree());
-  ul.appendChild(createInvoiceTree());
-  ul.appendChild(createVarianceTree());
+  ul.appendChild(createBreakDisplayListItem());
+  ul.appendChild(locationListItemTitle);
   ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(createCommodityListItem());
   ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(createDateRangeDisplayListItem());
   ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(createGranularityDisplayListItem());
+}
+
+function createEnergyUnitListItem() {
+  var div = document.getElementById('displayListItemTitlespan');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("displayListItemTitleHeader", 'Energy Unit ', true);
+  var ul = createBranchUl("displayListItemTitleSelector", false, true);
+
+  var costDisplayListItem = appendListItemChildren('costDisplaySelector', true, 'updatePage()', [{"Name" : "Cost"}], 'displaySelector', false, 'radio', 'displayGroup');
+  var usageDisplayListItem = appendListItemChildren('usageDisplaySelector', true, 'updatePage()', [{"Name" : "Usage"}], 'displaySelector', true, 'radio', 'displayGroup');
+  var rateDisplayListItem = appendListItemChildren('rateDisplaySelector', true, 'updatePage()', [{"Name" : "Rate"}], 'displaySelector', false, 'radio', 'displayGroup');
+
+  ul.appendChild(costDisplayListItem);
+  ul.appendChild(usageDisplayListItem);
+  ul.appendChild(rateDisplayListItem);
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
 
   createCostRateDisplayListItems(costDisplayListItem, 'Cost');
   createUsageDisplayListItems(usageDisplayListItem);
   createCostRateDisplayListItems(rateDisplayListItem, 'Rate');
+}
+
+function createEnergyUnitInstanceListItem() {
+  var div = document.getElementById('displayListItemAdditionalTitlespan');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("displayListItemAdditionalTitleHeader", 'Energy Unit Instance', true);
+  var ul = createBranchUl("displayListItemAdditionalTitleSelector", false, true);
+
+  ul.appendChild(createForecastTree());
+  ul.appendChild(createBudgetTree());
+  ul.appendChild(createInvoiceTree());
+  ul.appendChild(createVarianceTree());
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
 }
 
 function createBreakDisplayListItem() {
@@ -253,7 +280,7 @@ function createBudgetTree() {
 }
 
 function createSiteTree(usageSites, functions) {
-  var div = document.getElementById('siteTree');
+  var div = document.getElementById('siteTreespan');
   var inputs = div.getElementsByTagName('input');
   var checkboxes = getCheckedElements(inputs);
 
@@ -774,7 +801,7 @@ function updateChart(isPageLoading) {
   categories = getCategoryTexts(startDate, endDate, dateFormat);
   var displayType = getDisplayType();
 
-  var treeDiv = document.getElementById('siteTree');
+  var treeDiv = document.getElementById('siteTreespan');
   var inputs = treeDiv.getElementsByTagName('input');
   var checkboxes = getCheckedElements(inputs);
   

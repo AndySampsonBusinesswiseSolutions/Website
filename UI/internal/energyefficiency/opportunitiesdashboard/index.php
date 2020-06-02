@@ -175,9 +175,9 @@
 							</div>
 							<div class="divider-column"></div>
 							<div class="opportunity-column">
-								<button class="show-pointer approve" id="Project1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve Opportunity</button>
+								<button class="show-pointer approve" style="height: 36px;" id="Project1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve</button>
 								&nbsp&nbsp&nbsp&nbsp
-								<button class="show-pointer reject" id="Project1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject Opportunity</button>
+								<button class="show-pointer reject" style="height: 36px;" id="Project1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject</button>
 							</div>
 							<div class="divider-column"></div>
 							<div id="Project1EstimatedAnnualSavings" class="opportunity-column">
@@ -256,9 +256,9 @@
 								</div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column">
-									<button class="show-pointer approve" id="Project2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve Opportunity</button>
+									<button class="show-pointer approve" style="height: 36px;" id="Project2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve</button>
 									&nbsp&nbsp&nbsp&nbsp
-									<button class="show-pointer reject" id="Project2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject Opportunity</button>
+									<button class="show-pointer reject" style="height: 36px;" id="Project2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject</button>
 								</div>
 								<div class="divider-column"></div>
 								<div id="Project2EstimatedAnnualSavings" class="opportunity-column">

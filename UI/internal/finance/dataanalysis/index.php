@@ -65,9 +65,6 @@
 						</div>
 					</div>
 					<br>
-					<div id="siteTree" class="dashboard roundborder outer-container scrolling-wrapper">
-					</div>
-					<br>
 					<div id="groupingOptionTree" class="dashboard roundborder outer-container">
 					</div>
 					<br>

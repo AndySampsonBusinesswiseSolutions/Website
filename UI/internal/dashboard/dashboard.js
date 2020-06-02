@@ -7,14 +7,14 @@ function pageLoad(isPageLoad) {
     setOpenExpanders();
   }
 
-  document.onmousemove = function(e) {
-    setupSidebarHeight();
-    setupSidebar(e);
-  };
+  // document.onmousemove = function(e) {
+  //   setupSidebarHeight();
+  //   // setupSidebar(e);
+  // };
 
-  window.onscroll = function() {
-    setupSidebarHeight();
-  };
+  // window.onscroll = function() {
+  //   setupSidebarHeight();
+  // };
 }
 
 function loadDatagrid(checkBoxes) {
@@ -63,14 +63,14 @@ function loadDatagrid(checkBoxes) {
 
   var displayColumns = [
     {type:'text', width:'215px', name:'address', title:'Address', readOnly: true},
-    {type:'text', width:'150px', name:'meterpoint', title:'Meter Point', readOnly: true},
+    {type:'text', width:'140px', name:'meterpoint', title:'Meter Point', readOnly: true},
     {type:'text', width:'125px', name:'annualvolume', title:'Annual Volume<br>(kWh)', readOnly: true},
     {type:'text', width:'125px', name:'annualcost', title:'Annual Cost<br>(£)', readOnly: true},
     {type:'text', width:'115px', name:'carbon', title:'Carbon<br>(tonnes)', readOnly: true},
   ];
 
   jexcel(document.getElementById('spreadsheet'), {
-    pagination:10,
+    pagination:6,
     allowInsertRow: false,
     allowManualInsertRow: false,
     allowInsertColumn: false,
@@ -101,7 +101,7 @@ function loadMap(checkBoxes) {
     var mapOptions = {
       zoom: 5,
       center: new google.maps.LatLng(55, -5),
-      mapTypeId: google.maps.MapTypeId.SATELLITE
+      mapTypeId: google.maps.MapTypeId.TERRAIN
     }
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
@@ -173,9 +173,13 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
   clearElement(div);
 
   var tree = document.createElement('div');
-  tree.setAttribute('class', 'scrolling-wrapper');
+  tree.classList.add('scrolling-wrapper');
+  tree.classList.add('expander-container');
   
-  var headerDiv = createHeaderDiv(divId.concat('Header'), dataName != "Dashboard" ? "Location" : "Custom Dashboard Items", true);
+  var headerDiv = createHeaderDiv(divId.concat('Header'), 
+    dataName != "Dashboard" ? "Location" : "Add Dashboard Items", 
+    true, true,
+    dataName != "Dashboard" ? "Location" : "Add Dashboard Items");
   var ul = createBranchUl(divId.concat('Selector'), false, true);
 
   tree.appendChild(ul);
@@ -194,8 +198,8 @@ function createTree(baseData, divId, checkboxFunction, dataName) {
   selectButtonsListItem.classList.add('format-listitem');
   selectButtonsListItem.classList.add('listItemWithoutPadding');
   selectButtonsListItem.innerHTML = '<div>'
-    +'<button id="selectAll"' + divId + ' style="width: 45%; float: left;" onclick="' + camelize('select ' + divId.replace('Div', '')) + '(true)">Select All</button>'
-    +'<button id="selectAll"' + divId + ' style="width: 45%; float: right;" onclick="' + camelize('select ' + divId.replace('Div', '')) + '(false)">Deselect All</button>'
+    +'<button id="selectAll' + divId + '" style="width: 45%; float: left;" onclick="' + camelize('select ' + divId.replace('Div', '')) + '(true)">Select All</button>'
+    +'<button id="deselectAll' + divId + '" style="width: 45%; float: right;" onclick="' + camelize('select ' + divId.replace('Div', '')) + '(false)">Deselect All</button>'
     +'</div>'
     +'<div style="clear: both;"></div>';
   ul.appendChild(selectButtonsListItem);
@@ -531,7 +535,6 @@ function loadUsageChart(checkBoxes) {
       },
       title: {
         text: 'Forecast Portfolio Usage',
-        align: 'center'
       },
       tooltip: {
           x: {
@@ -624,7 +627,6 @@ function loadElectricityPriceChart() {
     },
     title: {
       text: 'Flex Electricity Price',
-      align: 'center'
     },
     tooltip: {
         x: {
@@ -691,7 +693,6 @@ function loadElectricityUsageChart() {
       },
       title: {
         text: 'Flex Electricity Usage',
-        align: 'center'
       },
       tooltip: {
           x: {
@@ -756,7 +757,6 @@ function loadGasPriceChart() {
           },
           title: {
             text: 'Flex Gas Price',
-            align: 'center'
           },
           tooltip: {
               x: {
@@ -810,8 +810,7 @@ function loadGasUsageChart() {
           stacked: true
         },
         title: {
-          text: 'Flex Gas Usage',
-          align: 'center'
+          text: 'Flex Gas Usage'
         },
         tooltip: {
             x: {
@@ -915,7 +914,15 @@ function refreshChart(newSeries, chartId, chartOptions) {
         }
       }
     },
-    title: chartOptions.title,
+    title: {
+      text: chartOptions.title.text,
+      align: 'center',
+      style: {
+        fontSize: '25px',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontWeight: 'normal',
+      }
+    },
     dataLabels: {
       enabled: false
     },
@@ -937,6 +944,7 @@ function refreshChart(newSeries, chartId, chartOptions) {
         return seriesName + '<br><br>';
       }
     },
+    colors: ['#0B6B5B', '#61B82E', '#B8252A', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537'],
     series: newSeries,
     yaxis: chartOptions.yaxis,
     xaxis: chartOptions.xaxis
@@ -1133,7 +1141,7 @@ function loadDashboardHeaderCarbon(checkBoxes) {
   }
 
   var carbonElement = document.getElementById("dashboardHeaderCarbon");
-  carbonElement.innerHTML = carbon.toLocaleString().concat(" tonnes per annum");
+  carbonElement.innerHTML = carbon.toLocaleString().concat(" tonnes p.a");
 }
 
 function loadDashboardHeaderOpportunities(checkBoxes) {
@@ -1204,11 +1212,8 @@ function loadDashboardHeaderOpportunities(checkBoxes) {
   }
 
   var activeOpportunitiesCountElement = document.getElementById("dashboardHeaderActiveOpportunitiesCount");
-  activeOpportunitiesCountElement.innerHTML = "Count: ".concat(activeOpportunities[0].toLocaleString());
-
-  var activeOpportunitiesUsageElement = document.getElementById("dashboardHeaderActiveOpportunitiesUsage");
-  activeOpportunitiesUsageElement.innerHTML = "Saving: ".concat(activeOpportunities[1].toLocaleString().concat(" kWh"));
+  activeOpportunitiesCountElement.innerHTML = activeOpportunities[0].toLocaleString().concat(' Active');
 
   var activeOpportunitiesCostElement = document.getElementById("dashboardHeaderActiveOpportunitiesCost");
-  activeOpportunitiesCostElement.innerHTML = "Saving: £".concat(activeOpportunities[2].toLocaleString());
+  activeOpportunitiesCostElement.innerHTML = "£".concat(activeOpportunities[2].toLocaleString()).concat(' proj. savings');
 }

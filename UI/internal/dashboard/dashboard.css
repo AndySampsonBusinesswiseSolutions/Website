@@ -1,28 +1,32 @@
 .dashboard-item-small, .dashboard-item-large, .custom-dashboard-item-large {
-  margin: 4.25px 4.25px 4.25px 0px; 
+  margin: 9px 9px 0px 0px; 
   float: left;
   color: white;
 }
-
 .dashboard-item-small {
-  width: calc((100% - 25.5px) / 3);
-  height: 225px;
+  width: calc((100% - 27px) / 3);
+  height: 200px;
+  background-color: #B82549;
 }
-
+.dashboard-item-small .dashboard-item-header {
+  font-size: 25px;
+}
+.dashboard-item-small .dashboard-item-text {
+  font-size: 20px;
+}
 .dashboard-item-large {
-  width: calc(100% - 4.25px);
-  height: 458.5px;
+  width: calc(100% - 9.5px);
+  height: 409px;
   color: black;
 }
-
 .custom-dashboard-item-large {
   height: 458.5px;
-  width: calc(50% - 4.25px); 
+  width: calc(50% - 9.5px); 
   background-color: white;
   color: black;
 }
-
-.icon {
-  color: white; 
-  padding: 5px;
+.dashboard-icon {
+  width: 90px; 
+  height: 90px;
+  filter: brightness(0) invert(1);
 }

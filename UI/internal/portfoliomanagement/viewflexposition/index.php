@@ -74,6 +74,7 @@
               </div>
               <div id="electricityDataList" class="expander-container listitem-hidden" style="text-align: center;">
                 <div id="spreadsheet3" class="expander-container"></div>
+                <div id="spreadsheet4" class="expander-container"></div>
               </div>
             </div>
           </div>			
@@ -100,31 +101,10 @@
               </div>
               <div id="gasDataList" class="expander-container listitem-hidden" style="text-align: center;">
                 <div id="spreadsheet5" class="expander-container"></div>
+                <div id="spreadsheet6" class="expander-container"></div>
               </div>
             </div>
           </div>			
-        </div>
-        <div id="leftHandTradeDiv" style="float: left; width: 49.5%;">
-          <div id="electricityDatagridContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-                <span>Electricity Trade Information</span>
-                <i id="electricityDatagrid" class="far fa-plus-square show-pointer expander"></i>
-            </div>
-            <div id="electricityDatagridList" class="roundborder expander-container listitem-hidden" style="text-align: center;">
-              <div id="spreadsheet4" class="expander-container"></div>
-            </div>
-          </div>
-        </div>
-        <div id="rightHandTradeDiv" style="float: right; width: 49.5%;">
-          <div id="gasDatagridContainer" class="dashboard outer-container expander-container">
-            <div class="expander-header">
-                <span>Gas Trade Information</span>
-                <i id="gasDatagrid" class="far fa-plus-square show-pointer expander"></i>
-            </div>
-            <div id="gasDatagridList" class="roundborder expander-container listitem-hidden" style="text-align: center;">
-              <div id="spreadsheet6" class="expander-container"></div>
-            </div>
-          </div>
         </div>
       </div> 
     </div>
