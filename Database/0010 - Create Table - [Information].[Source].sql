@@ -34,13 +34,13 @@ ALTER TABLE [Information].[Source] ADD CONSTRAINT
 
 GO
 ALTER TABLE [Information].[Source] ADD CONSTRAINT
-	DF_Source_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_Source_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[Source] ADD CONSTRAINT
 	DF_Source_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[Source] ADD CONSTRAINT
-	DF_Source_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_Source_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[Source] ADD CONSTRAINT
 	FK_Source_CreatedByUserId FOREIGN KEY

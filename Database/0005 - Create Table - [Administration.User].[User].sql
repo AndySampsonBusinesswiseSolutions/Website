@@ -34,13 +34,13 @@ ALTER TABLE [Administration.User].[User] ADD CONSTRAINT
 
 GO
 ALTER TABLE [Administration.User].[User] ADD CONSTRAINT
-	DF_User_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_User_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Administration.User].[User] ADD CONSTRAINT
 	DF_User_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Administration.User].[User] ADD CONSTRAINT
-	DF_User_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_User_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Administration.User].[User] ADD CONSTRAINT
 	FK_User_CreatedByUserId FOREIGN KEY
