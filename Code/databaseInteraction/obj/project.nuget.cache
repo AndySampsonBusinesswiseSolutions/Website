@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "L9rCmIcVWtclpamODxxtxh9hQiFUK2DB711B9SQXNZFr/9wC8mI0zNePjSLSzPw0eiZ96yLeVUpPH8Ib5FbtiQ==",
+  "dgSpecHash": "vGo9g71IDthrCCc9m4nZQf94+hGLyxvUneWShAPvuDEPWG+AoX4V/do9RyPduK/KZ46peW5SNb9LB7EVy/rjMA==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
   "expectedPackageFiles": [
@@ -12,6 +12,7 @@
     "C:\\Users\\andy.sampson\\.nuget\\packages\\runtime.win-x64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\runtime.win-x86.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-x86.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.buffers\\4.5.0\\system.buffers.4.5.0.nupkg.sha512",
+    "C:\\Users\\andy.sampson\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.data.sqlclient\\4.8.1\\system.data.sqlclient.4.8.1.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.7.0\\system.diagnostics.diagnosticsource.4.7.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",

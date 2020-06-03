@@ -27,14 +27,14 @@ namespace Routing.api.Controllers
         {
             //connect to database
             var databaseInteraction = new DatabaseInteraction();
-            databaseInteraction.userId = "Routing.api";
+            databaseInteraction.userName = "Routing.api";
             databaseInteraction.password = @"E{*Jj5&nLfC}@Q$:";
 
             //Set up stored procedure parameters
             var sqlParameters = new List<SqlParameter>
                 {
-                    new SqlParameter {ParameterName = "@Page", SqlValue = data.Page},
-                    new SqlParameter {ParameterName = "@Process", SqlValue = data.Process},
+                    // new SqlParameter {ParameterName = "@Page", SqlValue = data.Page},
+                    // new SqlParameter {ParameterName = "@Process", SqlValue = data.Process},
                     new SqlParameter {ParameterName = "@EffectiveDate", SqlValue = DateTime.Now}
                 };
 

@@ -7,9 +7,9 @@ namespace databaseInteraction
 {
     public class DatabaseInteraction
     {
-        public string userId;
+        public string userName;
         public string password;
-        private string ConnectionString => $@"Data Source=BWS-W10-L24;User ID={userId};Initial Catalog=EMaaS;Persist Security Info=True;Password={password};";
+        private string ConnectionString => $@"Data Source=BWS-W10-L24;User ID={userName};Initial Catalog=EMaaS;Persist Security Info=True;Password={password};";
 
         public object GetSingleRecord(string storedProcedure)
         {
@@ -184,6 +184,73 @@ namespace databaseInteraction
                     sqlCommand.ExecuteNonQuery();
                     CloseConnection(sqlConnection);
                 }
+            }
+        }
+    }
+
+    public class CommonMethods
+    {
+        public class API{
+            public string GetAPIStartupURLs(string userName, string password, string guid)
+            {
+                var databaseInteraction = new DatabaseInteraction();
+                databaseInteraction.userName = userName;
+                databaseInteraction.password = password;
+
+                var apiId = GetAPIId(databaseInteraction, guid);
+                var httpAPIAttributeId = GetAPIAttributeId(databaseInteraction, "HTTP Application URL");
+                var httpsAPIAttributeId = GetAPIAttributeId(databaseInteraction, "HTTPS Application URL");
+
+                var httpURL = GetAPIDetail(databaseInteraction, apiId, httpAPIAttributeId);
+                var httpsURL = GetAPIDetail(databaseInteraction, apiId, httpsAPIAttributeId);
+
+                return $"{httpsURL};{httpURL}";
+            }
+
+            public long GetAPIId(DatabaseInteraction databaseInteraction, string guid)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@APIGUID", SqlValue = guid}
+                };
+
+                //Get API Id
+                var apiDataTable = databaseInteraction.Get("[System].[API_GetByGUID]", sqlParameters);
+                return apiDataTable.AsEnumerable()
+                            .Select(r => r.Field<long>("APIId"))
+                            .First();
+            }
+
+            public long GetAPIAttributeId(DatabaseInteraction databaseInteraction, string apiAttributeDescription)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@APIAttributeDescription", SqlValue = apiAttributeDescription}
+                };
+
+                //Get API Attribute Id
+                var apiDataTable = databaseInteraction.Get("[System].[APIAttribute_GetByAPIAttributeDescription]", sqlParameters);
+                return apiDataTable.AsEnumerable()
+                            .Select(r => r.Field<long>("APIAttributeId"))
+                            .First();
+            }
+
+            public string GetAPIDetail(DatabaseInteraction databaseInteraction, long apiId, long apiAttributeId)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@APIID", SqlValue = apiId},
+                    new SqlParameter {ParameterName = "@APIAttributeID", SqlValue = apiAttributeId}
+                };
+
+                //Get API Detail
+                var apiDataTable = databaseInteraction.Get("[System].[APIDetail_GetByAPIIDAndAPIAttributeId]", sqlParameters);
+                return apiDataTable.AsEnumerable()
+                            .Select(r => r.Field<string>("APIDetailDescription"))
+                            .First();
             }
         }
     }

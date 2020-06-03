@@ -24,3 +24,12 @@ GO
 
 ALTER ROLE [db_denydatawriter] ADD MEMBER [Routing.api]
 GO
+
+GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [Website.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [Website.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [Website.api];  
+GO

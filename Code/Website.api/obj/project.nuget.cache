@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "XY//KPMfQzLKbFxJqVl3omeiAFqKbNHsSwkFdCADAaNy9Ay3ksx9mypit8yQgnHgmX5Hb3AHNyJS5dqhoRfXGg==",
+  "dgSpecHash": "VeVZbYPhNPX1hcukLlyzvgwZt6MzCvj2ARXG+ZDdKdFsDaLzCLBZ/1qo9IyK92ZEjiTOxVBnjOlWQMYpGacrXA==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\Website.api\\Website.api.csproj",
   "expectedPackageFiles": [
@@ -67,6 +67,7 @@
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.componentmodel.typeconverter\\4.3.0\\system.componentmodel.typeconverter.4.3.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.configuration.configurationmanager\\4.5.0\\system.configuration.configurationmanager.4.5.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.console\\4.3.0\\system.console.4.3.0.nupkg.sha512",
+    "C:\\Users\\andy.sampson\\.nuget\\packages\\system.data.datasetextensions\\4.5.0\\system.data.datasetextensions.4.5.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.data.sqlclient\\4.8.1\\system.data.sqlclient.4.8.1.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.diagnostics.debug\\4.3.0\\system.diagnostics.debug.4.3.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\system.diagnostics.diagnosticsource\\4.7.1\\system.diagnostics.diagnosticsource.4.7.1.nupkg.sha512",
