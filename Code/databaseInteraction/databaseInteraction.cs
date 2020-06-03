@@ -7,9 +7,15 @@ namespace databaseInteraction
 {
     public class DatabaseInteraction
     {
-        public string userName;
-        public string password;
+        private string userName;
+        private string password;
         private string ConnectionString => $@"Data Source=BWS-W10-L24;User ID={userName};Initial Catalog=EMaaS;Persist Security Info=True;Password={password};";
+
+        public DatabaseInteraction(string userName, string password)
+        {
+            this.userName = userName;
+            this.password = password;
+        }
 
         public object GetSingleRecord(string storedProcedure)
         {
@@ -193,10 +199,7 @@ namespace databaseInteraction
         public class API{
             public string GetAPIStartupURLs(string userName, string password, string guid)
             {
-                var databaseInteraction = new DatabaseInteraction();
-                databaseInteraction.userName = userName;
-                databaseInteraction.password = password;
-
+                var databaseInteraction = new DatabaseInteraction(userName, password);
                 var apiId = GetAPIId(databaseInteraction, guid);
                 var httpAPIAttributeId = GetAPIAttributeId(databaseInteraction, "HTTP Application URL");
                 var httpsAPIAttributeId = GetAPIAttributeId(databaseInteraction, "HTTPS Application URL");
