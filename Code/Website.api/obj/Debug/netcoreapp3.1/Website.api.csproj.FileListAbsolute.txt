@@ -55,3 +55,8 @@ C:\wamp64\www\Website\Code\Website.api\obj\Debug\netcoreapp3.1\Website.api.genru
 C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
 C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\databaseInteraction.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\databaseInteraction.pdb

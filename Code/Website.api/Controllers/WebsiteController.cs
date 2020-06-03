@@ -9,7 +9,6 @@ namespace Website.api.Controllers
 {
     [EnableCors]
     [ApiController]
-    [Route("Website")]
     public class WebsiteController : ControllerBase
     {
         private readonly ILogger<WebsiteController> _logger;
@@ -20,13 +19,20 @@ namespace Website.api.Controllers
         }
 
         [HttpPost]
+        [Route("Website/Validate")]
         public IActionResult Validate([FromBody] Website data)
         {
+            //validate PageGUID and ProcessGUID
+            //if invalid return error
+
+            var routingData = new Routing();
+            routingData.Data = data.Data;
+            routingData.ProcessGUID = data.ProcessGUID;
+
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri("http://localhost:5002/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var response = client.PostAsJsonAsync("Routing", data).Result;
+            client.PostAsJsonAsync("Routing", routingData);
 
             return Ok();
         }
