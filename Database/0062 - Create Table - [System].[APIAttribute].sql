@@ -23,7 +23,8 @@ CREATE TABLE [System].[APIAttribute]
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
 	SourceId bigint NOT NULL,
-	APIAttributeDescription varchar(200) NOT NULL
+	APIAttributeDescription varchar(200) NOT NULL,
+	AllowsMultipleActiveInstances BIT NOT NULL,
 	)  ON [System]
 GO
 ALTER TABLE [System].[APIAttribute] ADD CONSTRAINT
@@ -41,6 +42,9 @@ ALTER TABLE [System].[APIAttribute] ADD CONSTRAINT
 GO
 ALTER TABLE [System].[APIAttribute] ADD CONSTRAINT
 	DF_APIAttribute_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
+GO
+ALTER TABLE [System].[APIAttribute] ADD CONSTRAINT
+	DF_APIAttribute_AllowsMultipleActiveInstances DEFAULT 0 FOR AllowsMultipleActiveInstances
 GO
 ALTER TABLE [System].[APIAttribute] ADD CONSTRAINT
 	FK_APIAttribute_CreatedByUserId FOREIGN KEY

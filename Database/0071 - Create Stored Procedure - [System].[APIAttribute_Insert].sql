@@ -21,7 +21,8 @@ GO
 ALTER PROCEDURE [System].[APIAttribute_Insert]
     @UserGUID UNIQUEIDENTIFIER,
     @SourceTypeDescription VARCHAR(255),
-    @APIAttributeDescription VARCHAR(255)
+    @APIAttributeDescription VARCHAR(255),
+    @AllowsMultipleActiveInstances BIT = 0
 AS
 BEGIN
     -- =============================================
@@ -43,13 +44,15 @@ BEGIN
             (
                 CreatedByUserId,
                 SourceId,
-                APIAttributeDescription
+                APIAttributeDescription,
+                AllowsMultipleActiveInstances
             )
             VALUES
             (
                 @UserId,
                 @SourceId,
-                @APIAttributeDescription
+                @APIAttributeDescription,
+                @AllowsMultipleActiveInstances
             )
         END
 END

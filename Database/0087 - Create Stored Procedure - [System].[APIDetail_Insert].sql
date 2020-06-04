@@ -40,15 +40,18 @@ BEGIN
 
     IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId AND APIDetailDescription = @APIDetailDescription)
         BEGIN
-            UPDATE
-                [System].[APIDetail]
-            SET
-                EffectiveToDateTime = GETUTCDATE()
-            WHERE
-                APIId = @APIId
-                AND APIAttributeId = @APIAttributeId
-                AND APIDetailDescription <> @APIDetailDescription
-                AND EffectiveToDateTime = '9999-12-31'
+            DECLARE @AllowsMultipleActiveInstances BIT = (SELECT AllowsMultipleActiveInstances FROM [System].[APIAttribute] WHERE APIAttributeId = @APIAttributeId)
+
+            IF @AllowsMultipleActiveInstances = 0
+                BEGIN
+                    DECLARE @APIDetailId BIGINT = (SELECT APIDetailId FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId)
+
+                    WHILE APIDetailId > 0
+                        BEGIN
+                            EXEC [System].[APIDetail_DeleteByAPIDetailId] APIDetailId
+                            SET @APIDetailId = (SELECT APIDetailId FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId)
+                        END
+                END
                 
             DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
             DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)

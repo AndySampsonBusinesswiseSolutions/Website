@@ -2,20 +2,21 @@
 using Microsoft.Extensions.Logging;
 using databaseInteraction;
 using System;
-using System.Data;
 using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Routing.api.Controllers
 {
     [ApiController]
-    [Route("Routing")]
     public class RoutingController : ControllerBase
     {
         private readonly ILogger<RoutingController> _logger;
+        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
+        private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("Routing.api", @"E{*Jj5&nLfC}@Q$:");
 
         public RoutingController(ILogger<RoutingController> logger)
         {
@@ -23,33 +24,42 @@ namespace Routing.api.Controllers
         }
 
         [HttpPost]
-        public void Route([FromBody] Routing data)
+        [Route("Routing/POST")]
+        public void Route([FromBody] object data)
         {
-            //connect to database
-            var databaseInteraction = new DatabaseInteraction();
-            databaseInteraction.userName = "Routing.api";
-            databaseInteraction.password = @"E{*Jj5&nLfC}@Q$:";
+            //Get processId
+            var jsonObject = JObject.Parse(data.ToString());
+            var processGUID = jsonObject["ProcessGUID"].ToString();
+            var processId = _processMethods.Process_GetByGUID(_databaseInteraction, processGUID);
 
-            //Set up stored procedure parameters
-            var sqlParameters = new List<SqlParameter>
-                {
-                    // new SqlParameter {ParameterName = "@Page", SqlValue = data.Page},
-                    // new SqlParameter {ParameterName = "@Process", SqlValue = data.Process},
-                    new SqlParameter {ParameterName = "@EffectiveDate", SqlValue = DateTime.Now}
-                };
+            //If processId == 0 then the GUID provided isn't valid so create an error
 
-            //Get APIs
-            var apiDataTable = databaseInteraction.Get("[System].[GetAPIListFromPageAndProcess]", sqlParameters);
-            List<string> apiList = apiDataTable.AsEnumerable()
-                           .Select(r => r.Field<string>(0))
-                           .ToList();
+            //Get APIId list
+            List<long> APIIdList = _apiMethods.API_GetAPIIdListByProcessId(_databaseInteraction, processId);
 
-            foreach(var api in apiList)
+            foreach(var APIId in APIIdList)
             {
+                //Get API URL
+                var APIURL = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "HTTP Application URL").First();
+
+                //Get data keys required for API
+                var dataKeys = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "Required Data Key");
+
+                //Build new object with only those values API requires
+                var apiData = new JObject();
+                foreach(var dataKey in dataKeys)
+                {
+                    apiData.Add(dataKey, jsonObject[dataKey].ToString());
+                }
+
+                //Get API POST route
+                var postRoute = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "POST Route").First();
+
+                //Call API
                 HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri($"{api}/");
+                client.BaseAddress = new Uri($"{APIURL}/");
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.PostAsJsonAsync("ValidateEmailAddress", data);
+                client.PostAsJsonAsync(postRoute, apiData);
             }
         }
     }

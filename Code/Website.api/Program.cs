@@ -6,15 +6,12 @@ namespace Website.api
 {
     public class Program
     {
+        private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("Website.api", @"\wU.D[ArWjPG!F4$");
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-        }
-
-        public static string GetURLs()
-        {
-            var apiMethods = new CommonMethods.API();
-            return apiMethods.GetAPIStartupURLs("Website.api", @"\wU.D[ArWjPG!F4$", "CBB27186-B65F-4F6C-9FFA-B1E6C63C04EE");
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,7 +19,7 @@ namespace Website.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(GetURLs());
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "CBB27186-B65F-4F6C-9FFA-B1E6C63C04EE"));
                 });
     }
 }

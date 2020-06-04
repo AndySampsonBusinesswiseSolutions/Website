@@ -2288,7 +2288,9 @@
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
           "System.Data.DataSetExtensions": "4.5.0",
-          "System.Data.SqlClient": "4.8.1"
+          "System.Data.SqlClient": "4.8.1",
+          "System.Net.Http": "4.3.4",
+          "newtonsoft.json": "12.0.3"
         },
         "compile": {
           "bin/placeholder/databaseInteraction.dll": {}
@@ -7667,7 +7669,7 @@
       "Microsoft.AspNetCore.Authentication.Certificate >= 3.1.4",
       "Microsoft.EntityFrameworkCore.InMemory >= 3.1.4",
       "Microsoft.EntityFrameworkCore.SqlServer >= 3.1.4",
-      "Newtonsoft.Json >= 12.0.3",
+      "Newtonsoft.Json >= *",
       "System.net.http >= 4.3.4",
       "databaseInteraction >= 1.0.0",
       "system.data.sqlclient >= 4.8.1"
@@ -7740,7 +7742,7 @@
           },
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[12.0.3, )"
+            "version": "[*, )"
           },
           "System.net.http": {
             "target": "Package",

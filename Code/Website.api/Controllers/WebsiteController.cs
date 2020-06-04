@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using databaseInteraction;
 
 namespace Website.api.Controllers
 {
@@ -12,6 +13,8 @@ namespace Website.api.Controllers
     public class WebsiteController : ControllerBase
     {
         private readonly ILogger<WebsiteController> _logger;
+        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("Website.api", @"\wU.D[ArWjPG!F4$");
 
         public WebsiteController(ILogger<WebsiteController> logger)
         {
@@ -20,19 +23,19 @@ namespace Website.api.Controllers
 
         [HttpPost]
         [Route("Website/Validate")]
-        public IActionResult Validate([FromBody] Website data)
+        public IActionResult Validate([FromBody] object data)
         {
-            //validate PageGUID and ProcessGUID
-            //if invalid return error
+            //Get Routing.API URL
+            var routingAPIURL = _apiMethods.GetRoutingAPIURL(_databaseInteraction);
 
-            var routingData = new Routing();
-            routingData.Data = data.Data;
-            routingData.ProcessGUID = data.ProcessGUID;
+            //Get Routing.API POST Route
+            var routingAPIPOSTRoute = _apiMethods.GetRoutingAPIPOSTRoute(_databaseInteraction);
 
+            //Connect to Routing API and POST data
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:5002/");
+            client.BaseAddress = new Uri(routingAPIURL);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.PostAsJsonAsync("Routing", routingData);
+            client.PostAsJsonAsync(routingAPIPOSTRoute, data);
 
             return Ok();
         }
