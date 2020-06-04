@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj": {}
+    "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj": {}
   },
   "projects": {
-    "c:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj": {
+    "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
+        "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
         "projectName": "databaseInteraction",
-        "projectPath": "c:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
+        "projectPath": "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
         "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
-        "outputPath": "c:\\wamp64\\www\\Website\\Code\\databaseInteraction\\obj\\",
+        "outputPath": "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

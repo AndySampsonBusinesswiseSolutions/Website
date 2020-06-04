@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "pkZZ4leh1qL94ITahGJwQc938I8NMROl8J7obiprSPnLeR9xC3TdEdaGPSDGo+veBQ0z7iCh3JQeM0Kwuz5few==",
+  "dgSpecHash": "Cuza/+4lcogIMlQ+80sEMxCsVAnFTWUbdG14qjque2Sd0eIeNqbWktrwvylFpp+T3x/451g3WwxNpLEkl4gKfQ==",
   "success": true,
-  "projectFilePath": "c:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
+  "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.1\\microsoft.netcore.platforms.1.1.1.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
