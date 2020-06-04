@@ -18,11 +18,11 @@
 			<div id="id01" class="modal">
 				<form name="loginForm" class="modal-content animate roundborder" onsubmit="return login(event)">
 					<div class="container">
-						<label for="uname"><b>Email Address</b></label>
-						<input type="text" placeholder="Enter Email Address" name="uname" required>
+						<label for="userName"><b>Email Address</b></label>
+						<input type="text" placeholder="Enter Email Address" id="userName" required>
 
-						<label for="psw"><b>Password</b></label>
-						<input type="password" placeholder="Enter Password" name="psw" required>
+						<label for="password"><b>Password</b></label>
+						<input type="password" placeholder="Enter Password" id="password" required>
 							
 						<button type="submit" onclick="showLoader(true); ">Login</button>
 						<span class="psw"><a href="/Internal/ForgottenPassword/">Forgot password?</a></span>
