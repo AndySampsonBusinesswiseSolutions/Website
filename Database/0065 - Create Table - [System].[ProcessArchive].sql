@@ -23,6 +23,7 @@ CREATE TABLE [System].[ProcessArchive]
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
 	SourceId bigint NOT NULL,
+	GUID UNIQUEIDENTIFIER,
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessArchive] ADD CONSTRAINT
