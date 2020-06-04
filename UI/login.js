@@ -13,7 +13,7 @@ function login(event) {
         {
           QueueGUID: CreateGUID(), 
           PageGUID: "6641A1BF-84C8-48F8-9D79-70D0AB2BB787", 
-          Process: "Login", 
+          ProcessGUID: "AF10359F-FD78-4345-9F26-EF5A921E72FD", 
           EmailAddress: emailAddress, 
           Password: password
         }

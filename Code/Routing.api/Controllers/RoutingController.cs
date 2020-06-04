@@ -30,9 +30,16 @@ namespace Routing.api.Controllers
             //Get processId
             var jsonObject = JObject.Parse(data.ToString());
             var processGUID = jsonObject["ProcessGUID"].ToString();
-            var processId = _processMethods.Process_GetByGUID(_databaseInteraction, processGUID);
+            var processId = _processMethods.ProcessId_GetByGUID(_databaseInteraction, processGUID);
 
             //If processId == 0 then the GUID provided isn't valid so create an error
+            if(processId == 0)
+            {
+                var queueGUID = jsonObject["QueueGUID"].ToString();
+
+                //Insert into ProcessQueue
+                _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "A4F25D07-86AA-42BD-ACD7-51A8F772A92B", true);
+            }
 
             //Get APIId list
             List<long> APIIdList = _apiMethods.API_GetAPIIdListByProcessId(_databaseInteraction, processId);
@@ -56,11 +63,17 @@ namespace Routing.api.Controllers
                 var postRoute = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "POST Route").First();
 
                 //Call API
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri($"{APIURL}/");
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.PostAsJsonAsync(postRoute, apiData);
+                _apiMethods.CreateAPI(APIURL).PostAsJsonAsync(postRoute, apiData);
             }
+
+            //Get Archive.API URL
+            var archiveAPIURL = _apiMethods.GetArchiveProcessQueueAPIURL(_databaseInteraction);
+
+            //Get Archive.API POST Route
+            var archiveAPIPOSTRoute = _apiMethods.GetArchiveProcessQueueAPIPOSTRoute(_databaseInteraction);
+
+            //Connect to Archive API and POST API list
+            _apiMethods.CreateAPI(archiveAPIURL).PostAsJsonAsync(archiveAPIPOSTRoute, APIIdList);
         }
     }
 }
