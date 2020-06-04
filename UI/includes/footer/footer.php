@@ -32,11 +32,9 @@
                 <div class="fusion-column fusion-column-last col-lg-4 col-md-4 col-sm-4">
 					<section id="social_links-widget-2" class="fusion-footer-widget-column widget social_links"><h4 class="widget-title" data-fontsize="13" data-lineheight="19">Get Social</h4>
 		                <div class="fusion-social-networks">
-			                <div>
-                                <a href="https://www.facebook.com/businesswisesolutions" target="_blank" style="padding-right: 10px;"><i class="fab fa-facebook-f" title="Facebook"></i></a>
-								<a href="https://twitter.com/BusinesswiseSol" target="_blank" style="padding-right: 10px;"><i class="fab fa-twitter" title="Twitter"></i></a>
-								<a href="https://www.linkedin.com/company/businesswise-solutions/" target="_blank" style="padding-right: 10px;"><i class="fab fa-linkedin-in" title="LinkedIn"></i></a>
-                            </div>
+                            <a href="https://www.facebook.com/businesswisesolutions" target="_blank" style="padding-right: 10px;"><i class="socialmedia fab fa-facebook" title="Facebook"></i></a>
+                            <a href="https://twitter.com/BusinesswiseSol" target="_blank" style="padding-right: 10px;"><i class="socialmedia fab fa-twitter" title="Twitter"></i></a>
+                            <a href="https://www.linkedin.com/company/businesswise-solutions/" target="_blank" style="padding-right: 10px;"><i class="socialmedia fab fa-linkedin-in" title="LinkedIn"></i></a>
                         </div>
                         <div style="clear:both;"></div>
                     </section>

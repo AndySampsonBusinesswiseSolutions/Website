@@ -12,11 +12,11 @@ input[type=text], input[type=password] {
 button {
     background-color: #4CAF50;
     color: white;
-    padding: 14px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
     width: 50%;
+    height: 42px;
 }
 
 button:hover {
@@ -25,7 +25,7 @@ button:hover {
 
 span.psw {
     float: right;
-    padding-top: 16px;
+    padding-top: 21px;
 }
 
 /* The Modal (background) */

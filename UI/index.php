@@ -37,5 +37,5 @@
 	</div>
 </body>
 
-<script type="text/javascript" src="/includes/jquery/jquery.js"></script>
+<script type="text/javascript" src="/includes/base/base.js"></script>
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

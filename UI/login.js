@@ -4,10 +4,8 @@ function login(event) {
   errorMessage.style.display = 'none';
   event.preventDefault();
 
-  window.location.href = "http://energyportal/Internal/Dashboard/";
-    return true;
+  postData({QueueGUID: CreateGUID(), PageGUID: "6641A1BF-84C8-48F8-9D79-70D0AB2BB787", Process: "Login", EmailAddress: "test", Password: "test"});
 
-  // return postData({ PageGUID: "6641A1BF-84C8-48F8-9D79-70D0AB2BB787", Process: "Login", Data: {EmailAddress: "test", Password: "test"} })
   // .then(response => {
   //   processResponse(response);
   // });
@@ -19,7 +17,7 @@ function showLoader(show) {
 
 function processResponse(response) {
   if(response && response.ok) {
-    window.location.href = "http://energyportal/Internal/Dashboard/";
+    window.location.href = "/Internal/Dashboard/";
     return true;
   }
   
