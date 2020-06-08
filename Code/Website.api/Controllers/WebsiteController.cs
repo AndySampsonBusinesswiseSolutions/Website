@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
-using System;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using databaseInteraction;
 using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace Website.api.Controllers
 {
@@ -25,7 +24,7 @@ namespace Website.api.Controllers
 
         [HttpPost]
         [Route("Website/Validate")]
-        public IActionResult Validate([FromBody] object data)
+        public void Validate([FromBody] object data)
         {
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -45,8 +44,27 @@ namespace Website.api.Controllers
 
             //Update Process Queue
             _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "CBB27186-B65F-4F6C-9FFA-B1E6C63C04EE");
+        }
 
-            return Ok();
+        [HttpPost]
+        [Route("website/GetResponse")]
+        public IActionResult GetResponse([FromBody] string processQueueGuid)
+        {
+            //Get Process Archive Id
+            var processArchiveId = _processMethods.ProcessArchiveId_GetByGUID(_databaseInteraction, processQueueGuid);
+
+            //Loop until a response record is written into ProcessArchiveDetail
+            var response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response");
+
+            while(!response.Any())
+            {
+                response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response");
+            }
+
+            //Create return object with response record
+            var result = new OkObjectResult(new { message = "200 OK" });
+
+            return result;
         }
     }
 }
