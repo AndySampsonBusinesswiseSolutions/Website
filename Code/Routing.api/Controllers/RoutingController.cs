@@ -4,7 +4,8 @@ using databaseInteraction;
 using System.Collections.Generic;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using System;
+using System.Text.Json;
 
 namespace Routing.api.Controllers
 {
@@ -27,51 +28,46 @@ namespace Routing.api.Controllers
         {
             //Get processId
             var jsonObject = JObject.Parse(data.ToString());
-            var processGUID = jsonObject["ProcessGUID"].ToString();
-            var processId = _processMethods.ProcessId_GetByGUID(_databaseInteraction, processGUID);
-
-            //If processId == 0 then the GUID provided isn't valid so create an error
-            if(processId == 0)
-            {
-                var queueGUID = jsonObject["QueueGUID"].ToString();
-
-                //Insert into ProcessQueue
-                _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "A4F25D07-86AA-42BD-ACD7-51A8F772A92B", true);
-            }
+            
+            //Get ValidateProcessGUID API Id
+            var validateProcessAPIId = _apiMethods.GetValidateProcessGUIDAPIId(_databaseInteraction);
+            
+            //Call ValidateProcessGUID API
+            var processTask = _apiMethods.CreateAPI(_databaseInteraction, validateProcessAPIId)
+                    .PostAsJsonAsync(
+                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, validateProcessAPIId), 
+                        _apiMethods.GetAPIData(_databaseInteraction, validateProcessAPIId, jsonObject));
+            var processTaskResponse = processTask.GetAwaiter().GetResult();
+            var result = processTaskResponse.Content.ReadAsStringAsync();
+            var processId = Convert.ToInt64(result.Result);
 
             //Get APIId list
-            List<long> APIIdList = _apiMethods.API_GetAPIIdListByProcessId(_databaseInteraction, processId);
+            List<long> APIIdList = _apiMethods.GetAPIIdListByProcessId(_databaseInteraction, processId);
 
             foreach(var APIId in APIIdList)
             {
-                //Get API URL
-                var APIURL = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "HTTP Application URL").First();
-
-                //Get data keys required for API
-                var dataKeys = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "Required Data Key");
-
-                //Build new object with only those values API requires
-                var apiData = new JObject();
-                foreach(var dataKey in dataKeys)
-                {
-                    apiData.Add(dataKey, jsonObject[dataKey].ToString());
-                }
-
-                //Get API POST route
-                var postRoute = _apiMethods.GetAPIDetailByAPIId(_databaseInteraction, APIId, "POST Route").First();
-
                 //Call API
-                _apiMethods.CreateAPI(APIURL).PostAsJsonAsync(postRoute, apiData);
+                _apiMethods.CreateAPI(_databaseInteraction, APIId)
+                    .PostAsJsonAsync(
+                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, APIId), 
+                        _apiMethods.GetAPIData(_databaseInteraction, APIId, jsonObject));
             }
 
-            //Get Archive.API URL
-            var archiveAPIURL = _apiMethods.GetArchiveProcessQueueAPIURL(_databaseInteraction);
+            //Add Validate Process Id to list
+            APIIdList.Add(validateProcessAPIId);
 
-            //Get Archive.API POST Route
-            var archiveAPIPOSTRoute = _apiMethods.GetArchiveProcessQueueAPIPOSTRoute(_databaseInteraction);
+            //Get Archive.API Id
+            var archiveAPIId = _apiMethods.GetArchiveProcessQueueAPIId(_databaseInteraction);
+
+            //Create required jsonObject
+            var archiveObject = _apiMethods.GetAPIData(_databaseInteraction, archiveAPIId, jsonObject);
+            archiveObject.Add("APIList", JsonSerializer.Serialize(APIIdList));
 
             //Connect to Archive API and POST API list
-            _apiMethods.CreateAPI(archiveAPIURL).PostAsJsonAsync(archiveAPIPOSTRoute, APIIdList);
+            _apiMethods.CreateAPI(_databaseInteraction, archiveAPIId)
+                    .PostAsJsonAsync(
+                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, archiveAPIId), 
+                        archiveObject);
         }
     }
 }

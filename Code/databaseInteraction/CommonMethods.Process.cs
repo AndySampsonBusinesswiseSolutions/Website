@@ -33,7 +33,7 @@ namespace databaseInteraction
                     new SqlParameter {ParameterName = "@GUID", SqlValue = queueGUID},
                     new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
                     new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = source},
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = apiGUID},
+                    new SqlParameter {ParameterName = "@APIGUID", SqlValue = apiGUID},
                     new SqlParameter {ParameterName = "@HasError", SqlValue = Convert.ToByte(hasError)}
                 };
 
@@ -47,7 +47,7 @@ namespace databaseInteraction
                 var sqlParameters = new List<SqlParameter>
                 {
                     new SqlParameter {ParameterName = "@GUID", SqlValue = queueGUID},
-                    new SqlParameter {ParameterName = "@processGUID", SqlValue = apiGUID},
+                    new SqlParameter {ParameterName = "@APIGUID", SqlValue = apiGUID},
                     new SqlParameter {ParameterName = "@HasError", SqlValue = Convert.ToByte(hasError)}
                 };
 
@@ -55,12 +55,38 @@ namespace databaseInteraction
                 databaseInteraction.ExecuteNonQuery("[System].[ProcessQueue_Update]", sqlParameters);
             }
 
+            public void ProcessArchive_Insert(DatabaseInteraction databaseInteraction, string processArchiveGUID, string userGUID, string source)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID},
+                    new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
+                    new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = source}
+                };
+
+                //Execute stored procedure
+                databaseInteraction.ExecuteNonQuery("[System].[ProcessArchive_Insert]", sqlParameters);
+            }
+
+            public void ProcessArchive_Update(DatabaseInteraction databaseInteraction, string processArchiveGUID)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID}
+                };
+
+                //Execute stored procedure
+                databaseInteraction.ExecuteNonQuery("[System].[ProcessArchive_Update]", sqlParameters);
+            }
+
             public long ProcessArchiveId_GetByGUID(DatabaseInteraction databaseInteraction, string queueGUID)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
                 {
-                    new SqlParameter {ParameterName = "@GUID", SqlValue = queueGUID},
+                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = queueGUID},
                 };
 
                 //Get Process Archive Id
@@ -101,6 +127,22 @@ namespace databaseInteraction
                 return ProcessArchiveDataTable.AsEnumerable()
                             .Select(r => r.Field<string>("ProcessArchiveDetailDescription"))
                             .ToList();
+            }
+
+            public void ProcessArchiveDetail_Insert(DatabaseInteraction databaseInteraction, string processArchiveGUID, string userGUID, string source, string attribute, string description)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID},
+                    new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
+                    new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = source},
+                    new SqlParameter {ParameterName = "@ProcessArchiveAttributeDescription", SqlValue = attribute},
+                    new SqlParameter {ParameterName = "@ProcessArchiveDetailDescription", SqlValue = description}
+                };
+
+                //Execute stored procedure
+                databaseInteraction.ExecuteNonQuery("[System].[ProcessArchiveDetail_Insert]", sqlParameters);
             }
         }
     }

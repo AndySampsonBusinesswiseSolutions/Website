@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace databaseInteraction
 {
@@ -12,40 +13,101 @@ namespace databaseInteraction
     {
         public class API
         {
-            public HttpClient CreateAPI(string URL)
+            public HttpClient CreateAPI(DatabaseInteraction databaseInteraction, long APIId)
             {
+                var URL = GetAPIURLByAPIId(databaseInteraction, APIId);
+                
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(URL);
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 return client;
             }
 
+            public JObject GetAPIData(DatabaseInteraction databaseInteraction, long APIId, JObject jsonObject)
+            {
+                //Get data keys required for API
+                var dataKeys = GetAPIDetailByAPIId(databaseInteraction, APIId, "Required Data Key");
+
+                //If no specific data keys are required, return the enite object
+                if(!dataKeys.Any())
+                {
+                    return jsonObject;
+                }
+
+                //Build new object with only those values API requires
+                var apiData = new JObject();
+                foreach(var dataKey in dataKeys)
+                {
+                    if(jsonObject.ContainsKey(dataKey))
+                    {
+                        apiData.Add(dataKey, jsonObject[dataKey].ToString());
+                    }
+                }
+
+                return apiData;
+            }
+
+            public string GetAPIURLByAPIGUID(DatabaseInteraction databaseInteraction, string APIGUID) 
+            {
+                return GetAPIDetailByAPIGUID(databaseInteraction, APIGUID, "HTTP Application URL").First();
+            }
+
+            public string GetAPIURLByAPIId(DatabaseInteraction databaseInteraction, long APIId) 
+            {
+                return GetAPIDetailByAPIId(databaseInteraction, APIId, "HTTP Application URL").First();
+            }
+
+            public string GetAPIPOSTRouteByAPIGUID(DatabaseInteraction databaseInteraction, string APIGUID) 
+            {
+                return GetAPIDetailByAPIGUID(databaseInteraction, APIGUID, "POST Route").First();
+            }
+
+            public string GetAPIPOSTRouteByAPIId(DatabaseInteraction databaseInteraction, long APIId) 
+            {
+                return GetAPIDetailByAPIId(databaseInteraction, APIId, "POST Route").First();
+            }
+
             public string GetAPIStartupURLs(DatabaseInteraction databaseInteraction, string guid)
             {
-                var httpURL = GetAPIDetailByAPIGUID(databaseInteraction, guid, "HTTP Application URL").First();
+                var httpURL = GetAPIURLByAPIGUID(databaseInteraction, guid);
                 var httpsURL = GetAPIDetailByAPIGUID(databaseInteraction, guid, "HTTPS Application URL").First();
 
                 return $"{httpsURL};{httpURL}";
             }
 
+            public long GetRoutingAPIId(DatabaseInteraction databaseInteraction)
+            {
+                return APIId_GetByGUID(databaseInteraction, "A4F25D07-86AA-42BD-ACD7-51A8F772A92B");
+            }
+
             public string GetRoutingAPIURL(DatabaseInteraction databaseInteraction)
             {
-                return GetAPIDetailByAPIGUID(databaseInteraction, "A4F25D07-86AA-42BD-ACD7-51A8F772A92B", "HTTP Application URL").First();
+                return GetAPIURLByAPIGUID(databaseInteraction, "A4F25D07-86AA-42BD-ACD7-51A8F772A92B");
             }
 
             public string GetRoutingAPIPOSTRoute(DatabaseInteraction databaseInteraction)
             {
-                return GetAPIDetailByAPIGUID(databaseInteraction, "A4F25D07-86AA-42BD-ACD7-51A8F772A92B", "POST Route").First();
+                return GetAPIPOSTRouteByAPIGUID(databaseInteraction, "A4F25D07-86AA-42BD-ACD7-51A8F772A92B");
+            }
+
+            public long GetArchiveProcessQueueAPIId(DatabaseInteraction databaseInteraction)
+            {
+                return APIId_GetByGUID(databaseInteraction, "38D3A9E1-A060-4464-B971-8DC523B6A42D");
             }
 
             public string GetArchiveProcessQueueAPIURL(DatabaseInteraction databaseInteraction)
             {
-                return GetAPIDetailByAPIGUID(databaseInteraction, "38D3A9E1-A060-4464-B971-8DC523B6A42D", "HTTP Application URL").First();
+                return GetAPIURLByAPIGUID(databaseInteraction, "38D3A9E1-A060-4464-B971-8DC523B6A42D");
             }
 
             public string GetArchiveProcessQueueAPIPOSTRoute(DatabaseInteraction databaseInteraction)
             {
-                return GetAPIDetailByAPIGUID(databaseInteraction, "38D3A9E1-A060-4464-B971-8DC523B6A42D", "POST Route").First();
+                return GetAPIPOSTRouteByAPIGUID(databaseInteraction, "38D3A9E1-A060-4464-B971-8DC523B6A42D");
+            }
+
+            public long GetValidateProcessGUIDAPIId(DatabaseInteraction databaseInteraction)
+            {
+                return APIId_GetByGUID(databaseInteraction, "87AFEDA8-6A0F-4143-BF95-E08E78721CF5");
             }
 
             public List<string> GetAPIDetailByAPIGUID(DatabaseInteraction databaseInteraction, string guid, string attribute)
@@ -58,8 +120,13 @@ namespace databaseInteraction
             {
                 return APIDetail_GetByAPIIDAndAPIAttributeId(databaseInteraction, APIId, attribute);
             }
+
+            public List<long> GetAPIIdListByProcessId(DatabaseInteraction databaseInteraction, long processId)
+            {
+                return API_GetAPIIdListByProcessId(databaseInteraction, processId);
+            }
             
-            public long APIId_GetByGUID(DatabaseInteraction databaseInteraction, string guid)
+            private long APIId_GetByGUID(DatabaseInteraction databaseInteraction, string guid)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -74,7 +141,7 @@ namespace databaseInteraction
                             .First();
             }
 
-            public long APIAttributeId_GetByAPIAttributeDescription(DatabaseInteraction databaseInteraction, string APIAttributeDescription)
+            private long APIAttributeId_GetByAPIAttributeDescription(DatabaseInteraction databaseInteraction, string APIAttributeDescription)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -89,7 +156,7 @@ namespace databaseInteraction
                             .First();
             }
 
-            public List<string> APIDetail_GetByAPIIDAndAPIAttributeId(DatabaseInteraction databaseInteraction, long APIId, string attribute)
+            private List<string> APIDetail_GetByAPIIDAndAPIAttributeId(DatabaseInteraction databaseInteraction, long APIId, string attribute)
             {
                 var APIAttributeId = APIAttributeId_GetByAPIAttributeDescription(databaseInteraction, attribute);
 
@@ -107,7 +174,7 @@ namespace databaseInteraction
                             .ToList();
             }
 
-            public List<long> API_GetAPIIdListByProcessId(DatabaseInteraction databaseInteraction, long processId)
+            private List<long> API_GetAPIIdListByProcessId(DatabaseInteraction databaseInteraction, long processId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>

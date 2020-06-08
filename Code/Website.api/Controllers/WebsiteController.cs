@@ -34,13 +34,13 @@ namespace Website.api.Controllers
             _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "CBB27186-B65F-4F6C-9FFA-B1E6C63C04EE");
 
             //Get Routing.API URL
-            var routingAPIURL = _apiMethods.GetRoutingAPIURL(_databaseInteraction);
-
-            //Get Routing.API POST Route
-            var routingAPIPOSTRoute = _apiMethods.GetRoutingAPIPOSTRoute(_databaseInteraction);
+            var routingAPIId = _apiMethods.GetRoutingAPIId(_databaseInteraction);
 
             //Connect to Routing API and POST data
-            _apiMethods.CreateAPI(routingAPIURL).PostAsJsonAsync(routingAPIPOSTRoute, data);
+            _apiMethods.CreateAPI(_databaseInteraction, routingAPIId)
+                    .PostAsJsonAsync(
+                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, routingAPIId), 
+                        _apiMethods.GetAPIData(_databaseInteraction, routingAPIId, jsonObject));
 
             //Update Process Queue
             _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "CBB27186-B65F-4F6C-9FFA-B1E6C63C04EE");
@@ -52,6 +52,10 @@ namespace Website.api.Controllers
         {
             //Get Process Archive Id
             var processArchiveId = _processMethods.ProcessArchiveId_GetByGUID(_databaseInteraction, processQueueGuid);
+            while(processArchiveId == 0)
+            {
+                processArchiveId = _processMethods.ProcessArchiveId_GetByGUID(_databaseInteraction, processQueueGuid);
+            }
 
             //Loop until a response record is written into ProcessArchiveDetail
             var response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response");

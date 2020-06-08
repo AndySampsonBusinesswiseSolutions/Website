@@ -1770,7 +1770,9 @@
       "databaseInteraction/1.0.0": {
         "dependencies": {
           "System.Data.DataSetExtensions": "4.5.0",
-          "System.Data.SqlClient": "4.8.1"
+          "System.Data.SqlClient": "4.8.1",
+          "System.Net.Http": "4.3.4",
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "databaseInteraction.dll": {}

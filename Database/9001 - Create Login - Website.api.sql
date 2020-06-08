@@ -39,3 +39,12 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [Website.api];
 GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessArchive_GetByGUID] TO [Website.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription] TO [Website.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId] TO [Website.api];
+GO
