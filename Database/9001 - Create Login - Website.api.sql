@@ -28,8 +28,14 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [Website.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [Website.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [Website.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [Website.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [Website.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Insert] TO [Website.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [Website.api];
 GO

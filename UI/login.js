@@ -9,17 +9,22 @@ function login(event) {
 
   if(emailAddress == "andy.sampson@businesswise.co.uk"
     && password == "URLTesting") {
+      var processQueueGUID = CreateGUID();
+
       postData(
         {
-          QueueGUID: CreateGUID(), 
+          QueueGUID: processQueueGUID, 
           PageGUID: "6641A1BF-84C8-48F8-9D79-70D0AB2BB787", 
           ProcessGUID: "AF10359F-FD78-4345-9F26-EF5A921E72FD", 
           EmailAddress: emailAddress, 
           Password: password
         }
-      ).then(response => {
+      );
+
+      getResponse(processQueueGUID)
+      .then(response => {
         processResponse(response);
-      });;
+      })
 
       return false;
   }
@@ -52,8 +57,23 @@ function processResponse(response) {
 }
 
 async function postData(data) {
+  await fetch(uri + '/Validate', {
+    method: 'POST',
+    mode: 'cors',
+    cache: 'no-cache',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+    body: JSON.stringify(data)
+  });
+}
+
+async function getResponse(processQueueGUID) {
   try {
-    const response = await fetch(uri + '/Validate', {
+    const response = await fetch(uri + '/GetResponse', {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
@@ -63,10 +83,10 @@ async function postData(data) {
       },
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
+      body: JSON.stringify(processQueueGUID)
     });
   
-    return response;
+    return response.json();
   }
   catch {
     return null;

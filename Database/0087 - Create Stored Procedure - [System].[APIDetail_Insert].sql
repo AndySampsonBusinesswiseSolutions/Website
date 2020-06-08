@@ -46,7 +46,7 @@ BEGIN
                 BEGIN
                     DECLARE @APIDetailId BIGINT = (SELECT APIDetailId FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId)
 
-                    WHILE APIDetailId > 0
+                    WHILE @APIDetailId > 0
                         BEGIN
                             EXEC [System].[APIDetail_DeleteByAPIDetailId] APIDetailId
                             SET @APIDetailId = (SELECT APIDetailId FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId)
