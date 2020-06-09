@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using databaseInteraction;
 
-namespace Website.api
+namespace ValidatePageGUID.api
 {
     public class Program
     {

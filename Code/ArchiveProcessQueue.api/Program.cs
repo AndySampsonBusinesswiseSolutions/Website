@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using databaseInteraction;
 
-namespace Website.api
+namespace ArchiveProcessQueue.api
 {
     public class Program
     {

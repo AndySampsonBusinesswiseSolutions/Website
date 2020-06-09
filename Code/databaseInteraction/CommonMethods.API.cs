@@ -129,6 +129,11 @@ namespace databaseInteraction
                 return APIId_GetByGUID(databaseInteraction, "87AFEDA8-6A0F-4143-BF95-E08E78721CF5");
             }
 
+            public long GetCheckPrerequisiteAPIAPIId(DatabaseInteraction databaseInteraction)
+            {
+                return APIId_GetByGUID(databaseInteraction, "56371F02-4120-41C9-82F9-4408309684D1");
+            }
+
             public List<string> GetAPIDetailByAPIGUID(DatabaseInteraction databaseInteraction, string guid, string attribute)
             {
                 var APIId = APIId_GetByGUID(databaseInteraction, guid);
@@ -137,7 +142,7 @@ namespace databaseInteraction
 
             public List<string> GetAPIDetailByAPIId(DatabaseInteraction databaseInteraction, long APIId, string attribute)
             {
-                return APIDetail_GetByAPIIDAndAPIAttributeId(databaseInteraction, APIId, attribute);
+                return APIDetail_GetByAPIIdAndAPIAttributeId(databaseInteraction, APIId, attribute);
             }
 
             public List<long> GetAPIIdListByProcessId(DatabaseInteraction databaseInteraction, long processId)
@@ -148,6 +153,11 @@ namespace databaseInteraction
             public long GetAPIIdByGUID(DatabaseInteraction databaseInteraction, string guid)
             {
                 return APIId_GetByGUID(databaseInteraction, guid);
+            }
+
+            public string GetAPIGUIDById(DatabaseInteraction databaseInteraction, long id)
+            {
+                return APIGUID_GetById(databaseInteraction, id);
             }
             
             private long APIId_GetByGUID(DatabaseInteraction databaseInteraction, string guid)
@@ -162,6 +172,21 @@ namespace databaseInteraction
                 var APIDataTable = databaseInteraction.Get("[System].[API_GetByGUID]", sqlParameters);
                 return APIDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("APIId"))
+                            .First();
+            }
+
+            private string APIGUID_GetById(DatabaseInteraction databaseInteraction, long id)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@APIId", SqlValue = id}
+                };
+
+                //Get API Id
+                var APIDataTable = databaseInteraction.Get("[System].[API_GetById]", sqlParameters);
+                return APIDataTable.AsEnumerable()
+                            .Select(r => r.Field<string>("GUID"))
                             .First();
             }
 
@@ -180,19 +205,19 @@ namespace databaseInteraction
                             .First();
             }
 
-            private List<string> APIDetail_GetByAPIIDAndAPIAttributeId(DatabaseInteraction databaseInteraction, long APIId, string attribute)
+            private List<string> APIDetail_GetByAPIIdAndAPIAttributeId(DatabaseInteraction databaseInteraction, long APIId, string attribute)
             {
                 var APIAttributeId = APIAttributeId_GetByAPIAttributeDescription(databaseInteraction, attribute);
 
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
                 {
-                    new SqlParameter {ParameterName = "@APIID", SqlValue = APIId},
+                    new SqlParameter {ParameterName = "@APIId", SqlValue = APIId},
                     new SqlParameter {ParameterName = "@APIAttributeID", SqlValue = APIAttributeId}
                 };
 
                 //Get API Detail
-                var APIDataTable = databaseInteraction.Get("[System].[APIDetail_GetByAPIIDAndAPIAttributeId]", sqlParameters);
+                var APIDataTable = databaseInteraction.Get("[System].[APIDetail_GetByAPIIdAndAPIAttributeId]", sqlParameters);
                 return APIDataTable.AsEnumerable()
                             .Select(r => r.Field<string>("APIDetailDescription"))
                             .ToList();

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UbhsjqyaLygMiNDfI8muRcXeyvb62kT5cxILJoyzjVp/mBCGDIR/oPeyT+294Aa+VyuJ1MB/Hij1ilITvjkU1A==",
+  "dgSpecHash": "Ngfvo5SzDKwCetkbq/2DXBtWk3K4sM8vtObe0bA76PZLRmqrmvp94nisot6TnYo51ChD5WS413hh5ovH9Km+JQ==",
   "success": true,
-  "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\Website.api.csproj",
+  "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\ValidatePageGUID.api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.7\\microsoft.aspnet.webapi.client.5.2.7.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",

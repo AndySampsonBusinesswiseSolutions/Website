@@ -7034,9 +7034,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\Website.api.csproj",
-      "projectName": "Website.api",
-      "projectPath": "C:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\Website.api.csproj",
+      "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\ArchiveProcessQueue.api.csproj",
+      "projectName": "ArchiveProcessQueue.api",
+      "projectPath": "C:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\ArchiveProcessQueue.api.csproj",
       "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
       "outputPath": "C:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\obj\\",
       "projectStyle": "PackageReference",

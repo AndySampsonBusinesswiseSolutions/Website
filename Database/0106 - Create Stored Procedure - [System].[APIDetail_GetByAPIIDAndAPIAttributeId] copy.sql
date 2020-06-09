@@ -6,20 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [System].[ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get ProcessArchiveDetail info from [System].[ProcessArchiveDetail] table by ProcessArchive ID and ProcessArchive Attribute ID
+-- Description:	Get ProcessArchiveDetail info from [System].[ProcessArchiveDetail] table by ProcessArchive Id and ProcessArchive Attribute Id
 -- =============================================
 
-ALTER PROCEDURE [System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId]
-    @ProcessArchiveID BIGINT,
+ALTER PROCEDURE [System].[ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId]
+    @ProcessArchiveId BIGINT,
     @ProcessArchiveAttributeId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS

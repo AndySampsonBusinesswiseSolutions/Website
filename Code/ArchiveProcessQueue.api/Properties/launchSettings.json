@@ -12,15 +12,15 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "Website",
+      "launchUrl": "ArchiveProcessQueue",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Website.api": {
+    "ArchiveProcessQueue.api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "Website",
+      "launchUrl": "ArchiveProcessQueue",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

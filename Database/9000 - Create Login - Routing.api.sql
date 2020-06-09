@@ -36,3 +36,6 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Mapping].[API_GetAPIIdListByProcessId] TO [Routing.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[System].[API_GetById] TO [Routing.api];  
+GO

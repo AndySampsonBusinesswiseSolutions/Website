@@ -5,7 +5,123 @@
    "version": "0.2.0",
    "configurations": [
         {
-            "name": ".NET Core Launch (web)",
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        },
+        {
+            "name": "ArchiveProcessQueue.api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ArchiveProcessQueue.api/bin/Debug/netcoreapp3.1/ArchiveProcessQueue.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ArchiveProcessQueue.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/ArchiveProcessQueue.api/Views"
+            }
+        },
+        {
+            "name": "CheckPrerequisiteAPI.api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CheckPrerequisiteAPI.api/bin/Debug/netcoreapp3.1/CheckPrerequisiteAPI.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CheckPrerequisiteAPI.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CheckPrerequisiteAPI.api/Views"
+            }
+        },
+        {
+            "name": "Routing.api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Routing.api/bin/Debug/netcoreapp3.1/Routing.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Routing.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Routing.api/Views"
+            }
+        },
+        {
+            "name": "ValidatePageGUID.api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ValidatePageGUID.api/bin/Debug/netcoreapp3.1/ValidatePageGUID.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ValidatePageGUID.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/ValidatePageGUID.api/Views"
+            }
+        },
+        {
+            "name": "ValidateProcessGUID.api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ValidateProcessGUID.api/bin/Debug/netcoreapp3.1/ValidateProcessGUID.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ValidateProcessGUID.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/ValidateProcessGUID.api/Views"
+            }
+        },
+        {
+            "name": "Website.api",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
@@ -23,14 +139,21 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
+                "/Views": "${workspaceFolder}/Website.api/Views"
             }
         },
+    ],
+    "compounds": [
         {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "name": "All Projects",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api"
+            ]
         }
     ]
 }

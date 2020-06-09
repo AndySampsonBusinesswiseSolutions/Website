@@ -42,7 +42,8 @@ namespace Routing.api.Controllers
             var processId = Convert.ToInt64(result.Result);
 
             //Get APIId list
-            List<long> APIIdList = _apiMethods.GetAPIIdListByProcessId(_databaseInteraction, processId);
+            var APIIdList = _apiMethods.GetAPIIdListByProcessId(_databaseInteraction, processId);
+            var APIGUIDList = new List<string>();
 
             foreach(var APIId in APIIdList)
             {
@@ -51,17 +52,20 @@ namespace Routing.api.Controllers
                     .PostAsJsonAsync(
                         _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, APIId), 
                         _apiMethods.GetAPIData(_databaseInteraction, APIId, jsonObject));
+
+                APIGUIDList.Add(_apiMethods.GetAPIGUIDById(_databaseInteraction, APIId));
             }
 
             //Add Validate Process Id to list
             APIIdList.Add(validateProcessAPIId);
+            APIGUIDList.Add(_apiMethods.GetAPIGUIDById(_databaseInteraction, validateProcessAPIId));
 
             //Get Archive.API Id
             var archiveAPIId = _apiMethods.GetArchiveProcessQueueAPIId(_databaseInteraction);
 
             //Create required jsonObject
             var archiveObject = _apiMethods.GetAPIData(_databaseInteraction, archiveAPIId, jsonObject);
-            archiveObject.Add("APIList", JsonSerializer.Serialize(APIIdList));
+            archiveObject.Add("APIList", JsonSerializer.Serialize(APIGUIDList));
 
             //Connect to Archive API and POST API list
             _apiMethods.CreateAPI(_databaseInteraction, archiveAPIId)

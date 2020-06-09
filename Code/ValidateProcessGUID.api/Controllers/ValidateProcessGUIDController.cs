@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
-using System.Net.Http;
 using databaseInteraction;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace ValidateProcessGUID.api.Controllers
 {

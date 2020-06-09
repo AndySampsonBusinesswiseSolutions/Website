@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace ArchiveProcessQueue.api.Controllers
 {
@@ -31,33 +31,17 @@ namespace ArchiveProcessQueue.api.Controllers
             //Get API List
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject["QueueGUID"].ToString();
-            var APIList = jsonObject["APIList"].ToString();
-            var prerequisiteAPIs = APIList.Replace("[", "").Replace("]", "").Split(',').Select(v => Convert.ToInt64(v)).ToList();
-            
-            //Wait until prerequisite APIs have completed
-            var completedPrerequisiteAPIs = new List<long>();
 
-            while(completedPrerequisiteAPIs.Count() < prerequisiteAPIs.Count())
-            {
-                foreach(var prerequisiteAPI in prerequisiteAPIs)
-                {
-                    if(completedPrerequisiteAPIs.Contains(prerequisiteAPI))
-                    {
-                        continue;
-                    }
+            //Get CheckPrerequisiteAPI API Id
+            var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
-                    //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                    var processQueueDataRow = _processMethods.ProcessQueue_GetByGUIDAndAPIId(_databaseInteraction, queueGUID, prerequisiteAPI);
-
-                    //If EffectiveToDate is '9999-12-31' then it is still processing
-                    //otherwise, it has finished so add to completed if successful or errored if not
-                    var effectiveToDate = Convert.ToDateTime(processQueueDataRow["EffectiveToDateTime"]);
-                    if(effectiveToDate.Year != 9999)
-                    {
-                        completedPrerequisiteAPIs.Add(prerequisiteAPI);
-                    }
-                }
-            }
+            //Call CheckPrerequisiteAPI API
+            var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
+                    .PostAsJsonAsync(
+                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
+                        data);
+            var processTaskResponse = processTask.GetAwaiter().GetResult();
+            var result = processTaskResponse.Content.ReadAsStringAsync();
 
             //All APIs have finished so create record in ProcessArchive
             _processMethods.ProcessArchive_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated");

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
-using System.Collections.Generic;
 using databaseInteraction;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 using System;
+using System.Net.Http;
+using System.Linq;
 
 namespace ValidatePageGUID.api.Controllers
 {
@@ -35,43 +35,25 @@ namespace ValidatePageGUID.api.Controllers
             //Insert into ProcessQueue
             _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "F916F19F-9408-4969-84DC-9905D2FEFB0B");
 
-            //Get prerequisite APIs from database
-            var prerequisiteAPIs = _apiMethods.GetAPIDetailByAPIGUID(_databaseInteraction, "F916F19F-9408-4969-84DC-9905D2FEFB0B", "Prerequisite API GUID");
+            //Get CheckPrerequisiteAPI API Id
+            var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
-            //Wait until prerequisite APIs have completed
-            var completedPrerequisiteAPIs = new List<string>();
-            var erroredPrerequisiteAPIs = new List<string>();
-
-            while((completedPrerequisiteAPIs.Count() + erroredPrerequisiteAPIs.Count()) < prerequisiteAPIs.Count())
-            {
-                foreach(var prerequisiteAPI in prerequisiteAPIs)
-                {
-                    if(completedPrerequisiteAPIs.Contains(prerequisiteAPI) || erroredPrerequisiteAPIs.Contains(prerequisiteAPI))
-                    {
-                        continue;
-                    }
-
-                    //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                    var apiId = _apiMethods.GetAPIIdByGUID(_databaseInteraction, prerequisiteAPI);
-                    var processQueueDataRow = _processMethods.ProcessQueue_GetByGUIDAndAPIId(_databaseInteraction, queueGUID, apiId);
-
-                    //If EffectiveToDate is '9999-12-31' then it is still processing
-                    //otherwise, it has finished so add to completed if successful or errored if not
-                    var effectiveToDate = Convert.ToDateTime(processQueueDataRow["EffectiveToDateTime"]);
-                    if(effectiveToDate.Year != 9999)
-                    {
-                        var hasError = Convert.ToBoolean(processQueueDataRow["HasError"]);
-                        if(hasError)
-                        {
-                            erroredPrerequisiteAPIs.Add(prerequisiteAPI);
-                        }
-                        else
-                        {
-                            completedPrerequisiteAPIs.Add(prerequisiteAPI);
-                        }
-                    }
-                }
-            }
+            //Build JObject
+            var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
+            apiData.Add("CallingGUID", "F916F19F-9408-4969-84DC-9905D2FEFB0B");
+            
+            //Call CheckPrerequisiteAPI API
+            var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
+                    .PostAsJsonAsync(
+                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
+                        apiData);
+            var processTaskResponse = processTask.GetAwaiter().GetResult();
+            var result = processTaskResponse.Content.ReadAsStringAsync();
+            var erroredPrerequisiteAPIs = result.Result.ToString()
+                .Replace("\"","")
+                .Replace("[","")
+                .Replace("]","")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries);
 
             if(!erroredPrerequisiteAPIs.Any())
             {

@@ -7034,9 +7034,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\Website.api.csproj",
-      "projectName": "Website.api",
-      "projectPath": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\Website.api.csproj",
+      "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\ValidatePageGUID.api.csproj",
+      "projectName": "ValidatePageGUID.api",
+      "projectPath": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\ValidatePageGUID.api.csproj",
       "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
       "outputPath": "C:\\wamp64\\www\\Website\\Code\\ValidatePageGUID.api\\obj\\",
       "projectStyle": "PackageReference",

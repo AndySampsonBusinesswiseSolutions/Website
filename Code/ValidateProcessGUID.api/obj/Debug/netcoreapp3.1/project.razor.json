@@ -1,5 +1,5 @@
 {
-  "FilePath": "c:\\wamp64\\www\\Website\\Code\\ValidateProcessGUID.api\\Website.api.csproj",
+  "FilePath": "c:\\wamp64\\www\\Website\\Code\\ValidateProcessGUID.api\\ValidateProcessGUID.api.csproj",
   "Configuration": {
     "ConfigurationName": "MVC-3.0",
     "LanguageVersion": "3.0",
@@ -20518,7 +20518,7 @@
     ],
     "CSharpLanguageVersion": 800
   },
-  "RootNamespace": "Website.api",
+  "RootNamespace": "ValidateProcessGUID.api",
   "Documents": [],
   "SerializationFormat": "0.2"
 }

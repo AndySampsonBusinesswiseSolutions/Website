@@ -1,5 +1,5 @@
 {
-  "FilePath": "c:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\Website.api.csproj",
+  "FilePath": "c:\\wamp64\\www\\Website\\Code\\ArchiveProcessQueue.api\\ArchiveProcessQueue.api.csproj",
   "Configuration": {
     "ConfigurationName": "MVC-3.0",
     "LanguageVersion": "3.0",
@@ -20518,7 +20518,7 @@
     ],
     "CSharpLanguageVersion": 800
   },
-  "RootNamespace": "Website.api",
+  "RootNamespace": "ArchiveProcessQueue.api",
   "Documents": [],
   "SerializationFormat": "0.2"
 }
