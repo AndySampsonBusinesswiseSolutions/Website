@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace databaseInteraction
 {
@@ -35,12 +36,30 @@ namespace databaseInteraction
                 }
 
                 //Build new object with only those values API requires
+                var apiDictionary = new Dictionary<string, List<string>>();
+                foreach (var record in jsonObject)
+                {
+                    if(!apiDictionary.ContainsKey(record.Key))
+                    {
+                        apiDictionary.Add(record.Key, new List<string>());
+                    }
+
+                    apiDictionary[record.Key].Add(record.Value.ToString());
+                }
+
                 var apiData = new JObject();
                 foreach(var dataKey in dataKeys)
                 {
-                    if(jsonObject.ContainsKey(dataKey))
+                    if(apiDictionary.ContainsKey(dataKey))
                     {
-                        apiData.Add(dataKey, jsonObject[dataKey].ToString());
+                        if(apiDictionary[dataKey].Count() == 1)
+                        {
+                            apiData.Add(dataKey, apiDictionary[dataKey][0]);
+                        }
+                        else 
+                        {
+                            apiData.Add(dataKey, JsonConvert.SerializeObject(apiDictionary[dataKey]));
+                        }
                     }
                 }
 
@@ -124,6 +143,11 @@ namespace databaseInteraction
             public List<long> GetAPIIdListByProcessId(DatabaseInteraction databaseInteraction, long processId)
             {
                 return API_GetAPIIdListByProcessId(databaseInteraction, processId);
+            }
+
+            public long GetAPIIdByGUID(DatabaseInteraction databaseInteraction, string guid)
+            {
+                return APIId_GetByGUID(databaseInteraction, guid);
             }
             
             private long APIId_GetByGUID(DatabaseInteraction databaseInteraction, string guid)

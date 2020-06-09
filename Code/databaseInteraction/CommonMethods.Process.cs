@@ -55,6 +55,19 @@ namespace databaseInteraction
                 databaseInteraction.ExecuteNonQuery("[System].[ProcessQueue_Update]", sqlParameters);
             }
 
+            public DataRow ProcessQueue_GetByGUIDAndAPIId(DatabaseInteraction databaseInteraction, string queueGUID, long apiId)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@ProcessQueueGUID", SqlValue = queueGUID},
+                    new SqlParameter {ParameterName = "@APIId", SqlValue = apiId}
+                };
+
+                //Execute stored procedure
+                return databaseInteraction.GetSingleRow("[System].[ProcessQueue_GetByGUIDAndAPIId]", sqlParameters);
+            }
+
             public void ProcessArchive_Insert(DatabaseInteraction databaseInteraction, string processArchiveGUID, string userGUID, string source)
             {
                 //Set up stored procedure parameters

@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Cors;
 using databaseInteraction;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System;
+using Newtonsoft.Json;
 
 namespace ArchiveProcessQueue.api.Controllers
 {
@@ -27,13 +30,36 @@ namespace ArchiveProcessQueue.api.Controllers
         {
             //Get API List
             var jsonObject = JObject.Parse(data.ToString());
+            var queueGUID = jsonObject["QueueGUID"].ToString();
+            var APIList = jsonObject["APIList"].ToString();
+            var prerequisiteAPIs = APIList.Replace("[", "").Replace("]", "").Split(',').Select(v => Convert.ToInt64(v)).ToList();
             
-            //Loop through list
+            //Wait until prerequisite APIs have completed
+            var completedPrerequisiteAPIs = new List<long>();
 
-            //Check if API has finished
+            while(completedPrerequisiteAPIs.Count() < prerequisiteAPIs.Count())
+            {
+                foreach(var prerequisiteAPI in prerequisiteAPIs)
+                {
+                    if(completedPrerequisiteAPIs.Contains(prerequisiteAPI))
+                    {
+                        continue;
+                    }
+
+                    //Get prerequisite API EffectiveToDate from System.ProcessQueue
+                    var processQueueDataRow = _processMethods.ProcessQueue_GetByGUIDAndAPIId(_databaseInteraction, queueGUID, prerequisiteAPI);
+
+                    //If EffectiveToDate is '9999-12-31' then it is still processing
+                    //otherwise, it has finished so add to completed if successful or errored if not
+                    var effectiveToDate = Convert.ToDateTime(processQueueDataRow["EffectiveToDateTime"]);
+                    if(effectiveToDate.Year != 9999)
+                    {
+                        completedPrerequisiteAPIs.Add(prerequisiteAPI);
+                    }
+                }
+            }
 
             //All APIs have finished so create record in ProcessArchive
-            var queueGUID = jsonObject["QueueGUID"].ToString();
             _processMethods.ProcessArchive_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated");
             var processArchiveId = _processMethods.ProcessArchiveId_GetByGUID(_databaseInteraction, queueGUID);
 
@@ -44,6 +70,8 @@ namespace ArchiveProcessQueue.api.Controllers
 
             //Update ProcessArchive
             _processMethods.ProcessArchive_Update(_databaseInteraction, queueGUID);
+
+            //Delete GUID from ProcessQueue
         }
     }
 }

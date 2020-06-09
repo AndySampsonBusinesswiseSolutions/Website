@@ -45,3 +45,6 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ArchiveProcessQueue.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [ArchiveProcessQueue.api];  
+GO
