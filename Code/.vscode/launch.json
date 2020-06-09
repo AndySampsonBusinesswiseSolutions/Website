@@ -14,7 +14,7 @@
             "name": "ArchiveProcessQueue.api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ArchiveProcessQueue.api/bin/Debug/netcoreapp3.1/ArchiveProcessQueue.api.dll",
             "args": [],
@@ -36,7 +36,7 @@
             "name": "CheckPrerequisiteAPI.api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/CheckPrerequisiteAPI.api/bin/Debug/netcoreapp3.1/CheckPrerequisiteAPI.api.dll",
             "args": [],
@@ -58,7 +58,7 @@
             "name": "Routing.api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Routing.api/bin/Debug/netcoreapp3.1/Routing.api.dll",
             "args": [],
@@ -80,7 +80,7 @@
             "name": "ValidatePageGUID.api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ValidatePageGUID.api/bin/Debug/netcoreapp3.1/ValidatePageGUID.api.dll",
             "args": [],
@@ -102,7 +102,7 @@
             "name": "ValidateProcessGUID.api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/ValidateProcessGUID.api/bin/Debug/netcoreapp3.1/ValidateProcessGUID.api.dll",
             "args": [],
@@ -124,7 +124,7 @@
             "name": "Website.api",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Website.api/bin/Debug/netcoreapp3.1/Website.api.dll",
             "args": [],

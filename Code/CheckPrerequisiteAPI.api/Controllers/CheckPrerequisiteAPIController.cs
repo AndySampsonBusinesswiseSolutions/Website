@@ -34,12 +34,12 @@ namespace CheckPrerequisiteAPI.api.Controllers
             var prerequisiteAPIs = new List<string>();
 
             //If API list is passed through, then use that otherwise get API list from database
-            try
+            if(jsonObject.ContainsKey("APIList"))
             {
                 var APIList = jsonObject["APIList"].ToString();
-                prerequisiteAPIs = APIList.Replace("[", "").Replace("]", "").Split(',').ToList();
+                prerequisiteAPIs = APIList.Replace("\"","").Replace("[", "").Replace("]", "").Split(',').ToList();
             }
-            catch
+            else
             {
                 //Get prerequisite APIs from database
                 var callingGUID = jsonObject["CallingGUID"].ToString();

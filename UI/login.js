@@ -46,12 +46,17 @@ function showLoader(show) {
 }
 
 function processResponse(response) {
-  // if(response && response.ok) {
-  //   window.location.href = "/Internal/Dashboard/";
-  //   return true;
-  // }
-  
   errorMessage.style.display = '';
+  
+  if(response && response.message == "200 OK") {
+    errorMessage.innerText = 'Login OK';
+    //window.location.href = "/Internal/Dashboard/";
+    // return true;
+  }
+  else {
+    errorMessage.innerText = "Email address/Password combination invalid or account has been locked";
+  }
+  
   showLoader(false);
   return false;
 }

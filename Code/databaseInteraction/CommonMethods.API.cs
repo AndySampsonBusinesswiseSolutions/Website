@@ -186,7 +186,7 @@ namespace databaseInteraction
                 //Get API Id
                 var APIDataTable = databaseInteraction.Get("[System].[API_GetById]", sqlParameters);
                 return APIDataTable.AsEnumerable()
-                            .Select(r => r.Field<string>("GUID"))
+                            .Select(r => r.Field<Guid>("GUID").ToString())
                             .First();
             }
 

@@ -26,7 +26,7 @@
 							
 						<button type="submit" onclick="showLoader(true); ">Login</button>
 						<span class="psw"><a href="/Internal/ForgottenPassword/">Forgot password?</a></span>
-						<div id="errorMessage" style="display: none; color: red;">Email address/Password combination invalid or account has been locked<br>Please use 'Forgot Password' process</div>
+						<div id="errorMessage" style="display: none; color: red;"></div>
 					</div>
 				</form>
 			</div>

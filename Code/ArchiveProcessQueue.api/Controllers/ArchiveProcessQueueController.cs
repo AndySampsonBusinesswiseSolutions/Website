@@ -39,7 +39,7 @@ namespace ArchiveProcessQueue.api.Controllers
             var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
                         _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
-                        data);
+                        _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject));
             var processTaskResponse = processTask.GetAwaiter().GetResult();
             var result = processTaskResponse.Content.ReadAsStringAsync();
 

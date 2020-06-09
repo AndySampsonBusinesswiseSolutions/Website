@@ -58,17 +58,20 @@ namespace Website.api.Controllers
             }
 
             //Loop until a response record is written into ProcessArchiveDetail
-            var response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response");
+            var response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response").FirstOrDefault();
 
-            while(!response.Any())
+            while(response == null)
             {
-                response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response");
+                response = _processMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(_databaseInteraction, processArchiveId, "Response").FirstOrDefault();
             }
 
             //Create return object with response record
-            var result = new OkObjectResult(new { message = "200 OK" });
+            if(response == "OK")
+            {
+                return new OkObjectResult(new { message = "200 OK" });
+            }
 
-            return result;
+            return new UnauthorizedResult();
         }
     }
 }
