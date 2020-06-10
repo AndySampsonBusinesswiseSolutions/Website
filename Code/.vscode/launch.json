@@ -121,6 +121,28 @@
             }
         },
         {
+            "name": "ValidatePassword.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ValidatePassword.api/bin/Debug/netcoreapp3.1/ValidatePassword.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ValidatePassword.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/ValidatePassword.api/Views"
+            }
+        },
+        {
             "name": "ValidateProcessGUID.api",
             "type": "coreclr",
             "request": "launch",
@@ -163,7 +185,7 @@
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Website.api/Views"
             }
-        },
+        }
     ],
     "compounds": [
         {
@@ -175,7 +197,8 @@
                 "CheckPrerequisiteAPI.api",
                 "ValidatePageGUID.api",
                 "ValidateProcessGUID.api",
-                "ValidateEmailAddress.api"
+                "ValidateEmailAddress.api",
+                "ValidatePassword.api"
             ]
         }
     ]
