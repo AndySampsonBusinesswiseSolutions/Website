@@ -7,7 +7,7 @@ function login(event) {
   var emailAddress = document.getElementById('userName').value;
   var password = document.getElementById('password').value;
 
-  if(emailAddress == "andy.sampson@businesswise.co.uk"
+  if(emailAddress == "andy.sampson@businesswisesolutions.co.uk"
     && password == "URLTesting") {
       var processQueueGUID = CreateGUID();
 

@@ -77,6 +77,28 @@
             }
         },
         {
+            "name": "ValidateEmailAddress.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ValidateEmailAddress.api/bin/Debug/netcoreapp3.1/ValidateEmailAddress.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ValidateEmailAddress.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/ValidateEmailAddress.api/Views"
+            }
+        },
+        {
             "name": "ValidatePageGUID.api",
             "type": "coreclr",
             "request": "launch",
@@ -152,7 +174,8 @@
                 "ArchiveProcessQueue.api",
                 "CheckPrerequisiteAPI.api",
                 "ValidatePageGUID.api",
-                "ValidateProcessGUID.api"
+                "ValidateProcessGUID.api",
+                "ValidateEmailAddress.api"
             ]
         }
     ]
