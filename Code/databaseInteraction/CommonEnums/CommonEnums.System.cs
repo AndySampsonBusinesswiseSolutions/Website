@@ -54,6 +54,16 @@ namespace databaseInteraction
                     public string ValidatePasswordAPI = @"b7.Q!!X3Hp{\mJ}j";
                     public string ValidateEmailAddressPasswordMappingAPI = @"GQzD2!aZNvffr*zC";
                 }
+
+                public class RequiredDataKey
+                {
+                    public string APIList = "APIList";
+                    public string EmailAddress = "EmailAddress";
+                    public string PageGUID = "PageGUID";
+                    public string Password = "Password";
+                    public string ProcessGUID = "ProcessGUID";
+                    public string QueueGUID = "QueueGUID";
+                }
             }
 
             public class Page

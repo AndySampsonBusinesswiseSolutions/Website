@@ -7,7 +7,10 @@ namespace Routing.api
     public class Program
     {
         private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("Routing.api", @"E{*Jj5&nLfC}@Q$:");
+        private static readonly CommonEnums.System.API.Name _apiNameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _apiPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_apiNameEnums.RoutingAPI, _apiPasswordEnums.RoutingAPI);
 
         public static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace Routing.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "A4F25D07-86AA-42BD-ACD7-51A8F772A92B"));
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, _apiGUIDEnums.RoutingAPI));
                 });
     }
 }
