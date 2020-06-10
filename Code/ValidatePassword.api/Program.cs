@@ -7,7 +7,10 @@ namespace ValidatePassword.api
     public class Program
     {
         private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidatePassword.api", @"b7.Q!!X3Hp{\mJ}j");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidatePasswordAPI, _systemAPIPasswordEnums.ValidatePasswordAPI);
 
         public static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace ValidatePassword.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2"));
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, _apiGUIDEnums.ValidatePasswordAPI));
                 });
     }
 }

@@ -17,7 +17,12 @@ namespace CheckPrerequisiteAPI.api.Controllers
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Page _pageMethods = new CommonMethods.Page();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("CheckPrerequisiteAPI.api", @"w8chCkRAW]\N[7Hh");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
+        private readonly CommonEnums.System.API.Attribute _systemAPIAttributes = new CommonEnums.System.API.Attribute();
+        private readonly CommonEnums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new CommonEnums.System.ProcessArchive.Attribute();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.CheckPrerequisiteAPIAPI, _systemAPIPasswordEnums.CheckPrerequisiteAPIAPI);
 
         public CheckPrerequisiteAPIController(ILogger<CheckPrerequisiteAPIController> logger)
         {
@@ -30,20 +35,20 @@ namespace CheckPrerequisiteAPI.api.Controllers
         {
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject["QueueGUID"].ToString();
+            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
             var prerequisiteAPIs = new List<string>();
 
             //If API list is passed through, then use that otherwise get API list from database
-            if(jsonObject.ContainsKey("APIList"))
+            if(jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.APIList))
             {
-                var APIList = jsonObject["APIList"].ToString();
+                var APIList = jsonObject[_systemAPIRequiredDataKeyEnums.APIList].ToString();
                 prerequisiteAPIs = APIList.Replace("\"","").Replace("[", "").Replace("]", "").Split(',').ToList();
             }
             else
             {
                 //Get prerequisite APIs from database
-                var callingGUID = jsonObject["CallingGUID"].ToString();
-                prerequisiteAPIs = _apiMethods.GetAPIDetailByAPIGUID(_databaseInteraction, callingGUID, "Prerequisite API GUID");
+                var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+                prerequisiteAPIs = _apiMethods.GetAPIDetailByAPIGUID(_databaseInteraction, callingGUID, _systemAPIAttributes.PrerequisiteAPIGUID);
             }
 
             //Wait until prerequisite APIs have completed

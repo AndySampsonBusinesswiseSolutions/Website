@@ -13,7 +13,13 @@ namespace ValidateProcessGUID.api.Controllers
         private readonly ILogger<ValidateProcessGUIDController> _logger;
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidateProcessGUID.api", @"Y4c?.KT(>HXj@f8D");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private readonly CommonEnums.Administration.User.GUID _administrationUserGUIDEnums = new CommonEnums.Administration.User.GUID();
+        private readonly CommonEnums.Information.SourceType _informationSourceTypeEnums = new CommonEnums.Information.SourceType();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidateProcessGUIDAPI, _systemAPIPasswordEnums.ValidateProcessGUIDAPI);
 
         public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger)
         {
@@ -26,13 +32,17 @@ namespace ValidateProcessGUID.api.Controllers
         {
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject["QueueGUID"].ToString();
+            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "87AFEDA8-6A0F-4143-BF95-E08E78721CF5");
+            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+                queueGUID, 
+                _administrationUserGUIDEnums.System, 
+                _informationSourceTypeEnums.UserGenerated, 
+                _apiGUIDEnums.ValidateProcessGUIDAPI);
 
             //Get Process GUID
-            var processGUID = jsonObject["ProcessGUID"].ToString();
+            var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
 
             //Validate Process GUID
             var processId = _processMethods.ProcessId_GetByGUID(_databaseInteraction, processGUID);
@@ -44,7 +54,7 @@ namespace ValidateProcessGUID.api.Controllers
             }
 
             //Update Process Queue
-            _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "87AFEDA8-6A0F-4143-BF95-E08E78721CF5", processId == 0);
+            _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.ValidateProcessGUIDAPI, processId == 0);
 
             return processId;
         }

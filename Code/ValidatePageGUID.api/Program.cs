@@ -7,7 +7,10 @@ namespace ValidatePageGUID.api
     public class Program
     {
         private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidatePageGUID.api", @"n:Q>V&6P9KtG`(5k");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidatePageGUIDAPI, _systemAPIPasswordEnums.ValidatePageGUIDAPI);
 
         public static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace ValidatePageGUID.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "F916F19F-9408-4969-84DC-9905D2FEFB0B"));
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, _apiGUIDEnums.ValidatePageGUIDAPI));
                 });
     }
 }

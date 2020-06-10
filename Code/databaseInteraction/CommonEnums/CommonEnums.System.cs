@@ -63,6 +63,7 @@ namespace databaseInteraction
                     public string Password = "Password";
                     public string ProcessGUID = "ProcessGUID";
                     public string QueueGUID = "QueueGUID";
+                    public string CallingGUID = "CallingGUID";
                 }
             }
 

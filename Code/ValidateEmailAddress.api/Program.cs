@@ -7,7 +7,10 @@ namespace ValidateEmailAddress.api
     public class Program
     {
         private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidateEmailAddress.api", @"}h8FfD2r[Rd~PPNR");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidateEmailAddressAPI, _systemAPIPasswordEnums.ValidateEmailAddressAPI);
 
         public static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace ValidateEmailAddress.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "99681B37-575F-47E5-95E3-608063EA513E"));
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, _apiGUIDEnums.ValidateEmailAddressAPI));
                 });
     }
 }

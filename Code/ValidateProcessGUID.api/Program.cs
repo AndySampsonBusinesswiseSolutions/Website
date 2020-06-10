@@ -7,7 +7,10 @@ namespace ValidateProcessGUID.api
     public class Program
     {
         private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidateProcessGUID.api", @"Y4c?.KT(>HXj@f8D");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidateProcessGUIDAPI, _systemAPIPasswordEnums.ValidateProcessGUIDAPI);
 
         public static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace ValidateProcessGUID.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "87AFEDA8-6A0F-4143-BF95-E08E78721CF5"));
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, _apiGUIDEnums.ValidateProcessGUIDAPI));
                 });
     }
 }

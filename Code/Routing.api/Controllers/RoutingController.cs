@@ -15,9 +15,10 @@ namespace Routing.api.Controllers
         private readonly ILogger<RoutingController> _logger;
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
-        private static readonly CommonEnums.System.API.Name _apiNameEnums = new CommonEnums.System.API.Name();
-        private static readonly CommonEnums.System.API.Password _apiPasswordEnums = new CommonEnums.System.API.Password();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_apiNameEnums.RoutingAPI, _apiPasswordEnums.RoutingAPI);
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.RoutingAPI, _systemAPIPasswordEnums.RoutingAPI);
 
         public RoutingController(ILogger<RoutingController> logger)
         {
@@ -66,9 +67,8 @@ namespace Routing.api.Controllers
             var archiveAPIId = _apiMethods.GetArchiveProcessQueueAPIId(_databaseInteraction);
 
             //Create required jsonObject
-            var apiRequiredDataKeys = new CommonEnums.System.API.RequiredDataKey();
             var archiveObject = _apiMethods.GetAPIData(_databaseInteraction, archiveAPIId, jsonObject);
-            archiveObject.Add(apiRequiredDataKeys.APIList, JsonSerializer.Serialize(APIGUIDList));
+            archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIList, JsonSerializer.Serialize(APIGUIDList));
 
             //Connect to Archive API and POST API list
             _apiMethods.CreateAPI(_databaseInteraction, archiveAPIId)

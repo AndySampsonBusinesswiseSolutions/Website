@@ -7,7 +7,10 @@ namespace ArchiveProcessQueue.api
     public class Program
     {
         private static readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ArchiveProcessQueue.api", @"nb@89qWEW5!6=2s*");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ArchiveProcessQueueAPI, _systemAPIPasswordEnums.ArchiveProcessQueueAPI);
 
         public static void Main(string[] args)
         {
@@ -19,7 +22,7 @@ namespace ArchiveProcessQueue.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, "38D3A9E1-A060-4464-B971-8DC523B6A42D"));
+                    webBuilder.UseUrls(_apiMethods.GetAPIStartupURLs(_databaseInteraction, _apiGUIDEnums.ArchiveProcessQueueAPI));
                 });
     }
 }

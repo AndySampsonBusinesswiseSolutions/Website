@@ -17,7 +17,13 @@ namespace ValidatePassword.api.Controllers
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Password _passwordMethods = new CommonMethods.Password();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidatePassword.api", @"b7.Q!!X3Hp{\mJ}j");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private readonly CommonEnums.Administration.User.GUID _administrationUserGUIDEnums = new CommonEnums.Administration.User.GUID();
+        private readonly CommonEnums.Information.SourceType _informationSourceTypeEnums = new CommonEnums.Information.SourceType();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidatePasswordAPI, _systemAPIPasswordEnums.ValidatePasswordAPI);
 
         public ValidatePasswordController(ILogger<ValidatePasswordController> logger)
         {
@@ -30,17 +36,21 @@ namespace ValidatePassword.api.Controllers
         {
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject["QueueGUID"].ToString();
+            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2");
+            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+                queueGUID, 
+                _administrationUserGUIDEnums.System, 
+                _informationSourceTypeEnums.UserGenerated, 
+                _apiGUIDEnums.ValidatePasswordAPI);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
             //Build JObject
             var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
-            apiData.Add("CallingGUID", "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2");
+            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _apiGUIDEnums.ValidatePasswordAPI);
             
             //Call CheckPrerequisiteAPI API
             var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
@@ -58,7 +68,7 @@ namespace ValidatePassword.api.Controllers
             if(!erroredPrerequisiteAPIs.Any())
             {
                 //Get Password
-                var password = jsonObject["Password"].ToString();
+                var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
 
                 //Validate Password
                 var passwordId = _passwordMethods.PasswordId_GetByPassword(_databaseInteraction, password);
@@ -70,12 +80,12 @@ namespace ValidatePassword.api.Controllers
                 }
 
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2", passwordId == 0);
+                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.ValidatePasswordAPI, passwordId == 0);
             }
             else
             {
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2", true);
+                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.ValidatePasswordAPI, true);
             }
         }
     }

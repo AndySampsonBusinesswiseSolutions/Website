@@ -17,7 +17,13 @@ namespace ValidatePageGUID.api.Controllers
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Page _pageMethods = new CommonMethods.Page();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidatePageGUID.api", @"n:Q>V&6P9KtG`(5k");
+        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
+        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
+        private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
+        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private readonly CommonEnums.Administration.User.GUID _administrationUserGUIDEnums = new CommonEnums.Administration.User.GUID();
+        private readonly CommonEnums.Information.SourceType _informationSourceTypeEnums = new CommonEnums.Information.SourceType();
+        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidatePageGUIDAPI, _systemAPIPasswordEnums.ValidatePageGUIDAPI);
 
         public ValidatePageGUIDController(ILogger<ValidatePageGUIDController> logger)
         {
@@ -30,17 +36,21 @@ namespace ValidatePageGUID.api.Controllers
         {
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject["QueueGUID"].ToString();
+            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, queueGUID, "743E21EE-2185-45D4-9003-E35060B751E2", "User Generated", "F916F19F-9408-4969-84DC-9905D2FEFB0B");
+            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+                queueGUID, 
+                _administrationUserGUIDEnums.System, 
+                _informationSourceTypeEnums.UserGenerated, 
+                _apiGUIDEnums.ValidatePageGUIDAPI);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
             //Build JObject
             var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
-            apiData.Add("CallingGUID", "F916F19F-9408-4969-84DC-9905D2FEFB0B");
+            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _apiGUIDEnums.ValidatePageGUIDAPI);
             
             //Call CheckPrerequisiteAPI API
             var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
@@ -58,7 +68,7 @@ namespace ValidatePageGUID.api.Controllers
             if(!erroredPrerequisiteAPIs.Any())
             {
                 //Get Page GUID
-                var pageGUID = jsonObject["PageGUID"].ToString();
+                var pageGUID = jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
 
                 //Validate Page GUID
                 var pageId = _pageMethods.PageId_GetByGUID(_databaseInteraction, pageGUID);
@@ -70,12 +80,12 @@ namespace ValidatePageGUID.api.Controllers
                 }
 
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "F916F19F-9408-4969-84DC-9905D2FEFB0B", pageId == 0);
+                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.ValidatePageGUIDAPI, pageId == 0);
             }
             else
             {
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, "F916F19F-9408-4969-84DC-9905D2FEFB0B", true);
+                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.ValidatePageGUIDAPI, true);
             }
         }
     }
