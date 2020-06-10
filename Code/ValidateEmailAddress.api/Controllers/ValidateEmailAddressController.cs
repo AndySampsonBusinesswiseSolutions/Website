@@ -61,7 +61,7 @@ namespace ValidateEmailAddress.api.Controllers
                 var emailAddress = jsonObject["EmailAddress"].ToString();
 
                 //Validate Email Address
-                var emailAddressId = _emailAddressMethods.EmailAddressId_GetByValue(_databaseInteraction, emailAddress);
+                var emailAddressId = _emailAddressMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
 
                 //If emailAddressId == 0 then the GUID provided isn't valid so create an error
                 if(emailAddressId == 0)

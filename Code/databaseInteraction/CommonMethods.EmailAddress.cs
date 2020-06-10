@@ -9,7 +9,7 @@ namespace databaseInteraction
     {
         public class EmailAddress
         {
-            public long EmailAddressId_GetByValue(DatabaseInteraction databaseInteraction, string emailAddress)
+            public long UserDetailId_GetByEmailAddress(DatabaseInteraction databaseInteraction, string emailAddress)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
