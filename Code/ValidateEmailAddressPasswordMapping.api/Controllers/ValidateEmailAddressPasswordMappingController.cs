@@ -17,7 +17,6 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Mapping _mappingMethods = new CommonMethods.Mapping();
         private readonly CommonMethods.UserDetail _userDetailMethods = new CommonMethods.UserDetail();
-        private readonly CommonMethods.EmailAddress _emailAddressMethods = new CommonMethods.EmailAddress();
         private readonly CommonMethods.Password _passwordMethods = new CommonMethods.Password();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
         private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidateEmailAddressPasswordMapping.api", @"GQzD2!aZNvffr*zC");
@@ -66,7 +65,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
 
                 //Get User Id
                 var emailAddress = jsonObject["EmailAddress"].ToString();
-                var userDetailId = _emailAddressMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
+                var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
                 var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
 
                 //Validate Password and User combination

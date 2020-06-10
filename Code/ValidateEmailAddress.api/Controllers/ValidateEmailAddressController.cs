@@ -15,7 +15,7 @@ namespace ValidateEmailAddress.api.Controllers
     {
         private readonly ILogger<ValidateEmailAddressController> _logger;
         private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private readonly CommonMethods.EmailAddress _emailAddressMethods = new CommonMethods.EmailAddress();
+        private readonly CommonMethods.UserDetail _userDetailMethods = new CommonMethods.UserDetail();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
         private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction("ValidateEmailAddress.api", @"}h8FfD2r[Rd~PPNR");
 
@@ -61,7 +61,7 @@ namespace ValidateEmailAddress.api.Controllers
                 var emailAddress = jsonObject["EmailAddress"].ToString();
 
                 //Validate Email Address
-                var emailAddressId = _emailAddressMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
+                var emailAddressId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
 
                 //If emailAddressId == 0 then the GUID provided isn't valid so create an error
                 if(emailAddressId == 0)
