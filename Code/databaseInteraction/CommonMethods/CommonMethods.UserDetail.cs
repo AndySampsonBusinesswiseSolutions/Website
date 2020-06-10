@@ -18,7 +18,7 @@ namespace databaseInteraction
                 };
 
                 //Get EmailAddress Id
-                var processDataTable = databaseInteraction.Get("[Administration.User].[UserDetail_GetByUserDetailDescription]", sqlParameters);
+                var processDataTable = databaseInteraction.Get(_storedProcedureAdministrationEnums.UserDetail_GetByUserDetailDescription, sqlParameters);
                 return processDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("UserDetailId"))
                             .FirstOrDefault();
@@ -33,7 +33,7 @@ namespace databaseInteraction
                 };
 
                 //Get User Id
-                var processDataTable = databaseInteraction.Get("[Administration.User].[UserDetail_GetByUserDetailId]", sqlParameters);
+                var processDataTable = databaseInteraction.Get(_storedProcedureAdministrationEnums.UserDetail_GetByUserDetailId, sqlParameters);
                 return processDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("UserId"))
                             .FirstOrDefault();

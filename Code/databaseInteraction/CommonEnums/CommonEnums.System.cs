@@ -13,7 +13,7 @@ namespace databaseInteraction
                     public string HTTPApplicationURL = "HTTP Application URL";
                     public string PrerequisiteAPIGUID = "Prerequisite API GUID";
                     public string POSTRoute = "POST Route";
-                    public string RequiredDataKey = "RequiredDataKey";
+                    public string RequiredDataKey = "Required Data Key";
                 }
                 
                 public class GUID

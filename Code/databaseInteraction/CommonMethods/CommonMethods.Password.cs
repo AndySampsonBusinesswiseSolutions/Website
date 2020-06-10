@@ -18,7 +18,7 @@ namespace databaseInteraction
                 };
 
                 //Get Password Id
-                var processDataTable = databaseInteraction.Get("[Administration.User].[Password_GetByPassword]", sqlParameters);
+                var processDataTable = databaseInteraction.Get(_storedProcedureAdministrationEnums.Password_GetByPassword, sqlParameters);
                 return processDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("PasswordId"))
                             .FirstOrDefault();

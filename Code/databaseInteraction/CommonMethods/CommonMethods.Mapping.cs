@@ -19,7 +19,7 @@ namespace databaseInteraction
                 };
 
                 //Get Mapping Id
-                var processDataTable = databaseInteraction.Get("[Mapping].[PasswordToUser_GetByPasswordIdAndUserId]", sqlParameters);
+                var processDataTable = databaseInteraction.Get(_storedProcedureMappingEnums.PasswordToUser_GetByPasswordIdAndUserId, sqlParameters);
                 return processDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("PasswordToUserId"))
                             .FirstOrDefault();

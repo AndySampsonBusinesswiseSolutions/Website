@@ -18,7 +18,7 @@ namespace databaseInteraction
                 };
 
                 //Get Page Id
-                var processDataTable = databaseInteraction.Get("[System].[Page_GetByGUID]", sqlParameters);
+                var processDataTable = databaseInteraction.Get(_storedProcedureSystemEnums.Page_GetByGUID, sqlParameters);
                 return processDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("PageId"))
                             .FirstOrDefault();

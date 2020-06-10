@@ -19,7 +19,7 @@ namespace databaseInteraction
                 };
 
                 //Get Process Id
-                var processDataTable = databaseInteraction.Get("[System].[Process_GetByGUID]", sqlParameters);
+                var processDataTable = databaseInteraction.Get(_storedProcedureSystemEnums.Process_GetByGUID, sqlParameters);
                 return processDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("ProcessId"))
                             .FirstOrDefault();
@@ -38,7 +38,7 @@ namespace databaseInteraction
                 };
 
                 //Execute stored procedure
-                databaseInteraction.ExecuteNonQuery("[System].[ProcessQueue_Insert]", sqlParameters);
+                databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Insert, sqlParameters);
             }
 
             public void ProcessQueue_Update(DatabaseInteraction databaseInteraction, string queueGUID, string apiGUID, bool hasError = false)
@@ -52,7 +52,7 @@ namespace databaseInteraction
                 };
 
                 //Execute stored procedure
-                databaseInteraction.ExecuteNonQuery("[System].[ProcessQueue_Update]", sqlParameters);
+                databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Update, sqlParameters);
             }
 
             public DataRow ProcessQueue_GetByGUIDAndAPIId(DatabaseInteraction databaseInteraction, string queueGUID, long apiId)
@@ -65,7 +65,7 @@ namespace databaseInteraction
                 };
 
                 //Execute stored procedure
-                return databaseInteraction.GetSingleRow("[System].[ProcessQueue_GetByGUIDAndAPIId]", sqlParameters);
+                return databaseInteraction.GetSingleRow(_storedProcedureSystemEnums.ProcessQueue_GetByGUIDAndAPIId, sqlParameters);
             }
 
             public void ProcessArchive_Insert(DatabaseInteraction databaseInteraction, string processArchiveGUID, string userGUID, string source)
@@ -79,7 +79,7 @@ namespace databaseInteraction
                 };
 
                 //Execute stored procedure
-                databaseInteraction.ExecuteNonQuery("[System].[ProcessArchive_Insert]", sqlParameters);
+                databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchive_Insert, sqlParameters);
             }
 
             public void ProcessArchive_Update(DatabaseInteraction databaseInteraction, string processArchiveGUID)
@@ -91,7 +91,7 @@ namespace databaseInteraction
                 };
 
                 //Execute stored procedure
-                databaseInteraction.ExecuteNonQuery("[System].[ProcessArchive_Update]", sqlParameters);
+                databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchive_Update, sqlParameters);
             }
 
             public long ProcessArchiveId_GetByGUID(DatabaseInteraction databaseInteraction, string queueGUID)
@@ -103,7 +103,7 @@ namespace databaseInteraction
                 };
 
                 //Get Process Archive Id
-                var processArchiveDataTable = databaseInteraction.Get("[System].[ProcessArchive_GetByGUID]", sqlParameters);
+                var processArchiveDataTable = databaseInteraction.Get(_storedProcedureSystemEnums.ProcessArchive_GetByGUID, sqlParameters);
                 return processArchiveDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("ProcessArchiveId"))
                             .FirstOrDefault();
@@ -118,7 +118,7 @@ namespace databaseInteraction
                 };
 
                 //Get ProcessArchive Attribute Id
-                var ProcessArchiveDataTable = databaseInteraction.Get("[System].[ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription]", sqlParameters);
+                var ProcessArchiveDataTable = databaseInteraction.Get(_storedProcedureSystemEnums.ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription, sqlParameters);
                 return ProcessArchiveDataTable.AsEnumerable()
                             .Select(r => r.Field<long>("ProcessArchiveAttributeId"))
                             .First();
@@ -136,7 +136,7 @@ namespace databaseInteraction
                 };
 
                 //Get ProcessArchive Detail
-                var ProcessArchiveDataTable = databaseInteraction.Get("[System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId]", sqlParameters);
+                var ProcessArchiveDataTable = databaseInteraction.Get(_storedProcedureSystemEnums.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId, sqlParameters);
                 return ProcessArchiveDataTable.AsEnumerable()
                             .Select(r => r.Field<string>("ProcessArchiveDetailDescription"))
                             .ToList();
@@ -155,7 +155,7 @@ namespace databaseInteraction
                 };
 
                 //Execute stored procedure
-                databaseInteraction.ExecuteNonQuery("[System].[ProcessArchiveDetail_Insert]", sqlParameters);
+                databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchiveDetail_Insert, sqlParameters);
             }
         }
     }
