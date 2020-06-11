@@ -22,7 +22,7 @@ namespace LockUser.api.Controllers
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
-        private static readonly CommonEnums.System.API.GUID _apiGUIDEnums = new CommonEnums.System.API.GUID();
+        private static readonly CommonEnums.System.API.GUID _systemAPIGUIDEnums = new CommonEnums.System.API.GUID();
         private readonly CommonEnums.Administration.User.GUID _administrationUserGUIDEnums = new CommonEnums.Administration.User.GUID();
         private readonly CommonEnums.Information.SourceType _informationSourceTypeEnums = new CommonEnums.Information.SourceType();
         private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.LockUserAPI, _systemAPIPasswordEnums.LockUserAPI);
@@ -45,14 +45,14 @@ namespace LockUser.api.Controllers
                 queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated, 
-                _apiGUIDEnums.LockUserAPI);
+                _systemAPIGUIDEnums.LockUserAPI);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
             //Build JObject
             var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
-            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _apiGUIDEnums.LockUserAPI);
+            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.LockUserAPI);
             
             //Call CheckPrerequisiteAPI API
             var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
@@ -89,12 +89,12 @@ namespace LockUser.api.Controllers
                 }
 
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.LockUserAPI, !isAttemptValid);
+                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.LockUserAPI, !isAttemptValid);
             }
             else
             {
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _apiGUIDEnums.LockUserAPI, false);
+                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.LockUserAPI, false);
             }
         }
     }

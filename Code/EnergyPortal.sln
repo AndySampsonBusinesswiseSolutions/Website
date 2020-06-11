@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatePassword.api", "Val
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateEmailAddressPasswordMapping.api", "ValidateEmailAddressPasswordMapping.api\ValidateEmailAddressPasswordMapping.api.csproj", "{F1CEA6FA-8BFF-4F4E-B280-828E4AD340A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreLoginAttempt.api", "StoreLoginAttempt.api\StoreLoginAttempt.api.csproj", "{278AA31A-709B-4200-A51B-D435CA4BAA74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockUser.api", "LockUser.api\LockUser.api.csproj", "{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,5 +160,29 @@ Global
 		{F1CEA6FA-8BFF-4F4E-B280-828E4AD340A2}.Release|x64.Build.0 = Release|Any CPU
 		{F1CEA6FA-8BFF-4F4E-B280-828E4AD340A2}.Release|x86.ActiveCfg = Release|Any CPU
 		{F1CEA6FA-8BFF-4F4E-B280-828E4AD340A2}.Release|x86.Build.0 = Release|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Debug|x64.Build.0 = Debug|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Debug|x86.Build.0 = Debug|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Release|x64.ActiveCfg = Release|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Release|x64.Build.0 = Release|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Release|x86.ActiveCfg = Release|Any CPU
+		{278AA31A-709B-4200-A51B-D435CA4BAA74}.Release|x86.Build.0 = Release|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Debug|x64.Build.0 = Debug|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Debug|x86.Build.0 = Debug|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Release|x64.ActiveCfg = Release|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Release|x64.Build.0 = Release|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

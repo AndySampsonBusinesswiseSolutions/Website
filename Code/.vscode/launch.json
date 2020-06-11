@@ -55,6 +55,28 @@
             }
         },
         {
+            "name": "LockUser.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/LockUser.api/bin/Debug/netcoreapp3.1/LockUser.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/LockUser.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/LockUser.api/Views"
+            }
+        },
+        {
             "name": "Routing.api",
             "type": "coreclr",
             "request": "launch",
@@ -74,6 +96,28 @@
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Routing.api/Views"
+            }
+        },
+        {
+            "name": "StoreLoginAttempt.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/StoreLoginAttempt.api/bin/Debug/netcoreapp3.1/StoreLoginAttempt.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/StoreLoginAttempt.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/StoreLoginAttempt.api/Views"
             }
         },
         {
@@ -221,7 +265,9 @@
                 "ValidateProcessGUID.api",
                 "ValidateEmailAddress.api",
                 "ValidatePassword.api",
-                "ValidateEmailAddressPasswordMapping.api"
+                "ValidateEmailAddressPasswordMapping.api",
+                "LockUser.api",
+                "StoreLoginAttempt.api"
             ]
         }
     ]
