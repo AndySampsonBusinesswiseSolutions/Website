@@ -26,9 +26,11 @@ namespace Routing.api.Controllers
         }
 
         [HttpPost]
-        [Route("Routing/POST")]
+        [Route("Routing/POST")] //TODO:Chane POST route to better name
         public void Route([FromBody] object data)
         {
+            //TODO: Add try/catch
+
             //Get processId
             var jsonObject = JObject.Parse(data.ToString());
             
@@ -41,7 +43,7 @@ namespace Routing.api.Controllers
                         _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, validateProcessAPIId), 
                         _apiMethods.GetAPIData(_databaseInteraction, validateProcessAPIId, jsonObject));
             var processTaskResponse = processTask.GetAwaiter().GetResult();
-            var result = processTaskResponse.Content.ReadAsStringAsync();
+            var result = processTaskResponse.Content.ReadAsStringAsync();//TODO: Make into common method
             var processId = Convert.ToInt64(result.Result);
 
             //Get APIId list

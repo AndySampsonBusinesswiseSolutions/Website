@@ -33,6 +33,8 @@ namespace Website.api.Controllers
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
+            //TODO: Add try/catch
+
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
@@ -61,6 +63,8 @@ namespace Website.api.Controllers
         [Route("website/GetResponse")]
         public IActionResult GetResponse([FromBody] string processQueueGuid)
         {
+            //TODO: Add try/catch
+            
             //Get Process Archive Id
             var processArchiveId = _processMethods.ProcessArchiveId_GetByGUID(_databaseInteraction, processQueueGuid);
             while(processArchiveId == 0)

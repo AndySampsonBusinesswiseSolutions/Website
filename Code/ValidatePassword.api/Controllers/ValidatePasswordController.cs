@@ -34,6 +34,8 @@ namespace ValidatePassword.api.Controllers
         [Route("ValidatePassword/Validate")]
         public void Validate([FromBody] object data)
         {
+            //TODO: Add try/catch
+
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
@@ -58,12 +60,12 @@ namespace ValidatePassword.api.Controllers
                         _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
                         apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
-            var result = processTaskResponse.Content.ReadAsStringAsync();
+            var result = processTaskResponse.Content.ReadAsStringAsync();//TODO: Make into common method
             var erroredPrerequisiteAPIs = result.Result.ToString()
                 .Replace("\"","")
                 .Replace("[","")
                 .Replace("]","")
-                .Split(',', StringSplitOptions.RemoveEmptyEntries);
+                .Split(',', StringSplitOptions.RemoveEmptyEntries);//TODO: Make into extension
 
             if(!erroredPrerequisiteAPIs.Any())
             {
@@ -76,7 +78,7 @@ namespace ValidatePassword.api.Controllers
                 //If passwordId == 0 then the GUID provided isn't valid so create an error
                 if(passwordId == 0)
                 {
-                    
+                    //TODO: Add error handler
                 }
 
                 //Update Process Queue

@@ -47,7 +47,7 @@ namespace ArchiveProcessQueue.api.Controllers
                         _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
                         _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject));
             var processTaskResponse = processTask.GetAwaiter().GetResult();
-            var result = processTaskResponse.Content.ReadAsStringAsync();
+            var result = processTaskResponse.Content.ReadAsStringAsync(); //TODO: Make into common method
 
             //All APIs have finished so create record in ProcessArchive
             _processMethods.ProcessArchive_Insert(_databaseInteraction, queueGUID, 
@@ -55,7 +55,7 @@ namespace ArchiveProcessQueue.api.Controllers
                 _informationSourceTypeEnums.UserGenerated);
             var processArchiveId = _processMethods.ProcessArchiveId_GetByGUID(_databaseInteraction, queueGUID);
 
-            //Write records for each API into ProcessArchiveDetail
+            //TODO Write records for each API into ProcessArchiveDetail
 
             //Write response into ProcessArchiveDetail
             _processMethods.ProcessArchiveDetail_Insert(_databaseInteraction, queueGUID, 
@@ -67,7 +67,7 @@ namespace ArchiveProcessQueue.api.Controllers
             //Update ProcessArchive
             _processMethods.ProcessArchive_Update(_databaseInteraction, queueGUID);
 
-            //Delete GUID from ProcessQueue
+            //TODO Delete GUID from ProcessQueue
         }
     }
 }

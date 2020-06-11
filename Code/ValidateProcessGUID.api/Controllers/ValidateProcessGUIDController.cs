@@ -30,6 +30,8 @@ namespace ValidateProcessGUID.api.Controllers
         [Route("ValidateProcessGUID/Validate")]
         public long Validate([FromBody] object data)
         {
+            //TODO: Add try/catch
+
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
@@ -50,7 +52,7 @@ namespace ValidateProcessGUID.api.Controllers
             //If processId == 0 then the GUID provided isn't valid so create an error
             if(processId == 0)
             {
-                
+                //TODO: Add error handler
             }
 
             //Update Process Queue
