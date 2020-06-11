@@ -28,7 +28,7 @@ namespace databaseInteraction
                     public string ValidatePasswordAPI = "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2";
                     public string ValidateEmailAddressPasswordMappingAPI = "CEC56745-C1C5-4E67-805B-159A8A5E991D";
                     public string LockUserAPI = "0C1BAFAA-586D-48BB-8D0B-B0B56BE0CCD2";
-                    //public string StoreLoginAttemptAPI = "3BBFC2B6-2572-43CD-921A-A237000AC248";
+                    public string StoreLoginAttemptAPI = "3BBFC2B6-2572-43CD-921A-A237000AC248";
                 }
 
                 public class Name
@@ -43,10 +43,11 @@ namespace databaseInteraction
                     public string ValidatePasswordAPI = "ValidatePassword.api";
                     public string ValidateEmailAddressPasswordMappingAPI = "ValidateEmailAddressPasswordMapping.api";
                     public string LockUserAPI = "LockUser.api";
-                    //public string StoreLoginAttemptAPI = "StoreLoginAttempt.api";
+                    public string StoreLoginAttemptAPI = "StoreLoginAttempt.api";
                 }
 
-                public class Password //TODO: Move to config file in each API
+                //TODO: Move to config file in each API
+                public class Password 
                 {
                     public string RoutingAPI = @"E{*Jj5&nLfC}@Q$:";
                     public string WebsiteAPI = @"\wU.D[ArWjPG!F4$";
@@ -58,7 +59,7 @@ namespace databaseInteraction
                     public string ValidatePasswordAPI = @"b7.Q!!X3Hp{\mJ}j";
                     public string ValidateEmailAddressPasswordMappingAPI = @"GQzD2!aZNvffr*zC";
                     public string LockUserAPI = "JM7!?q#g#uTyM^!v";
-                    //public string StoreLoginAttemptAPI = "mLdas-Y*x2rbnJ2e";
+                    public string StoreLoginAttemptAPI = "mLdas-Y*x2rbnJ2e";
                 }
 
                 public class RequiredDataKey
