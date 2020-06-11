@@ -85,7 +85,7 @@ namespace LockUser.api.Controllers
                 //If invalid attempt count >= maximum allowed invalid attempts, lock the user
                 if(!isAttemptValid)
                 {
-                    
+                    //TODO: Add error handler
                 }
 
                 //Update Process Queue
