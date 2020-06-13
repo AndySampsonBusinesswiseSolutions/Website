@@ -69,34 +69,22 @@ namespace StoreLoginAttempt.api.Controllers
                 .Replace("]","")
                 .Split(',', StringSplitOptions.RemoveEmptyEntries);//TODO: Make into extension
 
-            if(!erroredPrerequisiteAPIs.Any())
-            {
-                //Get Password Id
-                var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
-                var passwordId = _passwordMethods.PasswordId_GetByPassword(_databaseInteraction, password);
+            //Get User Id
+            var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
+            var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
+            var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
 
-                //Get User Id
-                var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
-                var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
+            //Store login attempt
+            //TODO: create stored procedure using !erroredPrerequisiteAPIs.Any()
 
-                //Store Password and User combination
-                var mappingId = _mappingMethods.PasswordToUser_GetByPasswordIdAndUserId(_databaseInteraction, passwordId, userId);
+            //Get Login Id
+            var loginId = 0;
 
-                //If passwordId == 0 then the GUID provided isn't valid so create an error
-                if(mappingId == 0)
-                {
-                    //TODO: Add error handler
-                }
+            //Store mapping between login attempt and user
+            //TODO: create stored procedure
 
-                //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, mappingId == 0);
-            }
-            else
-            {
-                //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, true);
-            }
+            //Update Process Queue
+            _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, erroredPrerequisiteAPIs.Any());
         }
     }
 }
