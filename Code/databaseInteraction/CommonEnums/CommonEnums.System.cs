@@ -14,6 +14,7 @@ namespace databaseInteraction
                     public string PrerequisiteAPIGUID = "Prerequisite API GUID";
                     public string POSTRoute = "POST Route";
                     public string RequiredDataKey = "Required Data Key";
+                    public string MaximumInvalidLoginAttempts = "Maximum Invalid Login Attempts";
                 }
                 
                 public class GUID

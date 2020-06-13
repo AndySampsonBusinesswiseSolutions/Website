@@ -10,6 +10,7 @@ namespace databaseInteraction
                 {
                     public string EmailAddress = "Email Address";
                     public string UserName = "User Name";
+                    public string AccountLocked = "Account Locked";
                 }
 
                 public class Name

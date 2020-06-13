@@ -45,3 +45,15 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailId] TO [LockUser.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[Login_GetByLoginId] TO [LockUser.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Mapping].[LoginToUser_GetByUserId] TO [LockUser.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [LockUser.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_Insert] TO [LockUser.api];  
+GO

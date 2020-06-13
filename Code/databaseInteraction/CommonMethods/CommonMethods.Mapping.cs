@@ -39,6 +39,21 @@ namespace databaseInteraction
                 //Execute stored procedure
                 databaseInteraction.ExecuteNonQuery(_storedProcedureMappingEnums.LoginToUser_Insert, sqlParameters);
             }
+
+            public List<long> Login_GetByUserId(DatabaseInteraction databaseInteraction, long userId)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@UserId", SqlValue = userId}
+                };
+
+                //Get Login Id
+                var processDataTable = databaseInteraction.Get(_storedProcedureMappingEnums.LoginToUser_GetByUserId, sqlParameters);
+                return processDataTable.AsEnumerable()
+                            .Select(r => r.Field<long>("LoginId"))
+                            .ToList();
+            }
         }
     }
 }

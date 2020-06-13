@@ -38,6 +38,21 @@ namespace databaseInteraction
                             .Select(r => r.Field<long>("LoginId"))
                             .FirstOrDefault();
             }
+
+            public bool LoginSuccessful_GetByLoginId(DatabaseInteraction databaseInteraction, long loginId)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@LoginId", SqlValue = loginId}
+                };
+
+                //Get Login Id
+                var processDataTable = databaseInteraction.Get(_storedProcedureAdministrationEnums.Login_GetByLoginId, sqlParameters);
+                return processDataTable.AsEnumerable()
+                            .Select(r => r.Field<bool>("LoginSuccessful"))
+                            .FirstOrDefault();
+            }
         }
     }
 }

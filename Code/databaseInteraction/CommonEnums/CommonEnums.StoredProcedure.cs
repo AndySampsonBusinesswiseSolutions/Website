@@ -9,8 +9,10 @@ namespace databaseInteraction
                 public string Password_GetByPassword = "[Administration.User].[Password_GetByPassword]";
                 public string UserDetail_GetByUserDetailDescription = "[Administration.User].[UserDetail_GetByUserDetailDescription]";
                 public string UserDetail_GetByUserDetailId = "[Administration.User].[UserDetail_GetByUserDetailId]";
+                public string UserDetail_Insert = "[Administration.User].[UserDetail_Insert]";
                 public string Login_Insert = "[Administration.User].[Login_Insert]";
                 public string Login_GetByProcessArchiveGUID = "[Administration.User].[Login_GetByProcessArchiveGUID]";
+                public string Login_GetByLoginId = "[Administration.User].[Login_GetByLoginId]";
             }
 
             public class Information
@@ -24,6 +26,7 @@ namespace databaseInteraction
                 public string APIToProcess_GetAPIIdListByProcessId = "[Mapping].[API_GetAPIIdListByProcessId]"; //TODO: Rename sproc
                 public string PasswordToUser_GetByPasswordIdAndUserId = "[Mapping].[PasswordToUser_GetByPasswordIdAndUserId]";
                 public string LoginToUser_Insert = "[Mapping].[LoginToUser_Insert]";
+                public string LoginToUser_GetByUserId = "[Mapping].[LoginToUser_GetByUserId]";
             }
 
             public class System

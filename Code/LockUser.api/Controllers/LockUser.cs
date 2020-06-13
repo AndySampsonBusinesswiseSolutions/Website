@@ -19,9 +19,11 @@ namespace LockUser.api.Controllers
         private readonly CommonMethods.UserDetail _userDetailMethods = new CommonMethods.UserDetail();
         private readonly CommonMethods.Password _passwordMethods = new CommonMethods.Password();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
+        private readonly CommonEnums.System.API.Attribute _systemAPIAttributeEnums = new CommonEnums.System.API.Attribute();
         private static readonly CommonEnums.System.API.GUID _systemAPIGUIDEnums = new CommonEnums.System.API.GUID();
         private readonly CommonEnums.Administration.User.GUID _administrationUserGUIDEnums = new CommonEnums.Administration.User.GUID();
         private readonly CommonEnums.Information.SourceType _informationSourceTypeEnums = new CommonEnums.Information.SourceType();
@@ -74,18 +76,48 @@ namespace LockUser.api.Controllers
                 var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
                 var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
 
-                //TODO: Get how many invalid attempts since last valid login
-                var invalidAttempts = 1;
+                //Get logins by user id and order by descending
+                var loginList = _mappingMethods.Login_GetByUserId(_databaseInteraction, userId).OrderByDescending(l => l);
 
-                //TODO: Get maximum attempts allowed before locking
-                var maximumInvalidAttempts = 3;
+                //Initialise invalidAttempts variable
+                var invalidAttempts = 0;
+
+                //Loop through each login
+                foreach(var login in loginList)
+                {
+                    //Get LoginSuccessful attribute
+                    var loginSucessful = _administrationMethods.LoginSuccessful_GetByLoginId(_databaseInteraction, login);
+
+                    //If login is successful, then exit loop
+                    //Else increment invalidAttempts
+                    if(loginSucessful)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        invalidAttempts++;
+                    }
+                }
+
+                //Get maximum attempts allowed before locking
+                var maximumInvalidAttempts = _apiMethods.GetAPIDetailByAPIGUID(_databaseInteraction, 
+                    _systemAPIGUIDEnums.LockUserAPI, 
+                    _systemAPIAttributeEnums.MaximumInvalidLoginAttempts)
+                    .Select(a => Convert.ToInt64(a))
+                    .First();
 
                 var isAttemptValid = invalidAttempts < maximumInvalidAttempts;
 
                 //If invalid attempt count >= maximum allowed invalid attempts, lock the user
                 if(!isAttemptValid)
                 {
-                    //TODO: Add error handler
+                    //Lock account by adding 'Account Locked' to user detail
+                    _userDetailMethods.UserDetail_Insert(_databaseInteraction, 
+                        _administrationUserGUIDEnums.System, 
+                        _informationSourceTypeEnums.UserGenerated, 
+                        "Account Locked", 
+                        "true");
                 }
 
                 //Update Process Queue
