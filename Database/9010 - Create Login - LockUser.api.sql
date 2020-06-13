@@ -39,3 +39,9 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [LockUser.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailDescription] TO [LockUser.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailId] TO [LockUser.api];  
+GO

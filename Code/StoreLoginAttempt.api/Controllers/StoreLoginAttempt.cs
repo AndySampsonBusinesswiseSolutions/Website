@@ -19,6 +19,8 @@ namespace StoreLoginAttempt.api.Controllers
         private readonly CommonMethods.UserDetail _userDetailMethods = new CommonMethods.UserDetail();
         private readonly CommonMethods.Password _passwordMethods = new CommonMethods.Password();
         private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
+        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
@@ -74,14 +76,20 @@ namespace StoreLoginAttempt.api.Controllers
             var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
             var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
 
+            //Get Source Type Id
+            var sourceTypeId = _informationMethods.SourceTypeId_GetBySourceTypeDescription(_databaseInteraction, _informationSourceTypeEnums.UserGenerated);
+
+            //Get Source Id
+            var sourceId = _informationMethods.Source_GetBySourceTypeIdAndSourceTypeEntityId(_databaseInteraction, sourceTypeId, 0);
+
             //Store login attempt
-            //TODO: create stored procedure using !erroredPrerequisiteAPIs.Any()
+            _administrationMethods.Login_Insert(_databaseInteraction, userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
 
             //Get Login Id
-            var loginId = 0;
+            var loginId = _administrationMethods.LoginId_GetByProcessArchiveGUID(_databaseInteraction, queueGUID);
 
             //Store mapping between login attempt and user
-            //TODO: create stored procedure
+            _mappingMethods.LoginToUser_Insert(_databaseInteraction, 1, sourceId, loginId, userId);//TODO: Create GetSystemUserId method
 
             //Update Process Queue
             _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, erroredPrerequisiteAPIs.Any());

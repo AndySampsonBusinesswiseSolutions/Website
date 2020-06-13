@@ -9,12 +9,21 @@ namespace databaseInteraction
                 public string Password_GetByPassword = "[Administration.User].[Password_GetByPassword]";
                 public string UserDetail_GetByUserDetailDescription = "[Administration.User].[UserDetail_GetByUserDetailDescription]";
                 public string UserDetail_GetByUserDetailId = "[Administration.User].[UserDetail_GetByUserDetailId]";
+                public string Login_Insert = "[Administration.User].[Login_Insert]";
+                public string Login_GetByProcessArchiveGUID = "[Administration.User].[Login_GetByProcessArchiveGUID]";
+            }
+
+            public class Information
+            {
+                public string SourceType_GetBySourceTypeDescription = "[Information].[SourceType_GetBySourceTypeDescription]";
+                public string Source_GetBySourceTypeIdAndSourceTypeEntityId = "[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId]";
             }
 
             public class Mapping
             {
                 public string APIToProcess_GetAPIIdListByProcessId = "[Mapping].[API_GetAPIIdListByProcessId]"; //TODO: Rename sproc
                 public string PasswordToUser_GetByPasswordIdAndUserId = "[Mapping].[PasswordToUser_GetByPasswordIdAndUserId]";
+                public string LoginToUser_Insert = "[Mapping].[LoginToUser_Insert]";
             }
 
             public class System

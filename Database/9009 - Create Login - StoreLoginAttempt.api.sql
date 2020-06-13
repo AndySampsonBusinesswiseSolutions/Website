@@ -45,3 +45,18 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailId] TO [StoreLoginAttempt.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [StoreLoginAttempt.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [StoreLoginAttempt.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[Login_Insert] TO [StoreLoginAttempt.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Mapping].[LoginToUser_Insert] TO [StoreLoginAttempt.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[Login_GetByProcessArchiveGUID] TO [StoreLoginAttempt.api];  
+GO

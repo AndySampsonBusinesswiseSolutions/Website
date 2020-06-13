@@ -24,6 +24,21 @@ namespace databaseInteraction
                             .Select(r => r.Field<long>("PasswordToUserId"))
                             .FirstOrDefault();
             }
+
+            public void LoginToUser_Insert(DatabaseInteraction databaseInteraction, long createdByUserId, long sourceId, long loginId, long userId)
+            {
+                //Set up stored procedure parameters
+                var sqlParameters = new List<SqlParameter>
+                {
+                    new SqlParameter {ParameterName = "@CreatedByUserId", SqlValue = createdByUserId},
+                    new SqlParameter {ParameterName = "@SourceId", SqlValue = sourceId},
+                    new SqlParameter {ParameterName = "@LoginId", SqlValue = loginId},
+                    new SqlParameter {ParameterName = "@UserId", SqlValue = userId}
+                };
+
+                //Execute stored procedure
+                databaseInteraction.ExecuteNonQuery(_storedProcedureMappingEnums.LoginToUser_Insert, sqlParameters);
+            }
         }
     }
 }

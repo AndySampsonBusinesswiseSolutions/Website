@@ -7,5 +7,6 @@ namespace databaseInteraction
         private static readonly CommonEnums.StoredProcedure.System _storedProcedureSystemEnums = new CommonEnums.StoredProcedure.System();
         private static readonly CommonEnums.StoredProcedure.Mapping _storedProcedureMappingEnums = new CommonEnums.StoredProcedure.Mapping();
         private static readonly CommonEnums.StoredProcedure.Administration _storedProcedureAdministrationEnums = new CommonEnums.StoredProcedure.Administration();
+        private static readonly CommonEnums.StoredProcedure.Information _storedProcedureInformationEnums = new CommonEnums.StoredProcedure.Information();
     }
 }
