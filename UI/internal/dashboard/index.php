@@ -19,7 +19,7 @@
 				<div id="mySidenav" class="sidenav" style="display: none;">
 					<div class="header">
 						<button class="closebtn" onclick="closeNav()">Close</button>
-						<i class="fas fa-filter sidenav-icon-close" onclick="closeNav()"></i>
+						<i class="fas fa-filter sidenav-icon-close"></i>
 					</div>
 					<div class="tree-column">
 						<div style="float: left;">
@@ -65,8 +65,8 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="">Reset</button>
-						<button class="applybtn" onclick="">Apply</button>
+						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
 				<i id="openNav" class="fas fa-filter sidenav-icon" onclick="openNav()"></i>
@@ -77,22 +77,22 @@
 				</div>
 				<div id="dashboardHeader" class="outer-container" style="text-align: center;">
 					<div style="width: 40%; float: left;">
-						<a href="/Internal/PortfolioManagement/SiteManagement/" class="dashboard-item-small">
+						<a href="/Internal/PortfolioManagement/SiteManagement/" class="dashboard-item-small" style="background-color: #3b7e84">
 							<img src="/images/location.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Locations Selected</span><br>
 							<span id="dashboardHeaderNumberOfSites" class="dashboard-item-text"></span>
 						</a>
-						<a href="/Internal/Finance/DataAnalysis/"  class="dashboard-item-small">
+						<a href="/Internal/Finance/DataAnalysis/"  class="dashboard-item-small" style="background-color: #69566c">
 							<img src="/images/lightening bolt.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Portfolio Usage p.a</span><br>
 							<span id="dashboardHeaderPortfolioAnnualisedEnergyUsage" class="dashboard-item-text"></span>
 						</a>
-						<a href="/Internal/Finance/DataAnalysis/"  class="dashboard-item-small">
+						<a href="/Internal/Finance/DataAnalysis/"  class="dashboard-item-small" style="background-color: #97a3af">
 							<img src="/images/money6.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Portfolio Cost p.a</span><br>
 							<span id="dashboardHeaderPortfolioAnnualisedEnergyCost" class="dashboard-item-text"></span>
 						</a>
-						<div class="dashboard-item-small">
+						<div class="dashboard-item-small" style="background-color: #97a3af">
 							<img src="/images/money.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Savings</span><br>
 							<div class="dashboard-item-text">
@@ -100,7 +100,7 @@
 								<span>£9,249 over next 3 years</span>
 							</div>
 						</div>
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="dashboard-item-small" style="background-color: #333333">
 							<img src="/images/wrench.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Opportunities</span><br>
 							<div class="dashboard-item-text">
@@ -108,7 +108,7 @@
 								<span id="dashboardHeaderActiveOpportunitiesCost">£10,000</span>
 							</div>
 						</a>
-						<div class="dashboard-item-small">
+						<div class="dashboard-item-small" style="background-color: #3b7e84">
 							<img src="/images/cloud.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Carbon</span><br>
 							<span id="dashboardHeaderCarbon" class="dashboard-item-text">1,550 tonnes p.a</span>

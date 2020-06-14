@@ -1,20 +1,15 @@
 function pageLoad(isPageLoad) {
   createTree(data, "siteDiv", "updateDashboard", "Site");
   createTree(dashboard, "dashboardDiv", "addDashboardItem", "Dashboard");
-  
+
   addExpanderOnClickEvents();
   if(isPageLoad) {
+    document.getElementById('electricityCommoditycheckbox').checked = true;
+    document.getElementById('gasCommoditycheckbox').checked = true;
+    document.getElementById('sitesLocationcheckbox').checked = true;
+    document.getElementById('metersLocationcheckbox').checked = false;
     setOpenExpanders();
   }
-
-  // document.onmousemove = function(e) {
-  //   setupSidebarHeight();
-  //   // setupSidebar(e);
-  // };
-
-  // window.onscroll = function() {
-  //   setupSidebarHeight();
-  // };
 }
 
 function loadDatagrid(checkBoxes) {
@@ -461,11 +456,11 @@ function addCustomDashboardItems(checkBoxes) {
 
 function loadUsageChart(checkBoxes) {
   var electricityCategories = [
-    '01-20', '02-20', '03-20', '04-20', '05-20', '06-20', '07-20', '08-20', '09-20', '10-20', '11-20', '12-20',
-    '01-21', '02-21', '03-21', '04-21', '05-21', '06-21', '07-21', '08-21', '09-21', '10-21', '11-21', '12-21',
-    '01-22', '02-22', '03-22', '04-22', '05-22', '06-22', '07-22', '08-22', '09-22', '10-22', '11-22', '12-22',
-    '01-23', '02-23', '03-23', '04-23', '05-23', '06-23', '07-23', '08-23', '09-23', '10-23', '11-23', '12-23',
-    '01-24', '02-24', '03-24', '04-24', '05-24', '06-24', '07-24', '08-24', '09-24'
+    'JAN-20', 'FEB-20', 'MAR-20', 'APR-20', 'MAY-20', 'JUN-20', 'JUL-20', 'AUG-20', 'SEP-20', 'OCT-20', 'NOV-20', 'DEC-20',
+    'JAN-21', 'FEB-21', 'MAR-21', 'APR-21', 'MAY-21', 'JUN-21', 'JUL-21', 'AUG-21', 'SEP-21', 'OCT-21', 'NOV-21', 'DEC-21',
+    'JAN-22', 'FEB-22', 'MAR-22', 'APR-22', 'MAY-22', 'JUN-22', 'JUL-22', 'AUG-22', 'SEP-22', 'OCT-22', 'NOV-22', 'DEC-22',
+    'JAN-23', 'FEB-23', 'MAR-23', 'APR-23', 'MAY-23', 'JUN-23', 'JUL-23', 'AUG-23', 'SEP-23', 'OCT-23', 'NOV-23', 'DEC-23',
+    'JAN-24', 'FEB-24', 'MAR-24', 'APR-24', 'MAY-24', 'JUN-24', 'JUL-24', 'AUG-24', 'SEP-24'
     ];
   var electricityCategoriesLength = electricityCategories.length;
 
@@ -524,6 +519,14 @@ function loadUsageChart(checkBoxes) {
     }
   }
 
+  electricityCategories = [
+    'JAN-20', '', '', 'APR-20', '', '', 'JUL-20', '', '', 'OCT-20', '', '',
+    'JAN-21', '', '', 'APR-21', '', '', 'JUL-21', '', '', 'OCT-21', '', '',
+    'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+    'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', '', 'OCT-23', '', '',
+    'JAN-24', '', '', 'APR-24', '', '', 'JUL-24', '', ''
+    ];
+
   var electricityVolumeSeries = [{
     name: 'Forecast Usage (kWh)',
     data: forecastVolume
@@ -546,12 +549,24 @@ function loadUsageChart(checkBoxes) {
           text: ''
           },
           labels: {
-          format: getChartXAxisLabelFormat('Weekly')
+            rotate: -45,
+            rotateAlways: true,
+            hideOverlappingLabels: true,
+            style: {
+              fontSize: '10px',
+              fontFamily: 'Helvetica, Arial, sans-serif',
+              fontWeight: 400,
+            },
           },
           categories: electricityCategories
       },
       yaxis: [{
         title: {
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
           text: 'kWh'
         },
         forceNiceScale: true,
@@ -614,10 +629,10 @@ function loadElectricityPriceChart() {
     }];
 
   var electricityCategories = [
-    '10 2020', '11 2020', '12 2020',
-    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+    'OCT-20', '', '',
+    'JAN-21', '', '', 'APR-21', '', '', 'JUL-21', '', '', 'OCT-21', '', '',
+    'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+    'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', ''
     ];
   
   var electricityPriceOptions = {
@@ -638,12 +653,24 @@ function loadElectricityPriceChart() {
         text: ''
         },
         labels: {
-        format: 'dd/MM/yyyy'
+          rotate: -45,
+          rotateAlways: true,
+          hideOverlappingLabels: true,
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
         },
         categories: electricityCategories
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: 'p/kWh'
       },
       forceNiceScale: true,
@@ -681,10 +708,10 @@ function loadElectricityUsageChart() {
           ]
   }];
   var electricityCategories = [
-    '10 2020', '11 2020', '12 2020',
-    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+    'OCT-20', '', '',
+    'JAN-21', '', '', 'APR-21', '', '', 'JUL-21', '', '', 'OCT-21', '', '',
+    'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+    'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', ''
     ];
   var electricityUsageOptions = {
       chart: {
@@ -704,12 +731,24 @@ function loadElectricityUsageChart() {
           text: ''
           },
           labels: {
-          format: 'dd/MM/yyyy'
+            rotate: -45,
+            rotateAlways: true,
+            hideOverlappingLabels: true,
+            style: {
+              fontSize: '10px',
+              fontFamily: 'Helvetica, Arial, sans-serif',
+              fontWeight: 400,
+            },
           },
           categories: electricityCategories
       },
       yaxis: [{
         title: {
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
           text: 'MW'
         },
         forceNiceScale: true,
@@ -746,9 +785,9 @@ function loadGasPriceChart() {
                   ]
           }];
   var gasCategories = [
-          '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-          '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-          '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+          'JUL-21', '', '', 'OCT-21', '', '',
+          'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+          'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', ''
           ];
   var gasPriceOptions = {
           chart: {
@@ -768,12 +807,24 @@ function loadGasPriceChart() {
               text: ''
               },
               labels: {
-              format: 'dd/MM/yyyy'
+                rotate: -45,
+                rotateAlways: true,
+                hideOverlappingLabels: true,
+                style: {
+                  fontSize: '10px',
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                  fontWeight: 400,
+                },
               },
               categories: gasCategories
           },
           yaxis: [{
             title: {
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+              },
               text: 'p/kWh'
             },
             forceNiceScale: true,
@@ -800,10 +851,10 @@ function loadGasUsageChart() {
               ]
       }];
   var gasCategories = [
-      '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-      '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-      '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
-      ];
+    'JUL-21', '', '', 'OCT-21', '', '',
+    'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+    'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', ''
+    ];
   var gasUsageOptions = {
         chart: {
             type: 'bar',
@@ -822,12 +873,24 @@ function loadGasUsageChart() {
             text: ''
             },
             labels: {
-            format: 'dd/MM/yyyy'
+              rotate: -45,
+              rotateAlways: true,
+              hideOverlappingLabels: true,
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+              },
             },
             categories: gasCategories
         },
         yaxis: [{
           title: {
+            style: {
+              fontSize: '10px',
+              fontFamily: 'Helvetica, Arial, sans-serif',
+              fontWeight: 400,
+            },
             text: 'th/day'
           },
           forceNiceScale: true,
@@ -870,16 +933,7 @@ function getChartTooltipXFormat(period) {
 }
 
 function getChartXAxisLabelFormat(period) {
-  switch(period) {
-    case 'Daily':
-      return 'HH:mm';
-    case "Weekly":
-      return 'dd/MM/yyyy';
-    case "Monthly":
-      return 'dd';
-    case "Yearly":
-      return 'MMM';
-  }
+  return 'MMM-YY';
 }
 
 function refreshChart(newSeries, chartId, chartOptions) {
@@ -933,18 +987,19 @@ function refreshChart(newSeries, chartId, chartOptions) {
     },
     legend: {
       show: true,
-      showForSingleSeries: true,
+      showForSingleSeries: false,
       showForNullSeries: true,
       showForZeroSeries: true,
-      position: 'right',
+      position: 'top',
+      horizontalAlign: 'center', 
       onItemClick: {
         toggleDataSeries: true
       },
       formatter: function(seriesName) {
-        return seriesName + '<br><br>';
+        return seriesName;
       }
     },
-    colors: ['#0B6B5B', '#61B82E', '#B8252A', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537'],
+    colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
     series: newSeries,
     yaxis: chartOptions.yaxis,
     xaxis: chartOptions.xaxis

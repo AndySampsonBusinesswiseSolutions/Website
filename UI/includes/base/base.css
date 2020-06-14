@@ -807,6 +807,9 @@ table {
 .show-pointer {
     cursor: pointer;
 }
+i:not(.socialmedia) {
+    color: black;
+}
 input[type=checkbox], input[type=radio] {
     margin: 0!important;
     margin-top: -1px!important;
@@ -850,7 +853,7 @@ ul {
     float: left; 
     padding-top: 5px;
     left: 95%;
-    color: white;
+    color: white!important;
     cursor: pointer;
 }
 .sidenav-icon {
@@ -1070,9 +1073,6 @@ button {
 }
 #fileElem {
     display: none;
-}
-i:not(.socialmedia) {
-    color: black;
 }
 .switch-btn {
     width: 100%;

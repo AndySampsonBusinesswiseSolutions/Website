@@ -6,7 +6,6 @@
 .dashboard-item-small {
   width: calc((100% - 27px) / 3);
   height: 200px;
-  background-color: #B82549;
 }
 .dashboard-item-small .dashboard-item-header {
   font-size: 25px;
