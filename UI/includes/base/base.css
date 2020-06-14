@@ -865,7 +865,7 @@ ul {
     margin-top: -3px;
 }
 .sidenav {
-    max-height: 75%;
+    max-height: 85%;
     min-height: 10%;
     max-width: 75%;
     min-width: 600px;
@@ -950,7 +950,10 @@ ul>li>input, .expander {
 .outer-container {
     padding-left: 9px;
 }
-.tree-div, .datagrid, .chart {
+.tree-div {
+    max-height: 400px;
+}
+.datagrid, .chart {
     max-height: 650px;
 }
 .chart {
@@ -987,10 +990,10 @@ ul>li>input, .expander {
     font-size: 20px;
 }
 .approve {
-    background-color: lightgreen;
+    background-color: #12B887;
 }
 .reject {
-    background-color: lightcoral;
+    background-color: red;
 }
 .tabDiv {
     border: solid black 1px;
@@ -1056,7 +1059,7 @@ button {
     height: 25px;
     background-color: #3d3c3e;
     border: none;
-    color: white;
+    color: white!important;
 }
 .button {
     display: inline-block;

@@ -399,13 +399,13 @@ function buildBillChart(bill, divToAppendTo) {
 
 	var firstChartDiv = document.createElement('div');
 	firstChartDiv.id = "firstChartDiv";
-	firstChartDiv.setAttribute('class', 'roundborder chart');
+	firstChartDiv.setAttribute('class', 'chart');
 	firstChartDiv.setAttribute('style', 'float: left;');
 	containerListDiv.appendChild(firstChartDiv);
 
 	var secondChartDiv = document.createElement('div');
 	secondChartDiv.id = "secondChartDiv";
-	secondChartDiv.setAttribute('class', 'roundborder chart');
+	secondChartDiv.setAttribute('class', 'chart');
 	firstChartDiv.setAttribute('style', 'float: right;');
 	containerListDiv.appendChild(secondChartDiv);
 

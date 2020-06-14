@@ -110,7 +110,7 @@
 						<i class="far fa-plus-square show-pointer expander openExpander" id="opportunitiesSummary"></i>
 					</div>
 					<div id="opportunitiesSummaryList" class="expander-container">
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="roundborder dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="dashboard-item-small">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span class="tooltip">Pending Opportunities<span class="tooltiptext">Opportunities that have been approved but have not yet started</span></span><br>
 							<span style="font-size: 15px;">Count: 10</span><br>
@@ -118,7 +118,7 @@
 							<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
 						</a>
 						<div class="divider-column"></div>
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="roundborder dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="dashboard-item-small">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span class="tooltip">Active Opportunities<span class="tooltiptext">Opportunities that have been approved and have started</span></span><br>
 							<span style="font-size: 15px;">Count: 2</span><br>
@@ -126,7 +126,7 @@
 							<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
 						</a>
 						<div class="divider-column"></div>
-						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="roundborder dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="dashboard-item-small">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span class="tooltip">Finished Opportunities<span class="tooltiptext">Opportunities that have been completed</span></span><br>
 							<span style="font-size: 15px;">Count: 5</span><br>
@@ -136,7 +136,7 @@
 							<span style="font-size: 11px;">£ Savings over past 12 months: £10,000</span>
 						</a>
 						<div class="divider-column"></div>
-						<div class="roundborder dashboard-item-small">
+						<div class="dashboard-item-small">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span>Sub Meters</span><br><br><br>
 							<span style="font-size: 15px;">Installed: 1</span><br>
@@ -167,7 +167,7 @@
 						</div>
 						<div class="divider-column"></div>
 						<br>
-						<div class="tree-div roundborder expander-container">
+						<div class="tree-div expander-container">
 							<div class="divider-column"></div>
 							<div class="opportunity-column" style="padding-top: 10px;">
 								<i id="Project1" class="far fa-plus-square show-pointer expander"></i>
@@ -247,7 +247,7 @@
 								<br><br>
 							</div>
 						</div>
-						<div class="tree-div roundborder expander-container">
+						<div class="tree-div expander-container">
 							<div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column" style="padding-top: 10px;">

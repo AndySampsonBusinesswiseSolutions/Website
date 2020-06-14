@@ -190,14 +190,14 @@ function updateGraphs() {
     }];
 
   var electricityCategories = [
-    '02 2017', '03 2017', '04 2017', '05 2017', '06 2017', '07 2017', 
-    '08 2017', '09 2017', '10 2017', '11 2017', '12 2017', '01 2018', 
-    '02 2018', '03 2018', '04 2018', '05 2018', '06 2018', '07 2018', 
-    '08 2018', '09 2018', '10 2018', '11 2018', '12 2018', '01 2019', 
-    '02 2019', '03 2019', '04 2019', '05 2019', '06 2019', '07 2019', 
-    '08 2019', '09 2019', '10 2019', '11 2019', '12 2019', '01 2020', 
-    '02 2020', '03 2020', '04 2020', '05 2020', '06 2020', '07 2020', 
-    '08 2020', '09 2020', '10 2020', '11 2020', '12 2020', '01 2021'
+    'FEB-17', 'MAR-17', 'APR-17', 'MAY-17', 'JUN-17', 'JUL-17', 
+    'AUG-17', 'SEP-17', 'OCT-17', 'NOV-17', 'DEC-17', 'JAN-18', 
+    'FEB-18', 'MAR-18', 'APR-18', 'MAY-18', 'JUN-18', 'JUL-18', 
+    'AUG-18', 'SEP-18', 'OCT-18', 'NOV-18', 'DEC-18', 'JAN-19', 
+    'FEB-19', 'MAR-19', 'APR-19', 'MAY-19', 'JUN-19', 'JUL-19', 
+    'AUG-19', 'SEP-19', 'OCT-19', 'NOV-19', 'DEC-19', 'JAN-20', 
+    'FEB-20', 'MAR-20', 'APR-20', 'MAY-20', 'JUN-20', 'JUL-20', 
+    'AUG-20', 'SEP-20', 'OCT-20', 'NOV-20', 'DEC-20', 'JAN-21'
     ];
     
   var cumulativeSavingOptions = {
@@ -214,12 +214,25 @@ function updateGraphs() {
         text: ''
         },
         labels: {
+          rotate: -45,
+          rotateAlways: true,
+          hideOverlappingLabels: true,
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: electricityCategories
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: '£'
       },
       forceNiceScale: true,
@@ -247,6 +260,14 @@ function updateGraphs() {
         text: ''
         },
         labels: {
+          rotate: -45,
+          rotateAlways: true,
+          hideOverlappingLabels: true,
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: electricityCategories
@@ -263,6 +284,11 @@ function updateGraphs() {
       }
     },
     title: {
+      style: {
+        fontSize: '10px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 400,
+      },
       text: "£"
     },
     forceNiceScale: true,
@@ -289,6 +315,14 @@ function updateGraphs() {
         text: ''
         },
         labels: {
+          rotate: -45,
+          rotateAlways: true,
+          hideOverlappingLabels: true,
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: electricityCategories
@@ -305,6 +339,11 @@ function updateGraphs() {
       }
     },
     title: {
+      style: {
+        fontSize: '10px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 400,
+      },
       text: "kWh"
     },
     forceNiceScale: true,
@@ -625,17 +664,19 @@ function refreshChart(newSeries, chartId, chartOptions) {
       },
       legend: {
         show: true,
-        showForSingleSeries: true,
+        showForSingleSeries: false,
         showForNullSeries: true,
         showForZeroSeries: true,
-        position: 'right',
+        position: 'top',
+        horizontalAlign: 'center', 
         onItemClick: {
           toggleDataSeries: true
         },
         formatter: function(seriesName) {
-          return seriesName + '<br><br>';
+          return seriesName;
         }
       },
+      colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
       series: newSeries,
       yaxis: chartOptions.yaxis,
       xaxis: chartOptions.xaxis

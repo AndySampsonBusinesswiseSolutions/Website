@@ -25,156 +25,153 @@
 			<br>
 		</div>
 	</div>
-	<div id="mySidenav" class="sidenav">
-		<div style="text-align: center;">
-			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
-			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
-		</div>
-		<div class="tree-column">
-			<div id="budgetList" class="tree-div dashboard roundborder outer-container">
-				<div class="expander-header">
-					<span id="budgetSelectorSpan">Budget</span>
-					<i id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
-				</div>
-				<div id="budgetSelectorList" class="expander-container">
-					<ul class="format-listitem listItemWithoutPadding">
-						<li>
-							<i class="far fa-plus-square show-pointer" id="budget2Selector"></i>
-							<span id="allCommodityspan">Budget 2</span>
-							<ul class="format-listitem listitem-hidden" id="budget2SelectorList">
-								<li>
-									<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
-									<input type="radio" name="budgetSelector" id="allCommodityradio">
-									<span id="allCommodityspan">Version 2</span>
-									<i class="far fa-question-circle show-pointer" onclick="displayBudget2V2Popup();"></i>
-								</li>
-								<li>
-									<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
-									<input type="radio" name="budgetSelector" id="allCommodityradio">
-									<span id="allCommodityspan">Version 1</span>
-									<i class="far fa-question-circle show-pointer" onclick="displayBudget2V1Popup();"></i>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<i class="far fa-times-circle show-pointer" id="budget1Selector"></i>
-							<input type="radio" name="budgetSelector" id="allCommodityradio">
-							<span id="allCommodityspan">Budget 1</span>
-							<i class="far fa-question-circle show-pointer" onclick="displayBudget1Popup();"></i>
-						</li>
-					</ul>
-					<br>
-					<button style="width: 100%;">Review Selected Budget</button>
-					<br><br>
-					<button style="width: 100%" onclick="deleteBudgets();">Delete Selected Budgets</button>
-					<br><br>
-					<button style="width: 100%" onclick="reinstateBudgets();">Reinstate Deleted Budgets</button>
-				</div>
-			</div>
-			<br>
-			<div id="configureContainer" class="dashboard roundborder outer-container">
-				<div class="expander-header">
-					<span id="configureOptionsSpan">Configure</span>
-					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
-				</div>
-				<div id="configureOptionsList" class="slider-list expander-container">
-					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
-						<div class="expander-header">
-							<span id="configureLocationSelectorSpan">Location</span>
-							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="configureLocationSelectorList" class="expander-container">
-							<div style="width: 45%; text-align: center; float: left;">
-								<span>Sites</span>
-								<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: right;">
-								<span>Areas</span>
-								<label class="switch"><input type="checkbox" id="areaLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: left;">
-								<span>Commodities</span>
-								<label class="switch"><input type="checkbox" id="commodityLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: right;">
-								<span>Meters</span>
-								<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: left;">
-								<span>SubAreas</span>
-								<label class="switch"><input type="checkbox" id="subareaLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: right;">
-								<span>Assets</span>
-								<label class="switch"><input type="checkbox" id="assetLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: left;">
-								<span>SubMeters</span>
-								<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-						</div>
-					</div>
-					<br>
-					<div id="siteTree" class="tree-div dashboard roundborder outer-container">
-					</div>
-					<br>
-					<div class="tree-div dashboard roundborder outer-container scrolling-wrapper">
-						<div class="expander-header">
-							<span id="commoditySelectorSpan">Commodity</span>
-							<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
-						</div>
-						<div id="commoditySelectorList" class="expander-container listitem-hidden">
-							<div style="width: 45%; text-align: center; float: left;">
-								<span>Electricity</span>
-								<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-							<div style="width: 45%; text-align: center; float: right;">
-								<span>Gas</span>
-								<label class="switch"><input type="checkbox" id="gasCommoditycheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
-							</div>
-						</div>
-					</div>
-					<br>
-					<div id="timePeriodList" class="tree-div dashboard roundborder outer-container">
-						<div class="expander-header">
-							<span id="timePeriodSelectorSpan">Time Period</span>
-							<i id="timePeriodSelector" class="far fa-plus-square expander show-pointer"></i>
-						</div>
-						<div id="timePeriodSelectorList" class="slider-list expander-container">
-							<ul class="format-listitem listItemWithoutPadding">
-								<li>
-									<span>Budget Created Date Range</span>
-									<rzslider id="timePeriodCreationDateRange"
-										rz-slider-model="timePeriodCreationDateRange.minValue" 
-										rz-slider-high="timePeriodCreationDateRange.maxValue" 
-										rz-slider-options="timePeriodCreationDateRange.options">
-									</rzslider>
-								</li>
-								<li><br></li>
-								<li>
-									<span>Budget Period Date Range</span>
-									<rzslider id="timePeriodDateRange"
-										rz-slider-model="timePeriodDateRange.minValue" 
-										rz-slider-high="timePeriodDateRange.maxValue" 
-										rz-slider-options="timePeriodDateRange.options">
-									</rzslider>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<br>
-		</div>
-	</div>
 	<div id="outerContainer">
 		<div id="mainContainer">
-			<div class="section-header">
-				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+		<div class="section-header">
+				<div id="mySidenav" class="sidenav" style="display: none;">
+					<div class="header">
+						<button class="closebtn" onclick="closeNav()">Close</button>
+						<i class="fas fa-filter sidenav-icon-close"></i>
+					</div>
+					<div class="tree-column">
+						<div style="float: left;">
+							<div id="budgetList" class="tree-div">
+								<div class="expander-header">
+									<span id="budgetSelectorSpan">Budget</span>
+									<i id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+								</div>
+								<div id="budgetSelectorList" class="expander-container">
+									<ul class="format-listitem listItemWithoutPadding">
+										<li>
+											<i class="far fa-plus-square show-pointer" id="budget2Selector"></i>
+											<span id="allCommodityspan">Budget 2</span>
+											<ul class="format-listitem listitem-hidden" id="budget2SelectorList">
+												<li>
+													<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
+													<input type="radio" name="budgetSelector" id="allCommodityradio">
+													<span id="allCommodityspan">Version 2</span>
+													<i class="far fa-question-circle show-pointer" onclick="displayBudget2V2Popup();"></i>
+												</li>
+												<li>
+													<i class="far fa-times-circle show-pointer" id="budget2Selector"></i>
+													<input type="radio" name="budgetSelector" id="allCommodityradio">
+													<span id="allCommodityspan">Version 1</span>
+													<i class="far fa-question-circle show-pointer" onclick="displayBudget2V1Popup();"></i>
+												</li>
+											</ul>
+										</li>
+										<li>
+											<i class="far fa-times-circle show-pointer" id="budget1Selector"></i>
+											<input type="radio" name="budgetSelector" id="allCommodityradio">
+											<span id="allCommodityspan">Budget 1</span>
+											<i class="far fa-question-circle show-pointer" onclick="displayBudget1Popup();"></i>
+										</li>
+									</ul>
+									<br>
+									<button style="width: 100%;">Review Selected Budget</button>
+									<br><br>
+									<button style="width: 100%" onclick="deleteBudgets();">Delete Selected Budgets</button>
+									<br><br>
+									<button style="width: 100%" onclick="reinstateBudgets();">Reinstate Deleted Budgets</button>
+								</div>
+							</div>
+							<div id="siteTree" class="tree-div scrolling-wrapper">
+							</div>
+							<div class="tree-div scrolling-wrapper">
+								<div class="expander-header">
+									<span id="commoditySelectorSpan">Commodity</span>
+									<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
+								</div>
+								<div id="commoditySelectorList" class="expander-container listitem-hidden">
+									<div style="width: 45%; text-align: center; float: left;">
+										<span>Electricity</span>
+										<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: right;">
+										<span>Gas</span>
+										<label class="switch"><input type="checkbox" id="gasCommoditycheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="float: right; margin-left: 15px;">
+							<div class="tree-div scrolling-wrapper">
+								<div class="expander-header">
+									<span id="configureLocationSelectorSpan">Location Visibility</span>
+									<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+								</div>
+								<div id="configureLocationSelectorList" class="expander-container">
+									<div style="width: 45%; text-align: center; float: left;">
+										<span>Sites</span>
+										<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: right;">
+										<span>Areas</span>
+										<label class="switch"><input type="checkbox" id="areaLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: left;">
+										<span>Commodities</span>
+										<label class="switch"><input type="checkbox" id="commodityLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: right;">
+										<span>Meters</span>
+										<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: left;">
+										<span>SubAreas</span>
+										<label class="switch"><input type="checkbox" id="subareaLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: right;">
+										<span>Assets</span>
+										<label class="switch"><input type="checkbox" id="assetLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+									<div style="width: 45%; text-align: center; float: left;">
+										<span>SubMeters</span>
+										<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
+									</div>
+								</div>
+							</div>
+							<div id="timePeriodList" class="tree-div">
+								<div class="expander-header">
+									<span id="timePeriodSelectorSpan">Time Period</span>
+									<i id="timePeriodSelector" class="far fa-plus-square expander show-pointer"></i>
+								</div>
+								<div id="timePeriodSelectorList" class="slider-list expander-container">
+									<ul class="format-listitem listItemWithoutPadding">
+										<li>
+											<span>Budget Created Date Range</span>
+											<rzslider id="timePeriodCreationDateRange"
+												rz-slider-model="timePeriodCreationDateRange.minValue" 
+												rz-slider-high="timePeriodCreationDateRange.maxValue" 
+												rz-slider-options="timePeriodCreationDateRange.options">
+											</rzslider>
+										</li>
+										<li><br></li>
+										<li>
+											<span>Budget Period Date Range</span>
+											<rzslider id="timePeriodDateRange"
+												rz-slider-model="timePeriodDateRange.minValue" 
+												rz-slider-high="timePeriodDateRange.maxValue" 
+												rz-slider-options="timePeriodDateRange.options">
+											</rzslider>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div style="clear: both;"></div>
+					<div class="header">
+						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="applybtn" onclick="closeNav()">Done</button>
+					</div>
+				</div>
+				<i id="openNav" class="fas fa-filter sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i class="far fa-question-circle show-pointer" title="Budgets can be managed using the 'Filter' icon on the left-hand side"></i></div>
 			</div>
 			<div class="final-column">
+				<div id="overlay" style="display: none;">
+				</div>
 				<div class="dashboard outer-container">
 					<div class="expander-header">
 						<span>Create\Review Budget</span>
@@ -207,7 +204,7 @@
 							</select><br><br>
 							<button class="reject show-pointer" style="width: calc(45%); margin-right: calc(10%);">Reset Budget</button><button class="approve show-pointer" style="width: calc(45%);">Save Budget</button>
 						</div>
-						<div id="createReviewBudgetAdjustAreaDiv" class="tree-div roundborder scrolling-wrapper" style="width: 56%; float: left; margin-right: 1%;">
+						<div id="createReviewBudgetAdjustAreaDiv" class="tree-div scrolling-wrapper" style="width: 56%; float: left; margin-right: 1%;">
 							<label for="createReviewBudgetAdjustArea">Adjust </label>
 							<select id="createReviewBudgetAdjustArea">
 								<option value="">Select Option</option>
@@ -240,7 +237,7 @@
 								<div id="adjustmentsSpreadsheet"></div>
 							</div>				
 						</div>
-						<div id="createReviewBudgetTreeDiv" class="tree-div roundborder scrolling-wrapper" style="float: right; width: 20%;">
+						<div id="createReviewBudgetTreeDiv" class="tree-div scrolling-wrapper" style="float: right; width: 20%;">
 						</div>
 						<div style="clear: both;"></div>
 						<div class="dashboard expander-container">
@@ -249,11 +246,11 @@
 								<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
 							</div>
 							<div id="chartsList" class="expander-container">
-								<div id="leftHandChartDiv" class="roundborder chart" style="float: left;">
+								<div id="leftHandChartDiv" class="chart" style="float: left;">
 									<div id="leftHandChart">
 									</div>
 								</div>
-								<div id="rightHandChartDiv" class="roundborder chart" style="float: right;">
+								<div id="rightHandChartDiv" class="chart" style="float: right;">
 									<div id="rightHandChart">
 									</div>
 								</div>

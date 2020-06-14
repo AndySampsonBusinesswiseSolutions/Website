@@ -4,15 +4,6 @@ var chartSeries;
 function pageLoad() {
   createTrees();  
 
-  document.onmousemove = function(e) {
-    setupSidebarHeight();
-    setupSidebar(e);
-  };
-
-  window.onscroll = function() {
-    setupSidebarHeight();
-  };
-
   window.onload = function() {
     updateChart(true);
     hideSliders(); 
@@ -56,10 +47,7 @@ function createDisplayTree() {
   var div = document.getElementById('displayTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("displayHeader", "Display", true);
   var ul = createBranchUl("displaySelector", false, true);
-
-  div.appendChild(headerDiv);
   div.appendChild(ul);
 
   createDisplayListItems(ul);
@@ -68,7 +56,7 @@ function createDisplayTree() {
 function createDisplayListItems(ul) {
   var displayListItemTitle = createBranchSpan('displayListItemTitle', 'Energy Unit');
   var displayListItemAdditionalTitle = createBranchSpan('displayListItemAdditionalTitle', 'Energy Unit Instance');
-  var locationListItemTitle = createBranchSpan('siteTree', 'Locations');
+  var locationListItemTitle = createBranchSpan('siteTree', 'Location');
 
   ul.appendChild(displayListItemTitle);
   ul.appendChild(createBreakDisplayListItem());
@@ -309,7 +297,7 @@ function createSiteTree(usageSites, functions) {
 
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("siteHeader", 'Locations', true);
+  var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
   var ul = createBranchUl("siteSelector", false, true);
 
   var breakDisplayListItem = document.createElement('li');
@@ -1882,6 +1870,11 @@ function getChartOptions(categories, displayType, xAxisType, dateFormat) {
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: getChartYAxisTitle(displayType)
       },
       forceNiceScale: true,
@@ -1899,6 +1892,16 @@ function getChartOptions(categories, displayType, xAxisType, dateFormat) {
         axisTicks: {
           show: true,
           color: '#993333',
+        },
+        labels: {
+          rotate: -45,
+          rotateAlways: true,
+          hideOverlappingLabels: true,
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
         },
         tickPlacement: dateFormat == 'dd MMM yy' ? 'on' : 'between'
     }
@@ -1983,21 +1986,19 @@ function refreshChart(newSeries, displayType, chartOptions) {
     },
     legend: {
       show: true,
-      showForSingleSeries: true,
+      showForSingleSeries: false,
       showForNullSeries: true,
       showForZeroSeries: true,
-      position: 'right',
+      position: 'top',
+      horizontalAlign: 'center', 
       onItemClick: {
         toggleDataSeries: true
       },
-      width: 160,
-      fontSize: '9px',
-      offsetY: 25,
       formatter: function(seriesName) {
         return getLegendFormat(displayType, seriesName);
       },
     },
-    colors: ['#0099FF','#009900','#660099','#6699CC','#9900FF','#33CC00','#330066','#330000','#663399','#006699','#3366FF','#FF6633','#333399','#006633','#003366','#990000','#0066FF','#663366','#993300','#339900','#CCFF66','#CC3366','#00CC33','#CC0099','#99CC33','#66FF00','#999966','#CC6666','#33FF00','#99FFFF','#FFFF33','#CCFF00','#996699','#003300','#FF3333','#99FF66','#6600CC','#339999','#99FF00','#669999','#663300','#CC66CC','#FF00FF','#FF6666','#6633FF','#333366','#0033CC','#FFCC33','#CC99FF','#99CCFF','#33FF99','#3300CC','#660000','#660033','#CC6600','#00CC66','#CC0000','#66CCCC','#FFFF00','#00FF66','#CC3399','#66CC33','#33CC66','#CC9900','#66CC99','#6666CC','#3300FF','#00CC00','#CCCC33','#FF00CC','#999999','#FF66CC','#669933','#FF66FF','#3399FF','#99CC99','#333300','#990033','#000066','#33FF66','#9966FF','#FF33FF','#330099','#009966','#66FF99','#00FFFF','#FF3300','#669900','#CC3333','#9999CC','#330033','#336699','#0099CC','#FF99FF','#996600','#CCCC66','#3399CC','#6699FF','#339933','#FFCC66','#FF0000','#9966CC','#66FF33','#FF9999','#FF6600','#33FFFF','#996666','#FF9933','#660066','#CCFF33','#336633','#336666','#FF9966','#CC66FF','#999933','#CC9933','#999900','#0033FF','#99FF99','#FF3366','#000033','#009933','#33FF33','#FFFF66','#6600FF','#CC3300','#993366','#993399','#99CC66','#669966','#9933FF','#33CCCC','#66FF66','#990099','#9999FF','#000099','#0000CC','#3333CC','#33FFCC','#666633','#996633','#00FF33','#00FFCC','#6666FF','#333333','#33CC99','#CC00FF','#99FF33','#FF0033','#3366CC','#006666','#0066CC','#3333FF','#00CCCC','#666699','#66CC00','#CC33CC','#00FF00','#FF0099','#339966','#00CC99','#336600','#66FFCC','#FFCC00','#993333','#FF33CC','#CC9999','#66CCFF','#66CC66','#006600','#9900CC','#666600','#003333','#99CC00','#FF9900','#FF3399','#000000','#33CCFF','#CC99CC','#663333','#6633CC','#00CCFF','#33CC33','#CC0033','#003399','#CCCC00','#9933CC','#FF6699','#009999','#FF0066','#00FF99','#99CCCC','#CC9966','#CC6699','#CC33FF','#CC0066','#FF99CC','#990066','#CC00CC','#CC6633','#66FFFF','#0000FF','#666666'],
+    colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
     series: newSeries,
     yaxis: chartOptions.yaxis,
     xaxis: chartOptions.xaxis
@@ -2007,7 +2008,7 @@ function refreshChart(newSeries, displayType, chartOptions) {
 }
 
 function getLegendFormat(displayType, seriesName) {
-  return seriesName + '<br><br>';
+  return seriesName;
 }
 
 function updateDataGrid(chartSeries, categories) {

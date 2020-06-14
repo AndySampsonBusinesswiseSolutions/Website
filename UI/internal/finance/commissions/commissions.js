@@ -350,19 +350,19 @@ function updateChart(callingElement, chart) {
       },
       legend: {
         show: true,
-        showForSingleSeries: true,
+        showForSingleSeries: false,
         showForNullSeries: true,
         showForZeroSeries: true,
-        position: 'right',
+        position: 'top',
+        horizontalAlign: 'center', 
         onItemClick: {
           toggleDataSeries: true
         },
-        width: 100,
-        offsetY: 250,
-        formatter: function(seriesName, opts) {
-          return seriesName + '<br><br>';
+        formatter: function(seriesName) {
+          return seriesName;
         }
       },
+      colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
       series: newSeries,
       yaxis: [{
         axisTicks: {
@@ -373,6 +373,11 @@ function updateChart(callingElement, chart) {
         },
         forceNiceScale: true,
         title: {
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
           text: 'Commission',
         },
         show: true,
@@ -385,7 +390,17 @@ function updateChart(callingElement, chart) {
       }],
       xaxis: {
         type: 'category',
-        categories: newCategories
+        categories: newCategories,
+        labels: {
+          rotate: -45,
+          rotateAlways: true,
+          hideOverlappingLabels: true,
+          style: {
+            fontSize: '10px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 400,
+          },
+        },
       }
     };
 

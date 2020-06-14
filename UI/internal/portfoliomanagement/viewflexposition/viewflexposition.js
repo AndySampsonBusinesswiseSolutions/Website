@@ -22,18 +22,18 @@ function setupDatagrids() {
   jexcel(document.getElementById('spreadsheet3'), {
     pagination: 12,
         data:[
-            {month:'10 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'11 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'12 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'01 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'02 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'03 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'04 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'05 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'06 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'07 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'08 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'09 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'OCT-20',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'NOV-20',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'DEC-20',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'JAN-21',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'FEB-21',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'MAR-21',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'APR-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'MAY-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'JUN-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'JUL-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'AUG-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'SEP-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
         ],
         columns: [
             {type:'text', width:'115px', name:'month', title:'Month'},
@@ -74,18 +74,18 @@ function setupDatagrids() {
   jexcel(document.getElementById('spreadsheet5'), {
     pagination: 12,
         data:[
-            {month:'10 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'11 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'12 2020',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'01 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'02 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'03 2021',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
-            {month:'04 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'05 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'06 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'07 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'08 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
-            {month:'09 2021',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'OCT-20',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'NOV-20',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'DEC-20',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'JAN-21',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'FEB-21',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'MAR-21',	openvol:'1.324',	hedgevol:'1.426',	capprice:'5.718',	ecp:'4.99',	marketprice:'4.886',	day1price:'5.918'},
+            {month:'APR-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'MAY-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'JUN-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'JUL-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'AUG-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
+            {month:'SEP-21',	openvol:'0.713',	hedgevol:'1.657',	capprice:'4.888',	ecp:'5.03',	marketprice:'4.99',	day1price:'4.444'},
         ],
         columns: [
             {type:'text', width:'115px', name:'month', title:'Month'},
@@ -199,10 +199,10 @@ function setupCharts() {
   }];
 
   var electricityCategories = [
-    '10 2020', '11 2020', '12 2020',
-    '01 2021', '02 2021', '03 2021', '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+    'OCT-20', '', '',
+    'JAN-21', '', '', 'APR-21', '', '', 'JUL-21', '', '', 'OCT-21', '', '',
+    'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+    'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', ''
   ];
     
   var electricityVolumeOptions = {
@@ -220,12 +220,25 @@ function setupCharts() {
         text: ''
         },
         labels: {
+          rotate: -45,
+              rotateAlways: true,
+              hideOverlappingLabels: true,
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+              },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: electricityCategories
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: 'MW'
       },
       forceNiceScale: true,
@@ -253,12 +266,25 @@ function setupCharts() {
         text: ''
         },
         labels: {
+          rotate: -45,
+              rotateAlways: true,
+              hideOverlappingLabels: true,
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+              },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: electricityCategories
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: 'p/kWh'
       },
       forceNiceScale: true,
@@ -306,9 +332,9 @@ function setupCharts() {
   }];
     
   var gasCategories = [
-    '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-    '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-    '01 2023', '02 2023', '03 2023', '04 2023', '05 2023', '06 2023', '07 2023', '08 2023', '09 2023'
+    'JUL-21', '', '', 'OCT-21', '', '',
+    'JAN-22', '', '', 'APR-22', '', '', 'JUL-22', '', '', 'OCT-22', '', '',
+    'JAN-23', '', '', 'APR-23', '', '', 'JUL-23', '', ''
   ];
       
   var gasVolumeOptions = {
@@ -326,12 +352,25 @@ function setupCharts() {
         text: ''
         },
         labels: {
+          rotate: -45,
+              rotateAlways: true,
+              hideOverlappingLabels: true,
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+              },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: gasCategories
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: 'th/day'
       },
       forceNiceScale: true,
@@ -359,12 +398,25 @@ function setupCharts() {
         text: ''
         },
         labels: {
+          rotate: -45,
+              rotateAlways: true,
+              hideOverlappingLabels: true,
+              style: {
+                fontSize: '10px',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+                fontWeight: 400,
+              },
         format: getChartXAxisLabelFormat('Weekly')
         },
         categories: gasCategories
     },
     yaxis: [{
       title: {
+        style: {
+          fontSize: '10px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         text: 'p/kWh'
       },
       forceNiceScale: true,
@@ -460,18 +512,19 @@ function refreshChart(newSeries, chartId, chartOptions) {
       },
       legend: {
         show: true,
-        showForSingleSeries: true,
+        showForSingleSeries: false,
         showForNullSeries: true,
         showForZeroSeries: true,
-        position: 'right',
+        position: 'top',
+        horizontalAlign: 'center', 
         onItemClick: {
           toggleDataSeries: true
         },
-        offsetY: 250,
         formatter: function(seriesName) {
-          return seriesName + '<br><br>';
+          return seriesName;
         }
       },
+      colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
       series: newSeries,
       yaxis: chartOptions.yaxis,
       xaxis: chartOptions.xaxis

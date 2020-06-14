@@ -43,7 +43,7 @@
 							</div>
 						</div>
 						<div style="float: right; margin-left: 15px;">
-							<div class="tree-div  scrolling-wrapper">
+							<div class="tree-div scrolling-wrapper">
 								<div class="expander-header">
 									<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose whether to display Sites and/or Meters in the 'Location' tree on the left-hand side"></i>
 									<i id="locationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
@@ -59,7 +59,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="dashboardDiv" class="tree-div ">
+							<div id="dashboardDiv" class="tree-div">
 							</div>
 						</div>
 					</div>

@@ -81,12 +81,12 @@
                             </div>
                             <div class="middle"></div>
                             <div style="float: left; width: 15%;">
-                                <div id="siteTree" class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
+                                <div id="siteTree" class="tree-div scrolling-wrapper" style="padding: 5px;">
                                 </div>
                             </div>
                             <div class="middle"></div>
                             <div style="float: left; width: 15%;">
-                                <div class="tree-div roundborder scrolling-wrapper" style="padding: 5px;">
+                                <div class="tree-div scrolling-wrapper" style="padding: 5px;">
                                     <span id="timePeriodsDiv">Select Time Periods</span>
                                     <ul class="format-listitem listItemWithoutPadding" id="timePeriodsDivSelectorList">
                                         <li>

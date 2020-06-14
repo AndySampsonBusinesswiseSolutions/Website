@@ -8,8 +8,6 @@
 <html>
 <head>
 	<title><?php echo $PAGE_TITLE ?></title>
-
-	<link rel="stylesheet" href="forgottenpassword.css">
 </head>
 
 <body>

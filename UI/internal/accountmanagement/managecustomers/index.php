@@ -22,28 +22,32 @@
 			<br>
 		</div>
 	</div>
-	<div id="mySidenav" class="sidenav">
-		<div style="text-align: center;">
-			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
-			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
-		</div>
-		<div class="tree-column">
-			<div id="customerTree" class="tree-div dashboard roundborder">
-			</div>
-			<br>
-			<button style="width: 100%;" onclick='deleteCustomers()'>Delete Selected Customers</button><br><br>
-			<button style="width: 100%;" onclick='reinstateCustomers()'>Reinstate Deleted Customers</button>
-		</div>
-	</div>
 	<div id="outerContainer">
 		<div id="mainContainer">
-			<div class="section-header">
-				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+		<div class="section-header">
+				<div id="mySidenav" class="sidenav" style="display: none;">
+					<div class="header">
+						<button class="closebtn" onclick="closeNav()">Close</button>
+						<i class="fas fa-filter sidenav-icon-close"></i>
+					</div>
+					<div class="tree-column">
+					<div id="customerTree" class="tree-div dashboard roundborder">
+					</div>
+					<button style="width: 100%;" onclick='deleteCustomers()'>Delete Selected Customers</button><br><br>
+					<button style="width: 100%;" onclick='reinstateCustomers()'>Reinstate Deleted Customers</button><br>
+					</div>
+					<div style="clear: both;"></div>
+					<div class="header">
+						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="applybtn" onclick="closeNav()">Done</button>
+					</div>
+				</div>
+				<i id="openNav" class="fas fa-filter sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i class="far fa-question-circle show-pointer" title="Items can be added to the Dashboard using the 'Filter' icon on the left-hand side"></i></div>
 			</div>
-
 			<div class="final-column">
+				<div id="overlay" style="display: none;">
+				</div>
 				<div class="outer-container">
 					<div class="tabDiv" id="tabDiv"></div>
 					<div id="cardDiv"></div>

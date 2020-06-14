@@ -30,7 +30,7 @@ function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
         buildSiteProjectTree(baseData, ul, checkboxFunction);
     }
 
-    document.getElementById("locationSelectorSpan").innerText = order == "Project" ? 'Project' : 'Location';
+    document.getElementById("locationSelectorSpan").innerText = order == "Project" ? 'Project Visibility' : 'Location Visibility';
     var div = document.getElementById(divId);
     clearElement(div);
 

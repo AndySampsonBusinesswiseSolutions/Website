@@ -117,7 +117,7 @@
 				<br>
 			</div>
 			<div style="margin-top: 5px;">
-				<div class="roundborder divcolumn" style="float: left; width: 26%;">
+				<div class="divcolumn" style="float: left; width: 26%;">
 					<div class="expander-header">
 						<span id="opportunityDetailsSpan">Opportunity Details</span>
 						<i id="opportunityDetails" class="far fa-plus-square show-pointer expander"></i>
@@ -143,7 +143,7 @@
 					</div>
 				</div>
 				<div class="middle"></div>
-				<div class="roundborder divcolumn" style="float: left; width: 44%;">
+				<div class="divcolumn" style="float: left; width: 44%;">
 					<div class="expander-header">
 						<span id="addNewTimelineStepSpan">Add New Timeline Step</span>
 						<i id="addNewTimelineStep" class="far fa-plus-square show-pointer expander"></i>
@@ -282,7 +282,7 @@
 					</div>
 				</div>
 				<div class="middle"></div>
-				<div class="roundborder divcolumn" style="float: left; width: 26%;">
+				<div class="divcolumn" style="float: left; width: 26%;">
 					<div class="expander-header">
 						<span id="editTimelineStepSpan">Edit Timeline Step</span>
 						<i id="editTimelineStep" class="far fa-plus-square show-pointer expander"></i>
@@ -312,7 +312,7 @@
 				</div>
 			</div>
 			<div style="clear: left;"></div>
-			<div id="spreadsheet" class="roundborder scrolling-wrapper tree-div" style="margin-top: 5px;">
+			<div id="spreadsheet" class="scrolling-wrapper tree-div" style="margin-top: 5px;">
 				<div id="ganttChart"></div>
 			</div>
 			<br>
@@ -332,29 +332,44 @@
 			<input type="submit" style="float: right;" id="closeOpportunitySubmit" onclick="closeOpportunity();"></input>
 		</div>
 	</div>
-	<div id="mySidenav" class="sidenav">
-		<div style="text-align: center;">
-			<span id="selectOptionsSpan" style="font-size: 25px;">Options</span>
-			<i class="fas fa-unlock fa-w-14 sidenav-icon lock" onclick="lockSidebar()" title="Click To Lock Sidebar"></i>
-			<i class="fas fa-angle-double-left sidenav-icon closebtn" onclick="closeNav()"></i>
-		</div>
-		<div class="tree-column">
-			<div id="siteTree" class="dashboard roundborder outer-container scrolling-wrapper">
-			</div>
-			<br>
-			<div id="configureContainer" class="tree-div dashboard roundborder outer-container scrolling-wrapper">
-				<div class="expander-header">
-					<span id="configureOptionsSpan">Configure</span>
-					<i id="configureOptions" class="far fa-plus-square expander show-pointer"></i>
-				</div>
-				<div id="configureOptionsList" class="slider-list expander-container">
-					<div class="dashboard roundborder outer-container scrolling-wrapper">
-						<div class="expander-header">
-							<span id="configureLocationSelectorSpan">Location</span>
-							<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+	<div id="outerContainer">
+		<div id="mainContainer">
+			<div class="section-header">
+				<div id="mySidenav" class="sidenav" style="display: none;">
+					<div class="header">
+						<button class="closebtn" onclick="closeNav()">Close</button>
+						<i class="fas fa-filter sidenav-icon-close"></i>
+					</div>
+					<div class="tree-column">
+						<div style="float: left;">
+							<div id="siteTree" class="tree-div scrolling-wrapper">
+							</div>
+							<div class="expander-header">
+								<span id="opportunityStatusSpan">Opportunity Status</span>
+								<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
+							</div>
+							<div id="opportunityStatusList" class="expander-container">
+								<ul class="format-listitem listItemWithoutPadding">
+									<li>
+										<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
+									</li>
+									<li>
+										<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
+									</li>
+									<li>
+										<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
+									</li>
+								</ul>
+							</div>
 						</div>
-						<div id="configureLocationSelectorList" class="expander-container">
-							<div style="width: 45%; text-align: center; float: left;">
+						<div style="float: right; margin-left: 15px;">
+							<div class="tree-div scrolling-wrapper">
+								<div class="expander-header">
+									<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose whether to display Sites and/or Meters in the 'Location' tree on the left-hand side"></i>
+									<i id="locationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
+								</div>
+								<div id="locationSelectorList" class="expander-container">
+								<div style="width: 45%; text-align: center; float: left;">
 								<span>Sites</span>
 								<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
 							</div>
@@ -382,39 +397,22 @@
 								<span>SubMeters</span>
 								<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick="updatePage()" branch="locationSelector"></input><div class="switch-btn"></div></label>
 							</div>
+								</div>
+							</div>
 						</div>
 					</div>
-					<br>
-					<div class="tree-div dashboard roundborder outer-container">
-						<div class="expander-header">
-							<span id="opportunityStatusSpan">Opportunity Status</span>
-							<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
-						</div>
-						<div id="opportunityStatusList" class="expander-container">
-							<ul class="format-listitem listItemWithoutPadding">
-								<li>
-									<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
-								</li>
-								<li>
-									<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
-								</li>
-								<li>
-									<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
-								</li>
-							</ul>
-						</div>
+					<div style="clear: both;"></div>
+					<div class="header">
+						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-	<div id="outerContainer">
-		<div id="mainContainer">
-			<div class="section-header">
-				<i id="openNav" class="fas fa-angle-double-right sidenav-icon" onclick="openNav()"></i>
-				<div class="section-header-text"><?php echo $PAGE_TITLE ?></div>
+				<i id="openNav" class="fas fa-filter sidenav-icon" onclick="openNav()"></i>
+				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i class="far fa-question-circle show-pointer" title="Items can be added to the Dashboard using the 'Filter' icon on the left-hand side"></i></div>
 			</div>
 			<div class="final-column">
+				<div id="overlay" style="display: none;">
+				</div>
 				<div class="divcolumn left dashboard">
 					<div class="expander-header">
 						<span>Requested Visits</span>

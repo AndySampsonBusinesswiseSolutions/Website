@@ -2,15 +2,6 @@ function pageLoad(){
 	createBudgetTree(sites, "alertMessage()");
 	setupPage();
 
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
-
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
-
 	window.onload = function() {
 		hideSliders(); 
 	}
@@ -586,9 +577,9 @@ function loadCostChart() {
 			  ]
 	  }];
 	  var electricityCategories = [
-		'04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-		'01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-		'01 2023', '02 2023', '03 2023'
+		'APR-21', 'MAY-21', 'JUN-21', 'JUL-21', 'AUG-21', 'SEP-21', 'OCT-21', 'NOV-21', 'DEC-21',
+		'JAN-22', 'FEB-22', 'MAR-22', 'APR-22', 'MAY-22', 'JUN-22', 'JUL-22', 'AUG-22', 'SEP-22', 'OCT-22', 'NOV-22', 'DEC-22',
+		'JAN-23', 'FEB-23', 'MAR-23'
 		];
 	  var electricityCostOptions = {
 		  chart: {
@@ -609,13 +600,26 @@ function loadCostChart() {
 			  text: ''
 			  },
 			  labels: {
-			  format: 'dd/MM/yyyy'
+				rotate: -45,
+				rotateAlways: true,
+				hideOverlappingLabels: true,
+				style: {
+				  fontSize: '10px',
+				  fontFamily: 'Helvetica, Arial, sans-serif',
+				  fontWeight: 400,
+				},
+			  	format: 'dd/MM/yyyy'
 			  },
 			  categories: electricityCategories
 		  },
 		  yaxis: [{
 			title: {
-			  text: '£'
+				style: {
+					fontSize: '10px',
+					fontFamily: 'Helvetica, Arial, sans-serif',
+					fontWeight: 400,
+					},
+			  	text: '£'
 			},
 			forceNiceScale: true,
 			labels: {
@@ -649,9 +653,9 @@ function loadUsageChart() {
 			]
 	}];
 	var electricityCategories = [
-	  '04 2021', '05 2021', '06 2021', '07 2021', '08 2021', '09 2021', '10 2021', '11 2021', '12 2021',
-	  '01 2022', '02 2022', '03 2022', '04 2022', '05 2022', '06 2022', '07 2022', '08 2022', '09 2022', '10 2022', '11 2022', '12 2022',
-	  '01 2023', '02 2023', '03 2023'
+	  'APR-21', 'MAY-21', 'JUN-21', 'JUL-21', 'AUG-21', 'SEP-21', 'OCT-21', 'NOV-21', 'DEC-21',
+	  'JAN-22', 'FEB-22', 'MAR-22', 'APR-22', 'MAY-22', 'JUN-22', 'JUL-22', 'AUG-22', 'SEP-22', 'OCT-22', 'NOV-22', 'DEC-22',
+	  'JAN-23', 'FEB-23', 'MAR-23'
 	  ];
 	var electricityUsageOptions = {
 		chart: {
@@ -672,12 +676,25 @@ function loadUsageChart() {
 			text: ''
 			},
 			labels: {
-			format: 'dd/MM/yyyy'
+				rotate: -45,
+				rotateAlways: true,
+				hideOverlappingLabels: true,
+				style: {
+				  fontSize: '10px',
+				  fontFamily: 'Helvetica, Arial, sans-serif',
+				  fontWeight: 400,
+				},
+				format: 'dd/MM/yyyy'
 			},
 			categories: electricityCategories
 		},
 		yaxis: [{
 		  title: {
+			style: {
+				fontSize: '10px',
+				fontFamily: 'Helvetica, Arial, sans-serif',
+				fontWeight: 400,
+				},
 			text: 'kWh'
 		  },
 		  forceNiceScale: true,
@@ -736,18 +753,20 @@ function refreshChart(newSeries, chartId, chartOptions) {
 	  },
 	  legend: {
 		show: true,
-		showForSingleSeries: true,
+		showForSingleSeries: false,
 		showForNullSeries: true,
 		showForZeroSeries: true,
-		position: 'right',
+		position: 'top',
+		horizontalAlign: 'center', 
 		onItemClick: {
-		  toggleDataSeries: true
+			toggleDataSeries: true
 		},
 		formatter: function(seriesName) {
-		  return seriesName + '<br><br>';
+			return seriesName;
 		}
 	  },
 	  series: newSeries,
+	  colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
 	  yaxis: chartOptions.yaxis,
 	  xaxis: chartOptions.xaxis
 	};  
