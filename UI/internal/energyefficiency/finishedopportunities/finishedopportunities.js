@@ -2,15 +2,13 @@ function pageLoad() {
   createGroupingOptionTree();
   createTree("updateGraphs()");
   updateGraphs();
+}
 
-  document.onmousemove = function(e) {
-    setupSidebarHeight();
-    setupSidebar(e);
-  };
-
-  window.onscroll = function() {
-    setupSidebarHeight();
-  };
+function resetPage() {
+  projectLocationcheckbox.checked = true;
+  siteLocationcheckbox.checked = true;
+  meterLocationcheckbox.checked = true;
+  pageLoad();
 }
 
 function createGroupingOptionTree() {

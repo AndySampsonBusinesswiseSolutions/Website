@@ -1,15 +1,13 @@
 function pageLoad() {
 	createTree(data, "siteTree", "filterContractsByStatus()");
 	filterContractsByStatus(null);
-	
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
+}
 
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
+function resetPage() {
+	sitesLocationcheckbox.checked = true;
+	metersLocationcheckbox.checked = true;
+
+	pageLoad();
 }
 
 function deleteContracts() {

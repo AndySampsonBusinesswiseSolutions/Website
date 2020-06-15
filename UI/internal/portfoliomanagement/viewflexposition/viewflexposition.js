@@ -1,14 +1,15 @@
 function pageLoad() {
   updatePage();
+}
 
-  document.onmousemove = function(e) {
-    setupSidebarHeight();
-    setupSidebar(e);
-  };
+function resetPage() {
+  electricityCommoditycheckbox.checked = true;
+  gasCommoditycheckbox.checked = true;
 
-  window.onscroll = function() {
-    setupSidebarHeight();
-  };
+  showHideContainer(electricityCommoditycheckbox);
+  showHideContainer(gasCommoditycheckbox);
+
+  updatePage();
 }
 
 function updatePage() {

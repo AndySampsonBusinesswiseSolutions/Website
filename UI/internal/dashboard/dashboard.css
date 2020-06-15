@@ -1,5 +1,4 @@
 .dashboard-item-small, .dashboard-item-large, .custom-dashboard-item-large {
-  margin: 9px 9px 0px 0px; 
   float: left;
   color: white;
 }
@@ -14,15 +13,16 @@
   font-size: 20px;
 }
 .dashboard-item-large {
-  width: calc(100% - 9.5px);
+  width: 100%;
   height: 409px;
   color: black;
 }
 .custom-dashboard-item-large {
   height: 458.5px;
-  width: calc(50% - 9.5px); 
+  width: calc(50% - 4.5px); 
   background-color: white;
   color: black;
+  margin-bottom: 9px;
 }
 .dashboard-icon {
   width: 90px; 

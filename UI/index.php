@@ -16,7 +16,7 @@
 		<div id="mainContainer">
 			<img src="/images/EMaaS2.PNG" style="width: 100%;">
 			<div id="id01" class="modal">
-				<form name="loginForm" class="modal-content animate roundborder" onsubmit="return login(event)">
+				<form name="loginForm" class="modal-content animate" onsubmit="return login(event)">
 					<div class="container">
 						<label for="userName"><b>Email Address</b></label>
 						<input type="text" placeholder="Enter Email Address" id="userName" required>

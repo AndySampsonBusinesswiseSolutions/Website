@@ -1,14 +1,12 @@
 function pageLoad() {    
 	createTree(user, "userTree", "createCardButton");
-	
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
+}
 
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
+function resetPage() {
+	pageLoad();
+	createCardButton(User0checkbox);
+	createCardButton(User1checkbox);
+	createCardButton(User2checkbox);
 }
 
 function openTab(callingElement, tabName, guid) {

@@ -15,14 +15,24 @@
 	<div id="outerContainer">
 		<div id="mainContainer">
 			<div class="section-header">
-				<div id="mySidenav" class="sidenav" style="display: none;">
-					<div class="header" style="height: 35px;">
+				<div id="mySidenav" class="sidenav">
+					<div class="header">
 						<button class="closebtn" onclick="closeNav()">Close</button>
 						<i class="fas fa-filter sidenav-icon-close"></i>
 					</div>
 					<div class="tree-column">
 						<div style="float: left;">
-							<div id="displayTree" class="tree-div">
+							<div id="displayListItemTitlespan" class="tree-div">
+							</div>
+							<div id="displayListItemAdditionalTitlespan" class="tree-div">
+							</div>
+							<div id="siteTree" class="tree-div">
+							</div>
+							<div id="commodityTree" class="tree-div">
+							</div>
+							<div id="dateRangeDisplay" class="tree-div">
+							</div>
+							<div id="granularityTree" class="tree-div">
 							</div>
 						</div>
 						<div style="float: right; margin-left: 15px;">
@@ -70,7 +80,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad()">Reset To Default</button>
+						<button class="resetbtn" onclick="createTrees(false); resetSlider()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -78,9 +88,9 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i><i class="far fa-question-circle show-pointer" title="Analyse your portfolio using filters on the left-hand side"></i></div>
 			</div>
 			<div class="final-column">
-				<div id="overlay" style="display: none;">
+				<div id="overlay">
 				</div>
-				<div class="dashboard outer-container expander-container">
+				<div class="outer-container expander-container pad-container">
 					<div class="expander-header">
 						<span id="chartHeaderSpan">Usage Chart</span>						
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Chart To Download Basket"></i>
@@ -91,10 +101,10 @@
 						<div id="chart"></div>
 					</div>
 				</div>
-				<div class="dashboard outer-container expander-container">
+				<div class=" outer-container expander-container pad-container">
 					<div class="expander-header">
 						<span>Data</span>
-						<i id="dataHeader" class="far fa-plus-square expander show-pointer openExpander"></i>
+						<i id="dataHeader" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
 					</div>
 					<div id="dataHeaderList" class="datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">
 						<div id="datagrid" style="margin: 5px;"></div>
@@ -108,7 +118,6 @@
 <script type="text/javascript" src="/includes/base/base.js"></script>
 
 <link rel="stylesheet" href="/includes/rzslider/rzslider.css" />
-<link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
 <script data-require="ui-bootstrap@*" data-semver="2.2.0" src="https://cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-2.2.0.js"></script>
 <script src="/includes/rzslider/rzslider.js"></script>

@@ -1,14 +1,14 @@
 function pageLoad() {
   createTree(data, "siteTree", "updateChart(commissionChart)");
+}
 
-  document.onmousemove = function(e) {
-    setupSidebarHeight();
-    setupSidebar(e);
-  };
-
-  window.onscroll = function() {
-    setupSidebarHeight();
-  };
+function resetPage() {
+  supplierLocationcheckbox.checked = true;
+  customerLocationcheckbox.checked = true;
+  meterLocationcheckbox.checked = true;
+  electricityCommoditycheckbox.checked = true;
+  gasCommoditycheckbox.checked = true;
+  createTree(data, "siteTree", "updateChart(commissionChart)");
 }
 
 function getCommodityOption() {

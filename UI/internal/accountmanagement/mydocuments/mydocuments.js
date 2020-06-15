@@ -1,14 +1,14 @@
 function pageLoad() {    
 	createTree(documents, "documentTree", "createCardButton");
-	
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
+}
 
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
+function resetPage() {
+	pageLoad();
+
+	var inputs = siteSelectorList.getElementsByTagName('input');
+	for(var i = 0; i < inputs.length; i++) {
+		createCardButton(inputs[i]);
+	}
 }
 
 function openTab(callingElement, tabName, guid) {

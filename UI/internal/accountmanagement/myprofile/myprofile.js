@@ -1,14 +1,5 @@
 function pageLoad() {    
 	createTree(myprofile, "sectionTree", "createCardButton");
-	
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
-
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
 }
 
 function createTree(baseData, divId, checkboxFunction) {

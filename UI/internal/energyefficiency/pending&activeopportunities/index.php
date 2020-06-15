@@ -14,7 +14,7 @@
 <body>
 	<div id="outerContainer">
 		<div id="mainContainer">
-		<div class="section-header">
+			<div class="section-header">
 				<div id="mySidenav" class="sidenav" style="display: none;">
 					<div class="header">
 						<button class="closebtn" onclick="closeNav()">Close</button>
@@ -22,12 +22,12 @@
 					</div>
 					<div class="tree-column">
 						<div style="float: left;">
-							<div id="siteTree" class="tree-div dashboard roundborder">
+							<div id="siteTree" class="tree-div ">
 							</div>
-							<div class="tree-div dashboard scrolling-wrapper">
+							<div class="tree-div  scrolling-wrapper">
 								<div class="expander-header">
 									<span id="locationSelectorSpan">Location</span>
-									<i id="locationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="locationSelector" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 								</div>
 								<div id="locationSelectorList" class="expander-container">
 									<div style="width: 45%; text-align: center; float: left;">
@@ -47,10 +47,10 @@
 							
 						</div>
 						<div style="float: right; margin-left: 15px;">
-						<div id="treeDisplayList" class="tree-div dashboard roundborder">
+							<div id="treeDisplayList" class="tree-div">
 								<div class="expander-header">
 									<span id="treeDisplayOrderSpan">Tree Display Order</span>
-									<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 								</div>
 								<div id="treeDisplayOrderList" class="expander-container">
 									<ul id="treeDisplayOrderList" class="format-listitem listItemWithoutPadding">
@@ -63,10 +63,10 @@
 									</ul>
 								</div>
 							</div>
-							<div id="projectList" class="tree-div dashboard roundborder">
+							<div id="projectList" class="tree-div ">
 								<div class="expander-header">
 									<span id="projectStatusSpan">Project Status</span>
-									<i id="projectStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="projectStatus" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 								</div>
 								<div id="projectStatusList" class="expander-container">
 									<ul class="format-listitem listItemWithoutPadding">
@@ -96,23 +96,23 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div class="dashboard outer-container tree-div">
+				<div class="pad-container outer-container tree-div">
 					<div class="expander-header">
 						<span>Data</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="pendingAndActiveData"></i>
+						<i id="pendingAndActiveData" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
 					<div id="pendingAndActiveDataList" class="expander-container scrolling-wrapper" style="text-align: center;">
 						<div id="spreadsheet"></div>
 					</div>
 				</div>
-				<div class="dashboard outer-container tree-div expander-container">
+				<div class="pad-container outer-container tree-div expander-container">
 					<div class="expander-header">
 						<span>Chart</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="pendingAndActiveOpportunities"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></i>
+						<i id="pendingAndActiveOpportunities" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
-					<div id="pendingAndActiveOpportunitiesList" class="expander-container scrolling-wrapper">
+					<div id="pendingAndActiveOpportunitiesList" class="expander-container srolling-wrapper">
 						<div id="ganttChart"></div>
 					</div>
 				</div>

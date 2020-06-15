@@ -31,12 +31,12 @@
 						<i class="fas fa-filter sidenav-icon-close"></i>
 					</div>
 					<div class="tree-column">
-						<div id="supplierTree" class="tree-div dashboard roundborder">
+						<div id="supplierTree" class="tree-div ">
 						</div>
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="pageLoad()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -46,7 +46,7 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div class="outer-container">
+				<div class="pad-container outer-container">
 					<div class="tabDiv" id="tabDiv"></div>
 					<div id="cardDiv"></div>
 				</div>

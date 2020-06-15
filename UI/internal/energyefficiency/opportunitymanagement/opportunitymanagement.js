@@ -1,14 +1,32 @@
 function pageLoad() {
 	updatePage();
-    
-    document.onmousemove = function(e) {
-        setupSidebarHeight();
-        setupSidebar(e);
-    };
-    
-    window.onscroll = function() {
-        setupSidebarHeight();
-    };
+}
+
+function resetPage() {
+  siteLocationcheckbox.checked = true;
+  areaLocationcheckbox.checked = true;
+  commodityLocationcheckbox.checked = true;
+  meterLocationcheckbox.checked = true;
+  subareaLocationcheckbox.checked = true;
+  assetLocationcheckbox.checked = true;
+  submeterLocationcheckbox.checked = true;
+  rejectedOpportunitiescheckbox.checked = false;
+  recommendedOpportunitiescheckbox.checked = true;
+  pendingActiveOpportunitiescheckbox.checked = true;
+
+  if(!hasClass(rejectedOpportunitiesDiv, 'listitem-hidden')) {
+    updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');
+  }
+
+  if(hasClass(recommendedOpportunitiesDiv, 'listitem-hidden')) {
+    updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');
+  }
+
+  if(hasClass(pendingActiveOpportunitiesDiv, 'listitem-hidden')) {
+    updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');
+  }
+
+  updatePage();
 }
 
 function updatePage() {

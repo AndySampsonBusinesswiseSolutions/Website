@@ -31,11 +31,11 @@
 			<br>
 			<form action="" onsubmit="scheduleRequestedVisit(); return false;">
 				<div>Requested Visit Date:</div><span id="scheduleRequestedVisitRequestedVisitDate"></span><br><br>
-				<div class="requiredMessage roundborder" id="scheduleRequestedVisitScheduledVisitDateRequiredMessage"></div>
+				<div class="requiredMessage" id="scheduleRequestedVisitScheduledVisitDateRequiredMessage"></div>
 				<label for="scheduleRequestedVisitScheduledVisitDate">Scheduled Visit Date:</label><br>
 				<input type="date" id="scheduleRequestedVisitScheduledVisitDate"></input>
 				<br><br>
-				<div class="requiredMessage roundborder" id="scheduleRequestedVisitAssignEngineerRequiredMessage"></div>
+				<div class="requiredMessage" id="scheduleRequestedVisitAssignEngineerRequiredMessage"></div>
 				<label for="scheduleRequestedVisitAssignEngineer">Assign Engineer:</label><br>
 				<select id="scheduleRequestedVisitAssignEngineer">
 					<option value="">Select Engineer</option>
@@ -43,7 +43,7 @@
 				</select>
 				<br><br>
 				<label id="scheduleRequestedVisitNotesLabel" for="scheduleRequestedVisitNotes">Enter any notes for this visit:</label><br>
-				<textarea id="scheduleRequestedVisitNotes" name="scheduleRequestedVisitNotes" class="roundborder"></textarea><br><br>
+				<textarea id="scheduleRequestedVisitNotes" name="scheduleRequestedVisitNotes"></textarea><br><br>
 				<input type="submit" style="float: right;" id="scheduleRequestedVisitSubmit"></input>
 			</form>
 		</div>
@@ -56,7 +56,7 @@
 			</div>
 			<br>
 			<label id="rejectRequestedVisitNotesLabel" for="rejectRequestedVisitNotes">Enter why this visit is being rejected:</label><br>
-			<textarea id="rejectRequestedVisitNotes" name="rejectRequestedVisitNotes" class="roundborder"></textarea><br><br>
+			<textarea id="rejectRequestedVisitNotes" name="rejectRequestedVisitNotes"></textarea><br><br>
 			<input type="submit" style="float: right;" id="rejectRequestedVisitSubmit" onclick="rejectRequestedVisit();"></input>
 		</div>
 	</div>
@@ -78,7 +78,7 @@
 			</div>
 			<br>
 			<label id="rejectScheduledVisitNotesLabel" for="rejectScheduledVisitNotes">Enter why this visit is being rejected:</label><br>
-			<textarea id="rejectScheduledVisitNotes" name="rejectScheduledVisitNotes" class="roundborder"></textarea><br><br>
+			<textarea id="rejectScheduledVisitNotes" name="rejectScheduledVisitNotes"></textarea><br><br>
 			<input type="submit" style="float: right;" id="rejectScheduledVisitSubmit" onclick="rejectScheduledVisit();"></input>
 		</div>
 	</div>
@@ -102,7 +102,7 @@
 			<br>
 			<div>Estimated Annual Savings:</div><span id="rejectOpportunityEstimatedAnnualSavings"></span><br><br>
 			<label id="rejectOpportunityNotesLabel" for="rejectOpportunityNotes">Enter why this opportunity is being rejected:</label><br>
-			<textarea id="rejectOpportunityNotes" name="rejectOpportunityNotes" class="roundborder"></textarea><br><br>
+			<textarea id="rejectOpportunityNotes" name="rejectOpportunityNotes"></textarea><br><br>
 			<input type="submit" style="float: right;" id="rejectOpportunitySubmit" onclick="rejectOpportunity();"></input>
 		</div>
 	</div>
@@ -150,7 +150,7 @@
 					</div>
 					<br>
 					<div id="addNewTimelineStepList" class="listitem-hidden">
-						<div class="roundborder" style="float: left; width: 36%;">
+						<div style="float: left; width: 36%;">
 							<span id="addNewTimelineStepTreeSpan" style="padding-left: 5px;">Select Sites(s)/Meter(s)</span>
 							<i id="addNewTimelineStepTree" class="far fa-plus-square show-pointer expander openExpander"></i>
 							<div class="scrolling-wrapper">
@@ -232,14 +232,14 @@
 							</div>
 						</div>
 						<div class="middle"></div>
-						<div class="roundborder" style="float: left; width: 62%;">
+						<div style="float: left; width: 62%;">
 							<div style="text-align: center;">
 								<span id="addNewTimelineStepDetailSpan">New Timeline Step Details</span>
 							</div>
 							<div style="margin: 2%; margin-right: 2%; margin-top: 2%;">
 								<label for="stepName" style="width: 19%">Step Name:</label><input id="stepName" style="margin-left: 2%; width: 79%"></input>
 							</div>
-							<div class="roundborder" style="margin-left: 2%; margin-right: 2%; margin-top: 2%; text-align: center;">
+							<div style="margin-left: 2%; margin-right: 2%; margin-top: 2%; text-align: center;">
 								<div style="margin-top: 5px;">
 									<span>Start After:<span>
 									<select>
@@ -257,7 +257,7 @@
 								<br>
 								<span>*if both are set, the new step will start at the latter of the two dates</span>
 							</div>
-							<div class="roundborder" style="margin-left: 2%; margin-right: 2%; margin-top: 2%; text-align: center;">
+							<div style="margin-left: 2%; margin-right: 2%; margin-top: 2%; text-align: center;">
 								<div style="margin-top: 5px;">
 									<label for="endDays">End After:</label><input id="endDays" type="number" min="1" style="width: 15%;"></input>
 									<select>
@@ -328,7 +328,7 @@
 			<br>
 			<div>Estimated Annual Savings:</div><span id="closeOpportunityEstimatedAnnualSavings"></span><br><br>
 			<label id="closeOpportunityNotesLabel" for="closeOpportunityNotes">Enter why this opportunity is being closed:</label><br>
-			<textarea id="closeOpportunityNotes" name="closeOpportunityNotes" class="roundborder"></textarea><br><br>
+			<textarea id="closeOpportunityNotes" name="closeOpportunityNotes"></textarea><br><br>
 			<input type="submit" style="float: right;" id="closeOpportunitySubmit" onclick="closeOpportunity();"></input>
 		</div>
 	</div>
@@ -346,18 +346,18 @@
 							</div>
 							<div class="expander-header">
 								<span id="opportunityStatusSpan">Opportunity Status</span>
-								<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander"></i>
+								<i id="opportunityStatus" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 							</div>
 							<div id="opportunityStatusList" class="expander-container">
 								<ul class="format-listitem listItemWithoutPadding">
 									<li>
-										<input type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
+										<input id="rejectedOpportunitiescheckbox" type="checkbox" onclick="updateClassOnClick('rejectedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Rejected</span>
 									</li>
 									<li>
-										<input type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
+										<input id="recommendedOpportunitiescheckbox" type="checkbox" checked onclick="updateClassOnClick('recommendedOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Recommended</span>
 									</li>
 									<li>
-										<input type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
+										<input id="pendingActiveOpportunitiescheckbox" type="checkbox" checked onclick="updateClassOnClick('pendingActiveOpportunitiesDiv', 'listitem-hidden', '');"><span style="padding-left: 1px;">Pending & Active</span>
 									</li>
 								</ul>
 							</div>
@@ -403,7 +403,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="resetPage()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -413,62 +413,56 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div class="divcolumn left dashboard">
-					<div class="expander-header">
-						<span>Requested Visits</span>
-						<i id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
-						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></i>
-						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
+				<div class="pad-container" style="text-align: center;">
+					<div style="width: calc(50% - 9px); float: left;">
+						<div class="expander-header">
+							<span>Requested Visits</span>
+							<i id="requestedVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
+							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Requested Visits To Download Basket"></i>
+							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Requested Visits"></i>
+						</div>
+						<div id="requestedVisitsList" class="scrolling-wrapper" style="text-align: center;">
+							<div id="requestedVisitsSpreadsheet"></div>
+						</div>
 					</div>
-					<br>
-					<div id="requestedVisitsList" class="scrolling-wrapper" style="text-align: center;">
-						<div id="requestedVisitsSpreadsheet"></div>
-					</div>
-				</div>
-				<div class="middle"></div>
-				<div class="divcolumn right dashboard">
-					<div class="expander-header">
-						<span>Scheduled Visits</span>
-						<i id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
-						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></i>
-						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
-					</div>
-					<br>
-					<div id="scheduledVisitsList" class="scrolling-wrapper" style="text-align: center;">
-						<div id="scheduledVisitsSpreadsheet"></div>
+					<div style="width: calc(50% - 9px); float: right;">
+						<div class="expander-header">
+							<span>Scheduled Visits</span>
+							<i id="scheduledVisits" class="far fa-plus-square show-pointer expander openExpander"></i>
+							<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Scheduled Visits To Download Basket"></i>
+							<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Scheduled Visits"></i>
+						</div>
+						<div id="scheduledVisitsList" class="scrolling-wrapper" style="text-align: center;">
+							<div id="scheduledVisitsSpreadsheet"></div>
+						</div>
 					</div>
 				</div>
 				<div style="clear: left;"></div>
-				<br>
-				<div id="rejectedOpportunitiesDiv" class="listitem-hidden divcolumn dashboard">
+				<div id="rejectedOpportunitiesDiv" class="listitem-hidden pad-container">
 					<div class="expander-header">
 						<span>Rejected Opportunities</span>
 						<i id="rejectedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Rejected Opportunities To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Rejected Opportunities"></i>
 					</div>
-					<br>
 					<div id="rejectedOpportunitiesList" class="scrolling-wrapper" style="text-align: center;">
 						<div id="rejectedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>					
 				</div>
-				<br>
-				<div id="recommendedOpportunitiesDiv" class="divcolumn dashboard">
+				<div id="recommendedOpportunitiesDiv" class="pad-container">
 					<div class="expander-header">
 						<span>Recommended Opportunities</span>
 						<i id="recommendedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Recommended Opportunities"></i>
 					</div>
-					<br>
 					<div id="recommendedOpportunitiesList" class="scrolling-wrapper" style="text-align: center;">
 						<div id="recommendedOpportunitiesSpreadsheet"></div>
 					</div>
 					<div style="clear: left;"></div>
 				</div>
-				<br>
-				<div id="pendingActiveOpportunitiesDiv" class="divcolumn dashboard">
+				<div id="pendingActiveOpportunitiesDiv" class="pad-container">
 					<div class="expander-header">
 						<span>Pending & Active Opportunities</span>
 						<i id="pendingActiveOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>

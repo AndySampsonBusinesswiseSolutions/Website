@@ -22,10 +22,10 @@
 						<div style="float: left;">
 							<div id="siteTree" class="tree-div">
 							</div>
-							<div class="tree-div dashboard scrolling-wrapper">
+							<div class="tree-div  scrolling-wrapper">
 								<div class="expander-header">
 									<span id="locationSelectorSpan">Location Visibilty</span>
-									<i id="locationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="locationSelector" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 								</div>
 								<div id="locationSelectorList" class="expander-container">
 									<div style="width: 45%; text-align: center; float: left;">
@@ -49,7 +49,7 @@
 							<div id="treeDisplayList" class="tree-div">
 								<div class="expander-header">
 									<span id="treeDisplayOrderSpan">Tree Display Order</span>
-									<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="treeDisplayOrder" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 								</div>
 								<div id="treeDisplayOrderList" class="expander-container">
 									<ul class="format-listitem listItemWithoutPadding">
@@ -66,7 +66,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="resetPage()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -76,43 +76,43 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div class="dashboard outer-container tree-div">
+				<div class="pad-container outer-container tree-div">
 					<div class="expander-header">
 						<span>Project Financials Data</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="finishedData"></i>
+						<i id="finishedData" class="far fa-plus-square expander-container-control show-pointer openExpander"></i>
 					</div>
 					<div id="finishedDataList" class="expander-container scrolling-wrapper" style="text-align: center;">
 						<div id="spreadsheet"></div>
 					</div>
 				</div>
-				<div class="dashboard outer-container expander-container">
+				<div class="pad-container outer-container expander-container">
 					<div class="expander-header">
 						<span id="cumulativeSavingspan">Project Financials Chart</span>
-						<i id="cumulativeSaving" class="far fa-plus-square show-pointer expander openExpander"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Cumulative Saving Chart"></i>
+						<i id="cumulativeSaving" class="far fa-plus-square expander-container-control show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
 					<div id="cumulativeSavingList" class="chart expander-container">
 						<div id="cumulativeSavingChart"></div>
 					</div>
 				</div>
-				<div class="dashboard expander-container outer-container">
+				<div class="pad-container expander-container outer-container">
 					<div class="expander-header">
 						<span id="costSavingspan">Cost Saving Chart</span>
-						<i id="costSaving" class="far fa-plus-square show-pointer expander"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Cost Saving Chart"></i>
+						<i id="costSaving" class="far fa-plus-square expander-container-control show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
 					<div id="costSavingList"  class="listitem-hidden chart expander-container">
 						<div id="costSavingChart"></div>
 					</div>
 				</div>
-				<div class="dashboard expander-container outer-container">
+				<div class="pad-container expander-container outer-container">
 					<div class="expander-header">
 						<span id="volumeSavingspan">Volume Saving Chart</span>
-						<i id="volumeSaving" class="far fa-plus-square show-pointer expander"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Volume Saving Chart"></i>
+						<i id="volumeSaving" class="far fa-plus-square expander-container-control show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
 					<div id="volumeSavingList"  class="listitem-hidden chart expander-container">
 						<div id="volumeSavingChart"></div>

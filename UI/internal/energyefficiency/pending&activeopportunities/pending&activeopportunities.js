@@ -2,15 +2,6 @@ function pageLoad() {
     createTree(activeopportunity, "siteTree", "updateGanttChartAndDataGrid()", true);
     updateGanttChartAndDataGrid();
     setOpenExpanders();
-
-    document.onmousemove = function(e) {
-        setupSidebarHeight();
-        setupSidebar(e);
-    };
-    
-    window.onscroll = function() {
-        setupSidebarHeight();
-    };
 }
 
 function createTree(baseData, divId, checkboxFunction, isPageLoading = false) {
@@ -500,9 +491,7 @@ function buildGanttChart() {
 		}
 
 		function build() {
-			
-			var minDays = 35;// Math.floor((opts.slideWidth / opts.cellWidth)  + 5);
-			var startEnd = DateUtils.getBoundaryDatesFromData(opts.data, minDays);
+			var startEnd = DateUtils.getBoundaryDatesFromData(opts.data);
 			opts.start = startEnd[0];
 			opts.end = startEnd[1];
 			
@@ -513,8 +502,6 @@ function buildGanttChart() {
 	            new Chart(div, opts).render();
 				container.append(div);
 	            container.css("width", "100%");
-	            
-	            new Behavior(container, opts).apply();
 	        });
 		}
     }
@@ -536,12 +523,9 @@ function buildGanttChart() {
 		function render() {
             addVtHeader(div, opts.data, opts.cellHeight);
             
-            
-            var lock = document.getElementsByClassName('fa-lock');
-            var ganttWidth = lock.length == 0 ? '84.5%' : '80%';
             var slideDiv = jQuery("<div>", {
                 "class": "ganttview-slide-container",
-                "css": { "width": ganttWidth }
+                "css": { "width": "calc(100% - 282px)" }
             });
 			
             dates = getDates(opts.start, opts.end);
@@ -620,7 +604,7 @@ function buildGanttChart() {
             var totalW = 0;
 			for (var y in dates) {
 				for (var m in dates[y]) {
-					var w = dates[y][m].length * cellWidth;
+					var w = (dates[y][m].length * (cellWidth + 1));
 					totalW = totalW + w;
 					monthsDiv.append(jQuery("<div>", {
 						"class": "ganttview-hzheader-month",
@@ -632,7 +616,7 @@ function buildGanttChart() {
 					}
 				}
 			}
-            monthsDiv.css("width", totalW + "px");
+            monthsDiv.css("width", headerDiv.clientWidth);
             daysDiv.css("width", totalW + "px");
             headerDiv.append(monthsDiv).append(daysDiv);
             div.append(headerDiv);
@@ -827,8 +811,8 @@ function buildGanttChart() {
                 date.getFullYear() == today.getFullYear();
         },
 
-		getBoundaryDatesFromData: function (data, minDays) {
-			var minStart = new Date(); maxEnd = new Date();
+		getBoundaryDatesFromData: function (data) {
+			var minStart = new Date(); maxEnd = new Date(); today = new Date();
 			for (var i = 0; i < data.length; i++) {
 				for (var j = 0; j < data[i].series.length; j++) {
 					var start = Date.parse(data[i].series[j].start);
@@ -837,13 +821,11 @@ function buildGanttChart() {
 					if (minStart.compareTo(start) == 1) { minStart = start; }
 					if (maxEnd.compareTo(end) == -1) { maxEnd = end; }
 				}
-			}
-			
-			// Insure that the width of the chart is at least the slide width to avoid empty
-			// whitespace to the right of the grid
-			if (DateUtils.daysBetween(minStart, maxEnd) < minDays) {
-				maxEnd = minStart.clone().addDays(minDays);
-			}
+            }
+            
+            if(maxEnd < today) {
+                maxEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            }
 
 			var newMaxEnd = maxEnd.clone().moveToLastDayOfMonth();
 			

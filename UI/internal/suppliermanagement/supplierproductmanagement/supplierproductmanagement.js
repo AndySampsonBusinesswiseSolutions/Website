@@ -1,14 +1,5 @@
 function pageLoad() {    
 	createTree(supplierproduct, "supplierTree", "createCardButton");
-	
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
-
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
 }
 
 function openTab(callingElement, tabName, guid, branch) {

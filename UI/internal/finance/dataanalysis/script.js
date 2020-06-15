@@ -72,6 +72,57 @@
       $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
     };
 
+    $scope.resetSliders = function () {
+      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[1];
+      $scope.timePeriodOptionsFilteredCreated.value = dates[dates.length - 1];
+
+      $scope.timePeriodOptionsDisplayDateRange = {
+        minValue: minDate,
+        maxValue: maxDate,
+        options: {
+          id: 'timePeriodOptionsDisplayDateRange',
+          floor: floorDate,
+          ceil: ceilDate,
+          step: millisInDay,
+          showTicks: false,
+          draggableRange: true,
+          translate: function(date_millis) {
+            if ((date_millis !== null)) {
+              var dateFromMillis = new Date(date_millis);
+              return formatDate(dateFromMillis);
+            }
+            return '';
+          },
+          onEnd: function() {
+            updateChart();
+          } 
+        }
+      };
+
+      $scope.timePeriodOptionsFilterDateRange = {
+        minValue: minDate,
+        maxValue: maxDate,
+        options: {
+          id: 'timePeriodOptionsFilterDateRange',
+          floor: floorDate,
+          ceil: ceilDate,
+          step: millisInDay,
+          showTicks: false,
+          draggableRange: true,
+          translate: function(date_millis) {
+            if ((date_millis !== null)) {
+              var dateFromMillis = new Date(date_millis);
+              return formatDate(dateFromMillis);
+            }
+            return '';
+          },
+          onEnd: function() {
+            updatePage(timePeriodOptionsFilterDateRange);
+          } 
+        }
+      };
+    };
+
     $scope.timePeriodOptionsDisplayDateRange = {
       minValue: minDate,
       maxValue: maxDate,

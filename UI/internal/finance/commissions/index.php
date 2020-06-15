@@ -26,9 +26,9 @@
 							<div class="tree-div scrolling-wrapper">
 								<div class="expander-header">
 									<span id="configureLocationSelectorSpan">Location Visibility</span>
-									<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer"></i>
+									<i id="configureLocationSelector" class="far fa-plus-square expander-container-control show-pointer openExpander" style="float: right;"></i>
 								</div>
-								<div id="configureLocationSelectorList" class="expander-container listitem-hidden">
+								<div id="configureLocationSelectorList" class="expander-container">
 									<div style="width: 45%; text-align: center; float: left;">
 										<span>Suppliers</span>
 										<label class="switch"><input type="checkbox" id="supplierLocationcheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
@@ -48,9 +48,9 @@
 							<div class="tree-div scrolling-wrapper">
 								<div class="expander-header">
 									<span id="commoditySelectorSpan">Commodity</span>
-									<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
+									<i id="commoditySelector" class="far fa-plus-square expander-container-control show-pointer openExpander" style="float: right;"></i>
 								</div>
-								<div id="commoditySelectorList" class="expander-container listitem-hidden">
+								<div id="commoditySelectorList" class="expander-container">
 									<div style="width: 45%; text-align: center; float: left;">
 										<span>Electricity</span>
 										<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='createTree(data, "siteTree", "updateChart(commissionChart)");'></input><div class="switch-btn"></div></label>
@@ -65,7 +65,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="resetPage()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -73,22 +73,24 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i class="far fa-question-circle show-pointer" title="Where's our money coming from?"></i></div>
 			</div>
 			<div class="final-column">
-				<div class="dashboard outer-container">
+				<div id="overlay" style="display: none;">
+				</div>
+				<div class="pad-container outer-container">
 					<div class="expander-header">
 						<span>Commission Chart</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsChart"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Commission Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Commission Chart"></i>
+						<i id="commissionsChart" class="far fa-plus-square expander-container-control show-pointer openExpander" style="float: right;"></i>
 					</div>
 					<div id="commissionsChartList" class="chart expander-container">
 						<div id="commissionChart">
 						</div>
 					</div>
 				</div>
-				<div class="dashboard outer-container expander-container">
+				<div class="pad-container outer-container expander-container">
 					<div class="expander-header">
 						<span>Commission Data</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="commissionsData"></i>
+						<i id="commissionsData" class="far fa-plus-square expander-container-control show-pointer openExpander" style="float: right;"></i>
 					</div>
 					<div id="commissionsDataList" class="chart expander-container scrolling-wrapper">
 						<div id="commissionDatagrid" style="margin: 5px;">
@@ -96,7 +98,6 @@
 					</div>
 				</div>
 			</div>	
-			<br>
 		</div>
 	</div>
 </body>

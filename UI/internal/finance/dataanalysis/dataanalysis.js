@@ -2,19 +2,13 @@ var categories;
 var chartSeries;
 
 function pageLoad() {
-  createTrees();  
+  createTrees(true);  
 
   window.onload = function() {
     updateChart(true);
-    hideSliders(); 
+    mySidenav.style.display = "none";
+    overlay.style.display = "none";
   }
-}
-
-function hideSliders() {
-  var sliders = document.getElementsByClassName('slider-list');
-  [...sliders].forEach(slider => {
-    slider.classList.add('listitem-hidden');
-  });
 }
 
 function getCommodityOption() {
@@ -31,44 +25,35 @@ function getCommodityOption() {
   return 'None';
 }
 
-function createTrees() {
-  createDisplayTree();
+function resetSlider() {
+  var scope = angular.element(timePeriodOptionsDisplayTimeSpan).scope();
+  scope.$apply(function () {
+    scope.resetSliders();
+  });
+
+  updateChart(false);
+}
+
+function createTrees(isPageLoad) {
   createEnergyUnitListItem();
   createEnergyUnitInstanceListItem();
-  createSiteTree(usageSites, "updatePage()");
-  createGroupingOptionTree();
-  createTimePeriodTree();
+  createCommodityListItem();
+  
+  if(isPageLoad) {
+    createDateRangeDisplayListItem();
+    createGranularityDisplayListItem();
+    createGroupingOptionTree();
+    createTimePeriodTree();
+  }
+  
+  createSiteTree(usageSites, "updatePage()", isPageLoad);
 
+  if(!isPageLoad) {
+    updateChart(false);
+  }
+  
   addExpanderOnClickEvents();
   setOpenExpanders();
-}
-
-function createDisplayTree() {
-  var div = document.getElementById('displayTree');
-  clearElement(div);
-
-  var ul = createBranchUl("displaySelector", false, true);
-  div.appendChild(ul);
-
-  createDisplayListItems(ul);
-}
-
-function createDisplayListItems(ul) {
-  var displayListItemTitle = createBranchSpan('displayListItemTitle', 'Energy Unit');
-  var displayListItemAdditionalTitle = createBranchSpan('displayListItemAdditionalTitle', 'Energy Unit Instance');
-  var locationListItemTitle = createBranchSpan('siteTree', 'Location');
-
-  ul.appendChild(displayListItemTitle);
-  ul.appendChild(createBreakDisplayListItem());
-  ul.appendChild(displayListItemAdditionalTitle);
-  ul.appendChild(createBreakDisplayListItem());
-  ul.appendChild(locationListItemTitle);
-  ul.appendChild(createBreakDisplayListItem());
-  ul.appendChild(createCommodityListItem());
-  ul.appendChild(createBreakDisplayListItem());
-  ul.appendChild(createDateRangeDisplayListItem());
-  ul.appendChild(createBreakDisplayListItem());
-  ul.appendChild(createGranularityDisplayListItem());
 }
 
 function createEnergyUnitListItem() {
@@ -116,6 +101,12 @@ function createBreakDisplayListItem() {
 }
 
 function createCommodityListItem() {
+  var div = document.getElementById('commodityTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("commodityTreeHeader", 'Commodity', true);
+  var ul = createBranchUl("commodityTreeSelector", false, true);
+
   var commodityListItem = document.createElement('li');
   commodityListItem.innerHTML = '<div class="scrolling-wrapper">'
     +'<div id="configureCommoditySelectorList" class="expander-container">'
@@ -132,36 +123,50 @@ function createCommodityListItem() {
     +'</div>'
     +'</div>'
 
-  return commodityListItem;
+  ul.appendChild(commodityListItem);
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
 }
 
 function createDateRangeDisplayListItem() {
+  var div = document.getElementById('dateRangeDisplay');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("dateRangeDisplayHeader", 'Date Range', true);
+  var ul = createBranchUl("dateRangeDisplaySelector", false, true);
+  
   var dateRangeDisplayListItem = document.createElement('li');
-  var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "<br>Date Range<br>");
   var dateRangeDisplayRZSlider = document.createElement('rzslider');
   dateRangeDisplayRZSlider.id = 'timePeriodOptionsDisplayDateRange';
   dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDisplayDateRange.minValue');
   dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsDisplayDateRange.maxValue');
   dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDisplayDateRange.options');
 
-  dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
   dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
 
-  return dateRangeDisplayListItem;
+  ul.appendChild(dateRangeDisplayListItem);
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
 }
 
 function createGranularityDisplayListItem() {
+  var div = document.getElementById('granularityTree');
+  clearElement(div);
+
+  var headerDiv = createHeaderDiv("granularityTreeHeader", 'Granularity', true);
+  var ul = createBranchUl("granularityTreeSelector", false, true);
+
   var granularityDisplayListItem = document.createElement('li');
-  var granularityDisplaySpan = createBranchSpan('granularityDisplaySpan', "Granularity<br>");
   var granularityDisplayRZSlider = document.createElement('rzslider');
   granularityDisplayRZSlider.id = 'timePeriodOptionsDisplayTimeSpan';
   granularityDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsDisplayTimeSpan.value');
   granularityDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsDisplayTimeSpan.options');
 
-  granularityDisplayListItem.appendChild(granularityDisplaySpan);
   granularityDisplayListItem.appendChild(granularityDisplayRZSlider);
 
-  return granularityDisplayListItem;
+  ul.appendChild(granularityDisplayListItem);
+  div.appendChild(headerDiv);
+  div.appendChild(ul);
 }
 
 function createCostRateDisplayListItems(displayListItem, type) {
@@ -267,10 +272,10 @@ function createBudgetTree() {
   return budgetListItem;
 }
 
-function createSiteTree(usageSites, functions) {
-  var div = document.getElementById('siteTreespan');
+function createSiteTree(usageSites, functions, isPageLoad) {
+  var div = document.getElementById('siteTree');
   var inputs = div.getElementsByTagName('input');
-  var checkboxes = getCheckedElements(inputs);
+  var checkboxes = !isPageLoad ? [] : getCheckedElements(inputs);
 
   if(checkboxes.length == 0) {
     checkboxes = getBranchCheckboxes(inputs, 'Site');
@@ -370,8 +375,8 @@ function createGroupingOptionTree() {
   var div = document.getElementById('groupingOptionTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("groupingOptionHeader", "Grouping Option");
-  var ul = createBranchUl("groupingOptionSelector", true, true);
+  var headerDiv = createHeaderDiv("groupingOptionHeader", "Grouping Option", true);
+  var ul = createBranchUl("groupingOptionSelector", false, true);
 
   var groupingOption2GroupingOptionListItem = appendListItemChildren('groupingOption2GroupingOptionSelector', false, 'updatePage()', [{"Name" : "No Grouping"}], 'groupingOptionSelector', true, 'radio', 'groupingOptionGroup');
   var groupingOption1GroupingOptionListItem = appendListItemChildren('groupingOption1GroupingOptionSelector', true, 'updatePage()', [{"Name" : "Group"}], 'groupingOptionSelector', false, 'radio', 'groupingOptionGroup');
@@ -394,7 +399,7 @@ function createTimePeriodTree() {
   var div = document.getElementById('timePeriodTree');
   clearElement(div);
 
-  var headerDiv = createHeaderDiv("timePeriodHeader", "Time Period");
+  var headerDiv = createHeaderDiv("timePeriodHeader", "Time Period", true);
   var ul = createBranchUl("timePeriodSelector", false, true);
   ul.classList.add("slider-list");
 
@@ -789,7 +794,7 @@ function updateChart(isPageLoading) {
   categories = getCategoryTexts(startDate, endDate, dateFormat);
   var displayType = getDisplayType();
 
-  var treeDiv = document.getElementById('siteTreespan');
+  var treeDiv = document.getElementById('siteTree');
   var inputs = treeDiv.getElementsByTagName('input');
   var checkboxes = getCheckedElements(inputs);
   
@@ -1140,7 +1145,7 @@ function getSubMetersByAsset(asset, commodityOption) {
 }
 
 function determineShowByArray() {
-  var div = document.getElementById('displayTree');
+  var div = document.getElementById('displayListItemTitlespan');
   var inputs = div.getElementsByTagName('input');
   var checkedElements = getCheckedElements(inputs);
   var baseDisplayRadio = null;
@@ -1832,7 +1837,7 @@ function finaliseData(summedMeterSeries, seriesName) {
 }
 
 function getDisplayType() {
-  var div = document.getElementById('displayTree');
+  var div = document.getElementById('displayListItemTitlespan');
   var inputs = div.getElementsByTagName('input');
   var checkedElements = getCheckedElements(inputs);
   var baseDisplayRadio = null;

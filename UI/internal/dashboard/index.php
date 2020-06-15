@@ -75,14 +75,14 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div id="dashboardHeader" class="outer-container" style="text-align: center;">
+				<div id="dashboardHeader" class="pad-container" style="text-align: center;">
 					<div style="width: 40%; float: left;">
-						<a href="/Internal/PortfolioManagement/SiteManagement/" class="dashboard-item-small" style="background-color: #3b7e84">
+						<a href="/Internal/PortfolioManagement/SiteManagement/" class="dashboard-item-small" style="background-color: #3b7e84; margin-right: 9px;">
 							<img src="/images/location.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Locations Selected</span><br>
 							<span id="dashboardHeaderNumberOfSites" class="dashboard-item-text"></span>
 						</a>
-						<a href="/Internal/Finance/DataAnalysis/"  class="dashboard-item-small" style="background-color: #69566c">
+						<a href="/Internal/Finance/DataAnalysis/"  class="dashboard-item-small" style="background-color: #69566c; margin-right: 9px;">
 							<img src="/images/lightening bolt.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Portfolio Usage p.a</span><br>
 							<span id="dashboardHeaderPortfolioAnnualisedEnergyUsage" class="dashboard-item-text"></span>
@@ -92,7 +92,7 @@
 							<span class="dashboard-item-header">Portfolio Cost p.a</span><br>
 							<span id="dashboardHeaderPortfolioAnnualisedEnergyCost" class="dashboard-item-text"></span>
 						</a>
-						<div class="dashboard-item-small" style="background-color: #97a3af">
+						<div class="dashboard-item-small" style="background-color: #97a3af; margin-right: 9px; margin-top: 9px;">
 							<img src="/images/money.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Savings</span><br>
 							<div class="dashboard-item-text">
@@ -100,7 +100,7 @@
 								<span>£9,249 over next 3 years</span>
 							</div>
 						</div>
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="dashboard-item-small" style="background-color: #333333">
+						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" class="dashboard-item-small" style="background-color: #333333; margin-right: 9px; margin-top: 9px;">
 							<img src="/images/wrench.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Opportunities</span><br>
 							<div class="dashboard-item-text">
@@ -108,22 +108,24 @@
 								<span id="dashboardHeaderActiveOpportunitiesCost">£10,000</span>
 							</div>
 						</a>
-						<div class="dashboard-item-small" style="background-color: #3b7e84">
+						<div class="dashboard-item-small" style="background-color: #3b7e84; margin-top: 9px;">
 							<img src="/images/cloud.png" class="dashboard-icon"></img><br>
 							<span class="dashboard-item-header">Carbon</span><br>
 							<span id="dashboardHeaderCarbon" class="dashboard-item-text">1,550 tonnes p.a</span>
 						</div>
 					</div>
-					<div style="width: 17.5%; float: right;">
-						<div id="map-canvas" class=" dashboard-item-large"></div>
-					</div>
-					<div style="width: 42.5%; float: right;">
+					<div style="width: calc(42.5% - 9px); float: left;">
 						<div id="spreadsheetContainer" class="dashboard-item-large" style="overflow: auto; background-color: white;">
-							<div id="spreadsheet" style="float: left; margin-left: 10px; margin-top: 10px;"></div>
+							<div id="spreadsheet" style="float: left; margin-left: 9px; margin-top: 9px;"></div>
 						</div>
 					</div>
+					<div style="width: 17.5%; float: left; margin-left: 9px;">
+						<div id="map-canvas" class=" dashboard-item-large"></div>
+					</div>
 					<div style="clear: both;"></div>
-					<div id="customDashboardItem11" class=" custom-dashboard-item-large">
+				</div>
+				<div id="customDashboard" class="pad-container">
+					<div id="customDashboardItem11" class=" custom-dashboard-item-large" style="margin-right: 9px;">
 						<div id="totalUsageChart"></div>
 					</div>
 					<div id="customDashboardItem00" class=" custom-dashboard-item-large">

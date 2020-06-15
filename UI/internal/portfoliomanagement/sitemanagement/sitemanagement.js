@@ -1,14 +1,12 @@
 function pageLoad() {    
 	createTree("createCardButton", true);
-	
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
+}
 
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
+function resetPage() {
+	sitesLocationcheckbox.checked = true;
+	metersLocationcheckbox.checked = false;
+
+	createTree("createCardButton", true);
 }
 
 function deleteLocations() {

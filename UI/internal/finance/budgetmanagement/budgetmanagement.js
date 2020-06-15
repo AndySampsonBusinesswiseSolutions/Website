@@ -1,26 +1,37 @@
-function pageLoad(){  
+function pageLoad(isPageLoading){  
 	createBudgetTree(sites, "alertMessage()");
-	setupPage();
+	setupPage(isPageLoading);
 
 	window.onload = function() {
-		hideSliders(); 
+		mySidenav.style.display = "none";
+		overlay.style.display = "none";
 	}
 }
 
-function setupPage() {
-	createSiteTree(sites, "alertMessage()");
+function resetSliders() {
+	electricityCommoditycheckbox.checked = true;
+	gasCommoditycheckbox.checked = true;
+	siteLocationcheckbox.checked = true;
+	areaLocationcheckbox.checked = true;
+	commodityLocationcheckbox.checked = true;
+	meterLocationcheckbox.checked = true;
+	subareaLocationcheckbox.checked = true;
+	assetLocationcheckbox.checked = true;
+	submeterLocationcheckbox.checked = true;
+
+	var scope = angular.element(timePeriodCreationDateRange).scope();
+	scope.$apply(function () {
+		scope.resetSliders();
+	});
+}
+
+function setupPage(isPageLoading) {
+	createSiteTree(sites, "alertMessage()", isPageLoading);
 	setupDataGrid();
 	displayCharts();
 	addExpanderOnClickEvents();
 	setOpenExpanders();
 }
-
-function hideSliders() {
-	var sliders = document.getElementsByClassName('slider-list');
-	[...sliders].forEach(slider => {
-	  slider.classList.add('listitem-hidden');
-	});
-  }
 
 function createBudgetTree(sites, functions) {
 	var div = document.getElementById('createReviewBudgetTreeDiv');
@@ -37,7 +48,7 @@ function createBudgetTree(sites, functions) {
 
 	var headerSpan = document.createElement('span');
 	headerSpan.style = "padding-left: 5px;";
-	headerSpan.innerHTML = 'Select Locations <i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudgetTreeDivSelector"></i>';
+	headerSpan.innerHTML = 'Select Locations <i id="createReviewBudgetTreeDivSelector" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>';
 
 	headerDiv.appendChild(headerSpan);
 	div.appendChild(headerDiv);
@@ -61,15 +72,10 @@ function createBudgetTree(sites, functions) {
 	site.checked = true;
 }
 
-function createSiteTree(sites, functions) {
+function createSiteTree(sites, functions, isPageLoading) {
 	var div = document.getElementById('siteTree');
 	var inputs = div.getElementsByTagName('input');
-	var checkboxes = getCheckedElements(inputs);
-  
-	if(checkboxes.length == 0) {
-	  checkboxes = getBranchCheckboxes(inputs, 'Site');
-	}
-  
+	var checkboxes = !isPageLoading ? [] : getCheckedElements(inputs);  
 	var elements = div.getElementsByTagName("*");
   
 	var checkboxIds = [];

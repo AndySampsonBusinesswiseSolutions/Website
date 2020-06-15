@@ -2,13 +2,6 @@
     width: calc(100% - 10px); 
     margin: 5px;
 }
-.divcolumn {
-    padding: 10px;
-}
-.left, .right {
-    float: left;
-    width: 49%;
-}
 .middle {
     float: left;
     width: 2%;

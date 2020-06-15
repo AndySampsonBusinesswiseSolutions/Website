@@ -919,6 +919,21 @@ function addDashboardItem(checkbox) {
   else if(!checkbox.checked && !dashboardItem.classList.contains('listitem-hidden')) {
     updateClassOnClick(dashboardItemId, 'listitem-hidden', '');
   }
+
+  var items = ["customDashboardItem11", "customDashboardItem00", "customDashboardItem01", "customDashboardItem02", "customDashboardItem03"];
+  for(var j = 0; j < 5; j++) {
+    var visibleCount = 0;
+  
+    for(var i = 0; i < j; i++) {
+      visibleCount += (hasClass(document.getElementById(items[i]), 'listitem-hidden') ? 0 : 1);
+    }
+  
+    var margin = "margin-left: 0px";
+    if(visibleCount == 1 || visibleCount == 3) {
+      margin = "margin-left: 9px";
+    }
+    document.getElementById(items[i]).setAttribute('style', margin);
+  }
 }
 
 function getChartTooltipXFormat(period) {

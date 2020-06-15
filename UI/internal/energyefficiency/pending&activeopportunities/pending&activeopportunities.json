@@ -86,11 +86,11 @@ var ganttData = [
 			{name: "Site A", meters: [{identifier: 1234567890120}]},
 		], 
 		series: [
-			{ name: "Purchase Sub Meter", start: new Date(2020,02,05), end: new Date(2020,02,14) },
-			{ name: "Purchase LED Lights", start: new Date(2020,02,05), end: new Date(2020,02,14) },
-			{ name: "Install Sub Meter", start: new Date(2020,02,15), end: new Date(2020,02,15) },
-			{ name: "Receive Base Sub Meter Readings", start: new Date(2020,02,16), end: new Date(2020,03,15) },
-			{ name: "Install LED Lights", start: new Date(2020,03,16), end: new Date(2020,03,19) },
+			{ name: "Purchase Sub Meter", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Purchase LED Lights", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Install Sub Meter", start: new Date(2020,03,05), end: new Date(2020,03,05) },
+			{ name: "Receive Base Sub Meter Readings", start: new Date(2020,03,06), end: new Date(2020,04,05) },
+			{ name: "Install LED Lights", start: new Date(2020,04,06), end: new Date(2020,04,09) },
 		]
 	}
 ];

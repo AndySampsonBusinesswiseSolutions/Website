@@ -897,6 +897,12 @@ ul {
     padding-top: 5px; 
     padding-left: 5px;
 }
+.sidenav .expander-container {
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: white;
+}
 .fa-question-circle {
     margin-left: 5px;
     color: #bbb9cc;
@@ -905,7 +911,7 @@ ul {
     padding: 15px;
 }
 .final-column {
-    padding: 0px;
+    padding: 9px 0px 9px 9px;
 }
 .scrolling-wrapper {
     overflow-x: auto;
@@ -929,12 +935,6 @@ ul {
     background-color: #B82549;
     color: white;
 }
-.expander-container {
-    padding-top: 5px;
-    padding-left: 5px;
-    padding-right: 5px;
-    background-color: white;
-}
 .listitem-icon {
     padding-right: 3px;
 }
@@ -948,7 +948,11 @@ ul>li>input, .expander {
     width: 18px;
 }
 .outer-container {
-    padding-left: 9px;
+    background-color: white;
+}
+.pad-container {
+    margin-right: 9px; 
+    margin-bottom: 9px;
 }
 .tree-div {
     max-height: 400px;
@@ -997,22 +1001,18 @@ ul>li>input, .expander {
 }
 .tabDiv {
     border: solid black 1px;
-    border-top-left-radius: 5px; 
-    border-top-right-radius: 5px;
     overflow: hidden;
     background-color: white;
 }
 .card {
     border: solid black 1px;
-    border-bottom-left-radius: 5px; 
-    border-bottom-right-radius: 5px; 
     display: none;
     padding: 5px 5px;
     border-top: none;
     background-color: white;
 }
 .tabDiv button {
-    background-color: lightgray;
+    background-color: #B82549;
     float: left;
     border: none;
     outline: none;
@@ -1035,7 +1035,6 @@ ul>li>input, .expander {
 }
 #drop-area {
     border: 2px dashed #ccc;
-    border-radius: 20px;
     padding: 5px;
 }
 #drop-area.highlight {
@@ -1066,7 +1065,6 @@ button {
     padding: 10px;
     background: #ccc;
     cursor: pointer;
-    border-radius: 5px;
     border: 1px solid #ccc;
     width: 100%;
     text-align: center;

@@ -26,10 +26,10 @@
 		<div id="mainContainer">
             <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
             <div class="final-column">
-                <div class="divcolumn dashboard">
+                <div class="pad-container">
                     <div class="expander-header">
                         <span>Identified Opportunities</span>
-                        <i id="identifiedOpportunities" class="far fa-plus-square show-pointer expander openExpander"></i>
+                        <i id="identifiedOpportunities" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
                     </div>
                     <div id="identifiedOpportunitiesList">
                         <div style="text-align: right;">
@@ -42,16 +42,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="divcolumn expander-container dashboard">
+                <div class="pad-container expander-container ">
                     <div class="expander-header">
                         <span>Create New Opportunity</span>
-                        <i id="createNewOpportunity" class="far fa-plus-square show-pointer expander openExpander"></i>
+                        <i id="createNewOpportunity" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
                     </div>
                     <div id="createNewOpportunityList">
                     <div>
                         <div class="expander-container">
                             <div style="float: left;">
-                                <div class="tree-div roundborder" style="padding: 5px; text-align: right;">
+                                <div class="tree-div" style="padding: 5px; text-align: right;">
                                     <label for="opportunityType">Select Opportunity Type:</label>
                                     <select id="opportunityType" style="width:46%;">
                                         <option value="Custom">Custom</option>
@@ -284,7 +284,7 @@
                                 <button class="show-pointer approve" style="width: 48%;">Add Opportunity</button>&nbsp;
                                 <button class="show-pointer reject" style="width: 48%;">Reset Opportunity</button>
                                 <br><br>
-                                <div class="roundborder" style="text-align: center; float: left;">
+                                <div style="text-align: center; float: left;">
                                     <span style="border-bottom: solid black 1px;">Estimated Savings<br></span>
                                     <br>
                                     <div style="padding: 5px;">
@@ -296,7 +296,7 @@
                             </div>
                             <div class="middle" style="float: right;"></div>
                             <div style="float: right; width: 25%;">
-                                <div class="tree-div roundborder" style="padding: 5px;">
+                                <div class="tree-div" style="padding: 5px;">
                                     <label for="opportunityNotes">Notes:</label>
                                     <textarea id="opportunityNotes" style="height: 15%; resize: none;"></textarea>
                                 </div>
@@ -305,7 +305,7 @@
                     </div>
                     <div style="clear: both;"></div>
                     <div class="expander-container">
-                        <div class="roundborder" style="text-align: center; float: left; width: 100%;">
+                        <div style="text-align: center; float: left; width: 100%;">
                             <div style="padding: 5px;">
                                 <label for="applyPercentage">Percentage Saving</label>
                                 <input id="applyPercentage"></input>

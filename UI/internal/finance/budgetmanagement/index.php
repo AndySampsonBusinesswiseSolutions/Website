@@ -27,8 +27,8 @@
 	</div>
 	<div id="outerContainer">
 		<div id="mainContainer">
-		<div class="section-header">
-				<div id="mySidenav" class="sidenav" style="display: none;">
+			<div class="section-header">
+				<div id="mySidenav" class="sidenav">
 					<div class="header">
 						<button class="closebtn" onclick="closeNav()">Close</button>
 						<i class="fas fa-filter sidenav-icon-close"></i>
@@ -38,7 +38,7 @@
 							<div id="budgetList" class="tree-div">
 								<div class="expander-header">
 									<span id="budgetSelectorSpan">Budget</span>
-									<i id="budgetSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="budgetSelector" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 								</div>
 								<div id="budgetSelectorList" class="expander-container">
 									<ul class="format-listitem listItemWithoutPadding">
@@ -80,9 +80,9 @@
 							<div class="tree-div scrolling-wrapper">
 								<div class="expander-header">
 									<span id="commoditySelectorSpan">Commodity</span>
-									<i id="commoditySelector" class="far fa-plus-square expander show-pointer"></i>
+									<i id="commoditySelector" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 								</div>
-								<div id="commoditySelectorList" class="expander-container listitem-hidden">
+								<div id="commoditySelectorList" class="expander-container">
 									<div style="width: 45%; text-align: center; float: left;">
 										<span>Electricity</span>
 										<label class="switch"><input type="checkbox" id="electricityCommoditycheckbox" checked onclick='setupPage();'></input><div class="switch-btn"></div></label>
@@ -98,7 +98,7 @@
 							<div class="tree-div scrolling-wrapper">
 								<div class="expander-header">
 									<span id="configureLocationSelectorSpan">Location Visibility</span>
-									<i id="configureLocationSelector" class="far fa-plus-square expander show-pointer openExpander"></i>
+									<i id="configureLocationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 								</div>
 								<div id="configureLocationSelectorList" class="expander-container">
 									<div style="width: 45%; text-align: center; float: left;">
@@ -134,7 +134,7 @@
 							<div id="timePeriodList" class="tree-div">
 								<div class="expander-header">
 									<span id="timePeriodSelectorSpan">Time Period</span>
-									<i id="timePeriodSelector" class="far fa-plus-square expander show-pointer"></i>
+									<i id="timePeriodSelector" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 								</div>
 								<div id="timePeriodSelectorList" class="slider-list expander-container">
 									<ul class="format-listitem listItemWithoutPadding">
@@ -162,7 +162,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="pageLoad(false); resetSliders()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -170,17 +170,17 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i class="far fa-question-circle show-pointer" title="Budgets can be managed using the 'Filter' icon on the left-hand side"></i></div>
 			</div>
 			<div class="final-column">
-				<div id="overlay" style="display: none;">
+				<div id="overlay">
 				</div>
-				<div class="dashboard outer-container">
+				<div class="pad-container outer-container">
 					<div class="expander-header">
 						<span>Create\Review Budget</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="createReviewBudget"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Budget To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Budget"></i>
+						<i id="createReviewBudget" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 					</div>
 					<div id="createReviewBudgetList" class="expander-container">
-						<div id="createReviewBudgetDetailDiv" class="tree-div roundborder" style="width: 22%; float: left; margin-right: 1%;">
+						<div id="createReviewBudgetDetailDiv" class="tree-div" style="width: 22%; float: left; margin-right: 1%; margin-top: 9px;">
 							<label for="createReviewBudgetName" style="width: 75px; text-align: right;">Name: </label>
 							<input id="createReviewBudgetName" style="width: calc(100% - 80px);"></input><br>
 							<label for="createReviewBudgetBaseType" style="width: 75px; text-align: right;">Base Type: </label>
@@ -204,7 +204,7 @@
 							</select><br><br>
 							<button class="reject show-pointer" style="width: calc(45%); margin-right: calc(10%);">Reset Budget</button><button class="approve show-pointer" style="width: calc(45%);">Save Budget</button>
 						</div>
-						<div id="createReviewBudgetAdjustAreaDiv" class="tree-div scrolling-wrapper" style="width: 56%; float: left; margin-right: 1%;">
+						<div id="createReviewBudgetAdjustAreaDiv" class="tree-div scrolling-wrapper" style="width: 56%; float: left; margin-right: 1%; margin-top: 9px;">
 							<label for="createReviewBudgetAdjustArea">Adjust </label>
 							<select id="createReviewBudgetAdjustArea">
 								<option value="">Select Option</option>
@@ -227,36 +227,38 @@
 							<input type="date" id="createReviewBudgetAdjustDateFrom"></input>
 							<label for="createReviewBudgetAdjustDateTo">and</label>
 							<input type="date" id="createReviewBudgetAdjustDateTo"></input>
-							<button class="show-pointer roundborder" title="Add Adjustment">+</button>
+							<button class="show-pointer" title="Add Adjustment">+</button>
 							<br>
-							<div class="expander-header">
+							<div class="expander-header" style="margin-top: 9px;">
 								<span>Budget Adjustments</span>
-								<i id="createReviewBudgetAdjustments" class="far fa-plus-square show-pointer expander"></i>
+								<i id="createReviewBudgetAdjustments" class="far fa-plus-square expander-container-control show-pointer" style="float: right;"></i>
 							</div>
 							<div id="createReviewBudgetAdjustmentsList" class="datagrid listitem-hidden expander-container" style="overflow: auto;">
 								<div id="adjustmentsSpreadsheet"></div>
 							</div>				
 						</div>
-						<div id="createReviewBudgetTreeDiv" class="tree-div scrolling-wrapper" style="float: right; width: 20%;">
+						<div id="createReviewBudgetTreeDiv" class="tree-div scrolling-wrapper" style="float: right; width: 20%; margin-top: 9px;">
 						</div>
 						<div style="clear: both;"></div>
-						<div class="dashboard expander-container">
-							<div class="expander-header">
-								<span>Charts</span>
-								<i class="far fa-plus-square show-pointer expander openExpander" id="charts"></i>
-							</div>
-							<div id="chartsList" class="expander-container">
-								<div id="leftHandChartDiv" class="chart" style="float: left;">
-									<div id="leftHandChart">
-									</div>
-								</div>
-								<div id="rightHandChartDiv" class="chart" style="float: right;">
-									<div id="rightHandChart">
-									</div>
-								</div>
-							</div>			
-							<div style="clear: left;"></div>
+					</div>
+				</div>
+				<div class="pad-container outer-container">
+					<div class=" expander-container">
+						<div class="expander-header">
+							<span>Charts</span>
+							<i id="charts" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 						</div>
+						<div id="chartsList" class="expander-container">
+							<div id="leftHandChartDiv" class="chart" style="float: left;">
+								<div id="leftHandChart">
+								</div>
+							</div>
+							<div id="rightHandChartDiv" class="chart" style="float: right;">
+								<div id="rightHandChart">
+								</div>
+							</div>
+						</div>			
+						<div style="clear: left;"></div>
 					</div>
 				</div>
 			</div>
@@ -269,7 +271,6 @@
 <script type="text/javascript" src="/includes/jexcel/jexcel.js"></script>
 <script type="text/javascript" src="/includes/jsuites/jsuites.js"></script>
 <link rel="stylesheet" href="/includes/rzslider/rzslider.css" />
-<link data-require="bootstrap@3.3.7" data-semver="3.3.7" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 <script data-require="angular.js@1.6.0" data-semver="1.6.0" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.js"></script>
 <script data-require="ui-bootstrap@*" data-semver="2.2.0" src="https://cdn.rawgit.com/angular-ui/bootstrap/gh-pages/ui-bootstrap-tpls-2.2.0.js"></script>
 <script src="/includes/rzslider/rzslider.js"></script>
@@ -278,7 +279,7 @@
 <script type="text/javascript" src="/includes/apexcharts/apexcharts.js"></script>
 <script type="text/javascript" src="budgetmanagement.json"></script>
 <script type="text/javascript"> 
-	pageLoad();
+	pageLoad(true);
 </script>
 
 <?php include($_SERVER['DOCUMENT_ROOT']."/includes/footer/footer.php");?>

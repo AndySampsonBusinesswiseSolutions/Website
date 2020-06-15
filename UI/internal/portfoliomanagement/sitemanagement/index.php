@@ -62,7 +62,7 @@
 					</div>
 					<div class="tree-column">
 						<div style="float: left;">	
-							<div id="siteTree" class="tree-div dashboard roundborder">
+							<div id="siteTree" class="tree-div ">
 							</div>
 							<button style="width: 100%;" onclick="displayUploadUsage();">Upload Usage</button><br><br>
 							<button style="width: 100%;" onclick='deleteLocations()'>Delete Selected Locations</button><br><br>
@@ -89,7 +89,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="resetPage()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -99,7 +99,7 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div class="outer-container">
+				<div class="pad-container outer-container">
 					<div class="tabDiv" id="tabDiv"></div>
 					<div id="cardDiv"></div>
 				</div>

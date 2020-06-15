@@ -31,14 +31,14 @@
 						<i class="fas fa-filter sidenav-icon-close"></i>
 					</div>
 					<div class="tree-column">
-						<div id="userTree" class="tree-div dashboard roundborder">
+						<div id="userTree" class="tree-div ">
 						</div>
 						<button style="width: 100%;" onclick='deleteUsers()'>Delete Selected Users</button><br><br>
 						<button style="width: 100%;" onclick='reinstateUsers()'>Reinstate Deleted Users</button><br>
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="resetPage()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-				<div class="outer-container">
+				<div class="pad-container outer-container">
 					<div class="tabDiv" id="tabDiv"></div>
 					<div id="cardDiv"></div>
 				</div>

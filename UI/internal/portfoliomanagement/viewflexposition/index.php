@@ -23,7 +23,7 @@
 					<div class="tree-column">
             <div class="expander-header">
               <span id="commoditySelectorSpan">Commodity</span>
-              <i id="commoditySelector" class="far fa-plus-square expander openExpander show-pointer"></i>
+              <i id="commoditySelector" class="far fa-plus-square expander openExpander show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
             </div>
             <div id="commoditySelectorList" class="expander-container scrolling-wrapper">
               <div style="width: 45%; text-align: center; float: left;">
@@ -38,7 +38,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="pageLoad(true)">Reset To Default</button>
+						<button class="resetbtn" onclick="resetPage()">Reset To Default</button>
 						<button class="applybtn" onclick="closeNav()">Done</button>
 					</div>
 				</div>
@@ -48,12 +48,12 @@
       <div class="final-column">
 				<div id="overlay" style="display: none;">
 				</div>
-        <div id="electricityVolumeContainer" class="dashboard expander-container outer-container">
+        <div id="electricityVolumeContainer" class="pad-container expander-container outer-container">
           <div class="expander-header">
             <span>Electricity</span>
-            <i id="electricityVolume" class="far fa-plus-square show-pointer expander openExpander"></i>
             <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Electricity Flex To Download Basket"></i>
             <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Electricity Flex"></i>
+            <i id="electricityVolume" class="far fa-plus-square expander-container-control openExpander show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
           </div>
           <div id="electricityVolumeList" class="expander-container">
             <div id="leftHandChartDiv" class="chart" style="float: left;">
@@ -63,10 +63,10 @@
               <div id="electricityPriceChart"></div>
             </div>
             <div style="clear: both;"></div>
-            <div id="electricityDataContainer" class="dashboard expander-container outer-container">
+            <div id="electricityDataContainer" class="expander-container outer-container" style="margin-top: 24px;">
               <div class="expander-header">
                 <span>Electricity Data</span>
-                <i id="electricityData" class="far fa-plus-square show-pointer expander"></i>
+                <i id="electricityData" class="far fa-plus-square expander-container-control show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
               </div>
               <div id="electricityDataList" class="expander-container listitem-hidden" style="text-align: center;">
                 <div id="spreadsheet3" class="expander-container"></div>
@@ -75,12 +75,12 @@
             </div>
           </div>			
         </div>
-        <div id="gasVolumeContainer" class="dashboard expander-container outer-container">
+        <div id="gasVolumeContainer" class="pad-container expander-container outer-container">
           <div class="expander-header">
             <span>Gas</span>
-            <i id="gasVolume" class="far fa-plus-square show-pointer expander"></i>
             <i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Gas Flex To Download Basket"></i>
             <i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Gas Flex"></i>
+            <i id="gasVolume" class="far fa-plus-square expander-container-control show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
           </div>
           <div id="gasVolumeList" class="expander-container listitem-hidden">
             <div id="leftHandChartDiv" class="chart" style="float: left;">
@@ -90,10 +90,10 @@
               <div id="gasPriceChart"></div>
             </div>
             <div style="clear: both;"></div>
-            <div id="gasDataContainer" class="dashboard expander-container outer-container">
+            <div id="gasDataContainer" class="expander-container outer-container" style="margin-top: 24px;">
               <div class="expander-header">
                 <span>Gas Data</span>
-                <i id="gasData" class="far fa-plus-square show-pointer expander"></i>
+                <i id="gasData" class="far fa-plus-square expander-container-control show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
               </div>
               <div id="gasDataList" class="expander-container listitem-hidden" style="text-align: center;">
                 <div id="spreadsheet5" class="expander-container"></div>

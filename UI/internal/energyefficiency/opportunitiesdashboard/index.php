@@ -22,7 +22,7 @@
 			<br>
 			<div>Estimated Annual Savings:</div><span id="approveRejectOpportunityEstimatedAnnualSavings"></span><br><br>
 			<label id="approveRejectOpportunityNotesLabel" style="display: none;" for="approveRejectOpportunityNotes">Please let us know why this opportunity is being rejected:</label><br>
-			<textarea id="approveRejectOpportunityNotes" name="approveRejectOpportunityNotes" class="roundborder" style="display: none;"></textarea><br><br>
+			<textarea id="approveRejectOpportunityNotes" name="approveRejectOpportunityNotes" style="display: none;"></textarea><br><br>
 			<input type="submit" style="float: right;" id="approveRejectOpportunitySubmit" onclick="approveRejectOpportunity();"></input>
 		</div>
 	</div>
@@ -34,18 +34,18 @@
 			</div>
 			<br>
 			<form action="" onsubmit="requestVisit(); return false;">
-				<div class="requiredMessage roundborder" id="requestVisitSiteRequiredMessage"><i class="fas fa-exclamation-circle">Please select a site below</i></div>
-				<div id="requestVisitSiteDiv" class="tree-div roundborder">
+				<div class="requiredMessage" id="requestVisitSiteRequiredMessage"><i class="fas fa-exclamation-circle">Please select a site below</i></div>
+				<div id="requestVisitSiteDiv" class="tree-div">
 				</div>
 				<br>
-				<div class="requiredMessage roundborder" id="requestVisitVisitDateRequiredMessage"></div>
+				<div class="requiredMessage" id="requestVisitVisitDateRequiredMessage"></div>
 				<label for="requestVisitVisitDate">Select Visit Date:</label>
 				<input type="date" id="requestVisitVisitDate" name="visitDate"></input>
 				<br>
 				<br>
 				<label for="requestVisitNotes">Enter Notes:</label>
 				<br>
-				<textarea id="requestVisitNotes" name="requestVisitNotes" class="roundborder" title="Enter any notes you would like associated with this visit:"></textarea>
+				<textarea id="requestVisitNotes" name="requestVisitNotes" title="Enter any notes you would like associated with this visit:"></textarea>
 				<br>
 				<br>
 				<input type="submit" style="float: right;" id="requestVisitSubmit"></input>
@@ -104,29 +104,27 @@
 		<div id="mainContainer">
 			<div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
 			<div class="final-column" style="text-align: center;">
-				<div class="divcolumn dashboard outer-container">
+				<div class="divcolumn pad-container outer-container">
 					<div class="expander-header">
 						<span>Opportunities Summary</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="opportunitiesSummary"></i>
+						<i id="opportunitiesSummary" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
 					</div>
 					<div id="opportunitiesSummaryList" class="expander-container">
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="dashboard-item-small" style="background-color: #3b7e84; margin-right: 9px;">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span class="tooltip">Pending Opportunities<span class="tooltiptext">Opportunities that have been approved but have not yet started</span></span><br>
 							<span style="font-size: 15px;">Count: 10</span><br>
 							<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
 							<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
 						</a>
-						<div class="divider-column"></div>
-						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/Pending&ActiveOpportunities/" target="_blank" class="dashboard-item-small" style="background-color: #69566c; margin-right: 9px;">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span class="tooltip">Active Opportunities<span class="tooltiptext">Opportunities that have been approved and have started</span></span><br>
 							<span style="font-size: 15px;">Count: 2</span><br>
 							<span style="font-size: 15px;">Estimated kWh<br>Savings (pa): 10,000</span><br>
 							<span style="font-size: 15px;">Estimated £<br>Savings (pa): £10,000</span>
 						</a>
-						<div class="divider-column"></div>
-						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="dashboard-item-small">
+						<a href="/Internal/EnergyEfficiency/FinishedOpportunities/" target="_blank" class="dashboard-item-small" style="background-color: #97a3af; margin-right: 9px;">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span class="tooltip">Finished Opportunities<span class="tooltiptext">Opportunities that have been completed</span></span><br>
 							<span style="font-size: 15px;">Count: 5</span><br>
@@ -135,8 +133,7 @@
 							<span style="font-size: 11px;">kWh Savings over past 12 months: 10,000</span><br>
 							<span style="font-size: 11px;">£ Savings over past 12 months: £10,000</span>
 						</a>
-						<div class="divider-column"></div>
-						<div class="dashboard-item-small">
+						<div class="dashboard-item-small" style="background-color: #333333;">
 							<i class="fas fa-tools fa-4x" style="margin-top: 2px;"></i><br>
 							<span>Sub Meters</span><br><br><br>
 							<span style="font-size: 15px;">Installed: 1</span><br>
@@ -144,13 +141,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="divider-column"></div>
-				<div class="divcolumn dashboard outer-container" style="overflow: auto">
+				<div class="divcolumn pad-container outer-container" style="overflow: auto">
 					<div class="expander-header">
 						<span>Recommended Opportunities</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="recommendedOpportunities"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Recommended Opportunities To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Recommended Opportunities"></i>
+						<i id="recommendedOpportunities" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 					</div>
 					<div id="recommendedOpportunitiesList" class="expander-container">
 						<div class="divider-column"></div>
@@ -195,9 +191,9 @@
 								</div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column">
-									<button class="show-pointer approve" id="Project1Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
+									<button class="show-pointer approve" style="height: 36px;" id="Project1Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
 									&nbsp&nbsp&nbsp&nbsp
-									<button class="show-pointer reject" id="Project1Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
+									<button class="show-pointer reject" style="height: 36px;" id="Project1Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
 								</div>
 								<div class="divider-column"></div>
 								<div id="Project1Site1EstimatedAnnualSavings" class="opportunity-column">
@@ -214,9 +210,9 @@
 								</div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column">
-									<button class="show-pointer approve" id="Project1Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
+									<button class="show-pointer approve" style="height: 36px;" id="Project1Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
 									&nbsp&nbsp&nbsp&nbsp
-									<button class="show-pointer reject" id="Project1Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
+									<button class="show-pointer reject" style="height: 36px;" id="Project1Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
 								</div>
 								<div class="divider-column"></div>
 								<div id="Project1Site2EstimatedAnnualSavings" class="opportunity-column">
@@ -233,9 +229,9 @@
 								</div>
 								<div class="divider-column"></div>
 								<div class="opportunity-column">
-									<button class="show-pointer approve" id="Project1Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
+									<button class="show-pointer approve" style="height: 36px;" id="Project1Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
 									&nbsp&nbsp&nbsp&nbsp
-									<button class="show-pointer reject" id="Project1Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
+									<button class="show-pointer reject" style="height: 36px;" id="Project1Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
 								</div>
 								<div class="divider-column"></div>
 								<div id="Project1Site3EstimatedAnnualSavings" class="opportunity-column">
@@ -278,9 +274,9 @@
 									</div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column">
-										<button class="show-pointer approve" id="Project2Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
+										<button class="show-pointer approve" style="height: 36px;" id="Project2Site1ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site X Only</button>
 										&nbsp&nbsp&nbsp&nbsp
-										<button class="show-pointer reject" id="Project2Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
+										<button class="show-pointer reject" style="height: 36px;" id="Project2Site1RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site X Only</button>
 									</div>
 									<div class="divider-column"></div>
 									<div id="Project2Site1EstimatedAnnualSavings" class="opportunity-column">
@@ -299,9 +295,9 @@
 									</div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column">
-										<button class="show-pointer approve" id="Project2Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
+										<button class="show-pointer approve" style="height: 36px;" id="Project2Site2ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Y Only</button>
 										&nbsp&nbsp&nbsp&nbsp
-										<button class="show-pointer reject" id="Project2Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
+										<button class="show-pointer reject" style="height: 36px;" id="Project2Site2RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Y Only</button>
 									</div>
 									<div class="divider-column"></div>
 									<div id="Project2Site2EstimatedAnnualSavings" class="opportunity-column">
@@ -320,9 +316,9 @@
 									</div>
 									<div class="divider-column"></div>
 									<div class="opportunity-column">
-										<button class="show-pointer approve" id="Project2Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
+										<button class="show-pointer approve" style="height: 36px;" id="Project2Site3ApproveOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Approve<br>Site Z Only</button>
 										&nbsp&nbsp&nbsp&nbsp
-										<button class="show-pointer reject" id="Project2Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
+										<button class="show-pointer reject" style="height: 36px;" id="Project2Site3RejectOpportunityButton" onclick="openApproveRejectOpportunityPopup(this);">Reject<br>Site Z Only</button>
 									</div>
 									<div class="divider-column"></div>
 									<div id="Project2Site3EstimatedAnnualSavings" class="opportunity-column">
@@ -339,33 +335,32 @@
 				</div>
 			</div>
 			<div style="clear: both;"></div>
-			<br>
 			<div class="final-column">
-				<div class="divcolumn dashboard outer-container">
+				<div class="divcolumn pad-container outer-container">
 					<div class="expander-header">
 						<span>Site Visits</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="siteVisits"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Site Visits To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Site Visits"></i>
+						<i id="siteVisits" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 					</div>
 					<div id="siteVisitsList" class="expander-container">
-						<div class="divcolumn" style="margin-right: 2%;">
+						<div class="divcolumn" style="margin-top: 9px;">
 							<div class="expander-header">
 								<span>Future Site Visits</span>
-								<i class="far fa-plus-square show-pointer expander openExpander" id="futureSiteVisits"></i>
 								<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Future Site Visits To Download Basket"></i>
 								<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Future Site Visits"></i>
+								<i id="futureSiteVisits" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 							</div>
 							<div id="futureSiteVisitsList" class="expander-container" style="text-align: center;">
 								<div id="futureSiteVisitSpreadsheet"></div>
 							</div>
 						</div>
-						<div class="divcolumn">
+						<div class="divcolumn" style="float: right; margin-top: 9px;">
 							<div class="expander-header">
 								<span>Historical Site Visits</span>
-								<i class="far fa-plus-square show-pointer expander openExpander" id="historicalSiteVisits"></i>
 								<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Historical Site Visits To Download Basket"></i>
 								<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Historical Site Visits"></i>
+								<i id="historicalSiteVisits" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 							</div>
 							<div id="historicalSiteVisitsList" class="expander-container" style="text-align: center;">
 								<div id="historicalSiteVisitSpreadsheet"></div>
@@ -376,13 +371,12 @@
 						<button id="requestVisitButton" class="show-pointer" style="width: 50%; float: right;">Request Visit</button>
 					</div>
 				</div>
-				<div class="divider-column"></div>
-				<div class="divcolumn dashboard outer-container">
+				<div class="divcolumn pad-container outer-container">
 					<div class="expander-header">
 						<span>Site Ranking</span>
-						<i class="far fa-plus-square show-pointer expander openExpander" id="siteRanking"></i>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Site Ranking To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Site Ranking"></i>
+						<i id="siteRanking" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
 					</div>
 					<div id="siteRankingList" class="expander-container" style="text-align: center;">
 						<div id="siteRankingSpreadsheet"></div>

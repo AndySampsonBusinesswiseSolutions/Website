@@ -2,15 +2,6 @@ function pageLoad(){
 	createTree(billvalidation, "billTree", "createCardButton");
 	addExpanderOnClickEvents();
 	setOpenExpanders();
-
-	document.onmousemove = function(e) {
-		setupSidebarHeight();
-		setupSidebar(e);
-	};
-	
-	window.onscroll = function() {
-		setupSidebarHeight();
-	};
 }
 
 var subBranchCount = 0;
@@ -37,6 +28,24 @@ function createTree(baseData, divId, checkboxFunction) {
 	document.getElementById('Period13checkbox').checked = true;
 	createCardButton(document.getElementById('Period13checkbox'));
 	openTab(document.getElementById('Bill15button'), 'Bill15div', '15');
+}
+
+function resetTree() {
+	if(!document.getElementById('Period13checkbox').checked) {
+		document.getElementById('Period13checkbox').checked = true;
+		createCardButton(document.getElementById('Period13checkbox'));
+		openTab(document.getElementById('Bill15button'), 'Bill15div', '15');
+	}
+
+	if(document.getElementById('Period0checkbox').checked) {
+		document.getElementById('Period0checkbox').checked = false;
+		createCardButton(document.getElementById('Period0checkbox'));
+	}
+
+	if(document.getElementById('Period6checkbox').checked) {
+		document.getElementById('Period6checkbox').checked = false;
+		createCardButton(document.getElementById('Period6checkbox'));
+	}
 }
 
 function buildTree(baseData, baseElement, checkboxFunction) {
@@ -328,7 +337,9 @@ function updateTabDiv() {
 
 		for(var i = 0; i < tabDivChildrenLength; i++) {
 			if(hasClass(tabDivChildren[i], 'active')) {
-				cardDiv.style.display = '';
+				if(cardDiv) {
+					cardDiv.style.display = '';
+				}
 				return;
 			}
 		}
@@ -469,20 +480,19 @@ function buildBillChart(bill, divToAppendTo) {
 		},
 		legend: {
 			show: true,
-			showForSingleSeries: true,
+			showForSingleSeries: false,
 			showForNullSeries: true,
 			showForZeroSeries: true,
-			floating: false,
-			position: 'right',
+			position: 'top',
+			horizontalAlign: 'center', 
 			onItemClick: {
-				toggleDataSeries: true
+			  toggleDataSeries: true
 			},
-			width: 100,
-			offsetY: 150,
 			formatter: function(seriesName) {
-				return seriesName + '<br><br>';
+			  return seriesName;
 			}
-		},
+		  },
+		  colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
 		yaxis: [{
 			axisTicks: {
 				show: true
@@ -492,6 +502,11 @@ function buildBillChart(bill, divToAppendTo) {
 			},
 			forceNiceScale: true,
 			title: {
+				style: {
+					fontSize: '10px',
+					fontFamily: 'Helvetica, Arial, sans-serif',
+					fontWeight: 400,
+				  },
 				text: 'kWh Usage',
 			},
 			show: true,
