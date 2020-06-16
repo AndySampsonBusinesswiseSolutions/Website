@@ -79,7 +79,7 @@ namespace StoreLoginAttempt.api.Controllers
             var sourceTypeId = _informationMethods.SourceTypeId_GetBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
 
             //Get Source Id
-            var sourceId = _informationMethods.Source_GetBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var sourceId = _informationMethods.SourceId_GetBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
 
             //Store login attempt
             _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);

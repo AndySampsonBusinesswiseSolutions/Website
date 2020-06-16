@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using databaseInteraction;
 
 namespace commonMethods
 {
@@ -12,20 +11,35 @@ namespace commonMethods
         {
             public long SourceTypeId_GetBySourceTypeDescription(string sourceTypeDescription)
             {
+                //Get Source Type Id
+                var processDataTable = SourceType_GetBySourceTypeDescription(sourceTypeDescription);
+                return processDataTable.AsEnumerable()
+                            .Select(r => r.Field<long>("SourceTypeId"))
+                            .FirstOrDefault();
+            }
+
+            public long SourceId_GetBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
+            {
+                //Get Source Id
+                var processDataTable = Source_GetBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, sourceTypeEntityId);
+                return processDataTable.AsEnumerable()
+                            .Select(r => r.Field<long>("SourceId"))
+                            .FirstOrDefault();
+            }
+
+            private DataTable SourceType_GetBySourceTypeDescription(string sourceTypeDescription)
+            {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
                 {
                     new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = sourceTypeDescription}
                 };
 
-                //Get Source Type Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureInformationEnums.SourceType_GetBySourceTypeDescription, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("SourceTypeId"))
-                            .FirstOrDefault();
+                //Execute stored procedure
+                return _databaseInteraction.Get(_storedProcedureInformationEnums.SourceType_GetBySourceTypeDescription, sqlParameters);
             }
 
-            public long Source_GetBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
+            private DataTable Source_GetBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -34,11 +48,8 @@ namespace commonMethods
                     new SqlParameter {ParameterName = "@SourceTypeEntityId", SqlValue = sourceTypeEntityId}
                 };
 
-                //Get Source Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureInformationEnums.Source_GetBySourceTypeIdAndSourceTypeEntityId, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("SourceId"))
-                            .FirstOrDefault();
+                //Execute stored procedure
+                return _databaseInteraction.Get(_storedProcedureInformationEnums.Source_GetBySourceTypeIdAndSourceTypeEntityId, sqlParameters);
             }
         }
     }

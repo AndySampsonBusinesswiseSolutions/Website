@@ -19,7 +19,7 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[ProcessQueue_Insert]
-	@GUID UNIQUEIDENTIFIER,
+	@ProcessQueueGUID UNIQUEIDENTIFIER,
     @UserGUID UNIQUEIDENTIFIER,
     @SourceTypeDescription VARCHAR(255),
     @APIGUID UNIQUEIDENTIFIER,
@@ -29,6 +29,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-16 -> Andrew Sampson -> Updated @GUID to @ProcessQueueGUID to start matching code variable names
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -51,7 +52,7 @@ BEGIN
         )
     VALUES  
         (
-            @GUID,
+            @ProcessQueueGUID,
             @UserId,
             @SourceId,
             @APIId,

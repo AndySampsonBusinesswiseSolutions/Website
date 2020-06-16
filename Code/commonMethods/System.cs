@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace commonMethods
 {
@@ -268,17 +269,10 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public void ProcessQueue_Insert(string queueGUID, string userGUID, string source, string apiGUID, bool hasError = false)
+            public void ProcessQueue_Insert(string processQueueGUID, string userGUID, string sourceTypeDescription, string APIGUID, bool hasError = false)
             {
                 //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@GUID", SqlValue = queueGUID},
-                    new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
-                    new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = source},
-                    new SqlParameter {ParameterName = "@APIGUID", SqlValue = apiGUID},
-                    new SqlParameter {ParameterName = "@HasError", SqlValue = Convert.ToByte(hasError)}
-                };
+                var sqlParameters = CreateSqlParameters(MethodBase.GetCurrentMethod(), processQueueGUID, userGUID, sourceTypeDescription, APIGUID, hasError);
 
                 //Execute stored procedure
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Insert, sqlParameters);
