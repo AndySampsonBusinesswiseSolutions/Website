@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockUser.api", "LockUser.ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "enums", "enums\enums.csproj", "{26A5ECDE-BBBA-42ED-8CB9-D3AB0EB00E14}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "commonMethods", "commonMethods\commonMethods.csproj", "{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -198,5 +200,17 @@ Global
 		{26A5ECDE-BBBA-42ED-8CB9-D3AB0EB00E14}.Release|x64.Build.0 = Release|Any CPU
 		{26A5ECDE-BBBA-42ED-8CB9-D3AB0EB00E14}.Release|x86.ActiveCfg = Release|Any CPU
 		{26A5ECDE-BBBA-42ED-8CB9-D3AB0EB00E14}.Release|x86.Build.0 = Release|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Debug|x64.Build.0 = Debug|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Release|x64.ActiveCfg = Release|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Release|x64.Build.0 = Release|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A3907B4-0357-4C4F-AEDE-7ACF6A713D2E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,6 +1,6 @@
 namespace enums
 {
-    public partial class CommonEnums
+    public partial class Enums
     {
         public class Administration
         {
