@@ -33,12 +33,12 @@ div.ganttview {
 /* Horizontal Header */
 
 div.ganttview-hzheader-month {
-	border-left: 1px solid #d0d0d0;
+	border-right: 1px solid #d0d0d0;
 }
 
 div.ganttview-hzheader{
 	height: 20px;
-	border-left: 1px solid #d0d0d0;
+	/* border-left: 1px solid #d0d0d0; */
 	line-height: 20px;
 }
 
@@ -114,17 +114,16 @@ div.ganttview-grid-row-cell.ganttview-today {
 /* Blocks */
 
 div.ganttview-blocks {
-	margin-top: 20px;
+	margin-top: 25px;
 }
 
 div.ganttview-block-container {
-	height: 50px;
-	padding-top: 4px;
+	height: 51px;
 }
 
 div.ganttview-block {
 	position: relative;
-	height: 40px;
+	height: 41px;
 	background-color: #E5ECF9;
 	border: 1px solid #c0c0c0;
 	border-radius: 10px;

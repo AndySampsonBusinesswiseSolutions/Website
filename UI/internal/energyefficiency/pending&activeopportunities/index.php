@@ -105,14 +105,14 @@
 						<div id="spreadsheet"></div>
 					</div>
 				</div>
-				<div class="pad-container outer-container tree-div expander-container">
+				<div class="pad-container outer-container expander-container">
 					<div class="expander-header">
 						<span>Chart</span>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Pending & Active Opportunities To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending & Active Opportunities"></i>
 						<i id="pendingAndActiveOpportunities" class="far fa-plus-square expander show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
-					<div id="pendingAndActiveOpportunitiesList" class="expander-container srolling-wrapper">
+					<div id="pendingAndActiveOpportunitiesList" class="expander-container">
 						<div id="ganttChart"></div>
 					</div>
 				</div>
