@@ -14,11 +14,8 @@ namespace LockUser.api.Controllers
     public class LockUserController : ControllerBase
     {
         private readonly ILogger<LockUserController> _logger;
-        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Mapping _mappingMethods = new CommonMethods.Mapping();
-        private readonly CommonMethods.UserDetail _userDetailMethods = new CommonMethods.UserDetail();
-        private readonly CommonMethods.Password _passwordMethods = new CommonMethods.Password();
-        private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
@@ -43,23 +40,23 @@ namespace LockUser.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+            _systemMethods.ProcessQueue_Insert(_databaseInteraction, 
                 queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated, 
                 _systemAPIGUIDEnums.LockUserAPI);
 
             //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
+            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
             //Build JObject
-            var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
+            var apiData = _systemMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
             apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.LockUserAPI);
             
             //Call CheckPrerequisiteAPI API
-            var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
+            var processTask = _systemMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
-                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
+                        _systemMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
                         apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
             var result = processTaskResponse.Content.ReadAsStringAsync(); //TODO: Make into common method
@@ -73,8 +70,8 @@ namespace LockUser.api.Controllers
             {
                 //Get User Id
                 var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
-                var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
+                var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
+                var userId = _administrationMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
 
                 //Get logins by user id and order by descending
                 var loginList = _mappingMethods.Login_GetByUserId(_databaseInteraction, userId).OrderByDescending(l => l);
@@ -101,7 +98,7 @@ namespace LockUser.api.Controllers
                 }
 
                 //Get maximum attempts allowed before locking
-                var maximumInvalidAttempts = _apiMethods.GetAPIDetailByAPIGUID(_databaseInteraction, 
+                var maximumInvalidAttempts = _systemMethods.GetAPIDetailByAPIGUID(_databaseInteraction, 
                     _systemAPIGUIDEnums.LockUserAPI, 
                     _systemAPIAttributeEnums.MaximumInvalidLoginAttempts)
                     .Select(a => Convert.ToInt64(a))
@@ -113,7 +110,7 @@ namespace LockUser.api.Controllers
                 if(!isAttemptValid)
                 {
                     //Lock account by adding 'Account Locked' to user detail
-                    _userDetailMethods.UserDetail_Insert(_databaseInteraction, 
+                    _administrationMethods.UserDetail_Insert(_databaseInteraction, 
                         _administrationUserGUIDEnums.System, 
                         _informationSourceTypeEnums.UserGenerated, 
                         "Account Locked", 
@@ -121,12 +118,12 @@ namespace LockUser.api.Controllers
                 }
 
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.LockUserAPI, !isAttemptValid);
+                _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.LockUserAPI, !isAttemptValid);
             }
             else
             {
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.LockUserAPI, false);
+                _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.LockUserAPI, false);
             }
         }
     }

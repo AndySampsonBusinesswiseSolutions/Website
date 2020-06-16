@@ -14,9 +14,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
     public class CheckPrerequisiteAPIController : ControllerBase
     {
         private readonly ILogger<CheckPrerequisiteAPIController> _logger;
-        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private readonly CommonMethods.Page _pageMethods = new CommonMethods.Page();
-        private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
@@ -48,7 +46,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             {
                 //Get prerequisite APIs from database
                 var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-                prerequisiteAPIs = _apiMethods.GetAPIDetailByAPIGUID(_databaseInteraction, callingGUID, _systemAPIAttributes.PrerequisiteAPIGUID);
+                prerequisiteAPIs = _systemMethods.GetAPIDetailByAPIGUID(_databaseInteraction, callingGUID, _systemAPIAttributes.PrerequisiteAPIGUID);
             }
 
             //Wait until prerequisite APIs have completed
@@ -65,8 +63,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
                     }
 
                     //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                    var apiId = _apiMethods.GetAPIIdByGUID(_databaseInteraction, prerequisiteAPI);
-                    var processQueueDataRow = _processMethods.ProcessQueue_GetByGUIDAndAPIId(_databaseInteraction, queueGUID, apiId);
+                    var apiId = _systemMethods.GetAPIIdByGUID(_databaseInteraction, prerequisiteAPI);
+                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByGUIDAndAPIId(_databaseInteraction, queueGUID, apiId);
 
                     if(processQueueDataRow != null)
                     {

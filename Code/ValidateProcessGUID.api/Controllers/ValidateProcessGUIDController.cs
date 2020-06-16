@@ -11,8 +11,7 @@ namespace ValidateProcessGUID.api.Controllers
     public class ValidateProcessGUIDController : ControllerBase
     {
         private readonly ILogger<ValidateProcessGUIDController> _logger;
-        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
@@ -37,7 +36,7 @@ namespace ValidateProcessGUID.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+            _systemMethods.ProcessQueue_Insert(_databaseInteraction, 
                 queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated, 
@@ -47,7 +46,7 @@ namespace ValidateProcessGUID.api.Controllers
             var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
 
             //Validate Process GUID
-            var processId = _processMethods.ProcessId_GetByGUID(_databaseInteraction, processGUID);
+            var processId = _systemMethods.ProcessId_GetByGUID(_databaseInteraction, processGUID);
 
             //If processId == 0 then the GUID provided isn't valid so create an error
             if(processId == 0)
@@ -56,7 +55,7 @@ namespace ValidateProcessGUID.api.Controllers
             }
 
             //Update Process Queue
-            _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidateProcessGUIDAPI, processId == 0);
+            _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidateProcessGUIDAPI, processId == 0);
 
             return processId;
         }

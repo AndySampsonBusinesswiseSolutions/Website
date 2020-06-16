@@ -14,9 +14,7 @@ namespace ValidatePageGUID.api.Controllers
     public class ValidatePageGUIDController : ControllerBase
     {
         private readonly ILogger<ValidatePageGUIDController> _logger;
-        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
-        private readonly CommonMethods.Page _pageMethods = new CommonMethods.Page();
-        private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
@@ -41,23 +39,23 @@ namespace ValidatePageGUID.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+            _systemMethods.ProcessQueue_Insert(_databaseInteraction, 
                 queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated, 
                 _systemAPIGUIDEnums.ValidatePageGUIDAPI);
 
             //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
+            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
             //Build JObject
-            var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
+            var apiData = _systemMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
             apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI);
             
             //Call CheckPrerequisiteAPI API
-            var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
+            var processTask = _systemMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
-                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
+                        _systemMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
                         apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
             var result = processTaskResponse.Content.ReadAsStringAsync();//TODO: Make into common method
@@ -73,7 +71,7 @@ namespace ValidatePageGUID.api.Controllers
                 var pageGUID = jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
 
                 //Validate Page GUID
-                var pageId = _pageMethods.PageId_GetByGUID(_databaseInteraction, pageGUID);
+                var pageId = _systemMethods.PageId_GetByGUID(_databaseInteraction, pageGUID);
 
                 //If pageId == 0 then the GUID provided isn't valid so create an error
                 if(pageId == 0)
@@ -82,12 +80,12 @@ namespace ValidatePageGUID.api.Controllers
                 }
 
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI, pageId == 0);
+                _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI, pageId == 0);
             }
             else
             {
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI, true);
+                _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI, true);
             }
         }
     }

@@ -14,11 +14,9 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
     public class ValidateEmailAddressPasswordMappingController : ControllerBase
     {
         private readonly ILogger<ValidateEmailAddressPasswordMappingController> _logger;
-        private readonly CommonMethods.API _apiMethods = new CommonMethods.API();
         private readonly CommonMethods.Mapping _mappingMethods = new CommonMethods.Mapping();
-        private readonly CommonMethods.UserDetail _userDetailMethods = new CommonMethods.UserDetail();
-        private readonly CommonMethods.Password _passwordMethods = new CommonMethods.Password();
-        private readonly CommonMethods.Process _processMethods = new CommonMethods.Process();
+        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
         private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
         private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
@@ -43,23 +41,23 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _processMethods.ProcessQueue_Insert(_databaseInteraction, 
+            _systemMethods.ProcessQueue_Insert(_databaseInteraction, 
                 queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated, 
                 _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
 
             //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _apiMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
+            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
 
             //Build JObject
-            var apiData = _apiMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
+            var apiData = _systemMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
             apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
             
             //Call CheckPrerequisiteAPI API
-            var processTask = _apiMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
+            var processTask = _systemMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
-                        _apiMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
+                        _systemMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
                         apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
             var result = processTaskResponse.Content.ReadAsStringAsync();//TODO: Make into common method
@@ -73,12 +71,12 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             {
                 //Get Password Id
                 var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
-                var passwordId = _passwordMethods.PasswordId_GetByPassword(_databaseInteraction, password);
+                var passwordId = _administrationMethods.PasswordId_GetByPassword(_databaseInteraction, password);
 
                 //Get User Id
                 var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _userDetailMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
-                var userId = _userDetailMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
+                var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
+                var userId = _administrationMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
 
                 //Validate Password and User combination
                 var mappingId = _mappingMethods.PasswordToUser_GetByPasswordIdAndUserId(_databaseInteraction, passwordId, userId);
@@ -90,12 +88,12 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                 }
 
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, mappingId == 0);
+                _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, mappingId == 0);
             }
             else
             {
                 //Update Process Queue
-                _processMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, true);
+                _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, true);
             }
         }
     }
