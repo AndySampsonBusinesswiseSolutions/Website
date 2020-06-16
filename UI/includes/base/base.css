@@ -932,7 +932,7 @@ ul {
 }
 .expander-header {
     text-align: center; 
-    background-color: #B82549;
+    background-color: lightslategray;
     color: white;
 }
 .listitem-icon {
@@ -958,10 +958,10 @@ ul>li>input, .expander {
     max-height: 400px;
 }
 .datagrid, .chart {
-    max-height: 650px;
+    max-height: 750px;
 }
 .chart {
-    min-height: 650px;
+    min-height: 750px;
     color: black;
 }
 .popup {
@@ -1012,7 +1012,7 @@ ul>li>input, .expander {
     background-color: white;
 }
 .tabDiv button {
-    background-color: #B82549;
+    background-color: lightslategray;
     float: left;
     border: none;
     outline: none;

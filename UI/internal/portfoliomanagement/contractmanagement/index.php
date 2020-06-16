@@ -113,7 +113,7 @@
 						<span>Active Contracts</span>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Active Contracts To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Active Contracts"></i>
-						<i id="activeContracts" class="far fa-plus-square expander-container-control openExpander show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
+						<i id="activeContracts" class="far fa-plus-square expander-container-control show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
 					<div id="activeContractsList" class="listitem-hidden tree-div expander-container">
 						<div id="active"></div>
@@ -124,7 +124,7 @@
 						<span>Pending Contracts</span>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Pending Contracts To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Pending Contracts"></i>
-						<i id="pendingContracts" class="far fa-plus-square expander-container-control openExpander show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
+						<i id="pendingContracts" class="far fa-plus-square expander-container-control show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
 					</div>
 					<div id="pendingContractsList" class="listitem-hidden tree-div expander-container">
 						<div id="pending"></div>

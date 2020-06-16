@@ -87,7 +87,7 @@
 				</div>
 				<div class="pad-container outer-container expander-container">
 					<div class="expander-header">
-						<span id="cumulativeSavingspan">Project Financials Chart</span>
+						<span id="cumulativeSavingspan" style="color: lightslategrey;">Project Financials Chart</span>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Cumulative Saving Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Cumulative Saving Chart"></i>
 						<i id="cumulativeSaving" class="far fa-plus-square expander-container-control show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
@@ -98,7 +98,7 @@
 				</div>
 				<div class="pad-container expander-container outer-container">
 					<div class="expander-header">
-						<span id="costSavingspan">Cost Saving Chart</span>
+						<span id="costSavingspan" style="color: lightslategrey;">Cost Saving Chart</span>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Cost Saving Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Cost Saving Chart"></i>
 						<i id="costSaving" class="far fa-plus-square expander-container-control show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>
@@ -109,7 +109,7 @@
 				</div>
 				<div class="pad-container expander-container outer-container">
 					<div class="expander-header">
-						<span id="volumeSavingspan">Volume Saving Chart</span>
+						<span id="volumeSavingspan" style="color: lightslategrey;">Volume Saving Chart</span>
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Volume Saving Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Volume Saving Chart"></i>
 						<i id="volumeSaving" class="far fa-plus-square expander-container-control show-pointer openExpander" style="margin-top: 3px; margin-right: 5px; float: right;"></i>

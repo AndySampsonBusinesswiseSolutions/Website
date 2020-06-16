@@ -362,7 +362,7 @@ function updateChart(callingElement, chart) {
           return seriesName;
         }
       },
-      colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
+      colors: ['#69566c', '#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
       series: newSeries,
       yaxis: [{
         axisTicks: {

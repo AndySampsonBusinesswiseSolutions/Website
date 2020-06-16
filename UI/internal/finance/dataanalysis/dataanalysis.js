@@ -734,10 +734,10 @@ function updateChartHeader(callingElement) {
 
   if(span.innerText == "Usage") {
     chartHeaderText = document.getElementById('consumptionUsageItemsUsageDisplaySelectorradio').checked 
-      ? 'Usage Chart' : 'Capacity Chart';
+      ? 'Usage' : 'Capacity';
   }
   else {
-    chartHeaderText = span.innerText + ' Chart';
+    chartHeaderText = span.innerText;
   }
 
   chartHeader.innerText = chartHeaderText;
@@ -1873,6 +1873,9 @@ function getChartOptions(categories, displayType, xAxisType, dateFormat) {
     chart: {
         type: getChartTypeFromCategoryCount(categories.length),
     },
+    title: {
+      text: chartHeaderSpan.innerText,
+    },
     yaxis: [{
       title: {
         style: {
@@ -1986,6 +1989,15 @@ function refreshChart(newSeries, displayType, chartOptions) {
         }
       }
     },
+    title: {
+      text: chartOptions.title.text,
+      align: 'center',
+      style: {
+        fontSize: '25px',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontWeight: 'normal',
+      }
+    },
     dataLabels: {
       enabled: false
     },
@@ -2003,7 +2015,7 @@ function refreshChart(newSeries, displayType, chartOptions) {
         return getLegendFormat(displayType, seriesName);
       },
     },
-    colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
+    colors: ['#69566c', '#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
     series: newSeries,
     yaxis: chartOptions.yaxis,
     xaxis: chartOptions.xaxis

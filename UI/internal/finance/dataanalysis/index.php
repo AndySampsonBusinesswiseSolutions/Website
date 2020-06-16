@@ -92,7 +92,7 @@
 				</div>
 				<div class="outer-container expander-container pad-container">
 					<div class="expander-header">
-						<span id="chartHeaderSpan">Usage Chart</span>						
+						<span style="color: lightslategrey;" id="chartHeaderSpan">Usage</span>						
 						<i class="fas fa-cart-arrow-down show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Add Chart To Download Basket"></i>
 						<i class="fas fa-download show-pointer" style="margin-top: 3px; margin-right: 5px; float: right;" title="Download Chart"></i>
 						<i id="chartHeader" class="far fa-plus-square expander-container-control openExpander show-pointer" style="float: right;"></i>
@@ -101,9 +101,9 @@
 						<div id="chart"></div>
 					</div>
 				</div>
-				<div class=" outer-container expander-container pad-container">
+				<div class="outer-container expander-container pad-container">
 					<div class="expander-header">
-						<span>Data</span>
+						<span style="color: lightslategrey;">Data</span>
 						<i id="dataHeader" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
 					</div>
 					<div id="dataHeaderList" class="datagrid scrolling-wrapper expander-container" style="overflow-x: auto;">

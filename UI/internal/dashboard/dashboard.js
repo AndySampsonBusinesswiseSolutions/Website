@@ -553,7 +553,7 @@ function loadUsageChart(checkBoxes) {
             rotateAlways: true,
             hideOverlappingLabels: true,
             style: {
-              fontSize: '10px',
+              fontSize: '9px',
               fontFamily: 'Helvetica, Arial, sans-serif',
               fontWeight: 400,
             },
@@ -657,7 +657,7 @@ function loadElectricityPriceChart() {
           rotateAlways: true,
           hideOverlappingLabels: true,
           style: {
-            fontSize: '10px',
+            fontSize: '9px',
             fontFamily: 'Helvetica, Arial, sans-serif',
             fontWeight: 400,
           },
@@ -676,7 +676,7 @@ function loadElectricityPriceChart() {
       forceNiceScale: true,
       labels: {
         formatter: function(val) {
-          return val.toLocaleString();
+          return preciseRound(val, 2).toLocaleString();
         }
       }
     }]
@@ -735,7 +735,7 @@ function loadElectricityUsageChart() {
             rotateAlways: true,
             hideOverlappingLabels: true,
             style: {
-              fontSize: '10px',
+              fontSize: '9px',
               fontFamily: 'Helvetica, Arial, sans-serif',
               fontWeight: 400,
             },
@@ -811,7 +811,7 @@ function loadGasPriceChart() {
                 rotateAlways: true,
                 hideOverlappingLabels: true,
                 style: {
-                  fontSize: '10px',
+                  fontSize: '9px',
                   fontFamily: 'Helvetica, Arial, sans-serif',
                   fontWeight: 400,
                 },
@@ -830,7 +830,7 @@ function loadGasPriceChart() {
             forceNiceScale: true,
             labels: {
               formatter: function(val) {
-                return val.toLocaleString();
+                return preciseRound(val, 2).toLocaleString();
               }
             }
           }]
@@ -877,7 +877,7 @@ function loadGasUsageChart() {
               rotateAlways: true,
               hideOverlappingLabels: true,
               style: {
-                fontSize: '10px',
+                fontSize: '9px',
                 fontFamily: 'Helvetica, Arial, sans-serif',
                 fontWeight: 400,
               },
@@ -1014,7 +1014,7 @@ function refreshChart(newSeries, chartId, chartOptions) {
         return seriesName;
       }
     },
-    colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
+    colors: ['#69566c', '#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
     series: newSeries,
     yaxis: chartOptions.yaxis,
     xaxis: chartOptions.xaxis

@@ -27,23 +27,22 @@
             <div class="section-header section-header-text"><?php echo $PAGE_TITLE ?></div>
             <div class="final-column">
                 <div class="pad-container">
-                    <div class="expander-header">
+                    <div class="expander-header" style="margin-bottom: 9px;">
                         <span>Identified Opportunities</span>
                         <i id="identifiedOpportunities" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
                     </div>
                     <div id="identifiedOpportunitiesList">
-                        <div style="text-align: right;">
-                            <button class="approve show-pointer">Submit Selected Opportunities</button>&nbsp;
-                            <button class="reject show-pointer">Reject Selected Opportunities</button>
-                        </div>
-                        <br>
                         <div style="text-align: center;">
                             <div id="identifiedOpportunitiesSpreadsheet"></div>
+                        </div>
+                        <div style="text-align: right; padding-right: 5px;">
+                            <button class="approve show-pointer" style="width: 182.969px; height: 35px;">Submit Selected Opportunities</button>&nbsp;
+                            <button class="reject show-pointer" style="width: 182.969px; height: 35px;">Reject Selected Opportunities</button>
                         </div>
                     </div>
                 </div>
                 <div class="pad-container expander-container ">
-                    <div class="expander-header">
+                    <div class="expander-header" style="margin-bottom: 9px;">
                         <span>Create New Opportunity</span>
                         <i id="createNewOpportunity" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
                     </div>
@@ -281,9 +280,6 @@
                             </div>
                             <div class="middle"></div>
                             <div style="float: right;">
-                                <button class="show-pointer approve" style="width: 48%;">Add Opportunity</button>&nbsp;
-                                <button class="show-pointer reject" style="width: 48%;">Reset Opportunity</button>
-                                <br><br>
                                 <div style="text-align: center; float: left;">
                                     <span style="border-bottom: solid black 1px;">Estimated Savings<br></span>
                                     <br>
@@ -292,6 +288,10 @@
                                         <span>Estimated Annual kWh Savings on Existing Devices: 10,000</span><br>
                                         <span>Estimated Annual £ Savings on Existing Devices: £1,000</span>
                                     </div>
+                                </div>
+                                <div style="margin-top: 158px;">
+                                    <button class="show-pointer approve" style="width: 182.969px; height: 35px;">Add Opportunity</button>&nbsp;
+                                    <button class="show-pointer reject" style="width: 182.969px; height: 35px;">Reset Opportunity</button>
                                 </div>
                             </div>
                             <div class="middle" style="float: right;"></div>

@@ -211,6 +211,9 @@ function setupCharts() {
       type: 'bar',
       stacked: true
     },
+    title: {
+      text: 'Reference Volumes'
+    },
     tooltip: {
         x: {
         format: getChartTooltipXFormat("Yearly")
@@ -256,6 +259,9 @@ function setupCharts() {
     chart: {
       type: 'line',
       stacked: false
+    },
+    title: {
+      text: 'Wholesale Prices'
     },
     tooltip: {
         x: {
@@ -343,6 +349,9 @@ function setupCharts() {
         type: 'bar',
       stacked: true
     },
+    title: {
+      text: 'Reference Volumes'
+    },
     tooltip: {
         x: {
         format: getChartTooltipXFormat("Yearly")
@@ -388,6 +397,9 @@ function setupCharts() {
     chart: {
       type: 'line',
       stacked: false
+    },
+    title: {
+      text: 'Wholesale Prices'
     },
     tooltip: {
         x: {
@@ -503,6 +515,15 @@ function refreshChart(newSeries, chartId, chartOptions) {
           }
         }
       },
+      title: {
+        text: chartOptions.title.text,
+        align: 'center',
+        style: {
+          fontSize: '25px',
+          fontFamily: 'Arial, Helvetica, sans-serif',
+          fontWeight: 'normal',
+        }
+      },
       dataLabels: {
         enabled: false
       },
@@ -525,7 +546,7 @@ function refreshChart(newSeries, chartId, chartOptions) {
           return seriesName;
         }
       },
-      colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
+      colors: ['#69566c', '#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
       series: newSeries,
       yaxis: chartOptions.yaxis,
       xaxis: chartOptions.xaxis

@@ -399,7 +399,7 @@ function buildBillChart(bill, divToAppendTo) {
 
 	var containerDivIcon = document.createElement('i');
 	containerDivIcon.id = 'billChart';
-	containerDivIcon.setAttribute('class', 'far fa-plus-square show-pointer');
+	containerDivIcon.setAttribute('class', 'far fa-plus-square expander-container-control openExpander show-pointer');
 	containerDivIcon.setAttribute('style', 'margin-left: 5px;');
 	containerDiv.appendChild(containerDivIcon);
 
@@ -475,7 +475,7 @@ function buildBillChart(bill, divToAppendTo) {
 			enabled: false
 		},
 	  	title: {
-			text: 'Expected Usage v Actual Usage',
+			text: 'Usage - Expected v Actual',
 			align: 'center'
 		},
 		legend: {
@@ -492,7 +492,7 @@ function buildBillChart(bill, divToAppendTo) {
 			  return seriesName;
 			}
 		  },
-		  colors: ['#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
+		  colors: ['#69566c', '#61B82E', '#1CB89D', '#3C6B20', '#851B1E', '#C36265', '#104A6B', '#B8B537', '#B8252A', '#0B6B5B'],
 		yaxis: [{
 			axisTicks: {
 				show: true
@@ -532,7 +532,7 @@ function buildBillChart(bill, divToAppendTo) {
 		name: "Actual Spend",
 		data: [getAttribute(bill.Details, "Actual Spend")]
 	  }]
-	secondaryChartOptions.title.text = 'Expected Spend v Actual Spend';
+	secondaryChartOptions.title.text = 'Spend - Expected v Actual';
 	secondaryChartOptions.legend.formatter = function(seriesName) {
 		return seriesName + '<br><br>';
 	}
