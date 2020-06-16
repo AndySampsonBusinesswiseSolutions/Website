@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using System.Collections.Generic;
-using databaseInteraction;
+using commonMethods;
+using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
@@ -14,17 +15,18 @@ namespace CheckPrerequisiteAPI.api.Controllers
     public class CheckPrerequisiteAPIController : ControllerBase
     {
         private readonly ILogger<CheckPrerequisiteAPIController> _logger;
+        private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
-        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
-        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
-        private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
-        private readonly CommonEnums.System.API.Attribute _systemAPIAttributes = new CommonEnums.System.API.Attribute();
-        private readonly CommonEnums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new CommonEnums.System.ProcessArchive.Attribute();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.CheckPrerequisiteAPIAPI, _systemAPIPasswordEnums.CheckPrerequisiteAPIAPI);
+        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
+        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.System.API.Attribute _systemAPIAttributes = new Enums.System.API.Attribute();
+        private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
 
         public CheckPrerequisiteAPIController(ILogger<CheckPrerequisiteAPIController> logger)
         {
             _logger = logger;
+            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CheckPrerequisiteAPIAPI, _systemAPIPasswordEnums.CheckPrerequisiteAPIAPI);
         }
 
         [HttpPost]
@@ -46,7 +48,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             {
                 //Get prerequisite APIs from database
                 var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-                prerequisiteAPIs = _systemMethods.GetAPIDetailByAPIGUID(_databaseInteraction, callingGUID, _systemAPIAttributes.PrerequisiteAPIGUID);
+                prerequisiteAPIs = _systemMethods.GetAPIDetailByAPIGUID(callingGUID, _systemAPIAttributes.PrerequisiteAPIGUID);
             }
 
             //Wait until prerequisite APIs have completed
@@ -63,8 +65,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
                     }
 
                     //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                    var apiId = _systemMethods.GetAPIIdByGUID(_databaseInteraction, prerequisiteAPI);
-                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByGUIDAndAPIId(_databaseInteraction, queueGUID, apiId);
+                    var apiId = _systemMethods.GetAPIIdByGUID(prerequisiteAPI);
+                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByGUIDAndAPIId(queueGUID, apiId);
 
                     if(processQueueDataRow != null)
                     {

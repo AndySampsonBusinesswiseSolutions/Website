@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using databaseInteraction;
 
 namespace commonMethods
 {
@@ -15,9 +14,9 @@ namespace commonMethods
     {
         public class System
         {
-            public HttpClient CreateAPI(DatabaseInteraction _databaseInteraction, long APIId)
+            public HttpClient CreateAPI(long APIId)
             {
-                var URL = GetAPIURLByAPIId(_databaseInteraction, APIId);
+                var URL = GetAPIURLByAPIId(APIId);
                 
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(URL);
@@ -25,10 +24,10 @@ namespace commonMethods
                 return client;
             }
 
-            public JObject GetAPIData(DatabaseInteraction _databaseInteraction, long APIId, JObject jsonObject)
+            public JObject GetAPIData(long APIId, JObject jsonObject)
             {
                 //Get data keys required for API
-                var dataKeys = GetAPIDetailByAPIId(_databaseInteraction, APIId, _systemAPIAttributeEnums.RequiredDataKey);
+                var dataKeys = GetAPIDetailByAPIId(APIId, _systemAPIAttributeEnums.RequiredDataKey);
 
                 //If no specific data keys are required, return the enite object
                 if(!dataKeys.Any())
@@ -67,101 +66,101 @@ namespace commonMethods
                 return apiData;
             }
 
-            public string GetAPIURLByAPIGUID(DatabaseInteraction _databaseInteraction, string APIGUID) 
+            public string GetAPIURLByAPIGUID(string APIGUID) 
             {
-                return GetAPIDetailByAPIGUID(_databaseInteraction, APIGUID, _systemAPIAttributeEnums.HTTPApplicationURL).First();
+                return GetAPIDetailByAPIGUID(APIGUID, _systemAPIAttributeEnums.HTTPApplicationURL).First();
             }
 
-            public string GetAPIURLByAPIId(DatabaseInteraction _databaseInteraction, long APIId) 
+            public string GetAPIURLByAPIId(long APIId) 
             {
-                return GetAPIDetailByAPIId(_databaseInteraction, APIId, _systemAPIAttributeEnums.HTTPApplicationURL).First();
+                return GetAPIDetailByAPIId(APIId, _systemAPIAttributeEnums.HTTPApplicationURL).First();
             }
 
-            public string GetAPIPOSTRouteByAPIGUID(DatabaseInteraction _databaseInteraction, string APIGUID) 
+            public string GetAPIPOSTRouteByAPIGUID(string APIGUID) 
             {
-                return GetAPIDetailByAPIGUID(_databaseInteraction, APIGUID, _systemAPIAttributeEnums.POSTRoute).First();
+                return GetAPIDetailByAPIGUID(APIGUID, _systemAPIAttributeEnums.POSTRoute).First();
             }
 
-            public string GetAPIPOSTRouteByAPIId(DatabaseInteraction _databaseInteraction, long APIId) 
+            public string GetAPIPOSTRouteByAPIId(long APIId) 
             {
-                return GetAPIDetailByAPIId(_databaseInteraction, APIId, _systemAPIAttributeEnums.POSTRoute).First();
+                return GetAPIDetailByAPIId(APIId, _systemAPIAttributeEnums.POSTRoute).First();
             }
 
-            public string GetAPIStartupURLs(DatabaseInteraction _databaseInteraction, string guid)
+            public string GetAPIStartupURLs(string guid)
             {
-                var httpURL = GetAPIURLByAPIGUID(_databaseInteraction, guid);
-                var httpsURL = GetAPIDetailByAPIGUID(_databaseInteraction, guid, _systemAPIAttributeEnums.HTTPSApplicationURL).First();
+                var httpURL = GetAPIURLByAPIGUID(guid);
+                var httpsURL = GetAPIDetailByAPIGUID(guid, _systemAPIAttributeEnums.HTTPSApplicationURL).First();
 
                 return $"{httpsURL};{httpURL}";
             }
 
-            public long GetRoutingAPIId(DatabaseInteraction _databaseInteraction)
+            public long GetRoutingAPIId()
             {
-                return APIId_GetByGUID(_databaseInteraction, _systemAPIGUIDEnums.RoutingAPI);
+                return APIId_GetByGUID(_systemAPIGUIDEnums.RoutingAPI);
             }
 
-            public string GetRoutingAPIURL(DatabaseInteraction _databaseInteraction)
+            public string GetRoutingAPIURL()
             {
-                return GetAPIURLByAPIGUID(_databaseInteraction, _systemAPIGUIDEnums.RoutingAPI);
+                return GetAPIURLByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
             }
 
-            public string GetRoutingAPIPOSTRoute(DatabaseInteraction _databaseInteraction)
+            public string GetRoutingAPIPOSTRoute()
             {
-                return GetAPIPOSTRouteByAPIGUID(_databaseInteraction, _systemAPIGUIDEnums.RoutingAPI);
+                return GetAPIPOSTRouteByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
             }
 
-            public long GetArchiveProcessQueueAPIId(DatabaseInteraction _databaseInteraction)
+            public long GetArchiveProcessQueueAPIId()
             {
-                return APIId_GetByGUID(_databaseInteraction, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+                return APIId_GetByGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
             }
 
-            public string GetArchiveProcessQueueAPIURL(DatabaseInteraction _databaseInteraction)
+            public string GetArchiveProcessQueueAPIURL()
             {
-                return GetAPIURLByAPIGUID(_databaseInteraction, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+                return GetAPIURLByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
             }
 
-            public string GetArchiveProcessQueueAPIPOSTRoute(DatabaseInteraction _databaseInteraction)
+            public string GetArchiveProcessQueueAPIPOSTRoute()
             {
-                return GetAPIPOSTRouteByAPIGUID(_databaseInteraction, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+                return GetAPIPOSTRouteByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
             }
 
-            public long GetValidateProcessGUIDAPIId(DatabaseInteraction _databaseInteraction)
+            public long GetValidateProcessGUIDAPIId()
             {
-                return APIId_GetByGUID(_databaseInteraction, _systemAPIGUIDEnums.ValidateProcessGUIDAPI);
+                return APIId_GetByGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
             }
 
-            public long GetCheckPrerequisiteAPIAPIId(DatabaseInteraction _databaseInteraction)
+            public long GetCheckPrerequisiteAPIAPIId()
             {
-                return APIId_GetByGUID(_databaseInteraction, _systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
+                return APIId_GetByGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
             }
 
-            public List<string> GetAPIDetailByAPIGUID(DatabaseInteraction _databaseInteraction, string guid, string attribute)
+            public List<string> GetAPIDetailByAPIGUID(string guid, string attribute)
             {
-                var APIId = APIId_GetByGUID(_databaseInteraction, guid);
-                return GetAPIDetailByAPIId(_databaseInteraction, APIId, attribute);
+                var APIId = APIId_GetByGUID(guid);
+                return GetAPIDetailByAPIId(APIId, attribute);
             }
 
-            public List<string> GetAPIDetailByAPIId(DatabaseInteraction _databaseInteraction, long APIId, string attribute)
+            public List<string> GetAPIDetailByAPIId(long APIId, string attribute)
             {
-                return APIDetail_GetByAPIIdAndAPIAttributeId(_databaseInteraction, APIId, attribute);
+                return APIDetail_GetByAPIIdAndAPIAttributeId(APIId, attribute);
             }
 
-            public List<long> GetAPIIdListByProcessId(DatabaseInteraction _databaseInteraction, long processId)
+            public List<long> GetAPIIdListByProcessId(long processId)
             {
-                return APIToProcess_GetAPIIdListByProcessId(_databaseInteraction, processId);
+                return APIToProcess_GetAPIIdListByProcessId(processId);
             }
 
-            public long GetAPIIdByGUID(DatabaseInteraction _databaseInteraction, string guid)
+            public long GetAPIIdByGUID(string guid)
             {
-                return APIId_GetByGUID(_databaseInteraction, guid);
+                return APIId_GetByGUID(guid);
             }
 
-            public string GetAPIGUIDById(DatabaseInteraction _databaseInteraction, long id)
+            public string GetAPIGUIDById(long id)
             {
-                return APIGUID_GetById(_databaseInteraction, id);
+                return APIGUID_GetById(id);
             }
             
-            private long APIId_GetByGUID(DatabaseInteraction _databaseInteraction, string guid)
+            private long APIId_GetByGUID(string guid)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -176,7 +175,7 @@ namespace commonMethods
                             .First();
             }
 
-            private string APIGUID_GetById(DatabaseInteraction _databaseInteraction, long id)
+            private string APIGUID_GetById(long id)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -191,7 +190,7 @@ namespace commonMethods
                             .First();
             }
 
-            private long APIAttributeId_GetByAPIAttributeDescription(DatabaseInteraction _databaseInteraction, string APIAttributeDescription)
+            private long APIAttributeId_GetByAPIAttributeDescription(string APIAttributeDescription)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -206,9 +205,9 @@ namespace commonMethods
                             .First();
             }
 
-            private List<string> APIDetail_GetByAPIIdAndAPIAttributeId(DatabaseInteraction _databaseInteraction, long APIId, string attribute)
+            private List<string> APIDetail_GetByAPIIdAndAPIAttributeId(long APIId, string attribute)
             {
-                var APIAttributeId = APIAttributeId_GetByAPIAttributeDescription(_databaseInteraction, attribute);
+                var APIAttributeId = APIAttributeId_GetByAPIAttributeDescription(attribute);
 
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -224,7 +223,7 @@ namespace commonMethods
                             .ToList();
             }
 
-            private List<long> APIToProcess_GetAPIIdListByProcessId(DatabaseInteraction _databaseInteraction, long processId)
+            private List<long> APIToProcess_GetAPIIdListByProcessId(long processId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -239,7 +238,7 @@ namespace commonMethods
                             .ToList();
             }
             
-            public long PageId_GetByGUID(DatabaseInteraction _databaseInteraction, string guid)
+            public long PageId_GetByGUID(string guid)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -254,7 +253,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
             
-            public long ProcessId_GetByGUID(DatabaseInteraction _databaseInteraction, string guid)
+            public long ProcessId_GetByGUID(string guid)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -269,7 +268,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public void ProcessQueue_Insert(DatabaseInteraction _databaseInteraction, string queueGUID, string userGUID, string source, string apiGUID, bool hasError = false)
+            public void ProcessQueue_Insert(string queueGUID, string userGUID, string source, string apiGUID, bool hasError = false)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -285,7 +284,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Insert, sqlParameters);
             }
 
-            public void ProcessQueue_Update(DatabaseInteraction _databaseInteraction, string queueGUID, string apiGUID, bool hasError = false)
+            public void ProcessQueue_Update(string queueGUID, string apiGUID, bool hasError = false)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -299,7 +298,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Update, sqlParameters);
             }
 
-            public DataRow ProcessQueue_GetByGUIDAndAPIId(DatabaseInteraction _databaseInteraction, string queueGUID, long apiId)
+            public DataRow ProcessQueue_GetByGUIDAndAPIId(string queueGUID, long apiId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -312,7 +311,7 @@ namespace commonMethods
                 return _databaseInteraction.GetSingleRow(_storedProcedureSystemEnums.ProcessQueue_GetByGUIDAndAPIId, sqlParameters);
             }
 
-            public void ProcessArchive_Insert(DatabaseInteraction _databaseInteraction, string processArchiveGUID, string userGUID, string source)
+            public void ProcessArchive_Insert(string processArchiveGUID, string userGUID, string source)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -326,7 +325,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchive_Insert, sqlParameters);
             }
 
-            public void ProcessArchive_Update(DatabaseInteraction _databaseInteraction, string processArchiveGUID)
+            public void ProcessArchive_Update(string processArchiveGUID)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -338,7 +337,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchive_Update, sqlParameters);
             }
 
-            public long ProcessArchiveId_GetByGUID(DatabaseInteraction _databaseInteraction, string queueGUID)
+            public long ProcessArchiveId_GetByGUID(string queueGUID)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -353,7 +352,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public long ProcessArchiveAttributeId_GetByProcessArchiveAttributeDescription(DatabaseInteraction _databaseInteraction, string processArchiveAttributeDescription)
+            public long ProcessArchiveAttributeId_GetByProcessArchiveAttributeDescription(string processArchiveAttributeDescription)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -368,9 +367,9 @@ namespace commonMethods
                             .First();
             }
 
-            public List<string> ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(DatabaseInteraction _databaseInteraction, long processArchiveId, string attribute)
+            public List<string> ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(long processArchiveId, string attribute)
             {
-                var processArchiveAttributeId = ProcessArchiveAttributeId_GetByProcessArchiveAttributeDescription(_databaseInteraction, attribute);
+                var processArchiveAttributeId = ProcessArchiveAttributeId_GetByProcessArchiveAttributeDescription(attribute);
 
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -386,7 +385,7 @@ namespace commonMethods
                             .ToList();
             }
 
-            public void ProcessArchiveDetail_Insert(DatabaseInteraction _databaseInteraction, string processArchiveGUID, string userGUID, string source, string attribute, string description)
+            public void ProcessArchiveDetail_Insert(string processArchiveGUID, string userGUID, string source, string attribute, string description)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>

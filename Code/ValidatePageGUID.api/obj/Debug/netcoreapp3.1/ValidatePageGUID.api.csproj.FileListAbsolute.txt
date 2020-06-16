@@ -60,3 +60,7 @@ C:\wamp64\www\Website\Code\ValidatePageGUID.api\obj\Debug\netcoreapp3.1\staticwe
 C:\wamp64\www\Website\Code\ValidatePageGUID.api\obj\Debug\netcoreapp3.1\ValidatePageGUID.api.dll
 C:\wamp64\www\Website\Code\ValidatePageGUID.api\obj\Debug\netcoreapp3.1\ValidatePageGUID.api.pdb
 C:\wamp64\www\Website\Code\ValidatePageGUID.api\obj\Debug\netcoreapp3.1\ValidatePageGUID.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\ValidatePageGUID.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\ValidatePageGUID.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\ValidatePageGUID.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\ValidatePageGUID.api\bin\Debug\netcoreapp3.1\enums.pdb

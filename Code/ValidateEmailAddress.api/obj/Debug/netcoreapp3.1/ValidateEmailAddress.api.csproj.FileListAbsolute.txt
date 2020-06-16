@@ -60,3 +60,7 @@ C:\wamp64\www\Website\Code\ValidateEmailAddress.api\obj\Debug\netcoreapp3.1\stat
 C:\wamp64\www\Website\Code\ValidateEmailAddress.api\obj\Debug\netcoreapp3.1\ValidateEmailAddress.api.dll
 C:\wamp64\www\Website\Code\ValidateEmailAddress.api\obj\Debug\netcoreapp3.1\ValidateEmailAddress.api.pdb
 C:\wamp64\www\Website\Code\ValidateEmailAddress.api\obj\Debug\netcoreapp3.1\ValidateEmailAddress.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\ValidateEmailAddress.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\ValidateEmailAddress.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\ValidateEmailAddress.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\ValidateEmailAddress.api\bin\Debug\netcoreapp3.1\enums.pdb

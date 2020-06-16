@@ -31,7 +31,8 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.4",
           "Newtonsoft.Json": "12.0.3",
           "System.Net.Http": "4.3.4",
-          "databaseInteraction": "1.0.0",
+          "commonMethods": "1.0.0",
+          "enums": "1.0.0",
           "System.Data.SqlClient": "4.8.1",
           "Microsoft.AspNetCore.Antiforgery": "3.1.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions.Reference": "3.1.0.0",
@@ -1767,6 +1768,22 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
+      "commonMethods/1.0.0": {
+        "dependencies": {
+          "System.Data.DataSetExtensions": "4.5.0",
+          "System.Data.SqlClient": "4.8.1",
+          "System.Net.Http": "4.3.4",
+          "databaseInteraction": "1.0.0",
+          "enums": "1.0.0",
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "runtime": {
+          "commonMethods.dll": {}
+        },
+        "compile": {
+          "commonMethods.dll": {}
+        }
+      },
       "databaseInteraction/1.0.0": {
         "dependencies": {
           "System.Data.DataSetExtensions": "4.5.0",
@@ -1779,6 +1796,20 @@
         },
         "compile": {
           "databaseInteraction.dll": {}
+        }
+      },
+      "enums/1.0.0": {
+        "dependencies": {
+          "System.Data.DataSetExtensions": "4.5.0",
+          "System.Data.SqlClient": "4.8.1",
+          "System.Net.Http": "4.3.4",
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "runtime": {
+          "enums.dll": {}
+        },
+        "compile": {
+          "enums.dll": {}
         }
       },
       "Microsoft.AspNetCore.Antiforgery/3.1.0.0": {
@@ -4453,7 +4484,17 @@
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
     },
+    "commonMethods/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "databaseInteraction/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "enums/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

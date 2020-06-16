@@ -60,3 +60,7 @@ C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\runtimes\unix\lib
 C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\databaseInteraction.dll
 C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\databaseInteraction.pdb
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\Website.api\bin\Debug\netcoreapp3.1\enums.pdb

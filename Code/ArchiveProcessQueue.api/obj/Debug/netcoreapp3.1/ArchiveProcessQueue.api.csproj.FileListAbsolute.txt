@@ -60,3 +60,7 @@ C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\obj\Debug\netcoreapp3.1\stati
 C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\obj\Debug\netcoreapp3.1\ArchiveProcessQueue.api.dll
 C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\obj\Debug\netcoreapp3.1\ArchiveProcessQueue.api.pdb
 C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\obj\Debug\netcoreapp3.1\ArchiveProcessQueue.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\ArchiveProcessQueue.api\bin\Debug\netcoreapp3.1\enums.pdb

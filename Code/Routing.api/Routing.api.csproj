@@ -16,7 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\databaseInteraction\databaseInteraction.csproj" />
+    <ProjectReference Include="..\commonMethods\commonMethods.csproj" />
+    <ProjectReference Include="..\enums\enums.csproj" />
   </ItemGroup>
 
 

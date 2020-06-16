@@ -61,3 +61,7 @@ C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\databaseInteracti
 C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
 C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\Routing.api\bin\Debug\netcoreapp3.1\enums.pdb

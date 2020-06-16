@@ -60,3 +60,7 @@ C:\wamp64\www\Website\Code\LockUser.api\obj\Debug\netcoreapp3.1\staticwebassets\
 C:\wamp64\www\Website\Code\LockUser.api\obj\Debug\netcoreapp3.1\LockUser.api.dll
 C:\wamp64\www\Website\Code\LockUser.api\obj\Debug\netcoreapp3.1\LockUser.api.pdb
 C:\wamp64\www\Website\Code\LockUser.api\obj\Debug\netcoreapp3.1\LockUser.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\LockUser.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\LockUser.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\LockUser.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\LockUser.api\bin\Debug\netcoreapp3.1\enums.pdb

@@ -1,19 +1,21 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using databaseInteraction;
+using commonMethods;
+using enums;
 
 namespace ValidatePassword.api
 {
     public class Program
     {
+        private static readonly CommonMethods _methods = new CommonMethods();
         private static readonly CommonMethods.System _systemMethods = new CommonMethods.System();
-        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
-        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
-        private static readonly CommonEnums.System.API.GUID _systemAPIGUIDEnums = new CommonEnums.System.API.GUID();
-        private static readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.ValidatePasswordAPI, _systemAPIPasswordEnums.ValidatePasswordAPI);
+        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
+        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
+        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
 
         public static void Main(string[] args)
         {
+            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidatePasswordAPI, _systemAPIPasswordEnums.ValidatePasswordAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -22,7 +24,7 @@ namespace ValidatePassword.api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>(); 
-                    webBuilder.UseUrls(_systemMethods.GetAPIStartupURLs(_databaseInteraction, _systemAPIGUIDEnums.ValidatePasswordAPI));
+                    webBuilder.UseUrls(_systemMethods.GetAPIStartupURLs(_systemAPIGUIDEnums.ValidatePasswordAPI));
                 });
     }
 }

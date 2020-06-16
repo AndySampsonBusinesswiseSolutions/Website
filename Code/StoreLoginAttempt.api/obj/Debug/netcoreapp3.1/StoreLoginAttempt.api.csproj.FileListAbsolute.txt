@@ -60,3 +60,7 @@ C:\wamp64\www\Website\Code\StoreLoginAttempt.api\obj\Debug\netcoreapp3.1\staticw
 C:\wamp64\www\Website\Code\StoreLoginAttempt.api\obj\Debug\netcoreapp3.1\StoreLoginAttempt.api.dll
 C:\wamp64\www\Website\Code\StoreLoginAttempt.api\obj\Debug\netcoreapp3.1\StoreLoginAttempt.api.pdb
 C:\wamp64\www\Website\Code\StoreLoginAttempt.api\obj\Debug\netcoreapp3.1\StoreLoginAttempt.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\StoreLoginAttempt.api\bin\Debug\netcoreapp3.1\commonMethods.dll
+C:\wamp64\www\Website\Code\StoreLoginAttempt.api\bin\Debug\netcoreapp3.1\enums.dll
+C:\wamp64\www\Website\Code\StoreLoginAttempt.api\bin\Debug\netcoreapp3.1\commonMethods.pdb
+C:\wamp64\www\Website\Code\StoreLoginAttempt.api\bin\Debug\netcoreapp3.1\enums.pdb

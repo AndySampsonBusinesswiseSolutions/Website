@@ -10,7 +10,7 @@ namespace commonMethods
     {
         public class Mapping
         {
-            public long PasswordToUser_GetByPasswordIdAndUserId(DatabaseInteraction _databaseInteraction, long passwordId, long userId)
+            public long PasswordToUser_GetByPasswordIdAndUserId(long passwordId, long userId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -26,7 +26,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public void LoginToUser_Insert(DatabaseInteraction _databaseInteraction, long createdByUserId, long sourceId, long loginId, long userId)
+            public void LoginToUser_Insert(long createdByUserId, long sourceId, long loginId, long userId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -41,7 +41,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureMappingEnums.LoginToUser_Insert, sqlParameters);
             }
 
-            public List<long> Login_GetByUserId(DatabaseInteraction _databaseInteraction, long userId)
+            public List<long> Login_GetByUserId(long userId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>

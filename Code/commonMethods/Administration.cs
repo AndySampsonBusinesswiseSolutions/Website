@@ -10,7 +10,7 @@ namespace commonMethods
     {
         public class Administration
         {
-            public long PasswordId_GetByPassword(DatabaseInteraction _databaseInteraction, string password)
+            public long PasswordId_GetByPassword(string password)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -25,8 +25,8 @@ namespace commonMethods
                             .FirstOrDefault();
             }
             
-            // public void UserDetail_Insert(DatabaseInteraction _databaseInteraction, long createdByUserId, long sourceId, long userId, long userattributeId, string userDetailDescription)
-            public void UserDetail_Insert(DatabaseInteraction _databaseInteraction, string userGUID, string sourceTypeDescription, string UserAttributeDescription, string userDetailDescription)
+            // public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userattributeId, string userDetailDescription)
+            public void UserDetail_Insert(string userGUID, string sourceTypeDescription, string UserAttributeDescription, string userDetailDescription)
             {
                 //Set up stored procedure parameters
                 // var sqlParameters = new List<SqlParameter>
@@ -51,7 +51,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureAdministrationEnums.UserDetail_Insert, sqlParameters);
             }
             
-            public long UserId_GetByUserDetailId(DatabaseInteraction _databaseInteraction, long userDetailId)
+            public long UserId_GetByUserDetailId(long userDetailId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -66,7 +66,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
             
-            public long UserDetailId_GetByEmailAddress(DatabaseInteraction _databaseInteraction, string emailAddress)
+            public long UserDetailId_GetByEmailAddress(string emailAddress)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -81,7 +81,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public void Login_Insert(DatabaseInteraction _databaseInteraction, long userId, long sourceId, bool loginSuccessful, string processArchiveGUID)
+            public void Login_Insert(long userId, long sourceId, bool loginSuccessful, string processArchiveGUID)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -96,7 +96,7 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureAdministrationEnums.Login_Insert, sqlParameters);
             }
 
-            public long LoginId_GetByProcessArchiveGUID(DatabaseInteraction _databaseInteraction, string processArchiveGUID)
+            public long LoginId_GetByProcessArchiveGUID(string processArchiveGUID)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -111,7 +111,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public bool LoginSuccessful_GetByLoginId(DatabaseInteraction _databaseInteraction, long loginId)
+            public bool LoginSuccessful_GetByLoginId(long loginId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>

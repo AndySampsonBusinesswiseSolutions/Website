@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
-using databaseInteraction;
+using commonMethods;
+using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
@@ -14,21 +15,22 @@ namespace StoreLoginAttempt.api.Controllers
     public class StoreLoginAttemptController : ControllerBase
     {
         private readonly ILogger<StoreLoginAttemptController> _logger;
+        private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.Mapping _mappingMethods = new CommonMethods.Mapping();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
         private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
-        private static readonly CommonEnums.System.API.Name _systemAPINameEnums = new CommonEnums.System.API.Name();
-        private static readonly CommonEnums.System.API.Password _systemAPIPasswordEnums = new CommonEnums.System.API.Password();
-        private readonly CommonEnums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new CommonEnums.System.API.RequiredDataKey();
-        private static readonly CommonEnums.System.API.GUID _systemAPIGUIDEnums = new CommonEnums.System.API.GUID();
-        private readonly CommonEnums.Administration.User.GUID _administrationUserGUIDEnums = new CommonEnums.Administration.User.GUID();
-        private readonly CommonEnums.Information.SourceType _informationSourceTypeEnums = new CommonEnums.Information.SourceType();
-        private readonly DatabaseInteraction _databaseInteraction = new DatabaseInteraction(_systemAPINameEnums.StoreLoginAttemptAPI, _systemAPIPasswordEnums.StoreLoginAttemptAPI);
+        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
+        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private readonly Enums.Information.SourceType _informationSourceTypeEnums = new Enums.Information.SourceType();
 
         public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger)
         {
             _logger = logger;
+            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreLoginAttemptAPI, _systemAPIPasswordEnums.StoreLoginAttemptAPI);
         }
 
         [HttpPost]
@@ -42,23 +44,23 @@ namespace StoreLoginAttempt.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
-            _systemMethods.ProcessQueue_Insert(_databaseInteraction, 
+            _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated, 
                 _systemAPIGUIDEnums.StoreLoginAttemptAPI);
 
             //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId(_databaseInteraction);
+            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
             //Build JObject
-            var apiData = _systemMethods.GetAPIData(_databaseInteraction, checkPrerequisiteAPIAPIId, jsonObject);
+            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject);
             apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI);
             
             //Call CheckPrerequisiteAPI API
-            var processTask = _systemMethods.CreateAPI(_databaseInteraction, checkPrerequisiteAPIAPIId)
+            var processTask = _systemMethods.CreateAPI(checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
-                        _systemMethods.GetAPIPOSTRouteByAPIId(_databaseInteraction, checkPrerequisiteAPIAPIId), 
+                        _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
                         apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
             var result = processTaskResponse.Content.ReadAsStringAsync();//TODO: Make into common method
@@ -70,26 +72,26 @@ namespace StoreLoginAttempt.api.Controllers
 
             //Get User Id
             var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-            var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(_databaseInteraction, emailAddress);
-            var userId = _administrationMethods.UserId_GetByUserDetailId(_databaseInteraction, userDetailId);
+            var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(emailAddress);
+            var userId = _administrationMethods.UserId_GetByUserDetailId(userDetailId);
 
             //Get Source Type Id
-            var sourceTypeId = _informationMethods.SourceTypeId_GetBySourceTypeDescription(_databaseInteraction, _informationSourceTypeEnums.UserGenerated);
+            var sourceTypeId = _informationMethods.SourceTypeId_GetBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
 
             //Get Source Id
-            var sourceId = _informationMethods.Source_GetBySourceTypeIdAndSourceTypeEntityId(_databaseInteraction, sourceTypeId, 0);
+            var sourceId = _informationMethods.Source_GetBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
 
             //Store login attempt
-            _administrationMethods.Login_Insert(_databaseInteraction, userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
+            _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
 
             //Get Login Id
-            var loginId = _administrationMethods.LoginId_GetByProcessArchiveGUID(_databaseInteraction, queueGUID);
+            var loginId = _administrationMethods.LoginId_GetByProcessArchiveGUID(queueGUID);
 
             //Store mapping between login attempt and user
-            _mappingMethods.LoginToUser_Insert(_databaseInteraction, 1, sourceId, loginId, userId);//TODO: Create GetSystemUserId method
+            _mappingMethods.LoginToUser_Insert(1, sourceId, loginId, userId);//TODO: Create GetSystemUserId method
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_Update(_databaseInteraction, queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, erroredPrerequisiteAPIs.Any());
+            _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, erroredPrerequisiteAPIs.Any());
         }
     }
 }

@@ -10,7 +10,7 @@ namespace commonMethods
     {
         public class Information
         {
-            public long SourceTypeId_GetBySourceTypeDescription(DatabaseInteraction _databaseInteraction, string sourceTypeDescription)
+            public long SourceTypeId_GetBySourceTypeDescription(string sourceTypeDescription)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>
@@ -25,7 +25,7 @@ namespace commonMethods
                             .FirstOrDefault();
             }
 
-            public long Source_GetBySourceTypeIdAndSourceTypeEntityId(DatabaseInteraction _databaseInteraction, long sourceTypeId, long sourceTypeEntityId)
+            public long Source_GetBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
             {
                 //Set up stored procedure parameters
                 var sqlParameters = new List<SqlParameter>

@@ -1,4 +1,5 @@
 using enums;
+using databaseInteraction;
 
 namespace commonMethods
 {
@@ -10,5 +11,12 @@ namespace commonMethods
         private static readonly Enums.StoredProcedure.Mapping _storedProcedureMappingEnums = new Enums.StoredProcedure.Mapping();
         private static readonly Enums.StoredProcedure.Administration _storedProcedureAdministrationEnums = new Enums.StoredProcedure.Administration();
         private static readonly Enums.StoredProcedure.Information _storedProcedureInformationEnums = new Enums.StoredProcedure.Information();
+
+        public static DatabaseInteraction _databaseInteraction;
+
+        public void InitialiseDatabaseInteraction(string userName, string password)
+        {
+            _databaseInteraction = new DatabaseInteraction(userName, password);
+        }
     }
 }
