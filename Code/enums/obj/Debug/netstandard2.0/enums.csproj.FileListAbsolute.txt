@@ -1,0 +1,9 @@
+C:\wamp64\www\Website\Code\enums\bin\Debug\netstandard2.0\enums.deps.json
+C:\wamp64\www\Website\Code\enums\bin\Debug\netstandard2.0\enums.dll
+C:\wamp64\www\Website\Code\enums\bin\Debug\netstandard2.0\enums.pdb
+C:\wamp64\www\Website\Code\enums\obj\Debug\netstandard2.0\enums.csprojAssemblyReference.cache
+C:\wamp64\www\Website\Code\enums\obj\Debug\netstandard2.0\enums.csproj.CoreCompileInputs.cache
+C:\wamp64\www\Website\Code\enums\obj\Debug\netstandard2.0\enums.AssemblyInfoInputs.cache
+C:\wamp64\www\Website\Code\enums\obj\Debug\netstandard2.0\enums.AssemblyInfo.cs
+C:\wamp64\www\Website\Code\enums\obj\Debug\netstandard2.0\enums.dll
+C:\wamp64\www\Website\Code\enums\obj\Debug\netstandard2.0\enums.pdb
