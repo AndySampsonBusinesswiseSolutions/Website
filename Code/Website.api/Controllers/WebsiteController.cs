@@ -67,18 +67,19 @@ namespace Website.api.Controllers
             //TODO: Add try/catch
             
             //Get Process Archive Id
-            var processArchiveId = _systemMethods.ProcessArchiveId_GetByGUID(processQueueGuid);
+            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByQueueGUID(processQueueGuid);
             while(processArchiveId == 0)
             {
-                processArchiveId = _systemMethods.ProcessArchiveId_GetByGUID(processQueueGuid);
+                processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByQueueGUID(processQueueGuid);
             }
 
             //Loop until a response record is written into ProcessArchiveDetail
-            var response = _systemMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, _systemProcessArchiveAttributeEnums.Response).FirstOrDefault();
+            var responseAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
+            var response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
 
             while(response == null)
             {
-                response = _systemMethods.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, _systemProcessArchiveAttributeEnums.Response).FirstOrDefault();
+                response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
             }
 
             //Create return object with response record

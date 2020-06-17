@@ -48,7 +48,7 @@ namespace ValidateProcessGUID.api.Controllers
             var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
 
             //Validate Process GUID
-            var processId = _systemMethods.ProcessId_GetByGUID(processGUID);
+            var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
 
             //If processId == 0 then the GUID provided isn't valid so create an error
             if(processId == 0)

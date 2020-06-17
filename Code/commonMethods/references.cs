@@ -3,6 +3,7 @@ using databaseInteraction;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Data;
 
 namespace commonMethods
 {
@@ -22,12 +23,10 @@ namespace commonMethods
             _databaseInteraction = new DatabaseInteraction(userName, password);
         }
 
-        private static List<SqlParameter> CreateSqlParameters(MethodBase method, params object[] values)
+        private static List<SqlParameter> CreateSqlParameters(ParameterInfo[] parameters, params object[] values)
         {
             //Set up stored procedure parameters
             var sqlParameters = new List<SqlParameter>();
-
-            ParameterInfo[] parameters = method.GetParameters();
             object[] namevalues = new object[2 * parameters.Length];
 
             for (int i = 0, j = 0; i < parameters.Length; i++, j += 2)
@@ -38,6 +37,24 @@ namespace commonMethods
             }
 
             return sqlParameters;
+        }
+
+        private static DataTable GetDataTable(ParameterInfo[] parameters, string storedProcedureName, params object[] values)
+        {
+            //Set up stored procedure parameters
+            var sqlParameters = CreateSqlParameters(parameters, values);
+
+            //Get datatable
+            return _databaseInteraction.GetDataTable(storedProcedureName, sqlParameters);
+        }
+
+        private static void ExecuteNonQuery(ParameterInfo[] parameters, string storedProcedureName, params object[] values)
+        {
+            //Set up stored procedure parameters
+            var sqlParameters = CreateSqlParameters(parameters, values);
+
+            //Run stored procedure
+            _databaseInteraction.ExecuteNonQuery(storedProcedureName, sqlParameters);
         }
 
         private static string ConvertParameterName(string parameterName)

@@ -36,37 +36,39 @@ namespace CheckPrerequisiteAPI.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
-            var prerequisiteAPIs = new List<string>();
+            var prerequisiteAPIGUIDs = new List<string>();
 
             //If API list is passed through, then use that otherwise get API list from database
-            if(jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.APIList))
+            if(jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.APIGUIDList))
             {
-                var APIList = jsonObject[_systemAPIRequiredDataKeyEnums.APIList].ToString();
-                prerequisiteAPIs = APIList.Replace("\"","").Replace("[", "").Replace("]", "").Split(',').ToList();
+                var APIGUIDList = jsonObject[_systemAPIRequiredDataKeyEnums.APIGUIDList].ToString();
+                prerequisiteAPIGUIDs = APIGUIDList.Replace("\"","").Replace("[", "").Replace("]", "").Split(',').ToList();
             }
             else
             {
                 //Get prerequisite APIs from database
                 var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-                prerequisiteAPIs = _systemMethods.GetAPIDetailByAPIGUID(callingGUID, _systemAPIAttributes.PrerequisiteAPIGUID);
+                var prerequisiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(callingGUID);
+                var prerequisiteAPIGUIDAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.PrerequisiteAPIGUID);
+                prerequisiteAPIGUIDs = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);
             }
 
             //Wait until prerequisite APIs have completed
-            var completedPrerequisiteAPIs = new List<string>();
-            var erroredPrerequisiteAPIs = new List<string>();
+            var completedPrerequisiteAPIGUIDs = new List<string>();
+            var erroredPrerequisiteAPIGUIDs = new List<string>();
 
-            while((completedPrerequisiteAPIs.Count() + erroredPrerequisiteAPIs.Count()) < prerequisiteAPIs.Count())
+            while((completedPrerequisiteAPIGUIDs.Count() + erroredPrerequisiteAPIGUIDs.Count()) < prerequisiteAPIGUIDs.Count())
             {
-                foreach(var prerequisiteAPI in prerequisiteAPIs)
+                foreach(var prerequisiteAPIGUID in prerequisiteAPIGUIDs)
                 {
-                    if(completedPrerequisiteAPIs.Contains(prerequisiteAPI) || erroredPrerequisiteAPIs.Contains(prerequisiteAPI))
+                    if(completedPrerequisiteAPIGUIDs.Contains(prerequisiteAPIGUID) || erroredPrerequisiteAPIGUIDs.Contains(prerequisiteAPIGUID))
                     {
                         continue;
                     }
 
                     //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                    var apiId = _systemMethods.GetAPIIdByGUID(prerequisiteAPI);
-                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByGUIDAndAPIId(queueGUID, apiId);
+                    var apiId = _systemMethods.API_GetAPIIdByAPIGUID(prerequisiteAPIGUID);
+                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByQueueGUIDAndAPIId(queueGUID, apiId);
 
                     if(processQueueDataRow != null)
                     {
@@ -78,18 +80,18 @@ namespace CheckPrerequisiteAPI.api.Controllers
                             var hasError = Convert.ToBoolean(processQueueDataRow["HasError"]);
                             if(hasError)
                             {
-                                erroredPrerequisiteAPIs.Add(prerequisiteAPI);
+                                erroredPrerequisiteAPIGUIDs.Add(prerequisiteAPIGUID);
                             }
                             else
                             {
-                                completedPrerequisiteAPIs.Add(prerequisiteAPI);
+                                completedPrerequisiteAPIGUIDs.Add(prerequisiteAPIGUID);
                             }
                         }
                     }                    
                 }
             }
 
-            return erroredPrerequisiteAPIs;
+            return erroredPrerequisiteAPIGUIDs;
         }
     }
 }

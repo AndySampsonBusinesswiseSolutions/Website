@@ -28,7 +28,8 @@ namespace commonMethods
             public JObject GetAPIData(long APIId, JObject jsonObject)
             {
                 //Get data keys required for API
-                var dataKeys = GetAPIDetailByAPIId(APIId, _systemAPIAttributeEnums.RequiredDataKey);
+                var requiredDataKeyAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.RequiredDataKey);
+                var dataKeys = APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, requiredDataKeyAttributeId);
 
                 //If no specific data keys are required, return the enite object
                 if(!dataKeys.Any())
@@ -69,35 +70,41 @@ namespace commonMethods
 
             public string GetAPIURLByAPIGUID(string APIGUID) 
             {
-                return GetAPIDetailByAPIGUID(APIGUID, _systemAPIAttributeEnums.HTTPApplicationURL).First();
+                var APIId = API_GetAPIIdByAPIGUID(APIGUID);
+                return GetAPIURLByAPIId(APIId);
             }
 
             public string GetAPIURLByAPIId(long APIId) 
             {
-                return GetAPIDetailByAPIId(APIId, _systemAPIAttributeEnums.HTTPApplicationURL).First();
-            }
-
-            public string GetAPIPOSTRouteByAPIGUID(string APIGUID) 
-            {
-                return GetAPIDetailByAPIGUID(APIGUID, _systemAPIAttributeEnums.POSTRoute).First();
+                var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
+                return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId).First();
             }
 
             public string GetAPIPOSTRouteByAPIId(long APIId) 
             {
-                return GetAPIDetailByAPIId(APIId, _systemAPIAttributeEnums.POSTRoute).First();
+                //TODO: Error if more than one found
+
+                var POSTRouteAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.POSTRoute);
+                return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, POSTRouteAttributeId).First();
             }
 
-            public string GetAPIStartupURLs(string guid)
+            public string GetAPIStartupURLs(string APIGUID)
             {
-                var httpURL = GetAPIURLByAPIGUID(guid);
-                var httpsURL = GetAPIDetailByAPIGUID(guid, _systemAPIAttributeEnums.HTTPSApplicationURL).First();
+                //TODO: Error if more than one found
+
+                var APIId = API_GetAPIIdByAPIGUID(APIGUID);
+                var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
+                var HTTPSApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPSApplicationURL);
+
+                var httpURL = APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId).First();
+                var httpsURL = APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPSApplicationURLAttributeId).First();
 
                 return $"{httpsURL};{httpURL}";
             }
 
             public long GetRoutingAPIId()
             {
-                return APIId_GetByGUID(_systemAPIGUIDEnums.RoutingAPI);
+                return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
             }
 
             public string GetRoutingAPIURL()
@@ -107,12 +114,13 @@ namespace commonMethods
 
             public string GetRoutingAPIPOSTRoute()
             {
-                return GetAPIPOSTRouteByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
+                var APIId = API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
+                return GetAPIPOSTRouteByAPIId(APIId);
             }
 
             public long GetArchiveProcessQueueAPIId()
             {
-                return APIId_GetByGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+                return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
             }
 
             public string GetArchiveProcessQueueAPIURL()
@@ -122,277 +130,163 @@ namespace commonMethods
 
             public string GetArchiveProcessQueueAPIPOSTRoute()
             {
-                return GetAPIPOSTRouteByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+                var APIId = API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+                return GetAPIPOSTRouteByAPIId(APIId);
             }
 
             public long GetValidateProcessGUIDAPIId()
             {
-                return APIId_GetByGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
+                return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
             }
 
             public long GetCheckPrerequisiteAPIAPIId()
             {
-                return APIId_GetByGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
-            }
-
-            public List<string> GetAPIDetailByAPIGUID(string guid, string attribute)
-            {
-                var APIId = APIId_GetByGUID(guid);
-                return GetAPIDetailByAPIId(APIId, attribute);
-            }
-
-            public List<string> GetAPIDetailByAPIId(long APIId, string attribute)
-            {
-                return APIDetail_GetByAPIIdAndAPIAttributeId(APIId, attribute);
-            }
-
-            public List<long> GetAPIIdListByProcessId(long processId)
-            {
-                return APIToProcess_GetAPIIdListByProcessId(processId);
-            }
-
-            public long GetAPIIdByGUID(string guid)
-            {
-                return APIId_GetByGUID(guid);
-            }
-
-            public string GetAPIGUIDById(long id)
-            {
-                return APIGUID_GetById(id);
+                return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
             }
             
-            private long APIId_GetByGUID(string guid)
+            public long API_GetAPIIdByAPIGUID(string APIGUID)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@APIGUID", SqlValue = guid}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.API_GetByAPIGUID, 
+                    APIGUID);
 
-                //Get API Id
-                var APIDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.API_GetByGUID, sqlParameters);
-                return APIDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("APIId"))
-                            .First();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("APIId"))
+                    .FirstOrDefault();
             }
 
-            private string APIGUID_GetById(long id)
+            public string API_GetAPIGUIDByAPIId(long APIId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@APIId", SqlValue = id}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.API_GetById, 
+                    APIId);
 
-                //Get API Id
-                var APIDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.API_GetById, sqlParameters);
-                return APIDataTable.AsEnumerable()
-                            .Select(r => r.Field<Guid>("GUID").ToString())
-                            .First();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<Guid>("GUID").ToString())
+                    .FirstOrDefault();
             }
 
-            private long APIAttributeId_GetByAPIAttributeDescription(string APIAttributeDescription)
+            public long APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(string APIAttributeDescription)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@APIAttributeDescription", SqlValue = APIAttributeDescription}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.APIAttribute_GetByAPIAttributeDescription, 
+                    APIAttributeDescription);
 
-                //Get API Attribute Id
-                var APIDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.APIAttribute_GetByAPIAttributeDescription, sqlParameters);
-                return APIDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("APIAttributeId"))
-                            .First();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("APIAttributeId"))
+                    .FirstOrDefault();
             }
 
-            private List<string> APIDetail_GetByAPIIdAndAPIAttributeId(long APIId, string attribute)
+            public List<string> APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(long APIId, long APIAttributeId)
             {
-                var APIAttributeId = APIAttributeId_GetByAPIAttributeDescription(attribute);
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.APIDetail_GetByAPIIdAndAPIAttributeId, 
+                    APIId, APIAttributeId);
 
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@APIId", SqlValue = APIId},
-                    new SqlParameter {ParameterName = "@APIAttributeID", SqlValue = APIAttributeId}
-                };
-
-                //Get API Detail
-                var APIDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.APIDetail_GetByAPIIdAndAPIAttributeId, sqlParameters);
-                return APIDataTable.AsEnumerable()
-                            .Select(r => r.Field<string>("APIDetailDescription"))
-                            .ToList();
-            }
-
-            private List<long> APIToProcess_GetAPIIdListByProcessId(long processId)
-            {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessId", SqlValue = processId}
-                };
-
-                //Get API Ids
-                var APIDataTable = _databaseInteraction.Get(_storedProcedureMappingEnums.APIToProcess_GetAPIIdListByProcessId, sqlParameters);
-                return APIDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("APIId"))
-                            .ToList();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("APIDetailDescription"))
+                    .ToList();
             }
             
             public long PageId_GetByGUID(string guid)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@PageGUID", SqlValue = guid}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.Page_GetByGUID, 
+                    guid);
 
-                //Get Page Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.Page_GetByGUID, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("PageId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("PageId"))
+                    .FirstOrDefault();
             }
             
-            public long ProcessId_GetByGUID(string guid)
+            public long Process_GetProcessIdByProcessGUID(string processGUID)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessGUID", SqlValue = guid}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.Process_GetByProcessGUID, 
+                    processGUID);
 
-                //Get Process Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.Process_GetByGUID, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("ProcessId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ProcessId"))
+                    .FirstOrDefault();
             }
 
             public void ProcessQueue_Insert(string processQueueGUID, string userGUID, string sourceTypeDescription, string APIGUID, bool hasError = false)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = CreateSqlParameters(MethodBase.GetCurrentMethod(), processQueueGUID, userGUID, sourceTypeDescription, APIGUID, hasError);
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Insert, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessQueue_Insert, 
+                    processQueueGUID, userGUID, sourceTypeDescription, APIGUID, hasError);
             }
 
             public void ProcessQueue_Update(string queueGUID, string apiGUID, bool hasError = false)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@GUID", SqlValue = queueGUID},
-                    new SqlParameter {ParameterName = "@APIGUID", SqlValue = apiGUID},
-                    new SqlParameter {ParameterName = "@HasError", SqlValue = Convert.ToByte(hasError)}
-                };
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessQueue_Update, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessQueue_Update, 
+                    apiGUID, apiGUID, hasError);
             }
 
-            public DataRow ProcessQueue_GetByGUIDAndAPIId(string queueGUID, long apiId)
+            public DataRow ProcessQueue_GetByQueueGUIDAndAPIId(string queueGUID, long apiId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessQueueGUID", SqlValue = queueGUID},
-                    new SqlParameter {ParameterName = "@APIId", SqlValue = apiId}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessQueue_GetByQueueGUIDAndAPIId, 
+                    queueGUID, apiId);
 
-                //Execute stored procedure
-                return _databaseInteraction.GetSingleRow(_storedProcedureSystemEnums.ProcessQueue_GetByGUIDAndAPIId, sqlParameters);
+                return dataTable.AsEnumerable()
+                    .Select(r => r)
+                    .FirstOrDefault();
             }
 
             public void ProcessArchive_Insert(string processArchiveGUID, string userGUID, string source)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID},
-                    new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
-                    new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = source}
-                };
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchive_Insert, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessArchive_Insert, 
+                    processArchiveGUID, userGUID, source);
             }
 
             public void ProcessArchive_Update(string processArchiveGUID)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID}
-                };
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchive_Update, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessArchive_Update, 
+                    processArchiveGUID);
             }
 
-            public long ProcessArchiveId_GetByGUID(string queueGUID)
+            public long ProcessArchive_GetProcessArchiveIdByQueueGUID(string queueGUID)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = queueGUID},
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessArchive_GetByGUID, 
+                    queueGUID);
 
-                //Get Process Archive Id
-                var processArchiveDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.ProcessArchive_GetByGUID, sqlParameters);
-                return processArchiveDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("ProcessArchiveId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ProcessArchiveId"))
+                    .FirstOrDefault();
             }
 
-            public long ProcessArchiveAttributeId_GetByProcessArchiveAttributeDescription(string processArchiveAttributeDescription)
+            public long ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(string processArchiveAttributeDescription)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveAttributeDescription", SqlValue = processArchiveAttributeDescription}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription, 
+                    processArchiveAttributeDescription);
 
-                //Get ProcessArchive Attribute Id
-                var ProcessArchiveDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription, sqlParameters);
-                return ProcessArchiveDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("ProcessArchiveAttributeId"))
-                            .First();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ProcessArchiveAttributeId"))
+                    .First();
             }
 
-            public List<string> ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId(long processArchiveId, string attribute)
+            public List<string> ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(long processArchiveId, long processArchiveAttributeId)
             {
-                var processArchiveAttributeId = ProcessArchiveAttributeId_GetByProcessArchiveAttributeDescription(attribute);
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId, 
+                    processArchiveId, processArchiveAttributeId);
 
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveID", SqlValue = processArchiveId},
-                    new SqlParameter {ParameterName = "@ProcessArchiveAttributeID", SqlValue = processArchiveAttributeId}
-                };
-
-                //Get ProcessArchive Detail
-                var ProcessArchiveDataTable = _databaseInteraction.Get(_storedProcedureSystemEnums.ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId, sqlParameters);
-                return ProcessArchiveDataTable.AsEnumerable()
-                            .Select(r => r.Field<string>("ProcessArchiveDetailDescription"))
-                            .ToList();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("ProcessArchiveDetailDescription"))
+                    .ToList();
             }
 
             public void ProcessArchiveDetail_Insert(string processArchiveGUID, string userGUID, string source, string attribute, string description)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID},
-                    new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
-                    new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = source},
-                    new SqlParameter {ParameterName = "@ProcessArchiveAttributeDescription", SqlValue = attribute},
-                    new SqlParameter {ParameterName = "@ProcessArchiveDetailDescription", SqlValue = description}
-                };
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureSystemEnums.ProcessArchiveDetail_Insert, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessArchiveDetail_Insert, 
+                    userGUID, source, attribute, description);
             }
         }
     }

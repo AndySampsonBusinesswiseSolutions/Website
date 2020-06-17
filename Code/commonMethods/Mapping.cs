@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
-using databaseInteraction;
+using System.Reflection;
 
 namespace commonMethods
 {
@@ -10,50 +9,44 @@ namespace commonMethods
     {
         public class Mapping
         {
+            public List<long> APIToProcess_GetAPIIdListByProcessId(long processId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.APIToProcess_GetAPIIdListByProcessId, 
+                    processId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("APIId"))
+                    .ToList();
+            }
+
             public long PasswordToUser_GetByPasswordIdAndUserId(long passwordId, long userId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@PasswordId", SqlValue = passwordId},
-                    new SqlParameter {ParameterName = "@UserId", SqlValue = userId}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.PasswordToUser_GetByPasswordIdAndUserId, 
+                    passwordId, userId);
 
-                //Get Mapping Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureMappingEnums.PasswordToUser_GetByPasswordIdAndUserId, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("PasswordToUserId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("PasswordToUserId"))
+                    .FirstOrDefault();
             }
 
             public void LoginToUser_Insert(long createdByUserId, long sourceId, long loginId, long userId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@CreatedByUserId", SqlValue = createdByUserId},
-                    new SqlParameter {ParameterName = "@SourceId", SqlValue = sourceId},
-                    new SqlParameter {ParameterName = "@LoginId", SqlValue = loginId},
-                    new SqlParameter {ParameterName = "@UserId", SqlValue = userId}
-                };
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureMappingEnums.LoginToUser_Insert, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.LoginToUser_Insert, 
+                    sourceId, loginId, userId);
             }
 
-            public List<long> Login_GetByUserId(long userId)
+            public List<long> LoginToUser_GetLoginIdListByUserId(long userId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@UserId", SqlValue = userId}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.LoginToUser_GetByUserId, 
+                    userId);
 
-                //Get Login Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureMappingEnums.LoginToUser_GetByUserId, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("LoginId"))
-                            .ToList();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("LoginId"))
+                    .ToList();
             }
         }
     }

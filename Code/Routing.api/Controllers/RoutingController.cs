@@ -16,6 +16,7 @@ namespace Routing.api.Controllers
         private readonly ILogger<RoutingController> _logger;
         private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
+        private readonly CommonMethods.Mapping _mappingMethods = new CommonMethods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -48,7 +49,7 @@ namespace Routing.api.Controllers
             var processId = Convert.ToInt64(result.Result);
 
             //Get APIId list
-            var APIIdList = _systemMethods.GetAPIIdListByProcessId(processId);
+            var APIIdList = _mappingMethods.APIToProcess_GetAPIIdListByProcessId(processId);
             var APIGUIDList = new List<string>();
 
             foreach(var APIId in APIIdList)
@@ -59,19 +60,19 @@ namespace Routing.api.Controllers
                         _systemMethods.GetAPIPOSTRouteByAPIId(APIId), 
                         _systemMethods.GetAPIData(APIId, jsonObject));
 
-                APIGUIDList.Add(_systemMethods.GetAPIGUIDById(APIId));
+                APIGUIDList.Add(_systemMethods.API_GetAPIGUIDByAPIId(APIId));
             }
 
             //Add Validate Process Id to list
             APIIdList.Add(validateProcessAPIId);
-            APIGUIDList.Add(_systemMethods.GetAPIGUIDById(validateProcessAPIId));
+            APIGUIDList.Add(_systemMethods.API_GetAPIGUIDByAPIId(validateProcessAPIId));
 
             //Get Archive.API Id
             var archiveAPIId = _systemMethods.GetArchiveProcessQueueAPIId();
 
             //Create required jsonObject
             var archiveObject = _systemMethods.GetAPIData(archiveAPIId, jsonObject);
-            archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIList, JsonSerializer.Serialize(APIGUIDList));
+            archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
 
             //Connect to Archive API and POST API list
             _systemMethods.CreateAPI(archiveAPIId)

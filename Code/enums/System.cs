@@ -65,7 +65,7 @@ namespace enums
 
                 public class RequiredDataKey
                 {
-                    public string APIList = "APIList";
+                    public string APIGUIDList = "APIGUIDList";
                     public string EmailAddress = "EmailAddress";
                     public string PageGUID = "PageGUID";
                     public string Password = "Password";

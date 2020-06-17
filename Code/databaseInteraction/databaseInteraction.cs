@@ -17,51 +17,51 @@ namespace databaseInteraction
             this.password = password;
         }
 
-        public object GetSingleRecord(string storedProcedure)
-        {
-            return GetSingleRecord(storedProcedure, new List<SqlParameter>());
-        }
+        // public object GetSingleRecord(string storedProcedure)
+        // {
+        //     return GetSingleRecord(storedProcedure, new List<SqlParameter>());
+        // }
 
-        public object GetSingleRecord(string storedProcedure, SqlParameter sqlParameter)
-        {
-            return GetSingleRecord(storedProcedure, new List<SqlParameter> {sqlParameter});
-        }
+        // public object GetSingleRecord(string storedProcedure, SqlParameter sqlParameter)
+        // {
+        //     return GetSingleRecord(storedProcedure, new List<SqlParameter> {sqlParameter});
+        // }
 
-        public object GetSingleRecord(string storedProcedure, List<SqlParameter> sqlParameters)
-        {
-            var dataTable = Get(storedProcedure, sqlParameters);
-            var dataRow = dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+        // public object GetSingleRecord(string storedProcedure, List<SqlParameter> sqlParameters)
+        // {
+        //     var dataTable = Get(storedProcedure, sqlParameters);
+        //     var dataRow = dataTable.Rows.Cast<DataRow>().FirstOrDefault();
 
-            return dataRow?[0];
-        }
+        //     return dataRow?[0];
+        // }
 
-        public DataRow GetSingleRow(string storedProcedure)
-        {
-            return GetSingleRow(storedProcedure, new List<SqlParameter>());
-        }
+        // public DataRow GetSingleRow(string storedProcedure)
+        // {
+        //     return GetSingleRow(storedProcedure, new List<SqlParameter>());
+        // }
 
-        public DataRow GetSingleRow(string storedProcedure, SqlParameter sqlParameter)
-        {
-            return GetSingleRow(storedProcedure, new List<SqlParameter> {sqlParameter});
-        }
+        // public DataRow GetSingleRow(string storedProcedure, SqlParameter sqlParameter)
+        // {
+        //     return GetSingleRow(storedProcedure, new List<SqlParameter> {sqlParameter});
+        // }
 
-        public DataRow GetSingleRow(string storedProcedure, List<SqlParameter> sqlParameters)
-        {
-            var dataTable = Get(storedProcedure, sqlParameters);
-            return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
-        }
+        // public DataRow GetSingleRow(string storedProcedure, List<SqlParameter> sqlParameters)
+        // {
+        //     var dataTable = Get(storedProcedure, sqlParameters);
+        //     return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+        // }
 
-        public DataTable Get(string storedProcedure)
-        {
-            return Get(storedProcedure, new List<SqlParameter>());
-        }
+        // public DataTable Get(string storedProcedure)
+        // {
+        //     return Get(storedProcedure, new List<SqlParameter>());
+        // }
 
-        public DataTable Get(string storedProcedure, SqlParameter sqlParameter)
-        {
-            return Get(storedProcedure, new List<SqlParameter> {sqlParameter});
-        }
+        // public DataTable Get(string storedProcedure, SqlParameter sqlParameter)
+        // {
+        //     return Get(storedProcedure, new List<SqlParameter> {sqlParameter});
+        // }
 
-        public DataTable Get(string storedProcedure, List<SqlParameter> sqlParameters)
+        public DataTable GetDataTable(string storedProcedure, List<SqlParameter> sqlParameters)
         {
             var dataTable = new DataTable();
 
@@ -89,47 +89,47 @@ namespace databaseInteraction
             return dataTable;
         }
 
-        public DataSet GetDataSet(string storedProcedure)
-        {
-            return GetDataSet(storedProcedure, new List<SqlParameter>());
-        }
+        // public DataSet GetDataSet(string storedProcedure)
+        // {
+        //     return GetDataSet(storedProcedure, new List<SqlParameter>());
+        // }
 
-        public DataSet GetDataSet(string storedProcedure, SqlParameter sqlParameter)
-        {
-            return GetDataSet(storedProcedure, new List<SqlParameter> {sqlParameter});
-        }
+        // public DataSet GetDataSet(string storedProcedure, SqlParameter sqlParameter)
+        // {
+        //     return GetDataSet(storedProcedure, new List<SqlParameter> {sqlParameter});
+        // }
 
-        public DataSet GetDataSet(string storedProcedure, List<SqlParameter> sqlParameters)
-        {
-            var dataSet = new DataSet();
+        // public DataSet GetDataSet(string storedProcedure, List<SqlParameter> sqlParameters)
+        // {
+        //     var dataSet = new DataSet();
 
-            using (var sqlConnection = new SqlConnection(ConnectionString))
-            {
-                using (var sqlCommand = new SqlCommand(storedProcedure, sqlConnection))
-                {
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.CommandTimeout = 0;
+        //     using (var sqlConnection = new SqlConnection(ConnectionString))
+        //     {
+        //         using (var sqlCommand = new SqlCommand(storedProcedure, sqlConnection))
+        //         {
+        //             sqlCommand.CommandType = CommandType.StoredProcedure;
+        //             sqlCommand.CommandTimeout = 0;
 
-                    if (sqlParameters.Any())
-                    {
-                        sqlCommand.Parameters.AddRange(sqlParameters.ToArray());
-                    }
+        //             if (sqlParameters.Any())
+        //             {
+        //                 sqlCommand.Parameters.AddRange(sqlParameters.ToArray());
+        //             }
 
-                    OpenConnection(sqlConnection);
+        //             OpenConnection(sqlConnection);
 
-                    using (var sqlDataAdapter = new SqlDataAdapter(sqlCommand))
-                    {
-                        sqlDataAdapter.Fill(dataSet);
-                    }
+        //             using (var sqlDataAdapter = new SqlDataAdapter(sqlCommand))
+        //             {
+        //                 sqlDataAdapter.Fill(dataSet);
+        //             }
 
-                    CloseConnection(sqlConnection);
-                }
-            }
+        //             CloseConnection(sqlConnection);
+        //         }
+        //     }
 
-            dataSet.DataSetName = storedProcedure;
+        //     dataSet.DataSetName = storedProcedure;
 
-            return dataSet;
-        }
+        //     return dataSet;
+        // }
 
         private void OpenConnection(IDbConnection sqlConnection)
         {
@@ -163,15 +163,15 @@ namespace databaseInteraction
             }
         }
 
-        public void ExecuteNonQuery(string storedProcedure)
-        {
-            ExecuteNonQuery(storedProcedure, new List<SqlParameter>());
-        }
+        // public void ExecuteNonQuery(string storedProcedure)
+        // {
+        //     ExecuteNonQuery(storedProcedure, new List<SqlParameter>());
+        // }
 
-        public void ExecuteNonQuery(string storedProcedure, SqlParameter sqlParameter)
-        {
-            ExecuteNonQuery(storedProcedure, new List<SqlParameter> {sqlParameter});
-        }
+        // public void ExecuteNonQuery(string storedProcedure, SqlParameter sqlParameter)
+        // {
+        //     ExecuteNonQuery(storedProcedure, new List<SqlParameter> {sqlParameter});
+        // }
 
         public void ExecuteNonQuery(string storedProcedure, List<SqlParameter> sqlParameters)
         {

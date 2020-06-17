@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using databaseInteraction;
+using System.Reflection;
 
 namespace commonMethods
 {
@@ -10,19 +10,15 @@ namespace commonMethods
     {
         public class Administration
         {
-            public long PasswordId_GetByPassword(string password)
+            public long Password_GetPasswordIdByPassword(string password)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@Password", SqlValue = password}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.Password_GetByPassword, 
+                    password);
 
-                //Get Password Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureAdministrationEnums.Password_GetByPassword, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("PasswordId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("PasswordId"))
+                    .FirstOrDefault();
             }
             
             // public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userattributeId, string userDetailDescription)
@@ -51,79 +47,55 @@ namespace commonMethods
                 _databaseInteraction.ExecuteNonQuery(_storedProcedureAdministrationEnums.UserDetail_Insert, sqlParameters);
             }
             
-            public long UserId_GetByUserDetailId(long userDetailId)
+            public long User_GetUserIdByUserDetailId(long userDetailId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@UserDetailId", SqlValue = userDetailId}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.UserDetail_GetByUserDetailId, 
+                    userDetailId);
 
-                //Get User Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureAdministrationEnums.UserDetail_GetByUserDetailId, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("UserId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("UserId"))
+                    .FirstOrDefault();
             }
             
-            public long UserDetailId_GetByEmailAddress(string emailAddress)
+            public long UserDetail_GetUserDetailIdByEmailAddress(string emailAddress)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@UserDetailDescription", SqlValue = emailAddress}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.UserDetail_GetByUserDetailDescription, 
+                    emailAddress);
 
-                //Get EmailAddress Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureAdministrationEnums.UserDetail_GetByUserDetailDescription, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("UserDetailId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("UserDetailId"))
+                    .FirstOrDefault();
             }
 
             public void Login_Insert(long userId, long sourceId, bool loginSuccessful, string processArchiveGUID)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@UserId", SqlValue = userId},
-                    new SqlParameter {ParameterName = "@SourceId", SqlValue = sourceId},
-                    new SqlParameter {ParameterName = "@LoginSuccessful", SqlValue = loginSuccessful},
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID}
-                };
-
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureAdministrationEnums.Login_Insert, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureAdministrationEnums.Login_Insert, 
+                    userId, sourceId, loginSuccessful, processArchiveGUID);
             }
 
-            public long LoginId_GetByProcessArchiveGUID(string processArchiveGUID)
+            public long Login_GetLoginIdByProcessArchiveGUID(string processArchiveGUID)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@ProcessArchiveGUID", SqlValue = processArchiveGUID}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.Login_GetByProcessArchiveGUID, 
+                    processArchiveGUID);
 
-                //Get Login Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureAdministrationEnums.Login_GetByProcessArchiveGUID, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<long>("LoginId"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("LoginId"))
+                    .FirstOrDefault();
             }
 
-            public bool LoginSuccessful_GetByLoginId(long loginId)
+            public bool Login_GetLoginSuccessfulByLoginId(long loginId)
             {
-                //Set up stored procedure parameters
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@LoginId", SqlValue = loginId}
-                };
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.Login_GetByLoginId, 
+                    loginId);
 
-                //Get Login Id
-                var processDataTable = _databaseInteraction.Get(_storedProcedureAdministrationEnums.Login_GetByLoginId, sqlParameters);
-                return processDataTable.AsEnumerable()
-                            .Select(r => r.Field<bool>("LoginSuccessful"))
-                            .FirstOrDefault();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<bool>("LoginSuccessful"))
+                    .FirstOrDefault();
             }
         }
     }

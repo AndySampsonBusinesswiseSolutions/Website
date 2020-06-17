@@ -73,12 +73,12 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             {
                 //Get Password Id
                 var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
-                var passwordId = _administrationMethods.PasswordId_GetByPassword(password);
+                var passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
 
                 //Get User Id
                 var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(emailAddress);
-                var userId = _administrationMethods.UserId_GetByUserDetailId(userDetailId);
+                var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+                var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
 
                 //Validate Password and User combination
                 var mappingId = _mappingMethods.PasswordToUser_GetByPasswordIdAndUserId(passwordId, userId);

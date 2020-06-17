@@ -51,7 +51,7 @@ namespace ArchiveProcessQueue.api.Controllers
             _systemMethods.ProcessArchive_Insert(queueGUID, 
                 _administrationUserGUIDEnums.System, 
                 _informationSourceTypeEnums.UserGenerated);
-            var processArchiveId = _systemMethods.ProcessArchiveId_GetByGUID(queueGUID);
+            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByQueueGUID(queueGUID);
 
             //TODO Write records for each API into ProcessArchiveDetail
 

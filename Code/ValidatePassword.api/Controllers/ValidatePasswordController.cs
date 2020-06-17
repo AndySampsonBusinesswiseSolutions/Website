@@ -74,7 +74,7 @@ namespace ValidatePassword.api.Controllers
                 var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
 
                 //Validate Password
-                var passwordId = _administrationMethods.PasswordId_GetByPassword(password);
+                var passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
 
                 //If passwordId == 0 then the GUID provided isn't valid so create an error
                 if(passwordId == 0)

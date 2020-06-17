@@ -72,11 +72,11 @@ namespace LockUser.api.Controllers
             {
                 //Get User Id
                 var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(emailAddress);
-                var userId = _administrationMethods.UserId_GetByUserDetailId(userDetailId);
+                var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+                var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
 
                 //Get logins by user id and order by descending
-                var loginList = _mappingMethods.Login_GetByUserId(userId).OrderByDescending(l => l);
+                var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
 
                 //Initialise invalidAttempts variable
                 var invalidAttempts = 0;
@@ -85,7 +85,7 @@ namespace LockUser.api.Controllers
                 foreach(var login in loginList)
                 {
                     //Get LoginSuccessful attribute
-                    var loginSucessful = _administrationMethods.LoginSuccessful_GetByLoginId(login);
+                    var loginSucessful = _administrationMethods.Login_GetLoginSuccessfulByLoginId(login);
 
                     //If login is successful, then exit loop
                     //Else increment invalidAttempts
@@ -100,9 +100,9 @@ namespace LockUser.api.Controllers
                 }
 
                 //Get maximum attempts allowed before locking
-                var maximumInvalidAttempts = _systemMethods.GetAPIDetailByAPIGUID(
-                    _systemAPIGUIDEnums.LockUserAPI, 
-                    _systemAPIAttributeEnums.MaximumInvalidLoginAttempts)
+                var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+                var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
+                var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
                     .Select(a => Convert.ToInt64(a))
                     .First();
 

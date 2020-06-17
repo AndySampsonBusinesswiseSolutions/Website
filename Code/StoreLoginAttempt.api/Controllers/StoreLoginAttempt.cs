@@ -72,20 +72,20 @@ namespace StoreLoginAttempt.api.Controllers
 
             //Get User Id
             var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-            var userDetailId = _administrationMethods.UserDetailId_GetByEmailAddress(emailAddress);
-            var userId = _administrationMethods.UserId_GetByUserDetailId(userDetailId);
+            var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+            var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
 
             //Get Source Type Id
-            var sourceTypeId = _informationMethods.SourceTypeId_GetBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
 
             //Get Source Id
-            var sourceId = _informationMethods.SourceId_GetBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
 
             //Store login attempt
             _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
 
             //Get Login Id
-            var loginId = _administrationMethods.LoginId_GetByProcessArchiveGUID(queueGUID);
+            var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
 
             //Store mapping between login attempt and user
             _mappingMethods.LoginToUser_Insert(1, sourceId, loginId, userId);//TODO: Create GetSystemUserId method

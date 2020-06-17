@@ -31,20 +31,20 @@ namespace enums
 
             public class System
             {
-                public string API_GetByGUID = "[System].[API_GetByGUID]";
+                public string API_GetByAPIGUID = "[System].[API_GetByAPIGUID]";
                 public string API_GetById = "[System].[API_GetById]";
                 public string APIAttribute_GetByAPIAttributeDescription = "[System].[APIAttribute_GetByAPIAttributeDescription]";
                 public string APIDetail_GetByAPIIdAndAPIAttributeId = "[System].[APIDetail_GetByAPIIdAndAPIAttributeId]";
                 public string Page_GetByGUID = "[System].[Page_GetByGUID]";
-                public string Process_GetByGUID = "[System].[Process_GetByGUID]";
+                public string Process_GetByProcessGUID = "[System].[Process_GetByProcessGUID]";
                 public string ProcessQueue_Insert = "[System].[ProcessQueue_Insert]";
                 public string ProcessQueue_Update = "[System].[ProcessQueue_Update]";
-                public string ProcessQueue_GetByGUIDAndAPIId = "[System].[ProcessQueue_GetByGUIDAndAPIId]";
+                public string ProcessQueue_GetByQueueGUIDAndAPIId = "[System].[ProcessQueue_GetByQueueGUIDAndAPIId]";
                 public string ProcessArchive_Insert = "[System].[ProcessArchive_Insert]";
                 public string ProcessArchive_Update = "[System].[ProcessArchive_Update]";
                 public string ProcessArchive_GetByGUID = "[System].[ProcessArchive_GetByGUID]";
                 public string ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription = "[System].[ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription]";
-                public string ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId = "[System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId]";
+                public string ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId = "[System].[ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId]";
                 public string ProcessArchiveDetail_Insert = "[System].[ProcessArchiveDetail_Insert]";
             }
         }
