@@ -89,7 +89,7 @@ DECLARE @v sql_variant
 SET @v = N'Foreign Key constraint joining [Administration.Role].[RoleDetail].RoleAttributeId to [Administration.Role].[RoleAttribute].RoleAttributeId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Administration.Role', N'TABLE', N'RoleDetail', N'CONSTRAINT', N'FK_RoleDetail_RoleAttributeId'
 GO
-ALTER TABLE [Administration.RoleDetail].[RoleDetail] ADD CONSTRAINT
+ALTER TABLE [Administration.Role].[RoleDetail] ADD CONSTRAINT
 	FK_RoleDetail_SourceId FOREIGN KEY
 	(
 	SourceId
