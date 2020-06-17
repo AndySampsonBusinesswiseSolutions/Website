@@ -23,8 +23,7 @@ CREATE TABLE [Communication].[Communication]
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
 	SourceId bigint NOT NULL,
-	CommunicationTypeId bigint NOT NULL,
-	CommunicationTypeEntityId bigint NOT NULL
+	CommunicationGUID UNIQUEIDENTIFIER NOT NULL
 	)  ON Communication
 GO
 ALTER TABLE [Communication].[Communication] ADD CONSTRAINT
@@ -57,21 +56,6 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Communication].[Communication].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Communication', N'TABLE', N'Communication', N'CONSTRAINT', N'FK_Communication_CreatedByUserId'
-GO
-ALTER TABLE [Communication].[Communication] ADD CONSTRAINT
-	FK_Communication_CommunicationTypeId FOREIGN KEY
-	(
-	CommunicationTypeId
-	) REFERENCES [Communication].[CommunicationType]
-	(
-	CommunicationTypeId
-	) ON UPDATE  NO ACTION 
-	 ON DELETE  NO ACTION 
-	
-GO
-DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Communication].[Communication].CommunicationTypeId to [Communication].[CommunicationType].CommunicationTypeId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Communication', N'TABLE', N'Communication', N'CONSTRAINT', N'FK_Communication_CommunicationTypeId'
 GO
 ALTER TABLE [Communication].[Communication] ADD CONSTRAINT
 	FK_Communication_SourceId FOREIGN KEY

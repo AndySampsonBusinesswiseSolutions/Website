@@ -23,7 +23,7 @@ CREATE TABLE [System].[Page]
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
 	SourceId bigint NOT NULL,
-	GUID UNIQUEIDENTIFIER NOT NULL,
+	PageGUID UNIQUEIDENTIFIER NOT NULL,
 	)  ON [System]
 GO
 ALTER TABLE [System].[Page] ADD CONSTRAINT

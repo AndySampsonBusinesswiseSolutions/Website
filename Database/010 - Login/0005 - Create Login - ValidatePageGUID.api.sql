@@ -31,17 +31,17 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [ValidatePageGUID.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[Page_GetByGUID] TO [ValidatePageGUID.api];
+GRANT EXECUTE ON OBJECT::[System].[Page_GetByPageGUID] TO [ValidatePageGUID.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [ValidatePageGUID.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [ValidatePageGUID.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [ValidatePageGUID.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ValidatePageGUID.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [ValidatePageGUID.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [ValidatePageGUID.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [ValidatePageGUID.api];  
 GO

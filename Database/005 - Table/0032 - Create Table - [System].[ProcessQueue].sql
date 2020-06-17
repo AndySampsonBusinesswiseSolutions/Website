@@ -17,7 +17,7 @@ DROP TABLE [System].[ProcessQueue]
 GO
 CREATE TABLE [System].[ProcessQueue]
 	(
-	GUID UNIQUEIDENTIFIER NOT NULL,
+	ProcessQueueGUID UNIQUEIDENTIFIER NOT NULL,
 	EffectiveFromDateTime datetime NOT NULL,
 	EffectiveToDateTime datetime NOT NULL,
 	CreatedDateTime datetime NOT NULL,

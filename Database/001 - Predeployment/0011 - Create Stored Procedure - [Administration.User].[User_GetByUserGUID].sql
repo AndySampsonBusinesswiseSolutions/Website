@@ -6,26 +6,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[API_GetAPIIdListByProcessId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Administration.User].[User_GetByUserGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [Mapping].[API_GetAPIIdListByProcessId] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Administration.User].[User_GetByUserGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get API Ids from [Mapping].[APIToProcess] table by Process Id
+-- Description:	Get user info from [Administration.User].[User] table by GUID
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[API_GetAPIIdListByProcessId]
-    @ProcessId BIGINT,
+ALTER PROCEDURE [Administration.User].[User_GetByUserGUID]
+    @UserGUID UNIQUEIDENTIFIER,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,18 +36,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        APIToProcessId,
+        UserId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        APIId,
-        ProcessId
+        UserGUID
     FROM 
-        [Mapping].[APIToProcess] 
+        [Administration.User].[User] 
     WHERE 
-        ProcessId = @ProcessId
+        UserGUID = @UserGUID
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

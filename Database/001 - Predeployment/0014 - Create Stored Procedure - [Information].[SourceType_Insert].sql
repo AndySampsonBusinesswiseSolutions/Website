@@ -19,23 +19,23 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Information].[SourceType_Insert]
-    @UserGUID UNIQUEIDENTIFIER,
+    @CreatedByUserId BIGINT,
     @SourceTypeDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription 
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            
             INSERT INTO [Information].[SourceType]
             (
                 CreatedByUserId,
@@ -43,7 +43,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceTypeDescription
             )
         END

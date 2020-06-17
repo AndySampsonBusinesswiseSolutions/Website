@@ -19,31 +19,28 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[ProcessArchiveDetail_Insert]
-	@UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
-    @ProcessArchiveGUID UNIQUEIDENTIFIER,
-    @ProcessArchiveAttributeDescription VARCHAR(255),
+	@CreatedByUserId BIGINT,
+    @SourceId BIGINT,
+    @ProcessArchiveId BIGINT,
+    @ProcessArchiveAttributeId BIGINT,
     @ProcessArchiveDetailDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @ProcessArchiveId BIGINT = (SELECT ProcessArchiveId FROM [System].[ProcessArchive] WHERE GUID = @ProcessArchiveGUID)
-    DECLARE @ProcessArchiveAttributeId BIGINT = (SELECT ProcessArchiveAttributeId FROM [System].[ProcessArchiveAttribute] WHERE ProcessArchiveAttributeDescription = @ProcessArchiveAttributeDescription)
-
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[ProcessArchiveDetail] WHERE ProcessArchiveId = @ProcessArchiveId AND ProcessArchiveAttributeId = @ProcessArchiveAttributeId AND ProcessArchiveDetailDescription = @ProcessArchiveDetailDescription)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[ProcessArchiveDetail] WHERE ProcessArchiveId = @ProcessArchiveId 
+        AND ProcessArchiveAttributeId = @ProcessArchiveAttributeId 
+        AND ProcessArchiveDetailDescription = @ProcessArchiveDetailDescription
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-            DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-
             INSERT INTO [System].[ProcessArchiveDetail]
             (
                 CreatedByUserId,
@@ -54,7 +51,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceId,
                 @ProcessArchiveId,
                 @ProcessArchiveAttributeId,

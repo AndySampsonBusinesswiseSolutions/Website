@@ -28,7 +28,7 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessArchive_Insert] TO [ArchiveProcessQueue.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessArchive_GetByGUID] TO [ArchiveProcessQueue.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessArchive_GetByProcessArchiveGUID] TO [ArchiveProcessQueue.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[ProcessArchive_Update] TO [ArchiveProcessQueue.api];  
@@ -37,14 +37,14 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessArchiveDetail_Insert] TO [ArchiveProcessQueue.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [ArchiveProcessQueue.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [ArchiveProcessQueue.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [ArchiveProcessQueue.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ArchiveProcessQueue.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [ArchiveProcessQueue.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [ArchiveProcessQueue.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [ArchiveProcessQueue.api];  
 GO

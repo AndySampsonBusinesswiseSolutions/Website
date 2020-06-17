@@ -19,41 +19,28 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[ProcessDetail_Insert]
-    @UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
-    @ProcessGUID UNIQUEIDENTIFIER,
-    @ProcessAttributeDescription VARCHAR(255),
+    @CreatedByUserId BIGINT,
+    @SourceId BIGINT,
+    @ProcessId BIGINT,
+    @ProcessAttributeId BIGINT,
     @ProcessDetailDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @ProcessId BIGINT = (SELECT ProcessId FROM [System].[Process] WHERE GUID = @ProcessGUID)
-    DECLARE @ProcessAttributeId BIGINT = (SELECT ProcessAttributeId FROM [System].[ProcessAttribute] WHERE ProcessAttributeDescription = @ProcessAttributeDescription)
-
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[ProcessDetail] WHERE ProcessId = @ProcessId AND ProcessAttributeId = @ProcessAttributeId AND ProcessDetailDescription = @ProcessDetailDescription)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[ProcessDetail] WHERE ProcessId = @ProcessId 
+        AND ProcessAttributeId = @ProcessAttributeId 
+        AND ProcessDetailDescription = @ProcessDetailDescription
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            UPDATE
-                [System].[ProcessDetail]
-            SET
-                EffectiveToDateTime = GETUTCDATE()
-            WHERE
-                ProcessId = @ProcessId
-                AND ProcessAttributeId = @ProcessAttributeId
-                AND ProcessDetailDescription <> @ProcessDetailDescription
-                AND EffectiveToDateTime = '9999-12-31'
-            
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-            DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-            
             INSERT INTO [System].[ProcessDetail]
             (
                 CreatedByUserId,
@@ -64,7 +51,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceId,
                 @ProcessId,
                 @ProcessAttributeId,

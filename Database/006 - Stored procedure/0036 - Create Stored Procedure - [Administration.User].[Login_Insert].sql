@@ -19,7 +19,7 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Administration.User].[Login_Insert]
-	@UserId BIGINT,
+	@CreatedByUserId BIGINT,
     @SourceId BIGINT,
     @LoginSuccessful BIT,
     @ProcessArchiveGUID UNIQUEIDENTIFIER
@@ -28,6 +28,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -43,7 +44,7 @@ BEGIN
     )
     VALUES
     (
-        @UserId,
+        @CreatedByUserId,
         @SourceId,
         @LoginSuccessful,
         @ProcessArchiveGUID

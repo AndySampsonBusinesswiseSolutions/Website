@@ -23,7 +23,7 @@ CREATE TABLE [Administration.User].[User]
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NULL,
 	SourceId bigint NULL,
-	GUID UNIQUEIDENTIFIER NOT NULL,
+	UserGUID UNIQUEIDENTIFIER NOT NULL,
 	)  ON Administration
 GO
 ALTER TABLE [Administration.User].[User] ADD CONSTRAINT

@@ -25,14 +25,14 @@ GO
 ALTER ROLE [db_denydatawriter] ADD MEMBER [CheckPrerequisiteAPI.api]
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [CheckPrerequisiteAPI.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [CheckPrerequisiteAPI.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [CheckPrerequisiteAPI.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [CheckPrerequisiteAPI.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [CheckPrerequisiteAPI.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [CheckPrerequisiteAPI.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [CheckPrerequisiteAPI.api];  
 GO

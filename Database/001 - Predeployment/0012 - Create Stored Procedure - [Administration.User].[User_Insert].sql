@@ -25,17 +25,18 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Administration.User].[User] WHERE GUID = @UserGUID)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Administration.User].[User] WHERE UserGUID = @UserGUID)
         BEGIN
             INSERT INTO [Administration.User].[User]
             (
-                GUID
+                UserGUID
             )
             VALUES
             (

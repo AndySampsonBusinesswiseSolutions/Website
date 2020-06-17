@@ -23,7 +23,7 @@ CREATE TABLE [Administration.User].[Verification]
 	CreatedDateTime datetime NOT NULL,
 	CreatedByUserId bigint NOT NULL,
 	SourceId bigint NOT NULL,
-	VerificationDescription varchar(200) NOT NULL,
+	VerificationCode varchar(200) NOT NULL,
 	ExpiryDateTime datetime NOT NULL,
 	)  ON Administration
 GO

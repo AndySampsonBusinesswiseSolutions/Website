@@ -6,27 +6,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[APIDetail_GetByAPIIdAndAPIAttributeId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessArchive_GetByProcessArchiveGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[APIDetail_GetByAPIIdAndAPIAttributeId] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [System].[ProcessArchive_GetByProcessArchiveGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get APIDetail info from [System].[APIDetail] table by API ID and API Attribute ID
+-- Description:	Get ProcessArchive info from [System].[ProcessArchive] table by GUID
 -- =============================================
 
-ALTER PROCEDURE [System].[APIDetail_GetByAPIIdAndAPIAttributeId]
-    @APIID BIGINT,
-    @APIAttributeId BIGINT,
+ALTER PROCEDURE [System].[ProcessArchive_GetByProcessArchiveGUID]
+    @ProcessArchiveGUID UNIQUEIDENTIFIER,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Adjusted stored procedure name to correctly identify which GUID is being used
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -36,20 +36,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        APIDetailId,
+        ProcessArchiveId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        APIId,
-        APIAttributeId,
-        APIDetailDescription
+        ProcessArchiveGUID
     FROM 
-        [System].[APIDetail] 
+        [System].[ProcessArchive] 
     WHERE 
-        APIId = @APIId
-        AND APIAttributeId = @APIAttributeId
+        ProcessArchiveGUID = @ProcessArchiveGUID
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

@@ -19,30 +19,25 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Mapping].[APIToProcess_Insert]
-    @UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
-    @APIGUID UNIQUEIDENTIFIER,
-    @ProcessGUID UNIQUEIDENTIFIER
+    @CreatedByUserId BIGINT,
+    @SourceId BIGINT,
+    @APIId BIGINT,
+    @ProcessId BIGINT
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-03 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE GUID = @APIGUID)
-    DECLARE @ProcessId BIGINT = (SELECT ProcessId FROM [System].[Process] WHERE GUID = @ProcessGUID)
-
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Mapping].[APIToProcess] WHERE APIId = @APIId AND ProcessId = @ProcessId)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Mapping].[APIToProcess] WHERE APIId = @APIId AND ProcessId = @ProcessId
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-            DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-            
             INSERT INTO [Mapping].APIToProcess
             (
                 CreatedByUserId,
@@ -52,7 +47,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceId,
                 @APIId,
                 @ProcessId

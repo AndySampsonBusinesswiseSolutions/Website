@@ -6,26 +6,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[Process_GetByGUID]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[Page_GetByPageGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[Process_GetByGUID] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [System].[Page_GetByPageGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get Process info from [System].[Process] table by GUID
+-- Description:	Get Page info from [System].[Page] table by GUID
 -- =============================================
 
-ALTER PROCEDURE [System].[Process_GetByGUID]
-    @ProcessGUID UNIQUEIDENTIFIER,
+ALTER PROCEDURE [System].[Page_GetByPageGUID]
+    @PageGUID UNIQUEIDENTIFIER,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Adjusted stored procedure name to correctly identify which GUID is being used
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,17 +36,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        ProcessId,
+        PageId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        GUID
+        PageGUID
     FROM 
-        [System].[Process] 
+        [System].[Page] 
     WHERE 
-        GUID = @ProcessGUID
+        PageGUID = @PageGUID
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

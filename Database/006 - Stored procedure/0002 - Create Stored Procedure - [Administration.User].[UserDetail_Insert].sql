@@ -19,39 +19,28 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Administration.User].[UserDetail_Insert]
-    @UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
-    @UserAttributeDescription VARCHAR(255),
+    @CreatedByUserId BIGINT,
+    @SourceId BIGINT,
+    @UserId BIGINT,
+    @UserAttributeId BIGINT,
     @UserDetailDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-    DECLARE @UserAttributeId BIGINT = (SELECT UserAttributeId FROM [Administration.User].[UserAttribute] WHERE UserAttributeDescription = @UserAttributeDescription)
-
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Administration.User].[UserDetail] WHERE UserId = @UserId AND UserAttributeId = @UserAttributeId AND UserDetailDescription = @UserDetailDescription)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Administration.User].[UserDetail] WHERE UserId = @UserId 
+        AND UserAttributeId = @UserAttributeId 
+        AND UserDetailDescription = @UserDetailDescription
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            UPDATE
-                [Administration.User].[UserDetail]
-            SET
-                EffectiveToDateTime = GETUTCDATE()
-            WHERE
-                UserId = @UserId
-                AND UserAttributeId = @UserAttributeId
-                AND UserDetailDescription <> @UserDetailDescription
-                AND EffectiveToDateTime = '9999-12-31'
-            
-            DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-            DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-            
             INSERT INTO [Administration.User].[UserDetail]
             (
                 CreatedByUserId,
@@ -62,7 +51,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceId,
                 @UserId,
                 @UserAttributeId,

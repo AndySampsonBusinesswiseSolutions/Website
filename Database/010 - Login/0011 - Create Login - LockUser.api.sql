@@ -31,13 +31,13 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [LockUser.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [LockUser.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [LockUser.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [LockUser.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [LockUser.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [LockUser.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailDescription] TO [LockUser.api];  

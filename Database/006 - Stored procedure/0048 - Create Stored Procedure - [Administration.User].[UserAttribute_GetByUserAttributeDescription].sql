@@ -6,26 +6,26 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[Page_GetByGUID]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Administration.User].[UserAttribute_GetByUserAttributeDescription]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[Page_GetByGUID] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Administration.User].[UserAttribute_GetByUserAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get Page info from [System].[Page] table by GUID
+-- Description:	Get UserAttribute info from [Administration.User].[UserAttribute] table by UserAttributeDescription
 -- =============================================
 
-ALTER PROCEDURE [System].[Page_GetByGUID]
-    @PageGUID UNIQUEIDENTIFIER,
+ALTER PROCEDURE [Administration.User].[UserAttribute_GetByUserAttributeDescription]
+    @UserAttributeDescription VARCHAR(255),
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,17 +35,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        PageId,
+        UserAttributeId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        GUID
+        UserAttributeDescription
     FROM 
-        [System].[Page] 
+        [Administration.User].[UserAttribute] 
     WHERE 
-        GUID = @PageGUID
+        UserAttributeDescription = @UserAttributeDescription
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

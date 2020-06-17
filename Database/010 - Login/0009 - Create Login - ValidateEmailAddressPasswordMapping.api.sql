@@ -31,16 +31,16 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [ValidateEmailAddressPasswordMapping.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [ValidateEmailAddressPasswordMapping.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [ValidateEmailAddressPasswordMapping.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [ValidateEmailAddressPasswordMapping.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ValidateEmailAddressPasswordMapping.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [ValidateEmailAddressPasswordMapping.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [ValidateEmailAddressPasswordMapping.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [ValidateEmailAddressPasswordMapping.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[Password_GetByPassword] TO [ValidateEmailAddressPasswordMapping.api];  

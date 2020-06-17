@@ -31,16 +31,16 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [ValidateEmailAddress.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [ValidateEmailAddress.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [ValidateEmailAddress.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [ValidateEmailAddress.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ValidateEmailAddress.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [ValidateEmailAddress.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [ValidateEmailAddress.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [ValidateEmailAddress.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailDescription] TO [ValidateEmailAddress.api];  

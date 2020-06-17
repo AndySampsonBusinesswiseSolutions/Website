@@ -1,4 +1,11 @@
 USE [EMaaS]
 GO
 
-EXEC [Administration.User].[UserAttribute_Insert] '743E21EE-2185-45D4-9003-E35060B751E2', 'User Generated', 'Email Address'
+DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE UserGUID = '743E21EE-2185-45D4-9003-E35060B751E2')
+DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = 'User Generated')
+DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
+
+EXEC [Administration.User].[UserAttribute_Insert] 
+    @CreatedByUserId, 
+    @SourceId, 
+    'Email Address'

@@ -31,16 +31,16 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [ValidatePassword.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [ValidatePassword.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [ValidatePassword.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [ValidatePassword.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ValidatePassword.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [ValidatePassword.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByGUIDAndAPIId] TO [ValidatePassword.api];  
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [ValidatePassword.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[Password_GetByPassword] TO [ValidatePassword.api];  

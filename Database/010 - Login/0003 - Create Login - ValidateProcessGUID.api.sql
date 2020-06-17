@@ -25,13 +25,13 @@ GO
 ALTER ROLE [db_denydatawriter] ADD MEMBER [ValidateProcessGUID.api]
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [ValidateProcessGUID.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [ValidateProcessGUID.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [ValidateProcessGUID.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [ValidateProcessGUID.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [ValidateProcessGUID.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Insert] TO [ValidateProcessGUID.api];
@@ -40,5 +40,5 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [ValidateProcessGUID.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[Process_GetByGUID] TO [ValidateProcessGUID.api];
+GRANT EXECUTE ON OBJECT::[System].[Process_GetByProcessGUID] TO [ValidateProcessGUID.api];
 GO

@@ -19,44 +19,28 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[APIDetail_Insert]
-	@UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
-    @APIGUID UNIQUEIDENTIFIER,
-    @APIAttributeDescription VARCHAR(255),
+	@CreatedByUserId BIGINT,
+    @SourceId BIGINT,
+    @APIId BIGINT,
+    @APIAttributeId BIGINT,
     @APIDetailDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE GUID = @APIGUID)
-    DECLARE @APIAttributeId BIGINT = (SELECT APIAttributeId FROM [System].[APIAttribute] WHERE APIAttributeDescription = @APIAttributeDescription)
-
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId AND APIDetailDescription = @APIDetailDescription)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[APIDetail] WHERE APIId = @APIId 
+        AND APIAttributeId = @APIAttributeId 
+        AND APIDetailDescription = @APIDetailDescription
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            DECLARE @AllowsMultipleActiveInstances BIT = (SELECT AllowsMultipleActiveInstances FROM [System].[APIAttribute] WHERE APIAttributeId = @APIAttributeId)
-
-            IF @AllowsMultipleActiveInstances = 0
-                BEGIN
-                    DECLARE @APIDetailId BIGINT = (SELECT APIDetailId FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId)
-
-                    WHILE @APIDetailId > 0
-                        BEGIN
-                            EXEC [System].[APIDetail_DeleteByAPIDetailId] APIDetailId
-                            SET @APIDetailId = (SELECT APIDetailId FROM [System].[APIDetail] WHERE APIId = @APIId AND APIAttributeId = @APIAttributeId)
-                        END
-                END
-                
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-            DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-
             INSERT INTO [System].[APIDetail]
             (
                 CreatedByUserId,
@@ -67,7 +51,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceId,
                 @APIId,
                 @APIAttributeId,

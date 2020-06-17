@@ -6,26 +6,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[API_GetByGUID]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[Process_GetByProcessGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[API_GetByGUID] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [System].[Process_GetByProcessGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get API info from [System].[API] table by GUID
+-- Description:	Get Process info from [System].[Process] table by GUID
 -- =============================================
 
-ALTER PROCEDURE [System].[API_GetByGUID]
-    @APIGUID UNIQUEIDENTIFIER,
+ALTER PROCEDURE [System].[Process_GetByProcessGUID]
+    @ProcessGUID UNIQUEIDENTIFIER,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Adjusted stored procedure name to correctly identify which GUID is being used
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,17 +36,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        APIId,
+        ProcessId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        GUID
+        ProcessGUID
     FROM 
-        [System].[API] 
+        [System].[Process] 
     WHERE 
-        GUID = @APIGUID
+        ProcessGUID = @ProcessGUID
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

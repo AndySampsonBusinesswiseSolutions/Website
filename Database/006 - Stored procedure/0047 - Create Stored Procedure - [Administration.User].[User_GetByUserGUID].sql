@@ -6,26 +6,26 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Administration.User].[User_GetByGUID]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Administration.User].[User_GetByUserGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [Administration.User].[User_GetByGUID] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Administration.User].[User_GetByUserGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get user info from [Administration.User].[User] table by GUID
+-- Description:	Get User info from [Administration.User].[User] table by GUID
 -- =============================================
 
-ALTER PROCEDURE [Administration.User].[User_GetByGUID]
+ALTER PROCEDURE [Administration.User].[User_GetByUserGUID]
     @UserGUID UNIQUEIDENTIFIER,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -41,11 +41,11 @@ BEGIN
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        GUID
+        UserGUID
     FROM 
         [Administration.User].[User] 
     WHERE 
-        GUID = @UserGUID
+        UserGUID = @UserGUID
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

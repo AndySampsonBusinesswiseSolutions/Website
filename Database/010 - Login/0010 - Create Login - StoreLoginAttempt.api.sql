@@ -31,13 +31,13 @@ GO
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [StoreLoginAttempt.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [StoreLoginAttempt.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [StoreLoginAttempt.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [StoreLoginAttempt.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [StoreLoginAttempt.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [StoreLoginAttempt.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailDescription] TO [StoreLoginAttempt.api];  

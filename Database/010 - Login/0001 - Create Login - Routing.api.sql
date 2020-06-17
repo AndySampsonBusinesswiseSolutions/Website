@@ -25,17 +25,17 @@ GO
 ALTER ROLE [db_denydatawriter] ADD MEMBER [Routing.api]
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetByGUID] TO [Routing.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [Routing.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIAttribute_GetByAPIAttributeDescription] TO [Routing.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIDAndAPIAttributeId] TO [Routing.api];  
+GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [Routing.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Mapping].[API_GetAPIIdListByProcessId] TO [Routing.api];  
+GRANT EXECUTE ON OBJECT::[Mapping].[APIToProcess_GetByProcessId] TO [Routing.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[System].[API_GetById] TO [Routing.api];  
+GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIId] TO [Routing.api];  
 GO

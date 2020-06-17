@@ -6,26 +6,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessArchive_GetByGUID]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[APIToProcess_GetByProcessId]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[ProcessArchive_GetByGUID] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Mapping].[APIToProcess_GetByProcessId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Get ProcessArchive info from [System].[ProcessArchive] table by GUID
+-- Description:	Get APIToProcess info from [Mapping].[APIToProcess] table by Process Id
 -- =============================================
 
-ALTER PROCEDURE [System].[ProcessArchive_GetByGUID]
-    @ProcessArchiveGUID UNIQUEIDENTIFIER,
+ALTER PROCEDURE [Mapping].[APIToProcess_GetByProcessId]
+    @ProcessId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Adjusted stored procedure name
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,17 +36,18 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        ProcessArchiveId,
+        APIToProcessId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        GUID
+        APIId,
+        ProcessId
     FROM 
-        [System].[ProcessArchive] 
+        [Mapping].[APIToProcess] 
     WHERE 
-        GUID = @ProcessArchiveGUID
+        ProcessId = @ProcessId
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

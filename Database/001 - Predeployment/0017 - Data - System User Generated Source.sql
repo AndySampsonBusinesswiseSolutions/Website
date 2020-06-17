@@ -1,10 +1,11 @@
 USE [EMaaS]
 GO
 
-EXEC [Information].[Source_Insert] '743E21EE-2185-45D4-9003-E35060B751E2', 'User Generated', 0
-
+DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE UserGUID = '743E21EE-2185-45D4-9003-E35060B751E2')
 DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = 'User Generated')
-DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = '743E21EE-2185-45D4-9003-E35060B751E2')
+
+EXEC [Information].[Source_Insert] @CreatedByUserId, @SourceTypeId, 0
+
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId AND SourceTypeEntityId = 0)
 
 ALTER TABLE [Information].[SourceType] ADD CONSTRAINT
@@ -25,9 +26,9 @@ UPDATE
     [Administration.User].[User]
 SET 
     SourceId = @SourceId,
-    CreatedByUserId = @UserId
+    CreatedByUserId = @CreatedByUserId
 WHERE
-    UserId = @UserId
+    UserId = @CreatedByUserId
 
 UPDATE
     [Information].[SourceType]

@@ -6,25 +6,25 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessArchive_Update]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessDetail_DeleteByProcessDetailId]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[ProcessArchive_Update] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [System].[ProcessDetail_DeleteByProcessDetailId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	End-date entry in [System].[ProcessArchive] table
+-- Description:	Delete Process detail from [System].[ProcessDetail] table
 -- =============================================
 
-ALTER PROCEDURE [System].[ProcessArchive_Update]
-	@ProcessArchiveGUID UNIQUEIDENTIFIER
+ALTER PROCEDURE [System].[ProcessDetail_DeleteByProcessDetailId]
+    @ProcessDetailId BIGINT
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -32,10 +32,10 @@ BEGIN
 	SET NOCOUNT ON;
 
     UPDATE
-        [System].[ProcessArchive]
+        [System].[ProcessDetail]
     SET
         EffectiveToDateTime = GETUTCDATE()
     WHERE
-        ProcessArchiveGUID = @ProcessArchiveGUID
+        ProcessDetailId = @ProcessDetailId
 END
 GO

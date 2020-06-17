@@ -19,26 +19,25 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Information].[Source_Insert]
-    @UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
+    @CreatedByUserId BIGINT,
+    @SourceTypeId BIGINT,
     @SourceTypeEntityId BIGINT
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId AND SourceTypeEntityId = @SourceTypeEntityId)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId 
+        AND SourceTypeEntityId = @SourceTypeEntityId 
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            
             INSERT INTO [Information].[Source]
             (
                 CreatedByUserId,
@@ -47,7 +46,7 @@ BEGIN
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceTypeId,
                 @SourceTypeEntityId
             )

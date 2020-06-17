@@ -19,35 +19,33 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[Process_Insert]
-    @UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
+    @CreatedByUserId BIGINT,
+    @SourceId BIGINT,
     @ProcessGUID UNIQUEIDENTIFIER
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[Process] WHERE GUID = @ProcessGUID)
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[Process] WHERE ProcessGUID = @ProcessGUID
+        AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-            DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-            DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-
             INSERT INTO [System].Process
             (
                 CreatedByUserId,
                 SourceId,
-                GUID
+                ProcessGUID
             )
             VALUES
             (
-                @UserId,
+                @CreatedByUserId,
                 @SourceId,
                 @ProcessGUID
             )

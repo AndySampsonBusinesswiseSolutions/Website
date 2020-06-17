@@ -19,10 +19,10 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[ProcessQueue_Insert]
-	@ProcessQueueGUID UNIQUEIDENTIFIER,
-    @UserGUID UNIQUEIDENTIFIER,
-    @SourceTypeDescription VARCHAR(255),
-    @APIGUID UNIQUEIDENTIFIER,
+    @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @CreatedByUserId BIGINT,
+    @SourceId BIGINT,
+    @APIId BIGINT,
     @HasError BIT
 AS
 BEGIN
@@ -30,21 +30,17 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
     -- 2020-06-16 -> Andrew Sampson -> Updated @GUID to @ProcessQueueGUID to start matching code variable names
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @UserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE GUID = @UserGUID)
-    DECLARE @SourceTypeId BIGINT = (SELECT SourceTypeId FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription)
-    DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId)
-    DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE GUID = @APIGUID)
-
     INSERT INTO
         [System].[ProcessQueue]
         (
-            GUID,
+            ProcessQueueGUID,
             CreatedByUserId,
             SourceId,
             APIId,
@@ -53,7 +49,7 @@ BEGIN
     VALUES  
         (
             @ProcessQueueGUID,
-            @UserId,
+            @CreatedByUserId,
             @SourceId,
             @APIId,
             @HasError

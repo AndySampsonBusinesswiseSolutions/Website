@@ -19,21 +19,20 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [System].[ProcessQueue_Update]
-	@GUID UNIQUEIDENTIFIER,
-    @APIGUID UNIQUEIDENTIFIER,
+	@ProcessQueueGUID UNIQUEIDENTIFIER,
+    @APIId BIGINT,
     @HasError BIT
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
+    -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
-
-    DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE GUID = @APIGUID)
 
     UPDATE
         [System].[ProcessQueue]
@@ -41,7 +40,7 @@ BEGIN
         EffectiveToDateTime = GETUTCDATE(),
         HasError = @HasError
     WHERE
-        GUID = @GUID
+        ProcessQueueGUID = @ProcessQueueGUID
         AND APIId = @APIId
 END
 GO
