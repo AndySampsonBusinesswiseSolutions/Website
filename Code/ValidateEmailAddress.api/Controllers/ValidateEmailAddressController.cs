@@ -64,7 +64,7 @@ namespace ValidateEmailAddress.api.Controllers
                     .PostAsJsonAsync(
                         _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
                         apiData);
-            var processTaskResponse = processTask.GetAwaiter().GetResult();
+            
             var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 

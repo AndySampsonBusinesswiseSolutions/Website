@@ -45,7 +45,7 @@ namespace Routing.api.Controllers
                     .PostAsJsonAsync(
                         _systemMethods.GetAPIPOSTRouteByAPIId(validateProcessAPIId), 
                         _systemMethods.GetAPIData(validateProcessAPIId, jsonObject, _systemAPIGUIDEnums.RoutingAPI));
-            var processTaskResponse = processTask.GetAwaiter().GetResult();
+                        
             var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var processId = Convert.ToInt64(result.Result);
 

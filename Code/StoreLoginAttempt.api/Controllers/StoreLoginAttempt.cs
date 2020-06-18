@@ -65,14 +65,12 @@ namespace StoreLoginAttempt.api.Controllers
                     .PostAsJsonAsync(
                         _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
                         apiData);
-            var processTaskResponse = processTask.GetAwaiter().GetResult();
+            
             var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
             //Get User Id
-            var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-            var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
-            var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
+            var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
             //Store login attempt
             _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);

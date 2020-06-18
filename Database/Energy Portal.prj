@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>aadfe491-c70f-483e-a41a-f04b3045300a</ID>
-    <DateCreated>2020-06-18T14:09:52.6748634+01:00</DateCreated>
+    <ID>e48dee5e-cf2c-4a0c-a903-2b30c6f3a6cf</ID>
+    <DateCreated>2020-06-18T14:30:28.2058056+01:00</DateCreated>
     <Name>Energy Portal</Name>
     <FileName>C:\wamp64\www\Website\Database\Energy Portal.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>SKnzcHobOdvnviqEEGXrNw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe64aEXIV7Wh/bqW2BgZNJccs=</Password>
+    <Login>m2c9RRywMT3qxr9tYWPHSg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6ynzUZX9rtVlu136LKrlBrQ=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1267,7 +1267,7 @@
     <Name>999 - Data</Name>
   </ScriptFolder>
   <Mapping>
-    <ID>19135cea-ebd5-4c20-910b-9242f43bcd22</ID>
+    <ID>5d37be28-e1e5-433d-a9c0-f62d5879b3a4</ID>
     <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
     <Container_ID>95050ad3-e0f3-492a-b094-100e1720f63f</Container_ID>
     <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>
