@@ -72,9 +72,7 @@ namespace LockUser.api.Controllers
             if(erroredPrerequisiteAPIs.Any()) //TODO: Add try/catch for system error
             {
                 //Get User Id
-                var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
-                var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
+                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
                 //Get logins by user id and order by descending
                 var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);

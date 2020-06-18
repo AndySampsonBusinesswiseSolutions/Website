@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace commonMethods
 {
@@ -99,6 +98,13 @@ namespace commonMethods
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<bool>("LoginSuccessful"))
                     .FirstOrDefault();
+            }
+
+            public long GetUserIdByEmailAddress(JObject jsonObject)
+            {
+                var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
+                var userDetailId = UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+                return User_GetUserIdByUserDetailId(userDetailId);
             }
         }
     }

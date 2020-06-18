@@ -76,9 +76,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                 var passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
 
                 //Get User Id
-                var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-                var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
-                var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
+                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
                 //Validate Password and User combination
                 var mappingId = _mappingMethods.PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(passwordId, userId);
