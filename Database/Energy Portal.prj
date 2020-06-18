@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>e1f4d10a-24d7-4853-b9f2-70c937badf08</ID>
-    <DateCreated>2020-06-18T10:18:28.3351921+01:00</DateCreated>
+    <ID>aadfe491-c70f-483e-a41a-f04b3045300a</ID>
+    <DateCreated>2020-06-18T14:09:52.6748634+01:00</DateCreated>
     <Name>Energy Portal</Name>
     <FileName>C:\wamp64\www\Website\Database\Energy Portal.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>wdN7SILRzAT8SFkbqRSxRg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe64OSYRv1NhY1JVdd/2k1ZuE=</Password>
+    <Login>SKnzcHobOdvnviqEEGXrNw==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe64aEXIV7Wh/bqW2BgZNJccs=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -646,9 +646,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>d3f8d921-57e3-483a-b59e-7c85377022d0</ID>
+    <ID>22d9e02f-afc9-4345-b38f-ae46e942cd5b</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0024 - Create Stored Procedure - [System].[APIDetail_GetByAPIIDAndAPIAttributeId] copy.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0024 - Create Stored Procedure - [System].[APIDetail_GetByAPIIDAndAPIAttributeId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -821,6 +821,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>341bb67e-cce7-4828-a29c-d1b4981fee26</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0049 - Create Stored Procedure - [System].[ProcessQueue_Delete].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -894,6 +901,13 @@
     <ID>355aa66b-4a86-4d3a-b2bb-108c219fbc52</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0011 - Create Login - LockUser.api.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>659c4878-d73c-4595-82e1-2b2ffa8761ce</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0012 - Grant Execute - ArchiveProcessQueue.api to [System].[ProcessQueue_Delete].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1253,7 +1267,7 @@
     <Name>999 - Data</Name>
   </ScriptFolder>
   <Mapping>
-    <ID>2523aa2f-e290-4d7e-a2a0-231df37074f6</ID>
+    <ID>19135cea-ebd5-4c20-910b-9242f43bcd22</ID>
     <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
     <Container_ID>95050ad3-e0f3-492a-b094-100e1720f63f</Container_ID>
     <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>

@@ -37,7 +37,7 @@ namespace ArchiveProcessQueue.api.Controllers
         {
             //Get API List
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -59,9 +59,9 @@ namespace ArchiveProcessQueue.api.Controllers
 
             _systemMethods.ProcessArchive_Insert(createdByUserId,
                 sourceId,
-                queueGUID);
+                processQueueGUID);
 
-            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(queueGUID);
+            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
             var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
 
             //TODO Write records for each API into ProcessArchiveDetail
@@ -74,9 +74,10 @@ namespace ArchiveProcessQueue.api.Controllers
                 "OK");
 
             //Update ProcessArchive
-            _systemMethods.ProcessArchive_Update(queueGUID);
+            _systemMethods.ProcessArchive_Update(processQueueGUID);
 
-            //TODO Delete GUID from ProcessQueue
+            //Delete GUID from ProcessQueue
+            _systemMethods.ProcessQueue_Delete(processQueueGUID);
         }
     }
 }

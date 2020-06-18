@@ -292,6 +292,13 @@ namespace commonMethods
                     _storedProcedureSystemEnums.ProcessArchiveDetail_Insert, 
                     createdByUserId, sourceId, processArchiveId, processArchiveAttributeId, processArchiveDetailDescription);
             }
+
+            public void ProcessQueue_Delete(string processQueueGUID)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessQueue_Delete, 
+                    processQueueGUID);
+            }
         }
     }
 }
