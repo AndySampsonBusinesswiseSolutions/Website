@@ -44,8 +44,7 @@ namespace Website.api.Controllers
 
             //Insert into ProcessQueue
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
-            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
             var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
 
             _systemMethods.ProcessQueue_Insert(
@@ -61,7 +60,7 @@ namespace Website.api.Controllers
             _systemMethods.CreateAPI(routingAPIId)
                     .PostAsJsonAsync(
                         _systemMethods.GetAPIPOSTRouteByAPIId(routingAPIId), 
-                        _systemMethods.GetAPIData(routingAPIId, jsonObject));
+                        _systemMethods.GetAPIData(routingAPIId, jsonObject, _systemAPIGUIDEnums.WebsiteAPI));
 
             //Update Process Queue
             _systemMethods.ProcessQueue_Update(queueGUID, APIId);

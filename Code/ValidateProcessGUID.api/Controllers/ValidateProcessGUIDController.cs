@@ -41,8 +41,7 @@ namespace ValidateProcessGUID.api.Controllers
 
             //Insert into ProcessQueue
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
-            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
             var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
 
             _systemMethods.ProcessQueue_Insert(

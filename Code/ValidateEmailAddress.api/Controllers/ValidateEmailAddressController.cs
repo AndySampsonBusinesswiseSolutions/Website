@@ -44,8 +44,7 @@ namespace ValidateEmailAddress.api.Controllers
 
             //Insert into ProcessQueue
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
-            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
             var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
 
             _systemMethods.ProcessQueue_Insert(
@@ -58,8 +57,7 @@ namespace ValidateEmailAddress.api.Controllers
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
             //Build JObject
-            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject);
-            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.ValidateEmailAddressAPI);
+            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject, _systemAPIGUIDEnums.ValidateEmailAddressAPI);
             
             //Call CheckPrerequisiteAPI API
             var processTask = _systemMethods.CreateAPI(checkPrerequisiteAPIAPIId)
@@ -67,12 +65,8 @@ namespace ValidateEmailAddress.api.Controllers
                         _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
                         apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
-            var result = processTaskResponse.Content.ReadAsStringAsync();//TODO: Make into common method
-            var erroredPrerequisiteAPIs = result.Result.ToString()
-                .Replace("\"","")
-                .Replace("[","")
-                .Replace("]","")
-                .Split(',', StringSplitOptions.RemoveEmptyEntries);//TODO: Make into extension
+            var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
             if(!erroredPrerequisiteAPIs.Any())
             {

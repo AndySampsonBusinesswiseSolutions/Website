@@ -19,7 +19,13 @@ namespace commonMethods
                     .FirstOrDefault();
             }
 
-            public long SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
+            public long GetSystemUserGeneratedSourceId()
+            {
+                var sourceTypeId = SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+                return Source_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            }
+
+            public long Source_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.Source_GetBySourceTypeIdAndSourceTypeEntityId, 

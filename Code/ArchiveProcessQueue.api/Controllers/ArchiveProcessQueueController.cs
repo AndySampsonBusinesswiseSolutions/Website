@@ -43,21 +43,19 @@ namespace ArchiveProcessQueue.api.Controllers
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
             //Build JObject
-            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject);
-            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
 
             //Call CheckPrerequisiteAPI API
             var processTask = _systemMethods.CreateAPI(checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
                         _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
                         apiData);
-            var processTaskResponse = processTask.GetAwaiter().GetResult();
-            var result = processTaskResponse.Content.ReadAsStringAsync(); //TODO: Make into common method
+
+            var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
             //All APIs have finished so create record in ProcessArchive
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
-            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             _systemMethods.ProcessArchive_Insert(createdByUserId,
                 sourceId,

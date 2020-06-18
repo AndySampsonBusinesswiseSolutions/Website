@@ -24,7 +24,7 @@ namespace commonMethods
                 return client;
             }
 
-            public JObject GetAPIData(long APIId, JObject jsonObject)
+            public JObject GetAPIData(long APIId, JObject jsonObject, string callingGUID)
             {
                 //Get data keys required for API
                 var requiredDataKeyAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.RequiredDataKey);
@@ -62,6 +62,11 @@ namespace commonMethods
                             apiData.Add(dataKey, JsonConvert.SerializeObject(apiDictionary[dataKey]));
                         }
                     }
+                }
+
+                if(!string.IsNullOrWhiteSpace(callingGUID))
+                {
+                    apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, callingGUID);
                 }
 
                 return apiData;

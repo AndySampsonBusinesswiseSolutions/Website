@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Data;
+using System;
 
 namespace commonMethods
 {
@@ -15,6 +16,8 @@ namespace commonMethods
         private static readonly Enums.StoredProcedure.Mapping _storedProcedureMappingEnums = new Enums.StoredProcedure.Mapping();
         private static readonly Enums.StoredProcedure.Administration _storedProcedureAdministrationEnums = new Enums.StoredProcedure.Administration();
         private static readonly Enums.StoredProcedure.Information _storedProcedureInformationEnums = new Enums.StoredProcedure.Information();
+        private static readonly Enums.Information.SourceType _informationSourceTypeEnums = new Enums.Information.SourceType();
+        private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
 
         public static DatabaseInteraction _databaseInteraction;
 
@@ -60,6 +63,14 @@ namespace commonMethods
         private static string ConvertParameterName(string parameterName)
         {
             return char.ToUpper(parameterName[0]) + parameterName.Substring(1);
+        }
+
+        public string[] GetAPIArray(string APIList)
+        {
+            return APIList.Replace("\"","")
+                .Replace("[","")
+                .Replace("]","")
+                .Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
