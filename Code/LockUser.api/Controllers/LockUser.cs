@@ -19,12 +19,14 @@ namespace LockUser.api.Controllers
         private readonly CommonMethods.Mapping _mappingMethods = new CommonMethods.Mapping();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.API.Attribute _systemAPIAttributeEnums = new Enums.System.API.Attribute();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private readonly Enums.Administration.User.Attribute _administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
         private readonly Enums.Information.SourceType _informationSourceTypeEnums = new Enums.Information.SourceType();
 
         public LockUserController(ILogger<LockUserController> logger)
@@ -42,11 +44,16 @@ namespace LockUser.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+
             _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemAPIGUIDEnums.LockUserAPI);
+                createdByUserId,
+                sourceId,
+                APIId);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -112,20 +119,23 @@ namespace LockUser.api.Controllers
                 if(!isAttemptValid)
                 {
                     //Lock account by adding 'Account Locked' to user detail
+                    var accountLockedAttributeId = _administrationMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(_administrationUserAttributeEnums.AccountLocked);
+
                     _administrationMethods.UserDetail_Insert(
-                        _administrationUserGUIDEnums.System, 
-                        _informationSourceTypeEnums.UserGenerated, 
-                        "Account Locked", 
+                        createdByUserId, 
+                        sourceId,
+                        userId,
+                        accountLockedAttributeId, 
                         "true");
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.LockUserAPI, !isAttemptValid);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, !isAttemptValid);
             }
             else
             {
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.LockUserAPI, false);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, false);
             }
         }
     }

@@ -60,3 +60,12 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[Login_GetByProcessArchiveGUID] TO [StoreLoginAttempt.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [StoreLoginAttempt.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [StoreLoginAttempt.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [StoreLoginAttempt.api];
+GO

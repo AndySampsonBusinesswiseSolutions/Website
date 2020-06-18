@@ -42,3 +42,12 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[Process_GetByProcessGUID] TO [ValidateProcessGUID.api];
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [ValidateProcessGUID.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [ValidateProcessGUID.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [ValidateProcessGUID.api];
+GO

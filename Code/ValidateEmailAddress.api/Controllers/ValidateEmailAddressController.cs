@@ -17,6 +17,7 @@ namespace ValidateEmailAddress.api.Controllers
         private readonly ILogger<ValidateEmailAddressController> _logger;
         private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
@@ -42,11 +43,16 @@ namespace ValidateEmailAddress.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
+
             _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemAPIGUIDEnums.ValidateEmailAddressAPI);
+                createdByUserId,
+                sourceId,
+                APIId);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -83,12 +89,12 @@ namespace ValidateEmailAddress.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.ValidateEmailAddressAPI, emailAddressId == 0);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, emailAddressId == 0);
             }
             else
             {
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.ValidateEmailAddressAPI, true);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true);
             }
         }
     }

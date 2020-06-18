@@ -68,7 +68,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
 
                     //Get prerequisite API EffectiveToDate from System.ProcessQueue
                     var apiId = _systemMethods.API_GetAPIIdByAPIGUID(prerequisiteAPIGUID);
-                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByQueueGUIDAndAPIId(queueGUID, apiId);
+                    var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(queueGUID, apiId);
 
                     if(processQueueDataRow != null)
                     {

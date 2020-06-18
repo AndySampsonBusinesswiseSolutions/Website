@@ -44,11 +44,16 @@ namespace StoreLoginAttempt.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
+
             _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemAPIGUIDEnums.StoreLoginAttemptAPI);
+                createdByUserId,
+                sourceId,
+                APIId);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -75,12 +80,6 @@ namespace StoreLoginAttempt.api.Controllers
             var userDetailId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
             var userId = _administrationMethods.User_GetUserIdByUserDetailId(userDetailId);
 
-            //Get Source Type Id
-            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
-
-            //Get Source Id
-            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
-
             //Store login attempt
             _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
 
@@ -88,10 +87,14 @@ namespace StoreLoginAttempt.api.Controllers
             var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
 
             //Store mapping between login attempt and user
-            _mappingMethods.LoginToUser_Insert(1, sourceId, loginId, userId);//TODO: Create GetSystemUserId method
+            var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            _mappingMethods.LoginToUser_Insert(systemUserId, 
+                sourceId, 
+                loginId, 
+                userId);
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.StoreLoginAttemptAPI, erroredPrerequisiteAPIs.Any());
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any());
         }
     }
 }

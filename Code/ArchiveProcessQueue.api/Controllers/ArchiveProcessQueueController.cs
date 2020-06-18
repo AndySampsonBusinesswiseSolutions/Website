@@ -15,6 +15,9 @@ namespace ArchiveProcessQueue.api.Controllers
         private readonly ILogger<ArchiveProcessQueueController> _logger;
         private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
+        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
+        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -39,27 +42,37 @@ namespace ArchiveProcessQueue.api.Controllers
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
+            //Build JObject
+            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject);
+            apiData.Add(_systemAPIRequiredDataKeyEnums.CallingGUID, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+
             //Call CheckPrerequisiteAPI API
             var processTask = _systemMethods.CreateAPI(checkPrerequisiteAPIAPIId)
                     .PostAsJsonAsync(
                         _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
-                        _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject));
+                        apiData);
             var processTaskResponse = processTask.GetAwaiter().GetResult();
             var result = processTaskResponse.Content.ReadAsStringAsync(); //TODO: Make into common method
 
             //All APIs have finished so create record in ProcessArchive
-            _systemMethods.ProcessArchive_Insert(queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated);
-            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByQueueGUID(queueGUID);
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+
+            _systemMethods.ProcessArchive_Insert(createdByUserId,
+                sourceId,
+                queueGUID);
+
+            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(queueGUID);
+            var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
 
             //TODO Write records for each API into ProcessArchiveDetail
 
             //Write response into ProcessArchiveDetail
-            _systemMethods.ProcessArchiveDetail_Insert(queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemProcessArchiveAttributeEnums.Response, 
+            _systemMethods.ProcessArchiveDetail_Insert(createdByUserId,
+                sourceId,
+                processArchiveId,
+                processArchiveAttributeId,
                 "OK");
 
             //Update ProcessArchive

@@ -45,3 +45,12 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[Password_GetByPassword] TO [ValidatePassword.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [ValidatePassword.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [ValidatePassword.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [ValidatePassword.api];
+GO

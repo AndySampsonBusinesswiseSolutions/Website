@@ -21,30 +21,11 @@ namespace commonMethods
                     .FirstOrDefault();
             }
             
-            // public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userattributeId, string userDetailDescription)
-            public void UserDetail_Insert(string userGUID, string sourceTypeDescription, string UserAttributeDescription, string userDetailDescription)
+            public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userattributeId, string userDetailDescription)
             {
-                //Set up stored procedure parameters
-                // var sqlParameters = new List<SqlParameter>
-                // {
-                //     new SqlParameter {ParameterName = "@CreatedByUserId", SqlValue = createdByUserId},
-                //     new SqlParameter {ParameterName = "@SourceId", SqlValue = sourceId},
-                //     new SqlParameter {ParameterName = "@UserId", SqlValue = userId},
-                //     new SqlParameter {ParameterName = "@UserattributeId", SqlValue = userattributeId},
-                //     new SqlParameter {ParameterName = "@UserDetailDescription", SqlValue = userDetailDescription}
-                // };
-
-                var sqlParameters = new List<SqlParameter>
-                {
-                    new SqlParameter {ParameterName = "@UserGUID", SqlValue = userGUID},
-                    new SqlParameter {ParameterName = "@SourceTypeDescription", SqlValue = sourceTypeDescription},
-                    new SqlParameter {ParameterName = "@UserAttributeDescription", SqlValue = UserAttributeDescription},
-                    new SqlParameter {ParameterName = "@UserDetailDescription", SqlValue = userDetailDescription}
-                };
-
-                //TODO: Refactor sproc to not run against multiple tables
-                //Execute stored procedure
-                _databaseInteraction.ExecuteNonQuery(_storedProcedureAdministrationEnums.UserDetail_Insert, sqlParameters);
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureAdministrationEnums.UserDetail_Insert, 
+                    createdByUserId, sourceId, userId, userattributeId, userDetailDescription);
             }
             
             public long User_GetUserIdByUserDetailId(long userDetailId)
@@ -57,23 +38,45 @@ namespace commonMethods
                     .Select(r => r.Field<long>("UserId"))
                     .FirstOrDefault();
             }
+
+            public long User_GetUserIdByUserGUID(string userGUID)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.User_GetByUserGUID, 
+                    userGUID);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("UserId"))
+                    .FirstOrDefault();
+            }
+
+            public long UserAttribute_GetUserAttributeIdByUserAttributeDescription(string userAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.UserAttribute_GetByUserAttributeDescription, 
+                    userAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("UserAttributeId"))
+                    .FirstOrDefault();
+            }
             
-            public long UserDetail_GetUserDetailIdByEmailAddress(string emailAddress)
+            public long UserDetail_GetUserDetailIdByEmailAddress(string userDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureAdministrationEnums.UserDetail_GetByUserDetailDescription, 
-                    emailAddress);
+                    userDetailDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("UserDetailId"))
                     .FirstOrDefault();
             }
 
-            public void Login_Insert(long userId, long sourceId, bool loginSuccessful, string processArchiveGUID)
+            public void Login_Insert(long createdByUserId, long sourceId, bool loginSuccessful, string processArchiveGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureAdministrationEnums.Login_Insert, 
-                    userId, sourceId, loginSuccessful, processArchiveGUID);
+                    createdByUserId, sourceId, loginSuccessful, processArchiveGUID);
             }
 
             public long Login_GetLoginIdByProcessArchiveGUID(string processArchiveGUID)

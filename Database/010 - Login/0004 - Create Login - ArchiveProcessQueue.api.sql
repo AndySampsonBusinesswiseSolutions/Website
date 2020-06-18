@@ -48,3 +48,15 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] TO [ArchiveProcessQueue.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [ArchiveProcessQueue.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [ArchiveProcessQueue.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [ArchiveProcessQueue.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription] TO [ArchiveProcessQueue.api];  
+GO

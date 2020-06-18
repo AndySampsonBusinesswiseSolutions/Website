@@ -48,3 +48,12 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[ProcessArchiveDetail_GetByProcessArchiveIDAndProcessArchiveAttributeId] TO [Website.api];
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [Website.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [Website.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [Website.api];
+GO

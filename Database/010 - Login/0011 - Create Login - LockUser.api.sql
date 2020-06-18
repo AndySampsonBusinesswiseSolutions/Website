@@ -57,3 +57,15 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_Insert] TO [LockUser.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [LockUser.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [LockUser.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [LockUser.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[UserAttribute_GetByUserAttributeDescription] TO [LockUser.api];  
+GO

@@ -18,6 +18,7 @@ namespace ValidatePassword.api.Controllers
         private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -42,11 +43,16 @@ namespace ValidatePassword.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
+
             _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemAPIGUIDEnums.ValidatePasswordAPI);
+                createdByUserId,
+                sourceId,
+                APIId);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -83,12 +89,12 @@ namespace ValidatePassword.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.ValidatePasswordAPI, passwordId == 0);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, passwordId == 0);
             }
             else
             {
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.ValidatePasswordAPI, true);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true);
             }
         }
     }

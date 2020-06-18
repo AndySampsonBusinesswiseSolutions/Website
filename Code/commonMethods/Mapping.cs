@@ -12,7 +12,7 @@ namespace commonMethods
             public List<long> APIToProcess_GetAPIIdListByProcessId(long processId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.APIToProcess_GetAPIIdListByProcessId, 
+                    _storedProcedureMappingEnums.APIToProcess_GetByProcessId, 
                     processId);
 
                 return dataTable.AsEnumerable()
@@ -20,7 +20,7 @@ namespace commonMethods
                     .ToList();
             }
 
-            public long PasswordToUser_GetByPasswordIdAndUserId(long passwordId, long userId)
+            public long PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(long passwordId, long userId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.PasswordToUser_GetByPasswordIdAndUserId, 
@@ -35,7 +35,7 @@ namespace commonMethods
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.LoginToUser_Insert, 
-                    sourceId, loginId, userId);
+                    createdByUserId, sourceId, loginId, userId);
             }
 
             public List<long> LoginToUser_GetLoginIdListByUserId(long userId)

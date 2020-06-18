@@ -16,6 +16,8 @@ namespace Website.api.Controllers
         private readonly ILogger<WebsiteController> _logger;
         private readonly CommonMethods _methods = new CommonMethods();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
+        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -41,11 +43,16 @@ namespace Website.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
+
             _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemAPIGUIDEnums.WebsiteAPI);
+                createdByUserId,
+                sourceId,
+                APIId);
 
             //Get Routing.API URL
             var routingAPIId = _systemMethods.GetRoutingAPIId();
@@ -57,7 +64,7 @@ namespace Website.api.Controllers
                         _systemMethods.GetAPIData(routingAPIId, jsonObject));
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.WebsiteAPI);
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId);
         }
 
         [HttpPost]
@@ -67,10 +74,10 @@ namespace Website.api.Controllers
             //TODO: Add try/catch
             
             //Get Process Archive Id
-            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByQueueGUID(processQueueGuid);
+            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGuid);
             while(processArchiveId == 0)
             {
-                processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByQueueGUID(processQueueGuid);
+                processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGuid);
             }
 
             //Loop until a response record is written into ProcessArchiveDetail

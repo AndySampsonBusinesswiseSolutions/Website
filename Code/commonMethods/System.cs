@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System;
 using System.Net.Http;
@@ -158,11 +157,11 @@ namespace commonMethods
             public string API_GetAPIGUIDByAPIId(long APIId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSystemEnums.API_GetById, 
+                    _storedProcedureSystemEnums.API_GetByAPIId, 
                     APIId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<Guid>("GUID").ToString())
+                    .Select(r => r.Field<Guid>("APIGUID").ToString())
                     .FirstOrDefault();
             }
 
@@ -188,11 +187,11 @@ namespace commonMethods
                     .ToList();
             }
             
-            public long PageId_GetByGUID(string guid)
+            public long Page_GetPageIdByGUID(string pageGUID)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSystemEnums.Page_GetByGUID, 
-                    guid);
+                    _storedProcedureSystemEnums.Page_GetByPageGUID, 
+                    pageGUID);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("PageId"))
@@ -210,36 +209,36 @@ namespace commonMethods
                     .FirstOrDefault();
             }
 
-            public void ProcessQueue_Insert(string processQueueGUID, string userGUID, string sourceTypeDescription, string APIGUID, bool hasError = false)
+            public void ProcessQueue_Insert(string processQueueGUID, long createdByUserId, long sourceId, long APIId, bool hasError = false)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessQueue_Insert, 
-                    processQueueGUID, userGUID, sourceTypeDescription, APIGUID, hasError);
+                    processQueueGUID, createdByUserId, sourceId, APIId, hasError);
             }
 
-            public void ProcessQueue_Update(string queueGUID, string apiGUID, bool hasError = false)
+            public void ProcessQueue_Update(string processQueueGUID, long APIId, bool hasError = false)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessQueue_Update, 
-                    apiGUID, apiGUID, hasError);
+                    processQueueGUID, APIId, hasError);
             }
 
-            public DataRow ProcessQueue_GetByQueueGUIDAndAPIId(string queueGUID, long apiId)
+            public DataRow ProcessQueue_GetByProcessQueueGUIDAndAPIId(string processQueueGUID, long apiId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSystemEnums.ProcessQueue_GetByQueueGUIDAndAPIId, 
-                    queueGUID, apiId);
+                    _storedProcedureSystemEnums.ProcessQueue_GetByProcessQueueGUIDAndAPIId, 
+                    processQueueGUID, apiId);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r)
                     .FirstOrDefault();
             }
 
-            public void ProcessArchive_Insert(string processArchiveGUID, string userGUID, string source)
+            public void ProcessArchive_Insert(long createdByUserId, long sourceId, string processArchiveGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessArchive_Insert, 
-                    processArchiveGUID, userGUID, source);
+                    createdByUserId, sourceId, processArchiveGUID);
             }
 
             public void ProcessArchive_Update(string processArchiveGUID)
@@ -249,11 +248,11 @@ namespace commonMethods
                     processArchiveGUID);
             }
 
-            public long ProcessArchive_GetProcessArchiveIdByQueueGUID(string queueGUID)
+            public long ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(string processArchiveGUID)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSystemEnums.ProcessArchive_GetByGUID, 
-                    queueGUID);
+                    _storedProcedureSystemEnums.ProcessArchive_GetByProcessArchiveGUID, 
+                    processArchiveGUID);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ProcessArchiveId"))
@@ -282,11 +281,11 @@ namespace commonMethods
                     .ToList();
             }
 
-            public void ProcessArchiveDetail_Insert(string processArchiveGUID, string userGUID, string source, string attribute, string description)
+            public void ProcessArchiveDetail_Insert(long createdByUserId, long sourceId, long processArchiveId, long processArchiveAttributeId, string processArchiveDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessArchiveDetail_Insert, 
-                    userGUID, source, attribute, description);
+                    createdByUserId, sourceId, processArchiveId, processArchiveAttributeId, processArchiveDetailDescription);
             }
         }
     }

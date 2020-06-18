@@ -16,6 +16,8 @@ namespace ValidatePageGUID.api.Controllers
     {
         private readonly ILogger<ValidatePageGUIDController> _logger;
         private readonly CommonMethods _methods = new CommonMethods();
+        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
+        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
         private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
@@ -41,11 +43,16 @@ namespace ValidatePageGUID.api.Controllers
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
             //Insert into ProcessQueue
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceTypeId = _informationMethods.SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
+            var sourceId = _informationMethods.SourceId_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePageGUIDAPI);
+
             _systemMethods.ProcessQueue_Insert(
                 queueGUID, 
-                _administrationUserGUIDEnums.System, 
-                _informationSourceTypeEnums.UserGenerated, 
-                _systemAPIGUIDEnums.ValidatePageGUIDAPI);
+                createdByUserId,
+                sourceId,
+                APIId);
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -73,7 +80,7 @@ namespace ValidatePageGUID.api.Controllers
                 var pageGUID = jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
 
                 //Validate Page GUID
-                var pageId = _systemMethods.PageId_GetByGUID(pageGUID);
+                var pageId = _systemMethods.Page_GetPageIdByGUID(pageGUID);
 
                 //If pageId == 0 then the GUID provided isn't valid so create an error
                 if(pageId == 0)
@@ -82,12 +89,12 @@ namespace ValidatePageGUID.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI, pageId == 0);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, pageId == 0);
             }
             else
             {
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, _systemAPIGUIDEnums.ValidatePageGUIDAPI, true);
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true);
             }
         }
     }
