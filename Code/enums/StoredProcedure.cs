@@ -29,6 +29,7 @@ namespace enums
                 public string PasswordToUser_GetByPasswordIdAndUserId = "[Mapping].[PasswordToUser_GetByPasswordIdAndUserId]";
                 public string LoginToUser_Insert = "[Mapping].[LoginToUser_Insert]";
                 public string LoginToUser_GetByUserId = "[Mapping].[LoginToUser_GetByUserId]";
+                public string ProcessToProcessArchive_Insert = "[Mapping].[ProcessToProcessArchive_Insert]";
             }
 
             public class System

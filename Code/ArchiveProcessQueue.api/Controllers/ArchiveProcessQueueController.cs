@@ -16,6 +16,7 @@ namespace ArchiveProcessQueue.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
@@ -34,9 +35,12 @@ namespace ArchiveProcessQueue.api.Controllers
         [Route("ArchiveProcessQueue/Archive")]
         public void Archive([FromBody] object data)
         {
-            //Get API List
+            //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+
+            //Get Process GUID
+            var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
 
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -55,6 +59,14 @@ namespace ArchiveProcessQueue.api.Controllers
 
             var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
             var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
+
+            //Write record into ProcessToProcessArchive mapping table
+            var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
+
+            if(processId != 0)
+            {
+                _mappingMethods.ProcessToProcessArchive_Insert(createdByUserId, sourceId, processId, processArchiveId);
+            }
 
             //TODO Write records for each API into ProcessArchiveDetail
 

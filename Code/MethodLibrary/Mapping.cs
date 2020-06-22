@@ -48,6 +48,13 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("LoginId"))
                     .ToList();
             }
+
+            public void ProcessToProcessArchive_Insert(long createdByUserId, long sourceId, long processId, long processArchiveId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ProcessToProcessArchive_Insert, 
+                    createdByUserId, sourceId, processId, processArchiveId);
+            }
         }
     }
 }

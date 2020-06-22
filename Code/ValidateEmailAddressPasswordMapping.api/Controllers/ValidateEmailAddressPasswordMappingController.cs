@@ -83,7 +83,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             }
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, mappingId == 0);
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, mappingId == 0, errorMessage);
         }
     }
 }
