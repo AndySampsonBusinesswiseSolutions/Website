@@ -17,14 +17,14 @@ DROP TABLE [Mapping].[ProcessToProcessArchive]
 GO
 CREATE TABLE [Mapping].[ProcessToProcessArchive]
 	(
-	ProcessToProcessArchiveId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	ProcessId bigint NOT NULL,
-	ProcessArchiveId bigint NOT NULL
+	ProcessToProcessArchiveId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	ProcessId BIGINT NOT NULL,
+	ProcessArchiveId BIGINT NOT NULL
 	)  ON Mapping
 GO
 ALTER TABLE [Mapping].[ProcessToProcessArchive] ADD CONSTRAINT

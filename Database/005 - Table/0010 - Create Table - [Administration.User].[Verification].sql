@@ -17,14 +17,14 @@ DROP TABLE [Administration.User].[Verification]
 GO
 CREATE TABLE [Administration.User].[Verification]
 	(
-	VerificationId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	VerificationCode varchar(200) NOT NULL,
-	ExpiryDateTime datetime NOT NULL,
+	VerificationId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	VerificationCode VARCHAR(200) NOT NULL,
+	ExpiryDateTime DATETIME NOT NULL,
 	)  ON Administration
 GO
 ALTER TABLE [Administration.User].[Verification] ADD CONSTRAINT

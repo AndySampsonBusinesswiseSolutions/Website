@@ -17,13 +17,13 @@ DROP TABLE [Administration.User].[UserAttribute]
 GO
 CREATE TABLE [Administration.User].[UserAttribute]
 	(
-	UserAttributeId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	UserAttributeDescription varchar(200) NOT NULL
+	UserAttributeId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	UserAttributeDescription VARCHAR(200) NOT NULL
 	)  ON Administration
 GO
 ALTER TABLE [Administration.User].[UserAttribute] ADD CONSTRAINT

@@ -18,13 +18,13 @@ GO
 CREATE TABLE [System].[ProcessQueue]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	APIId int NOT NULL,
-	HasError bit NOT NULL
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	APIId BIGINT NOT NULL,
+	HasError BIT NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT

@@ -17,12 +17,12 @@ DROP TABLE [Administration.User].[User]
 GO
 CREATE TABLE [Administration.User].[User]
 	(
-	UserId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NULL,
-	SourceId bigint NULL,
+	UserId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NULL,
+	SourceId BIGINT NULL,
 	UserGUID UNIQUEIDENTIFIER NOT NULL,
 	)  ON Administration
 GO

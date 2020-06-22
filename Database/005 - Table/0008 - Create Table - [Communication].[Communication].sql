@@ -17,12 +17,12 @@ DROP TABLE [Communication].[Communication]
 GO
 CREATE TABLE [Communication].[Communication]
 	(
-	CommunicationId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
+	CommunicationId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
 	CommunicationGUID UNIQUEIDENTIFIER NOT NULL
 	)  ON Communication
 GO

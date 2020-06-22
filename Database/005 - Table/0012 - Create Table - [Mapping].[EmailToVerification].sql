@@ -17,14 +17,14 @@ DROP TABLE [Mapping].[EmailToVerification]
 GO
 CREATE TABLE [Mapping].[EmailToVerification]
 	(
-	EmailToVerificationId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	EmailId bigint NOT NULL,
-	VerificationId bigint NOT NULL
+	EmailToVerificationId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	EmailId BIGINT NOT NULL,
+	VerificationId BIGINT NOT NULL
 	)  ON Mapping
 GO
 ALTER TABLE [Mapping].[EmailToVerification] ADD CONSTRAINT

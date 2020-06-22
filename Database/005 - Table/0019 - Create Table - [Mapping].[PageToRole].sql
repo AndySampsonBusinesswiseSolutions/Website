@@ -17,14 +17,14 @@ DROP TABLE [Mapping].[PageToRole]
 GO
 CREATE TABLE [Mapping].[PageToRole]
 	(
-	PageToRoleId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	PageId bigint NOT NULL,
-	RoleId bigint NOT NULL
+	PageToRoleId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	PageId BIGINT NOT NULL,
+	RoleId BIGINT NOT NULL
 	)  ON Mapping
 GO
 ALTER TABLE [Mapping].[PageToRole] ADD CONSTRAINT

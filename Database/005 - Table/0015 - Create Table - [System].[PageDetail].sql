@@ -17,15 +17,15 @@ DROP TABLE [System].[PageDetail]
 GO
 CREATE TABLE [System].[PageDetail]
 	(
-	PageDetailId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	PageId bigint NOT NULL,
-	PageAttributeId bigint NOT NULL,
-	PageDetailDescription varchar(200) NOT NULL
+	PageDetailId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	PageId BIGINT NOT NULL,
+	PageAttributeId BIGINT NOT NULL,
+	PageDetailDescription VARCHAR(200) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[PageDetail] ADD CONSTRAINT

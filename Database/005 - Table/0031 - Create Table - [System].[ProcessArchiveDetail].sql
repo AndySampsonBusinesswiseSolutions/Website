@@ -17,15 +17,15 @@ DROP TABLE [System].[ProcessArchiveDetail]
 GO
 CREATE TABLE [System].[ProcessArchiveDetail]
 	(
-	ProcessArchiveDetailId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	ProcessArchiveId bigint NOT NULL,
-	ProcessArchiveAttributeId bigint NOT NULL,
-	ProcessArchiveDetailDescription varchar(200) NOT NULL
+	ProcessArchiveDetailId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	ProcessArchiveId BIGINT NOT NULL,
+	ProcessArchiveAttributeId BIGINT NOT NULL,
+	ProcessArchiveDetailDescription VARCHAR(200) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessArchiveDetail] ADD CONSTRAINT

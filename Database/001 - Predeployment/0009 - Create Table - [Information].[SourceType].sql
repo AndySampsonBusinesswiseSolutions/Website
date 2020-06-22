@@ -17,13 +17,13 @@ DROP TABLE [Information].[SourceType]
 GO
 CREATE TABLE [Information].[SourceType]
 	(
-	SourceTypeId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NULL,
-	SourceTypeDescription varchar(200) NOT NULL,
+	SourceTypeId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NULL,
+	SourceTypeDescription VARCHAR(200) NOT NULL,
 	)  ON Information
 GO
 ALTER TABLE [Information].[SourceType] ADD CONSTRAINT

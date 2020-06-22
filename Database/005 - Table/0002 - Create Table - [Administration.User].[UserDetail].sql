@@ -17,15 +17,15 @@ DROP TABLE [Administration.User].[UserDetail]
 GO
 CREATE TABLE [Administration.User].[UserDetail]
 	(
-	UserDetailId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	UserId bigint NOT NULL,
-	UserAttributeId bigint NOT NULL,
-	UserDetailDescription varchar(200) NOT NULL
+	UserDetailId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	UserId BIGINT NOT NULL,
+	UserAttributeId BIGINT NOT NULL,
+	UserDetailDescription VARCHAR(200) NOT NULL
 	)  ON Administration
 GO
 ALTER TABLE [Administration.User].[UserDetail] ADD CONSTRAINT

@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>dc381114-2a99-4b6c-86b6-84be209cb460</ID>
-    <DateCreated>2020-06-22T13:24:57.8264226+01:00</DateCreated>
+    <ID>c2003ba8-e4d5-4e6e-9939-c0248cb69bd1</ID>
+    <DateCreated>2020-06-22T13:51:02.8201955+01:00</DateCreated>
     <Name>Energy Portal</Name>
     <FileName>C:\wamp64\www\Website\Database\Energy Portal.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>6usflFNMIiYhby5rtphcAg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6zgTHNQvn2zGuoTdJsgP3Q0=</Password>
+    <Login>lnEnPa7Zi2znRUJV+J1HTQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6+jH55C4VZac4GdLidsQKYY=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -506,6 +506,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>824f18f3-db49-4542-bbac-e2c7ab1f32b6</ID>
+    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\0039 - Create Table - [System].[Error].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>7a8ec634-3dc2-4e35-b396-7e2752503d0d</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0001 - Create Stored Procedure - [Administration.User].[UserAttribute_Insert].sql</FullName>
@@ -866,6 +873,13 @@
     <ID>3ebe6ce4-3146-4951-8c63-14c6f8032be8</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0052 - Create Stored Procedure - [System].[ProcessQueue_GetHasErrorByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>dd56e825-de62-42f2-915c-650ef78eb80e</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0053 - Create Stored Procedure - [System].[Error_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

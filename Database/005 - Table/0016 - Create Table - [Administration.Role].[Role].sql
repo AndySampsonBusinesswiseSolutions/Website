@@ -17,12 +17,12 @@ DROP TABLE [Administration.Role].[Role]
 GO
 CREATE TABLE [Administration.Role].[Role]
 	(
-	RoleId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
+	RoleId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
 	RoleGUID UNIQUEIDENTIFIER NOT NULL
 	)  ON [Administration]
 GO

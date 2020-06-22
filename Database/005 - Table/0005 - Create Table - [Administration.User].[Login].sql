@@ -17,13 +17,13 @@ DROP TABLE [Administration.User].[Login]
 GO
 CREATE TABLE [Administration.User].[Login]
 	(
-	LoginId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	LoginSuccessful bit NOT NULL
+	LoginId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	LoginSuccessful BIT NOT NULL
 	)  ON Administration
 GO
 ALTER TABLE [Administration.User].[Login] ADD CONSTRAINT

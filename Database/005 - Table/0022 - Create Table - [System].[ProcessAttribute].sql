@@ -17,13 +17,13 @@ DROP TABLE [System].[ProcessAttribute]
 GO
 CREATE TABLE [System].[ProcessAttribute]
 	(
-	ProcessAttributeId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	ProcessAttributeDescription varchar(200) NOT NULL
+	ProcessAttributeId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	ProcessAttributeDescription VARCHAR(200) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessAttribute] ADD CONSTRAINT

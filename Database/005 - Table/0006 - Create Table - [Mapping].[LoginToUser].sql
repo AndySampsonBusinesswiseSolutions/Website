@@ -17,14 +17,14 @@ DROP TABLE [Mapping].[LoginToUser]
 GO
 CREATE TABLE [Mapping].[LoginToUser]
 	(
-	LoginToUserId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	UserId bigint NOT NULL,
-	LoginId bigint NOT NULL
+	LoginToUserId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	UserId BIGINT NOT NULL,
+	LoginId BIGINT NOT NULL
 	)  ON Mapping
 GO
 ALTER TABLE [Mapping].[LoginToUser] ADD CONSTRAINT

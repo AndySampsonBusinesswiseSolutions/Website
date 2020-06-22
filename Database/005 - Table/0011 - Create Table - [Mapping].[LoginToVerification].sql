@@ -17,14 +17,14 @@ DROP TABLE [Mapping].[LoginToVerification]
 GO
 CREATE TABLE [Mapping].[LoginToVerification]
 	(
-	LoginToVerificationId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	LoginId bigint NOT NULL,
-	VerificationId bigint NOT NULL
+	LoginToVerificationId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	LoginId BIGINT NOT NULL,
+	VerificationId BIGINT NOT NULL
 	)  ON Mapping
 GO
 ALTER TABLE [Mapping].[LoginToVerification] ADD CONSTRAINT

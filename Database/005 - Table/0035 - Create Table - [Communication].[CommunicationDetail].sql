@@ -17,15 +17,15 @@ DROP TABLE [Communication].[CommunicationDetail]
 GO
 CREATE TABLE [Communication].[CommunicationDetail]
 	(
-	CommunicationDetailId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	CommunicationId bigint NOT NULL,
-	CommunicationAttributeId bigint NOT NULL,
-	CommunicationDetailDescription varchar(200) NOT NULL
+	CommunicationDetailId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	CommunicationId BIGINT NOT NULL,
+	CommunicationAttributeId BIGINT NOT NULL,
+	CommunicationDetailDescription VARCHAR(200) NOT NULL
 	)  ON Communication
 GO
 ALTER TABLE [Communication].[CommunicationDetail] ADD CONSTRAINT

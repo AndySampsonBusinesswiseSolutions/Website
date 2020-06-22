@@ -17,15 +17,15 @@ DROP TABLE [System].[ProcessDetail]
 GO
 CREATE TABLE [System].[ProcessDetail]
 	(
-	ProcessDetailId bigint IDENTITY(1,1) NOT NULL,
-	EffectiveFromDateTime datetime NOT NULL,
-	EffectiveToDateTime datetime NOT NULL,
-	CreatedDateTime datetime NOT NULL,
-	CreatedByUserId bigint NOT NULL,
-	SourceId bigint NOT NULL,
-	ProcessId bigint NOT NULL,
-	ProcessAttributeId bigint NOT NULL,
-	ProcessDetailDescription varchar(200) NOT NULL
+	ProcessDetailId BIGINT IDENTITY(1,1) NOT NULL,
+	EffectiveFromDateTime DATETIME NOT NULL,
+	EffectiveToDateTime DATETIME NOT NULL,
+	CreatedDateTime DATETIME NOT NULL,
+	CreatedByUserId BIGINT NOT NULL,
+	SourceId BIGINT NOT NULL,
+	ProcessId BIGINT NOT NULL,
+	ProcessAttributeId BIGINT NOT NULL,
+	ProcessDetailDescription VARCHAR(200) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessDetail] ADD CONSTRAINT
