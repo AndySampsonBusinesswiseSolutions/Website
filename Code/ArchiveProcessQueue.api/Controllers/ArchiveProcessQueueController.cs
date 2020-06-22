@@ -2,8 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using Newtonsoft.Json.Linq;
-using System.Net.Http;
-using commonMethods;
+using MethodLibrary;
 using enums;
 
 namespace ArchiveProcessQueue.api.Controllers
@@ -13,10 +12,10 @@ namespace ArchiveProcessQueue.api.Controllers
     public class ArchiveProcessQueueController : ControllerBase
     {
         private readonly ILogger<ArchiveProcessQueueController> _logger;
-        private readonly CommonMethods _methods = new CommonMethods();
-        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
-        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
-        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
+        private readonly Methods _methods = new Methods();
+        private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
+        private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
@@ -42,16 +41,9 @@ namespace ArchiveProcessQueue.api.Controllers
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-            //Build JObject
-            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject, _systemAPIGUIDEnums.ArchiveProcessQueueAPI);
-
             //Call CheckPrerequisiteAPI API
-            var processTask = _systemMethods.CreateAPI(checkPrerequisiteAPIAPIId)
-                    .PostAsJsonAsync(
-                        _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
-                        apiData);
-
-            var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, jsonObject);
+            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
             //All APIs have finished so create record in ProcessArchive
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);

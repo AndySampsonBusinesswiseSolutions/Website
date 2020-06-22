@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using System.Collections.Generic;
-using commonMethods;
+using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -15,8 +15,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
     public class CheckPrerequisiteAPIController : ControllerBase
     {
         private readonly ILogger<CheckPrerequisiteAPIController> _logger;
-        private readonly CommonMethods _methods = new CommonMethods();
-        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
+        private readonly Methods _methods = new Methods();
+        private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();

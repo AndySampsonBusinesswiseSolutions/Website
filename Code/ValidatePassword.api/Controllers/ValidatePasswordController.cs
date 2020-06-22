@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
-using commonMethods;
+using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Net.Http;
 using System.Linq;
 
 namespace ValidatePassword.api.Controllers
@@ -15,10 +13,10 @@ namespace ValidatePassword.api.Controllers
     public class ValidatePasswordController : ControllerBase
     {
         private readonly ILogger<ValidatePasswordController> _logger;
-        private readonly CommonMethods _methods = new CommonMethods();
-        private readonly CommonMethods.System _systemMethods = new CommonMethods.System();
-        private readonly CommonMethods.Administration _administrationMethods = new CommonMethods.Administration();
-        private readonly CommonMethods.Information _informationMethods = new CommonMethods.Information();
+        private readonly Methods _methods = new Methods();
+        private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
+        private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -56,16 +54,9 @@ namespace ValidatePassword.api.Controllers
             //Get CheckPrerequisiteAPI API Id
             var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-            //Build JObject
-            var apiData = _systemMethods.GetAPIData(checkPrerequisiteAPIAPIId, jsonObject, _systemAPIGUIDEnums.ValidatePasswordAPI);
-            
             //Call CheckPrerequisiteAPI API
-            var processTask = _systemMethods.CreateAPI(checkPrerequisiteAPIAPIId)
-                    .PostAsJsonAsync(
-                        _systemMethods.GetAPIPOSTRouteByAPIId(checkPrerequisiteAPIAPIId), 
-                        apiData);
-            
-            var result = processTask.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidatePasswordAPI, jsonObject);
+            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
             if(!erroredPrerequisiteAPIs.Any())

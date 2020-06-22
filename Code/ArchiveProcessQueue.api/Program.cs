@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using commonMethods;
+using MethodLibrary;
 using enums;
 
 namespace ArchiveProcessQueue.api
 {
     public class Program
     {
-        private static readonly CommonMethods _methods = new CommonMethods();
-        private static readonly CommonMethods.System _systemMethods = new CommonMethods.System();
+        private static readonly Methods _methods = new Methods();
+        private static readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
