@@ -60,6 +60,9 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
+            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+            long mappingId = 0;
+
             if(!erroredPrerequisiteAPIs.Any())
             {
                 //Get Password Id
@@ -70,22 +73,17 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                 var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
                 //Validate Password and User combination
-                var mappingId = _mappingMethods.PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(passwordId, userId);
+                mappingId = _mappingMethods.PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(passwordId, userId);
 
-                //If passwordId == 0 then the GUID provided isn't valid so create an error
+                //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error
                 if(mappingId == 0)
                 {
-                    //TODO: Add error handler
+                    errorMessage = $"UserId/PasswordId combination {userId}/{passwordId} does not exist in [Mapping].[PasswordToUser] table";
                 }
+            }
 
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, mappingId == 0);
-            }
-            else
-            {
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true);
-            }
+            //Update Process Queue
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, mappingId == 0);
         }
     }
 }

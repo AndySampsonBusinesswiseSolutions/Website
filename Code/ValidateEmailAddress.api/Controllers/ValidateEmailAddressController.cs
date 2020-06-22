@@ -59,28 +59,26 @@ namespace ValidateEmailAddress.api.Controllers
             var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
+            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+            long emailAddressId = 0;
+
             if(!erroredPrerequisiteAPIs.Any())
             {
                 //Get Email Address
                 var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
 
                 //Validate Email Address
-                var emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+                emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
 
-                //If emailAddressId == 0 then the GUID provided isn't valid so create an error
+                //If emailAddressId == 0 then the email address provided isn't valid so create an error
                 if(emailAddressId == 0)
                 {
-                    //TODO: Add error handler
+                    errorMessage = $"Email address {emailAddress} does not exist in [Administration.User].[UserDetail] table";
                 }
+            }
 
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, emailAddressId == 0);
-            }
-            else
-            {
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true);
-            }
+            //Update Process Queue
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, emailAddressId == 0);
         }
     }
 }

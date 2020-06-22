@@ -224,18 +224,18 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public void ProcessQueue_Insert(string processQueueGUID, long createdByUserId, long sourceId, long APIId, bool hasError = false)
+            public void ProcessQueue_Insert(string processQueueGUID, long createdByUserId, long sourceId, long APIId, bool hasError = false, string errorMessage = null)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessQueue_Insert, 
-                    processQueueGUID, createdByUserId, sourceId, APIId, hasError);
+                    processQueueGUID, createdByUserId, sourceId, APIId, hasError, errorMessage);
             }
 
-            public void ProcessQueue_Update(string processQueueGUID, long APIId, bool hasError = false)
+            public void ProcessQueue_Update(string processQueueGUID, long APIId, bool hasError = false, string errorMessage = null)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessQueue_Update, 
-                    processQueueGUID, APIId, hasError);
+                    processQueueGUID, APIId, hasError, errorMessage);
             }
 
             public DataRow ProcessQueue_GetByProcessQueueGUIDAndAPIId(string processQueueGUID, long apiId)

@@ -21,13 +21,15 @@ GO
 ALTER PROCEDURE [System].[ProcessQueue_Update]
 	@ProcessQueueGUID UNIQUEIDENTIFIER,
     @APIId BIGINT,
-    @HasError BIT
+    @HasError BIT,
+    @ErrorMessage VARCHAR(MAX) = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
     -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
+    -- 2020-06-22 -> Andrew Sampson -> Added @ErrorMessage parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -38,7 +40,8 @@ BEGIN
         [System].[ProcessQueue]
     SET
         EffectiveToDateTime = GETUTCDATE(),
-        HasError = @HasError
+        HasError = @HasError,
+        ErrorMessage = @ErrorMessage
     WHERE
         ProcessQueueGUID = @ProcessQueueGUID
         AND APIId = @APIId

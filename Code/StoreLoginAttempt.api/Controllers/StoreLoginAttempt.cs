@@ -60,24 +60,30 @@ namespace StoreLoginAttempt.api.Controllers
             var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
+            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+
             //Get User Id
             var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
-            //Store login attempt
-            _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
+            if(userId != 0)
+            {
+                //Store login attempt
+                _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
 
-            //Get Login Id
-            var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
+                //Get Login Id
+                var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
 
-            //Store mapping between login attempt and user
-            var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            _mappingMethods.LoginToUser_Insert(systemUserId, 
-                sourceId, 
-                loginId, 
-                userId);
+                //Store mapping between login attempt and user
+                var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+                _mappingMethods.LoginToUser_Insert(systemUserId, 
+                    sourceId, 
+                    loginId, 
+                    userId);
+            }
+            
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any());
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
         }
     }
 }

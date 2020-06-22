@@ -38,6 +38,8 @@ namespace LockUser.api.Controllers
         [Route("LockUser/Lock")]
         public void Lock([FromBody] object data)
         {
+            //TODO: Add try/catch for system error
+
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
@@ -60,69 +62,75 @@ namespace LockUser.api.Controllers
             var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.LockUserAPI, jsonObject);
             var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+                
+            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
-            if(erroredPrerequisiteAPIs.Any()) //TODO: Add try/catch for system error
+            if(erroredPrerequisiteAPIs.Any())
             {
-                //TODO: Log prerequisite API failure
-
                 //Get User Id
                 var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
-                //Get logins by user id and order by descending
-                var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
-
-                //Initialise invalidAttempts variable
-                var invalidAttempts = 0;
-
-                //Loop through each login
-                foreach(var login in loginList)
+                if(userId != 0)
                 {
-                    //Get LoginSuccessful attribute
-                    var loginSucessful = _administrationMethods.Login_GetLoginSuccessfulByLoginId(login);
+                    //Get logins by user id and order by descending
+                    var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
 
-                    //If login is successful, then exit loop
-                    //Else increment invalidAttempts
-                    if(loginSucessful)
+                    //Get invalidAttempts count
+                    var invalidAttempts = CountInvalidAttempts(loginList);
+
+                    //Get maximum attempts allowed before locking
+                    var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+                    var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
+                    var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
+                        .Select(a => Convert.ToInt64(a))
+                        .First();
+
+                    //If invalid attempt count >= maximum allowed invalid attempts, lock the user
+                    if (invalidAttempts >= maximumInvalidAttempts)
                     {
-                        break;
-                    }
-                    else
-                    {
-                        invalidAttempts++;
+                        //Lock account by adding 'Account Locked' to user detail
+                        var accountLockedAttributeId = _administrationMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(_administrationUserAttributeEnums.AccountLocked);
+
+                        _administrationMethods.UserDetail_Insert(
+                            createdByUserId,
+                            sourceId,
+                            userId,
+                            accountLockedAttributeId,
+                            "true");
+
+                        //Update error message
+                        errorMessage = $"Account Locked. {errorMessage}";
                     }
                 }
-
-                //Get maximum attempts allowed before locking
-                var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
-                var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
-                var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
-                    .Select(a => Convert.ToInt64(a))
-                    .First();
-
-                var isAttemptValid = invalidAttempts < maximumInvalidAttempts;
-
-                //If invalid attempt count >= maximum allowed invalid attempts, lock the user
-                if(!isAttemptValid)
-                {
-                    //Lock account by adding 'Account Locked' to user detail
-                    var accountLockedAttributeId = _administrationMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(_administrationUserAttributeEnums.AccountLocked);
-
-                    _administrationMethods.UserDetail_Insert(
-                        createdByUserId, 
-                        sourceId,
-                        userId,
-                        accountLockedAttributeId, 
-                        "true");
-                }
-
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, !isAttemptValid);
             }
-            else
+
+            //Update Process Queue
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+        }
+
+        private int CountInvalidAttempts(IOrderedEnumerable<long> loginList)
+        {
+            var invalidAttempts = 0;
+
+            //Loop through each login
+            foreach (var login in loginList)
             {
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, false);
+                //Get LoginSuccessful attribute
+                var loginSucessful = _administrationMethods.Login_GetLoginSuccessfulByLoginId(login);
+
+                //If login is successful, then exit loop
+                //Else increment invalidAttempts
+                if (loginSucessful)
+                {
+                    break;
+                }
+                else
+                {
+                    invalidAttempts++;
+                }
             }
+
+            return invalidAttempts;
         }
     }
 }

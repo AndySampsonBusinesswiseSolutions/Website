@@ -57,13 +57,10 @@ namespace ValidateProcessGUID.api.Controllers
             var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
 
             //If processId == 0 then the GUID provided isn't valid so create an error
-            if(processId == 0)
-            {
-                //TODO: Add error handler
-            }
+            string errorMessage = processId == 0 ? $"Process GUID {processGUID} does not exist in [System].[Process] table" : null;
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, processId == 0);
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, processId == 0, errorMessage);
 
             return processId;
         }

@@ -59,28 +59,26 @@ namespace ValidatePageGUID.api.Controllers
             var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
             var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
+            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+            long pageId = 0;
+
             if(!erroredPrerequisiteAPIs.Any())
             {
                 //Get Page GUID
                 var pageGUID = jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
 
                 //Validate Page GUID
-                var pageId = _systemMethods.Page_GetPageIdByGUID(pageGUID);
+                pageId = _systemMethods.Page_GetPageIdByGUID(pageGUID);
 
                 //If pageId == 0 then the GUID provided isn't valid so create an error
                 if(pageId == 0)
                 {
-                    //TODO: Add error handler
+                    errorMessage = $"Page GUID {pageGUID} does not exist in [System].[Page] table";
                 }
+            }
 
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, pageId == 0);
-            }
-            else
-            {
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true);
-            }
+            //Update Process Queue
+            _systemMethods.ProcessQueue_Update(queueGUID, APIId, pageId == 0, errorMessage);
         }
     }
 }

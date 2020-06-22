@@ -23,7 +23,8 @@ ALTER PROCEDURE [System].[ProcessQueue_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
     @APIId BIGINT,
-    @HasError BIT
+    @HasError BIT,
+    @ErrorMessage VARCHAR(MAX) = NULL
 AS
 BEGIN
     -- =============================================
@@ -31,6 +32,7 @@ BEGIN
     -- 2020-06-02 -> Andrew Sampson -> Initial development of script
     -- 2020-06-16 -> Andrew Sampson -> Updated @GUID to @ProcessQueueGUID to start matching code variable names
     -- 2020-06-17 -> Andrew Sampson -> Updated as part of code refactor
+    -- 2020-06-22 -> Andrew Sampson -> Added @ErrorMessage parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -44,7 +46,8 @@ BEGIN
             CreatedByUserId,
             SourceId,
             APIId,
-            HasError
+            HasError,
+            ErrorMessage
         )
     VALUES  
         (
@@ -52,7 +55,8 @@ BEGIN
             @CreatedByUserId,
             @SourceId,
             @APIId,
-            @HasError
+            @HasError,
+            @ErrorMessage
         )
 END
 GO
