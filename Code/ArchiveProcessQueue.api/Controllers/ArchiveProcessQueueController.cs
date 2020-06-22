@@ -53,9 +53,13 @@ namespace ArchiveProcessQueue.api.Controllers
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
+            //Get whether there is an error in the API records
+            var hasError = _systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
+
             _systemMethods.ProcessArchive_Insert(createdByUserId,
                 sourceId,
-                processQueueGUID);
+                processQueueGUID,
+                hasError);
 
             var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
             var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
@@ -75,7 +79,7 @@ namespace ArchiveProcessQueue.api.Controllers
                 sourceId,
                 processArchiveId,
                 processArchiveAttributeId,
-                "OK");
+                hasError ? "ERROR" : "OK");
 
             //Update ProcessArchive
             _systemMethods.ProcessArchive_Update(processQueueGUID);

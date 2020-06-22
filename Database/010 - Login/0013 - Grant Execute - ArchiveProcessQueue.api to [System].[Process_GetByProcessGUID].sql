@@ -1,5 +1,5 @@
 USE [EMaaS]
 GO
 
-GRANT EXECUTE ON OBJECT::[Mapping].[ProcessToProcessArchive_Insert] TO [ArchiveProcessQueue.api];  
+GRANT EXECUTE ON OBJECT::[System].[Process_GetByProcessGUID] TO [ArchiveProcessQueue.api];  
 GO

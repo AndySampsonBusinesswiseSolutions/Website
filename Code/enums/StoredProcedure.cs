@@ -44,6 +44,7 @@ namespace enums
                 public string ProcessQueue_Insert = "[System].[ProcessQueue_Insert]";
                 public string ProcessQueue_Update = "[System].[ProcessQueue_Update]";
                 public string ProcessQueue_GetByProcessQueueGUIDAndAPIId = "[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId]";
+                public string ProcessQueue_GetHasErrorByProcessQueueGUID = "[System].[ProcessQueue_GetHasErrorByProcessQueueGUID]";
                 public string ProcessArchive_Insert = "[System].[ProcessArchive_Insert]";
                 public string ProcessArchive_Update = "[System].[ProcessArchive_Update]";
                 public string ProcessArchive_GetByProcessArchiveGUID = "[System].[ProcessArchive_GetByProcessArchiveGUID]";

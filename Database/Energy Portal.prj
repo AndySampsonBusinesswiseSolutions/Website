@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>dceaf686-8312-4f75-93f0-d546713bb3e5</ID>
-    <DateCreated>2020-06-22T12:00:36.5115851+01:00</DateCreated>
+    <ID>dc381114-2a99-4b6c-86b6-84be209cb460</ID>
+    <DateCreated>2020-06-22T13:24:57.8264226+01:00</DateCreated>
     <Name>Energy Portal</Name>
     <FileName>C:\wamp64\www\Website\Database\Energy Portal.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>QhHU98O8p9OXbqSQ/4VN5g==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe65Zk3JQJzJX+9jwpzzvLYQM=</Password>
+    <Login>6usflFNMIiYhby5rtphcAg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6zgTHNQvn2zGuoTdJsgP3Q0=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -856,6 +856,20 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>309c68e4-dd46-407e-8a26-017cd0493dd4</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0051 - Amend Stored Procedure - [System].[ProcessArchive_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3ebe6ce4-3146-4951-8c63-14c6f8032be8</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0052 - Create Stored Procedure - [System].[ProcessQueue_GetHasErrorByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -940,9 +954,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>65964590-9da5-4716-9da5-990c5210aac0</ID>
+    <ID>d7adfa08-7470-4a24-8c52-d12e40d48819</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\010 - Login\0013 - Grant Execute - ArchiveProcessQueue.api to [System].[Process_GetByProcessGUID] copy.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0013 - Grant Execute - ArchiveProcessQueue.api to [System].[Process_GetByProcessGUID].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -950,6 +964,13 @@
     <ID>349b9110-2ecf-4361-8d1e-79a9fd670af8</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0014 - Grant Execute - ArchiveProcessQueue.api to [Mapping].[ProcessToProcessArchive_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>65baa8ec-3ede-4278-b162-b9e5f937aac7</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0015 - Grant Execute - ArchiveProcessQueue.api to [System].[ProcessQueue_GetHasErrorByProcessQueueGUID].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1316,7 +1337,7 @@
     <Name>999 - Data</Name>
   </ScriptFolder>
   <Mapping>
-    <ID>ccb08e9b-7f6a-4974-aad2-348c5ee25218</ID>
+    <ID>d7f757ae-f9d3-4a1d-953c-464b50f49174</ID>
     <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
     <Container_ID>95050ad3-e0f3-492a-b094-100e1720f63f</Container_ID>
     <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>

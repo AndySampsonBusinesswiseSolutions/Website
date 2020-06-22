@@ -249,11 +249,22 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public void ProcessArchive_Insert(long createdByUserId, long sourceId, string processArchiveGUID)
+            public bool ProcessQueue_GetHasErrorByProcessQueueGUID(string processQueueGUID)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessQueue_GetHasErrorByProcessQueueGUID, 
+                    processQueueGUID);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<bool>("HasError"))
+                    .FirstOrDefault();
+            }
+
+            public void ProcessArchive_Insert(long createdByUserId, long sourceId, string processArchiveGUID, bool hasError)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessArchive_Insert, 
-                    createdByUserId, sourceId, processArchiveGUID);
+                    createdByUserId, sourceId, processArchiveGUID, hasError);
             }
 
             public void ProcessArchive_Update(string processArchiveGUID)
