@@ -71,8 +71,8 @@ namespace Website.api.Controllers
         }
 
         [HttpPost]
-        [Route("website/GetResponse")]
-        public IActionResult GetResponse([FromBody] string processQueueGuid)
+        [Route("Website/GetLoginResponse")]
+        public IActionResult GetLoginResponse([FromBody] string processQueueGuid)
         {
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
@@ -96,18 +96,22 @@ namespace Website.api.Controllers
                 }
 
                 //Create return object with response record
-                if(response == "OK")
+                switch(response)
                 {
-                    return new OkObjectResult(new { message = "200 OK" });
+                    case "OK":
+                        return new OkObjectResult(new { message = "OK" });
+                    case "ERROR":
+                        return new UnauthorizedResult();
+                    case "SYSTEM ERROR":
+                    default:
+                        return new BadRequestResult();
                 }
-
-                return new UnauthorizedResult();
             }
             catch(Exception error)
             {
                 _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
-                return new UnauthorizedResult();
+                return new BadRequestResult();
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>82a8188a-46d5-4511-8b89-edd0adb5fa99</ID>
-    <DateCreated>2020-06-22T15:51:49.4956676+01:00</DateCreated>
-    <Name>Energy Portal</Name>
-    <FileName>C:\wamp64\www\Website\Database\Energy Portal.prj</FileName>
+    <ID>1209c051-7b03-4fdc-9fd5-59d2808e9a90</ID>
+    <DateCreated>2020-06-23T11:06:30.468404+01:00</DateCreated>
+    <Name>Dev - 2 - Deployed</Name>
+    <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
   </Project>
   <Package>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>AHiXwjERFJZjdgHvGEoH/g==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe66c0NDRyK5jK0Q+IS5M7++s=</Password>
+    <Login>L/LGSyZym1lVU+5sAnSlqA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6xdv6XEuD1EE1/87m1hNlXM=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -884,6 +884,20 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>1336f8fe-1ec5-4dfe-b554-635c86acebe5</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0054 - Create Stored Procedure - [System].[Error_GetByErrorGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>4cba87c6-5135-454d-9b45-29b20f185063</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0055 - Create Stored Procedure - [System].[ProcessQueue_GetHasSystemErrorByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -992,6 +1006,13 @@
     <ID>eadd991f-3aeb-450c-80de-95eb2b6cd3eb</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0016 - Grant Execute - Multiple APIs to allow writing into [System].[Error].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>4619ba6d-767d-4485-b596-4434ee22bde4</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0017 - Grant Execute - ArchiveProcessQueue.api to [System].[ProcessQueue_GetHasSystemErrorByProcessQueueGUID].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1220,18 +1241,8 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFileContainer>
-    <ID>95050ad3-e0f3-492a-b094-100e1720f63f</ID>
-    <Name>001 - Scripts To Be Run</Name>
-    <Description />
-    <FileExtension>*.sql</FileExtension>
-    <FileEncoding>1</FileEncoding>
-    <RootFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</RootFolder_ID>
-    <X>80</X>
-    <Y>50</Y>
-  </ScriptFileContainer>
-  <ScriptFileContainer>
     <ID>1b5e813a-f426-41c8-9159-a35b24d0c162</ID>
-    <Name>002 - Deployed Scripts</Name>
+    <Name>All Scripts</Name>
     <Description />
     <FileExtension>*.sql</FileExtension>
     <FileEncoding>1</FileEncoding>
@@ -1239,65 +1250,6 @@
     <X>100</X>
     <Y>150</Y>
   </ScriptFileContainer>
-  <ScriptFolder>
-    <ID>060b1bff-06e7-4508-b97d-d7f953cae671</ID>
-    <Name />
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>1c843e1a-060a-47ac-bd8b-81b3663135c6</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>001 - Predeployment</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>a9c5cab3-23dd-4f6f-9447-7786948cd8b7</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>002 - Filegroup</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>b7a9ec0c-a403-426a-be1f-fc58eab2eaaa</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>003 - File</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>7f4b7e15-0bbc-4129-827c-a29c6205afb1</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>004 - Schema</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>e5fb390a-e6c5-4e6b-ba6a-78c5fd79e201</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>005 - Table</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>79421cc0-ccf1-4c65-87e7-3ad828cc4b14</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>006 - Stored procedure</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>46cdffe1-0286-4a6e-bf0a-572b4bc924c2</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>007 - View</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>cbb164d2-7480-44a6-9739-4ca54b0443a5</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>008 - Function</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>7141c517-22a2-4955-997b-f48662321c17</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>009 - Job</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>97d58cd0-d387-45e0-9b14-4b4a916b1fc0</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>010 - Login</Name>
-  </ScriptFolder>
-  <ScriptFolder>
-    <ID>31821b16-baf1-4f06-bf25-32ac94810f45</ID>
-    <ParentFolder_ID>060b1bff-06e7-4508-b97d-d7f953cae671</ParentFolder_ID>
-    <Name>999 - Data</Name>
-  </ScriptFolder>
   <ScriptFolder>
     <ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ID>
     <Name />
@@ -1358,19 +1310,11 @@
     <Name>999 - Data</Name>
   </ScriptFolder>
   <Mapping>
-    <ID>c2aa3aba-95d6-424d-b706-6ab15b99aa66</ID>
-    <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
-    <Container_ID>95050ad3-e0f3-492a-b094-100e1720f63f</Container_ID>
-    <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>
-    <ExecOrder>1</ExecOrder>
-    <PrecedenceConstraint>1</PrecedenceConstraint>
-  </Mapping>
-  <Mapping>
-    <ID>758eee9c-501c-4fe4-ba42-3ea4b964e01a</ID>
+    <ID>09b1f4ee-a843-4415-8d23-9e2547aaa29f</ID>
     <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
     <Container_ID>1b5e813a-f426-41c8-9159-a35b24d0c162</Container_ID>
     <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>
-    <ExecOrder>2</ExecOrder>
+    <ExecOrder>1</ExecOrder>
     <PrecedenceConstraint>1</PrecedenceConstraint>
   </Mapping>
 </ProjectDataSet>

@@ -262,6 +262,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public bool ProcessQueue_GetHasSystemErrorByProcessQueueGUID(string processQueueGUID)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessQueue_GetHasSystemErrorByProcessQueueGUID, 
+                    processQueueGUID);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<bool>("HasError"))
+                    .FirstOrDefault();
+            }
+
             public void ProcessArchive_Insert(long createdByUserId, long sourceId, string processArchiveGUID, bool hasError)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

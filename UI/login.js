@@ -21,7 +21,7 @@ function login(event) {
         }
       );
 
-      getResponse(processQueueGUID)
+      getLoginResponse(processQueueGUID)
       .then(response => {
         processResponse(response);
       })
@@ -47,16 +47,24 @@ function showLoader(show) {
 
 function processResponse(response) {
   errorMessage.style.display = '';
-  
-  if(response && response.message == "200 OK") {
-    errorMessage.innerText = 'Login OK';
-    //window.location.href = "/Internal/Dashboard/";
-    // return true;
+
+  if(response) {
+    if(response.message == "OK") {
+      errorMessage.innerText = 'Login OK';
+      //window.location.href = "/Internal/Dashboard/";
+      // return true;
+    }
+    else if(response.status == 401) {
+      errorMessage.innerText = "Email address/Password combination invalid or account has been locked";
+    }
+    else {
+      errorMessage.innerText = "Sorry, we could not log you in at this time. Please try again later";
+    }
   }
   else {
-    errorMessage.innerText = "Email address/Password combination invalid or account has been locked";
+    errorMessage.innerText = "Sorry, we could not log you in at this time. Please try again later";
   }
-  
+
   showLoader(false);
   return false;
 }
@@ -76,9 +84,9 @@ async function postData(data) {
   });
 }
 
-async function getResponse(processQueueGUID) {
+async function getLoginResponse(processQueueGUID) {
   try {
-    const response = await fetch(uri + '/GetResponse', {
+    const response = await fetch(uri + '/GetLoginResponse', {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',

@@ -60,6 +60,9 @@ namespace ArchiveProcessQueue.api.Controllers
                 //Get whether there is an error in the API records
                 var hasError = _systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
 
+                //If there is an error, check to see if it's a system error
+                var hasSystemError = hasError && _systemMethods.ProcessQueue_GetHasSystemErrorByProcessQueueGUID(processQueueGUID);
+
                 //Create record in ProcessArchive
                 _systemMethods.ProcessArchive_Insert(createdByUserId,
                     sourceId,
@@ -84,7 +87,7 @@ namespace ArchiveProcessQueue.api.Controllers
                     sourceId,
                     processArchiveId,
                     processArchiveAttributeId,
-                    hasError ? "ERROR" : "OK");
+                    hasSystemError ? "SYSTEM ERROR" : hasError ? "ERROR" : "OK");
 
                 //Update ProcessArchive
                 _systemMethods.ProcessArchive_Update(processQueueGUID);

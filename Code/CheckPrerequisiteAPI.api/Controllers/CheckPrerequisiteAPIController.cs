@@ -119,15 +119,21 @@ namespace CheckPrerequisiteAPI.api.Controllers
                             {
                                 //Check if process has been running for longer than it's anticipated run time
                                 var effectiveFromDate = Convert.ToDateTime(processQueueDataRow["EffectiveFromDateTime"]);
-                                var latestRunDate = effectiveFromDate.AddMinutes(1);
+                                var latestRunDate = effectiveFromDate.AddMinutes(1); //TODO: Make detail against API and make adjustable
                                 var currentDate = DateTime.UtcNow;
 
                                 if(currentDate > latestRunDate)
                                 {
                                     erroredPrerequisiteAPIGUIDs.Add(prerequisiteAPIGUID);
 
+                                    var errorId = _systemMethods.InsertSystemError(createdByUserId, 
+                                        sourceId, 
+                                        $"API {APIId} Timeout",
+                                        "API Timeout",
+                                        Environment.StackTrace);
+
                                     //Update Process Queue
-                                    _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, "Timeout");
+                                    _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
                                 }
                             }
                         }                    
