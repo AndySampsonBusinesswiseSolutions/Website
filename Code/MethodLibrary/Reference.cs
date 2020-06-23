@@ -72,5 +72,18 @@ namespace MethodLibrary
                 .Replace("]","")
                 .Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
         }
+
+        public string ConvertDateTimeToSqlParameter(DateTime dateTime)
+        {
+            var year = dateTime.Year;
+            var month = dateTime.Month.ToString().PadLeft(2, '0');
+            var day = dateTime.Day.ToString().PadLeft(2, '0');
+            var hour = dateTime.Hour.ToString().PadLeft(2, '0');
+            var minute = dateTime.Minute.ToString().PadLeft(2, '0');
+            var second = dateTime.Second.ToString().PadLeft(2, '0');
+            var millisecond = dateTime.Millisecond.ToString().PadLeft(3, '0');
+
+            return $"{year}-{month}-{day} {hour}:{minute}:{second}.{millisecond}";
+        }
     }
 }

@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using MethodLibrary;
 using enums;
 using System;
-using System.Net.Http;
+using System.Data;
 
 namespace ArchiveProcessQueue.api.Controllers
 {
@@ -80,7 +80,34 @@ namespace ArchiveProcessQueue.api.Controllers
                     _mappingMethods.ProcessToProcessArchive_Insert(createdByUserId, sourceId, processId, processArchiveId);
                 }
 
-                //TODO Write records for each API into ProcessArchiveDetail
+                //Write records for each API into ProcessArchiveDetail
+                var processQueueDataTable = _systemMethods.ProcessQueue_GetByProcessQueueGUID(processQueueGUID);
+                foreach(DataRow dataRow in processQueueDataTable.Rows)
+                {
+                    var effectiveFromDateTime = Convert.ToDateTime(dataRow["EffectiveFromDateTime"]);
+                    var effectiveToDateTime = Convert.ToDateTime(dataRow["EffectiveToDateTime"]);
+                    var processArchiveDetailDescription = string.IsNullOrWhiteSpace(dataRow["ErrorMessage"].ToString())
+                        ? "Success"
+                        : dataRow["ErrorMessage"].ToString();
+                    var APIId = Convert.ToInt64(dataRow["APIId"]);
+
+                    _systemMethods.ProcessArchiveDetail_InsertAll(effectiveFromDateTime,
+                        effectiveToDateTime,
+                        createdByUserId,
+                        sourceId,
+                        processArchiveId,
+                        processArchiveAttributeId,
+                        processArchiveDetailDescription);
+
+                    var effectiveFromString = _methods.ConvertDateTimeToSqlParameter(effectiveFromDateTime);
+                    var effectiveToString = _methods.ConvertDateTimeToSqlParameter(effectiveToDateTime);
+
+                    var processArchiveDetailId = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdByEffectiveFromDateTimeAndEffectiveToDateTimeAndProcessArchiveDetailDescription(effectiveFromString,
+                        effectiveToString,
+                        processArchiveDetailDescription);
+
+                    _mappingMethods.APIToProcessArchiveDetail_Insert(createdByUserId, sourceId, APIId, processArchiveDetailId);
+                }
 
                 //Write response into ProcessArchiveDetail
                 _systemMethods.ProcessArchiveDetail_Insert(createdByUserId,

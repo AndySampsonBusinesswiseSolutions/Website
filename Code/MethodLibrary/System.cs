@@ -251,6 +251,13 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public DataTable ProcessQueue_GetByProcessQueueGUID(string processQueueGUID)
+            {
+                return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessQueue_GetByProcessQueueGUID, 
+                    processQueueGUID);
+            }
+
             public bool ProcessQueue_GetHasErrorByProcessQueueGUID(string processQueueGUID)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -320,11 +327,29 @@ namespace MethodLibrary
                     .ToList();
             }
 
+            public long ProcessArchiveDetail_GetProcessArchiveDetailIdByEffectiveFromDateTimeAndEffectiveToDateTimeAndProcessArchiveDetailDescription(string effectiveFromDateTime, string effectiveToDateTime, string processArchiveDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessArchiveDetail_GetByEffectiveFromDateAndEffectiveToDateTimeAndProcessArchiveDetailDescription,
+                    effectiveFromDateTime, effectiveToDateTime, processArchiveDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ProcessArchiveDetailId"))
+                    .FirstOrDefault();
+            }
+
             public void ProcessArchiveDetail_Insert(long createdByUserId, long sourceId, long processArchiveId, long processArchiveAttributeId, string processArchiveDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSystemEnums.ProcessArchiveDetail_Insert, 
                     createdByUserId, sourceId, processArchiveId, processArchiveAttributeId, processArchiveDetailDescription);
+            }
+
+            public void ProcessArchiveDetail_InsertAll(DateTime effectiveFromDateTime, DateTime effectiveToDateTime, long createdByUserId, long sourceId, long processArchiveId, long processArchiveAttributeId, string processArchiveDetailDescription)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessArchiveDetail_InsertAll, 
+                    effectiveFromDateTime, effectiveToDateTime, createdByUserId, sourceId, processArchiveId, processArchiveAttributeId, processArchiveDetailDescription);
             }
 
             public void ProcessQueue_Delete(string processQueueGUID)

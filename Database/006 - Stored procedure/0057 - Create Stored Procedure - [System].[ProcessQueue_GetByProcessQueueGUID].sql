@@ -6,27 +6,25 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessQueue_GetByProcessQueueGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [System].[ProcessQueue_GetByProcessQueueGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-06-02
--- Description:	Get Process Queue info from [System].[ProcessQueue] table by ProcessQueueGUID and APIId
+-- Create date: 2020-06-23
+-- Description:	Get Process Queue info from [System].[ProcessQueue] table by ProcessQueueGUID
 -- =============================================
 
-ALTER PROCEDURE [System].[ProcessQueue_GetByProcessQueueGUIDAndAPIId]
-    @ProcessQueueGUID UNIQUEIDENTIFIER,
-    @APIId BIGINT
+ALTER PROCEDURE [System].[ProcessQueue_GetByProcessQueueGUID]
+    @ProcessQueueGUID UNIQUEIDENTIFIER
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-06-02 -> Andrew Sampson -> Initial development of script
-    -- 2020-06-17 -> Andrew Sampson -> Adjusted stored procedure name to correctly identify which GUID is being used
+    -- 2020-06-23 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -41,11 +39,11 @@ BEGIN
         CreatedByUserId,
         SourceId,
         APIID,
-        HasError
+        HasError,
+		ErrorMessage
     FROM 
         [System].[ProcessQueue] 
     WHERE 
         ProcessQueueGUID = @ProcessQueueGUID
-        AND APIId = @APIId
 END
 GO

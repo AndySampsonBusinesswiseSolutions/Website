@@ -143,9 +143,11 @@ namespace CheckPrerequisiteAPI.api.Controllers
             catch(Exception error)
             {
                 _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                return prerequisiteAPIGUIDs;
             }
 
-            return prerequisiteAPIGUIDs;
+            return erroredPrerequisiteAPIGUIDs;
         }
     }
 }

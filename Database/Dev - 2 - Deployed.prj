@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>568a344c-a333-4cea-babc-5bdc7fac8d84</ID>
-    <DateCreated>2020-06-23T13:15:44.2086308+01:00</DateCreated>
+    <ID>b2e05fff-ba0a-48dd-a42d-416ece02282d</ID>
+    <DateCreated>2020-06-23T20:51:23.8093377+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>QE7fGfTNyPfXPoRG4YvWqg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe63uD2X5v1aEhjB7UFhHuIag=</Password>
+    <Login>Qk1QaTfWpBRB+3ZClDzhYQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6y4RXR0MV4ynAMH1frYaA7A=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -681,9 +681,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>22d9e02f-afc9-4345-b38f-ae46e942cd5b</ID>
+    <ID>3bbc45b6-0390-41b1-89d2-c9fb2dc15ace</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0024 - Create Stored Procedure - [System].[APIDetail_GetByAPIIDAndAPIAttributeId].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0024 - Create Stored Procedure - [System].[ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -912,6 +912,27 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>567c72c8-ac8e-4642-998f-f4dfa106e761</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0057 - Create Stored Procedure - [System].[ProcessQueue_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cda4eccb-04b8-4c80-865c-5c13cee983f9</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0058 - Create Stored Procedure - [System].[ProcessArchiveDetail_InsertAll].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>81c0c291-2750-40bc-9a95-94fb489e9372</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0059 - Create Stored Procedure - [System].[ProcessArchiveDetail_GetByEffectiveFromDateAndEffectiveToDateTimeAndProcessArchiveDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -1027,6 +1048,13 @@
     <ID>4619ba6d-767d-4485-b596-4434ee22bde4</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0017 - Grant Execute - ArchiveProcessQueue.api to [System].[ProcessQueue_GetHasSystemErrorByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>93900bae-520f-4121-b941-ce21f4ec44cd</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0018 - Grant Execute - ArchiveProcessQueue.api to multiple scripts.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
