@@ -26,6 +26,7 @@ namespace enums
             public class Mapping
             {
                 public string APIToProcess_GetByProcessId = "[Mapping].[APIToProcess_GetByProcessId]";
+                public string APIToProcessArchiveDetail_Insert = "[Mapping].[APIToProcessArchiveDetail_Insert]";
                 public string PasswordToUser_GetByPasswordIdAndUserId = "[Mapping].[PasswordToUser_GetByPasswordIdAndUserId]";
                 public string LoginToUser_Insert = "[Mapping].[LoginToUser_Insert]";
                 public string LoginToUser_GetByUserId = "[Mapping].[LoginToUser_GetByUserId]";

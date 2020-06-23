@@ -55,6 +55,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.ProcessToProcessArchive_Insert, 
                     createdByUserId, sourceId, processId, processArchiveId);
             }
+
+            public void APIToProcessArchiveDetail_Insert(long createdByUserId, long sourceId, long APIId, long processArchiveDetailId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.APIToProcessArchiveDetail_Insert, 
+                    createdByUserId, sourceId, APIId, processArchiveDetailId);
+            }
         }
     }
 }

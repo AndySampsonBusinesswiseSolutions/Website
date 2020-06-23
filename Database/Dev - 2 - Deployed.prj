@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>1209c051-7b03-4fdc-9fd5-59d2808e9a90</ID>
-    <DateCreated>2020-06-23T11:06:30.468404+01:00</DateCreated>
+    <ID>568a344c-a333-4cea-babc-5bdc7fac8d84</ID>
+    <DateCreated>2020-06-23T13:15:44.2086308+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>L/LGSyZym1lVU+5sAnSlqA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6xdv6XEuD1EE1/87m1hNlXM=</Password>
+    <Login>QE7fGfTNyPfXPoRG4YvWqg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe63uD2X5v1aEhjB7UFhHuIag=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -513,6 +513,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>36d30d59-84e7-4b10-9e1a-9083fdfa50b1</ID>
+    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\0040 - Create Table - [Mapping].[APIToProcessArchiveDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>7a8ec634-3dc2-4e35-b396-7e2752503d0d</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0001 - Create Stored Procedure - [Administration.User].[UserAttribute_Insert].sql</FullName>
@@ -894,6 +901,13 @@
     <ID>4cba87c6-5135-454d-9b45-29b20f185063</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0055 - Create Stored Procedure - [System].[ProcessQueue_GetHasSystemErrorByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>7d968da0-14a1-43f7-8ca6-f409b7194a72</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0056 - Create Stored Procedure - [Mapping].[APIToProcessArchiveDetail_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
