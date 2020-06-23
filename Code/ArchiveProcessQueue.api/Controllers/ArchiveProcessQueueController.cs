@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Cors;
 using Newtonsoft.Json.Linq;
 using MethodLibrary;
 using enums;
+using System;
+using System.Net.Http;
 
 namespace ArchiveProcessQueue.api.Controllers
 {
@@ -35,6 +37,10 @@ namespace ArchiveProcessQueue.api.Controllers
         [Route("ArchiveProcessQueue/Archive")]
         public void Archive([FromBody] object data)
         {
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
@@ -42,50 +48,54 @@ namespace ArchiveProcessQueue.api.Controllers
             //Get Process GUID
             var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
 
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-
-            //All APIs have finished so create record in ProcessArchive
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-
-            //Get whether there is an error in the API records
-            var hasError = _systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
-
-            _systemMethods.ProcessArchive_Insert(createdByUserId,
-                sourceId,
-                processQueueGUID,
-                hasError);
-
-            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
-            var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
-
-            //Write record into ProcessToProcessArchive mapping table
-            var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
-
-            if(processId != 0)
+            try
             {
-                _mappingMethods.ProcessToProcessArchive_Insert(createdByUserId, sourceId, processId, processArchiveId);
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();           
+
+                //Get whether there is an error in the API records
+                var hasError = _systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
+
+                //Create record in ProcessArchive
+                _systemMethods.ProcessArchive_Insert(createdByUserId,
+                    sourceId,
+                    processQueueGUID,
+                    hasError);
+
+                var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+                var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
+
+                //Write record into ProcessToProcessArchive mapping table
+                var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
+
+                if(processId != 0)
+                {
+                    _mappingMethods.ProcessToProcessArchive_Insert(createdByUserId, sourceId, processId, processArchiveId);
+                }
+
+                //TODO Write records for each API into ProcessArchiveDetail
+
+                //Write response into ProcessArchiveDetail
+                _systemMethods.ProcessArchiveDetail_Insert(createdByUserId,
+                    sourceId,
+                    processArchiveId,
+                    processArchiveAttributeId,
+                    hasError ? "ERROR" : "OK");
+
+                //Update ProcessArchive
+                _systemMethods.ProcessArchive_Update(processQueueGUID);
+
+                //Delete GUID from ProcessQueue
+                _systemMethods.ProcessQueue_Delete(processQueueGUID);
             }
-
-            //TODO Write records for each API into ProcessArchiveDetail
-
-            //Write response into ProcessArchiveDetail
-            _systemMethods.ProcessArchiveDetail_Insert(createdByUserId,
-                sourceId,
-                processArchiveId,
-                processArchiveAttributeId,
-                hasError ? "ERROR" : "OK");
-
-            //Update ProcessArchive
-            _systemMethods.ProcessArchive_Update(processQueueGUID);
-
-            //Delete GUID from ProcessQueue
-            _systemMethods.ProcessQueue_Delete(processQueueGUID);
+            catch(Exception error)
+            {
+                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Net.Http;
 
 namespace LockUser.api.Controllers
 {
@@ -38,74 +39,83 @@ namespace LockUser.api.Controllers
         [Route("LockUser/Lock")]
         public void Lock([FromBody] object data)
         {
-            //TODO: Add try/catch for system error
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Insert into ProcessQueue
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
-
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
-
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.LockUserAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-                
-            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
-
-            if(erroredPrerequisiteAPIs.Any())
+            try
             {
-                //Get User Id
-                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+                //Insert into ProcessQueue
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-                if(userId != 0)
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.LockUserAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+                    
+                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+
+                if(erroredPrerequisiteAPIs.Any())
                 {
-                    //Get logins by user id and order by descending
-                    var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
+                    //Get User Id
+                    var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
 
-                    //Get invalidAttempts count
-                    var invalidAttempts = CountInvalidAttempts(loginList);
-
-                    //Get maximum attempts allowed before locking
-                    var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
-                    var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
-                    var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
-                        .Select(a => Convert.ToInt64(a))
-                        .First();
-
-                    //If invalid attempt count >= maximum allowed invalid attempts, lock the user
-                    if (invalidAttempts >= maximumInvalidAttempts)
+                    if(userId != 0)
                     {
-                        //Lock account by adding 'Account Locked' to user detail
-                        var accountLockedAttributeId = _administrationMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(_administrationUserAttributeEnums.AccountLocked);
+                        //Get logins by user id and order by descending
+                        var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
 
-                        _administrationMethods.UserDetail_Insert(
-                            createdByUserId,
-                            sourceId,
-                            userId,
-                            accountLockedAttributeId,
-                            "true");
+                        //Get invalidAttempts count
+                        var invalidAttempts = CountInvalidAttempts(loginList);
 
-                        //Update error message
-                        errorMessage = $"Account Locked. {errorMessage}";
+                        //Get maximum attempts allowed before locking
+                        var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+                        var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
+                        var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
+                            .Select(a => Convert.ToInt64(a))
+                            .First();
+
+                        //If invalid attempt count >= maximum allowed invalid attempts, lock the user
+                        if (invalidAttempts >= maximumInvalidAttempts)
+                        {
+                            //Lock account by adding 'Account Locked' to user detail
+                            var accountLockedAttributeId = _administrationMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(_administrationUserAttributeEnums.AccountLocked);
+
+                            _administrationMethods.UserDetail_Insert(
+                                createdByUserId,
+                                sourceId,
+                                userId,
+                                accountLockedAttributeId,
+                                "true");
+
+                            //Update error message
+                            errorMessage = $"Account Locked. {errorMessage}";
+                        }
                     }
                 }
-            }
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+            }
+            catch(Exception error)
+            {
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+            }
         }
 
         private int CountInvalidAttempts(IOrderedEnumerable<long> loginList)

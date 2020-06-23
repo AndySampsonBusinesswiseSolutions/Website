@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net.Http;
 
 namespace ValidatePageGUID.api.Controllers
 {
@@ -34,51 +36,60 @@ namespace ValidatePageGUID.api.Controllers
         [Route("ValidatePageGUID/Validate")]
         public void Validate([FromBody] object data)
         {
-            //TODO: Add try/catch
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePageGUIDAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Insert into ProcessQueue
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePageGUIDAPI);
-
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
-
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidatePageGUIDAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-
-            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
-            long pageId = 0;
-
-            if(!erroredPrerequisiteAPIs.Any())
+            try
             {
-                //Get Page GUID
-                var pageGUID = jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
+                //Insert into ProcessQueue
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-                //Validate Page GUID
-                pageId = _systemMethods.Page_GetPageIdByGUID(pageGUID);
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-                //If pageId == 0 then the GUID provided isn't valid so create an error
-                if(pageId == 0)
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidatePageGUIDAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+
+                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+                long pageId = 0;
+
+                if(!erroredPrerequisiteAPIs.Any())
                 {
-                    errorMessage = $"Page GUID {pageGUID} does not exist in [System].[Page] table";
-                }
-            }
+                    //Get Page GUID
+                    var pageGUID = jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, pageId == 0, errorMessage);
+                    //Validate Page GUID
+                    pageId = _systemMethods.Page_GetPageIdByGUID(pageGUID);
+
+                    //If pageId == 0 then the GUID provided isn't valid so create an error
+                    if(pageId == 0)
+                    {
+                        errorMessage = $"Page GUID {pageGUID} does not exist in [System].[Page] table";
+                    }
+                }
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, pageId == 0, errorMessage);
+            }
+            catch(Exception error)
+            {
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+            }
         }
     }
 }

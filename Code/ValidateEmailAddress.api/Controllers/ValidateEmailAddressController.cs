@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net.Http;
 
 namespace ValidateEmailAddress.api.Controllers
 {
@@ -34,51 +36,60 @@ namespace ValidateEmailAddress.api.Controllers
         [Route("ValidateEmailAddress/Validate")]
         public void Validate([FromBody] object data)
         {
-            //TODO: Add try/catch
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Insert into ProcessQueue
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
-
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
-
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateEmailAddressAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-
-            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
-            long emailAddressId = 0;
-
-            if(!erroredPrerequisiteAPIs.Any())
+            try
             {
-                //Get Email Address
-                var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
+                //Insert into ProcessQueue
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-                //Validate Email Address
-                emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-                //If emailAddressId == 0 then the email address provided isn't valid so create an error
-                if(emailAddressId == 0)
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateEmailAddressAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+
+                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+                long emailAddressId = 0;
+
+                if(!erroredPrerequisiteAPIs.Any())
                 {
-                    errorMessage = $"Email address {emailAddress} does not exist in [Administration.User].[UserDetail] table";
-                }
-            }
+                    //Get Email Address
+                    var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, emailAddressId == 0);
+                    //Validate Email Address
+                    emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+
+                    //If emailAddressId == 0 then the email address provided isn't valid so create an error
+                    if(emailAddressId == 0)
+                    {
+                        errorMessage = $"Email address {emailAddress} does not exist in [Administration.User].[UserDetail] table";
+                    }
+                }
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, emailAddressId == 0, errorMessage);
+            }
+            catch(Exception error)
+            {
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+            }
         }
     }
 }

@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net.Http;
 
 namespace ValidatePassword.api.Controllers
 {
@@ -34,51 +36,60 @@ namespace ValidatePassword.api.Controllers
         [Route("ValidatePassword/Validate")]
         public void Validate([FromBody] object data)
         {
-            //TODO: Add try/catch
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Insert into ProcessQueue
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
-
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
-
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidatePasswordAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-            
-            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
-            long passwordId = 0;
-
-            if(!erroredPrerequisiteAPIs.Any())
+            try
             {
-                //Get Password
-                var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
+                //Insert into ProcessQueue
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-                //Validate Password
-                passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-                //If passwordId == 0 then the password provided isn't valid so create an error
-                if(passwordId == 0)
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidatePasswordAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+                
+                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+                long passwordId = 0;
+
+                if(!erroredPrerequisiteAPIs.Any())
                 {
-                    errorMessage = $"Password {password} does not exist in [Administration.User].[Password] table";
-                }
-            }
+                    //Get Password
+                    var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, passwordId == 0, errorMessage);
+                    //Validate Password
+                    passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
+
+                    //If passwordId == 0 then the password provided isn't valid so create an error
+                    if(passwordId == 0)
+                    {
+                        errorMessage = $"Password {password} does not exist in [Administration.User].[Password] table";
+                    }
+                }
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, passwordId == 0, errorMessage);
+            }
+            catch(Exception error)
+            {
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+            }
         }
     }
 }

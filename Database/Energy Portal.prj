@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>c2003ba8-e4d5-4e6e-9939-c0248cb69bd1</ID>
-    <DateCreated>2020-06-22T13:51:02.8201955+01:00</DateCreated>
+    <ID>82a8188a-46d5-4511-8b89-edd0adb5fa99</ID>
+    <DateCreated>2020-06-22T15:51:49.4956676+01:00</DateCreated>
     <Name>Energy Portal</Name>
     <FileName>C:\wamp64\www\Website\Database\Energy Portal.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>lnEnPa7Zi2znRUJV+J1HTQ==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6+jH55C4VZac4GdLidsQKYY=</Password>
+    <Login>AHiXwjERFJZjdgHvGEoH/g==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe66c0NDRyK5jK0Q+IS5M7++s=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -989,6 +989,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>eadd991f-3aeb-450c-80de-95eb2b6cd3eb</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0016 - Grant Execute - Multiple APIs to allow writing into [System].[Error].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>1066b0b0-8929-4350-a7e8-0f6a517e7082</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0001 - Data - Email Address User Attribute.sql</FullName>
@@ -1351,11 +1358,19 @@
     <Name>999 - Data</Name>
   </ScriptFolder>
   <Mapping>
-    <ID>d7f757ae-f9d3-4a1d-953c-464b50f49174</ID>
+    <ID>c2aa3aba-95d6-424d-b706-6ab15b99aa66</ID>
     <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
     <Container_ID>95050ad3-e0f3-492a-b094-100e1720f63f</Container_ID>
     <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>
     <ExecOrder>1</ExecOrder>
+    <PrecedenceConstraint>1</PrecedenceConstraint>
+  </Mapping>
+  <Mapping>
+    <ID>758eee9c-501c-4fe4-ba42-3ea4b964e01a</ID>
+    <Group_ID>8446d9ed-320b-4afd-9779-f72e85955891</Group_ID>
+    <Container_ID>1b5e813a-f426-41c8-9159-a35b24d0c162</Container_ID>
+    <Package_ID>b0bff705-64ad-47e7-9448-5eeaa726fc38</Package_ID>
+    <ExecOrder>2</ExecOrder>
     <PrecedenceConstraint>1</PrecedenceConstraint>
   </Mapping>
 </ProjectDataSet>

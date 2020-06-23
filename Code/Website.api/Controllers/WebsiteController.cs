@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net.Http;
 
 namespace Website.api.Controllers
 {
@@ -35,62 +37,78 @@ namespace Website.api.Controllers
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
-            //TODO: Add try/catch
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
-
-            //Insert into ProcessQueue
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
 
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
+            try
+            {
+                //Get Queue GUID
+                var jsonObject = JObject.Parse(data.ToString());
+                var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Get Routing.API URL
-            var routingAPIId = _systemMethods.GetRoutingAPIId();
+                //Insert into ProcessQueue
+                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
 
-            //Connect to Routing API and POST data
-            _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, jsonObject);
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId);
+                //Get Routing.API URL
+                var routingAPIId = _systemMethods.GetRoutingAPIId();
+
+                //Connect to Routing API and POST data
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, jsonObject);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId);
+            }
+            catch(Exception error)
+            {
+                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+            }        
         }
 
         [HttpPost]
         [Route("website/GetResponse")]
         public IActionResult GetResponse([FromBody] string processQueueGuid)
         {
-            //TODO: Add try/catch
-            
-            //Get Process Archive Id
-            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGuid);
-            while(processArchiveId == 0)
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+
+            try
             {
-                processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGuid);
+                //Get Process Archive Id
+                var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGuid);
+                while(processArchiveId == 0)
+                {
+                    processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGuid);
+                }
+
+                //Loop until a response record is written into ProcessArchiveDetail
+                var responseAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
+                var response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
+
+                while(response == null)
+                {
+                    response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
+                }
+
+                //Create return object with response record
+                if(response == "OK")
+                {
+                    return new OkObjectResult(new { message = "200 OK" });
+                }
+
+                return new UnauthorizedResult();
             }
-
-            //Loop until a response record is written into ProcessArchiveDetail
-            var responseAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
-            var response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
-
-            while(response == null)
+            catch(Exception error)
             {
-                response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
-            }
+                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
-            //Create return object with response record
-            if(response == "OK")
-            {
-                return new OkObjectResult(new { message = "200 OK" });
+                return new UnauthorizedResult();
             }
-
-            return new UnauthorizedResult();
         }
     }
 }

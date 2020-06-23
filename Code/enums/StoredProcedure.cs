@@ -38,6 +38,8 @@ namespace enums
                 public string API_GetByAPIId = "[System].[API_GetByAPIId]";
                 public string APIAttribute_GetByAPIAttributeDescription = "[System].[APIAttribute_GetByAPIAttributeDescription]";
                 public string APIDetail_GetByAPIIdAndAPIAttributeId = "[System].[APIDetail_GetByAPIIdAndAPIAttributeId]";
+                public string Error_Insert = "[System].[Error_Insert]";
+                public string Error_GetByErrorGUID = "[System].[Error_GetByErrorGUID]";
                 public string Page_GetByPageGUID = "[System].[Page_GetByPageGUID]";
                 public string Process_GetByProcessGUID = "[System].[Process_GetByProcessGUID]";
                 public string ProcessQueue_Delete = "[System].[ProcessQueue_Delete]";

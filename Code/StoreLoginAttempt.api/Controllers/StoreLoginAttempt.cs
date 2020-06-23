@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net.Http;
 
 namespace StoreLoginAttempt.api.Controllers
 {
@@ -35,55 +37,64 @@ namespace StoreLoginAttempt.api.Controllers
         [Route("StoreLoginAttempt/Store")]
         public void Store([FromBody] object data)
         {
-            //TODO: Add try/catch
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Insert into ProcessQueue
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
-
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
-
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreLoginAttemptAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-
-            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
-
-            //Get User Id
-            var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
-
-            if(userId != 0)
+            try
             {
-                //Store login attempt
-                _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
+                //Insert into ProcessQueue
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-                //Get Login Id
-                var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-                //Store mapping between login attempt and user
-                var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-                _mappingMethods.LoginToUser_Insert(systemUserId, 
-                    sourceId, 
-                    loginId, 
-                    userId);
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreLoginAttemptAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+
+                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+
+                //Get User Id
+                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+
+                if(userId != 0)
+                {
+                    //Store login attempt
+                    _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
+
+                    //Get Login Id
+                    var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
+
+                    //Store mapping between login attempt and user
+                    var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+                    _mappingMethods.LoginToUser_Insert(systemUserId, 
+                        sourceId, 
+                        loginId, 
+                        userId);
+                }
+                
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
-            
+            catch(Exception error)
+            {
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+            }
         }
     }
 }

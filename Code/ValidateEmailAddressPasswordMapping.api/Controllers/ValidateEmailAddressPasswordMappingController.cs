@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System;
+using System.Net.Http;
 
 namespace ValidateEmailAddressPasswordMapping.api.Controllers
 {
@@ -35,55 +37,64 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         [Route("ValidateEmailAddressPasswordMapping/Validate")]
         public void Validate([FromBody] object data)
         {
-            //TODO: Add try/catch
+            //Get base variables
+            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Insert into ProcessQueue
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
-
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
-
-            //Get CheckPrerequisiteAPI API Id
-            var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-            //Call CheckPrerequisiteAPI API
-            var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, jsonObject);
-            var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-            var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-
-            string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
-            long mappingId = 0;
-
-            if(!erroredPrerequisiteAPIs.Any())
+            try
             {
-                //Get Password Id
-                var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
-                var passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
+                //Insert into ProcessQueue
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-                //Get User Id
-                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
-                //Validate Password and User combination
-                mappingId = _mappingMethods.PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(passwordId, userId);
+                //Call CheckPrerequisiteAPI API
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
 
-                //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error
-                if(mappingId == 0)
+                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+                long mappingId = 0;
+
+                if(!erroredPrerequisiteAPIs.Any())
                 {
-                    errorMessage = $"UserId/PasswordId combination {userId}/{passwordId} does not exist in [Mapping].[PasswordToUser] table";
-                }
-            }
+                    //Get Password Id
+                    var password = jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
+                    var passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, mappingId == 0, errorMessage);
+                    //Get User Id
+                    var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+
+                    //Validate Password and User combination
+                    mappingId = _mappingMethods.PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(passwordId, userId);
+
+                    //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error
+                    if(mappingId == 0)
+                    {
+                        errorMessage = $"UserId/PasswordId combination {userId}/{passwordId} does not exist in [Mapping].[PasswordToUser] table";
+                    }
+                }
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, mappingId == 0, errorMessage);
+            }
+            catch(Exception error)
+            {
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+            }
         }
     }
 }

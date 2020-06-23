@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Net.Http;
 
 namespace ValidateProcessGUID.api.Controllers
 {
@@ -33,36 +35,44 @@ namespace ValidateProcessGUID.api.Controllers
         [Route("ValidateProcessGUID/Validate")]
         public long Validate([FromBody] object data)
         {
-            //TODO: Add try/catch
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
-
-            //Insert into ProcessQueue
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
 
-            _systemMethods.ProcessQueue_Insert(
-                queueGUID, 
-                createdByUserId,
-                sourceId,
-                APIId);
+            try
+            {
+                //Get Queue GUID
+                var jsonObject = JObject.Parse(data.ToString());
+                var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
 
-            //Get Process GUID
-            var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
+                //Insert into ProcessQueue
+                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
 
-            //Validate Process GUID
-            var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
+                _systemMethods.ProcessQueue_Insert(
+                    queueGUID, 
+                    createdByUserId,
+                    sourceId,
+                    APIId);
 
-            //If processId == 0 then the GUID provided isn't valid so create an error
-            string errorMessage = processId == 0 ? $"Process GUID {processGUID} does not exist in [System].[Process] table" : null;
+                //Get Process GUID
+                var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
 
-            //Update Process Queue
-            _systemMethods.ProcessQueue_Update(queueGUID, APIId, processId == 0, errorMessage);
+                //Validate Process GUID
+                var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
 
-            return processId;
+                //If processId == 0 then the GUID provided isn't valid so create an error
+                string errorMessage = processId == 0 ? $"Process GUID {processGUID} does not exist in [System].[Process] table" : null;
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(queueGUID, APIId, processId == 0, errorMessage);
+
+                return processId;
+            }
+            catch(Exception error)
+            {
+                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                return 0;
+            }    
         }
     }
 }
