@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>b2e05fff-ba0a-48dd-a42d-416ece02282d</ID>
-    <DateCreated>2020-06-23T20:51:23.8093377+01:00</DateCreated>
+    <ID>d5620a4b-f70f-48bc-b504-c55772178fc9</ID>
+    <DateCreated>2020-06-24T08:38:13.7449019+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>Qk1QaTfWpBRB+3ZClDzhYQ==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6y4RXR0MV4ynAMH1frYaA7A=</Password>
+    <Login>a60fMhW/UALNuFqcUF2RPw==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe66G8g+T2DPz0glg2gpV4vYo=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -933,6 +933,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>c9df60fe-cbe5-423c-8cad-2b9e09e3e17d</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0060 - Create Stored Procedure - [Administration.User].[UserDetail_GetByUserIdAndUserAttributeId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -1055,6 +1062,13 @@
     <ID>93900bae-520f-4121-b941-ce21f4ec44cd</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0018 - Grant Execute - ArchiveProcessQueue.api to multiple scripts.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c3721a2a-bff8-4fdb-999c-663add3e918c</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0018 - Grant Execute - LockUser.api to [Administration.User].[UserDetail_GetByUserIdAndUserAttributeId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

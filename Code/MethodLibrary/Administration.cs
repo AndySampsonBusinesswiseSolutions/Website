@@ -71,6 +71,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public long UserDetail_GetUserDetailIdByUserIdAndUserAttributeId(long userId, long userAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureAdministrationEnums.UserDetail_GetByUserIdAndUserAttributeId, 
+                    userId, userAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("UserDetailId"))
+                    .FirstOrDefault();
+            }
+
             public void Login_Insert(long createdByUserId, long sourceId, bool loginSuccessful, string processArchiveGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
