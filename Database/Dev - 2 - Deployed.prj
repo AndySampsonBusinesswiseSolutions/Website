@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>a300fa6f-84c7-4e6f-977b-79673c6aee77</ID>
-    <DateCreated>2020-06-29T09:07:02.3076591+01:00</DateCreated>
+    <ID>8c6dd50d-8782-49cc-9bcd-d36e569530c2</ID>
+    <DateCreated>2020-06-29T15:38:17.4881798+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>UZmbKnAy1XxLD2uePl1RDg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6xQytox5YYTyUWSiGtwfJ38=</Password>
+    <Login>nXODgRivqEk5vfRYdKFwig==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe667SsvtXUWBcaL/O0ZSlqqg=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1024,6 +1024,27 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>025cae1e-3e7f-43ba-926b-89a52e2ab1f8</ID>
+    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\0102 - Create Table - [Information].[File].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5745ee14-8655-4f9b-889b-18b6ab084639</ID>
+    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\0103 - Create Table - [Information].[FileAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>fe423f45-8dba-42e8-ade4-b4ed20b9a2b5</ID>
+    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\0104 - Create Table - [Information].[FileDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>7a8ec634-3dc2-4e35-b396-7e2752503d0d</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0001 - Create Stored Procedure - [Administration.User].[UserAttribute_Insert].sql</FullName>
@@ -1507,6 +1528,27 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>436730d2-b9b7-46c3-b442-0d56dc81aa22</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0070 - Create Stored Procedure - [Information].[FileAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>7e9e3c8c-2960-4198-8d1e-df1c040ed937</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0071 - Create Stored Procedure - [Information].[File_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cee93815-060d-4950-8d2b-1b51bab7532e</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0072 - Create Stored Procedure - [Information].[FileDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -1923,6 +1965,13 @@
     <ID>7049a272-97dd-4b69-8d04-5374d6ee8c60</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0041 - Data - DateToForecastAgent.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0a42992a-4385-4f5d-9902-bf326f6779ec</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0042 - Data - File SourceAttribute.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
