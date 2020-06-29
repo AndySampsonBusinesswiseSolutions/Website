@@ -25,7 +25,7 @@ namespace StoreLoginAttempt.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.Information.SourceType _informationSourceTypeEnums = new Enums.Information.SourceType();
+        private readonly Enums.Information.SourceAttribute _informationSourceAttributeEnums = new Enums.Information.SourceAttribute();
 
         public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger)
         {

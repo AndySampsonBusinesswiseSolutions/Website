@@ -20,8 +20,8 @@ namespace enums
 
             public class Information
             {
-                public string SourceType_GetBySourceTypeDescription = "[Information].[SourceType_GetBySourceTypeDescription]";
-                public string Source_GetBySourceTypeIdAndSourceTypeEntityId = "[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId]";
+                public string SourceAttribute_GetBySourceAttributeDescription = "[Information].[SourceAttribute_GetBySourceAttributeDescription]";
+                public string SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription = "[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription]";
             }
 
             public class Mapping

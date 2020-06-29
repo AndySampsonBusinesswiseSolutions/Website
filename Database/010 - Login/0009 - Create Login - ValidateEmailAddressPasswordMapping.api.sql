@@ -58,8 +58,8 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [ValidateEmailAddressPasswordMapping.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [ValidateEmailAddressPasswordMapping.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [ValidateEmailAddressPasswordMapping.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [ValidateEmailAddressPasswordMapping.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [ValidateEmailAddressPasswordMapping.api];
 GO

@@ -24,13 +24,13 @@ CREATE TABLE [Administration.User].[Password]
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
 	Password VARCHAR(200) NOT NULL
-	)  ON Administration
+	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[Password] ADD CONSTRAINT
 	PK_Password PRIMARY KEY CLUSTERED 
 	(
 	PasswordId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Administration
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Administration]
 
 GO
 ALTER TABLE [Administration.User].[Password] ADD CONSTRAINT

@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[ProcessToProcessArchive]
 	SourceId BIGINT NOT NULL,
 	ProcessId BIGINT NOT NULL,
 	ProcessArchiveId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[ProcessToProcessArchive] ADD CONSTRAINT
 	PK_ProcessToProcessArchive PRIMARY KEY CLUSTERED 
 	(
 	ProcessToProcessArchiveId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[ProcessToProcessArchive] ADD CONSTRAINT

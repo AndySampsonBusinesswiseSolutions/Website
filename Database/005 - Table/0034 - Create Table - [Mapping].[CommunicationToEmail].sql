@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[CommunicationToEmail]
 	SourceId BIGINT NOT NULL,
 	CommunicationId BIGINT NOT NULL,
 	EmailId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[CommunicationToEmail] ADD CONSTRAINT
 	PK_CommunicationToEmail PRIMARY KEY CLUSTERED 
 	(
 	CommunicationToEmailId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[CommunicationToEmail] ADD CONSTRAINT

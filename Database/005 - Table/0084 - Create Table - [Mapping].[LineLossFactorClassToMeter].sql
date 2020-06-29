@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[LineLossFactorClassToMeter]
 	SourceId BIGINT NOT NULL,
 	LineLossFactorClassId BIGINT NOT NULL,
 	MeterId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[LineLossFactorClassToMeter] ADD CONSTRAINT
 	PK_LineLossFactorClassToMeter PRIMARY KEY CLUSTERED 
 	(
 	LineLossFactorClassToMeterId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[LineLossFactorClassToMeter] ADD CONSTRAINT

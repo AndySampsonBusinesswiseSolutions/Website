@@ -52,8 +52,8 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [Website.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [Website.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [Website.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [Website.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [Website.api];
 GO

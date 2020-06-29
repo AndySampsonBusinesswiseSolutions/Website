@@ -24,13 +24,13 @@ CREATE TABLE [Administration.User].[UserAttribute]
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
 	UserAttributeDescription VARCHAR(200) NOT NULL
-	)  ON Administration
+	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[UserAttribute] ADD CONSTRAINT
 	PK_UserAttribute PRIMARY KEY CLUSTERED 
 	(
 	UserAttributeId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Administration
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Administration]
 
 GO
 ALTER TABLE [Administration.User].[UserAttribute] ADD CONSTRAINT

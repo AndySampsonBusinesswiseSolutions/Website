@@ -6,21 +6,21 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[SourceType_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[Source_Insert]'))
     BEGIN
-        exec('CREATE PROCEDURE [Information].[SourceType_Insert] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Information].[Source_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Insert new user into [Information].[SourceType] table
+-- Description:	Insert new user into [Information].[Source] table
 -- =============================================
 
-ALTER PROCEDURE [Information].[SourceType_Insert]
+ALTER PROCEDURE [Information].[Source_Insert]
     @CreatedByUserId BIGINT,
-    @SourceTypeDescription VARCHAR(255)
+    @SourceGUID UNIQUEIDENTIFIER
 AS
 BEGIN
     -- =============================================
@@ -33,18 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[SourceType] WHERE SourceTypeDescription = @SourceTypeDescription 
-        AND EffectiveToDateTime = '9999-12-31')
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Source] WHERE SourceGUID = @SourceGUID)
         BEGIN
-            INSERT INTO [Information].[SourceType]
+            INSERT INTO [Information].[Source]
             (
                 CreatedByUserId,
-                SourceTypeDescription
+                SourceGUID
             )
             VALUES
             (
                 @CreatedByUserId,
-                @SourceTypeDescription
+                @SourceGUID
             )
         END
 END

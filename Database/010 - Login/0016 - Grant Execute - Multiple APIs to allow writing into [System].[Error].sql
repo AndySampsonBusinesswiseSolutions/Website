@@ -4,19 +4,19 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [Routing.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [Routing.api];  
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [Routing.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [Routing.api];  
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [Routing.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [CheckPrerequisiteAPI.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [CheckPrerequisiteAPI.api];  
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [CheckPrerequisiteAPI.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [CheckPrerequisiteAPI.api];  
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [CheckPrerequisiteAPI.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[Error_Insert] TO [ArchiveProcessQueue.api];  

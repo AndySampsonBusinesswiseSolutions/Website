@@ -8,28 +8,30 @@ namespace MethodLibrary
     {
         public class Information
         {
-            public long SourceType_GetSourceTypeIdBySourceTypeDescription(string sourceTypeDescription)
+            public long SourceAttribute_GetSourceAttributeIdBySourceAttributeDescription(string sourceAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.SourceType_GetBySourceTypeDescription, 
-                    sourceTypeDescription);
+                    _storedProcedureInformationEnums.SourceAttribute_GetBySourceAttributeDescription, 
+                    sourceAttributeDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SourceTypeId"))
+                    .Select(r => r.Field<long>("SourceAttributeId"))
                     .FirstOrDefault();
             }
 
             public long GetSystemUserGeneratedSourceId()
             {
-                var sourceTypeId = SourceType_GetSourceTypeIdBySourceTypeDescription(_informationSourceTypeEnums.UserGenerated);
-                return Source_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(sourceTypeId, 0);
+                var systemUserId = new Administration().User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+                var sourceAttributeId = SourceAttribute_GetSourceAttributeIdBySourceAttributeDescription(_informationSourceAttributeEnums.UserGenerated);
+
+                return SourceDetail_GetSourceIdBySourceAttributeIdAndSourceDetailDescription(sourceAttributeId, systemUserId.ToString());
             }
 
-            public long Source_GetSourceIdBySourceTypeIdAndSourceTypeEntityId(long sourceTypeId, long sourceTypeEntityId)
+            public long SourceDetail_GetSourceIdBySourceAttributeIdAndSourceDetailDescription(long sourceAttributeId, string sourceDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.Source_GetBySourceTypeIdAndSourceTypeEntityId, 
-                    sourceTypeId, sourceTypeEntityId);
+                    _storedProcedureInformationEnums.SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription, 
+                    sourceAttributeId, sourceDetailDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("SourceId"))

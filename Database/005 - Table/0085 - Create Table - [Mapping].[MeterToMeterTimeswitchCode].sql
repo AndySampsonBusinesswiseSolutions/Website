@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[MeterToMeterTimeswitchCode]
 	SourceId BIGINT NOT NULL,
 	MeterId BIGINT NOT NULL,
 	MeterTimeswitchCodeId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[MeterToMeterTimeswitchCode] ADD CONSTRAINT
 	PK_MeterToMeterTimeswitchCode PRIMARY KEY CLUSTERED 
 	(
 	MeterToMeterTimeswitchCodeId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[MeterToMeterTimeswitchCode] ADD CONSTRAINT

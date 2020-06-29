@@ -24,13 +24,13 @@ CREATE TABLE [Administration.User].[Login]
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
 	LoginSuccessful BIT NOT NULL
-	)  ON Administration
+	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[Login] ADD CONSTRAINT
 	PK_Login PRIMARY KEY CLUSTERED 
 	(
 	LoginId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Administration
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Administration]
 
 GO
 ALTER TABLE [Administration.User].[Login] ADD CONSTRAINT

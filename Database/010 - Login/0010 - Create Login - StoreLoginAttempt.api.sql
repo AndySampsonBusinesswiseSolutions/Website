@@ -46,10 +46,10 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[UserDetail_GetByUserDetailId] TO [StoreLoginAttempt.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [StoreLoginAttempt.api];  
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [StoreLoginAttempt.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [StoreLoginAttempt.api];  
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [StoreLoginAttempt.api];  
 GO
 
 GRANT EXECUTE ON OBJECT::[Administration.User].[Login_Insert] TO [StoreLoginAttempt.api];  
@@ -64,8 +64,8 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [StoreLoginAttempt.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [StoreLoginAttempt.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [StoreLoginAttempt.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [StoreLoginAttempt.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [StoreLoginAttempt.api];
 GO

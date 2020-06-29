@@ -49,8 +49,8 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [ValidatePageGUID.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [ValidatePageGUID.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [ValidatePageGUID.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [ValidatePageGUID.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [ValidatePageGUID.api];
 GO

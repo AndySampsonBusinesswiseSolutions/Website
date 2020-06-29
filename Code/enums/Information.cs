@@ -4,7 +4,7 @@ namespace enums
     {
         public class Information
         {
-            public class SourceType
+            public class SourceAttribute
             {
                 public string UserGenerated = "User Generated";
             }

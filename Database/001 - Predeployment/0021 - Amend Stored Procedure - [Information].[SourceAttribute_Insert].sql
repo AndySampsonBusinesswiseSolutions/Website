@@ -6,22 +6,22 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[Source_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[SourceAttribute_Insert]'))
     BEGIN
-        exec('CREATE PROCEDURE [Information].[Source_Insert] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Information].[SourceAttribute_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-02
--- Description:	Insert new user into [Information].[Source] table
+-- Description:	Insert new source attribute into [Information].[SourceAttribute] table
 -- =============================================
 
-ALTER PROCEDURE [Information].[Source_Insert]
+ALTER PROCEDURE [Information].[SourceAttribute_Insert]
     @CreatedByUserId BIGINT,
-    @SourceTypeId BIGINT,
-    @SourceTypeEntityId BIGINT
+    @SourceId BIGINT,
+    @SourceAttributeDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
@@ -34,21 +34,20 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Source] WHERE SourceTypeId = @SourceTypeId 
-        AND SourceTypeEntityId = @SourceTypeEntityId 
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = @SourceAttributeDescription 
         AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            INSERT INTO [Information].[Source]
+            INSERT INTO [Information].[SourceAttribute]
             (
                 CreatedByUserId,
-                SourceTypeId,
-                SourceTypeEntityId
+                SourceId,
+                SourceAttributeDescription
             )
             VALUES
             (
                 @CreatedByUserId,
-                @SourceTypeId,
-                @SourceTypeEntityId
+                @SourceId,
+                @SourceAttributeDescription
             )
         END
 END

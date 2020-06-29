@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>615cb9ef-50cd-47f1-be01-9b00774e85ab</ID>
-    <DateCreated>2020-06-25T14:03:56.6979662+01:00</DateCreated>
+    <ID>a300fa6f-84c7-4e6f-977b-79673c6aee77</ID>
+    <DateCreated>2020-06-29T09:07:02.3076591+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>UMXx1DRnO4fRYSnvHoi9yw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe61RT4gmZj8XceNeU7H3eCvQ=</Password>
+    <Login>UZmbKnAy1XxLD2uePl1RDg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6xQytox5YYTyUWSiGtwfJ38=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -44,128 +44,149 @@
     <Y>50</Y>
   </ServerGroup>
   <ScriptFile>
-    <ID>a3e27e25-b99e-4318-9631-3ac0494d1430</ID>
+    <ID>26a0fee6-5967-4494-85a0-9c74ef55001f</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0001 - Reset Database.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>94e3e1d8-fd21-4c31-bae9-18390b5d4deb</ID>
+    <ID>9de6e7e7-9f5d-45c5-a12a-3923042e8aba</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0002 - Create Filegroup - Administration.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>6cc9e672-1b05-4570-89ac-2ede50d8af88</ID>
+    <ID>2bbae4d3-b742-443e-8dbf-2afe8bcc2bb3</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0003 - Create File - Administration.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>fb277b53-a4b1-4f5a-a3d2-488a2de90181</ID>
+    <ID>19dc4b72-97d4-4948-bfb5-06dc53d00030</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0004 - Create Schema - Administration.User.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>932972a1-2f18-4ddc-b5d5-f189e5df40d0</ID>
+    <ID>6600ab44-b72d-4ab0-b64d-79fe72418fa7</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0005 - Create Table - [Administration.User].[User].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>16d0f2bb-5f6b-4b11-a7a8-99d085eb24a8</ID>
+    <ID>4ae2399b-21ad-4dbe-acdf-92203035e5bb</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0006 - Create Filegroup - Information.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>823603e1-69ea-49c0-a467-ddab8ef04230</ID>
+    <ID>5584545d-38c2-4b85-a34a-634ad166b233</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0007 - Create File - Information.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>af1aeace-a64a-4272-83bd-df2aeea6b8c8</ID>
+    <ID>0c36a714-882c-428c-8f9d-93d2f002b7eb</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0008 - Create Schema - Information.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>551d93c1-1f85-4ba7-a97b-8327fec30c22</ID>
+    <ID>b79795d7-705f-43de-9e1f-d0c247120cc5</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0009 - Create Table - [Information].[SourceType].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0009 - Create Table - [Information].[Source].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>05e883dc-c880-465c-a89e-1a27336dde78</ID>
+    <ID>0823b5b4-bba3-4494-b6ea-fb1e3b264242</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0010 - Create Table - [Information].[Source].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0010 - Create Table - [Information].[SourceAttribute].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>0d6028d3-a3a3-4c19-bb84-46d5e0a111bb</ID>
+    <ID>a1babcf3-f7c7-4819-873d-7fba977c6e49</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0011 - Create Stored Procedure - [Administration.User].[User_GetByUserGUID].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0011 - Create Table - [Information].[SourceDetail].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>d86e3bac-bf81-4876-a629-2226b042a6f1</ID>
+    <ID>4d85c9b1-cf13-4f86-aa1e-97e94711e17c</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0012 - Create Stored Procedure - [Administration.User].[User_Insert].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0012 - Create Stored Procedure - [Administration.User].[User_GetByUserGUID].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>f7e21f56-5576-4eeb-9a0d-7564d3899359</ID>
+    <ID>8f35c501-8352-484a-a617-346efc091303</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0013 - Data - System User.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0013 - Create Stored Procedure - [Administration.User].[User_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>fa875598-ce86-4f9b-9299-521c885cbeb8</ID>
+    <ID>ebbd858b-92bb-4939-849c-9b427f71a2dd</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0014 - Create Stored Procedure - [Information].[SourceType_Insert].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0014 - Data - System User.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>f624aa3f-dfac-4ba2-b135-94d4a23483ad</ID>
+    <ID>bb70b488-18d8-4458-8f3b-16cdcb63142c</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0015 - Data - User Generated Source Type.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0015 - Create Stored Procedure - [Information].[SourceAttribute_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>c09b454b-2197-46e7-a251-a7ad5f002d88</ID>
+    <ID>b9419b79-a346-4d85-9edd-dd92a55c6b24</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0016 - Create Stored Procedure - [Information].[Source_Insert].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0016 - Data - User Generated Source Type.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>5865184a-0d07-48d0-92e3-253d7478514b</ID>
+    <ID>524cc67a-e058-47e2-baed-e694152741fc</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0017 - Data - System User Generated Source.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0017 - Create Stored Procedure - [Information].[Source_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>0f9f8611-2aba-4bf1-b6bb-329d889ebe9e</ID>
+    <ID>7faaa005-51e0-4dc6-9d30-713265b038ec</ID>
     <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0018 - Amend Table - [Administration.User].[User].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0018 - Create Stored Procedure - [Information].[SourceDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9b64639d-af8a-49f5-b4ca-38bcde3527b8</ID>
+    <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0019 - Data - System User Generated Source.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>56ea82c2-4485-4448-a4ec-ed733d746ffe</ID>
+    <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0020 - Amend Table - [Administration.User].[User].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>dc65c62b-9b1e-4771-bdbd-fab77a2a71c8</ID>
+    <ParentFolder_ID>e7a1b41f-f17b-476a-ae32-5ded0e8b29dd</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\001 - Predeployment\0021 - Amend Stored Procedure - [Information].[SourceAttribute_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1262,9 +1283,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>c3eed1a9-4673-4785-8c77-4fea9561496d</ID>
+    <ID>c4685345-96f9-4a94-aea8-94ccd60d6193</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0038 - Create Stored Procedure - [Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0038 - Create Stored Procedure - [Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

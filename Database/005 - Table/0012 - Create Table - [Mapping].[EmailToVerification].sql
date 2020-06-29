@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[EmailToVerification]
 	SourceId BIGINT NOT NULL,
 	EmailId BIGINT NOT NULL,
 	VerificationId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[EmailToVerification] ADD CONSTRAINT
 	PK_EmailToVerification PRIMARY KEY CLUSTERED 
 	(
 	EmailToVerificationId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[EmailToVerification] ADD CONSTRAINT

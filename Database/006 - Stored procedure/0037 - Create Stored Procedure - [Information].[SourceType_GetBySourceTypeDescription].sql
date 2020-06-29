@@ -6,20 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[SourceType_GetBySourceTypeDescription]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[SourceAttribute_GetBySourceAttributeDescription]'))
     BEGIN
-        exec('CREATE PROCEDURE [Information].[SourceType_GetBySourceTypeDescription] AS BEGIN SET NOCOUNT ON; END')
+        exec('CREATE PROCEDURE [Information].[SourceAttribute_GetBySourceAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-06-09
--- Description:	Get SourceType info from [Information].[SourceType] table by Source Type Description
+-- Description:	Get SourceAttribute info from [Information].[SourceAttribute] table by Source Type Description
 -- =============================================
 
-ALTER PROCEDURE [Information].[SourceType_GetBySourceTypeDescription]
-    @SourceTypeDescription VARCHAR(255),
+ALTER PROCEDURE [Information].[SourceAttribute_GetBySourceAttributeDescription]
+    @SourceAttributeDescription VARCHAR(255),
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -35,17 +35,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        SourceTypeId,
+        SourceAttributeId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        SourceTypeDescription
+        SourceAttributeDescription
     FROM 
-        [Information].[SourceType] 
+        [Information].[SourceAttribute] 
     WHERE 
-        SourceTypeDescription = @SourceTypeDescription
+        SourceAttributeDescription = @SourceAttributeDescription
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[LocalDistributionZoneToMeter]
 	SourceId BIGINT NOT NULL,
 	LocalDistributionZoneId BIGINT NOT NULL,
 	MeterId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[LocalDistributionZoneToMeter] ADD CONSTRAINT
 	PK_LocalDistributionZoneToMeter PRIMARY KEY CLUSTERED 
 	(
 	LocalDistributionZoneToMeterId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[LocalDistributionZoneToMeter] ADD CONSTRAINT

@@ -25,13 +25,13 @@ CREATE TABLE [Administration.User].[Verification]
 	SourceId BIGINT NOT NULL,
 	VerificationCode VARCHAR(200) NOT NULL,
 	ExpiryDateTime DATETIME NOT NULL,
-	)  ON Administration
+	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[Verification] ADD CONSTRAINT
 	PK_Verification PRIMARY KEY CLUSTERED 
 	(
 	VerificationId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Administration
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Administration]
 
 GO
 ALTER TABLE [Administration.User].[Verification] ADD CONSTRAINT

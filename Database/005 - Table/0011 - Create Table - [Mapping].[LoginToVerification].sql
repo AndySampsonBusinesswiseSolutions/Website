@@ -25,13 +25,13 @@ CREATE TABLE [Mapping].[LoginToVerification]
 	SourceId BIGINT NOT NULL,
 	LoginId BIGINT NOT NULL,
 	VerificationId BIGINT NOT NULL
-	)  ON Mapping
+	)  ON [Mapping]
 GO
 ALTER TABLE [Mapping].[LoginToVerification] ADD CONSTRAINT
 	PK_LoginToVerification PRIMARY KEY CLUSTERED 
 	(
 	LoginToVerificationId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Mapping
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Mapping]
 
 GO
 ALTER TABLE [Mapping].[LoginToVerification] ADD CONSTRAINT

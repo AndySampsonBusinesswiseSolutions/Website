@@ -52,10 +52,10 @@ GO
 GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [ArchiveProcessQueue.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[SourceType_GetBySourceTypeDescription] TO [ArchiveProcessQueue.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [ArchiveProcessQueue.api];
 GO
 
-GRANT EXECUTE ON OBJECT::[Information].[Source_GetBySourceTypeIdAndSourceTypeEntityId] TO [ArchiveProcessQueue.api];
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [ArchiveProcessQueue.api];
 GO
 
 GRANT EXECUTE ON OBJECT::[System].[ProcessArchiveAttribute_GetByProcessArchiveAttributeDescription] TO [ArchiveProcessQueue.api];  

@@ -24,13 +24,13 @@ CREATE TABLE [Communication].[CommunicationAttribute]
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
 	CommunicationAttributeDescription VARCHAR(200) NOT NULL
-	)  ON Communication
+	)  ON [Communication]
 GO
 ALTER TABLE [Communication].[CommunicationAttribute] ADD CONSTRAINT
 	PK_CommunicationAttribute PRIMARY KEY CLUSTERED 
 	(
 	CommunicationAttributeId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Communication
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Communication]
 
 GO
 ALTER TABLE [Communication].[CommunicationAttribute] ADD CONSTRAINT

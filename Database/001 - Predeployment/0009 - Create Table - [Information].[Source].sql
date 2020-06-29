@@ -22,15 +22,14 @@ CREATE TABLE [Information].[Source]
 	EffectiveToDateTime DATETIME NOT NULL,
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
-	SourceTypeId BIGINT NOT NULL,
-	SourceTypeEntityId BIGINT NOT NULL
-	)  ON Information
+	SourceGUID UNIQUEIDENTIFIER NOT NULL
+	)  ON [Information]
 GO
 ALTER TABLE [Information].[Source] ADD CONSTRAINT
 	PK_Source PRIMARY KEY CLUSTERED 
 	(
 	SourceId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Information
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Information]
 
 GO
 ALTER TABLE [Information].[Source] ADD CONSTRAINT
@@ -56,21 +55,6 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Information].[Source].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Information', N'TABLE', N'Source', N'CONSTRAINT', N'FK_Source_CreatedByUserId'
-GO
-ALTER TABLE [Information].[Source] ADD CONSTRAINT
-	FK_Source_SourceTypeId FOREIGN KEY
-	(
-	SourceTypeId
-	) REFERENCES [Information].[SourceType]
-	(
-	SourceTypeId
-	) ON UPDATE  NO ACTION 
-	 ON DELETE  NO ACTION 
-	
-GO
-DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Information].[Source].SourceTypeId to [Information].[SourceType].SourceTypeId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Information', N'TABLE', N'Source', N'CONSTRAINT', N'FK_Source_SourceTypeId'
 GO
 ALTER TABLE [Information].[Source] SET (LOCK_ESCALATION = TABLE)
 GO

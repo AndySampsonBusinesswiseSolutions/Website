@@ -26,13 +26,13 @@ CREATE TABLE [Administration.User].[UserDetail]
 	UserId BIGINT NOT NULL,
 	UserAttributeId BIGINT NOT NULL,
 	UserDetailDescription VARCHAR(200) NOT NULL
-	)  ON Administration
+	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[UserDetail] ADD CONSTRAINT
 	PK_UserDetail PRIMARY KEY CLUSTERED 
 	(
 	UserDetailId
-	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON Administration
+	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [Administration]
 
 GO
 ALTER TABLE [Administration.User].[UserDetail] ADD CONSTRAINT

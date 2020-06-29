@@ -11,7 +11,7 @@ function login(event) {
     && password == "URLTesting") {
       var processQueueGUID = CreateGUID();
 
-      postData(
+      var postSuccessful = postData(
         {
           QueueGUID: processQueueGUID, 
           PageGUID: "6641A1BF-84C8-48F8-9D79-70D0AB2BB787", 
@@ -21,10 +21,15 @@ function login(event) {
         }
       );
 
-      getLoginResponse(processQueueGUID)
-      .then(response => {
-        processResponse(response);
-      })
+      if(postSuccessful) {
+        getLoginResponse(processQueueGUID)
+        .then(response => {
+          processResponse(response);
+        })
+      }
+      else {
+        processResponse(null);
+      }
 
       return false;
   }
@@ -62,7 +67,7 @@ function processResponse(response) {
     }
   }
   else {
-    errorMessage.innerText = "Sorry, we could not log you in at this time. Please try again later";
+    errorMessage.innerText = 'A system error occurred. Please contact System@BusinessWiseSolutions.co.uk quoting reference ERR7426424';
   }
 
   showLoader(false);
@@ -70,18 +75,25 @@ function processResponse(response) {
 }
 
 async function postData(data) {
-  await fetch(uri + '/Validate', {
-    method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
-    body: JSON.stringify(data)
-  });
+  try {
+    await fetch(uri + '/Validate', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
+    return true;
+  }
+  catch{
+    return false;
+  }
 }
 
 async function getLoginResponse(processQueueGUID) {
