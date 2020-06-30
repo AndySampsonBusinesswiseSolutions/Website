@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[Meter]
 	(
 	ProcessGUID UNIQUEIDENTIFIER,
+	CustomerId BIGINT,
 	MPXN VARCHAR(255),
 	SubMeterIdentifier VARCHAR(255)
 	)  ON [Temp]

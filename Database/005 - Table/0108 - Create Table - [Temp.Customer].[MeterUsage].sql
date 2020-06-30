@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[MeterUsage]
 	(
 	ProcessGUID UNIQUEIDENTIFIER,
+	CustomerId BIGINT,
 	MPXN VARCHAR(255),
 	[Date] VARCHAR(255),
 	[00:30] VARCHAR(255),

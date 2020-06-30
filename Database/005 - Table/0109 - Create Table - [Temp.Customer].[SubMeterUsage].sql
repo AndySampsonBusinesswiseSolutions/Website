@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[SubMeterUsage]
 	(
 	ProcessGUID UNIQUEIDENTIFIER,
+	CustomerId BIGINT,
 	SubMeterIdentifier VARCHAR(255),
 	[Date] VARCHAR(255),
 	[00:30] VARCHAR(255),
