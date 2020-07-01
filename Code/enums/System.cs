@@ -30,6 +30,7 @@ namespace enums
                     public string ValidatePasswordAPI = "26FEFFE8-49F7-4458-98ED-FD5F6C65C7C2";
                     public string ValidateEmailAddressPasswordMappingAPI = "CEC56745-C1C5-4E67-805B-159A8A5E991D";
                     public string LockUserAPI = "0C1BAFAA-586D-48BB-8D0B-B0B56BE0CCD2";
+                    public string StoreUsageUploadAPI = "94DD0DCB-DDC3-45A9-9C3D-D83922CF3110";
                 }
 
                 public class Name
@@ -45,6 +46,7 @@ namespace enums
                     public string ValidatePasswordAPI = "ValidatePassword.api";
                     public string ValidateEmailAddressPasswordMappingAPI = "ValidateEmailAddressPasswordMapping.api";
                     public string LockUserAPI = "LockUser.api";
+                    public string StoreUsageUploadAPI = "StoreUsageUpload.api";
                 }
 
                 //TODO: Move to config file in each API
@@ -61,6 +63,7 @@ namespace enums
                     public string ValidateEmailAddressPasswordMappingAPI = @"GQzD2!aZNvffr*zC";
                     public string LockUserAPI = "JM7!?q#g#uTyM^!v";
                     public string StoreLoginAttemptAPI = "mLdas-Y*x2rbnJ2e";
+                    public string StoreUsageUploadAPI = "Mt35GJs9un!Jq7pg";
                 }
 
                 public class RequiredDataKey
@@ -72,6 +75,8 @@ namespace enums
                     public string ProcessGUID = "ProcessGUID";
                     public string QueueGUID = "QueueGUID";
                     public string CallingGUID = "CallingGUID";
+                    public string CustomerGUID = "CustomerGUID";
+                    public string XLSXFile = "XLSXFile";
                 }
             }
 
@@ -85,11 +90,13 @@ namespace enums
                 public class GUID
                 {
                     public string Login = "6641A1BF-84C8-48F8-9D79-70D0AB2BB787";
+                    public string SiteManagement = "714F10C4-ACF3-4409-97A8-C605E8E2FD0C";
                 }
 
                 public class Name
                 {
                     public string Login = "Login";
+                    public string SiteManagement = "Site Management";
                 }
             }
 
@@ -111,11 +118,13 @@ namespace enums
                 public class GUID
                 {
                     public string Login = "AF10359F-FD78-4345-9F26-EF5A921E72FD";
+                    public string UsageUpload = "1ACFB189-9C95-4DCD-A21A-93CDB2928620";
                 }
 
                 public class Name
                 {
                     public string Login = "Login";
+                    public string UsageUpload = "Usage Upload";
                 }
             }
         }

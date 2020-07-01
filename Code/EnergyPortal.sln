@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "enums", "enums\enums.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodLibrary", "MethodLibrary\MethodLibrary.csproj", "{40FAD0EF-152D-483A-BA6D-14F51A79FA9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUpload.api", "StoreUsageUpload.api\StoreUsageUpload.api.csproj", "{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -224,5 +226,17 @@ Global
 		{40FAD0EF-152D-483A-BA6D-14F51A79FA9E}.Release|x64.Build.0 = Release|Any CPU
 		{40FAD0EF-152D-483A-BA6D-14F51A79FA9E}.Release|x86.ActiveCfg = Release|Any CPU
 		{40FAD0EF-152D-483A-BA6D-14F51A79FA9E}.Release|x86.Build.0 = Release|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Debug|x64.Build.0 = Debug|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Debug|x86.Build.0 = Debug|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Release|x64.ActiveCfg = Release|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Release|x64.Build.0 = Release|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Release|x86.ActiveCfg = Release|Any CPU
+		{9DCF85C1-A31E-4444-B0EB-AD6F22740C9F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

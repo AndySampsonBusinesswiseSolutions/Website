@@ -6,7 +6,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
-using System.Net.Http;
 
 namespace Website.api.Controllers
 {

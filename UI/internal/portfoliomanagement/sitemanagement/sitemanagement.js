@@ -764,13 +764,22 @@ async function uploadFile(file) {
 	fileReader.onload = (event)=>{
 		let data = event.target.result;
 		let workbook = XLSX.read(data,{type:"binary"});
-		var postBody = JSON.stringify(workbook);
+		var workbookJSON = JSON.stringify(workbook);
+
+		var processQueueGUID = CreateGUID();
+		var postBody = {
+			QueueGUID: processQueueGUID, 
+			PageGUID: "714F10C4-ACF3-4409-97A8-C605E8E2FD0C", 
+			ProcessGUID: "1ACFB189-9C95-4DCD-A21A-93CDB2928620", 
+			CustomerGUID: "1ACFB189-9C95-4DCD-A21A-93CDB2928620", //TODO: Update GUID
+			XLSXFile: workbookJSON
+		  };
 		postData(postBody);		
 	}
 	fileReader.readAsBinaryString(file);
 }
 
-async function postData(json) {
+async function postData(data) {
 	var url = 'http://localhost:5000/Website/Validate';
 
 	try {
@@ -784,7 +793,7 @@ async function postData(json) {
 		},
 		redirect: 'follow',
 		referrerPolicy: 'no-referrer',
-		body: json
+		body: JSON.stringify(data)
 		});
 
 		return true;

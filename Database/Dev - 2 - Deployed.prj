@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>18ba0c5e-2aa8-462c-b2ce-471dd6c774fb</ID>
-    <DateCreated>2020-06-30T09:50:30.027273+01:00</DateCreated>
+    <ID>64dfcdc8-b2b7-4e25-ae85-237a038879c6</ID>
+    <DateCreated>2020-07-01T12:09:34.6379553+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>6dzaE2yEqb3s2Xl+cxCXOQ==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6+OEBKu42KIEG409hpYQFJY=</Password>
+    <Login>cPJjfSCCXuIjmjpL0EYRaw==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6yk82UonQxWas/WMG9QHC5g=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1738,6 +1738,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>df3a068a-e05b-4175-abc0-f208a63dcea0</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0019 - Create Login - SaveUsageUpload.api.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>1066b0b0-8929-4350-a7e8-0f6a517e7082</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0001 - Data - Email Address User Attribute.sql</FullName>
@@ -2028,6 +2035,48 @@
     <ID>0a42992a-4385-4f5d-9902-bf326f6779ec</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0042 - Data - File SourceAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>4bb8a896-fc9c-40a8-b6e4-a48f9a72feeb</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0043 - Data - Site Management Page.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>162aa745-964e-4e99-a792-40365cb99719</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0044 - Data - Site Management Page Name Page Detail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>69245240-c4e5-4973-b99f-1aa142625c11</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0045 - Data - Usage Upload Process.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5ab873ab-343c-4a53-859b-176433dca671</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0046 - Data - Usage Upload Process Name Process Detail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ded43957-3da0-477b-8f52-36773178480c</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0047 - Data - Usage Upload Page To Login Process Mapping.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>06739aba-850f-479a-b932-8b2bd5241c94</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0048 - Data - StoreUsageUpload.API API.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

@@ -121,6 +121,28 @@
             }
         },
         {
+            "name": "StoreUsageUpload.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/StoreUsageUpload.api/bin/Debug/netcoreapp3.1/StoreUsageUpload.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/StoreUsageUpload.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/StoreUsageUpload.api/Views"
+            }
+        },
+        {
             "name": "ValidateEmailAddress.api",
             "type": "coreclr",
             "request": "launch",
@@ -267,7 +289,8 @@
                 "ValidatePassword.api",
                 "ValidateEmailAddressPasswordMapping.api",
                 "LockUser.api",
-                "StoreLoginAttempt.api"
+                "StoreLoginAttempt.api",
+                "StoreUsageUpload.api"
             ]
         }
     ]
