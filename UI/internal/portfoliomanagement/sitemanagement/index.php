@@ -31,12 +31,9 @@
 				<span id="uploadUsageTitle"></span>
 			</div>
 			<div id="drop-area">
-				<input type="file" id="fileElem" multiple accept="*" onchange="handleFiles(this.files)"><br>
-				<label class="button" for="fileElem">Select some files</label><br><br>
-				<progress id="progress-bar" max=100 value=0 style="width: 100%;"></progress><br>
-				<div id="gallery"></div>
+				<input type="file" id="fileElem" multiple accept="*" onchange="handleFiles(this.files)">
+				<label class="button" for="fileElem" style="width: 95%;">Select some files</label><br><br>
 			</div>
-			<button style="float: right; margin-top: 5px;" class="show-pointer approve">Upload Usage</button>
 			<br>
 		</div>
 	</div>
@@ -109,6 +106,7 @@
 </body>
 
 <script type="text/javascript" src="/includes/base/base.js"></script>
+<script type="text/javascript" src="/includes/xlsx/xlsx.js"></script>
 
 <script type="text/javascript" src="sitemanagement.js"></script>
 <script type="text/javascript" src="sitemanagement.json"></script>

@@ -752,61 +752,44 @@ function handleDrop(e) {
   handleFiles(files)
 }
 
-let uploadProgress = []
-let progressBar = document.getElementById('progress-bar')
-
-function initializeProgress(numFiles) {
-  progressBar.value = 0
-  uploadProgress = []
-
-  for(let i = numFiles; i > 0; i--) {
-    uploadProgress.push(0)
-  }
-}
-
-function updateProgress(fileNumber, percent) {
-  uploadProgress[fileNumber] = percent
-  let total = uploadProgress.reduce((tot, curr) => tot + curr, 0) / uploadProgress.length
-  console.debug('update', fileNumber, percent, total)
-  progressBar.value = total
-}
-
 function handleFiles(files) {
-  files = [...files]
-  initializeProgress(files.length)
-  files.forEach(uploadFile)
-  files.forEach(previewFile)
+  files = [...files];
+  files.forEach(uploadFile);
+  
+  alert('The files you selected have been uploaded to our server. You will receive an email confirming success or failure of these files.')
 }
 
-function previewFile(file) {
-	var icon = document.createElement('i');
-	icon.setAttribute('class', 'far fa-file-excel fa-9x');
-	icon.setAttribute('title', file.name);
-	document.getElementById('gallery').appendChild(icon)
+async function uploadFile(file) {
+	let fileReader = new FileReader();
+	fileReader.onload = (event)=>{
+		let data = event.target.result;
+		let workbook = XLSX.read(data,{type:"binary"});
+		var postBody = JSON.stringify(workbook);
+		postData(postBody);		
+	}
+	fileReader.readAsBinaryString(file);
 }
 
-function uploadFile(file, i) {
-  var url = 'https://api.cloudinary.com/v1_1/joezimim007/image/upload'
-  var xhr = new XMLHttpRequest()
-  var formData = new FormData()
-  xhr.open('POST', url, true)
-  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest')
+async function postData(json) {
+	var url = 'http://localhost:5000/Website/Validate';
 
-  // Update progress (can be used to show progress indicator)
-  xhr.upload.addEventListener("progress", function(e) {
-    updateProgress(i, (e.loaded * 100.0 / e.total) || 100)
-  })
+	try {
+		await fetch(url, {
+		method: 'POST',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: json
+		});
 
-  xhr.addEventListener('readystatechange', function(e) {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      updateProgress(i, 100)
-    }
-    else if (xhr.readyState == 4 && xhr.status != 200) {
-      // Error. Inform the user
-    }
-  })
-
-  formData.append('upload_preset', 'ujpu6gyk')
-  formData.append('file', file)
-  xhr.send(formData)
+		return true;
+	}
+	catch {
+		return false;
+	}
 }
