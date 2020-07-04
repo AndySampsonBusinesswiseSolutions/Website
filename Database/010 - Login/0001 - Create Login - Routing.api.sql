@@ -25,6 +25,12 @@ GO
 ALTER ROLE [db_denydatawriter] ADD MEMBER [Routing.api]
 GO
 
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Insert] TO [Routing.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Update] TO [Routing.api];
+GO
+
 GRANT EXECUTE ON OBJECT::[System].[API_GetByAPIGUID] TO [Routing.api];  
 GO
 

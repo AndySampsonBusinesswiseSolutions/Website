@@ -24,7 +24,6 @@ GO
 
 ALTER ROLE [db_denydatawriter] ADD MEMBER [StoreUsageUpload.api]
 
-
 GRANT EXECUTE ON OBJECT::[System].[ProcessQueue_Insert] TO [StoreUsageUpload.api];
 GO
 

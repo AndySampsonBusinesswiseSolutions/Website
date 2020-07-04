@@ -768,7 +768,7 @@ async function uploadFile(file) {
 
 		var processQueueGUID = CreateGUID();
 		var postBody = {
-			QueueGUID: processQueueGUID, 
+			ProcessQueueGUID: processQueueGUID, 
 			PageGUID: "714F10C4-ACF3-4409-97A8-C605E8E2FD0C", 
 			ProcessGUID: "1ACFB189-9C95-4DCD-A21A-93CDB2928620", 
 			CustomerGUID: "1ACFB189-9C95-4DCD-A21A-93CDB2928620", //TODO: Update GUID

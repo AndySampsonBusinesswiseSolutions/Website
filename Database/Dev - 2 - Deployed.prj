@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>64dfcdc8-b2b7-4e25-ae85-237a038879c6</ID>
-    <DateCreated>2020-07-01T12:09:34.6379553+01:00</DateCreated>
+    <ID>c8f961f7-fcea-446a-83aa-43a38af77457</ID>
+    <DateCreated>2020-07-04T10:58:52.2880467+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>cPJjfSCCXuIjmjpL0EYRaw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6yk82UonQxWas/WMG9QHC5g=</Password>
+    <Login>QUrt2AdxZuU/oxOd6u8uCA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe65JFOD57vnZtv+qs4Oan2h4=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1738,9 +1738,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>df3a068a-e05b-4175-abc0-f208a63dcea0</ID>
+    <ID>0837b150-e2dd-4d8a-bedd-cbc1e1cf99b3</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\010 - Login\0019 - Create Login - SaveUsageUpload.api.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0019 - Create Login - StoreUsageUpload.api.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2077,6 +2077,27 @@
     <ID>06739aba-850f-479a-b932-8b2bd5241c94</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0048 - Data - StoreUsageUpload.API API.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b5fb2489-05d3-4bd5-ba24-b44a1d015fa1</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0049 - Data - ValidatePageGUID.API add to Usage Upload process.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>2dad9f13-99ed-440e-8770-9fff8512a419</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0050 - Data - IsRunning Route API Attribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0fe859a4-c721-41ef-8455-2026e90bae12</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0051 - Data - Add IsRunning Route to APIs.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
