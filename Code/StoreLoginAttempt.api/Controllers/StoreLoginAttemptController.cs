@@ -34,6 +34,20 @@ namespace StoreLoginAttempt.api.Controllers
         }
 
         [HttpPost]
+        [Route("StoreLoginAttempt/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("StoreLoginAttempt/Store")]
         public void Store([FromBody] object data)
         {
@@ -44,13 +58,13 @@ namespace StoreLoginAttempt.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             try
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    queueGUID, 
+                    processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     APIId);
@@ -71,10 +85,10 @@ namespace StoreLoginAttempt.api.Controllers
                 if(userId != 0)
                 {
                     //Store login attempt
-                    _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), queueGUID);
+                    _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), processQueueGUID);
 
                     //Get Login Id
-                    var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(queueGUID);
+                    var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(processQueueGUID);
 
                     //Store mapping between login attempt and user
                     var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
@@ -86,14 +100,14 @@ namespace StoreLoginAttempt.api.Controllers
                 
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
             }
         }
     }

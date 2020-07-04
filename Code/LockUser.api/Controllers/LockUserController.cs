@@ -36,6 +36,20 @@ namespace LockUser.api.Controllers
         }
 
         [HttpPost]
+        [Route("LockUser/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("LockUser/Lock")]
         public void Lock([FromBody] object data)
         {
@@ -46,13 +60,13 @@ namespace LockUser.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             try
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    queueGUID, 
+                    processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     APIId);
@@ -118,14 +132,14 @@ namespace LockUser.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
             }
         }
 

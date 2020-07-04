@@ -34,6 +34,20 @@ namespace ArchiveProcessQueue.api.Controllers
         }
 
         [HttpPost]
+        [Route("ArchiveProcessQueue/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("ArchiveProcessQueue/Archive")]
         public void Archive([FromBody] object data)
         {
@@ -43,7 +57,7 @@ namespace ArchiveProcessQueue.api.Controllers
 
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             //Get Process GUID
             var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();

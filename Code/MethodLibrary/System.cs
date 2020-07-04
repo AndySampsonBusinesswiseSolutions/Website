@@ -16,6 +16,15 @@ namespace MethodLibrary
     {
         public class System
         {
+            public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, JObject jsonObject)
+            {
+                var API = CreateAPI(APIID);
+                var APIIsRunningRoute = GetAPIIsRunningRouteByAPIId(APIID);
+                var APIData = GetAPIData(APIID, callingGUID, jsonObject);
+
+                return API.PostAsJsonAsync(APIIsRunningRoute, APIData);
+            }
+
             public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string callingGUID, JObject jsonObject)
             {
                 var API = CreateAPI(APIID);
@@ -96,18 +105,20 @@ namespace MethodLibrary
                 return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId).First();
             }
 
+            public string GetAPIIsRunningRouteByAPIId(long APIId) 
+            {
+                var isRunningRouteAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.IsRunningRoute);
+                return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, isRunningRouteAttributeId).First();
+            }
+
             public string GetAPIPOSTRouteByAPIId(long APIId) 
             {
-                //TODO: Error if more than one found
-
                 var POSTRouteAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.POSTRoute);
                 return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, POSTRouteAttributeId).First();
             }
 
             public string GetAPIStartupURLs(string APIGUID)
             {
-                //TODO: Error if more than one found
-
                 var APIId = API_GetAPIIdByAPIGUID(APIGUID);
                 var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
                 var HTTPSApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPSApplicationURL);
@@ -224,6 +235,23 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ProcessId"))
                     .FirstOrDefault();
+            }
+
+            public void InsertProcessQueueError(string processQueueGUID, long createdByUserId, long sourceId, long APIId, string errorMessage = null)
+            {
+                var errorId = InsertSystemError(createdByUserId, 
+                                sourceId, 
+                                $"API {APIId} Not Started - {errorMessage}",
+                                "API Not Started",
+                                Environment.StackTrace);
+                    
+                ProcessQueue_Insert(
+                        processQueueGUID, 
+                        createdByUserId,
+                        sourceId,
+                        APIId);
+
+                ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
             }
 
             public void ProcessQueue_Insert(string processQueueGUID, long createdByUserId, long sourceId, long APIId, bool hasError = false, string errorMessage = null)

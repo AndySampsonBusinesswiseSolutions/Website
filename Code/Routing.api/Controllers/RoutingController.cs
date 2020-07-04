@@ -32,6 +32,20 @@ namespace Routing.api.Controllers
         }
 
         [HttpPost]
+        [Route("Routing/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("Routing/POST")] //TODO:Change POST route to better name
         public void Route([FromBody] object data)
         {
@@ -41,32 +55,57 @@ namespace Routing.api.Controllers
 
             try
             {
-                //Get processId
+                //Get Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
+                var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
                 
                 //Get ValidateProcessGUID API Id
-                var validateProcessAPIId = _systemMethods.GetValidateProcessGUIDAPIId();
+                var validateProcessGUIDAPIId = _systemMethods.GetValidateProcessGUIDAPIId();
                 
                 //Call ValidateProcessGUID API
-                var API = _systemMethods.PostAsJsonAsync(validateProcessAPIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var processId = Convert.ToInt64(result.Result);
+                var API = _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
+
+                var processId = 0L;
+
+                try
+                {
+                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+
+                    //Get processId
+                    processId = Convert.ToInt64(result.Result);
+                }
+                catch(Exception error)
+                {
+                    //API never started so create record
+                    _systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, validateProcessGUIDAPIId, error.Message);
+                }
 
                 //Get APIId list
                 var APIIdList = _mappingMethods.APIToProcess_GetAPIIdListByProcessId(processId);
-                var APIGUIDList = new List<string>();
+                var APIGUIDList = new List<string>
+                    {
+                        _systemMethods.API_GetAPIGUIDByAPIId(validateProcessGUIDAPIId)
+                    };
 
                 foreach(var APIId in APIIdList)
                 {
                     //Call API
-                    API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
+                    API = _systemMethods.PostAsJson(APIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
+
+                    try
+                    {
+                        //If this doesn't fail then the API is running
+                        var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                    }
+                    catch(Exception error)
+                    {
+                        //API never started so create record
+                        _systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, APIId, error.Message);
+                    }
+                    
 
                     APIGUIDList.Add(_systemMethods.API_GetAPIGUIDByAPIId(APIId));
                 }
-
-                //Add Validate Process Id to list
-                APIIdList.Add(validateProcessAPIId);
-                APIGUIDList.Add(_systemMethods.API_GetAPIGUIDByAPIId(validateProcessAPIId));
 
                 //Get Archive.API Id
                 var archiveAPIId = _systemMethods.GetArchiveProcessQueueAPIId();

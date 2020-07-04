@@ -6,7 +6,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Net.Http;
 
 namespace StoreUsageUpload.api.Controllers
 {
@@ -36,6 +35,20 @@ namespace StoreUsageUpload.api.Controllers
         }
 
         [HttpPost]
+        [Route("StoreUsageUpload/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreUsageUploadAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("StoreUsageUpload/Store")]
         public void Store([FromBody] object data)
         {
@@ -46,13 +59,13 @@ namespace StoreUsageUpload.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             try
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    queueGUID, 
+                    processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     APIId);
@@ -67,16 +80,21 @@ namespace StoreUsageUpload.api.Controllers
                 var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
                 //TODO: Create Store logic
+                //Get xlsx JSON
+                var xlsxFile = jsonObject[_systemAPIRequiredDataKeyEnums.XLSXFile].ToString();
+
+                //Save to folder
+                System.IO.File.WriteAllText(@"C:\Users\andy.sampson\Downloads\BWS Files\Energy Portal\Customer Files\test.json", xlsxFile);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
             }
         }
     }

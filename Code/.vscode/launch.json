@@ -277,6 +277,12 @@
     ],
     "compounds": [
         {
+            "name": "------------------------------------------------------------",
+            "configurations": [
+                "Website.api",
+            ]
+        },
+        {
             "name": "All Projects",
             "configurations": [
                 "Website.api",
@@ -290,6 +296,34 @@
                 "ValidateEmailAddressPasswordMapping.api",
                 "LockUser.api",
                 "StoreLoginAttempt.api",
+                "StoreUsageUpload.api"
+            ]
+        },
+        {
+            "name": "Login",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "ValidateEmailAddress.api",
+                "ValidatePassword.api",
+                "ValidateEmailAddressPasswordMapping.api",
+                "LockUser.api",
+                "StoreLoginAttempt.api",
+            ]
+        },
+        {
+            "name": "Usage Upload",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
                 "StoreUsageUpload.api"
             ]
         }

@@ -275,6 +275,10 @@
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[12.0.3, )"
+            },
+            "system.io": {
+              "target": "Package",
+              "version": "[4.3.0, )"
             }
           },
           "imports": [

@@ -43,13 +43,13 @@ namespace Website.api.Controllers
             {
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
-                var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+                var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
                 //Insert into ProcessQueue
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
 
                 _systemMethods.ProcessQueue_Insert(
-                    queueGUID, 
+                    processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     APIId);
@@ -61,7 +61,7 @@ namespace Website.api.Controllers
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId);
             }
             catch(Exception error)
             {

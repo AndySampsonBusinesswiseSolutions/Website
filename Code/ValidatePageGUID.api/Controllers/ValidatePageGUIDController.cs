@@ -33,6 +33,20 @@ namespace ValidatePageGUID.api.Controllers
         }
 
         [HttpPost]
+        [Route("ValidatePageGUID/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePageGUIDAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("ValidatePageGUID/Validate")]
         public void Validate([FromBody] object data)
         {
@@ -43,13 +57,13 @@ namespace ValidatePageGUID.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             try
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    queueGUID, 
+                    processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     APIId);
@@ -81,14 +95,14 @@ namespace ValidatePageGUID.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, pageId == 0, errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, pageId == 0, errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
             }
         }
     }

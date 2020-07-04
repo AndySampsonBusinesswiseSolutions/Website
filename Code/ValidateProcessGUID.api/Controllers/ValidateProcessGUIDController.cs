@@ -32,6 +32,20 @@ namespace ValidateProcessGUID.api.Controllers
         }
 
         [HttpPost]
+        [Route("ValidateProcessGUID/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("ValidateProcessGUID/Validate")]
         public long Validate([FromBody] object data)
         {
@@ -42,13 +56,13 @@ namespace ValidateProcessGUID.api.Controllers
             {
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
-                var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+                var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
                 //Insert into ProcessQueue
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
 
                 _systemMethods.ProcessQueue_Insert(
-                    queueGUID, 
+                    processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     APIId);
@@ -63,7 +77,7 @@ namespace ValidateProcessGUID.api.Controllers
                 string errorMessage = processId == 0 ? $"Process GUID {processGUID} does not exist in [System].[Process] table" : null;
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(queueGUID, APIId, processId == 0, errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, processId == 0, errorMessage);
 
                 return processId;
             }

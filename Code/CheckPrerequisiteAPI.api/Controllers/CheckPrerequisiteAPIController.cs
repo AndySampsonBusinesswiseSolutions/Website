@@ -35,6 +35,20 @@ namespace CheckPrerequisiteAPI.api.Controllers
         }
 
         [HttpPost]
+        [Route("CheckPrerequisiteAPI/IsRunning")]
+        public bool IsRunning([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
+            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+
+            //Launch API process
+            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+
+            return true;
+        }
+
+        [HttpPost]
         [Route("CheckPrerequisiteAPI/Check")]
         public List<string> Check([FromBody] object data)
         {
@@ -44,7 +58,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var queueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.QueueGUID].ToString();
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             var prerequisiteAPIGUIDs = new List<string>();
             var completedPrerequisiteAPIGUIDs = new List<string>();
@@ -79,26 +93,9 @@ namespace CheckPrerequisiteAPI.api.Controllers
 
                         //Get prerequisite API EffectiveToDate from System.ProcessQueue
                         var APIId = _systemMethods.API_GetAPIIdByAPIGUID(prerequisiteAPIGUID);
-                        var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(queueGUID, APIId);
+                        var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, APIId);
 
-                        if(processQueueDataRow == null)
-                        {
-                            var errorId = _systemMethods.InsertSystemError(createdByUserId, 
-                                sourceId, 
-                                $"API {APIId} Not Started",
-                                "API Not Started",
-                                Environment.StackTrace);
-
-                            //API never started so create record
-                            _systemMethods.ProcessQueue_Insert(
-                                queueGUID, 
-                                createdByUserId,
-                                sourceId,
-                                APIId);
-
-                            _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
-                        }
-                        else
+                        if(processQueueDataRow != null)
                         {
                             //If EffectiveToDate is '9999-12-31' then it is still processing
                             //otherwise, it has finished so add to completed if successful or errored if not
@@ -133,7 +130,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
                                         Environment.StackTrace);
 
                                     //Update Process Queue
-                                    _systemMethods.ProcessQueue_Update(queueGUID, APIId, true, $"System Error Id {errorId}");
+                                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
                                 }
                             }
                         }                    

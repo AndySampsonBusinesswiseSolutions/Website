@@ -13,6 +13,7 @@ namespace enums
                     public string HTTPApplicationURL = "HTTP Application URL";
                     public string PrerequisiteAPIGUID = "Prerequisite API GUID";
                     public string POSTRoute = "POST Route";
+                    public string IsRunningRoute = "IsRunning Route";
                     public string RequiredDataKey = "Required Data Key";
                     public string MaximumInvalidLoginAttempts = "Maximum Invalid Login Attempts";
                 }
@@ -73,7 +74,7 @@ namespace enums
                     public string PageGUID = "PageGUID";
                     public string Password = "Password";
                     public string ProcessGUID = "ProcessGUID";
-                    public string QueueGUID = "QueueGUID";
+                    public string ProcessQueueGUID = "ProcessQueueGUID";
                     public string CallingGUID = "CallingGUID";
                     public string CustomerGUID = "CustomerGUID";
                     public string XLSXFile = "XLSXFile";
