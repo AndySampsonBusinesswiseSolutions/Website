@@ -115,10 +115,18 @@ namespace Routing.api.Controllers
                 archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
 
                 //Connect to Archive API and POST API list
-                _systemMethods.CreateAPI(archiveAPIId)
-                        .PostAsJsonAsync(
-                            _systemMethods.GetAPIPOSTRouteByAPIId(archiveAPIId), 
-                            archiveObject);
+                API = _systemMethods.PostAsJson(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, archiveObject, false);
+
+                try
+                {
+                    //If this doesn't fail then the API is running
+                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                }
+                catch(Exception error)
+                {
+                    //API never started so create system error record
+                    _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                }
             }
             catch(Exception error)
             {

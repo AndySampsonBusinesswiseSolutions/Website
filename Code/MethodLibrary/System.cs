@@ -16,22 +16,26 @@ namespace MethodLibrary
     {
         public class System
         {
-            public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, JObject jsonObject)
+            public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, JObject jsonObject, bool buildJSONObject = true)
             {
-                var API = CreateAPI(APIID);
                 var APIIsRunningRoute = GetAPIIsRunningRouteByAPIId(APIID);
-                var APIData = GetAPIData(APIID, callingGUID, jsonObject);
 
-                return API.PostAsJsonAsync(APIIsRunningRoute, APIData);
+                return Post(APIID, callingGUID, APIIsRunningRoute, jsonObject, buildJSONObject);
             }
 
-            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string callingGUID, JObject jsonObject)
+            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string callingGUID, JObject jsonObject, bool buildJSONObject = true)
+            {
+                var APIPostRoute = GetAPIPOSTRouteByAPIId(APIID);
+
+                return Post(APIID, callingGUID, APIPostRoute, jsonObject, buildJSONObject);
+            }
+
+            private Task<HttpResponseMessage> Post(long APIID, string callingGUID, string route, JObject jsonObject, bool buildJSONObject)
             {
                 var API = CreateAPI(APIID);
-                var APIPostRoute = GetAPIPOSTRouteByAPIId(APIID);
-                var APIData = GetAPIData(APIID, callingGUID, jsonObject);
+                var APIData = buildJSONObject ? GetAPIData(APIID, callingGUID, jsonObject) : jsonObject;
 
-                return API.PostAsJsonAsync(APIPostRoute, APIData);
+                return API.PostAsJsonAsync(route, APIData);
             }
 
             public HttpClient CreateAPI(long APIId)
@@ -51,7 +55,7 @@ namespace MethodLibrary
                 var requiredDataKeyAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.RequiredDataKey);
                 var dataKeys = APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, requiredDataKeyAttributeId);
 
-                //If no specific data keys are required, return the enite object
+                //If no specific data keys are required, return the entire object
                 if(!dataKeys.Any())
                 {
                     return jsonObject;
