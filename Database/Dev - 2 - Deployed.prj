@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>c8f961f7-fcea-446a-83aa-43a38af77457</ID>
-    <DateCreated>2020-07-04T10:58:52.2880467+01:00</DateCreated>
+    <ID>9b524032-2fa4-42e3-94c6-d34967300d11</ID>
+    <DateCreated>2020-07-05T18:14:59.6941979+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>QUrt2AdxZuU/oxOd6u8uCA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe65JFOD57vnZtv+qs4Oan2h4=</Password>
+    <Login>ZdChGSqlwa7tsfuKSI2CJg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe69I7KxMlgK8dTHpwum2jpcM=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -2098,6 +2098,20 @@
     <ID>0fe859a4-c721-41ef-8455-2026e90bae12</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0051 - Data - Add IsRunning Route to APIs.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>00d6eb05-9b79-4069-bea3-6b485f86c132</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0052 - Data - Timeout Seconds API Attribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>826ed383-3c9f-4134-b975-6e0fe88ab56c</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0053 - Data - Add Timeout Seconds to APIs.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

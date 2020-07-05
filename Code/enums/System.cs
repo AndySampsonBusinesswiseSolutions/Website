@@ -16,6 +16,7 @@ namespace enums
                     public string IsRunningRoute = "IsRunning Route";
                     public string RequiredDataKey = "Required Data Key";
                     public string MaximumInvalidLoginAttempts = "Maximum Invalid Login Attempts";
+                    public string TimeoutSeconds = "Timeout Seconds";
                 }
                 
                 public class GUID

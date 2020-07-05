@@ -63,6 +63,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             var prerequisiteAPIGUIDs = new List<string>();
             var completedPrerequisiteAPIGUIDs = new List<string>();
             var erroredPrerequisiteAPIGUIDs = new List<string>();
+            var timeoutSecondsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.TimeoutSeconds);
 
             try
             {
@@ -116,7 +117,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
                             {
                                 //Check if process has been running for longer than it's anticipated run time
                                 var effectiveFromDate = Convert.ToDateTime(processQueueDataRow["EffectiveFromDateTime"]);
-                                var latestRunDate = effectiveFromDate.AddMinutes(1); //TODO: Make detail against API and make adjustable
+                                var timeoutSeconds = Convert.ToDouble(_systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, timeoutSecondsAttributeId).First());
+                                var latestRunDate = effectiveFromDate.AddMinutes(timeoutSeconds/60);
                                 var currentDate = DateTime.UtcNow;
 
                                 if(currentDate > latestRunDate)
