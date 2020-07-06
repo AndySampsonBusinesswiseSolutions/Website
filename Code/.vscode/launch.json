@@ -356,6 +356,8 @@
             "configurations": [
                 "Website.api",
                 "Routing.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
                 "AddNewCustomer.api",
             ]
         }

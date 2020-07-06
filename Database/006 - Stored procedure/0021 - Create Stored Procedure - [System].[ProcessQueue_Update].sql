@@ -8,7 +8,7 @@ GO
 
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[ProcessQueue_Update]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[ProcessQueue_Update] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [System].[ProcessQueue_Update] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

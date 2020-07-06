@@ -18,6 +18,14 @@ namespace enums
                 public string Login_GetByLoginId = "[Administration.User].[Login_GetByLoginId]";
             }
 
+            public class Customer
+            {
+                public string CustomerAttribute_GetByCustomerAttributeDescription = "[Customer].[CustomerAttribute_GetByCustomerAttributeDescription]";
+                public string CustomerDetail_GetByCustomerAttributeIdAndCustomerDetailDescription = "[Customer].[CustomerDetail_GetByCustomerAttributeIdAndCustomerDetailDescription]";
+                public string Customer_Insert = "[Customer].[Customer_Insert]";
+                public string CustomerDetail_Insert = "[Customer].[CustomerDetail_Insert]";
+            }
+
             public class Information
             {
                 public string SourceAttribute_GetBySourceAttributeDescription = "[Information].[SourceAttribute_GetBySourceAttributeDescription]";

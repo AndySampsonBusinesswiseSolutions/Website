@@ -196,12 +196,14 @@ function saveNewCustomer() {
 	}
 
 	var processQueueGUID = CreateGUID();
+	var customerGUID = CreateGUID();
 
 	var postSuccessful = postData(
 		{
 			ProcessQueueGUID: processQueueGUID, 
 			PageGUID: "80B1CC99-7C91-4D07-A541-9D69AC4CC304", 
 			ProcessGUID: "D39E768A-D06D-4EB3-80E3-895EDC556A6B",
+			CustomerGUID: customerGUID,
 			CustomerData: JSON.stringify(customerData),
 			ChildCustomerData: JSON.stringify(childCustomerData)
 		}

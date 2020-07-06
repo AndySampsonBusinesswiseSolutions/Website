@@ -7,7 +7,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Customer].[CustomerAttribute_Insert]'))
     BEGIN
-        exec('CREATE PROCEDURE [Customer].[CustomerAttribute_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Customer].[CustomerAttribute_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

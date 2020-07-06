@@ -20,11 +20,11 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
             
-            public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userattributeId, string userDetailDescription)
+            public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userAttributeId, string userDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureAdministrationEnums.UserDetail_Insert, 
-                    createdByUserId, sourceId, userId, userattributeId, userDetailDescription);
+                    createdByUserId, sourceId, userId, userAttributeId, userDetailDescription);
             }
             
             public long User_GetUserIdByUserDetailId(long userDetailId)

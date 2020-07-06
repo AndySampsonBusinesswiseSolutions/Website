@@ -3,7 +3,7 @@ var managecustomers = [
         "GUID" : "0",
         "Attributes" : 
         [
-            {"CustomerName" : "DFS Trading"},
+            {"Customer Name" : "DFS Trading"},
             {"Address Line 1" : "32"},
             {"Address Line 2" : "The Havens"},
             {"Address Line 3" : ""},
@@ -14,15 +14,15 @@ var managecustomers = [
             {"Email" : "contact.us@havenpower.com"}
         ],
         "ChildCustomers" :[
-            {"CustomerName" : "DFS Trading - North East"},
-            {"CustomerName" : "DFS Trading - North West"}
+            {"Customer Name" : "DFS Trading - North East"},
+            {"Customer Name" : "DFS Trading - North West"}
         ]
     },
     {
         "GUID" : "1",
         "Attributes" : 
         [
-            {"CustomerName" : "Businesswise Solutions"},
+            {"Customer Name" : "Businesswise Solutions"},
             {"Address Line 1" : "3rd floor"},
             {"Address Line 2" : "Elder House"},
             {"Address Line 3" : "586-592 Elder Gate"},
@@ -40,7 +40,7 @@ var managecustomers = [
         "GUID" : "2",
         "Attributes" : 
         [
-            {"CustomerName" : "DFS Trading - North East"},
+            {"Customer Name" : "DFS Trading - North East"},
             {"Address Line 1" : "3rd floor"},
             {"Address Line 2" : "Elder House"},
             {"Address Line 3" : "586-592 Elder Gate"},
@@ -59,7 +59,7 @@ var managecustomers = [
         "GUID" : "3",
         "Attributes" : 
         [
-            {"CustomerName" : "DFS Trading - North West"},
+            {"Customer Name" : "DFS Trading - North West"},
             {"Address Line 1" : "3rd floor"},
             {"Address Line 2" : "Elder House"},
             {"Address Line 3" : "586-592 Elder Gate"},
@@ -78,7 +78,7 @@ var managecustomers = [
         "GUID" : "4",
         "Attributes" : 
         [
-            {"CustomerName" : "Add New Customer"},
+            {"Customer Name" : "Add New Customer"},
             {"Address Line 1" : ""},
             {"Address Line 2" : ""},
             {"Address Line 3" : ""},

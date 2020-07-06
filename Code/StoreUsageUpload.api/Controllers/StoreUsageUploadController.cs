@@ -76,7 +76,7 @@ namespace StoreUsageUpload.api.Controllers
                 //Call CheckPrerequisiteAPI API
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreUsageUploadAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
                 var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
                 //TODO: Create Store logic

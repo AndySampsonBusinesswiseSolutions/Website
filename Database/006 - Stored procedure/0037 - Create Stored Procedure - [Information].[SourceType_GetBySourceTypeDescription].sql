@@ -8,7 +8,7 @@ GO
 
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[SourceAttribute_GetBySourceAttributeDescription]'))
     BEGIN
-        exec('CREATE PROCEDURE [Information].[SourceAttribute_GetBySourceAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Information].[SourceAttribute_GetBySourceAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

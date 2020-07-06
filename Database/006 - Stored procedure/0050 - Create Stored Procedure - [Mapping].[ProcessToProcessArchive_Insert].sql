@@ -8,7 +8,7 @@ GO
 
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ProcessToProcessArchive_Insert]'))
     BEGIN
-        exec('CREATE PROCEDURE [Mapping].[ProcessToProcessArchive_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[ProcessToProcessArchive_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

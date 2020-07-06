@@ -8,7 +8,7 @@ GO
 
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Administration.User].[UserDetail_DeleteByUserDetailId]'))
     BEGIN
-        exec('CREATE PROCEDURE [Administration.User].[UserDetail_DeleteByUserDetailId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Administration.User].[UserDetail_DeleteByUserDetailId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

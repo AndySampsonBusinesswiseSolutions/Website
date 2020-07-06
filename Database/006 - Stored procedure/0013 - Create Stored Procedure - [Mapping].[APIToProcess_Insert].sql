@@ -8,7 +8,7 @@ GO
 
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[APIToProcess_Insert]'))
     BEGIN
-        exec('CREATE PROCEDURE [Mapping].[APIToProcess_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[APIToProcess_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

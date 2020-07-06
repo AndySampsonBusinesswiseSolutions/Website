@@ -8,7 +8,7 @@ GO
 
 IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[System].[Page_GetByPageGUID]'))
     BEGIN
-        exec('CREATE PROCEDURE [System].[Page_GetByPageGUID] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [System].[Page_GetByPageGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 

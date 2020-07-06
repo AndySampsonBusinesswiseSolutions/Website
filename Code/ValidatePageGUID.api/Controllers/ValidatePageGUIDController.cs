@@ -74,7 +74,7 @@ namespace ValidatePageGUID.api.Controllers
                 //Call CheckPrerequisiteAPI API
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidatePageGUIDAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
+                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
 
                 string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
                 long pageId = 0;

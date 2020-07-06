@@ -18,15 +18,14 @@ namespace AddNewCustomer.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.System.API.Attribute _systemAPIAttributeEnums = new Enums.System.API.Attribute();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.Administration.User.Attribute _administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
-        private readonly Enums.Information.SourceAttribute _informationSourceAttributeEnums = new Enums.Information.SourceAttribute();
+        private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
 
         public AddNewCustomerController(ILogger<AddNewCustomerController> logger)
         {
@@ -76,13 +75,53 @@ namespace AddNewCustomer.api.Controllers
                 //Call CheckPrerequisiteAPI API
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.AddNewCustomerAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetAPIArray(result.Result.ToString());
-                var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
 
-                //TODO: Add New Customer logic
+                if(erroredPrerequisiteAPIs.Any())
+                {
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    return;
+                }
 
-                //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                //Get Customer Name attribute Id
+                var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
+
+                //Split Customer Data to an array of attribute/value
+                var customerData = _methods.GetArray(jsonObject["CustomerData"].ToString());
+
+                //Loop through array and find Customer Name attribute
+                var customerName = "";
+                for(var dataCount = 0; dataCount < customerData.Count(); dataCount++)
+                {
+                    var record = customerData[dataCount];
+                    var type = record.Split(':')[0];
+                    var value = record.Split(':')[1];
+
+                    if(type == "attribute" && value == "Customer Name")
+                    {
+                        customerName = customerData[dataCount + 1].Split(':')[1];
+                        break;
+                    }
+                }
+
+                //Check if customer name exists
+                var customerDetailId = _customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(customerNameAttributeId, customerName);
+
+                if(customerDetailId == 0)
+                {
+                    //Customer name does not exist as an active customer so insert
+                    var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+                    _customerMethods.Customer_Insert(createdByUserId, sourceId, customerGUID);
+
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, false, null);
+                }
+                else 
+                {
+                    //Customer name exists as an active customer so fail
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"Customer Name {customerName} already exists as an active record");
+                }                
             }
             catch(Exception error)
             {
