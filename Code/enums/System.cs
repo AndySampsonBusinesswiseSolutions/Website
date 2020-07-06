@@ -33,6 +33,7 @@ namespace enums
                     public string ValidateEmailAddressPasswordMappingAPI = "CEC56745-C1C5-4E67-805B-159A8A5E991D";
                     public string LockUserAPI = "0C1BAFAA-586D-48BB-8D0B-B0B56BE0CCD2";
                     public string StoreUsageUploadAPI = "94DD0DCB-DDC3-45A9-9C3D-D83922CF3110";
+                    public string AddNewCustomerAPI = "1B2E2BA3-D538-47E0-9044-BBBFC6BF3892";
                 }
 
                 public class Name
@@ -49,6 +50,7 @@ namespace enums
                     public string ValidateEmailAddressPasswordMappingAPI = "ValidateEmailAddressPasswordMapping.api";
                     public string LockUserAPI = "LockUser.api";
                     public string StoreUsageUploadAPI = "StoreUsageUpload.api";
+                    public string AddNewCustomerAPI = "AddNewCustomer.api";
                 }
 
                 //TODO: Move to config file in each API
@@ -66,6 +68,7 @@ namespace enums
                     public string LockUserAPI = "JM7!?q#g#uTyM^!v";
                     public string StoreLoginAttemptAPI = "mLdas-Y*x2rbnJ2e";
                     public string StoreUsageUploadAPI = "Mt35GJs9un!Jq7pg";
+                    public string AddNewCustomerAPI = "$hRXtrCfb$$W3XZ+";
                 }
 
                 public class RequiredDataKey
@@ -79,6 +82,8 @@ namespace enums
                     public string CallingGUID = "CallingGUID";
                     public string CustomerGUID = "CustomerGUID";
                     public string XLSXFile = "XLSXFile";
+                    public string CustomerData = "CustomerData";
+                    public string ChildCustomerData = "ChildCustomerData";
                 }
             }
 

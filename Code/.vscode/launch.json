@@ -11,6 +11,28 @@
             "processId": "${command:pickProcess}"
         },
         {
+            "name": "AddNewCustomer.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/AddNewCustomer.api/bin/Debug/netcoreapp3.1/AddNewCustomer.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/AddNewCustomer.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/AddNewCustomer.api/Views"
+            }
+        },
+        {
             "name": "ArchiveProcessQueue.api",
             "type": "coreclr",
             "request": "launch",
@@ -313,6 +335,7 @@
                 "ValidateEmailAddressPasswordMapping.api",
                 "LockUser.api",
                 "StoreLoginAttempt.api",
+                "AddNewCustomer.api",
             ]
         },
         {
@@ -324,7 +347,16 @@
                 "CheckPrerequisiteAPI.api",
                 "ValidatePageGUID.api",
                 "ValidateProcessGUID.api",
-                "StoreUsageUpload.api"
+                "StoreUsageUpload.api",
+                "AddNewCustomer.api",
+            ]
+        },
+        {
+            "name": "Add New Customer",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "AddNewCustomer.api",
             ]
         }
     ]
