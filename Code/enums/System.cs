@@ -93,12 +93,14 @@ namespace enums
                 {
                     public string Login = "6641A1BF-84C8-48F8-9D79-70D0AB2BB787";
                     public string SiteManagement = "714F10C4-ACF3-4409-97A8-C605E8E2FD0C";
+                    public string ManageCustomers = "80B1CC99-7C91-4D07-A541-9D69AC4CC304";
                 }
 
                 public class Name
                 {
                     public string Login = "Login";
                     public string SiteManagement = "Site Management";
+                    public string ManageCustomers = "Manage Customers";
                 }
             }
 
@@ -121,12 +123,14 @@ namespace enums
                 {
                     public string Login = "AF10359F-FD78-4345-9F26-EF5A921E72FD";
                     public string UsageUpload = "1ACFB189-9C95-4DCD-A21A-93CDB2928620";
+                    public string AddNewCustomer = "D39E768A-D06D-4EB3-80E3-895EDC556A6B";
                 }
 
                 public class Name
                 {
                     public string Login = "Login";
                     public string UsageUpload = "Usage Upload";
+                    public string AddNewCustomer = "Add New Customer";
                 }
             }
         }

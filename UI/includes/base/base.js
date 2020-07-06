@@ -454,6 +454,29 @@ function CreateGUID() {
   ).toUpperCase();
 }
 
+const uri = 'http://localhost:5000/Website';
+async function postData(data) {
+  try {
+    await fetch(uri + '/Validate', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
+    return true;
+  }
+  catch{
+    return false;
+  }
+}
+
 function alertMessage() {
     alert('Something needs to happen here when you click this thing......what is it??');
 }

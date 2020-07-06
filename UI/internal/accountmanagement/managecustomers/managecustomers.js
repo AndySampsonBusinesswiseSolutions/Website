@@ -168,9 +168,50 @@ function buildCardView(entity, divToAppendTo){
 	if(name && name.startsWith('Add New')) {
 		var addNewbutton = document.createElement('button');
 		addNewbutton.id = 'addNewButton';
-		addNewbutton.innerHTML = name;
+		addNewbutton.innerHTML = 'Save New Customer';
 		addNewbutton.setAttribute('style', 'margin-left: 10px;');
-		divToAppendTo.appendChild(addNewbutton);	
+		addNewbutton.setAttribute('onclick', 'saveNewCustomer()')
+		divToAppendTo.appendChild(addNewbutton);
+	}
+}
+
+function saveNewCustomer() {
+	var customerData = [];
+	var customerAttributeDiv = document.getElementById('displayAttributes');
+	var table = customerAttributeDiv.children[0];
+	for (var i = 1, row; row = table.rows[i]; i++) {
+		var attributeValue = row.children[1].innerText;
+		var valueValue = row.children[2].innerText;
+		var record = {attribute: attributeValue, value:valueValue};
+		customerData.push(record);
+	}
+
+	var childCustomerData = [];
+	var childCustomerDiv = document.getElementById('displayChildCustomers');
+	var table = childCustomerDiv.children[0];
+	for (var i = 1, row; row = table.rows[i]; i++) {
+		var attributeValue = row.children[1].innerText;
+		var record = {childCustomerName: attributeValue};
+		customerData.push(record);
+	}
+
+	var processQueueGUID = CreateGUID();
+
+	var postSuccessful = postData(
+		{
+			ProcessQueueGUID: processQueueGUID, 
+			PageGUID: "80B1CC99-7C91-4D07-A541-9D69AC4CC304", 
+			ProcessGUID: "D39E768A-D06D-4EB3-80E3-895EDC556A6B",
+			CustomerData: JSON.stringify(customerData),
+			ChildCustomerData: JSON.stringify(childCustomerData)
+		}
+	);
+
+	if(postSuccessful) {
+		// location.reload();
+	}
+	else {
+
 	}
 }
 

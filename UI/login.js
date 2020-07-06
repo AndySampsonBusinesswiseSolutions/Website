@@ -1,5 +1,3 @@
-const uri = 'http://localhost:5000/Website';
-
 function login(event) {
   errorMessage.style.display = 'none';
   event.preventDefault();
@@ -72,28 +70,6 @@ function processResponse(response) {
 
   showLoader(false);
   return false;
-}
-
-async function postData(data) {
-  try {
-    await fetch(uri + '/Validate', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
-    });
-
-    return true;
-  }
-  catch{
-    return false;
-  }
 }
 
 async function getLoginResponse(processQueueGUID) {
