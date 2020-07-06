@@ -4,14 +4,7 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
-        },
-        {
-            "name": "AddNewCustomer.api",
+        {"name": "AddNewCustomer.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -32,8 +25,7 @@
                 "/Views": "${workspaceFolder}/AddNewCustomer.api/Views"
             }
         },
-        {
-            "name": "ArchiveProcessQueue.api",
+        {"name": "ArchiveProcessQueue.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -54,8 +46,7 @@
                 "/Views": "${workspaceFolder}/ArchiveProcessQueue.api/Views"
             }
         },
-        {
-            "name": "CheckPrerequisiteAPI.api",
+        {"name": "CheckPrerequisiteAPI.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -76,8 +67,7 @@
                 "/Views": "${workspaceFolder}/CheckPrerequisiteAPI.api/Views"
             }
         },
-        {
-            "name": "LockUser.api",
+        {"name": "LockUser.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -98,8 +88,7 @@
                 "/Views": "${workspaceFolder}/LockUser.api/Views"
             }
         },
-        {
-            "name": "Routing.api",
+        {"name": "Routing.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -120,8 +109,7 @@
                 "/Views": "${workspaceFolder}/Routing.api/Views"
             }
         },
-        {
-            "name": "StoreLoginAttempt.api",
+        {"name": "StoreLoginAttempt.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -142,8 +130,7 @@
                 "/Views": "${workspaceFolder}/StoreLoginAttempt.api/Views"
             }
         },
-        {
-            "name": "StoreUsageUpload.api",
+        {"name": "StoreUsageUpload.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -164,8 +151,7 @@
                 "/Views": "${workspaceFolder}/StoreUsageUpload.api/Views"
             }
         },
-        {
-            "name": "UpdateCustomerDetail.api",
+        {"name": "UpdateCustomerDetail.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -186,8 +172,7 @@
                 "/Views": "${workspaceFolder}/UpdateCustomerDetail.api/Views"
             }
         },
-        {
-            "name": "ValidateEmailAddress.api",
+        {"name": "ValidateEmailAddress.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -208,8 +193,7 @@
                 "/Views": "${workspaceFolder}/ValidateEmailAddress.api/Views"
             }
         },
-        {
-            "name": "ValidateEmailAddressPasswordMapping.api",
+        {"name": "ValidateEmailAddressPasswordMapping.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -230,8 +214,7 @@
                 "/Views": "${workspaceFolder}/ValidateEmailAddressPasswordMapping.api/Views"
             }
         },
-        {
-            "name": "ValidatePageGUID.api",
+        {"name": "ValidatePageGUID.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -252,8 +235,7 @@
                 "/Views": "${workspaceFolder}/ValidatePageGUID.api/Views"
             }
         },
-        {
-            "name": "ValidatePassword.api",
+        {"name": "ValidatePassword.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -274,8 +256,7 @@
                 "/Views": "${workspaceFolder}/ValidatePassword.api/Views"
             }
         },
-        {
-            "name": "ValidateProcessGUID.api",
+        {"name": "ValidateProcessGUID.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -296,8 +277,7 @@
                 "/Views": "${workspaceFolder}/ValidateProcessGUID.api/Views"
             }
         },
-        {
-            "name": "Website.api",
+        {"name": "Website.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
@@ -340,7 +320,10 @@
                 "ValidateEmailAddressPasswordMapping.api",
                 "LockUser.api",
                 "StoreLoginAttempt.api",
-                "StoreUsageUpload.api"
+                "StoreUsageUpload.api",
+                "AddNewCustomer.api",
+                "UpdateCustomerDetail.api",
+                "MapCustomerToChildCustomer.api",
             ]
         },
         {
@@ -357,7 +340,6 @@
                 "ValidateEmailAddressPasswordMapping.api",
                 "LockUser.api",
                 "StoreLoginAttempt.api",
-                "AddNewCustomer.api",
             ]
         },
         {
@@ -370,7 +352,6 @@
                 "ValidatePageGUID.api",
                 "ValidateProcessGUID.api",
                 "StoreUsageUpload.api",
-                "AddNewCustomer.api",
             ]
         },
         {
@@ -382,6 +363,7 @@
                 "ValidateProcessGUID.api",
                 "AddNewCustomer.api",
                 "UpdateCustomerDetail.api",
+                "MapCustomerToChildCustomer.api",
             ]
         }
     ]

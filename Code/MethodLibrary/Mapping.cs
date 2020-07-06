@@ -62,6 +62,31 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.APIToProcessArchiveDetail_Insert, 
                     createdByUserId, sourceId, APIId, processArchiveDetailId);
             }
+
+            public List<long> CustomerToChildCustomer_GetChildCustomerIdListByCustomerId(long customerId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.CustomerToChildCustomer_GetByCustomerId, 
+                    customerId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ChildCustomerId"))
+                    .ToList();
+            }
+
+            public void CustomerToChildCustomer_DeleteByCustomerIdAndChildCustomerId(long customerId, long childCustomerId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId, 
+                    customerId, childCustomerId);
+            }
+
+            public void CustomerToChildCustomer_Insert(long createdByUserId, long sourceId, long customerId, long childCustomerId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.CustomerToChildCustomer_Insert, 
+                    createdByUserId, sourceId, customerId, childCustomerId);
+            }
         }
     }
 }

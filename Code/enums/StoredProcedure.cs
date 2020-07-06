@@ -43,6 +43,10 @@ namespace enums
                 public string LoginToUser_Insert = "[Mapping].[LoginToUser_Insert]";
                 public string LoginToUser_GetByUserId = "[Mapping].[LoginToUser_GetByUserId]";
                 public string ProcessToProcessArchive_Insert = "[Mapping].[ProcessToProcessArchive_Insert]";
+                public string CustomerToChildCustomer_Insert = "[Mapping].[CustomerToChildCustomer_Insert]";
+                public string CustomerToChildCustomer_GetByChildCustomerId = "[Mapping].[CustomerToChildCustomer_GetByChildCustomerId]";
+                public string CustomerToChildCustomer_GetByCustomerId = "[Mapping].[CustomerToChildCustomer_GetByCustomerId]";
+                public string CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId = "[Mapping].[CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId]";
             }
 
             public class System

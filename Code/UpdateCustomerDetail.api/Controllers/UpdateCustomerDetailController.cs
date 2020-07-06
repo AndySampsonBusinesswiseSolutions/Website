@@ -89,7 +89,7 @@ namespace UpdateCustomerDetail.api.Controllers
                 var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
 
                 //Split Customer Data to an array of attribute/value
-                var customerData = _methods.GetArray(jsonObject["CustomerData"].ToString());
+                var customerData = _methods.GetArray(jsonObject[_systemAPIRequiredDataKeyEnums.CustomerData].ToString());
 
                 var customerAttributeId = 0L;
                 for(var dataCount = 0; dataCount < customerData.Count(); dataCount++)

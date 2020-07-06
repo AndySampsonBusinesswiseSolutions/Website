@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>acf47051-8a7c-4c19-8243-823677fee367</ID>
-    <DateCreated>2020-07-06T18:10:18.115058+01:00</DateCreated>
+    <ID>44bec00a-2610-4fb6-a24e-87301460d9ab</ID>
+    <DateCreated>2020-07-06T19:33:15.7085915+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>KpwUhIf32tybhN6hcbAMcA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe699nuzlZNPsSMNzFLHn7kRA=</Password>
+    <Login>DH65gQTbSCOldD2KoP35QQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe66h/KYNfGbTJzqwAIEJD/14=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1643,6 +1643,41 @@
     <ID>2fab09ff-3d66-4d7e-afb1-e803b99e1fcf</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0078 - Create Stored Procedure - [Customer].[Customer_GetByCustomerGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c70940fc-b0c5-486c-9212-5e2fac9472b8</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0079 - Create Stored Procedure - [Customer].[CustomerDetail_DeleteByCustomerDetailId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0a0cf799-9622-47c9-aab6-8d0d0d0e09a4</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0080 - Create Stored Procedure - [Customer].[CustomerDetail_GetByCustomerIdAndCustomerAttributeId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5927adcf-361a-493c-8cf0-5d1d00a3a88a</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0081 - Create Stored Procedure - [Mapping].[CustomerToChildCustomer_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6bfa6840-b3a6-4b9b-bf5d-38ccd3a0814e</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0082 - Create Stored Procedure - [Mapping].[CustomerToChildCustomer_GetByCustomerId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6a74aafa-a589-4ee4-ba63-ccc0a9fc3fc2</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0083 - Create Stored Procedure - [Mapping].[CustomerToChildCustomer_GetByCustomerId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

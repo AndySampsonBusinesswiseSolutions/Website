@@ -41,6 +41,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public long CustomerDetail_GetCustomerIdByCustomerAttributeIdAndCustomerDetailDescription(long customerAttributeId, string customerDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerAttributeIdAndCustomerDetailDescription, 
+                    customerAttributeId, customerDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("CustomerId"))
+                    .FirstOrDefault();
+            }
+
             public DataRow CustomerDetail_GetByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
