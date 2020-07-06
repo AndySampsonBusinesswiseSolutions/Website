@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>fab8ca1b-dd54-4b92-8abc-3d1c27a07032</ID>
-    <DateCreated>2020-07-06T17:12:47.9611075+01:00</DateCreated>
+    <ID>acf47051-8a7c-4c19-8243-823677fee367</ID>
+    <DateCreated>2020-07-06T18:10:18.115058+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>CAvlzoHRNU01Lbs0p2Hvsw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6/BD4tj3FMoeH2WstxwIKM8=</Password>
+    <Login>KpwUhIf32tybhN6hcbAMcA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe699nuzlZNPsSMNzFLHn7kRA=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1640,6 +1640,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>2fab09ff-3d66-4d7e-afb1-e803b99e1fcf</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0078 - Create Stored Procedure - [Customer].[Customer_GetByCustomerGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>8dfb1623-927d-487c-b021-7209f985cf06</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0001 - Create Login - Routing.api.sql</FullName>
@@ -1783,6 +1790,13 @@
     <ID>3336b58c-d4c6-4788-a557-3d7f8141d99e</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0020 - Create Login - AddNewCustomer.api.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a065bb36-518e-483d-a65b-e53e25ec3d94</ID>
+    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\010 - Login\0021 - Create Login - UpdateCustomerDetail.api.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2210,6 +2224,13 @@
     <ID>f151fbce-ea64-41e8-a099-2ba0d12dfc41</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0061 - Data - ValidatePageGUID.API add to Add New Customer process.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>40e0a7bd-c738-47db-bc3e-c1141b96395f</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0062 - Data - UpdateCustomerDetail.API API.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

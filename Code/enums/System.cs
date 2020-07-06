@@ -34,6 +34,7 @@ namespace enums
                     public string LockUserAPI = "0C1BAFAA-586D-48BB-8D0B-B0B56BE0CCD2";
                     public string StoreUsageUploadAPI = "94DD0DCB-DDC3-45A9-9C3D-D83922CF3110";
                     public string AddNewCustomerAPI = "1B2E2BA3-D538-47E0-9044-BBBFC6BF3892";
+                    public string UpdateCustomerDetailAPI = "C151AD1B-C3AB-448F-8C8D-572328A8D1C7";
                 }
 
                 public class Name
@@ -51,6 +52,7 @@ namespace enums
                     public string LockUserAPI = "LockUser.api";
                     public string StoreUsageUploadAPI = "StoreUsageUpload.api";
                     public string AddNewCustomerAPI = "AddNewCustomer.api";
+                    public string UpdateCustomerDetailAPI = "UpdateCustomerDetail.api";
                 }
 
                 //TODO: Move to config file in each API
@@ -69,6 +71,7 @@ namespace enums
                     public string StoreLoginAttemptAPI = "mLdas-Y*x2rbnJ2e";
                     public string StoreUsageUploadAPI = "Mt35GJs9un!Jq7pg";
                     public string AddNewCustomerAPI = "$hRXtrCfb$$W3XZ+";
+                    public string UpdateCustomerDetailAPI = "7QJyVNc4+K74F67V";
                 }
 
                 public class RequiredDataKey

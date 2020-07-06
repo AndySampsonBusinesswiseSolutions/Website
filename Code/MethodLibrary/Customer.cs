@@ -8,6 +8,17 @@ namespace MethodLibrary
     {
         public class Customer
         {
+            public long Customer_GetCustomerIdByCustomerGUID(string customerGUID)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Customer_GetByCustomerGUID, 
+                    customerGUID);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("CustomerId"))
+                    .FirstOrDefault();
+            }
+
             public long CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(string customerAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -28,6 +39,22 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("CustomerDetailId"))
                     .FirstOrDefault();
+            }
+
+            public DataRow CustomerDetail_GetByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerIdAndCustomerAttributeId, 
+                    customerId, customerAttributeId);
+
+                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+            }
+
+            public void CustomerDetail_DeleteByCustomerDetailId(long customerDetailId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureCustomerEnums.CustomerDetail_DeleteByCustomerDetailId, 
+                    customerDetailId);
             }
 
             public void Customer_Insert(long createdByUserId, long sourceId, string customerGUID)

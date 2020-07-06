@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUpload.api", "Sto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddNewCustomer.api", "AddNewCustomer.api\AddNewCustomer.api.csproj", "{7D605FC9-40FE-4909-8006-F0536EDCB717}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateCustomerDetail.api", "UpdateCustomerDetail.api\UpdateCustomerDetail.api.csproj", "{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -252,5 +254,17 @@ Global
 		{7D605FC9-40FE-4909-8006-F0536EDCB717}.Release|x64.Build.0 = Release|Any CPU
 		{7D605FC9-40FE-4909-8006-F0536EDCB717}.Release|x86.ActiveCfg = Release|Any CPU
 		{7D605FC9-40FE-4909-8006-F0536EDCB717}.Release|x86.Build.0 = Release|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Debug|x64.Build.0 = Debug|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Debug|x86.Build.0 = Debug|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Release|x64.ActiveCfg = Release|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Release|x64.Build.0 = Release|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Release|x86.ActiveCfg = Release|Any CPU
+		{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
