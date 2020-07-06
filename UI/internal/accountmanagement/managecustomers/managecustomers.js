@@ -208,10 +208,30 @@ function saveNewCustomer() {
 	);
 
 	if(postSuccessful) {
-		// location.reload();
+        getProcessResponse(processQueueGUID)
+        .then(response => {
+          processResponse(response);
+        })
 	}
 	else {
+        processResponse(null);
+	}
+}
 
+function processResponse(response) {
+	if(response) {
+	  if(response.message == "OK") {
+		location.reload();
+	  }
+	  else if(response.status == 401) {
+		
+	  }
+	  else {
+		
+	  }
+	}
+	else {
+	  
 	}
 }
 

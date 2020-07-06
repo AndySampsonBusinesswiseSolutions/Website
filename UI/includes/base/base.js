@@ -477,6 +477,28 @@ async function postData(data) {
   }
 }
 
+async function getProcessResponse(processQueueGUID) {
+  try {
+    const response = await fetch(uri + '/GetProcessResponse', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(processQueueGUID)
+    });
+  
+    return response.json();
+  }
+  catch {
+    return null;
+  }
+}
+
 function alertMessage() {
     alert('Something needs to happen here when you click this thing......what is it??');
 }

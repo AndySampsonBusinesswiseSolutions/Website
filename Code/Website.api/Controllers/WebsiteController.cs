@@ -70,8 +70,8 @@ namespace Website.api.Controllers
         }
 
         [HttpPost]
-        [Route("Website/GetLoginResponse")]
-        public IActionResult GetLoginResponse([FromBody] string processQueueGuid)
+        [Route("Website/GetProcessResponse")]
+        public IActionResult GetProcessResponse([FromBody] string processQueueGuid)
         {
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();

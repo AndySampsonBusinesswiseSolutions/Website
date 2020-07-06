@@ -20,7 +20,7 @@ function login(event) {
       );
 
       if(postSuccessful) {
-        getLoginResponse(processQueueGUID)
+        getProcessResponse(processQueueGUID)
         .then(response => {
           processResponse(response);
         })
@@ -70,26 +70,4 @@ function processResponse(response) {
 
   showLoader(false);
   return false;
-}
-
-async function getLoginResponse(processQueueGUID) {
-  try {
-    const response = await fetch(uri + '/GetLoginResponse', {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(processQueueGUID)
-    });
-  
-    return response.json();
-  }
-  catch {
-    return null;
-  }
 }
