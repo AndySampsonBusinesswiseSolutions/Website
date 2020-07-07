@@ -6,20 +6,19 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[CustomerToChildCustomer_GetByCustomerId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[CustomerToChildCustomer_GetList]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[CustomerToChildCustomer_GetByCustomerId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[CustomerToChildCustomer_GetList] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-06
--- Description:	Get CustomerToChildCustomer info from [Mapping].[CustomerToChildCustomer] table by Customer Id
+-- Description:	Get CustomerToChildCustomer info from [Mapping].[CustomerToChildCustomer] table
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[CustomerToChildCustomer_GetByCustomerId]
-    @CustomerId BIGINT,
+ALTER PROCEDURE [Mapping].[CustomerToChildCustomer_GetList]
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -46,7 +45,6 @@ BEGIN
     FROM 
         [Mapping].[CustomerToChildCustomer]
     WHERE 
-        CustomerId = @CustomerId
-        AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
+        @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

@@ -386,7 +386,7 @@ function displayAttributes(attributes, table, type) {
 	var attributeTableDatacell = document.createElement('td');
 	attributeTableDatacell.id = 'attribute' + i;
 	attributeTableDatacell.setAttribute('style', 'border: solid black 1px;');
-	attributeTableDatacell.innerHTML = '<select style="width: 100%;"><option value=""></option><option value="Attribute 1">Attribute 1</option><option value="Attribute 2">Attribute 2</option></select>'
+	attributeTableDatacell.innerHTML = '<select style="width: 100%;"></select>'
 	tableRow.appendChild(attributeTableDatacell);
 
 	var inputTableDatacell = document.createElement('td');
@@ -534,29 +534,53 @@ function getCustomers() {
 var branchCount = 0;
 var subBranchCount = 0;
 
-function createTree(baseData, divId, checkboxFunction) {
+async function getTree(data) {
+	try {
+	const response = await fetch(uri + '/BuildCustomerTree', {
+		method: 'POST',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(data)
+	  });
+  
+	  return response.json();
+	}
+	catch{
+	  return null;
+	}
+  }
+
+async function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
-    tree.setAttribute('class', 'scrolling-wrapper');
+    // tree.setAttribute('class', 'scrolling-wrapper');
     
-	var headerDiv = createHeaderDiv("siteHeader", 'Customers', true);
-	var ul = createBranchUl("siteSelector", false, true);
+	// var ul = createBranchUl("siteSelector", false, true);
 	  
-    tree.appendChild(ul);
+    // tree.appendChild(ul);
 
-    branchCount = 0;
-    subBranchCount = 0; 
+    // branchCount = 0;
+    // subBranchCount = 0; 
 
-    buildTree(baseData, ul, checkboxFunction);
+	// buildTree(baseData, ul, checkboxFunction);
+	var response = await getTree({CustomerGUID:CreateGUID()});
+	tree.innerHTML = response.message;
 
     var div = document.getElementById(divId);
     clearElement(div);
 
+	var headerDiv = createHeaderDiv("siteHeader", 'Customers', true);
     div.appendChild(headerDiv);
 	div.appendChild(tree);
 	
-	document.getElementById('Customer4checkbox').checked = true;
-	createCardButton(document.getElementById('Customer4checkbox'));
-	openTab(document.getElementById('Customer4button'), 'Customer4button', '4');
+	document.getElementById('Customer0checkbox').checked = true;
+	createCardButton(document.getElementById('Customer0checkbox'));
+	openTab(document.getElementById('Customer0button'), 'Customer0button', '0');
 
 	addExpanderOnClickEvents();
 	setOpenExpanders();
@@ -593,7 +617,7 @@ function buildChildCustomer(childCustomers, baseElement, checkboxFunction, linke
             hasChildren = childCustomer.ChildCustomers.length > 0;
         }
 
-        appendListItemChildren(li, 'ChildCustomer'.concat(branchCount), checkboxFunction, 'ChildCustomer', childCustomer.CustomerName, ul, linkedSite, '', hasChildren);
+        appendListItemChildren(li, 'ChildCustomer'.concat(branchCount), checkboxFunction, 'ChildCustomer', childCustomer["Customer Name"], ul, linkedSite, '', hasChildren);
 
         baseElement.appendChild(li);
         branchCount++;

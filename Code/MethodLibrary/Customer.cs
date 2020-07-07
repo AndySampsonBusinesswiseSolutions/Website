@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,16 @@ namespace MethodLibrary
     {
         public class Customer
         {
+            public List<long> Customer_GetCustomerIdList()
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Customer_GetList);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("CustomerId"))
+                    .ToList();
+            }
+
             public long Customer_GetCustomerIdByCustomerGUID(string customerGUID)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -59,6 +70,17 @@ namespace MethodLibrary
                     customerId, customerAttributeId);
 
                 return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+            }
+
+            public string CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerIdAndCustomerAttributeId, 
+                    customerId, customerAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("CustomerDetailDescription"))
+                    .FirstOrDefault();
             }
 
             public void CustomerDetail_DeleteByCustomerDetailId(long customerDetailId)

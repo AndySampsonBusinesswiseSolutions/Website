@@ -15,11 +15,12 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-06
--- Description:	Get CustomerToChildCustomer info from [Mapping].[CustomerToChildCustomer_GetByChildCustomerId] table by Child Customer Id
+-- Description:	Get CustomerToChildCustomer info from [Mapping].[CustomerToChildCustomer] table by Child Customer Id
 -- =============================================
 
 ALTER PROCEDURE [Mapping].[CustomerToChildCustomer_GetByChildCustomerId]
-    @ChildCustomerId BIGINT
+    @ChildCustomerId BIGINT,
+    @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
@@ -30,6 +31,8 @@ BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
+
+    SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
         CustomerToChildCustomerId,
@@ -44,5 +47,6 @@ BEGIN
         [Mapping].[CustomerToChildCustomer]
     WHERE 
         ChildCustomerId = @ChildCustomerId
+        AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

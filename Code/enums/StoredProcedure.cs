@@ -27,6 +27,7 @@ namespace enums
                 public string Customer_Insert = "[Customer].[Customer_Insert]";
                 public string CustomerDetail_Insert = "[Customer].[CustomerDetail_Insert]";
                 public string Customer_GetByCustomerGUID = "[Customer].[Customer_GetByCustomerGUID]";
+                public string Customer_GetList = "[Customer].[Customer_GetList]";
             }
 
             public class Information
@@ -47,6 +48,7 @@ namespace enums
                 public string CustomerToChildCustomer_GetByChildCustomerId = "[Mapping].[CustomerToChildCustomer_GetByChildCustomerId]";
                 public string CustomerToChildCustomer_GetByCustomerId = "[Mapping].[CustomerToChildCustomer_GetByCustomerId]";
                 public string CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId = "[Mapping].[CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId]";
+                public string CustomerToChildCustomer_GetList = "[Mapping].[CustomerToChildCustomer_GetList]";
             }
 
             public class System

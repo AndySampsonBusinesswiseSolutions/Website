@@ -63,6 +63,26 @@ namespace MethodLibrary
                     createdByUserId, sourceId, APIId, processArchiveDetailId);
             }
 
+            public Dictionary<long, List<long>> CustomerToChildCustomer_GetCustomerIdToChildCustomerIdDictionary()
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.CustomerToChildCustomer_GetList);
+                
+                var dictionary = new Dictionary<long, List<long>>();
+
+                foreach(DataRow r in dataTable.Rows)
+                {
+                    if(!dictionary.ContainsKey(r.Field<long>("CustomerId")))
+                    {
+                        dictionary.Add(r.Field<long>("CustomerId"), new List<long>());
+                    }
+
+                    dictionary[r.Field<long>("CustomerId")].Add(r.Field<long>("ChildCustomerId"));
+                }
+
+                return dictionary;
+            }
+
             public List<long> CustomerToChildCustomer_GetChildCustomerIdListByCustomerId(long customerId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
