@@ -69,12 +69,12 @@ namespace enums
                     public string ValidateEmailAddressAPI = @"}h8FfD2r[Rd~PPNR";
                     public string ValidatePasswordAPI = @"b7.Q!!X3Hp{\mJ}j";
                     public string ValidateEmailAddressPasswordMappingAPI = @"GQzD2!aZNvffr*zC";
-                    public string LockUserAPI = "JM7!?q#g#uTyM^!v";
-                    public string StoreLoginAttemptAPI = "mLdas-Y*x2rbnJ2e";
-                    public string StoreUsageUploadAPI = "Mt35GJs9un!Jq7pg";
-                    public string AddNewCustomerAPI = "$hRXtrCfb$$W3XZ+";
-                    public string UpdateCustomerDetailAPI = "7QJyVNc4+K74F67V";
-                    public string MapCustomerToChildCustomerAPI = "=t@wGL*kf4$DjdJ6";
+                    public string LockUserAPI = @"JM7!?q#g#uTyM^!v";
+                    public string StoreLoginAttemptAPI = @"mLdas-Y*x2rbnJ2e";
+                    public string StoreUsageUploadAPI = @"Mt35GJs9un!Jq7pg";
+                    public string AddNewCustomerAPI = @"$hRXtrCfb$$W3XZ+";
+                    public string UpdateCustomerDetailAPI = @"7QJyVNc4+K74F67V";
+                    public string MapCustomerToChildCustomerAPI = @"6dFB@tk?7L$UrQ9p";
                 }
 
                 public class RequiredDataKey
