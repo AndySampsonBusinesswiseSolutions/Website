@@ -380,6 +380,8 @@
             "configurations": [
                 "Website.api",
                 "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
                 "ValidatePageGUID.api",
                 "ValidateProcessGUID.api",
                 "AddNewCustomer.api",
