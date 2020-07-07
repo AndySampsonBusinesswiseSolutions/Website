@@ -1,6 +1,12 @@
 USE [master]
 GO
 
+IF EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'Routing.api')
+    BEGIN
+        DROP LOGIN [Routing.api]
+    END
+GO
+
 IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'Routing.api')
     BEGIN
         CREATE LOGIN [Routing.api] WITH PASSWORD=N'E{*Jj5&nLfC}@Q$:', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF

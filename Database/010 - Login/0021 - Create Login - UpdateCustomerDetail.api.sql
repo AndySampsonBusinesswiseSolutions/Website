@@ -1,6 +1,12 @@
 USE [master]
 GO
 
+IF EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'UpdateCustomerDetail.api')
+    BEGIN
+        DROP LOGIN [UpdateCustomerDetail.api]
+    END
+GO
+
 IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'UpdateCustomerDetail.api')
     BEGIN
         CREATE LOGIN [UpdateCustomerDetail.api] WITH PASSWORD=N'7QJyVNc4+K74F67V', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF

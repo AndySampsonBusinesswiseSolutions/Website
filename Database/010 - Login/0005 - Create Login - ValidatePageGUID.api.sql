@@ -1,6 +1,12 @@
 USE [master]
 GO
 
+IF EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'ValidatePageGUID.api')
+    BEGIN
+        DROP LOGIN [ValidatePageGUID.api]
+    END
+GO
+
 IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'ValidatePageGUID.api')
     BEGIN
         CREATE LOGIN [ValidatePageGUID.api] WITH PASSWORD=N'n:Q>V&6P9KtG`(5k', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF

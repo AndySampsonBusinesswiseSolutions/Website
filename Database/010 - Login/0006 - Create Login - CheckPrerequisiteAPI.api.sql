@@ -1,6 +1,12 @@
 USE [master]
 GO
 
+IF EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CheckPrerequisiteAPI.api')
+    BEGIN
+        DROP LOGIN [CheckPrerequisiteAPI.api]
+    END
+GO
+
 IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CheckPrerequisiteAPI.api')
     BEGIN
         CREATE LOGIN [CheckPrerequisiteAPI.api] WITH PASSWORD=N'w8chCkRAW]\N[7Hh', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF

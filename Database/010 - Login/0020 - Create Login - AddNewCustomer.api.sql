@@ -1,6 +1,12 @@
 USE [master]
 GO
 
+IF EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'AddNewCustomer.api')
+    BEGIN
+        DROP LOGIN [AddNewCustomer.api]
+    END
+GO
+
 IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'AddNewCustomer.api')
     BEGIN
         CREATE LOGIN [AddNewCustomer.api] WITH PASSWORD=N'$hRXtrCfb$$W3XZ+', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF

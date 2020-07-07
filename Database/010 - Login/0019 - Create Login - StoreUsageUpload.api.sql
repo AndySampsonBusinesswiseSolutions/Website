@@ -1,6 +1,12 @@
 USE [master]
 GO
 
+IF EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'StoreUsageUpload.api')
+    BEGIN
+        DROP LOGIN [StoreUsageUpload.api]
+    END
+GO
+
 IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'StoreUsageUpload.api')
     BEGIN
         CREATE LOGIN [StoreUsageUpload.api] WITH PASSWORD=N'Mt35GJs9un!Jq7pg', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
