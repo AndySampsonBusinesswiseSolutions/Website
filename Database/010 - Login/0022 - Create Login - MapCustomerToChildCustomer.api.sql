@@ -66,5 +66,8 @@ GO
 GRANT EXECUTE ON OBJECT::[Mapping].[CustomerToChildCustomer_GetByCustomerId] TO [MapCustomerToChildCustomer.api];  
 GO
 
-GRANT EXECUTE ON OBJECT::[Customer].[CustomerAttribute_GetByCustomerAttributeDescription] TO [UpdateCustomerDetail.api];  
+GRANT EXECUTE ON OBJECT::[Customer].[CustomerAttribute_GetByCustomerAttributeDescription] TO [MapCustomerToChildCustomer.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Customer].[Customer_GetByCustomerGUID] TO [MapCustomerToChildCustomer.api];  
 GO

@@ -98,6 +98,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
 
                         if(processQueueDataRow != null)
                         {
+                            processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, APIId);
+                            
                             //If EffectiveToDate is '9999-12-31' then it is still processing
                             //otherwise, it has finished so add to completed if successful or errored if not
                             var effectiveToDate = Convert.ToDateTime(processQueueDataRow["EffectiveToDateTime"]);

@@ -121,14 +121,13 @@ function buildCardView(entity, divToAppendTo){
 	table.appendChild(createTableHeader('width: 50%', ''));
 
 	var cardViewAttributes = [
-		"Address Line 1",
-		"Address Line 2",
-		"Address Line 3",
-		"Address Line 4",
-		"Postcode",
+		"Address Lines",
+        "Address Town",
+        "Address County",
+		"Address PostCode",
 		"Contact Name",
 		"Contact Telephone Number",
-		"Email"
+		"Contact Email Address"
 	];
 	var cardViewAttributesLength = cardViewAttributes.length;
 	var entityAttributes = entity.Attributes;
@@ -164,7 +163,7 @@ function buildCardView(entity, divToAppendTo){
 	editChildCustomersButton.setAttribute('style', 'margin-top: 5px; margin-right: 5px; margin-bottom: 5px;')
 	divToAppendTo.appendChild(editChildCustomersButton);
 	
-	var name = getAttribute(entity.Attributes, 'CustomerName');
+	var name = getAttribute(entity.Attributes, 'Customer Name');
 	if(name && name.startsWith('Add New')) {
 		var addNewbutton = document.createElement('button');
 		addNewbutton.id = 'addNewButton';
@@ -570,7 +569,7 @@ function buildTree(baseData, baseElement, checkboxFunction) {
 		var isChildCustomer = getAttribute(base.Attributes, 'IsChildCustomer');
 
 		if(!isChildCustomer) {
-			var baseName = getAttribute(base.Attributes, 'CustomerName');
+			var baseName = getAttribute(base.Attributes, 'Customer Name');
 			var li = document.createElement('li');
 			var ul = createUL();
 	

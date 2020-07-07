@@ -67,8 +67,16 @@ namespace MethodLibrary
             return char.ToUpper(parameterName[0]) + parameterName.Substring(1);
         }
 
-        public string[] GetArray(string jsonList)
+        public string[] GetArray(string jsonList, params object[] additionalCharacters)
         {
+            if(additionalCharacters != null)
+            {
+                foreach(var additionalCharacter in additionalCharacters)
+                {
+                    jsonList = jsonList.Replace(additionalCharacter.ToString(), "");
+                }
+            }
+
             return jsonList.Replace("\"","")
                 .Replace("[","")
                 .Replace("]","")

@@ -88,7 +88,7 @@ namespace AddNewCustomer.api.Controllers
                 var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
 
                 //Split Customer Data to an array of attribute/value
-                var customerData = _methods.GetArray(jsonObject["CustomerData"].ToString());
+                var customerData = _methods.GetArray(jsonObject["CustomerData"].ToString(), "{", "}");
 
                 //Loop through array and find Customer Name attribute
                 var customerName = "";

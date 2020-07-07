@@ -89,7 +89,7 @@ namespace UpdateCustomerDetail.api.Controllers
                 var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
 
                 //Split Customer Data to an array of attribute/value
-                var customerData = _methods.GetArray(jsonObject[_systemAPIRequiredDataKeyEnums.CustomerData].ToString());
+                var customerData = _methods.GetArray(jsonObject[_systemAPIRequiredDataKeyEnums.CustomerData].ToString(), "{", "}");
 
                 var customerAttributeId = 0L;
                 for(var dataCount = 0; dataCount < customerData.Count(); dataCount++)
@@ -100,7 +100,7 @@ namespace UpdateCustomerDetail.api.Controllers
 
                     if(type == "attribute")
                     {
-                        customerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(record.Split(':')[1]);
+                        customerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(value);
                     }
                     else
                     {

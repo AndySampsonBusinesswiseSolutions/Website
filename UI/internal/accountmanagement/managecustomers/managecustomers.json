@@ -4,14 +4,13 @@ var managecustomers = [
         "Attributes" : 
         [
             {"Customer Name" : "DFS Trading"},
-            {"Address Line 1" : "32"},
-            {"Address Line 2" : "The Havens"},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : "Ipswich"},
-            {"Postcode" : "IP3 9SJ"},
+            {"Address Lines" : "32, The Havens"},
+            {"Address Town" : "Ipswich"},
+            {"Address County" : "Suffolk"},
+            {"Address PostCode" : "IP3 9SJ"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "01473 277556"},
-            {"Email" : "contact.us@havenpower.com"}
+            {"Contact Email Address" : "contact.us@havenpower.com"}
         ],
         "ChildCustomers" :[
             {"Customer Name" : "DFS Trading - North East"},
@@ -23,14 +22,13 @@ var managecustomers = [
         "Attributes" : 
         [
             {"Customer Name" : "Businesswise Solutions"},
-            {"Address Line 1" : "3rd floor"},
-            {"Address Line 2" : "Elder House"},
-            {"Address Line 3" : "586-592 Elder Gate"},
-            {"Address Line 4" : "Milton Keynes"},
-            {"Postcode" : "MK9 1LR"},
+            {"Address Lines" : "3rd floor, Elder House, 586-592 Elder Gate"},
+            {"Address Town" : "Milton Keynes"},
+            {"Address County" : "Buckinghamshire"},
+            {"Address PostCode" : "MK9 1LR"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"}
+            {"Contact Email Address" : "Sales@HudsonEnergy.co.uk"}
         ]
         ,
         "ChildCustomers" :[
@@ -41,14 +39,13 @@ var managecustomers = [
         "Attributes" : 
         [
             {"Customer Name" : "DFS Trading - North East"},
-            {"Address Line 1" : "3rd floor"},
-            {"Address Line 2" : "Elder House"},
-            {"Address Line 3" : "586-592 Elder Gate"},
-            {"Address Line 4" : "Milton Keynes"},
-            {"Postcode" : "MK9 1LR"},
+            {"Address Lines" : "3rd floor, Elder House, 586-592 Elder Gate"},
+            {"Address Town" : "Milton Keynes"},
+            {"Address County" : "Buckinghamshire"},
+            {"Address PostCode" : "MK9 1LR"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"},
+            {"Contact Email Address" : "Sales@HudsonEnergy.co.uk"},
             {"IsChildCustomer" : true}
         ]
         ,
@@ -60,14 +57,13 @@ var managecustomers = [
         "Attributes" : 
         [
             {"Customer Name" : "DFS Trading - North West"},
-            {"Address Line 1" : "3rd floor"},
-            {"Address Line 2" : "Elder House"},
-            {"Address Line 3" : "586-592 Elder Gate"},
-            {"Address Line 4" : "Milton Keynes"},
-            {"Postcode" : "MK9 1LR"},
+            {"Address Lines" : "3rd floor, Elder House, 586-592 Elder Gate"},
+            {"Address Town" : "Milton Keynes"},
+            {"Address County" : "Buckinghamshire"},
+            {"Address PostCode" : "MK9 1LR"},
             {"Contact Name" : "David Ford"},
             {"Contact Telephone Number" : "0330 088 2679"},
-            {"Email" : "Sales@HudsonEnergy.co.uk"},
+            {"Contact Email Address" : "Sales@HudsonEnergy.co.uk"},
             {"IsChildCustomer" : true}
         ]
         ,
@@ -79,14 +75,13 @@ var managecustomers = [
         "Attributes" : 
         [
             {"Customer Name" : "Add New Customer"},
-            {"Address Line 1" : ""},
-            {"Address Line 2" : ""},
-            {"Address Line 3" : ""},
-            {"Address Line 4" : ""},
-            {"Postcode" : ""},
+            {"Address Lines" : ""},
+            {"Address Town" : ""},
+            {"Address County" : ""},
+            {"Address PostCode" : ""},
             {"Contact Name" : ""},
             {"Contact Telephone Number" : ""},
-            {"Email" : ""}
+            {"Contact Email Address" : ""}
         ]
         ,
         "ChildCustomers" :[

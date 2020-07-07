@@ -69,7 +69,7 @@ namespace ArchiveProcessQueue.api.Controllers
 
                 //Call CheckPrerequisiteAPI API
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();           
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get whether there is an error in the API records
                 var hasError = _systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
@@ -84,7 +84,7 @@ namespace ArchiveProcessQueue.api.Controllers
                     hasError);
 
                 var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
-                var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
+                var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.APIResponse);
 
                 //Write record into ProcessToProcessArchive mapping table
                 var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
@@ -124,6 +124,7 @@ namespace ArchiveProcessQueue.api.Controllers
                 }
 
                 //Write response into ProcessArchiveDetail
+                processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
                 _systemMethods.ProcessArchiveDetail_Insert(createdByUserId,
                     sourceId,
                     processArchiveId,

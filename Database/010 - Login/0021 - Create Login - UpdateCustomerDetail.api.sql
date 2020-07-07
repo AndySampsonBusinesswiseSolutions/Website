@@ -65,3 +65,9 @@ GO
 
 GRANT EXECUTE ON OBJECT::[Customer].[CustomerDetail_Insert] TO [UpdateCustomerDetail.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Customer].[Customer_GetByCustomerGUID] TO [UpdateCustomerDetail.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Customer].[CustomerDetail_GetByCustomerIdAndCustomerAttributeId] TO [UpdateCustomerDetail.api];  
+GO

@@ -120,6 +120,7 @@ namespace enums
                 public class Attribute
                 {
                     public string Response = "Response";
+                    public string APIResponse = "API Response";
                 }
             }
 

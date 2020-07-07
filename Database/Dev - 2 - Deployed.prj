@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>4e5498bc-437d-4020-8707-8d156f8b3ab6</ID>
-    <DateCreated>2020-07-06T20:47:44.3351165+01:00</DateCreated>
+    <ID>f8fac370-8fb6-4f8f-b903-337ed58c07a5</ID>
+    <DateCreated>2020-07-07T09:23:28.2415526+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>4MNIRaeiHgnOcCD305JTtA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe68c2dd+0FY1XnetFatHuGqc=</Password>
+    <Login>gUKlcjS3VnhsJzNlEITfAw==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6/5pD0l3cmhVNUOP0joxs2c=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -2287,6 +2287,13 @@
     <ID>552485d8-3eee-4b62-bf35-75394fe05969</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0063 - Data - MapCustomerToChildCustomer.API API.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1b1b1dc1-e162-458f-bd2b-f931332d246b</ID>
+    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\999 - Data\0064 - Data - API Response Process Archive Attribute.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

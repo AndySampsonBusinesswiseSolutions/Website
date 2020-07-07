@@ -95,7 +95,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                 var customerChildList = _mappingMethods.CustomerToChildCustomer_GetChildCustomerIdListByCustomerId(customerId);
 
                 //Get New Customer Child Mapping
-                var customerChildData = _methods.GetArray(jsonObject[_systemAPIRequiredDataKeyEnums.ChildCustomerData].ToString());
+                var customerChildData = _methods.GetArray(jsonObject[_systemAPIRequiredDataKeyEnums.ChildCustomerData].ToString(), "{", "}");
 
                 //Get Customer Name attribute Id
                 var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
