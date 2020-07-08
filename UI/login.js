@@ -37,7 +37,7 @@ function login(event) {
   }
 }
 
-function showLoader(show) {
+function showOverlay(show) {
   var emailAddress = document.getElementById('userName').value;
   var password = document.getElementById('password').value;
 
@@ -68,6 +68,6 @@ function processResponse(response) {
     errorMessage.innerText = 'A system error occurred. Please contact System@BusinessWiseSolutions.co.uk quoting reference ERR7426424';
   }
 
-  showLoader(false);
+  showOverlay(false);
   return false;
 }

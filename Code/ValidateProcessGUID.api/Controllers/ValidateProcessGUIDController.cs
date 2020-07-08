@@ -5,7 +5,6 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Net.Http;
 
 namespace ValidateProcessGUID.api.Controllers
 {
@@ -23,12 +22,13 @@ namespace ValidateProcessGUID.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.Information.SourceAttribute _informationSourceAttributeEnums = new Enums.Information.SourceAttribute();
+        private readonly Int64 APIId;
 
         public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateProcessGUIDAPI, _systemAPIPasswordEnums.ValidateProcessGUIDAPI);
+            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,6 @@ namespace ValidateProcessGUID.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
@@ -59,8 +58,6 @@ namespace ValidateProcessGUID.api.Controllers
                 var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
                 //Insert into ProcessQueue
-                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
-
                 _systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,

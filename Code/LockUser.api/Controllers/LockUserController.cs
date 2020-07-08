@@ -6,7 +6,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Net.Http;
 
 namespace LockUser.api.Controllers
 {
@@ -27,12 +26,13 @@ namespace LockUser.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.Administration.User.Attribute _administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
-        private readonly Enums.Information.SourceAttribute _informationSourceAttributeEnums = new Enums.Information.SourceAttribute();
+        private readonly Int64 APIId;
 
         public LockUserController(ILogger<LockUserController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.LockUserAPI, _systemAPIPasswordEnums.LockUserAPI);
+            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 
         [HttpPost]
@@ -40,7 +40,6 @@ namespace LockUser.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
@@ -56,7 +55,6 @@ namespace LockUser.api.Controllers
             //Get base variables
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());

@@ -24,7 +24,7 @@
 						<label for="password"><b>Password</b></label>
 						<input type="password" placeholder="Enter Password" id="password" required>
 							
-						<button type="submit" onclick="showLoader(true); ">Login</button>
+						<button type="submit" onclick="showOverlay(true); ">Login</button>
 						<span class="psw"><a href="/Internal/ForgottenPassword/">Forgot password?</a></span>
 						<div id="errorMessage" style="display: none; color: red;"></div>
 					</div>

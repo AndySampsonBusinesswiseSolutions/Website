@@ -7,7 +7,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
-using System.Net.Http;
 
 namespace CheckPrerequisiteAPI.api.Controllers
 {
@@ -24,7 +23,6 @@ namespace CheckPrerequisiteAPI.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.API.Attribute _systemAPIAttributes = new Enums.System.API.Attribute();
-        private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
 

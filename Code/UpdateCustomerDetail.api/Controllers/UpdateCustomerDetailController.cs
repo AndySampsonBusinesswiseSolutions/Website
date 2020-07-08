@@ -24,11 +24,13 @@ namespace UpdateCustomerDetail.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private readonly Int64 APIId;
 
         public UpdateCustomerDetailController(ILogger<UpdateCustomerDetailController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.UpdateCustomerDetailAPI, _systemAPIPasswordEnums.UpdateCustomerDetailAPI);
+            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UpdateCustomerDetailAPI);
         }
 
         [HttpPost]
@@ -36,7 +38,6 @@ namespace UpdateCustomerDetail.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UpdateCustomerDetailAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
@@ -52,7 +53,6 @@ namespace UpdateCustomerDetail.api.Controllers
             //Get base variables
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UpdateCustomerDetailAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());

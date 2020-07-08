@@ -58,7 +58,7 @@ namespace enums
                 }
 
                 //TODO: Move to config file in each API
-                public class Password 
+                public class Password
                 {
                     public string RoutingAPI = @"E{*Jj5&nLfC}@Q$:";
                     public string WebsiteAPI = @"\wU.D[ArWjPG!F4$";

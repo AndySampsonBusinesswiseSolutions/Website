@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using MethodLibrary;
 using enums;
 using System.Collections.Generic;
-using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Text.Json;

@@ -26,14 +26,15 @@ namespace Website.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.Information.SourceAttribute _informationSourceAttributeEnums = new Enums.Information.SourceAttribute();
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
+        private readonly Int64 APIId;
 
         public WebsiteController(ILogger<WebsiteController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.WebsiteAPI, _systemAPIPasswordEnums.WebsiteAPI);
+            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
         }
 
         [HttpPost]
@@ -50,8 +51,6 @@ namespace Website.api.Controllers
                 var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
                 //Insert into ProcessQueue
-                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
-
                 _systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,

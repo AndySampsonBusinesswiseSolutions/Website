@@ -6,7 +6,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
-using System.Net.Http;
 
 namespace ValidateEmailAddressPasswordMapping.api.Controllers
 {
@@ -25,12 +24,13 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.Information.SourceAttribute _informationSourceAttributeEnums = new Enums.Information.SourceAttribute();
+        private readonly Int64 APIId;
 
         public ValidateEmailAddressPasswordMappingController(ILogger<ValidateEmailAddressPasswordMappingController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateEmailAddressPasswordMappingAPI, _systemAPIPasswordEnums.ValidateEmailAddressPasswordMappingAPI);
+            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
         }
 
         [HttpPost]
@@ -38,7 +38,6 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
@@ -54,7 +53,6 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             //Get base variables
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
