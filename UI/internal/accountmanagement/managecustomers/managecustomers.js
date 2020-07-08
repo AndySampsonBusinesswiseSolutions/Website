@@ -175,6 +175,8 @@ function buildCardView(entity, divToAppendTo){
 }
 
 function saveNewCustomer() {
+	showLoader(true);
+
 	var customerData = [];
 	var customerAttributeDiv = document.getElementById('displayAttributes');
 	var table = customerAttributeDiv.children[0];
@@ -211,7 +213,7 @@ function saveNewCustomer() {
 	if(postSuccessful) {
         getProcessResponse(processQueueGUID)
         .then(response => {
-          processResponse(response);
+          processResponse(response, processQueueGUID);
         })
 	}
 	else {
@@ -219,20 +221,50 @@ function saveNewCustomer() {
 	}
 }
 
-function processResponse(response) {
+async function getProcessResponseDetail(data) {
+	try {
+	  const response = await fetch(uri + '/GetProcessResponseDetail', {
+		method: 'POST',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(data)
+	  });
+	
+	  return response.json();
+	}
+	catch {
+	  return null;
+	}
+  }
+
+async function processResponse(response, processQueueGUID) {
 	if(response) {
 	  if(response.message == "OK") {
 		location.reload();
 	  }
-	  else if(response.status == 401) {
-		
-	  }
 	  else {
-		
+			//Get response from GetProcessResponseDetail
+		  	var responseDetail = await getProcessResponseDetail({ProcessQueueGUID:processQueueGUID, APIGUID:"1B2E2BA3-D538-47E0-9044-BBBFC6BF3892"});
+			if(responseDetail.message == "Success") {
+				alert('Customer has been created but some attributes were not saved');
+				showLoader(false);
+				location.reload();
+			}
+			else {
+				alert('Customer has not been created');
+				showLoader(false);
+			}
+			//This needs to be an in-page error rather than alert
 	  }
 	}
 	else {
-	  
+		//display alert
 	}
 }
 
@@ -558,18 +590,8 @@ async function getTree(data) {
 
 async function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
-    // tree.setAttribute('class', 'scrolling-wrapper');
-    
-	// var ul = createBranchUl("siteSelector", false, true);
-	  
-    // tree.appendChild(ul);
-
-    // branchCount = 0;
-    // subBranchCount = 0; 
-
-	// buildTree(baseData, ul, checkboxFunction);
-	var response = await getTree({CustomerGUID:CreateGUID()});
-	tree.innerHTML = response.message;
+	var treeResponse = await getTree({CustomerGUID:CreateGUID()});
+	tree.innerHTML = treeResponse.message;
 
     var div = document.getElementById(divId);
     clearElement(div);

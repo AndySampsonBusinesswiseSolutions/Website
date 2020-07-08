@@ -1,6 +1,6 @@
 var managecustomers = [
     {
-        "GUID" : "0",
+        "GUID" : "1",
         "Attributes" : 
         [
             {"Customer Name" : "DFS Trading"},
@@ -18,7 +18,7 @@ var managecustomers = [
         ]
     },
     {
-        "GUID" : "1",
+        "GUID" : "2",
         "Attributes" : 
         [
             {"Customer Name" : "Businesswise Solutions"},
@@ -35,7 +35,7 @@ var managecustomers = [
         ]
     },
     {
-        "GUID" : "2",
+        "GUID" : "3",
         "Attributes" : 
         [
             {"Customer Name" : "DFS Trading - North East"},
@@ -53,7 +53,7 @@ var managecustomers = [
         ]
     },
     {
-        "GUID" : "3",
+        "GUID" : "4",
         "Attributes" : 
         [
             {"Customer Name" : "DFS Trading - North West"},
@@ -71,7 +71,7 @@ var managecustomers = [
         ]
     },
     {
-        "GUID" : "4",
+        "GUID" : "0",
         "Attributes" : 
         [
             {"Customer Name" : "Add New Customer"},

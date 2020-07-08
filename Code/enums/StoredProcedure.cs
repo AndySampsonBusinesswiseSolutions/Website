@@ -49,6 +49,7 @@ namespace enums
                 public string CustomerToChildCustomer_GetByCustomerId = "[Mapping].[CustomerToChildCustomer_GetByCustomerId]";
                 public string CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId = "[Mapping].[CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId]";
                 public string CustomerToChildCustomer_GetList = "[Mapping].[CustomerToChildCustomer_GetList]";
+                public string APIToProcessArchiveDetail_GetByAPIId = "[Mapping].[APIToProcessArchiveDetail_GetByAPIId]";
             }
 
             public class System
@@ -76,6 +77,7 @@ namespace enums
                 public string ProcessArchiveDetail_GetByEffectiveFromDateAndEffectiveToDateTimeAndProcessArchiveDetailDescription = "[System].[ProcessArchiveDetail_GetByEffectiveFromDateAndEffectiveToDateTimeAndProcessArchiveDetailDescription]";
                 public string ProcessArchiveDetail_Insert = "[System].[ProcessArchiveDetail_Insert]";
                 public string ProcessArchiveDetail_InsertAll = "[System].[ProcessArchiveDetail_InsertAll]";
+                public string ProcessArchiveDetail_GetByProcessArchiveDetailId = "[System].[ProcessArchiveDetail_GetByProcessArchiveDetailId]";
             }
         }
     }

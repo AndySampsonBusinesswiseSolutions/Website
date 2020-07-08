@@ -24,7 +24,7 @@
 	</div>
 	<div id="outerContainer">
 		<div id="mainContainer">
-		<div class="section-header">
+			<div class="section-header">
 				<div id="mySidenav" class="sidenav" style="display: none;">
 					<div class="header">
 						<button class="closebtn" onclick="closeNav()">Close</button>
@@ -47,6 +47,9 @@
 			</div>
 			<div class="final-column">
 				<div id="overlay" style="display: none;">
+				</div>
+				<div id="loader" style="display: none;">
+					<div class="loader"></div>
 				</div>
 				<div class="pad-container outer-container">
 					<div class="tabDiv" id="tabDiv"></div>

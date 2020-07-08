@@ -348,6 +348,28 @@ namespace MethodLibrary
                     .First();
             }
 
+            public string ProcessArchiveDetail_GetProcessArchiveDetailDescriptionByProcessArchiveDetailId(long processArchiveDetailId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessArchiveDetail_GetByProcessArchiveDetailId, 
+                    processArchiveDetailId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("ProcessArchiveDetailDescription"))
+                    .First();
+            }
+
+            public List<long> ProcessArchiveDetail_GetProcessArchiveDetailIdListByProcessArchiveIDAndProcessArchiveAttributeId(long processArchiveId, long processArchiveAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.ProcessArchiveDetail_GetByProcessArchiveIdAndProcessArchiveAttributeId, 
+                    processArchiveId, processArchiveAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ProcessArchiveDetailId"))
+                    .ToList();
+            }
+
             public List<string> ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(long processArchiveId, long processArchiveAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

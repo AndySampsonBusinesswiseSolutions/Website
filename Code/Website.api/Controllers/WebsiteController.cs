@@ -45,7 +45,7 @@ namespace Website.api.Controllers
 
             try
             {
-                //Get Queue GUID
+                //Get Process Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
                 var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
@@ -104,10 +104,10 @@ namespace Website.api.Controllers
                     case "OK":
                         return new OkObjectResult(new { message = "OK" });
                     case "ERROR":
-                        return new UnauthorizedResult();
+                        return new UnauthorizedResult(); //status = 401
                     case "SYSTEM ERROR":
                     default:
-                        return new BadRequestResult();
+                        return new BadRequestResult(); //status = 400
                 }
             }
             catch(Exception error)
@@ -119,8 +119,45 @@ namespace Website.api.Controllers
         }
 
         [HttpPost]
+        [Route("Website/GetProcessResponseDetail")]
+        public IActionResult GetProcessResponseDetail([FromBody] object data)
+        {
+            var jsonObject = JObject.Parse(data.ToString());
+
+            //Get Process Queue GUID
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+
+            //Get Process Archive Id
+            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+
+            //Get API Response Process Archive Attribute Id
+            var APIResponseProcesArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.APIResponse);
+
+            //Get Process Archive Detail Id List By Process Archive Id and Process Archive Attribute Id
+            var processArchiveDetailIdList = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, APIResponseProcesArchiveAttributeId);
+
+            //Get API GUID
+            var APIGUID = jsonObject[_systemAPIRequiredDataKeyEnums.APIGUID].ToString();
+
+            //Get API Id
+            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(APIGUID);
+
+            //Get Process Archive Detail Id List by API Id
+            var APIProcessArchiveDetailIdList = _mappingMethods.APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(APIId);
+
+            //Get Process Archive Detail Id that is in both lists
+            var processArchiveDetailId = processArchiveDetailIdList.Intersect(APIProcessArchiveDetailIdList).First();
+
+            //Get Process Archive Detail Description by Process Archive Detail Id
+            var processArchiveDetailDescription = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionByProcessArchiveDetailId(processArchiveDetailId);
+            
+            //Return Process Archive Detail Description in message
+            return new OkObjectResult(new { message = processArchiveDetailDescription });
+        }
+
+        [HttpPost]
         [Route("Website/BuildCustomerTree")]
-        public IActionResult BuildCustomerTree([FromBody] object data)
+        public IActionResult BuildCustomerTree([FromBody] object data) //TODO: Build into new API
         {
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -149,6 +186,9 @@ namespace Website.api.Controllers
 
             //Loop though Customer Ids, get Customer Name and add to dictionary
             var customerNames = new Dictionary<string, List<string>>();
+
+            //Add New Customer option
+            customerNames.Add("Add New Customer", new List<string>());
 
             foreach(var customer in customerIds)
             {
@@ -180,9 +220,6 @@ namespace Website.api.Controllers
                 }
             }
 
-            //Add New Customer option
-            customerNames.Add("Add New Customer", new List<string>());
-
             //Build HTML
             var childCustomerId = 0;
             customerId = 0;
@@ -197,7 +234,7 @@ namespace Website.api.Controllers
                 {
                     var childSpan = $"<span id='ChildCustomer{childCustomerId}span'>{child}</span>";
                     var childIcon = $"<i class='fas fa-customer' style='padding-left: 3px; padding-right: 3px;'></i>";
-                    var childCheckbox = $"<input type='checkbox' id='ChildCustomer{childCustomerId}checkbox' Branch='ChildCustomer' LinkedSite='{customer.Key}' onclick='createCardButton(ChildCustomer{childCustomerId}checkbox)'></input>";
+                    var childCheckbox = $"<input type='checkbox' id='ChildCustomer{childCustomerId}checkbox' GUID='{childCustomerId}' Branch='ChildCustomer' LinkedSite='{customer.Key}' onclick='createCardButton(ChildCustomer{childCustomerId}checkbox)'></input>";
                     var childBranchDiv = $"<i id='ChildCustomer{childCustomerId}' class='far fa-times-circle expander'></i>";
 
                     var childCustomerLi = $"<li>{childBranchDiv}{childCheckbox}{childIcon}{childSpan}</li>";
@@ -209,11 +246,12 @@ namespace Website.api.Controllers
                 var branchListDiv = $"<div id='Customer{customerId}List' class='listitem-hidden'>{ul}</div>";
                 var span = $"<span id='Customer{customerId}span'>{customer.Key}</span>";
                 var icon = $"<i class='fas fa-customer' style='padding-left: 3px; padding-right: 3px;'></i>";
-                var checkbox = $"<input type='checkbox' id='Customer{customerId}checkbox' Branch='Customer' LinkedSite='{customer.Key}' onclick='createCardButton(Customer{customerId}checkbox)'></input>";
+                var checkbox = $"<input type='checkbox' id='Customer{customerId}checkbox' GUID='{customerId}' Branch='Customer' LinkedSite='{customer.Key}' onclick='createCardButton(Customer{customerId}checkbox)'></input>";
                 var branchDiv = $"<i id='Customer{customerId}' class='far fa-times-circle expander'></i>";
 
                 var li = $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
                 customerLi += $"{li}";
+                customerId++;
             }
 
             var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{customerLi}<ul>";

@@ -90,6 +90,7 @@ namespace enums
                     public string XLSXFile = "XLSXFile";
                     public string CustomerData = "CustomerData";
                     public string ChildCustomerData = "ChildCustomerData";
+                    public string APIGUID = "APIGUID";
                 }
             }
 

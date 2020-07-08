@@ -499,6 +499,10 @@ async function getProcessResponse(processQueueGUID) {
   }
 }
 
+function showLoader(show) {
+  loader.style.display = show ? '' : 'none';
+}
+
 function alertMessage() {
     alert('Something needs to happen here when you click this thing......what is it??');
 }

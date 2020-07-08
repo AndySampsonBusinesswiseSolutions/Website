@@ -1138,7 +1138,7 @@ input[type=checkbox]:checked + .switch-btn {
     -webkit-animation: spin 2s linear infinite; /* Safari */
     animation: spin 2s linear infinite;
   }
-  #overlay{
+  #overlay, #loader{
       position: fixed;
       top: 0px;
       left:0px;
