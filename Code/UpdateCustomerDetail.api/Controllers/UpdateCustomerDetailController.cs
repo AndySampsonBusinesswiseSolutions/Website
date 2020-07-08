@@ -104,22 +104,25 @@ namespace UpdateCustomerDetail.api.Controllers
                     }
                     else
                     {
-                        var customerDetailDataRow = _customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, customerAttributeId);
-                        if(customerDetailDataRow == null)
+                        if(customerAttributeId != 0)
                         {
-                            //Attribute does not exist from this customer so insert
-                            _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
-                        }
-                        else 
-                        {
-                            var customerDetailDescription = customerDetailDataRow["CustomerDetailDescription"].ToString();
-                            if(customerDetailDescription != value)
+                            var customerDetailDataRow = _customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, customerAttributeId);
+                            if(customerDetailDataRow == null)
                             {
-                                //new value is different to current value so end date current value and insert new value
-                                var customerDetailId = Convert.ToInt64(customerDetailDataRow["CustomerDetailId"].ToString());
-
-                                _customerMethods.CustomerDetail_DeleteByCustomerDetailId(customerDetailId);
+                                //Attribute does not exist from this customer so insert
                                 _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
+                            }
+                            else 
+                            {
+                                var customerDetailDescription = customerDetailDataRow["CustomerDetailDescription"].ToString();
+                                if(customerDetailDescription != value)
+                                {
+                                    //new value is different to current value so end date current value and insert new value
+                                    var customerDetailId = Convert.ToInt64(customerDetailDataRow["CustomerDetailId"].ToString());
+
+                                    _customerMethods.CustomerDetail_DeleteByCustomerDetailId(customerDetailId);
+                                    _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
+                                }
                             }
                         }
                     }
