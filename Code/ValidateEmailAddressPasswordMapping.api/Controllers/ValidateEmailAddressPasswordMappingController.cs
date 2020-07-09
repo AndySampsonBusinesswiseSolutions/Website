@@ -24,13 +24,13 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Int64 APIId;
+        private readonly Int64 validateEmailAddressPasswordMappingAPIId;
 
         public ValidateEmailAddressPasswordMappingController(ILogger<ValidateEmailAddressPasswordMappingController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateEmailAddressPasswordMappingAPI, _systemAPIPasswordEnums.ValidateEmailAddressPasswordMappingAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
+            validateEmailAddressPasswordMappingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -65,7 +65,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    validateEmailAddressPasswordMappingAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -98,14 +98,14 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, mappingId == 0, errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateEmailAddressPasswordMappingAPIId, mappingId == 0, errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateEmailAddressPasswordMappingAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

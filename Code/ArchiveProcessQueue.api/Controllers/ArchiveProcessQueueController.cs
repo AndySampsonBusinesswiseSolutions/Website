@@ -37,11 +37,11 @@ namespace ArchiveProcessQueue.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+            var archiveProcessQueueAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(archiveProcessQueueAPIId, callingGUID, jsonObject);
 
             return true;
         }

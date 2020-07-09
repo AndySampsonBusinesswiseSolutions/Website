@@ -23,13 +23,13 @@ namespace ValidatePassword.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Int64 APIId;
+        private readonly Int64 validatePasswordAPIId;
 
         public ValidatePasswordController(ILogger<ValidatePasswordController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidatePasswordAPI, _systemAPIPasswordEnums.ValidatePasswordAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
+            validatePasswordAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace ValidatePassword.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validatePasswordAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -64,7 +64,7 @@ namespace ValidatePassword.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    validatePasswordAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -93,14 +93,14 @@ namespace ValidatePassword.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, passwordId == 0, errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validatePasswordAPIId, passwordId == 0, errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validatePasswordAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

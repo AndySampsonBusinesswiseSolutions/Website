@@ -27,13 +27,13 @@ namespace MapCustomerToChildCustomer.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
-        private readonly Int64 APIId;
+        private readonly Int64 mapCustomerToChildCustomerAPIId;
 
         public MapCustomerToChildCustomerController(ILogger<MapCustomerToChildCustomerController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.MapCustomerToChildCustomerAPI, _systemAPIPasswordEnums.MapCustomerToChildCustomerAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI);
+            mapCustomerToChildCustomerAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI);
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(mapCustomerToChildCustomerAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -68,7 +68,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    mapCustomerToChildCustomerAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -81,7 +81,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                 if(erroredPrerequisiteAPIs.Any())
                 {
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, mapCustomerToChildCustomerAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 
@@ -132,14 +132,14 @@ namespace MapCustomerToChildCustomer.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, false, null);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, mapCustomerToChildCustomerAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, mapCustomerToChildCustomerAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

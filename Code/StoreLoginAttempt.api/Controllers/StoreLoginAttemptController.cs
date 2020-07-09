@@ -24,13 +24,13 @@ namespace StoreLoginAttempt.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Int64 APIId;
+        private readonly Int64 storeLoginAttemptAPIId;
 
         public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreLoginAttemptAPI, _systemAPIPasswordEnums.StoreLoginAttemptAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
+            storeLoginAttemptAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace StoreLoginAttempt.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(storeLoginAttemptAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -65,7 +65,7 @@ namespace StoreLoginAttempt.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    storeLoginAttemptAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -98,14 +98,14 @@ namespace StoreLoginAttempt.api.Controllers
                 
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, storeLoginAttemptAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, storeLoginAttemptAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

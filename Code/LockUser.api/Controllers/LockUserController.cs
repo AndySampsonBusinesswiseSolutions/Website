@@ -26,13 +26,13 @@ namespace LockUser.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.Administration.User.Attribute _administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
-        private readonly Int64 APIId;
+        private readonly Int64 lockUserAPIId;
 
         public LockUserController(ILogger<LockUserController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.LockUserAPI, _systemAPIPasswordEnums.LockUserAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+            lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 
         [HttpPost]
@@ -43,7 +43,7 @@ namespace LockUser.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(lockUserAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -67,7 +67,7 @@ namespace LockUser.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    lockUserAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -130,14 +130,14 @@ namespace LockUser.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, lockUserAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, lockUserAPIId, true, $"System Error Id {errorId}");
             }
         }
 

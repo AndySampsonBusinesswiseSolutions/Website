@@ -23,13 +23,13 @@ namespace StoreUsageUpload.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Int64 APIId;
+        private readonly Int64 storeUsageUploadAPIId;
 
         public StoreUsageUploadController(ILogger<StoreUsageUploadController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreUsageUploadAPI, _systemAPIPasswordEnums.StoreUsageUploadAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreUsageUploadAPI);
+            storeUsageUploadAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreUsageUploadAPI);
         }
 
         [HttpPost]
@@ -40,7 +40,7 @@ namespace StoreUsageUpload.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(storeUsageUploadAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -64,7 +64,7 @@ namespace StoreUsageUpload.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    storeUsageUploadAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -83,14 +83,14 @@ namespace StoreUsageUpload.api.Controllers
                 System.IO.File.WriteAllText(@"C:\Users\andy.sampson\Downloads\BWS Files\Energy Portal\Customer Files\test.json", xlsxFile);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

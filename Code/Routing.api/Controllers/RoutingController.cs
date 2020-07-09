@@ -35,11 +35,11 @@ namespace Routing.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
+            var routingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(routingAPIId, callingGUID, jsonObject);
 
             return true;
         }

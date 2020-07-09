@@ -22,13 +22,13 @@ namespace ValidateProcessGUID.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Int64 APIId;
+        private readonly Int64 validateProcessGUIDAPIId;
 
         public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateProcessGUIDAPI, _systemAPIPasswordEnums.ValidateProcessGUIDAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
+            validateProcessGUIDAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
         }
 
         [HttpPost]
@@ -39,7 +39,7 @@ namespace ValidateProcessGUID.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -62,7 +62,7 @@ namespace ValidateProcessGUID.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    validateProcessGUIDAPIId);
 
                 //Get Process GUID
                 var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
@@ -74,7 +74,7 @@ namespace ValidateProcessGUID.api.Controllers
                 string errorMessage = processId == 0 ? $"Process GUID {processGUID} does not exist in [System].[Process] table" : null;
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, processId == 0, errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateProcessGUIDAPIId, processId == 0, errorMessage);
 
                 return processId;
             }

@@ -24,13 +24,13 @@ namespace UpdateCustomerDetail.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Int64 APIId;
+        private readonly Int64 updateCustomerDetailAPIId;
 
         public UpdateCustomerDetailController(ILogger<UpdateCustomerDetailController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.UpdateCustomerDetailAPI, _systemAPIPasswordEnums.UpdateCustomerDetailAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UpdateCustomerDetailAPI);
+            updateCustomerDetailAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UpdateCustomerDetailAPI);
         }
 
         [HttpPost]
@@ -41,7 +41,7 @@ namespace UpdateCustomerDetail.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(updateCustomerDetailAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -65,7 +65,7 @@ namespace UpdateCustomerDetail.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    updateCustomerDetailAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -78,7 +78,7 @@ namespace UpdateCustomerDetail.api.Controllers
                 if(erroredPrerequisiteAPIs.Any())
                 {
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, updateCustomerDetailAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 
@@ -129,14 +129,14 @@ namespace UpdateCustomerDetail.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, false, null);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, updateCustomerDetailAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, updateCustomerDetailAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

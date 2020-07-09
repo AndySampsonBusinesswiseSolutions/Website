@@ -37,11 +37,11 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
+            var checkPrerequisiteAPIAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -91,12 +91,12 @@ namespace CheckPrerequisiteAPI.api.Controllers
                         }
 
                         //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                        var APIId = _systemMethods.API_GetAPIIdByAPIGUID(prerequisiteAPIGUID);
-                        var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, APIId);
+                        var prerequisiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(prerequisiteAPIGUID);
+                        var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, prerequisiteAPIId);
 
                         if(processQueueDataRow != null)
                         {
-                            processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, APIId);
+                            processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, prerequisiteAPIId);
                             
                             //If EffectiveToDate is '9999-12-31' then it is still processing
                             //otherwise, it has finished so add to completed if successful or errored if not
@@ -117,7 +117,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
                             {
                                 //Check if process has been running for longer than it's anticipated run time
                                 var effectiveFromDate = Convert.ToDateTime(processQueueDataRow["EffectiveFromDateTime"]);
-                                var timeoutSeconds = Convert.ToDouble(_systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, timeoutSecondsAttributeId).First());
+                                var timeoutSeconds = Convert.ToDouble(_systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, timeoutSecondsAttributeId).First());
                                 var latestRunDate = effectiveFromDate.AddMinutes(timeoutSeconds/60);
                                 var currentDate = DateTime.UtcNow;
 
@@ -127,12 +127,12 @@ namespace CheckPrerequisiteAPI.api.Controllers
 
                                     var errorId = _systemMethods.InsertSystemError(createdByUserId, 
                                         sourceId, 
-                                        $"API {APIId} Timeout",
+                                        $"API {prerequisiteAPIId} Timeout",
                                         "API Timeout",
                                         Environment.StackTrace);
 
                                     //Update Process Queue
-                                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                                    _systemMethods.ProcessQueue_Update(processQueueGUID, prerequisiteAPIId, true, $"System Error Id {errorId}");
                                 }
                             }
                         }                    

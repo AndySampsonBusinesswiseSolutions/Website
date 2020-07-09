@@ -26,13 +26,13 @@ namespace AddNewCustomer.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
-        private readonly Int64 APIId;
+        private readonly Int64 addNewCustomerAPIId;
 
         public AddNewCustomerController(ILogger<AddNewCustomerController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.AddNewCustomerAPI, _systemAPIPasswordEnums.AddNewCustomerAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.AddNewCustomerAPI);
+            addNewCustomerAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.AddNewCustomerAPI);
         }
 
         [HttpPost]
@@ -43,7 +43,7 @@ namespace AddNewCustomer.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(APIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(addNewCustomerAPIId, callingGUID, jsonObject);
 
             return true;
         }
@@ -67,7 +67,7 @@ namespace AddNewCustomer.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    addNewCustomerAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
@@ -80,7 +80,7 @@ namespace AddNewCustomer.api.Controllers
                 if(erroredPrerequisiteAPIs.Any())
                 {
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 
@@ -115,12 +115,12 @@ namespace AddNewCustomer.api.Controllers
                     _customerMethods.Customer_Insert(createdByUserId, sourceId, customerGUID);
 
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, false, null);
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, false, null);
                 }
                 else 
                 {
                     //Customer name exists as an active customer so fail
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"Customer Name {customerName} already exists as an active record");
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, true, $"Customer Name {customerName} already exists as an active record");
                 }                
             }
             catch(Exception error)
@@ -128,7 +128,7 @@ namespace AddNewCustomer.api.Controllers
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

@@ -28,13 +28,13 @@ namespace Website.api.Controllers
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
-        private readonly Int64 APIId;
+        private readonly Int64 websiteAPIId;
 
         public WebsiteController(ILogger<WebsiteController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.WebsiteAPI, _systemAPIPasswordEnums.WebsiteAPI);
-            APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
+            websiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
         }
 
         [HttpPost]
@@ -55,7 +55,7 @@ namespace Website.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    APIId);
+                    websiteAPIId);
 
                 //Get Routing.API URL
                 var routingAPIId = _systemMethods.GetRoutingAPIId();
@@ -64,7 +64,7 @@ namespace Website.api.Controllers
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, APIId);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, websiteAPIId);
             }
             catch(Exception error)
             {
@@ -139,10 +139,10 @@ namespace Website.api.Controllers
             var APIGUID = jsonObject[_systemAPIRequiredDataKeyEnums.APIGUID].ToString();
 
             //Get API Id
-            var APIId = _systemMethods.API_GetAPIIdByAPIGUID(APIGUID);
+            var websiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(APIGUID);
 
             //Get Process Archive Detail Id List by API Id
-            var APIProcessArchiveDetailIdList = _mappingMethods.APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(APIId);
+            var APIProcessArchiveDetailIdList = _mappingMethods.APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);
 
             //Get Process Archive Detail Id that is in both lists
             var processArchiveDetailId = processArchiveDetailIdList.Intersect(APIProcessArchiveDetailIdList).First();
