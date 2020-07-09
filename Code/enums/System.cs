@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CreateCustomerFoldersAPI = "2AE6E5B2-1D5F-431B-9BCE-A5CDDB52B493";
                     public string StoreLoginAttemptAPI = "3BBFC2B6-2572-43CD-921A-A237000AC248";//
                     public string RoutingAPI = "A4F25D07-86AA-42BD-ACD7-51A8F772A92B";
                     public string WebsiteAPI = "CBB27186-B65F-4F6C-9FFA-B1E6C63C04EE";
@@ -40,6 +41,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CreateCustomerFoldersAPI = "CreateCustomerFolders.api";
                     public string StoreLoginAttemptAPI = "StoreLoginAttempt.api";
                     public string RoutingAPI = "Routing.api";
                     public string WebsiteAPI = "Website.api";
@@ -60,6 +62,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CreateCustomerFoldersAPI = "UE9ggtwMq6G4fpYv";
                     public string RoutingAPI = @"E{*Jj5&nLfC}@Q$:";
                     public string WebsiteAPI = @"\wU.D[ArWjPG!F4$";
                     public string ValidateProcessGUIDAPI = @"Y4c?.KT(>HXj@f8D";
