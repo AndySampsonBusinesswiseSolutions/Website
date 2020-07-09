@@ -118,6 +118,28 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.CustomerToChildCustomer_Insert, 
                     createdByUserId, sourceId, customerId, childCustomerId);
             }
+
+            public List<long> FolderToRootFolderType_GetFolderIdListByRootFolderTypeId(long rootFolderTypeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.FolderToRootFolderType_GetByRootFolderTypeId, 
+                    rootFolderTypeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("FolderId"))
+                    .ToList();
+            }
+
+            public List<long> FolderToFolderExtension_GetFolderExtensionIdByFolderId(long folderTypeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.FolderToFolderExtension_GetByFolderId, 
+                    folderTypeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("FolderExtensionId"))
+                    .ToList();
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>700925a0-6c57-48d7-8537-69def6e03797</ID>
-    <DateCreated>2020-07-09T15:24:42.1124911+01:00</DateCreated>
+    <ID>0cba4d04-67f3-4a3a-8c72-3c2832e4e313</ID>
+    <DateCreated>2020-07-09T17:38:45.4323132+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>yfCZbha3ZXM2D2iKAOvABA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe66SFfNB4qFURdS10mMszcCs=</Password>
+    <Login>X4osPOf5KEQNiD4at7FAXA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6+UYADTHFsP+RKkqbH+Uv6k=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1839,6 +1839,41 @@
     <ID>c8fb02fd-8f49-4e63-b3e9-f831a36f81b3</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0098 - Create Stored Procedure - [Mapping].[FolderToFolderExtension_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f5b0df8d-76df-41fc-a12f-7bd0dc8e8b34</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0099 - Create Stored Procedure - [Information].[RootFolderType_GetByRootFolderTypeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9e647b7e-1e19-4b5f-abf6-869abbda086a</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0100 - Create Stored Procedure - [Mapping].[FolderToRootFolderType_GetByRootFolderTypeId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>03e85566-8b53-45bc-8b73-494a09dd5fc8</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0101 - Create Stored Procedure - [Information].[FolderAttribute_GetByFolderAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3c0bff63-2893-4791-a03c-b378557ad05f</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0102 - Create Stored Procedure - [Customer].[CustomerDetail_GetByCustomerIdAndCustomerAttributeId] copy.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>e47cbe36-ff14-46de-8853-783c757062d4</ID>
+    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0103 - Create Stored Procedure - [Mapping].[FolderToFolderExtension_GetByFolderId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

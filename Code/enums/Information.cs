@@ -22,6 +22,11 @@ namespace enums
                     public string Invoice = "Invoice";
                     public string SupplierBill = "Supplier Bill";
                 }
+
+                public class RootFolderType
+                {
+                    public string CustomerFiles = "Customer Files";
+                }
             }
 
             public class Source

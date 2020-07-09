@@ -6,7 +6,7 @@ DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information]
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 DECLARE @FolderId BIGINT = (SELECT FolderId FROM [Information].[Folder] WHERE FolderGUID = 'FA701B83-CBDD-457F-9300-1112F503F5CF')
 
-DECLARE @FolderExtensionId BIGINT = (SELECT FolderId FROM [Information].[Folder] WHERE FolderGUID = 'FA701B83-CBDD-457F-9300-1112F503F5CF')
+DECLARE @FolderExtensionId BIGINT = (SELECT FolderId FROM [Information].[Folder] WHERE FolderGUID = 'BB2666E4-D79A-4490-9EC2-1B57DD3D1945')
 EXEC [Mapping].[FolderToFolderExtension_Insert] @CreatedByUserId, @SourceId, @FolderId, @FolderExtensionId
 
 SET @FolderExtensionId = (SELECT FolderId FROM [Information].[Folder] WHERE FolderGUID = 'FBB997A4-0C41-426D-8A32-7A4B7168DFCE')

@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.IO;
 
 namespace CreateCustomerFolders.api.Controllers
 {
@@ -18,11 +19,14 @@ namespace CreateCustomerFolders.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private readonly Enums.Information.Folder.RootFolderType _informationFolderRootFolderTypeEnums = new Enums.Information.Folder.RootFolderType();
+        private readonly Enums.Information.Folder.Attribute _informationFolderAttributeEnums = new Enums.Information.Folder.Attribute();
         private readonly Int64 createCustomerFoldersAPIId;
 
         public CreateCustomerFoldersController(ILogger<CreateCustomerFoldersController> logger)
@@ -74,6 +78,39 @@ namespace CreateCustomerFolders.api.Controllers
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                 var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
                 var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+
+                //Get Customer GUID
+                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+
+                //Get Root Folder Type Id of Customer Files
+                var rootFolderTypeId = _informationMethods.RootFolderType_GetRootFolderIdByRootFolderTypeDescription(_informationFolderRootFolderTypeEnums.CustomerFiles);
+
+                //Get Root Folder Folder Ids
+                var rootFolderIdList = _mappingMethods.FolderToRootFolderType_GetFolderIdListByRootFolderTypeId(rootFolderTypeId);
+
+                //Get Folder Path Attribute Id
+                var folderPathAttributeId = _informationMethods.FolderAttribute_GetFolderAttributeIdByFolderAttributeDescription(_informationFolderAttributeEnums.FolderPath);
+
+                //Get Root Folder Descriptions
+                foreach(var folderId in rootFolderIdList)
+                {
+                    var rootFolderDescription = _informationMethods.FolderDetail_GetFolderDetailDescriptionListByFolderIdAndFolderAttributeId(folderId, folderPathAttributeId);
+
+                    //Check if Folder Description + Customer GUID exists on fileshare
+                    var customerFilesRootFolder = Path.Combine(rootFolderDescription, customerGUID);
+                    Directory.CreateDirectory(customerFilesRootFolder);
+
+                    //Get linked folder extensions
+                    var folderExtensionIdList = _mappingMethods.FolderToFolderExtension_GetFolderExtensionIdByFolderId(folderId);
+
+                    foreach(var folderExtensionId in folderExtensionIdList)
+                    {
+                        //Check if folder Description + Customer GUID + Folder Extension exists on fileshare
+                        var folderExtensionDescription = _informationMethods.FolderDetail_GetFolderDetailDescriptionListByFolderIdAndFolderAttributeId(folderExtensionId, folderPathAttributeId);
+                        var customerFilesExtensionFolder = Path.Combine(customerFilesRootFolder, folderExtensionDescription);
+                        Directory.CreateDirectory(customerFilesExtensionFolder);
+                    }
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, createCustomerFoldersAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
