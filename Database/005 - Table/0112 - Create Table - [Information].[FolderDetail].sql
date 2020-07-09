@@ -21,7 +21,7 @@ CREATE TABLE [Information].[FolderDetail]
 	SourceId BIGINT NOT NULL,
 	FolderId BIGINT NOT NULL,
 	FolderAttributeId BIGINT NOT NULL,
-	FolderDetailDescription VARCHAR(10) NOT NULL
+	FolderDetailDescription VARCHAR(200) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[FolderDetail] ADD CONSTRAINT

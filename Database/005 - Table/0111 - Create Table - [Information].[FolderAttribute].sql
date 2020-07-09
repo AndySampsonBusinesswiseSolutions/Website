@@ -19,7 +19,7 @@ CREATE TABLE [Information].[FolderAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	FolderAttributeDescription VARCHAR(10) NOT NULL
+	FolderAttributeDescription VARCHAR(200) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[FolderAttribute] ADD CONSTRAINT
