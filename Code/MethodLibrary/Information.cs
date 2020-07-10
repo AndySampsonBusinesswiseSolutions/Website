@@ -49,6 +49,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public long FolderExtensionType_GetFolderExtensionTypeIdByFolderExtensionTypeDescription(string folderExtensionTypeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.FolderExtensionType_GetByFolderExtensionTypeDescription, 
+                    folderExtensionTypeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("FolderExtensionTypeId"))
+                    .FirstOrDefault();
+            }
+
             public long FolderAttribute_GetFolderAttributeIdByFolderAttributeDescription(string folderAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

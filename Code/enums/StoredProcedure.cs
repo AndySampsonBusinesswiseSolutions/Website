@@ -37,6 +37,7 @@ namespace enums
                 public string RootFolderType_GetByRootFolderTypeDescription = "[Information].[RootFolderType_GetByRootFolderTypeDescription]";
                 public string FolderAttribute_GetByFolderAttributeDescription = "[Information].[FolderAttribute_GetByFolderAttributeDescription]";
                 public string FolderDetail_GetByFolderIdAndFolderAttributeId = "[Information].[FolderDetail_GetByFolderIdAndFolderAttributeId]";
+                public string FolderExtensionType_GetByFolderExtensionTypeDescription = "[Information].[FolderExtensionType_GetByFolderExtensionTypeDescription]";
             }
 
             public class Mapping
@@ -55,6 +56,7 @@ namespace enums
                 public string APIToProcessArchiveDetail_GetByAPIId = "[Mapping].[APIToProcessArchiveDetail_GetByAPIId]";
                 public string FolderToRootFolderType_GetByRootFolderTypeId = "[Mapping].[FolderToRootFolderType_GetByRootFolderTypeId]";
                 public string FolderToFolderExtension_GetByFolderId = "[Mapping].[FolderToFolderExtension_GetByFolderId]";
+                public string FolderToFolderExtensionType_GetByFolderExtensionTypeId = "[Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId]";
             }
 
             public class System

@@ -6,26 +6,26 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[FolderToFolderExtension_GetByFolderId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[FolderToFolderExtension_GetByFolderId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-07-09
--- Description:	Get FolderToFolderExtension info from [Mapping].[FolderToFolderExtension] table by Folder Id
+-- Create date: 2020-07-10
+-- Description:	Get FolderToFolderExtensionType info from [Mapping].[FolderToFolderExtensionType] table by Folder Extension Type Id
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[FolderToFolderExtension_GetByFolderId]
-    @FolderId BIGINT,
+ALTER PROCEDURE [Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId]
+    @FolderExtensionTypeId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-07-09 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-10 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,18 +35,18 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        FolderToFolderExtensionId,
+        FolderToFolderExtensionTypeId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
         FolderId,
-        FolderExtensionId
+        FolderExtensionTypeId
     FROM 
-        [Mapping].[FolderToFolderExtension]
+        [Mapping].[FolderToFolderExtensionType]
     WHERE 
-        FolderId = @FolderId
+        FolderExtensionTypeId = @FolderExtensionTypeId
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

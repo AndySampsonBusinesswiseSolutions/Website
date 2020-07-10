@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.IO;
 
 namespace StoreUsageUpload.api.Controllers
 {
@@ -18,6 +19,7 @@ namespace StoreUsageUpload.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -25,6 +27,7 @@ namespace StoreUsageUpload.api.Controllers
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.Information.Folder.RootFolderType _informationFolderRootFolderTypeEnums = new Enums.Information.Folder.RootFolderType();
         private readonly Enums.Information.Folder.Attribute _informationFolderAttributeEnums = new Enums.Information.Folder.Attribute();
+        private readonly Enums.Information.Folder.ExtensionType _informationFolderExtensionTypeEnums = new Enums.Information.Folder.ExtensionType();
         private readonly Int64 storeUsageUploadAPIId;
 
         public StoreUsageUploadController(ILogger<StoreUsageUploadController> logger)
@@ -75,20 +78,58 @@ namespace StoreUsageUpload.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreUsageUploadAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                 var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-                var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
-                //TODO: Create Store logic
-                //Get Root Folder Type Id of Customer Files
-                var rootFolderTypeId = _informationMethods.RootFolderType_GetRootFolderIdByRootFolderTypeDescription(_informationFolderRootFolderTypeEnums.CustomerFiles);
+                if(erroredPrerequisiteAPIs.Any())
+                {
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    return;
+                }
 
                 //Get xlsx JSON
                 var xlsxFile = jsonObject[_systemAPIRequiredDataKeyEnums.XLSXFile].ToString();
 
-                //Save to folder
-                System.IO.File.WriteAllText(@"C:\Users\andy.sampson\Downloads\BWS Files\Energy Portal\Customer Files\test.json", xlsxFile);
+                //Get Customer GUID
+                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+
+                //Get Root Folder Type Id of Customer Files
+                var rootFolderTypeId = _informationMethods.RootFolderType_GetRootFolderIdByRootFolderTypeDescription(_informationFolderRootFolderTypeEnums.CustomerFiles);
+
+                //Get Root Folder Folder Ids
+                var rootFolderIdList = _mappingMethods.FolderToRootFolderType_GetFolderIdListByRootFolderTypeId(rootFolderTypeId);
+
+                //Get Folder Path Attribute Id
+                var folderPathAttributeId = _informationMethods.FolderAttribute_GetFolderAttributeIdByFolderAttributeDescription(_informationFolderAttributeEnums.FolderPath);
+
+                //Get Usage Upload Folder Extension Type Id
+                var folderExtensionTypeId = _informationMethods.FolderExtensionType_GetFolderExtensionTypeIdByFolderExtensionTypeDescription(_informationFolderExtensionTypeEnums.UsageUpload);
+
+                //Get Folder Extension Id List
+                var folderIdList = _mappingMethods.FolderToFolderExtensionType_GetFolderIdListByFolderExtensionTypeId(folderExtensionTypeId);
+
+                //Get Root Folder Descriptions
+                foreach(var folderId in rootFolderIdList)
+                {
+                    //Get Customer Files folder
+                    var rootFolderDescription = _informationMethods.FolderDetail_GetFolderDetailDescriptionListByFolderIdAndFolderAttributeId(folderId, folderPathAttributeId);
+                    var customerFilesRootFolder = Path.Combine(rootFolderDescription, customerGUID);
+
+                    //Get linked folder extensions
+                    var folderExtensionIdList = _mappingMethods.FolderToFolderExtension_GetFolderExtensionIdByFolderId(folderId);
+
+                    //Get linked Usage Upload folder extension
+                    var usageUploadFolderExtensionId = folderExtensionIdList.Intersect(folderIdList).First();
+
+                    //Get Customer Files UsageUpload folder
+                    var usageUploadFolderDescription = _informationMethods.FolderDetail_GetFolderDetailDescriptionListByFolderIdAndFolderAttributeId(usageUploadFolderExtensionId, folderPathAttributeId);
+                    var customerFilesUsageUploadFolder = Path.Combine(customerFilesRootFolder, usageUploadFolderDescription);
+
+                    //Save to folder
+                    System.IO.File.WriteAllText($@"{customerFilesUsageUploadFolder}\test.json", xlsxFile);
+                }            
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadAPIId, false, null);
             }
             catch(Exception error)
             {

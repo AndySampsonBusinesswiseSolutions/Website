@@ -77,7 +77,13 @@ namespace CreateCustomerFolders.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.CreateCustomerFoldersAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                 var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-                var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+
+                if(erroredPrerequisiteAPIs.Any())
+                {
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, createCustomerFoldersAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    return;
+                }
 
                 //Get Customer GUID
                 var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
@@ -113,7 +119,7 @@ namespace CreateCustomerFolders.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, createCustomerFoldersAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, createCustomerFoldersAPIId, false, null);
             }
             catch(Exception error)
             {

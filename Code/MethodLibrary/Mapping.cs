@@ -140,6 +140,17 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("FolderExtensionId"))
                     .ToList();
             }
+
+            public List<long> FolderToFolderExtensionType_GetFolderIdListByFolderExtensionTypeId(long folderExtensionTypeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.FolderToFolderExtensionType_GetByFolderExtensionTypeId, 
+                    folderExtensionTypeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("FolderId"))
+                    .ToList();
+            }
         }
     }
 }
