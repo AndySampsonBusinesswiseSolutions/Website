@@ -24,7 +24,7 @@ CREATE TABLE [Information].[SourceDetail]
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
 	SourceAttributeId BIGINT NOT NULL,
-	SourceDetailDescription VARCHAR(200) NOT NULL
+	SourceDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[SourceDetail] ADD CONSTRAINT

@@ -25,7 +25,7 @@ CREATE TABLE [Information].[GridSupplyPointDetail]
 	SourceId BIGINT NOT NULL,
 	GridSupplyPointId BIGINT NOT NULL,
 	GridSupplyPointAttributeId BIGINT NOT NULL,
-	GridSupplyPointDetailDescription VARCHAR(200) NOT NULL
+	GridSupplyPointDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[GridSupplyPointDetail] ADD CONSTRAINT

@@ -19,17 +19,17 @@ CREATE TABLE [Information].[FolderExtensionType]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	FolderExtensionTypeDescription VARCHAR(200) NOT NULL
+	FolderExtensionTypeDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[FolderExtensionType] ADD CONSTRAINT
-	DF_FolderExtensionType_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_FolderExtensionType_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[FolderExtensionType] ADD CONSTRAINT
 	DF_FolderExtensionType_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[FolderExtensionType] ADD CONSTRAINT
-	DF_FolderExtensionType_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_FolderExtensionType_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[FolderExtensionType] ADD CONSTRAINT
 	PK_FolderExtensionType PRIMARY KEY CLUSTERED 

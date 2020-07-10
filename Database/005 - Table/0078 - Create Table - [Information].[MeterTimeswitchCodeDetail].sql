@@ -25,7 +25,7 @@ CREATE TABLE [Information].[MeterTimeswitchCodeDetail]
 	SourceId BIGINT NOT NULL,
 	MeterTimeswitchCodeId BIGINT NOT NULL,
 	MeterTimeswitchCodeAttributeId BIGINT NOT NULL,
-	MeterTimeswitchCodeDetailDescription VARCHAR(200) NOT NULL
+	MeterTimeswitchCodeDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[MeterTimeswitchCodeDetail] ADD CONSTRAINT

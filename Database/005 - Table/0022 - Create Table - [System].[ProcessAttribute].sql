@@ -23,7 +23,7 @@ CREATE TABLE [System].[ProcessAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ProcessAttributeDescription VARCHAR(200) NOT NULL
+	ProcessAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessAttribute] ADD CONSTRAINT

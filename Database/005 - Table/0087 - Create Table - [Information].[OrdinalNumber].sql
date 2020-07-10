@@ -23,13 +23,13 @@ CREATE TABLE [Information].[OrdinalNumber]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[OrdinalNumber] ADD CONSTRAINT
-	DF_OrdinalNumber_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_OrdinalNumber_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[OrdinalNumber] ADD CONSTRAINT
 	DF_OrdinalNumber_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[OrdinalNumber] ADD CONSTRAINT
-	DF_OrdinalNumber_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_OrdinalNumber_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[OrdinalNumber] ADD CONSTRAINT
 	PK_OrdinalNumber PRIMARY KEY CLUSTERED 

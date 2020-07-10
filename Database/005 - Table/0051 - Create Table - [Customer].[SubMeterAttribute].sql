@@ -23,7 +23,7 @@ CREATE TABLE [Customer].[SubMeterAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	SubMeterAttributeDescription VARCHAR(200) NOT NULL
+	SubMeterAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[SubMeterAttribute] ADD CONSTRAINT

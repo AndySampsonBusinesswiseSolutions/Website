@@ -23,13 +23,13 @@ CREATE TABLE [Information].[Folder]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[Folder] ADD CONSTRAINT
-	DF_Folder_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_Folder_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[Folder] ADD CONSTRAINT
 	DF_Folder_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[Folder] ADD CONSTRAINT
-	DF_Folder_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_Folder_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[Folder] ADD CONSTRAINT
 	PK_Folder PRIMARY KEY CLUSTERED 

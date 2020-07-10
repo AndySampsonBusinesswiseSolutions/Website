@@ -25,7 +25,7 @@ CREATE TABLE [System].[ProcessArchiveDetail]
 	SourceId BIGINT NOT NULL,
 	ProcessArchiveId BIGINT NOT NULL,
 	ProcessArchiveAttributeId BIGINT NOT NULL,
-	ProcessArchiveDetailDescription VARCHAR(200) NOT NULL
+	ProcessArchiveDetailDescription VARCHAR(255) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessArchiveDetail] ADD CONSTRAINT

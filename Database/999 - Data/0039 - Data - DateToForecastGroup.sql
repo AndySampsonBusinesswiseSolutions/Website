@@ -14,7 +14,7 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 DECLARE @Mapping TABLE
 (
 	DateDescription DATE,
-	ForecastGroupDescription VARCHAR(100),
+	ForecastGroupDescription VARCHAR(255),
 	Priority TINYINT
 )
 

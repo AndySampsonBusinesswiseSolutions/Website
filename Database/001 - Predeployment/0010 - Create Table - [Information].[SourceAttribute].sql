@@ -23,7 +23,7 @@ CREATE TABLE [Information].[SourceAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NULL,
-	SourceAttributeDescription VARCHAR(200) NOT NULL,
+	SourceAttributeDescription VARCHAR(255) NOT NULL,
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[SourceAttribute] ADD CONSTRAINT

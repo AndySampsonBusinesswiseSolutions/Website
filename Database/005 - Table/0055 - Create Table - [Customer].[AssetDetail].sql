@@ -25,7 +25,7 @@ CREATE TABLE [Customer].[AssetDetail]
 	SourceId BIGINT NOT NULL,
 	AssetId BIGINT NOT NULL,
 	AssetAttributeId BIGINT NOT NULL,
-	AssetDetailDescription VARCHAR(200) NOT NULL
+	AssetDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[AssetDetail] ADD CONSTRAINT

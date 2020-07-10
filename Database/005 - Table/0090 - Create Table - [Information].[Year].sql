@@ -24,13 +24,13 @@ CREATE TABLE [Information].[Year]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[Year] ADD CONSTRAINT
-	DF_Year_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_Year_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[Year] ADD CONSTRAINT
 	DF_Year_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[Year] ADD CONSTRAINT
-	DF_Year_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_Year_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[Year] ADD CONSTRAINT
 	PK_Year PRIMARY KEY CLUSTERED 

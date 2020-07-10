@@ -45,3 +45,33 @@ GO
 
 GRANT EXECUTE ON OBJECT::[System].[APIDetail_GetByAPIIdAndAPIAttributeId] TO [CreateCustomerFolders.api];  
 GO
+
+GRANT EXECUTE ON OBJECT::[Administration.User].[User_GetByUserGUID] TO [CreateCustomerFolders.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceAttribute_GetBySourceAttributeDescription] TO [CreateCustomerFolders.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription] TO [CreateCustomerFolders.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[Error_Insert] TO [CreateCustomerFolders.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[System].[Error_GetByErrorGUID] TO [CreateCustomerFolders.api];  
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[RootFolderType_GetByRootFolderTypeDescription] TO [CreateCustomerFolders.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Mapping].[FolderToRootFolderType_GetByRootFolderTypeId] TO [CreateCustomerFolders.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[FolderAttribute_GetByFolderAttributeDescription] TO [CreateCustomerFolders.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Information].[FolderDetail_GetByFolderIdAndFolderAttributeId] TO [CreateCustomerFolders.api];
+GO
+
+GRANT EXECUTE ON OBJECT::[Mapping].[FolderToFolderExtension_GetByFolderId] TO [CreateCustomerFolders.api];
+GO

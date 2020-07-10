@@ -23,7 +23,7 @@ CREATE TABLE [System].[ProcessArchiveAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ProcessArchiveAttributeDescription VARCHAR(200) NOT NULL
+	ProcessArchiveAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessArchiveAttribute] ADD CONSTRAINT

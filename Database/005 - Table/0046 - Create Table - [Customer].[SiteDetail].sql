@@ -25,7 +25,7 @@ CREATE TABLE [Customer].[SiteDetail]
 	SourceId BIGINT NOT NULL,
 	SiteId BIGINT NOT NULL,
 	SiteAttributeId BIGINT NOT NULL,
-	SiteDetailDescription VARCHAR(200) NOT NULL
+	SiteDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[SiteDetail] ADD CONSTRAINT

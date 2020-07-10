@@ -23,7 +23,7 @@ CREATE TABLE [Customer].[MeterAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	MeterAttributeDescription VARCHAR(200) NOT NULL
+	MeterAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[MeterAttribute] ADD CONSTRAINT

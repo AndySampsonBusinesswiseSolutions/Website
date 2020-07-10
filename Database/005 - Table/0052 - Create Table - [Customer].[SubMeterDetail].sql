@@ -25,7 +25,7 @@ CREATE TABLE [Customer].[SubMeterDetail]
 	SourceId BIGINT NOT NULL,
 	SubMeterId BIGINT NOT NULL,
 	SubMeterAttributeId BIGINT NOT NULL,
-	SubMeterDetailDescription VARCHAR(200) NOT NULL
+	SubMeterDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[SubMeterDetail] ADD CONSTRAINT

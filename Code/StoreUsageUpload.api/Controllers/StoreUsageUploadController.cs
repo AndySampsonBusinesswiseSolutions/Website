@@ -23,6 +23,8 @@ namespace StoreUsageUpload.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private readonly Enums.Information.Folder.RootFolderType _informationFolderRootFolderTypeEnums = new Enums.Information.Folder.RootFolderType();
+        private readonly Enums.Information.Folder.Attribute _informationFolderAttributeEnums = new Enums.Information.Folder.Attribute();
         private readonly Int64 storeUsageUploadAPIId;
 
         public StoreUsageUploadController(ILogger<StoreUsageUploadController> logger)
@@ -76,6 +78,9 @@ namespace StoreUsageUpload.api.Controllers
                 var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
                 //TODO: Create Store logic
+                //Get Root Folder Type Id of Customer Files
+                var rootFolderTypeId = _informationMethods.RootFolderType_GetRootFolderIdByRootFolderTypeDescription(_informationFolderRootFolderTypeEnums.CustomerFiles);
+
                 //Get xlsx JSON
                 var xlsxFile = jsonObject[_systemAPIRequiredDataKeyEnums.XLSXFile].ToString();
 

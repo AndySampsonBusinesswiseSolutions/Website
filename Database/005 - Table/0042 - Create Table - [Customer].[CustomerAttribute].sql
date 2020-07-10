@@ -23,7 +23,7 @@ CREATE TABLE [Customer].[CustomerAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	CustomerAttributeDescription VARCHAR(200) NOT NULL
+	CustomerAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[CustomerAttribute] ADD CONSTRAINT

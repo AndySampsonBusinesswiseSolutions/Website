@@ -38,22 +38,22 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public long RootFolderType_GetRootFolderIdByRootFolderTypeDescription(string rootFolderDescription)
+            public long RootFolderType_GetRootFolderIdByRootFolderTypeDescription(string rootFolderTypeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.RootFolderType_GetByRootFolderTypeDescription, 
-                    rootFolderDescription);
+                    rootFolderTypeDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("RootFolderId"))
+                    .Select(r => r.Field<long>("RootFolderTypeId"))
                     .FirstOrDefault();
             }
 
-            public long FolderAttribute_GetFolderAttributeIdByFolderAttributeDescription(string folderAttribute)
+            public long FolderAttribute_GetFolderAttributeIdByFolderAttributeDescription(string folderAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.FolderAttribute_GetByFolderAttributeDescription, 
-                    folderAttribute);
+                    folderAttributeDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("FolderAttributeId"))
@@ -63,7 +63,7 @@ namespace MethodLibrary
             public string FolderDetail_GetFolderDetailDescriptionListByFolderIdAndFolderAttributeId(long folderId, long folderAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSystemEnums.ProcessArchiveDetail_GetByProcessArchiveDetailId, 
+                    _storedProcedureInformationEnums.FolderDetail_GetByFolderIdAndFolderAttributeId, 
                     folderId, folderAttributeId);
 
                 return dataTable.AsEnumerable()

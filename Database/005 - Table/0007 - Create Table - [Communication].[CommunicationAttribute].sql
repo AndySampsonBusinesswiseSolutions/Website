@@ -23,7 +23,7 @@ CREATE TABLE [Communication].[CommunicationAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	CommunicationAttributeDescription VARCHAR(200) NOT NULL
+	CommunicationAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Communication]
 GO
 ALTER TABLE [Communication].[CommunicationAttribute] ADD CONSTRAINT

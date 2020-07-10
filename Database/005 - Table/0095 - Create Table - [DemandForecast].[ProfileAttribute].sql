@@ -19,17 +19,17 @@ CREATE TABLE [DemandForecast].[ProfileAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ProfileAttributeDescription VARCHAR(10) NOT NULL
+	ProfileAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [DemandForecast]
 GO
 ALTER TABLE [DemandForecast].[ProfileAttribute] ADD CONSTRAINT
-	DF_ProfileAttribute_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_ProfileAttribute_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [DemandForecast].[ProfileAttribute] ADD CONSTRAINT
 	DF_ProfileAttribute_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [DemandForecast].[ProfileAttribute] ADD CONSTRAINT
-	DF_ProfileAttribute_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_ProfileAttribute_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [DemandForecast].[ProfileAttribute] ADD CONSTRAINT
 	PK_ProfileAttribute PRIMARY KEY CLUSTERED 

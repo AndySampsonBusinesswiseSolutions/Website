@@ -23,7 +23,7 @@ CREATE TABLE [System].[PageAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	PageAttributeDescription VARCHAR(200) NOT NULL
+	PageAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[PageAttribute] ADD CONSTRAINT

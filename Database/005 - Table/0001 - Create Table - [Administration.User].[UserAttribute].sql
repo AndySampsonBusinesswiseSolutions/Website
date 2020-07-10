@@ -23,7 +23,7 @@ CREATE TABLE [Administration.User].[UserAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	UserAttributeDescription VARCHAR(200) NOT NULL
+	UserAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[UserAttribute] ADD CONSTRAINT

@@ -25,7 +25,7 @@ CREATE TABLE [System].[PageDetail]
 	SourceId BIGINT NOT NULL,
 	PageId BIGINT NOT NULL,
 	PageAttributeId BIGINT NOT NULL,
-	PageDetailDescription VARCHAR(200) NOT NULL
+	PageDetailDescription VARCHAR(255) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[PageDetail] ADD CONSTRAINT

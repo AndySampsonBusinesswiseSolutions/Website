@@ -25,7 +25,7 @@ CREATE TABLE [Customer].[CustomerDetail]
 	SourceId BIGINT NOT NULL,
 	CustomerId BIGINT NOT NULL,
 	CustomerAttributeId BIGINT NOT NULL,
-	CustomerDetailDescription VARCHAR(200) NOT NULL
+	CustomerDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[CustomerDetail] ADD CONSTRAINT

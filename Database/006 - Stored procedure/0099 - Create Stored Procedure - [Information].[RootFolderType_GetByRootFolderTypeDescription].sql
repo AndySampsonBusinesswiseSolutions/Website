@@ -19,7 +19,7 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Information].[RootFolderType_GetByRootFolderTypeDescription]
-    @RootFolderTypeDescription UNIQUEIDENTIFIER
+    @RootFolderTypeDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================

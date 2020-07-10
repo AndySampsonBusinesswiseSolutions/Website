@@ -23,7 +23,7 @@ CREATE TABLE [System].[APIAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	APIAttributeDescription VARCHAR(200) NOT NULL,
+	APIAttributeDescription VARCHAR(255) NOT NULL,
 	AllowsMultipleActiveInstances BIT NOT NULL,
 	)  ON [System]
 GO

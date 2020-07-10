@@ -26,13 +26,13 @@ CREATE TABLE [Information].[Date]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[Date] ADD CONSTRAINT
-	DF_Date_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_Date_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[Date] ADD CONSTRAINT
 	DF_Date_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[Date] ADD CONSTRAINT
-	DF_Date_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_Date_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[Date] ADD CONSTRAINT
 	PK_Date PRIMARY KEY CLUSTERED 

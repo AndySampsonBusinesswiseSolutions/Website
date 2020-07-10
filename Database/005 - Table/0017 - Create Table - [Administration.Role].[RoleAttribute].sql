@@ -23,7 +23,7 @@ CREATE TABLE [Administration.Role].[RoleAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	RoleAttributeDescription VARCHAR(200) NOT NULL
+	RoleAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Administration]
 GO
 ALTER TABLE [Administration.Role].[RoleAttribute] ADD CONSTRAINT

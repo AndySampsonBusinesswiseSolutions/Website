@@ -25,7 +25,7 @@ CREATE TABLE [Customer].[MeterDetail]
 	SourceId BIGINT NOT NULL,
 	MeterId BIGINT NOT NULL,
 	MeterAttributeId BIGINT NOT NULL,
-	MeterDetailDescription VARCHAR(200) NOT NULL
+	MeterDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[MeterDetail] ADD CONSTRAINT

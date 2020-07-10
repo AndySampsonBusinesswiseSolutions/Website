@@ -23,7 +23,7 @@ CREATE TABLE [Information].[FileAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	FileAttributeDescription VARCHAR(200) NOT NULL
+	FileAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[FileAttribute] ADD CONSTRAINT

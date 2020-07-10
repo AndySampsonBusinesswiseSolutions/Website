@@ -24,13 +24,13 @@ CREATE TABLE [Information].[Period]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[Period] ADD CONSTRAINT
-	DF_Period_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_Period_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[Period] ADD CONSTRAINT
 	DF_Period_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[Period] ADD CONSTRAINT
-	DF_Period_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_Period_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[Period] ADD CONSTRAINT
 	PK_Period PRIMARY KEY CLUSTERED 

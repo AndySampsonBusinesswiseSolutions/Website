@@ -7,7 +7,7 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 
 DECLARE @GroupDescription TABLE
 (
-	ForecastGroupDescription VARCHAR(100)
+	ForecastGroupDescription VARCHAR(255)
 )
 
 INSERT INTO @GroupDescription

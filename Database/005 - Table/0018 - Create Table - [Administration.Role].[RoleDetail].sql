@@ -25,7 +25,7 @@ CREATE TABLE [Administration.Role].[RoleDetail]
 	SourceId BIGINT NOT NULL,
 	RoleId BIGINT NOT NULL,
 	RoleAttributeId BIGINT NOT NULL,
-	RoleDetailDescription VARCHAR(200) NOT NULL
+	RoleDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Administration]
 GO
 ALTER TABLE [Administration.Role].[RoleDetail] ADD CONSTRAINT

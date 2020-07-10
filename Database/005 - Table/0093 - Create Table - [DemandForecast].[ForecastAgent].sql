@@ -24,13 +24,13 @@ CREATE TABLE [DemandForecast].[ForecastAgent]
 	)  ON [DemandForecast]
 GO
 ALTER TABLE [DemandForecast].[ForecastAgent] ADD CONSTRAINT
-	DF_ForecastAgent_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_ForecastAgent_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [DemandForecast].[ForecastAgent] ADD CONSTRAINT
 	DF_ForecastAgent_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [DemandForecast].[ForecastAgent] ADD CONSTRAINT
-	DF_ForecastAgent_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_ForecastAgent_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [DemandForecast].[ForecastAgent] ADD CONSTRAINT
 	PK_ForecastAgent PRIMARY KEY CLUSTERED 

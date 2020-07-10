@@ -23,7 +23,7 @@ CREATE TABLE [Information].[LocalDistributionZoneAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	LocalDistributionZoneAttributeDescription VARCHAR(200) NOT NULL
+	LocalDistributionZoneAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[LocalDistributionZoneAttribute] ADD CONSTRAINT

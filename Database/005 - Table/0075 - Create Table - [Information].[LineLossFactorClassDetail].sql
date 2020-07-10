@@ -25,7 +25,7 @@ CREATE TABLE [Information].[LineLossFactorClassDetail]
 	SourceId BIGINT NOT NULL,
 	LineLossFactorClassId BIGINT NOT NULL,
 	LineLossFactorClassAttributeId BIGINT NOT NULL,
-	LineLossFactorClassDetailDescription VARCHAR(200) NOT NULL
+	LineLossFactorClassDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[LineLossFactorClassDetail] ADD CONSTRAINT

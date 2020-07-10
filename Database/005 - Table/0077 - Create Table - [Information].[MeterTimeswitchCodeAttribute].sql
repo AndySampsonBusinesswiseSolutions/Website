@@ -23,7 +23,7 @@ CREATE TABLE [Information].[MeterTimeswitchCodeAttribute]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	MeterTimeswitchCodeAttributeDescription VARCHAR(200) NOT NULL
+	MeterTimeswitchCodeAttributeDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[MeterTimeswitchCodeAttribute] ADD CONSTRAINT

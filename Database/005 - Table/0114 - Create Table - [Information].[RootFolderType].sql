@@ -19,17 +19,17 @@ CREATE TABLE [Information].[RootFolderType]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	RootFolderTypeDescription VARCHAR(200) NOT NULL
+	RootFolderTypeDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[RootFolderType] ADD CONSTRAINT
-	DF_RootFolderType_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_RootFolderType_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[RootFolderType] ADD CONSTRAINT
 	DF_RootFolderType_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[RootFolderType] ADD CONSTRAINT
-	DF_RootFolderType_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_RootFolderType_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[RootFolderType] ADD CONSTRAINT
 	PK_RootFolderType PRIMARY KEY CLUSTERED 

@@ -25,7 +25,7 @@ CREATE TABLE [Communication].[CommunicationDetail]
 	SourceId BIGINT NOT NULL,
 	CommunicationId BIGINT NOT NULL,
 	CommunicationAttributeId BIGINT NOT NULL,
-	CommunicationDetailDescription VARCHAR(200) NOT NULL
+	CommunicationDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Communication]
 GO
 ALTER TABLE [Communication].[CommunicationDetail] ADD CONSTRAINT

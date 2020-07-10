@@ -771,7 +771,7 @@ async function uploadFile(file) {
 			ProcessQueueGUID: processQueueGUID, 
 			PageGUID: "714F10C4-ACF3-4409-97A8-C605E8E2FD0C", 
 			ProcessGUID: "1ACFB189-9C95-4DCD-A21A-93CDB2928620", 
-			CustomerGUID: "1ACFB189-9C95-4DCD-A21A-93CDB2928620", //TODO: Update GUID
+			CustomerGUID: "1C08F006-572E-4322-8D3E-149287AE550A", //TODO: Update GUID
 			XLSXFile: workbookJSON
 		  };
 		postData(postBody);		

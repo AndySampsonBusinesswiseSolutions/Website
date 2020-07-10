@@ -25,7 +25,7 @@ CREATE TABLE [System].[APIDetail]
 	SourceId BIGINT NOT NULL,
 	APIId BIGINT NOT NULL,
 	APIAttributeId BIGINT NOT NULL,
-	APIDetailDescription VARCHAR(200) NOT NULL
+	APIDetailDescription VARCHAR(255) NOT NULL
 	)  ON [System]
 GO
 ALTER TABLE [System].[APIDetail] ADD CONSTRAINT

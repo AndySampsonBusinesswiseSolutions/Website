@@ -23,7 +23,7 @@ CREATE TABLE [Administration.User].[Password]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	Password VARCHAR(200) NOT NULL
+	Password VARCHAR(255) NOT NULL
 	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[Password] ADD CONSTRAINT

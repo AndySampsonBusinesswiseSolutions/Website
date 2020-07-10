@@ -23,13 +23,13 @@ CREATE TABLE [Information].[Month]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[Month] ADD CONSTRAINT
-	DF_Month_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_Month_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[Month] ADD CONSTRAINT
 	DF_Month_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[Month] ADD CONSTRAINT
-	DF_Month_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_Month_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[Month] ADD CONSTRAINT
 	PK_Month PRIMARY KEY CLUSTERED 

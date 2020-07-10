@@ -25,7 +25,7 @@ CREATE TABLE [Administration.User].[UserDetail]
 	SourceId BIGINT NOT NULL,
 	UserId BIGINT NOT NULL,
 	UserAttributeId BIGINT NOT NULL,
-	UserDetailDescription VARCHAR(200) NOT NULL
+	UserDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Administration]
 GO
 ALTER TABLE [Administration.User].[UserDetail] ADD CONSTRAINT

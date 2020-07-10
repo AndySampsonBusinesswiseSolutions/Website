@@ -21,17 +21,17 @@ CREATE TABLE [Information].[FolderDetail]
 	SourceId BIGINT NOT NULL,
 	FolderId BIGINT NOT NULL,
 	FolderAttributeId BIGINT NOT NULL,
-	FolderDetailDescription VARCHAR(200) NOT NULL
+	FolderDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[FolderDetail] ADD CONSTRAINT
-	DF_FolderDetail_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_FolderDetail_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[FolderDetail] ADD CONSTRAINT
 	DF_FolderDetail_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[FolderDetail] ADD CONSTRAINT
-	DF_FolderDetail_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_FolderDetail_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[FolderDetail] ADD CONSTRAINT
 	PK_FolderDetail PRIMARY KEY CLUSTERED 

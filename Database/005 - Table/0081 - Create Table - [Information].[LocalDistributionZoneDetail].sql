@@ -25,7 +25,7 @@ CREATE TABLE [Information].[LocalDistributionZoneDetail]
 	SourceId BIGINT NOT NULL,
 	LocalDistributionZoneId BIGINT NOT NULL,
 	LocalDistributionZoneAttributeId BIGINT NOT NULL,
-	LocalDistributionZoneDetailDescription VARCHAR(200) NOT NULL
+	LocalDistributionZoneDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[LocalDistributionZoneDetail] ADD CONSTRAINT

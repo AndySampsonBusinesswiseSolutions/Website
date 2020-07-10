@@ -25,7 +25,7 @@ CREATE TABLE [Information].[ProfileClassDetail]
 	SourceId BIGINT NOT NULL,
 	ProfileClassId BIGINT NOT NULL,
 	ProfileClassAttributeId BIGINT NOT NULL,
-	ProfileClassDetailDescription VARCHAR(200) NOT NULL
+	ProfileClassDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[ProfileClassDetail] ADD CONSTRAINT

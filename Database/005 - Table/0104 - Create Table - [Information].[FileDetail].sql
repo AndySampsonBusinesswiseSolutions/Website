@@ -25,7 +25,7 @@ CREATE TABLE [Information].[FileDetail]
 	SourceId BIGINT NOT NULL,
 	FileId BIGINT NOT NULL,
 	FileAttributeId BIGINT NOT NULL,
-	FileDetailDescription VARCHAR(200) NOT NULL
+	FileDetailDescription VARCHAR(255) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[FileDetail] ADD CONSTRAINT

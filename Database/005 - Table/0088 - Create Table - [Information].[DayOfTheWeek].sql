@@ -23,13 +23,13 @@ CREATE TABLE [Information].[DayOfTheWeek]
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[DayOfTheWeek] ADD CONSTRAINT
-	DF_DayOfTheWeek_EffectiveFromDateTime DEFAULT GETDATE() FOR EffectiveFromDateTime
+	DF_DayOfTheWeek_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
 GO
 ALTER TABLE [Information].[DayOfTheWeek] ADD CONSTRAINT
 	DF_DayOfTheWeek_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime
 GO
 ALTER TABLE [Information].[DayOfTheWeek] ADD CONSTRAINT
-	DF_DayOfTheWeek_CreatedDateTime DEFAULT GETDATE() FOR CreatedDateTime
+	DF_DayOfTheWeek_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
 GO
 ALTER TABLE [Information].[DayOfTheWeek] ADD CONSTRAINT
 	PK_DayOfTheWeek PRIMARY KEY CLUSTERED 
