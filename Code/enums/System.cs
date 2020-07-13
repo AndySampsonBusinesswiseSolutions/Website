@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string DetermineFileTypeAPI = "4C7CACF3-22BF-4943-B03C-83E1B4DADC35";
                     public string UploadFileAPI = "5681C395-98AC-4410-98DE-DBB550106EF2";
                     public string CreateCustomerFoldersAPI = "2AE6E5B2-1D5F-431B-9BCE-A5CDDB52B493";
                     public string StoreLoginAttemptAPI = "3BBFC2B6-2572-43CD-921A-A237000AC248";//
@@ -42,6 +43,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string DetermineFileTypeAPI = "DetermineFileType.api";
                     public string UploadFileAPI = "UploadFile.api";
                     public string CreateCustomerFoldersAPI = "CreateCustomerFolders.api";
                     public string StoreLoginAttemptAPI = "StoreLoginAttempt.api";
@@ -64,6 +66,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string DetermineFileTypeAPI = "dp2juZYYbdjkh43c";
                     public string UploadFileAPI = "puFbyaAvrzMgC3MU";
                     public string CreateCustomerFoldersAPI = "UE9ggtwMq6G4fpYv";
                     public string RoutingAPI = @"E{*Jj5&nLfC}@Q$:";

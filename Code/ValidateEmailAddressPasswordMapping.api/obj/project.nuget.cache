@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "0HQmGnafkuQJWrf3tpdF6s7uwKCzCiFiYeCeptFCDDO9Xu28vBWJch61V7+ogGA43l2Q5Xwz/uiM0MWGPzi9QQ==",
+  "dgSpecHash": "8maGAcCbyZZ2A19t5Z3BJBx2KOOW0Inj9R2b8zHpGf9ZjPoeuo1Sec2SPYguEQa6ZjEWGwLnWCLDyjsaV9LWJA==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\ValidateEmailAddressPasswordMapping.api\\ValidateEmailAddressPasswordMapping.api.csproj",
   "expectedPackageFiles": [
