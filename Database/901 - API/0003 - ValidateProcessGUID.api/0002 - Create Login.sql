@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'ValidateProcessGUID.api')
+    BEGIN
+        CREATE LOGIN [ValidateProcessGUID.api] WITH PASSWORD=N'Y4c?.KT(>HXj@f8D', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO
