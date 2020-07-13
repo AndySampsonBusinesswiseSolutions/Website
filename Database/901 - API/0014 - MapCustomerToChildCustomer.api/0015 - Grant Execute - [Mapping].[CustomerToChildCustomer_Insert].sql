@@ -1,5 +1,5 @@
 USE [EMaaS]
 GO
 
-GRANT EXECUTE ON OBJECT::[Mapping].[CustomerToChildCustomer_Insert] TO [UpdateCustomerDetail.api];  
+GRANT EXECUTE ON OBJECT::[Mapping].[CustomerToChildCustomer_Insert] TO [MapCustomerToChildCustomer.api];  
 GO
