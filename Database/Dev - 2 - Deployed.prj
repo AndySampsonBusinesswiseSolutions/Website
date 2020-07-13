@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>ef69c59a-ef2d-4acc-8ffe-0bd3378f2198</ID>
-    <DateCreated>2020-07-10T11:24:02.2543817+01:00</DateCreated>
+    <ID>44bf95c1-5051-4f92-8100-a2044e542a6e</ID>
+    <DateCreated>2020-07-13T08:14:24.6123153+01:00</DateCreated>
     <Name>Dev - 2 - Deployed</Name>
     <FileName>C:\wamp64\www\Website\Database\Dev - 2 - Deployed.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>VwlzJrsXgDzJuI4V/1qtmw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6wxXj8ZJ/2D+py1THeidlUI=</Password>
+    <Login>MVLJxlcuoYA92Qr9jcXEhQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe64pqkfGKKiZnhNpTaL4Ykmg=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1101,62 +1101,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>fb5f6fed-13bc-460e-8620-ed3428eca810</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0110 - Create Table - [Information].[Folder].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>a8c52788-1921-4b48-9a02-bbe12fc9346f</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0111 - Create Table - [Information].[FolderAttribute].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>d460777d-1df9-4b66-a038-3414f42570e7</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0112 - Create Table - [Information].[FolderDetail].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>b2c29969-b71f-4c04-917f-38e5ec4a8930</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0113 - Create Table - [Information].[FolderExtenstionType].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>2c7e572f-82bc-4e43-9204-4dbf5654669c</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0114 - Create Table - [Information].[RootFolderType].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>2fc6d22d-bedc-432b-a88e-2c5a204c4848</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0115 - Create Table - [Mapping].[FolderToFolderExtensionType].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>3e828a7c-bddc-462e-90b6-9b7ba013b852</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0116 - Create Table - [Mapping].[FolderToRootFolderType].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>ce14eb4d-d193-412f-bfa6-c1d07bce54d8</ID>
-    <ParentFolder_ID>8cac5bd3-9536-4326-944b-ad9196406412</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\005 - Table\0117 - Create Table - [Mapping].[FolderToFolderExtension].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>7a8ec634-3dc2-4e35-b396-7e2752503d0d</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0001 - Create Stored Procedure - [Administration.User].[UserAttribute_Insert].sql</FullName>
@@ -1787,107 +1731,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>6caeeea2-18db-4f80-a4b0-9acf4ec9a590</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0091 - Create Stored Procedure - [Information].[FolderAttribute_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>1b93d4c4-16af-4965-ade2-f05e9cda4442</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0092 - Create Stored Procedure - [Information].[Folder_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>16b5ad8c-9969-4614-89c0-ecba99098e8d</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0093 - Create Stored Procedure - [Information].[FolderDetail_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>62f36198-f338-48a3-b36c-5b5bb08ddcca</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0094 - Create Stored Procedure - [Information].[FolderExtensionType_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>eec9a211-5775-4c9d-952c-721948bef59a</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0095 - Create Stored Procedure - [Information].[RootFolderType_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>0f46c51a-c362-4d86-9fdc-360a63fa10aa</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0096 - Create Stored Procedure - [Mapping].[FolderToFolderExtensionType_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>6bc222f6-0f96-4548-a48d-be53a4547ff0</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0097 - Create Stored Procedure - [Mapping].[FolderToRootFolderType_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>c8fb02fd-8f49-4e63-b3e9-f831a36f81b3</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0098 - Create Stored Procedure - [Mapping].[FolderToFolderExtension_Insert].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>f5b0df8d-76df-41fc-a12f-7bd0dc8e8b34</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0099 - Create Stored Procedure - [Information].[RootFolderType_GetByRootFolderTypeDescription].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>9e647b7e-1e19-4b5f-abf6-869abbda086a</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0100 - Create Stored Procedure - [Mapping].[FolderToRootFolderType_GetByRootFolderTypeId].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>03e85566-8b53-45bc-8b73-494a09dd5fc8</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0101 - Create Stored Procedure - [Information].[FolderAttribute_GetByFolderAttributeDescription].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>3c0bff63-2893-4791-a03c-b378557ad05f</ID>
     <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0102 - Create Stored Procedure - [Customer].[CustomerDetail_GetByCustomerIdAndCustomerAttributeId] copy.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>e47cbe36-ff14-46de-8853-783c757062d4</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0103 - Create Stored Procedure - [Mapping].[FolderToFolderExtension_GetByFolderId].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>6b461ad1-e74d-4566-8e3e-cb8c19d3111f</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0104 - Create Stored Procedure - [Information].[FolderExtensionType_GetByFolderExtensionTypeDescription].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>e8d6680d-3423-4835-84de-8c42e2d457df</ID>
-    <ParentFolder_ID>b2671013-a938-4cfb-9329-fc7d37d461fe</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\0105 - Create Stored Procedure - [Mapping].[FolderToFolderExtension_GetByFolderExtensionTypeId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2025,13 +1871,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>f080a857-d40d-4a4b-a7c1-ecc542365a87</ID>
-    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\010 - Login\0020 - Create Login - StoreUsageUpload.api.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>19388d2b-aa32-45c8-a03b-cba3326db59b</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0021 - Create Login - AddNewCustomer.api.sql</FullName>
@@ -2049,20 +1888,6 @@
     <ID>18b1b207-f5ef-4350-9559-65506341d909</ID>
     <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\010 - Login\0023 - Create Login - MapCustomerToChildCustomer.api.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>e20b660e-6ade-4d11-b093-1b6936867929</ID>
-    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\010 - Login\0024 - Create Login - CreateCustomerFolders.api.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>79995440-0f1c-43b5-9661-3e1c224f4d8b</ID>
-    <ParentFolder_ID>16355284-4a15-4f2e-b93b-42672d52b4b8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\010 - Login\0025 - Grant Execute - StoreUsageUpload.api.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2396,13 +2221,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>06739aba-850f-479a-b932-8b2bd5241c94</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0048 - Data - StoreUsageUpload.API API.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>b5fb2489-05d3-4bd5-ba24-b44a1d015fa1</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0049 - Data - ValidatePageGUID.API add to Usage Upload process.sql</FullName>
@@ -2511,62 +2329,6 @@
     <ID>1b1b1dc1-e162-458f-bd2b-f931332d246b</ID>
     <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\999 - Data\0064 - Data - API Response Process Archive Attribute.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>5ef0c9d1-b439-4ad3-a148-029eee9f898f</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0065 - Data - CreateCustomerFolders.api API.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>e4c11ab4-3ffb-4289-867d-72d3867ddbb9</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0066 - Data - FolderAttributes.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>2a499330-9073-474d-be14-334bf190ec83</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0067 - Data - Folders.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>07a5972e-8318-4752-bf54-b460e80d3b15</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0068 - Data - FolderExtensionTypes.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>1b5e119f-21f1-4b56-a580-9682974e24f9</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0069 - Data - RootFolderTypes.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>33858c1f-61c7-4c22-a8fe-299d193823f4</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0070 - Data - FolderToFolderExtensionTypes.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>c59a88a2-40ff-4b55-aa99-7d04a28f3b2e</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0071 - Data - FolderToRootFolderTypes.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>a723c8ed-5a5c-456c-9f0a-6e64c3a12fc5</ID>
-    <ParentFolder_ID>70ce888c-97ac-4139-a38a-cb3f1ac3164e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\999 - Data\0072 - Data - FolderToFolderExtensions.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

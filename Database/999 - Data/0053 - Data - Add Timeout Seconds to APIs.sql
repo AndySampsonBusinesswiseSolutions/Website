@@ -32,6 +32,3 @@ EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttrib
 
 SET @APIId = (SELECT APIId FROM [System].[API] WHERE APIGUID = '0C1BAFAA-586D-48BB-8D0B-B0B56BE0CCD2') --LockUser.api
 EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '600'
-
-SET @APIId = (SELECT APIId FROM [System].[API] WHERE APIGUID = '94DD0DCB-DDC3-45A9-9C3D-D83922CF3110') --StoreUsageUpload.api
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '600'
