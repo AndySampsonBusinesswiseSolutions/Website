@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>952d1c8b-5427-46e0-af01-0ce8271b5c02</ID>
-    <DateCreated>2020-07-13T15:42:46.6408239+01:00</DateCreated>
+    <ID>e17d3131-a147-4ccc-988c-9b68dbac1d9e</ID>
+    <DateCreated>2020-07-13T17:43:41.8653186+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>aiXGZNx0rmUryj+fV6ShCw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe68iVqxQ7mjdZ6A05ujsngiw=</Password>
+    <Login>4Zs+XGPUf+UoEx4zRvQEtQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6/XXirA3mVoKml77bj/mF5A=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1892,114 +1892,114 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>84f7f4ec-78a5-448a-86e4-a2c053fcc506</ID>
+    <ID>c340b899-2e2b-44fd-b338-febbbfd36c87</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0012 - API Attribute - POST Route.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0011 - API Attribute - POST Route.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>4f62be7d-2403-41e3-b191-2735f9a8575a</ID>
+    <ID>102069df-8ec3-495d-aacf-a1dd72efd78c</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0013 - API Attribute - Required Data Keys.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0012 - API Attribute - Required Data Keys.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>8d640c1c-4088-45f5-a880-671edffcd106</ID>
+    <ID>a49eafe3-c4b3-4914-96ed-68e079de1296</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0014 - Process Archive Attribute - Response.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0013 - Process Archive Attribute - Response.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>72a3f02a-89d7-4f91-b48e-07e1ba582302</ID>
+    <ID>fe52ff72-c3ba-46f5-9257-e5fc53bf6aa1</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0015 - API Attribute - Maximum Invalid Login Attempts.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0014 - API Attribute - Maximum Invalid Login Attempts.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>c191115b-92b6-4605-9273-e05be324e78f</ID>
+    <ID>a5a8d5f4-89eb-48ed-b1e6-a95b797129b8</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0016 - User Attribute - Account Locked.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0015 - User Attribute - Account Locked.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>11c94d00-a853-4a55-83f7-21acd024ee36</ID>
+    <ID>aa8e5ef6-39ae-4560-9d74-22bad3a8aac8</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0017 - Page - Site Management.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0016 - Page - Site Management.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>91a0885e-2c43-4875-b835-971e4bb61048</ID>
+    <ID>1dcaadb4-471e-4047-a5c0-3dfb835d064f</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0018 - Page Detail - Page Name - Site Management.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0017 - Page Detail - Page Name - Site Management.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>f474fe1c-f548-4792-a326-21b2148ebd1d</ID>
+    <ID>4673c708-c313-4789-9c6c-25a1a47440dd</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0019 - Process - Usage Upload.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0018 - API Attribute - IsRunning Route.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>2c974bee-6acb-43fa-9a07-975ff6999fae</ID>
+    <ID>12a46ef3-f09d-4b8f-99e8-db657a181e3b</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0020 - Process Detail - Process Name - Usage Upload.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0019 - API Attribute - Timeout Seconds.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>b25d77d1-9f17-45e7-9b86-9c895bcc076f</ID>
+    <ID>d501e0cc-1fc7-45e7-8e5f-a933a9903b18</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0021 - API Attribute - IsRunning Route.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0020 - Page - Manage Customers.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>cd9e9cf0-b023-461f-9a12-47fa9b682b27</ID>
+    <ID>3daa2290-fb55-4070-aa40-a35daa5aafb3</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0022 - API Attribute - Timeout Seconds.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0021 - Page Detail - Page Name - Manage Customers.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>80104ba3-8c2e-4827-b2d7-2ae86914c1ce</ID>
+    <ID>42d01b00-4542-4c0e-866f-03a32d3d4890</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0023 - Page - Manage Customers.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0022 - Process - Add New Customer.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>632a307a-6ee6-4862-9eb3-39a453999a11</ID>
+    <ID>e5266958-213e-4d0a-bf14-8fa84df3919d</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0024 - Page Detail - Page Name - Manage Customers.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0023 - Process Detail - Process Name - Add New Customer.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>bb89c6a4-b870-4951-b596-6680f85dd1ab</ID>
+    <ID>f659606c-7b27-4e67-9423-7c364e947d50</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0025 - Process - Add New Customer.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0024 - Process Archive Attribute - API Response.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>39e60d34-b06c-4c41-a176-785cd11e1d90</ID>
+    <ID>9b4243ff-1c3f-4ebb-aace-b0f90c0da200</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0026 - Process Detail - Process Name - Add New Customer.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0025 - Process - File Upload.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>2a7a1b1b-da56-4be0-b314-a345c0e21bad</ID>
+    <ID>e7c11f1a-4cb1-4335-b466-97c73c6996b3</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0027 - Process Archive Attribute - API Response.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0026 - Process Detail - Process Name - File Upload.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2039,23 +2039,23 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>ed1a2574-72cf-489f-b4d6-2c42526d913c</ID>
+    <ID>a431c6d8-f8e7-4e4b-a865-a93087562c76</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0003 - PageToProcess - Usage Upload To Login.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0003 - PageToProcess - Manage Customer To Add New Customer.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>4123c30f-d4d0-4c2e-9a24-0f48d9249eb5</ID>
+    <ID>4b59b6c0-0bd2-4f03-a5e9-f07a90a3da9e</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0004 - PageToProcess - Manage Customer To Add New Customer.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0004 - PageToProcess - Login To Login.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>8096f503-3a64-44bd-b4cc-53cdb32e1194</ID>
+    <ID>ee029bac-d68e-44ac-ba07-a1cca1009f7d</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0005 - PageToProcess - Login To Login.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0005 - PageToProcess - Site Management To File Upload.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2928,16 +2928,16 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>3c8c7630-ff25-490c-9c96-ce8c072e18a8</ID>
+    <ID>c8d1d412-4d09-492b-b2dc-a3622bc82d46</ID>
     <ParentFolder_ID>67e5081a-6576-4b29-89c9-c3ab10428fe8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0005 - ValidatePageGUID.api\0019 - API Detail - API Name.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0005 - ValidatePageGUID.api\0019 - Create API.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>0908f2b4-8efa-48eb-b12b-f9c89abecc74</ID>
+    <ID>c5604578-f5d5-4f9a-a2b3-efa81a18504f</ID>
     <ParentFolder_ID>67e5081a-6576-4b29-89c9-c3ab10428fe8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0005 - ValidatePageGUID.api\0020 - Create API.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0005 - ValidatePageGUID.api\0020 - API Detail - API Name.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

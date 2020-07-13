@@ -87,6 +87,10 @@ namespace MethodLibrary
                             apiData.Add(dataKey, JsonConvert.SerializeObject(apiDictionary[dataKey]));
                         }
                     }
+                    else
+                    {
+                        apiDictionary.Add(dataKey, new List<string>());
+                    }
                 }
 
                 if(!string.IsNullOrWhiteSpace(callingGUID))
