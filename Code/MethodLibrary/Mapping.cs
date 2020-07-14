@@ -151,6 +151,20 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("FolderId"))
                     .ToList();
             }
+
+            public void CustomerToFile_Insert(long createdByUserId, long sourceId, long customerId, long fileId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.CustomerToFile_Insert, 
+                    createdByUserId, sourceId, customerId, fileId);
+            }
+
+            public void FileToFileType_Insert(long createdByUserId, long sourceId, long fileId, long fileTypeId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.FileToFileType_Insert, 
+                    createdByUserId, sourceId, fileId, fileTypeId);
+            }
         }
     }
 }

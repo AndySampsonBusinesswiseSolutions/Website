@@ -38,48 +38,58 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public long RootFolderType_GetRootFolderIdByRootFolderTypeDescription(string rootFolderTypeDescription)
+            public void File_Insert(long createdByUserId, long sourceId, string fileGUID)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureInformationEnums.File_Insert, 
+                    createdByUserId, sourceId, fileGUID);
+            }
+
+            public long File_GetFileIdByFileGUID(string fileGUID)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.RootFolderType_GetByRootFolderTypeDescription, 
-                    rootFolderTypeDescription);
+                    _storedProcedureInformationEnums.File_GetByFileGUID, 
+                    fileGUID);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("RootFolderTypeId"))
+                    .Select(r => r.Field<long>("FileId"))
                     .FirstOrDefault();
             }
 
-            public long FolderExtensionType_GetFolderExtensionTypeIdByFolderExtensionTypeDescription(string folderExtensionTypeDescription)
+            public long FileAttribute_GetFileAttributeIdByFileAttributeDescription(string fileAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.FolderExtensionType_GetByFolderExtensionTypeDescription, 
-                    folderExtensionTypeDescription);
+                    _storedProcedureInformationEnums.FileAttribute_GetByFileAttributeDescription, 
+                    fileAttributeDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FolderExtensionTypeId"))
+                    .Select(r => r.Field<long>("FileAttributeId"))
                     .FirstOrDefault();
             }
 
-            public long FolderAttribute_GetFolderAttributeIdByFolderAttributeDescription(string folderAttributeDescription)
+            public void FileDetail_Insert(long createdByUserId, long sourceId, long fileId, long fileAttributeId, string fileDetailDescription)
             {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.FolderAttribute_GetByFolderAttributeDescription, 
-                    folderAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FolderAttributeId"))
-                    .FirstOrDefault();
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureInformationEnums.FileDetail_Insert, 
+                    createdByUserId, sourceId, fileId, fileAttributeId, fileDetailDescription);
             }
 
-            public string FolderDetail_GetFolderDetailDescriptionListByFolderIdAndFolderAttributeId(long folderId, long folderAttributeId)
+            public void FileContent_Insert(long createdByUserId, long sourceId, long fileId, string fileContent)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureInformationEnums.FileContent_Insert, 
+                    createdByUserId, sourceId, fileId, fileContent);
+            }
+
+            public long FileType_GetFileTypeIdByFileTypeDescription(string fileTypeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.FolderDetail_GetByFolderIdAndFolderAttributeId, 
-                    folderId, folderAttributeId);
+                    _storedProcedureInformationEnums.FileType_GetByFileTypeDescription, 
+                    fileTypeDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<string>("FolderDetailDescription"))
-                    .First();
+                    .Select(r => r.Field<long>("FileTypeId"))
+                    .FirstOrDefault();
             }
         }
     }

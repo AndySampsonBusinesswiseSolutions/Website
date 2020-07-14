@@ -34,10 +34,12 @@ namespace enums
             {
                 public string SourceAttribute_GetBySourceAttributeDescription = "[Information].[SourceAttribute_GetBySourceAttributeDescription]";
                 public string SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription = "[Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription]";
-                public string RootFolderType_GetByRootFolderTypeDescription = "[Information].[RootFolderType_GetByRootFolderTypeDescription]";
-                public string FolderAttribute_GetByFolderAttributeDescription = "[Information].[FolderAttribute_GetByFolderAttributeDescription]";
-                public string FolderDetail_GetByFolderIdAndFolderAttributeId = "[Information].[FolderDetail_GetByFolderIdAndFolderAttributeId]";
-                public string FolderExtensionType_GetByFolderExtensionTypeDescription = "[Information].[FolderExtensionType_GetByFolderExtensionTypeDescription]";
+                public string File_Insert = "[Information].[File_Insert]";
+                public string File_GetByFileGUID = "[Information].[File_GetByFileGUID]";
+                public string FileAttribute_GetByFileAttributeDescription = "[Information].[FileAttribute_GetByFileAttributeDescription]";
+                public string FileDetail_Insert = "[Information].[FileDetail_Insert]";
+                public string FileContent_Insert = "[Information].[FileContent_Insert]";
+                public string FileType_GetByFileTypeDescription = "[Information].[FileType_GetByFileTypeDescription]";
             }
 
             public class Mapping
@@ -57,6 +59,8 @@ namespace enums
                 public string FolderToRootFolderType_GetByRootFolderTypeId = "[Mapping].[FolderToRootFolderType_GetByRootFolderTypeId]";
                 public string FolderToFolderExtension_GetByFolderId = "[Mapping].[FolderToFolderExtension_GetByFolderId]";
                 public string FolderToFolderExtensionType_GetByFolderExtensionTypeId = "[Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId]";
+                public string CustomerToFile_Insert = "[Mapping].[CustomerToFile_Insert]";
+                public string FileToFileType_Insert = "[Mapping].[FileToFileType_Insert]";
             }
 
             public class System

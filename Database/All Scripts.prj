@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>e6242bc6-4f36-4ada-a980-2022f4932875</ID>
-    <DateCreated>2020-07-13T22:00:39.9831176+01:00</DateCreated>
+    <ID>2a013982-8927-40db-a149-224de3b95676</ID>
+    <DateCreated>2020-07-14T10:10:38.3517468+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>tPQtd0QNXRP0ZxoFRvYnmg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6wg2afua30q2EbcBOwOQfGE=</Password>
+    <Login>M4tlXM/sEnMzl3K0To5NDA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe64KwpTvcQvu9HgOmgTwRTxw=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -590,6 +590,20 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>bf87a03a-66ab-43d8-aa5d-dd8947bc086f</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0028 - [Information].[FileType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>4f18ee13-96aa-4696-a8d4-3cdc60960e51</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0029 - [Information].[FileContent].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>6c3048a7-bed1-4226-8f28-6651ae4510ef</ID>
     <ParentFolder_ID>33680a27-22d6-487d-a54d-7ce5336f53e0</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\003 - System\0001 - [System].[Page].sql</FullName>
@@ -1115,6 +1129,20 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>c1f8ea9d-5b35-43d1-adee-772eb2bf65e5</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0030 - [Mapping].[CustomerToFile].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>25b51e17-8af3-4a08-9e67-695fea50df5d</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0031 - [Mapping].[FileToFileType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>0a072cb4-3f48-456e-b3df-7e6fae0b3975</ID>
     <ParentFolder_ID>a9c21168-2791-4fbc-9ff9-6f4221904752</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\001 - Administration\0001 - [Administration.User].[UserAttribute_Insert].sql</FullName>
@@ -1199,9 +1227,9 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>a04931f3-656c-46ea-8f45-4be835d87dac</ID>
+    <ID>af25a33d-ed96-4bd1-be13-70717851ee69</ID>
     <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0001 - [Information].[SourceType_GetBySourceTypeDescription].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0001 - [Information].[SourceAttribute_GetBySourceAttributeDescription].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1265,6 +1293,41 @@
     <ID>f1baca9f-8c5a-43df-8c1f-e1e9eb410a8e</ID>
     <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0010 - [Information].[FileDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>07aa6a87-c166-4c90-8dd2-881b41d7b4e9</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0011 - [Information].[FileType_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>36db4467-ec8a-4171-ba74-d7dccf4a050d</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0012 - [Information].[File_GetByFileGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9130dc9b-ae0e-4915-8c0c-3bef771224f2</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0013 - [Information].[FileAttribute_GetByFileAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a7f64700-775e-4167-87de-289ca42b0d27</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0014 - [Information].[FileContent_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d98f9439-aefe-46dc-93ab-b1f16e4ec2c0</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0015 - [Information].[FileType_GetByFileTypeDescription].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1752,6 +1815,20 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>f025ee1f-41ac-447a-a325-cc94ef0420b3</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0017 - [Mapping].[CustomerToFile_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1cfb5e6f-6b1a-4a88-a95a-ab1c173dee5a</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0018 - [Mapping].[FileToFileType_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>c7c1b875-57a8-427a-9e09-bc4b04ee3f78</ID>
     <ParentFolder_ID>07fd139f-e12d-4ef8-996c-00c0e09f5041</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\001 - Administration\0001 - User Attribute - Email Address.sql</FullName>
@@ -1818,6 +1895,20 @@
     <ID>cb1f0271-2e23-408c-a6b5-24a27be59d8c</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0006 - SourceAttribute - File.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8aaf99fc-40f0-44d4-a73e-709a12929f14</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0007 - FileAttribute - File Name.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>863f3e0e-3a5b-4130-baa6-b478310acf69</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0008 - FileType.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

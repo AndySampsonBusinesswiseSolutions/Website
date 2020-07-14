@@ -96,10 +96,13 @@ namespace enums
                     public string ProcessQueueGUID = "ProcessQueueGUID";
                     public string CallingGUID = "CallingGUID";
                     public string CustomerGUID = "CustomerGUID";
-                    public string XLSXFile = "XLSXFile";
                     public string CustomerData = "CustomerData";
                     public string ChildCustomerData = "ChildCustomerData";
                     public string APIGUID = "APIGUID";
+                    public string FileContent = "FileContent";
+                    public string FileGUID = "FileGUID";
+                    public string FileType = "FileType";
+                    public string FileName = "FileName";
                 }
             }
 

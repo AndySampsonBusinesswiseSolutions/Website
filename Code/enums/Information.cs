@@ -4,15 +4,14 @@ namespace enums
     {
         public class Information
         {
-            public class Folder
+            public class File
             {
                 public class Attribute
                 {
-                    public string FolderPath = "Folder Path";
-                    public string FolderType = "Folder Type";
+                    public string FileName ="File Name";
                 }
 
-                public class ExtensionType
+                public class Type
                 {
                     public string UsageUpload = "Usage Upload";
                     public string LetterOfAuthority = "Letter Of Authority";
@@ -21,11 +20,6 @@ namespace enums
                     public string FlexContract = "Flex Contract";
                     public string Invoice = "Invoice";
                     public string SupplierBill = "Supplier Bill";
-                }
-
-                public class RootFolderType
-                {
-                    public string CustomerFiles = "Customer Files";
                 }
             }
 

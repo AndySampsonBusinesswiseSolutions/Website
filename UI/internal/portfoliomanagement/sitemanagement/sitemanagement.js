@@ -757,6 +757,9 @@ function handleFiles(files) {
   files.forEach(uploadFile);
   
   alert('The files you selected have been uploaded to our server. You will receive an email confirming success or failure of these files.')
+
+  var modal = document.getElementById("uploadUsagePopup");
+  modal.style.display = "none";
 }
 
 async function uploadFile(file) {
@@ -767,12 +770,16 @@ async function uploadFile(file) {
 		var workbookJSON = JSON.stringify(workbook);
 
 		var processQueueGUID = CreateGUID();
+		var fileGUID = CreateGUID();
 		var postBody = {
 			ProcessQueueGUID: processQueueGUID, 
 			PageGUID: "714F10C4-ACF3-4409-97A8-C605E8E2FD0C", 
 			ProcessGUID: "3AFF25CB-06BD-4BD1-A409-13D10A08044F", 
-			CustomerGUID: "1C08F006-572E-4322-8D3E-149287AE550A", //TODO: Update GUID
-			XLSXFile: workbookJSON
+			CustomerGUID: "DBA4F128-B713-40DB-9999-5FE4E352A33C", //TODO: Update GUID
+			FileContent: workbookJSON,
+			FileGUID: fileGUID,
+			FileType: "Usage Upload",
+			FileName: "Usage Upload.xlsx"
 		  };
 		postData(postBody);		
 	}
