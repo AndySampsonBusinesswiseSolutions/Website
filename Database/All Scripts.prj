@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>3a53e31c-407b-445d-a40d-bda6efe5752c</ID>
-    <DateCreated>2020-07-14T13:43:29.3050226+01:00</DateCreated>
+    <ID>02230c8e-585d-49b1-8036-a123be8493f9</ID>
+    <DateCreated>2020-07-14T13:51:21.7831304+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>Q5FjNIbGQ0lSP81imt7Edg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe66RMiSGPaL8tjSPHNx48eVs=</Password>
+    <Login>G5dJO9Raw3wDfrD8YweO7Q==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe62b+23hKV5yULw9iX0SsrTk=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -5056,13 +5056,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>f77ac38c-70e6-47d8-93f0-dc5d34f4e086</ID>
-    <ParentFolder_ID>31a03590-d11a-43dc-bd75-8126e91ea853</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0015 - UploadFile.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>a8d4b1d1-029a-4e52-94b2-c87431c0c873</ID>
     <ParentFolder_ID>31a03590-d11a-43dc-bd75-8126e91ea853</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0015 - UploadFile.api\0021 - API Detail - POST Route.sql</FullName>
@@ -5287,13 +5280,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>4b52e5d1-1b81-4acd-95aa-9322d15b690e</ID>
-    <ParentFolder_ID>fc1c4ce1-020d-4521-9ec9-839e6a4cdb5e</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0016 - DetermineFileType.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>0deae68d-651b-49d4-a27a-be7d51c64614</ID>
     <ParentFolder_ID>fc1c4ce1-020d-4521-9ec9-839e6a4cdb5e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0016 - DetermineFileType.api\0021 - API Detail - POST Route.sql</FullName>
@@ -5490,13 +5476,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>8f5a2bbb-6fa1-4417-99cf-5badb7b24ab2</ID>
-    <ParentFolder_ID>b6b013b5-6013-42fa-b5c4-a99027da72f8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0017 - StoreUsageUploadTempSiteData.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>20f6a5ab-c3c2-45df-80e4-1140be37fe29</ID>
     <ParentFolder_ID>b6b013b5-6013-42fa-b5c4-a99027da72f8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0017 - StoreUsageUploadTempSiteData.api\0021 - API Detail - POST Route.sql</FullName>
@@ -5661,13 +5640,6 @@
     <ID>c44a603f-aa3a-46e6-8639-28b9164cda78</ID>
     <ParentFolder_ID>6fcda250-bcc3-4755-8c25-4277bc099990</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0018 - StoreUsageUploadTempMeterData.api\0019 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>b98d474b-e43f-4885-9eaa-0b6af80e6555</ID>
-    <ParentFolder_ID>6fcda250-bcc3-4755-8c25-4277bc099990</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0018 - StoreUsageUploadTempMeterData.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -5840,13 +5812,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>114358c8-aead-4e9c-bd5e-1b92a6b41681</ID>
-    <ParentFolder_ID>48e92f7c-9569-43b4-9fef-56f8723718dd</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0019 - StoreUsageUploadTempSubMeterData.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>d4f0298d-110a-4990-9959-dcbfb17df285</ID>
     <ParentFolder_ID>48e92f7c-9569-43b4-9fef-56f8723718dd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0019 - StoreUsageUploadTempSubMeterData.api\0021 - API Detail - POST Route.sql</FullName>
@@ -6011,13 +5976,6 @@
     <ID>7221ec04-03fe-4524-947d-9efb83e24183</ID>
     <ParentFolder_ID>aa787cf7-9939-4d57-a4ce-0d270f6d5026</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0020 - StoreUsageUploadTempMeterUsageData.api\0019 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>c23f721e-08df-445d-8386-210d10a0728f</ID>
-    <ParentFolder_ID>aa787cf7-9939-4d57-a4ce-0d270f6d5026</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0020 - StoreUsageUploadTempMeterUsageData.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -6190,13 +6148,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>6db81a64-02c9-4ba6-be4d-f8243658606e</ID>
-    <ParentFolder_ID>b6069f58-d805-4513-8920-0713927ea9b8</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0021 - StoreUsageUploadTempSubMeterUsageData.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>4aeeca5c-a5e8-422c-97ac-dc2c25363fb2</ID>
     <ParentFolder_ID>b6069f58-d805-4513-8920-0713927ea9b8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0021 - StoreUsageUploadTempSubMeterUsageData.api\0021 - API Detail - POST Route.sql</FullName>
@@ -6365,13 +6316,6 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>7339a215-aa9c-4301-9fe5-7587c2aad216</ID>
-    <ParentFolder_ID>87a199ea-610d-4a69-8ee8-73aee6a57155</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0022 - ValidateUsageUploadTempSiteData.api\0020 - API Detail - HTTPS Application URL.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
     <ID>ce55cf86-63c5-4ee8-b16d-f1cc08078691</ID>
     <ParentFolder_ID>87a199ea-610d-4a69-8ee8-73aee6a57155</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0022 - ValidateUsageUploadTempSiteData.api\0021 - API Detail - POST Route.sql</FullName>
@@ -6410,6 +6354,181 @@
     <ID>7a21d5d3-7a54-4c80-ac92-dcdb776cecb4</ID>
     <ParentFolder_ID>87a199ea-610d-4a69-8ee8-73aee6a57155</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0022 - ValidateUsageUploadTempSiteData.api\0026 - API Detail - Required Data Key.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>7e1c68cf-d1af-451f-ba91-17fd3dc1f6b3</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0001 - Drop Login.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6817a306-e6a7-43d0-85d9-ad69010e0c87</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0002 - Create Login.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b7d7d764-92e2-4a81-8e8c-91dea7077078</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0003 - Create User.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1a747b3a-5337-4721-adf2-9a9130ac4e7b</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0004 - Add Role - db_denydatareader.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9eba0828-10a8-466a-871b-cf2fe45b41f3</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0005 - Add Role - db_denydatawriter.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>03b84eaf-fde0-4415-b270-cb37c204aa15</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0006 - Grant Execute - [Information].[SourceAttribute_GetBySourceAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d17bb909-f893-4fce-b666-cf0c1a4101e1</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0007 - Grant Execute - [Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>87e9f5e2-61ef-4f70-b34b-ccf7320fcf6f</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0008 - Grant Execute - [System].[APIAttribute_GetByAPIAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9ffe0752-192d-4b84-9a44-9f046505fe8c</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0009 - Grant Execute - [System].[APIDetail_GetByAPIIdAndAPIAttributeId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8e842be9-84e1-4fda-95ff-ce3c8d13b328</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0010 - Grant Execute - [System].[API_GetByAPIGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0fa7130e-effb-4550-bbd4-29951859368d</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0011 - Grant Execute - [Administration.User].[User_GetByUserGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>756bf000-5cc4-4cdf-92e7-167f65dc95e6</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0012 - Grant Execute - [System].[Error_GetByErrorGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0783745d-c2a1-4863-84b7-2fc06ee99b56</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0013 - Grant Execute - [System].[Error_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f995491f-c577-4d22-9dd0-ef54288a994d</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0014 - Grant Execute - [System].[ProcessQueue_Update].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5e0f2391-addb-4c84-942a-8d41c038f7fa</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0015 - Grant Execute - [System].[ProcessQueue_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f770d417-52df-427e-870e-2732208027f6</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0016 - Create API.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f1bb383f-f354-49ca-b8fa-1e44f9eb3766</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0017 - API Detail - API Name.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b12cf397-ee74-4c67-82b0-3d6fb1971dac</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0018 - API Detail - HTTP Application URL.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9fa8889f-6e85-4322-ab89-eeecf2bb19d9</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0019 - API Detail - HTTPS Application URL.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>41437ab8-43a7-4686-90d9-df8baa3d7ffb</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0020 - API Detail - POST Route.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>08124248-e7c6-46aa-9fc0-47483ac61df6</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0021 - API Detail - Timeout Seconds.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1a530098-3fe3-4f97-879e-a29197bc42b8</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0022 - API Detail - IsRunning Route.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>31bba33d-7643-44fd-a2a2-08e0fd61a6e3</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0023 - API To Process - Usage Upload.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>30ffa40d-7cd8-46be-bd12-803a82711b45</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0024 - API Detail - Prerequisite API GUID.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b10e25d5-1555-4f6d-8e37-51664bb46f37</ID>
+    <ParentFolder_ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0023 - ValidateUsageUploadTempMeterData.api\0025 - API Detail - Required Data Key.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -6711,6 +6830,11 @@
     <ID>87a199ea-610d-4a69-8ee8-73aee6a57155</ID>
     <ParentFolder_ID>2ccf216c-ac1b-4e1d-b795-afcd8c238aea</ParentFolder_ID>
     <Name>0022 - ValidateUsageUploadTempSiteData.api</Name>
+  </ScriptFolder>
+  <ScriptFolder>
+    <ID>f1eb8a8b-fc9e-4f5c-8240-5fdc1402307f</ID>
+    <ParentFolder_ID>2ccf216c-ac1b-4e1d-b795-afcd8c238aea</ParentFolder_ID>
+    <Name>0023 - ValidateUsageUploadTempMeterData.api</Name>
   </ScriptFolder>
   <Mapping>
     <ID>09b1f4ee-a843-4415-8d23-9e2547aaa29f</ID>
