@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "ValidateUsageUploadTempSiteData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/ValidateUsageUploadTempSiteData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempSiteData.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/ValidateUsageUploadTempSiteData.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/ValidateUsageUploadTempSiteData.api/Views"
+            }
+        },
         {"name": "StoreUsageUploadTempSubMeterUsageData.api",
             "type": "coreclr",
             "request": "launch",
@@ -447,14 +468,12 @@
         }
     ],
     "compounds": [
-        {
-            "name": "------------------------------------------------------------",
+        {"name": "------------------------------------------------------------",
             "configurations": [
                 "Website.api",
             ]
         },
-        {
-            "name": "All Projects",
+        {"name": "All Projects",
             "configurations": [
                 "Website.api",
                 "Routing.api",
@@ -477,10 +496,10 @@
                 "StoreUsageUploadTempSubMeterData.api",
                 "StoreUsageUploadTempMeterUsageData.api",
                 "StoreUsageUploadTempSubMeterUsageData.api",
+                "ValidateUsageUploadTempSiteData.api",
             ]
         },
-        {
-            "name": "Login",
+        {"name": "Login",
             "configurations": [
                 "Website.api",
                 "Routing.api",
@@ -495,8 +514,7 @@
                 "StoreLoginAttempt.api",
             ]
         },
-        {
-            "name": "File Upload",
+        {"name": "File Upload",
             "configurations": [
                 "Website.api",
                 "Routing.api",
@@ -508,8 +526,7 @@
                 "DetermineFileType.api",
             ]
         },
-        {
-            "name": "Add New Customer",
+        {"name": "Add New Customer",
             "configurations": [
                 "Website.api",
                 "Routing.api",
@@ -522,8 +539,7 @@
                 "MapCustomerToChildCustomer.api",
             ]
         },
-        {
-            "name": "Usage Upload",
+        {"name": "Usage Upload",
             "configurations": [
                 "Routing.api",
                 "ArchiveProcessQueue.api",
@@ -534,7 +550,9 @@
                 "StoreUsageUploadTempSubMeterData.api",
                 "StoreUsageUploadTempMeterUsageData.api",
                 "StoreUsageUploadTempSubMeterUsageData.api",
+                "ValidateUsageUploadTempSiteData.api",
             ]
         }
     ]
 }
+

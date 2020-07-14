@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string ValidateUsageUploadTempSiteDataAPI = "535FDE7A-8720-4B72-BF68-DAC8FB95FBE9";
                     public string StoreUsageUploadTempSubMeterUsageDataAPI = "0AF991E7-EE90-4CB0-AD03-CE57F45450EF";
                     public string StoreUsageUploadTempMeterUsageDataAPI = "3B054332-65F9-40A7-AD7E-8E8E4089DBC9";
                     public string StoreUsageUploadTempSubMeterDataAPI = "BDC8BA2C-C97A-4445-9B3E-31E0CE520AB8";
@@ -48,6 +49,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string ValidateUsageUploadTempSiteDataAPI = "ValidateUsageUploadTempSiteData.api";
                     public string StoreUsageUploadTempSubMeterUsageDataAPI = "StoreUsageUploadTempSubMeterUsageData.api";
                     public string StoreUsageUploadTempMeterUsageDataAPI = "StoreUsageUploadTempMeterUsageData.api";
                     public string StoreUsageUploadTempSubMeterDataAPI = "StoreUsageUploadTempSubMeterData.api";
@@ -76,6 +78,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string ValidateUsageUploadTempSiteDataAPI = "w2fs7druC2jUCNfQ";
                     public string StoreUsageUploadTempSubMeterUsageDataAPI = "uKxeuMwrdks8nXSa";
                     public string StoreUsageUploadTempMeterUsageDataAPI = "Xrx7E74XsVQeMqy7";
                     public string StoreUsageUploadTempSubMeterDataAPI = "HHq85F87Ymc7P4X7";
