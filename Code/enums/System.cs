@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string StoreUsageUploadTempSiteDataAPI = "AB6466A5-4CF0-4DA5-AE55-7EA93ACE8E13";
                     public string DetermineFileTypeAPI = "4C7CACF3-22BF-4943-B03C-83E1B4DADC35";
                     public string UploadFileAPI = "5681C395-98AC-4410-98DE-DBB550106EF2";
                     public string CreateCustomerFoldersAPI = "2AE6E5B2-1D5F-431B-9BCE-A5CDDB52B493";
@@ -43,6 +44,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string StoreUsageUploadTempSiteDataAPI = "StoreUsageUploadTempSiteData.api";
                     public string DetermineFileTypeAPI = "DetermineFileType.api";
                     public string UploadFileAPI = "UploadFile.api";
                     public string CreateCustomerFoldersAPI = "CreateCustomerFolders.api";
@@ -66,6 +68,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string StoreUsageUploadTempSiteDataAPI = "46PP5VdL6Djet8tA";
                     public string DetermineFileTypeAPI = "dp2juZYYbdjkh43c";
                     public string UploadFileAPI = "puFbyaAvrzMgC3MU";
                     public string CreateCustomerFoldersAPI = "UE9ggtwMq6G4fpYv";
@@ -147,15 +150,17 @@ namespace enums
                 public class GUID
                 {
                     public string Login = "AF10359F-FD78-4345-9F26-EF5A921E72FD";
-                    public string UsageUpload = "1ACFB189-9C95-4DCD-A21A-93CDB2928620";
                     public string AddNewCustomer = "D39E768A-D06D-4EB3-80E3-895EDC556A6B";
+                    public string FileUpload = "3AFF25CB-06BD-4BD1-A409-13D10A08044F";
+                    public string UsageUpload = "63D6E7CA-591F-4BF3-BECA-57A9E350879A";
                 }
 
                 public class Name
                 {
                     public string Login = "Login";
-                    public string UsageUpload = "Usage Upload";
                     public string AddNewCustomer = "Add New Customer";
+                    public string FileUpload = "File Upload";
+                    public string UsageUpload = "Usage Upload";
                 }
             }
         }
