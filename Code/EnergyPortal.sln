@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSiteDat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterData.api", "StoreUsageUploadTempMeterData.api\StoreUsageUploadTempMeterData.api.csproj", "{1CB8493C-E6D1-401E-B81C-3C1B073168B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSubMeterData.api", "StoreUsageUploadTempSubMeterData.api\StoreUsageUploadTempSubMeterData.api.csproj", "{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -322,5 +324,17 @@ Global
 		{1CB8493C-E6D1-401E-B81C-3C1B073168B6}.Release|x64.Build.0 = Release|Any CPU
 		{1CB8493C-E6D1-401E-B81C-3C1B073168B6}.Release|x86.ActiveCfg = Release|Any CPU
 		{1CB8493C-E6D1-401E-B81C-3C1B073168B6}.Release|x86.Build.0 = Release|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Debug|x64.Build.0 = Debug|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Debug|x86.Build.0 = Debug|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Release|x64.ActiveCfg = Release|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Release|x64.Build.0 = Release|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Release|x86.ActiveCfg = Release|Any CPU
+		{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
