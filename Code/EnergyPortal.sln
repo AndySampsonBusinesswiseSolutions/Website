@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSubM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterUsageData.api", "ValidateUsageUploadTempMeterUsageData.api\ValidateUsageUploadTempMeterUsageData.api.csproj", "{22985BD7-8614-48B6-8D19-DB9381BF095B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSubMeterUsageData.api", "ValidateUsageUploadTempSubMeterUsageData.api\ValidateUsageUploadTempSubMeterUsageData.api.csproj", "{F5C8FB4F-014E-491B-A937-A0245F1F473B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -420,5 +422,17 @@ Global
 		{22985BD7-8614-48B6-8D19-DB9381BF095B}.Release|x64.Build.0 = Release|Any CPU
 		{22985BD7-8614-48B6-8D19-DB9381BF095B}.Release|x86.ActiveCfg = Release|Any CPU
 		{22985BD7-8614-48B6-8D19-DB9381BF095B}.Release|x86.Build.0 = Release|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Debug|x64.Build.0 = Debug|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Debug|x86.Build.0 = Debug|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Release|x64.ActiveCfg = Release|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Release|x64.Build.0 = Release|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Release|x86.ActiveCfg = Release|Any CPU
+		{F5C8FB4F-014E-491B-A937-A0245F1F473B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
