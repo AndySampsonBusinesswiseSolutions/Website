@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string StoreUsageUploadTempMeterDataAPI = "9EDA4294-4FF7-45C3-8FD1-1CD50BD4B7C3";
                     public string StoreUsageUploadTempSiteDataAPI = "AB6466A5-4CF0-4DA5-AE55-7EA93ACE8E13";
                     public string DetermineFileTypeAPI = "4C7CACF3-22BF-4943-B03C-83E1B4DADC35";
                     public string UploadFileAPI = "5681C395-98AC-4410-98DE-DBB550106EF2";
@@ -44,6 +45,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string StoreUsageUploadTempMeterDataAPI = "StoreUsageUploadTempMeterData.api";
                     public string StoreUsageUploadTempSiteDataAPI = "StoreUsageUploadTempSiteData.api";
                     public string DetermineFileTypeAPI = "DetermineFileType.api";
                     public string UploadFileAPI = "UploadFile.api";
@@ -68,6 +70,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string StoreUsageUploadTempMeterDataAPI = "EqsVJUK59sxf8QsE";
                     public string StoreUsageUploadTempSiteDataAPI = "46PP5VdL6Djet8tA";
                     public string DetermineFileTypeAPI = "dp2juZYYbdjkh43c";
                     public string UploadFileAPI = "puFbyaAvrzMgC3MU";
