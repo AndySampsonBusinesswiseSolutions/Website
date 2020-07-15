@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>79bbe8b0-3a07-4667-9b4e-e1064e34e530</ID>
-    <DateCreated>2020-07-15T11:25:14.9931853+01:00</DateCreated>
+    <ID>96190b37-410d-4d7b-9459-21f65c2b3d7c</ID>
+    <DateCreated>2020-07-15T11:44:35.2438824+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>RQWvI3We9vWv555jo0cNjA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe66F0ECgUoCP+FyqJmT/q6jg=</Password>
+    <Login>3sYbFqQlN0vmRBC6SIhKog==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6896NCd/kfljbiEkzwvDBIM=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1720,6 +1720,13 @@
     <ID>a0699658-04c9-4892-9420-843b75531101</ID>
     <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0002 - [Temp.Customer].[Meter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>174d9ec6-c581-4258-8cb1-17c3679a4f50</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0003 - [Temp.Customer].[SubMeter_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

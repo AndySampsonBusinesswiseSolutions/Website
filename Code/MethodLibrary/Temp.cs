@@ -23,6 +23,13 @@ namespace MethodLibrary
                         processQueueGUID, customerGUID, site, MPXN, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, dayUsage, nightUsage);
                 }
 
+                public void SubMeter_Insert(string processQueueGUID, string customerGUID, string MPXN, string subMeterIdentifier)
+                {
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        _storedProcedureTempCustomerEnums.Meter_Insert, 
+                        processQueueGUID, customerGUID, MPXN, subMeterIdentifier);
+                }
+
                 public void MeterUsage_Insert(DataTable dataTable)
                 {
                     _databaseInteraction.BulkInsert(dataTable, "[Temp.Customer].[MeterUsage]");
