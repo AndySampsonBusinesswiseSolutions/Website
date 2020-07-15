@@ -18,6 +18,7 @@ namespace StoreUsageUploadTempMeterData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +82,26 @@ namespace StoreUsageUploadTempMeterData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get File Content by FileId
+                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
+                var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
+
+                //Strip out data not related to Meter
+                var site = "";
+                var mpxn = "";
+                var profileClass = "";
+                var meterTimeswitchClass = "";
+                var lineLossFactorClass = "";
+                var capacity = "";
+                var localDistributionZone = "";
+                var standardOfftakeQuantity = "";
+                var annualUsage = "";
+                var dayUsage = "";
+                var nightUsage = "";
+
+                //Insert meter data into [Temp.Customer].[Meter]
+                _tempCustomerMethods.Meter_Insert(processQueueGUID, customerGUID, site, mpxn, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, dayUsage, nightUsage);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempMeterDataAPIId, false, null);

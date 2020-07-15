@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>a7745a4a-dd38-435f-9039-d0da1148a1a5</ID>
-    <DateCreated>2020-07-15T10:04:19.9165034+01:00</DateCreated>
+    <ID>79bbe8b0-3a07-4667-9b4e-e1064e34e530</ID>
+    <DateCreated>2020-07-15T11:25:14.9931853+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>tMVGVvS98BmfQcJahDEF3A==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe68CD1af27vyvu/V/k36L5jc=</Password>
+    <Login>RQWvI3We9vWv555jo0cNjA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe66F0ECgUoCP+FyqJmT/q6jg=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1706,6 +1706,20 @@
     <ID>7c64bd8d-aeac-49cf-b9aa-9a9ff0e3a9ef</ID>
     <ParentFolder_ID>0427121f-7cea-4690-8769-2dee13e5b4e0</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\006 - DemandForecast\0002 - [DemandForecast].[ForecastAgent_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b9212e6f-ad4d-48ac-94b1-b8dad08e3421</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0001 - [Temp.Customer].[Site_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a0699658-04c9-4892-9420-843b75531101</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0002 - [Temp.Customer].[Meter_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
