@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace StoreUsageUploadTempSiteData.api.Controllers
 {
@@ -83,19 +84,39 @@ namespace StoreUsageUploadTempSiteData.api.Controllers
                 }
 
                 //Get File Content by FileId
-                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
                 var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
                 var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
+                var fileJSON = JObject.Parse(fileContent);
 
                 //Strip out data not related to Site
-                var siteName = "";
-                var siteAddress = "";
-                var siteTown = "";
-                var siteCounty = "";
-                var sitePostCode = "";
+                var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
+                var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets.Sites");
+                var cells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets.Sites.", "") != "!ref" 
+                    && c.Path.Replace("Sheets.Sites.", "") != "!margins"
+                    && !_methods.IsHeaderRow(c.Parent)).ToList();
+                var cellDictionary = new Dictionary<int, List<string>>();
 
-                //Insert site data into [Temp.Customer].[Site]
-                _tempCustomerMethods.Site_Insert(processQueueGUID, customerGUID, siteName, siteAddress, siteTown, siteCounty, sitePostCode);
+                foreach(var cell in cells)
+                {
+                    var row = _methods.GetRow(cell.Path);
+
+                    if(!cellDictionary.ContainsKey(row))
+                    {
+                        cellDictionary.Add(row, new List<string>());
+                    }
+
+                    var valueToken = cell.Children().First(c => ((Newtonsoft.Json.Linq.JProperty)c).Name == "v");
+                    var value = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)valueToken).Value).Value.ToString();
+                    cellDictionary[row].Add(value);
+                }
+
+                foreach(var row in cellDictionary.Keys)
+                {
+                    var values = cellDictionary[row];
+
+                    //Insert site data into [Temp.Customer].[Site]
+                    _tempCustomerMethods.Site_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4]);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempSiteDataAPIId, false, null);
@@ -110,4 +131,3 @@ namespace StoreUsageUploadTempSiteData.api.Controllers
         }
     }
 }
-

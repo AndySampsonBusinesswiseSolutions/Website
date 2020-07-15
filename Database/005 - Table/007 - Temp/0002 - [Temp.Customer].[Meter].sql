@@ -17,8 +17,7 @@ DROP TABLE [Temp.Customer].[Meter]
 GO
 CREATE TABLE [Temp.Customer].[Meter]
 	(
-	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerGUID UNIQUEIDENTIFIER,
+	ProcessQueueGUID UNIQUEIDENTIFIER,
 	Site VARCHAR(255),
 	MPXN VARCHAR(255),
 	ProfileClass VARCHAR(255),

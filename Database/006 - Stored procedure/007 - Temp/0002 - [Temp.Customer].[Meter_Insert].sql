@@ -19,8 +19,7 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Temp.Customer].[Meter_Insert]
-    @ProcessGUID UNIQUEIDENTIFIER,
-    @CustomerGUID UNIQUEIDENTIFIER,
+    @ProcessQueueGUID UNIQUEIDENTIFIER,
     @Site VARCHAR(255),
     @MPXN VARCHAR(255),
     @ProfileClass VARCHAR(255),
@@ -45,8 +44,7 @@ BEGIN
 
     INSERT INTO [Temp.Customer].[Meter]
     (
-        ProcessGUID,
-        CustomerGUID,
+        ProcessQueueGUID,
         Site,
         MPXN,
         ProfileClass,
@@ -61,8 +59,7 @@ BEGIN
     )
     VALUES
     (
-        @ProcessGUID,
-        @CustomerGUID,
+        @ProcessQueueGUID,
         @Site,
         @MPXN,
         @ProfileClass,

@@ -17,8 +17,7 @@ DROP TABLE [Temp.Customer].[SubMeterUsage]
 GO
 CREATE TABLE [Temp.Customer].[SubMeterUsage]
 	(
-	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerGUID UNIQUEIDENTIFIER,
+	ProcessQueueGUID UNIQUEIDENTIFIER,
 	SubMeterIdentifier VARCHAR(255),
 	Date VARCHAR(255),
 	TimePeriod VARCHAR(255),

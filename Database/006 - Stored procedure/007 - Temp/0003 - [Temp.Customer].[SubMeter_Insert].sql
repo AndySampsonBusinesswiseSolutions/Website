@@ -19,8 +19,7 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Temp.Customer].[SubMeter_Insert]
-    @ProcessGUID UNIQUEIDENTIFIER,
-    @CustomerGUID UNIQUEIDENTIFIER,
+    @ProcessQueueGUID UNIQUEIDENTIFIER,
     @MPXN VARCHAR(255),
     @SubMeterIdentifier VARCHAR(255)
 AS
@@ -36,15 +35,13 @@ BEGIN
 
     INSERT INTO [Temp.Customer].[SubMeter]
     (
-        ProcessGUID,
-        CustomerGUID,
+        ProcessQueueGUID,
         MPXN,
         SubMeterIdentifier
     )
     VALUES
     (
-        @ProcessGUID,
-        @CustomerGUID,
+        @ProcessQueueGUID,
         @MPXN,
         @SubMeterIdentifier
     )

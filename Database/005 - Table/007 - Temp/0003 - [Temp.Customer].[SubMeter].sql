@@ -17,8 +17,7 @@ DROP TABLE [Temp.Customer].[SubMeter]
 GO
 CREATE TABLE [Temp.Customer].[SubMeter]
 	(
-	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerGUID UNIQUEIDENTIFIER,
+	ProcessQueueGUID UNIQUEIDENTIFIER,
 	MPXN VARCHAR(255),
 	SubMeterIdentifier VARCHAR(255)
 	)  ON [Temp]

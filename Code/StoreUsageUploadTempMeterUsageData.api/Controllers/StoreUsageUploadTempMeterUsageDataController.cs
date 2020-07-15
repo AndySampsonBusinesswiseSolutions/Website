@@ -7,6 +7,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using System.Collections.Generic;
+using System.Text;
 
 namespace StoreUsageUploadTempMeterUsageData.api.Controllers
 {
@@ -84,12 +86,70 @@ namespace StoreUsageUploadTempMeterUsageData.api.Controllers
                 }
 
                 //Get File Content by FileId
-                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
                 var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
                 var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
+                var fileJSON = JObject.Parse(fileContent);
 
                 //Strip out data not related to Meter Usage
                 var meterUsageDataTable = new DataTable();
+                meterUsageDataTable.Columns.Add("ProcessQueueGUID");
+                meterUsageDataTable.Columns.Add("MPXN");
+                meterUsageDataTable.Columns.Add("Date");
+                meterUsageDataTable.Columns.Add("TimePeriod");
+                meterUsageDataTable.Columns.Add("Value");
+
+                var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
+                var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets['Meter HH Data']");
+                var validCells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets['Meter HH Data'].", string.Empty) != "!ref" 
+                    && c.Path.Replace("Sheets['Meter HH Data'].", string.Empty) != "!margins").ToList();
+                var cells = validCells.Where(c => !_methods.IsHeaderRow(c.Parent)).ToList();
+                var columns = validCells.Where(c => _methods.IsHeaderRow(c.Parent))
+                    .Select(c => c.Path.Replace(_methods.GetRow(c.Path).ToString(), string.Empty))
+                    .Select(c => c.Replace("Sheets['Meter HH Data'].", string.Empty))
+                    .OrderBy(c => Convert.ToInt64(string.Join(string.Empty, Encoding.ASCII.GetBytes(c))))
+                    .Select(c => $"Sheets['Meter HH Data'].{c}")
+                    .ToList();
+
+                var cellDictionary = new Dictionary<int, List<string>>(columns.Count());
+
+                foreach(var cell in cells)
+                {
+                    var row = _methods.GetRow(cell.Path);
+                    var columnIndex = columns.IndexOf(cell.Path.Replace(row.ToString(), string.Empty));
+
+                    if(!cellDictionary.ContainsKey(row))
+                    {
+                        cellDictionary.Add(row, new List<string>());
+                        foreach(var column in columns)
+                        {
+                            cellDictionary[row].Add(string.Empty);
+                        }
+                    }
+
+                    var valueToken = cell.Children().First(c => ((Newtonsoft.Json.Linq.JProperty)c).Name == "v");
+                    var value = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)valueToken).Value).Value.ToString();
+                    cellDictionary[row][columnIndex] = value;
+                }
+
+                foreach(var row in cellDictionary.Keys)
+                {
+                    var values = cellDictionary[row];
+
+                    //Insert meter data into data table
+                    var mpxn = values[0];
+                    var date = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
+
+                    for(var timePeriod = 2; timePeriod < columns.Count(); timePeriod++)
+                    {
+                        var dataRow = meterUsageDataTable.NewRow();
+                        dataRow["ProcessQueueGUID"] = processQueueGUID;
+                        dataRow["MPXN"] = mpxn;
+                        dataRow["Date"] = date;
+                        dataRow["Value"] = values[timePeriod];
+
+                        meterUsageDataTable.Rows.Add(dataRow);
+                    }
+                }
 
                 //Insert meter usage data into [Temp.Customer].[MeterUsage]
                 _tempCustomerMethods.MeterUsage_Insert(meterUsageDataTable);

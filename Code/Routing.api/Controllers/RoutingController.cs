@@ -102,7 +102,6 @@ namespace Routing.api.Controllers
                         _systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, APIId, error.Message);
                     }
                     
-
                     APIGUIDList.Add(_systemMethods.API_GetAPIGUIDByAPIId(APIId));
                 }
 

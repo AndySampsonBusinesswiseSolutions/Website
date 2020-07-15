@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace StoreUsageUploadTempSubMeterData.api.Controllers
 {
@@ -83,16 +84,49 @@ namespace StoreUsageUploadTempSubMeterData.api.Controllers
                 }
 
                 //Get File Content by FileId
-                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
                 var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
                 var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
+                var fileJSON = JObject.Parse(fileContent);
 
                 //Strip out data not related to SubMeter
-                var mpxn = "";
-                var subMeterIdentifier = "";
+                var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
+                var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets.SubMeters");
+                var validCells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets.SubMeters.", string.Empty) != "!ref" 
+                    && c.Path.Replace("Sheets.SubMeters.", string.Empty) != "!margins").ToList();
+                var cells = validCells.Where(c => !_methods.IsHeaderRow(c.Parent)).ToList();
+                var columns = validCells.Where(c => _methods.IsHeaderRow(c.Parent))
+                    .Select(c => c.Path.Replace(_methods.GetRow(c.Path).ToString(), string.Empty))
+                    .OrderBy(c => c)
+                    .ToList();
 
-                //Insert submeter data into [Temp.Customer].[SubMeter]
-                _tempCustomerMethods.SubMeter_Insert(processQueueGUID, customerGUID, mpxn, subMeterIdentifier);
+                var cellDictionary = new Dictionary<int, List<string>>(columns.Count());
+
+                foreach(var cell in cells)
+                {
+                    var row = _methods.GetRow(cell.Path);
+                    var columnIndex = columns.IndexOf(cell.Path.Replace(row.ToString(), string.Empty));
+
+                    if(!cellDictionary.ContainsKey(row))
+                    {
+                        cellDictionary.Add(row, new List<string>());
+                        foreach(var column in columns)
+                        {
+                            cellDictionary[row].Add(string.Empty);
+                        }
+                    }
+
+                    var valueToken = cell.Children().First(c => ((Newtonsoft.Json.Linq.JProperty)c).Name == "v");
+                    var value = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)valueToken).Value).Value.ToString();
+                    cellDictionary[row][columnIndex] = value;
+                }
+
+                foreach(var row in cellDictionary.Keys)
+                {
+                    var values = cellDictionary[row];
+
+                    //Insert submeter data into [Temp.Customer].[SubMeter]
+                    _tempCustomerMethods.SubMeter_Insert(processQueueGUID, values[0], values[1]);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempSubMeterDataAPIId, false, null);

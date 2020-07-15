@@ -17,8 +17,7 @@ DROP TABLE [Temp.Customer].[Site]
 GO
 CREATE TABLE [Temp.Customer].[Site]
 	(
-	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerGUID UNIQUEIDENTIFIER,
+	ProcessQueueGUID UNIQUEIDENTIFIER,
 	SiteName VARCHAR(255),
 	SiteAddress VARCHAR(255),
 	SiteTown VARCHAR(255),

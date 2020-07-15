@@ -94,9 +94,15 @@ namespace UploadFile.api.Controllers
                 //Get FileName File Attribute Id
                 var fileNameFileAttributeId = _informationMethods.FileAttribute_GetFileAttributeIdByFileAttributeDescription(_informationFileAttributeEnums.FileName);
 
+                //Get ProcessQueueGUID File Attribute Id
+                var processQueueGUIDFileAttributeId = _informationMethods.FileAttribute_GetFileAttributeIdByFileAttributeDescription(_informationFileAttributeEnums.ProcessQueueGUID);
+
                 //Insert File Name into Information.FileDetail
                 var fileName = jsonObject[_systemAPIRequiredDataKeyEnums.FileName].ToString();
                 _informationMethods.FileDetail_Insert(createdByUserId, sourceId, fileId, fileNameFileAttributeId, fileName);
+
+                //Insert Process Queue GUID into Information.FileDetail
+                _informationMethods.FileDetail_Insert(createdByUserId, sourceId, fileId, processQueueGUIDFileAttributeId, processQueueGUID);
 
                 //Insert File Content into Information.FileContent
                 var fileContent = jsonObject[_systemAPIRequiredDataKeyEnums.FileContent].ToString();

@@ -9,6 +9,7 @@ namespace enums
                 public class Attribute
                 {
                     public string FileName ="File Name";
+                    public string ProcessQueueGUID ="Process Queue GUID";
                 }
 
                 public class Type

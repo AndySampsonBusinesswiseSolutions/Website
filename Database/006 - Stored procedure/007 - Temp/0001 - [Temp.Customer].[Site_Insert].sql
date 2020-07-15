@@ -19,8 +19,7 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Temp.Customer].[Site_Insert]
-    @ProcessGUID UNIQUEIDENTIFIER,
-    @CustomerGUID UNIQUEIDENTIFIER,
+    @ProcessQueueGUID UNIQUEIDENTIFIER,
     @SiteName VARCHAR(255),
     @SiteAddress VARCHAR(255),
     @SiteTown VARCHAR(255),
@@ -39,8 +38,7 @@ BEGIN
 
     INSERT INTO [Temp.Customer].[Site]
     (
-        ProcessGUID,
-        CustomerGUID,
+        ProcessQueueGUID,
         SiteName,
         SiteAddress,
         SiteTown,
@@ -49,8 +47,7 @@ BEGIN
     )
     VALUES
     (
-        @ProcessGUID,
-        @CustomerGUID,
+        @ProcessQueueGUID,
         @SiteName,
         @SiteAddress,
         @SiteTown,
