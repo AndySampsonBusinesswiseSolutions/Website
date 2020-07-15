@@ -81,7 +81,13 @@ namespace StoreUsageUploadTempSubMeterData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get File Content by FileId
+
+                //Strip out data not related to SubMeter
+
+                //Get CustomerId by FileId
+
+                //Insert submeter data into [Temp.Customer].[SubMeter]
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempSubMeterDataAPIId, false, null);

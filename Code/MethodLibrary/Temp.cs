@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Data;
 
 namespace MethodLibrary
 {
@@ -20,6 +21,16 @@ namespace MethodLibrary
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Meter_Insert, 
                         processQueueGUID, customerGUID, site, MPXN, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, dayUsage, nightUsage);
+                }
+
+                public void MeterUsage_Insert(DataTable dataTable)
+                {
+                    _databaseInteraction.BulkInsert(dataTable, "[Temp.Customer].[MeterUsage]");
+                }
+
+                public void SubMeterUsage_Insert(DataTable dataTable)
+                {
+                    _databaseInteraction.BulkInsert(dataTable, "[Temp.Customer].[SubMeterUsage]");
                 }
             }
         }

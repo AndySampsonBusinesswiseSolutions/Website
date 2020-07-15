@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
 
 namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
 {
@@ -18,6 +19,7 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +83,16 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get File Content by FileId
+                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
+                var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
+
+                //Strip out data not related to SubMeter Usage
+                var subMeterUsageDataTable = new DataTable();
+
+                //Insert meter usage data into [Temp.Customer].[SubMeterUsage]
+                _tempCustomerMethods.SubMeterUsage_Insert(subMeterUsageDataTable);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempSubMeterUsageDataAPIId, false, null);
