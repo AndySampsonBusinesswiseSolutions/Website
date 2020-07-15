@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>7852dcec-af20-4f43-b63f-27399c0d43b2</ID>
-    <DateCreated>2020-07-14T14:06:17.0738127+01:00</DateCreated>
+    <ID>a7745a4a-dd38-435f-9039-d0da1148a1a5</ID>
+    <DateCreated>2020-07-15T10:04:19.9165034+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>iy9MXMqHpo9fd1Ak9sFBaw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6xplA8R9YC3L2NTQRc8Fy2U=</Password>
+    <Login>tMVGVvS98BmfQcJahDEF3A==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe68CD1af27vyvu/V/k36L5jc=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1328,6 +1328,13 @@
     <ID>d98f9439-aefe-46dc-93ab-b1f16e4ec2c0</ID>
     <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0015 - [Information].[FileType_GetByFileTypeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>52a2970f-55bc-4fb0-b462-5f1ab71fb87f</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0016 - [Information].[FileContent_GetByFileId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

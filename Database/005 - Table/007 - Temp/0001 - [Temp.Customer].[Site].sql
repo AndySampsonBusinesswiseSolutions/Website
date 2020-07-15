@@ -18,7 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[Site]
 	(
 	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerId BIGINT,
+	CustomerGUID UNIQUEIDENTIFIER,
 	SiteName VARCHAR(255),
 	SiteAddress VARCHAR(255),
 	SiteTown VARCHAR(255),

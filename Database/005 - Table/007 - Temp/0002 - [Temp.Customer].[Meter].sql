@@ -18,7 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[Meter]
 	(
 	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerId BIGINT,
+	CustomerGUID UNIQUEIDENTIFIER,
 	Site VARCHAR(255),
 	MPXN VARCHAR(255),
 	ProfileClass VARCHAR(255),

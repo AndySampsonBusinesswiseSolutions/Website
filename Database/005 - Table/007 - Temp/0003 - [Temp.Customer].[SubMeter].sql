@@ -12,17 +12,17 @@ SET ANSI_WARNINGS ON
 COMMIT
 BEGIN TRANSACTION
 GO
-IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[Temp.Customer].[Meter]') AND type in (N'U'))
-DROP TABLE [Temp.Customer].[Meter]
+IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[Temp.Customer].[SubMeter]') AND type in (N'U'))
+DROP TABLE [Temp.Customer].[SubMeter]
 GO
-CREATE TABLE [Temp.Customer].[Meter]
+CREATE TABLE [Temp.Customer].[SubMeter]
 	(
 	ProcessGUID UNIQUEIDENTIFIER,
-	CustomerId BIGINT,
+	CustomerGUID UNIQUEIDENTIFIER,
 	MPXN VARCHAR(255),
 	SubMeterIdentifier VARCHAR(255)
 	)  ON [Temp]
 GO
-ALTER TABLE [Temp.Customer].[Meter] SET (LOCK_ESCALATION = TABLE)
+ALTER TABLE [Temp.Customer].[SubMeter] SET (LOCK_ESCALATION = TABLE)
 GO
 COMMIT

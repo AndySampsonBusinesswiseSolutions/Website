@@ -91,6 +91,23 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("FileTypeId"))
                     .FirstOrDefault();
             }
+
+            public string FileContent_GetFileContentByFileId(long fileId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.FileContent_GetByFileId, 
+                    fileId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("FileContent"))
+                    .FirstOrDefault();
+            }
+
+            public string FileContent_GetFileContentByFileGUID(string fileGUID)
+            {
+                var fileId = File_GetFileIdByFileGUID(fileGUID);
+                return FileContent_GetFileContentByFileId(fileId);;
+            }
         }
     }
 }

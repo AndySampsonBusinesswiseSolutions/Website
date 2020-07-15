@@ -18,6 +18,7 @@ namespace StoreUsageUploadTempSiteData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +82,20 @@ namespace StoreUsageUploadTempSiteData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get File Content by FileId
+                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
+                var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
+
+                //Strip out data not related to Site
+                var siteName = "";
+                var siteAddress = "";
+                var siteTown = "";
+                var siteCounty = "";
+                var sitePostCode = "";
+
+                //Insert site data into [Temp.Customer].[Site]
+                _tempCustomerMethods.Site_Insert(processQueueGUID, customerGUID, siteName, siteAddress, siteTown, siteCounty, sitePostCode);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempSiteDataAPIId, false, null);
