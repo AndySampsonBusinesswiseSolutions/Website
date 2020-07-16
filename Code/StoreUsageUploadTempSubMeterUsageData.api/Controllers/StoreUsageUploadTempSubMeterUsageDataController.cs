@@ -91,13 +91,6 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
                 var fileJSON = JObject.Parse(fileContent);
 
                 //Strip out data not related to SubMeter Usage
-                var subMeterUsageDataTable = new DataTable();
-                subMeterUsageDataTable.Columns.Add("ProcessQueueGUID");
-                subMeterUsageDataTable.Columns.Add("MPXN");
-                subMeterUsageDataTable.Columns.Add("Date");
-                subMeterUsageDataTable.Columns.Add("TimePeriod");
-                subMeterUsageDataTable.Columns.Add("Value");
-
                 var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
                 var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets['SubMeter HH Data']");
                 var validCells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets['SubMeter HH Data'].", string.Empty) != "!ref" 
@@ -136,23 +129,18 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
                     var values = cellDictionary[row];
 
                     //Insert submeter data into data table
-                    var mpxn = values[0];
+                    var subMeterIdentifier = values[0];
                     var date = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
 
                     for(var timePeriod = 2; timePeriod < columns.Count(); timePeriod++)
                     {
-                        var dataRow = subMeterUsageDataTable.NewRow();
-                        dataRow["ProcessQueueGUID"] = processQueueGUID;
-                        dataRow["SubMeterIdentifier"] = mpxn;
-                        dataRow["Date"] = date;
-                        dataRow["Value"] = values[timePeriod];
+                        var time = DateTime.Today.AddMinutes(30 * (timePeriod - 1));
+                        var timePeriodString = $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
 
-                        subMeterUsageDataTable.Rows.Add(dataRow);
+                        //Insert meter usage data into [Temp.Customer].[SubMeterUsage]
+                        _tempCustomerMethods.SubMeterUsage_Insert(processQueueGUID, subMeterIdentifier, date, timePeriodString, values[timePeriod]);
                     }
                 }
-
-                //Insert meter usage data into [Temp.Customer].[SubMeterUsage]
-                _tempCustomerMethods.SubMeterUsage_Insert(subMeterUsageDataTable);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempSubMeterUsageDataAPIId, false, null);

@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>dc3cb705-59eb-4133-8405-25be3c888fbb</ID>
-    <DateCreated>2020-07-15T21:48:53.6158839+01:00</DateCreated>
+    <ID>704fe81f-c5d5-403c-a62a-a49948edcf9d</ID>
+    <DateCreated>2020-07-16T08:36:56.333438+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>We9JXEKvqA+Wqfd2Azmm8Q==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe68t0XBm/LhuYwoCPj1qWvBA=</Password>
+    <Login>ZtLZN+bdPpOAU7nVRvh+4Q==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe65DauOHsH8dsnulxZDZOShc=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1727,6 +1727,20 @@
     <ID>174d9ec6-c581-4258-8cb1-17c3679a4f50</ID>
     <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0003 - [Temp.Customer].[SubMeter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f1d9c9c6-7145-4a15-b243-c5b06586ef29</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0004 - [Temp.Customer].[MeterUsage_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1f94b333-1bd1-4517-9007-63bad5e9b158</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0005 - [Temp.Customer].[SubMeterUsage_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -6123,13 +6137,6 @@
     <ID>0266f456-aa42-49a1-8ae7-495723140658</ID>
     <ParentFolder_ID>aa787cf7-9939-4d57-a4ce-0d270f6d5026</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\0020 - StoreUsageUploadTempMeterUsageData.api\0027 - Grant Execute - [Information].[File_GetByFileGUID].sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>true</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>0a0987c7-43d8-49ec-bf55-b80086ab7a8e</ID>
-    <ParentFolder_ID>aa787cf7-9939-4d57-a4ce-0d270f6d5026</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\0020 - StoreUsageUploadTempMeterUsageData.api\0028 - Grant Insert - [Temp.Customer].[MeterUsage].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

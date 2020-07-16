@@ -30,14 +30,18 @@ namespace MethodLibrary
                         processQueueGUID, MPXN, subMeterIdentifier);
                 }
 
-                public void MeterUsage_Insert(DataTable dataTable)
+                public void MeterUsage_Insert(string processQueueGUID, string MPXN, string date, string timePeriod, string value)
                 {
-                    _databaseInteraction.BulkInsert(dataTable, "[Temp.Customer].[MeterUsage]");
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        _storedProcedureTempCustomerEnums.MeterUsage_Insert, 
+                        processQueueGUID, MPXN, date, timePeriod, value);
                 }
 
-                public void SubMeterUsage_Insert(DataTable dataTable)
+                public void SubMeterUsage_Insert(string processQueueGUID, string subMeterIdentifier, string date, string timePeriod, string value)
                 {
-                    _databaseInteraction.BulkInsert(dataTable, "[Temp.Customer].[SubMeterUsage]");
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        _storedProcedureTempCustomerEnums.SubMeterUsage_Insert, 
+                        processQueueGUID, subMeterIdentifier, date, timePeriod, value);
                 }
             }
         }

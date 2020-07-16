@@ -91,13 +91,6 @@ namespace StoreUsageUploadTempMeterUsageData.api.Controllers
                 var fileJSON = JObject.Parse(fileContent);
 
                 //Strip out data not related to Meter Usage
-                var meterUsageDataTable = new DataTable();
-                meterUsageDataTable.Columns.Add("ProcessQueueGUID");
-                meterUsageDataTable.Columns.Add("MPXN");
-                meterUsageDataTable.Columns.Add("Date");
-                meterUsageDataTable.Columns.Add("TimePeriod");
-                meterUsageDataTable.Columns.Add("Value");
-
                 var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
                 var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets['Meter HH Data']");
                 var validCells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets['Meter HH Data'].", string.Empty) != "!ref" 
@@ -135,24 +128,19 @@ namespace StoreUsageUploadTempMeterUsageData.api.Controllers
                 {
                     var values = cellDictionary[row];
 
-                    //Insert meter data into data table
+                    //Insert submeter data into data table
                     var mpxn = values[0];
                     var date = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
 
                     for(var timePeriod = 2; timePeriod < columns.Count(); timePeriod++)
                     {
-                        var dataRow = meterUsageDataTable.NewRow();
-                        dataRow["ProcessQueueGUID"] = processQueueGUID;
-                        dataRow["MPXN"] = mpxn;
-                        dataRow["Date"] = date;
-                        dataRow["Value"] = values[timePeriod];
+                        var time = DateTime.Today.AddMinutes(30 * (timePeriod - 1));
+                        var timePeriodString = $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
 
-                        meterUsageDataTable.Rows.Add(dataRow);
+                        //Insert meter usage data into [Temp.Customer].[MeterUsage]
+                        _tempCustomerMethods.MeterUsage_Insert(processQueueGUID, mpxn, date, timePeriodString, values[timePeriod]);
                     }
                 }
-
-                //Insert meter usage data into [Temp.Customer].[MeterUsage]
-                _tempCustomerMethods.MeterUsage_Insert(meterUsageDataTable);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempMeterUsageDataAPIId, false, null);
