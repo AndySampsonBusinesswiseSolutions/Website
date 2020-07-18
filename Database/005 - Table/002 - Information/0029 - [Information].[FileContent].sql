@@ -88,8 +88,6 @@ DECLARE @v sql_variant
 SET @v = N'Foreign Key constraint joining [Information].[FileContent].SourceId to [Information].[Source].SourceId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Information', N'TABLE', N'FileContent', N'CONSTRAINT', N'FK_FileContent_SourceId'
 GO
-ALTER TABLE [Information].[FileContent] ADD INDEX IX_FileContent_ClusteredColumnstore CLUSTERED COLUMNSTORE
-GO
 ALTER TABLE [Information].[FileContent] SET (LOCK_ESCALATION = TABLE)
 GO
 COMMIT
