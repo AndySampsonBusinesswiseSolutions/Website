@@ -18,6 +18,7 @@ namespace StoreUsageUploadTempMeterExemptionData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +82,16 @@ namespace StoreUsageUploadTempMeterExemptionData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get Meter Exemption data from Customer Data Upload
+                var meterExemptionDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Meter Exemptions");
+
+                foreach(var row in meterExemptionDictionary.Keys)
+                {
+                    var values = meterExemptionDictionary[row];
+
+                    //Insert meter exemption data into [Temp.Customer].[MeterExemption]
+                    _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4]);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempMeterExemptionDataAPIId, false, null);

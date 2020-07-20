@@ -83,36 +83,12 @@ namespace StoreUsageUploadTempSiteData.api.Controllers
                     return;
                 }
 
-                //Get File Content by FileId
-                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
-                var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
-                var fileJSON = JObject.Parse(fileContent);
+                //Get Site data from Customer Data Upload
+                var siteDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sites");
 
-                //Strip out data not related to Site
-                var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
-                var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets.Sites");
-                var cells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets.Sites.", "") != "!ref" 
-                    && c.Path.Replace("Sheets.Sites.", "") != "!margins"
-                    && !_methods.IsHeaderRow(c.Parent)).ToList();
-                var cellDictionary = new Dictionary<int, List<string>>();
-
-                foreach(var cell in cells)
+                foreach(var row in siteDictionary.Keys)
                 {
-                    var row = _methods.GetRow(cell.Path);
-
-                    if(!cellDictionary.ContainsKey(row))
-                    {
-                        cellDictionary.Add(row, new List<string>());
-                    }
-
-                    var valueToken = cell.Children().First(c => ((Newtonsoft.Json.Linq.JProperty)c).Name == "v");
-                    var value = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)valueToken).Value).Value.ToString();
-                    cellDictionary[row].Add(value);
-                }
-
-                foreach(var row in cellDictionary.Keys)
-                {
-                    var values = cellDictionary[row];
+                    var values = siteDictionary[row];
 
                     //Insert site data into [Temp.Customer].[Site]
                     _tempCustomerMethods.Site_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4]);

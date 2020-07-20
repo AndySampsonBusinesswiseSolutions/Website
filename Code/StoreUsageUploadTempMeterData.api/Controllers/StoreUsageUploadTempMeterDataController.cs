@@ -83,46 +83,12 @@ namespace StoreUsageUploadTempMeterData.api.Controllers
                     return;
                 }
 
-                //Get File Content by FileId
-                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
-                var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
-                var fileJSON = JObject.Parse(fileContent);
+                //Get Meter data from Customer Data Upload
+                var meterDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Meters");
 
-                //Strip out data not related to Meter
-                var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
-                var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets.Meters");
-                var validCells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets.Meters.", string.Empty) != "!ref" 
-                    && c.Path.Replace("Sheets.Meters.", string.Empty) != "!margins").ToList();
-                var cells = validCells.Where(c => !_methods.IsHeaderRow(c.Parent)).ToList();
-                var columns = validCells.Where(c => _methods.IsHeaderRow(c.Parent))
-                    .Select(c => c.Path.Replace(_methods.GetRow(c.Path).ToString(), string.Empty))
-                    .OrderBy(c => c)
-                    .ToList();
-
-                var cellDictionary = new Dictionary<int, List<string>>(columns.Count());
-
-                foreach(var cell in cells)
+                foreach(var row in meterDictionary.Keys)
                 {
-                    var row = _methods.GetRow(cell.Path);
-                    var columnIndex = columns.IndexOf(cell.Path.Replace(row.ToString(), string.Empty));
-
-                    if(!cellDictionary.ContainsKey(row))
-                    {
-                        cellDictionary.Add(row, new List<string>());
-                        foreach(var column in columns)
-                        {
-                            cellDictionary[row].Add(string.Empty);
-                        }
-                    }
-
-                    var valueToken = cell.Children().First(c => ((Newtonsoft.Json.Linq.JProperty)c).Name == "v");
-                    var value = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)valueToken).Value).Value.ToString();
-                    cellDictionary[row][columnIndex] = value;
-                }
-
-                foreach(var row in cellDictionary.Keys)
-                {
-                    var values = cellDictionary[row];
+                    var values = meterDictionary[row];
 
                     //Insert meter data into [Temp.Customer].[Meter]
                     _tempCustomerMethods.Meter_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10]);

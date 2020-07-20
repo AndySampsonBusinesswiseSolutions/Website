@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 
 namespace MethodLibrary
 {
@@ -107,6 +108,13 @@ namespace MethodLibrary
             {
                 var fileId = File_GetFileIdByFileGUID(fileGUID);
                 return FileContent_GetFileContentByFileId(fileId);;
+            }
+
+            public JObject FileContent_GetFileContentJSONByFileGUID(JObject jsonObject)
+            {
+                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
+                var fileContent = FileContent_GetFileContentByFileGUID(fileGUID);
+                return JObject.Parse(fileContent);
             }
         }
     }

@@ -18,6 +18,7 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +82,16 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get Customer data from Customer Data Upload
+                var customerDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Customers");
+
+                foreach(var row in customerDictionary.Keys)
+                {
+                    var values = customerDictionary[row];
+
+                    //Insert customer data into [Temp.Customer].[FlexContract]
+                    _tempCustomerMethods.Customer_Insert(processQueueGUID, values[0], values[1], values[2], values[3]);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempCustomerDataAPIId, false, null);

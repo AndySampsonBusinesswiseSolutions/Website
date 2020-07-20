@@ -85,59 +85,22 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
                     return;
                 }
 
-                //Get File Content by FileId
-                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
-                var fileContent = _informationMethods.FileContent_GetFileContentByFileGUID(fileGUID);
-                var fileJSON = JObject.Parse(fileContent);
+                //Get SubMeter Usage data from Customer Data Upload
+                var subMeterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "SubMeter HH Data");
 
-                //Strip out data not related to SubMeter Usage
-                var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
-                var sitesJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == "Sheets['SubMeter HH Data']");
-                var validCells = sitesJSON.Values().Children().Where(c => c.Path.Replace("Sheets['SubMeter HH Data'].", string.Empty) != "!ref" 
-                    && c.Path.Replace("Sheets['SubMeter HH Data'].", string.Empty) != "!margins").ToList();
-                var cells = validCells.Where(c => !_methods.IsHeaderRow(c.Parent)).ToList();
-                var columns = validCells.Where(c => _methods.IsHeaderRow(c.Parent))
-                    .Select(c => c.Path.Replace(_methods.GetRow(c.Path).ToString(), string.Empty))
-                    .Select(c => c.Replace("Sheets['SubMeter HH Data'].", string.Empty))
-                    .OrderBy(c => Convert.ToInt64(string.Join(string.Empty, Encoding.ASCII.GetBytes(c))))
-                    .Select(c => $"Sheets['SubMeter HH Data'].{c}")
-                    .ToList();
-
-                var cellDictionary = new Dictionary<int, List<string>>(columns.Count());
-
-                foreach(var cell in cells)
+                //TODO: Make into BulkInsert
+                foreach(var row in subMeterUsageDictionary.Keys)
                 {
-                    var row = _methods.GetRow(cell.Path);
-                    var columnIndex = columns.IndexOf(cell.Path.Replace(row.ToString(), string.Empty));
-
-                    if(!cellDictionary.ContainsKey(row))
-                    {
-                        cellDictionary.Add(row, new List<string>());
-                        foreach(var column in columns)
-                        {
-                            cellDictionary[row].Add(string.Empty);
-                        }
-                    }
-
-                    var valueToken = cell.Children().First(c => ((Newtonsoft.Json.Linq.JProperty)c).Name == "v");
-                    var value = ((Newtonsoft.Json.Linq.JValue)((Newtonsoft.Json.Linq.JProperty)valueToken).Value).Value.ToString();
-                    cellDictionary[row][columnIndex] = value;
-                }
-
-                foreach(var row in cellDictionary.Keys)
-                {
-                    var values = cellDictionary[row];
-
-                    //Insert submeter data into data table
+                    var values = subMeterUsageDictionary[row];
                     var subMeterIdentifier = values[0];
                     var date = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
 
-                    for(var timePeriod = 2; timePeriod < columns.Count(); timePeriod++)
+                    for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
                     {
                         var time = DateTime.Today.AddMinutes(30 * (timePeriod - 1));
                         var timePeriodString = $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
 
-                        //Insert meter usage data into [Temp.Customer].[SubMeterUsage]
+                        //Insert submeter usage data into [Temp.Customer].[SubMeterUsage]
                         _tempCustomerMethods.SubMeterUsage_Insert(processQueueGUID, subMeterIdentifier, date, timePeriodString, values[timePeriod]);
                     }
                 }

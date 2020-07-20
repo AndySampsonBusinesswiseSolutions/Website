@@ -18,6 +18,7 @@ namespace StoreUsageUploadTempFlexContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +82,16 @@ namespace StoreUsageUploadTempFlexContractData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get Flex Contract data from Customer Data Upload
+                var flexContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Flex Contracts");
+
+                foreach(var row in flexContractDictionary.Keys)
+                {
+                    var values = flexContractDictionary[row];
+
+                    //Insert flex contract data into [Temp.Customer].[FlexContract]
+                    _tempCustomerMethods.FlexContract_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempFlexContractDataAPIId, false, null);

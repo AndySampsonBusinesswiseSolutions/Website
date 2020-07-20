@@ -5,8 +5,6 @@ using System.Data.SqlClient;
 using System.Reflection;
 using System.Data;
 using System;
-using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace MethodLibrary
 {
@@ -97,16 +95,6 @@ namespace MethodLibrary
             var millisecond = dateTime.Millisecond.ToString().PadLeft(3, '0');
 
             return $"{year}-{month}-{day} {hour}:{minute}:{second}.{millisecond}";
-        }
-
-        public bool IsHeaderRow(JContainer parent)
-        {
-            return GetRow(((Newtonsoft.Json.Linq.JProperty)parent).Name) == 1;
-        }
-
-        public int GetRow(string cell)
-        {
-            return Convert.ToInt16(String.Join("", cell.Where(char.IsDigit)));
         }
     }
 }
