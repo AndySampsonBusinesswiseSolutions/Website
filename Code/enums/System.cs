@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string ValidateUsageUploadTempFlexReferenceVolumeDataAPI = "D520F4DC-F582-45D7-A53C-608156991C6E";
                     public string ValidateUsageUploadTempFlexContractDataAPI = "BE59D94B-61BE-4900-B336-36AEB8904973";
                     public string ValidateUsageUploadTempFixedContractDataAPI = "B8F5A9D3-CD9F-44F2-B3EA-DCECA0F7CCFF";
                     public string ValidateUsageUploadTempMeterExempionDataAPI = "0BA4C8E7-3723-4106-A117-656F6871BC99";
@@ -63,6 +64,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string ValidateUsageUploadTempFlexReferenceVolumeDataAPI = "ValidateUsageUploadTempFlexReferenceVolumeData.api";
                     public string ValidateUsageUploadTempFlexContractDataAPI = "ValidateUsageUploadTempFlexContractData.api";
                     public string ValidateUsageUploadTempFixedContractDataAPI = "ValidateUsageUploadTempFixedContractData.api";
                     public string ValidateUsageUploadTempMeterExempionDataAPI = "ValidateUsageUploadTempMeterExempionData.api";
@@ -106,6 +108,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string ValidateUsageUploadTempFlexReferenceVolumeDataAPI = "h9CMbkML68NCyMNj";
                     public string ValidateUsageUploadTempFlexContractDataAPI = "FMTXVhfa5Yu8s6vQ";
                     public string ValidateUsageUploadTempFixedContractDataAPI = "aHG2nFuzttAHQDCN";
                     public string ValidateUsageUploadTempMeterExempionDataAPI = "XdUWncBgXVs2hmvE";
