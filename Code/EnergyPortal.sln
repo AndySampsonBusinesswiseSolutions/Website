@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempCustome
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterExemptionData.api", "StoreUsageUploadTempMeterExemptionData.api\StoreUsageUploadTempMeterExemptionData.api.csproj", "{F00D0714-502A-4F96-A375-A50BA0121A73}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFixedContractData.api", "StoreUsageUploadTempFixedContractData.api\StoreUsageUploadTempFixedContractData.api.csproj", "{683D2662-5852-480C-B3A0-B7B459F31CD1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -462,5 +464,17 @@ Global
 		{F00D0714-502A-4F96-A375-A50BA0121A73}.Release|x64.Build.0 = Release|Any CPU
 		{F00D0714-502A-4F96-A375-A50BA0121A73}.Release|x86.ActiveCfg = Release|Any CPU
 		{F00D0714-502A-4F96-A375-A50BA0121A73}.Release|x86.Build.0 = Release|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Debug|x64.Build.0 = Debug|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Debug|x86.Build.0 = Debug|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Release|x64.ActiveCfg = Release|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Release|x64.Build.0 = Release|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Release|x86.ActiveCfg = Release|Any CPU
+		{683D2662-5852-480C-B3A0-B7B459F31CD1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
