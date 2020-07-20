@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexReferenceVolumeData.api", "StoreUsageUploadTempFlexReferenceVolumeData.api\StoreUsageUploadTempFlexReferenceVolumeData.api.csproj", "{6816593E-03E0-4C02-9744-3F6CC9482424}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexTradeData.api", "StoreUsageUploadTempFlexTradeData.api\StoreUsageUploadTempFlexTradeData.api.csproj", "{491C50C0-F740-439C-A479-167E2329157B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -504,5 +506,17 @@ Global
 		{6816593E-03E0-4C02-9744-3F6CC9482424}.Release|x64.Build.0 = Release|Any CPU
 		{6816593E-03E0-4C02-9744-3F6CC9482424}.Release|x86.ActiveCfg = Release|Any CPU
 		{6816593E-03E0-4C02-9744-3F6CC9482424}.Release|x86.Build.0 = Release|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Debug|x64.Build.0 = Debug|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Debug|x86.Build.0 = Debug|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Release|x64.ActiveCfg = Release|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Release|x64.Build.0 = Release|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Release|x86.ActiveCfg = Release|Any CPU
+		{491C50C0-F740-439C-A479-167E2329157B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
