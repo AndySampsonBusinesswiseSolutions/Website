@@ -108,13 +108,6 @@ namespace UploadFile.api.Controllers
                 var fileContent = jsonObject[_systemAPIRequiredDataKeyEnums.FileContent].ToString();
                 _informationMethods.FileContent_Insert(createdByUserId,sourceId, fileId, fileContent);
 
-                //Get CustomerId by CustomerGUID
-                var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
-                var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
-
-                //Insert Customer To File Mapping
-                _mappingMethods.CustomerToFile_Insert(createdByUserId, sourceId, customerId, fileId);
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, uploadFileAPIId, false, null);
             }

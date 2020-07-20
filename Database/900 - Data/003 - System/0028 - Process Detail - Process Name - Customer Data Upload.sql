@@ -12,4 +12,4 @@ EXEC [System].[ProcessDetail_Insert]
     @SourceId,
     @ProcessId,
     @ProcessAttributeId,
-    'Usage Upload'
+    'Customer Data Upload'

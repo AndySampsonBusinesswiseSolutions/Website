@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>8a343e41-6a1e-4532-a947-56fc5b974655</ID>
-    <DateCreated>2020-07-20T08:46:55.3540084+01:00</DateCreated>
+    <ID>e13712d8-0a20-4bca-afe9-02af371bbfdb</ID>
+    <DateCreated>2020-07-20T09:39:00.9212352+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>N0DaTeAl8CJPopOE0tIwKg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe66Sp0vKXiWxjiRIlcIJWca4=</Password>
+    <Login>wB4o6AzdqZ7Ej4QWkKtxTg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6yEuU6dxv/ASvTdgKkXPDcI=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -2228,16 +2228,16 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>56196f2d-4f45-4f91-97cd-d4f7c0bb8c6f</ID>
+    <ID>f08a6537-5209-40a3-9ab5-eb21a378fde7</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0027 - Process - Usage Upload.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0027 - Process - Customer Data Upload.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>7cef96c3-b4db-48fc-9ab4-960b8b809529</ID>
+    <ID>de71a01e-28b8-484a-be62-d1d9e82922ed</ID>
     <ParentFolder_ID>4b46bc41-52f6-4ea9-a507-08eb2c40ccb6</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0028 - Process Detail - Process Name - Usage Upload.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\003 - System\0028 - Process Detail - Process Name - Customer Data Upload.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
