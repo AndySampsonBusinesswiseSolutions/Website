@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>2167b8ee-cd4e-4036-899c-ff7218848847</ID>
-    <DateCreated>2020-07-20T10:46:47.2188227+01:00</DateCreated>
+    <ID>217f98eb-98e3-4a67-8d13-76dff1822efe</ID>
+    <DateCreated>2020-07-20T10:51:42.7222913+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>y0fgPl9ejcW+QcF3F3osjw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6z6JhIVqNlr2r1h8p1Kr2tM=</Password>
+    <Login>/bXyU6bbSt9YD3KUnhR+lQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6yrBzsTYTd/aPx/2ijUHxWc=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -8940,6 +8940,181 @@
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
+  <ScriptFile>
+    <ID>5736dd2f-b49b-4605-89d8-b8de215ca4b7</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0001 - Drop Login.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>71afd8b6-28fe-44df-843b-04997ccffdab</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0002 - Create Login.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8035738d-d000-4daa-a0d0-af71648576b0</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0003 - Create User.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>95c02156-0237-43de-a72d-b72c3a9b6b24</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0004 - Add Role - db_denydatareader.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cb994ab5-c34e-4d5b-af76-ea9d578e3340</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0005 - Add Role - db_denydatawriter.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>608bdbbe-05a3-4c49-b668-cc6ff3ec2377</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0006 - Grant Execute - [Information].[SourceAttribute_GetBySourceAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>84b9de37-590e-44c9-b9e4-c5b1a6d24a0d</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0007 - Grant Execute - [Information].[SourceDetail_GetBySourceAttributeIdAndSourceDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5d80a637-d247-46a0-b144-387b61a05d3f</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0008 - Grant Execute - [System].[APIAttribute_GetByAPIAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>85190915-5abc-4e60-af57-0122dcce5207</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0009 - Grant Execute - [System].[APIDetail_GetByAPIIdAndAPIAttributeId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d4fc4245-c846-4683-8dd7-e347454e0606</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0010 - Grant Execute - [System].[API_GetByAPIGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>e816a26e-56a0-4f3f-9415-03bf5188beb8</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0011 - Grant Execute - [Administration.User].[User_GetByUserGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>94dcdd9b-ecd0-4e09-83c9-03bbf7acaa7c</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0012 - Grant Execute - [System].[Error_GetByErrorGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f221a7ff-d166-4a43-92d9-831a2d6b825b</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0013 - Grant Execute - [System].[Error_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5adaf04c-6226-49ff-a07d-6dee9db8baf1</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0014 - Grant Execute - [System].[ProcessQueue_Update].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bfaab7b1-0235-445b-80f4-2419bbe63d54</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0015 - Grant Execute - [System].[ProcessQueue_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3204ea90-37eb-4513-94c2-4909d5043dd7</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0016 - Create API.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5d6b311c-000d-40b5-a425-54c870ac04db</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0017 - API Detail - API Name.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>95481a4f-f945-4457-abe4-431df82a2783</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0018 - API Detail - HTTP Application URL.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>85ea987a-9f7b-4243-9ea8-69eeb3fe85eb</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0019 - API Detail - HTTPS Application URL.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a3613f93-2d38-40db-aaa0-3f2904daedf7</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0020 - API Detail - POST Route.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>e89ba634-0856-4143-9d25-fc5146a6a2e7</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0021 - API Detail - Timeout Seconds.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>445ac1a6-a4d5-4c39-8a91-16e046b6f132</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0022 - API Detail - IsRunning Route.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f83b0765-304f-4c59-9652-8c1be001a575</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0023 - API To Process - Usage Upload.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9c3f75f9-b1ba-4642-bb8d-a35d24625f6d</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0024 - API Detail - Prerequisite API GUID.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>dc27eb66-4c41-4e6a-af67-660152b095bd</ID>
+    <ParentFolder_ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\0036 - ValidateUsageUploadTempFlexContractData.api\0025 - API Detail - Required Data Key.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
   <ScriptFileContainer>
     <ID>1b5e813a-f426-41c8-9159-a35b24d0c162</ID>
     <Name>All Scripts</Name>
@@ -9303,6 +9478,11 @@
     <ID>ab16847f-9976-4f91-8ce6-e4c94a378e73</ID>
     <ParentFolder_ID>2ccf216c-ac1b-4e1d-b795-afcd8c238aea</ParentFolder_ID>
     <Name>0035 - ValidateUsageUploadTempFixedContractData.api</Name>
+  </ScriptFolder>
+  <ScriptFolder>
+    <ID>e283b413-e3ab-4cb5-a30e-fc68900a4ae4</ID>
+    <ParentFolder_ID>2ccf216c-ac1b-4e1d-b795-afcd8c238aea</ParentFolder_ID>
+    <Name>0036 - ValidateUsageUploadTempFlexContractData.api</Name>
   </ScriptFolder>
   <Mapping>
     <ID>09b1f4ee-a843-4415-8d23-9e2547aaa29f</ID>
