@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexReferenceVolumeData.api", "ValidateUsageUploadTempFlexReferenceVolumeData.api\ValidateUsageUploadTempFlexReferenceVolumeData.api.csproj", "{5AB725F6-AACF-4F1B-ADA2-71A21CC1E27D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexTradeData.api", "ValidateUsageUploadTempFlexTradeData.api\ValidateUsageUploadTempFlexTradeData.api.csproj", "{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -560,5 +562,17 @@ Global
 		{5AB725F6-AACF-4F1B-ADA2-71A21CC1E27D}.Release|x64.Build.0 = Release|Any CPU
 		{5AB725F6-AACF-4F1B-ADA2-71A21CC1E27D}.Release|x86.ActiveCfg = Release|Any CPU
 		{5AB725F6-AACF-4F1B-ADA2-71A21CC1E27D}.Release|x86.Build.0 = Release|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Debug|x64.Build.0 = Debug|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Debug|x86.Build.0 = Debug|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Release|x64.ActiveCfg = Release|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Release|x64.Build.0 = Release|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Release|x86.ActiveCfg = Release|Any CPU
+		{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
