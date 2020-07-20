@@ -83,14 +83,16 @@ namespace StoreUsageUploadTempFlexContractData.api.Controllers
                 }
 
                 //Get Flex Contract data from Customer Data Upload
-                var flexContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Flex Contracts");
+                var flexContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
 
                 foreach(var row in flexContractDictionary.Keys)
                 {
                     var values = flexContractDictionary[row];
+                    var contractStartDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[4])));
+                    var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[5])));
 
                     //Insert flex contract data into [Temp.Customer].[FlexContract]
-                    _tempCustomerMethods.FlexContract_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
+                    _tempCustomerMethods.FlexContract_Insert(processQueueGUID, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
                 }
 
                 //Update Process Queue

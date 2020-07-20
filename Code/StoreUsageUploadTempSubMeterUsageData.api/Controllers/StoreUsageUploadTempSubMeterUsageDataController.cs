@@ -86,7 +86,7 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
                 }
 
                 //Get SubMeter Usage data from Customer Data Upload
-                var subMeterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "SubMeter HH Data");
+                var subMeterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['SubMeter HH Data']");
 
                 //TODO: Make into BulkInsert
                 foreach(var row in subMeterUsageDictionary.Keys)
@@ -97,8 +97,7 @@ namespace StoreUsageUploadTempSubMeterUsageData.api.Controllers
 
                     for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
                     {
-                        var time = DateTime.Today.AddMinutes(30 * (timePeriod - 1));
-                        var timePeriodString = $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
+                        var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
                         //Insert submeter usage data into [Temp.Customer].[SubMeterUsage]
                         _tempCustomerMethods.SubMeterUsage_Insert(processQueueGUID, subMeterIdentifier, date, timePeriodString, values[timePeriod]);

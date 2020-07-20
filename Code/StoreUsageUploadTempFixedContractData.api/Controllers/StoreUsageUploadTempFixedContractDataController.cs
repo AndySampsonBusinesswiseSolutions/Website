@@ -83,14 +83,16 @@ namespace StoreUsageUploadTempFixedContractData.api.Controllers
                 }
 
                 //Get Fixed Contract data from Customer Data Upload
-                var fixedContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Fixed Contracts");
+                var fixedContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Fixed Contracts']");
 
                 foreach(var row in fixedContractDictionary.Keys)
                 {
                     var values = fixedContractDictionary[row];
+                    var contractStartDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[3])));
+                    var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[4])));
 
                     //Insert fixed contract data into [Temp.Customer].[FlexContract]
-                    _tempCustomerMethods.FixedContract_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10]);
+                    _tempCustomerMethods.FixedContract_Insert(processQueueGUID, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], values[7], values[8], values[9], values[10]);
                 }
 
                 //Update Process Queue

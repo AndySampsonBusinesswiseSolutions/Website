@@ -96,5 +96,21 @@ namespace MethodLibrary
 
             return $"{year}-{month}-{day} {hour}:{minute}:{second}.{millisecond}";
         }
+
+        public string ConvertIntegerToHalfHourTimePeriod(int halfHour)
+        {
+            var time = DateTime.Today.AddMinutes(30 * (halfHour - 1));
+
+            if(halfHour == 50)
+            {
+                time = DateTime.Today.AddHours(1).AddMinutes(31);
+            }
+            else if(halfHour == 51)
+            {
+                time = DateTime.Today.AddHours(1).AddMinutes(32);
+            }
+
+            return $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
+        }
     }
 }

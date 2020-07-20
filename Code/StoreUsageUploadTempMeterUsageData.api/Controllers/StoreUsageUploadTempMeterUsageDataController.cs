@@ -86,7 +86,7 @@ namespace StoreUsageUploadTempMeterUsageData.api.Controllers
                 }
 
                 //Get Meter Usage data from Customer Data Upload
-                var meterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Meter HH Data");
+                var meterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter HH Data']");
 
                 //TODO: Make into BulkInsert
                 foreach(var row in meterUsageDictionary.Keys)
@@ -96,9 +96,8 @@ namespace StoreUsageUploadTempMeterUsageData.api.Controllers
                     var date = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
 
                     for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
-                    {
-                        var time = DateTime.Today.AddMinutes(30 * (timePeriod - 1));
-                        var timePeriodString = $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
+                    {                       
+                        var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
                         //Insert meter usage data into [Temp.Customer].[MeterUsage]
                         _tempCustomerMethods.MeterUsage_Insert(processQueueGUID, mpxn, date, timePeriodString, values[timePeriod]);

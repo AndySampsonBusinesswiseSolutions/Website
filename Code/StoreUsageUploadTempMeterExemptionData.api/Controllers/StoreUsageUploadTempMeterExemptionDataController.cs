@@ -83,14 +83,16 @@ namespace StoreUsageUploadTempMeterExemptionData.api.Controllers
                 }
 
                 //Get Meter Exemption data from Customer Data Upload
-                var meterExemptionDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Meter Exemptions");
+                var meterExemptionDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter Exemptions']");
 
                 foreach(var row in meterExemptionDictionary.Keys)
                 {
                     var values = meterExemptionDictionary[row];
+                    var dateFrom = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
+                    var dateTo = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[2])));
 
                     //Insert meter exemption data into [Temp.Customer].[MeterExemption]
-                    _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4]);
+                    _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, values[0], dateFrom, dateTo, values[3], values[4]);
                 }
 
                 //Update Process Queue

@@ -83,7 +83,7 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
                 }
 
                 //Get Customer data from Customer Data Upload
-                var customerDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Customers");
+                var customerDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Customers");
 
                 foreach(var row in customerDictionary.Keys)
                 {

@@ -775,7 +775,6 @@ async function uploadFile(file) {
 			ProcessQueueGUID: processQueueGUID, 
 			PageGUID: "714F10C4-ACF3-4409-97A8-C605E8E2FD0C", 
 			ProcessGUID: "3AFF25CB-06BD-4BD1-A409-13D10A08044F", 
-			CustomerGUID: "DBA4F128-B713-40DB-9999-5FE4E352A33C", //TODO: Update GUID
 			FileContent: workbookJSON,
 			FileGUID: fileGUID,
 			FileType: "Usage Upload",

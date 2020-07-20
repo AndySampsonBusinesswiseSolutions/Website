@@ -83,14 +83,15 @@ namespace StoreUsageUploadTempFlexTradeData.api.Controllers
                 }
 
                 //Get Flex Trade data from Customer Data Upload
-                var flexTradeDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Flex Trades");
+                var flexTradeDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Trades']");
 
                 foreach(var row in flexTradeDictionary.Keys)
                 {
                     var values = flexTradeDictionary[row];
+                    var tradeDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
 
                     //Insert flex trade data into [Temp.Customer].[FlexTrade]
-                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5]);
+                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, values[0], tradeDate, values[2], values[3], values[4], values[5]);
                 }
 
                 //Update Process Queue

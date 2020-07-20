@@ -83,14 +83,16 @@ namespace StoreUsageUploadTempFlexReferenceVolumeData.api.Controllers
                 }
 
                 //Get Flex Reference Volume data from Customer Data Upload
-                var flexReferenceVolumeDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Flex Reference Volumes");
+                var flexReferenceVolumeDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
 
                 foreach(var row in flexReferenceVolumeDictionary.Keys)
                 {
                     var values = flexReferenceVolumeDictionary[row];
+                    var dateFrom = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
+                    var dateTo = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[2])));
 
                     //Insert flex reference volume data into [Temp.Customer].[FlexReferenceVolume]
-                    _tempCustomerMethods.FlexReferenceVolume_Insert(processQueueGUID, values[0], values[1], values[2], values[3]);
+                    _tempCustomerMethods.FlexReferenceVolume_Insert(processQueueGUID, values[0], dateFrom, dateTo, values[3]);
                 }
 
                 //Update Process Queue

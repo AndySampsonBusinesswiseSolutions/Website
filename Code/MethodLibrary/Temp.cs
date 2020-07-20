@@ -21,17 +21,17 @@ namespace MethodLibrary
 
                     //Strip out data not required
                     var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
-                    var dataTypeJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == $"Sheets.Sheets['{dataType}']");
-                    var validCells = dataTypeJSON.Values().Children().Where(c => 
-                            c.Path.Replace($"Sheets.Sheets['{dataType}'].", string.Empty) != "!ref" 
-                            && c.Path.Replace($"Sheets.Sheets['{dataType}'].", string.Empty) != "!margins")
+                    var dataJSON = sheetJSON.Values().FirstOrDefault(v => v.Path == $"{dataType}");
+                    var validCells = dataJSON.Values().Children().Where(c => 
+                            c.Path.Replace($"{dataType}.", string.Empty) != "!ref" 
+                            && c.Path.Replace($"{dataType}.", string.Empty) != "!margins")
                         .ToList();
                     var cells = validCells.Where(c => !IsCustomerDataUploadHeaderRow(c.Parent)).ToList();
                     var columns = validCells.Where(c => IsCustomerDataUploadHeaderRow(c.Parent))
                         .Select(c => c.Path.Replace(GetCustomerDataUploadRow(c.Path).ToString(), string.Empty))
-                        .Select(c => c.Replace($"Sheets['{dataType}'].", string.Empty))
-                        .OrderBy(c => Convert.ToInt64(string.Join(string.Empty, Encoding.ASCII.GetBytes(c))))
-                        .Select(c => $"Sheets['{dataType}'].{c}")
+                        .Select(c => c.Replace($"{dataType}.", string.Empty))
+                        .OrderBy(c => ConvertColumnToInteger(c))
+                        .Select(c => $"{dataType}.{c}")
                         .ToList();
 
                     var dictionary = new Dictionary<int, List<string>>();
@@ -58,6 +58,14 @@ namespace MethodLibrary
                     return dictionary;
                 }
 
+                private Int64 ConvertColumnToInteger(string column)
+                {
+                    var columnBytes = Encoding.ASCII.GetBytes(column);
+                    var joinedBytes = string.Join(string.Empty, columnBytes);
+                    var integer = Convert.ToInt64(joinedBytes);
+                    return integer;
+                }
+
                 private bool IsCustomerDataUploadHeaderRow(JContainer parent)
                 {
                     return GetCustomerDataUploadRow(((Newtonsoft.Json.Linq.JProperty)parent).Name) == 1;
@@ -68,32 +76,32 @@ namespace MethodLibrary
                     return Convert.ToInt16(String.Join("", cell.Where(char.IsDigit)));
                 }
 
-                public void Site_Insert(string processQueueGUID, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode)
+                public void Site_Insert(string processQueueGUID, string customerName, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode, string siteDescription, string contactName, string contactTelephoneNumber, string contactEmailAddress, string contactRole)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Site_Insert, 
-                        processQueueGUID, siteName, siteAddress, siteTown, siteCounty, sitePostCode);
+                        processQueueGUID, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactTelephoneNumber, contactEmailAddress, contactRole);
                 }
 
-                public void Meter_Insert(string processQueueGUID, string site, string MPXN, string profileClass, string meterTimeswitchClass, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string dayUsage, string nightUsage)
+                public void Meter_Insert(string processQueueGUID, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchClass, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Meter_Insert, 
-                        processQueueGUID, site, MPXN, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, dayUsage, nightUsage);
+                        processQueueGUID, siteName, MPXN, gridSupplyPoint, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
                 }
 
-                public void SubMeter_Insert(string processQueueGUID, string MPXN, string subMeterIdentifier)
+                public void SubMeter_Insert(string processQueueGUID, string MPXN, string subMeterIdentifier, string serialNumber, string subArea, string asset)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.SubMeter_Insert, 
-                        processQueueGUID, MPXN, subMeterIdentifier);
+                        processQueueGUID, MPXN, subMeterIdentifier, serialNumber, subArea, asset);
                 }
 
                 public void Customer_Insert(string processQueueGUID, string customerName, string contactName, string contactTelephoneNumber, string contactEmailAddress)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Customer_Insert, 
-                        processQueueGUID, contactName, contactTelephoneNumber, contactEmailAddress);
+                        processQueueGUID, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
                 }
 
                 public void FixedContract_Insert(string processQueueGUID, string contractReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateCount, string standingCharge, string capacityCharge, string rate, string value)
