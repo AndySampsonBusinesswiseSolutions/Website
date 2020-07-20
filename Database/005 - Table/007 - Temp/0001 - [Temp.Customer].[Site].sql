@@ -18,11 +18,17 @@ GO
 CREATE TABLE [Temp.Customer].[Site]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	CustomerName VARCHAR(255),
 	SiteName VARCHAR(255),
 	SiteAddress VARCHAR(255),
 	SiteTown VARCHAR(255),
 	SiteCounty VARCHAR(255),
-	SitePostCode VARCHAR(255)
+	SitePostCode VARCHAR(255),
+	SiteDescription VARCHAR(255),
+	ContactName VARCHAR(255),
+	ContactTelephoneNumber VARCHAR(255),
+	ContactEmailAddress VARCHAR(255),
+	ContactRole VARCHAR(255)
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.Customer].[Site] SET (LOCK_ESCALATION = TABLE)

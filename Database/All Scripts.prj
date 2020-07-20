@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>704fe81f-c5d5-403c-a62a-a49948edcf9d</ID>
-    <DateCreated>2020-07-16T08:36:56.333438+01:00</DateCreated>
+    <ID>8a343e41-6a1e-4532-a947-56fc5b974655</ID>
+    <DateCreated>2020-07-20T08:46:55.3540084+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>ZtLZN+bdPpOAU7nVRvh+4Q==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe65DauOHsH8dsnulxZDZOShc=</Password>
+    <Login>N0DaTeAl8CJPopOE0tIwKg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe66Sp0vKXiWxjiRIlcIJWca4=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -926,6 +926,48 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>60ff2f01-3ece-4d22-a33f-1f05ad4a827c</ID>
+    <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0006 - [Temp.Customer].[Customer].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1ca5fee8-d4d0-42e7-9689-2fa9db48cda5</ID>
+    <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0007 - [Temp.Customer].[MeterExemption].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c03a4284-ab3a-41a3-aa7a-2a4e81df06a3</ID>
+    <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0008 - [Temp.Customer].[FixedContract].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>83f2b5a3-5391-46ee-92e7-68ceea32a2bf</ID>
+    <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0009 - [Temp.Customer].[FlexContract].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ffa53198-94c1-493e-b380-05cef9df53fb</ID>
+    <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0010 - [Temp.Customer].[FlexReferenceVolume].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0c31efcf-7629-4d97-b00b-d13ce59a5d09</ID>
+    <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0011 - [Temp.Customer].[FlexTrade].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>783d2a0c-24c1-4e83-b35c-56a9b347d0a8</ID>
     <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0001 - [Mapping].[PasswordToUser].sql</FullName>
@@ -1741,6 +1783,48 @@
     <ID>1f94b333-1bd1-4517-9007-63bad5e9b158</ID>
     <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0005 - [Temp.Customer].[SubMeterUsage_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>962f0804-098c-4eff-a4ec-78265e76629f</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0006 - [Temp.Customer].[Customer_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f85cbb16-f1fe-4e39-b95f-de76efcad953</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0007 - [Temp.Customer].[MeterExemption_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c9759f0d-b445-481e-bc6b-908d77b7dd75</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0008 - [Temp.Customer].[FixedContract_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>18e138a0-02e7-4e49-83ee-b1fe46a61f13</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0009 - [Temp.Customer].[FlexContract_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a92c6aeb-3154-42c1-9896-7f4c7e8b1def</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0010 - [Temp.Customer].[FlexReferenceVolume_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5ac09f58-9d30-4c24-8ee8-f7c0c227f658</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0011 - [Temp.Customer].[FlexTrade_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

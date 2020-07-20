@@ -18,8 +18,9 @@ GO
 CREATE TABLE [Temp.Customer].[Meter]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
-	Site VARCHAR(255),
+	SiteName VARCHAR(255),
 	MPXN VARCHAR(255),
+	GridSupplyPoint VARCHAR(255),
 	ProfileClass VARCHAR(255),
 	MeterTimeswitchClass VARCHAR(255),
 	LineLossFactorClass VARCHAR(255),
@@ -27,8 +28,9 @@ CREATE TABLE [Temp.Customer].[Meter]
 	LocalDistributionZone VARCHAR(255),
 	StandardOfftakeQuantity VARCHAR(255),
 	AnnualUsage VARCHAR(255),
-	DayUsage VARCHAR(255),
-	NightUsage VARCHAR(255)
+	MeterSerialNumber VARCHAR(255),
+	Area VARCHAR(255),
+	ImportExport VARCHAR(255)
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.Customer].[Meter] SET (LOCK_ESCALATION = TABLE)

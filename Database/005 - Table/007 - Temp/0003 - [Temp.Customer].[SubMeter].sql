@@ -19,7 +19,10 @@ CREATE TABLE [Temp.Customer].[SubMeter]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
 	MPXN VARCHAR(255),
-	SubMeterIdentifier VARCHAR(255)
+	SubMeterIdentifier VARCHAR(255),
+	SerialNumber VARCHAR(255),
+	SubArea VARCHAR(255),
+	Asset VARCHAR(255)
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.Customer].[SubMeter] SET (LOCK_ESCALATION = TABLE)

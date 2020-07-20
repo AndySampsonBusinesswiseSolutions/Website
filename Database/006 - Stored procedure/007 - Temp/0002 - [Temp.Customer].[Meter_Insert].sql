@@ -20,8 +20,9 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[Meter_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
-    @Site VARCHAR(255),
+    @SiteName VARCHAR(255),
     @MPXN VARCHAR(255),
+    @GridSupplyPoint VARCHAR(255),
     @ProfileClass VARCHAR(255),
     @MeterTimeswitchClass VARCHAR(255),
     @LineLossFactorClass VARCHAR(255),
@@ -29,13 +30,15 @@ ALTER PROCEDURE [Temp.Customer].[Meter_Insert]
     @LocalDistributionZone VARCHAR(255),
     @StandardOfftakeQuantity VARCHAR(255),
     @AnnualUsage VARCHAR(255),
-    @DayUsage VARCHAR(255),
-    @NightUsage VARCHAR(255)
+    @MeterSerialNumber VARCHAR(255),
+    @Area VARCHAR(255),
+    @ImportExport VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-15 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-20 -> Andrew Sampson -> Updates to handle new upload template
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -45,8 +48,9 @@ BEGIN
     INSERT INTO [Temp.Customer].[Meter]
     (
         ProcessQueueGUID,
-        Site,
+        SiteName,
         MPXN,
+        GridSupplyPoint,
         ProfileClass,
         MeterTimeswitchClass,
         LineLossFactorClass,
@@ -54,14 +58,16 @@ BEGIN
         LocalDistributionZone,
         StandardOfftakeQuantity,
         AnnualUsage,
-        DayUsage,
-        NightUsage
+        MeterSerialNumber,
+        Area,
+        ImportExport
     )
     VALUES
     (
         @ProcessQueueGUID,
-        @Site,
+        @SiteName,
         @MPXN,
+        @GridSupplyPoint,
         @ProfileClass,
         @MeterTimeswitchClass,
         @LineLossFactorClass,
@@ -69,8 +75,9 @@ BEGIN
         @LocalDistributionZone,
         @StandardOfftakeQuantity,
         @AnnualUsage,
-        @DayUsage,
-        @NightUsage
+        @MeterSerialNumber,
+        @Area,
+        @ImportExport
     )
 END
 GO

@@ -21,12 +21,16 @@ GO
 ALTER PROCEDURE [Temp.Customer].[SubMeter_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
     @MPXN VARCHAR(255),
-    @SubMeterIdentifier VARCHAR(255)
+    @SubMeterIdentifier VARCHAR(255),
+    @SerialNumber VARCHAR(255),
+    @SubArea VARCHAR(255),
+    @Asset VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-15 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-20 -> Andrew Sampson -> Updates to handle new upload template
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -37,13 +41,19 @@ BEGIN
     (
         ProcessQueueGUID,
         MPXN,
-        SubMeterIdentifier
+        SubMeterIdentifier,
+        SerialNumber,
+        SubArea,
+        Asset
     )
     VALUES
     (
         @ProcessQueueGUID,
         @MPXN,
-        @SubMeterIdentifier
+        @SubMeterIdentifier,
+        @SerialNumber,
+        @SubArea,
+        @Asset
     )
 END
 GO
