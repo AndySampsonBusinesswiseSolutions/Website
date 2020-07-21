@@ -42,9 +42,9 @@ BEGIN
         SitePostCode,
         SiteDescription,
         ContactName,
+        ContactRole,
         ContactTelephoneNumber,
-        ContactEmailAddress,
-        ContactRole
+        ContactEmailAddress
     FROM
         [Temp.Customer].[Site]
     WHERE

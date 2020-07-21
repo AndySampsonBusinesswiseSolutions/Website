@@ -76,11 +76,11 @@ namespace MethodLibrary
                     return Convert.ToInt16(String.Join("", cell.Where(char.IsDigit)));
                 }
 
-                public void Site_Insert(string processQueueGUID, int rowId, string customerName, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode, string siteDescription, string contactName, string contactTelephoneNumber, string contactEmailAddress, string contactRole)
+                public void Site_Insert(string processQueueGUID, int rowId, string customerName, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode, string siteDescription, string contactName, string contactRole, string contactTelephoneNumber, string contactEmailAddress)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Site_Insert, 
-                        processQueueGUID, rowId, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactTelephoneNumber, contactEmailAddress, contactRole);
+                        processQueueGUID, rowId, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactRole, contactTelephoneNumber, contactEmailAddress);
                 }
 
                 public void Meter_Insert(string processQueueGUID, int rowId, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchClass, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
@@ -287,6 +287,23 @@ namespace MethodLibrary
                     }
 
                     return dataRows;
+                }
+
+                public IEnumerable<string> GetMissingRecords(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                {
+                    var errors = new List<string>();
+
+                    foreach(var column in columns)
+                    {
+                        var emptyRecords = dataRows.Where(c => string.IsNullOrWhiteSpace(c[column.Key].ToString()));
+
+                        foreach(var emptyRecord in emptyRecords)
+                        {
+                            errors.Add($"{column.Value} missing in row {emptyRecord["RowId"]}");
+                        }
+                    }
+
+                    return errors;
                 }
             }
         }

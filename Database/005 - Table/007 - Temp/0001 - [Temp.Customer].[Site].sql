@@ -27,9 +27,9 @@ CREATE TABLE [Temp.Customer].[Site]
 	SitePostCode VARCHAR(255),
 	SiteDescription VARCHAR(255),
 	ContactName VARCHAR(255),
+	ContactRole VARCHAR(255),
 	ContactTelephoneNumber VARCHAR(255),
-	ContactEmailAddress VARCHAR(255),
-	ContactRole VARCHAR(255)
+	ContactEmailAddress VARCHAR(255)
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.Customer].[Site] SET (LOCK_ESCALATION = TABLE)

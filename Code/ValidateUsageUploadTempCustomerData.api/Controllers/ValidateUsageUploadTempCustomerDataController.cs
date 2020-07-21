@@ -92,16 +92,38 @@ namespace ValidateUsageUploadTempCustomerData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempCustomerDataAPIId, false, null);
                     return;
-                }        
+                }               
 
-                var errors = new List<string>();        
+                //If any are empty records, store error
+                var requiredColumns = new Dictionary<string, string>
+                    {
+                        {"CustomerName", "Customer Name"},
+                        {"ContactName", "Contact Name"},
+                        {"ContactTelephoneNumber", "Contact Telephone Number"},
+                        {"ContactEmailAddress", "Contact Email Address"}
+                    };
+                
+                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
 
-                //If any are empty customer names, store error
-                var emptyCustomerNames = customerDataRows.Where(c => string.IsNullOrWhiteSpace(c["CustomerName"].ToString()));
+                //If Customer already exists, check that User is linked to Customer
+                //If not, then reject - this is to stop people updating details of other customers
 
-                foreach(var emptyCustomerName in emptyCustomerNames)
+                //Validate telephone number
+                var invalidTelephoneNumberDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactTelephoneNumber")) 
+                    && !_methods.IsValidPhoneNumber(r.Field<string>("ContactTelephoneNumber")));
+
+                foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
                 {
-                    errors.Add($"Customer Name missing in row {emptyCustomerName["RowId"]}");
+                    errors.Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}' in row {invalidTelephoneNumberDataRow["RowId"]}");
+                }
+
+                //Validate email address
+                var invalidEmailAddressDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactEmailAddress")) 
+                    && !_methods.IsValidEmailAddress(r.Field<string>("ContactEmailAddress")));
+
+                foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)
+                {
+                    errors.Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}' in row {invalidEmailAddressDataRow["RowId"]}");
                 }
 
                 //Update Process Queue

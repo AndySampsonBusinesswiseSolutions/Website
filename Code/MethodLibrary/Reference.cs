@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Data;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace MethodLibrary
 {
@@ -130,6 +132,162 @@ namespace MethodLibrary
             }
 
             return trimmedDataTable;
+        }
+
+        public bool IsValidPhoneNumber(string telephoneNumber)
+        {
+            if (string.IsNullOrWhiteSpace(telephoneNumber))
+            {
+                return false;
+            }
+
+            try
+            {
+                var telephoneNumberRegexMatch = Regex.Match(telephoneNumber, 
+                    @"^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$",
+                    RegexOptions.IgnoreCase,
+                    TimeSpan.FromMilliseconds(250));
+
+                return telephoneNumberRegexMatch.Success;
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidPostCode(string postCode)
+        {
+            if (string.IsNullOrWhiteSpace(postCode))
+            {
+                return false;
+            }
+
+            try
+            {
+                //TODO: Move regexes into database
+                var postCodeRegexMatch = Regex.Match(postCode, 
+                    @"^(([gG][iI][rR] {0,}0[aA]{2})|((([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y]?[0-9][0-9]?)|(([a-pr-uwyzA-PR-UWYZ][0-9][a-hjkstuwA-HJKSTUW])|([a-pr-uwyzA-PR-UWYZ][a-hk-yA-HK-Y][0-9][abehmnprv-yABEHMNPRV-Y]))) {0,}[0-9][abd-hjlnp-uw-zABD-HJLNP-UW-Z]{2}))$",
+                    RegexOptions.IgnoreCase,
+                    TimeSpan.FromMilliseconds(250));
+
+                return postCodeRegexMatch.Success;
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidEmailAddress(string emailAddress)
+        {
+            if (string.IsNullOrWhiteSpace(emailAddress))
+            {
+                return false;
+            }
+
+            try
+            {
+                // Normalize the domain
+                emailAddress = Regex.Replace(emailAddress, @"(@)(.+)$", DomainMapper,
+                                    RegexOptions.None, TimeSpan.FromMilliseconds(200));
+
+                // Examines the domain part of the email and normalizes it.
+                string DomainMapper(Match match)
+                {
+                    // Use IdnMapping class to convert Unicode domain names.
+                    var idn = new IdnMapping();
+
+                    // Pull out and process domain name (throws ArgumentException on invalid)
+                    var domainName = idn.GetAscii(match.Groups[2].Value);
+
+                    return match.Groups[1].Value + domainName;
+                }
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            try
+            {
+                return Regex.IsMatch(emailAddress,
+                    @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
+                    RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
+            }
+            catch (RegexMatchTimeoutException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidMPAN(string mpan)
+        {
+            if (string.IsNullOrWhiteSpace(mpan)
+                || mpan.Length != 13)
+            {
+                return false;
+            }
+
+            try
+            {
+                var mpanValue = Convert.ToInt64(mpan);
+
+                var primeNumbers = new List<int>() { 3, 5, 7, 13, 17, 19, 23, 29, 31, 37, 41, 43 };
+                var digitCheckSumResults = new List<int>();
+
+                int primeNumberIdx = 0;
+                mpan.Substring(0, 12)
+                    .ToCharArray()
+                    .Where(x => int.TryParse(x.ToString(), out int convertedInt))
+                    .Select(x => Convert.ToInt16(x.ToString()))
+                    .ToList()
+                    .ForEach(x => digitCheckSumResults.Add(x * primeNumbers[primeNumberIdx++]));
+                
+                var checkDigit = Convert.ToUInt16(mpan.Substring(12, 1));
+                return checkDigit == (digitCheckSumResults.Sum() % 11 % 10);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidMPRN(string mprn)
+        {
+            if (string.IsNullOrWhiteSpace(mprn)
+                || mprn.Length > 10)
+            {
+                return false;
+            }
+
+            try
+            {
+                var mprnValue = Convert.ToInt64(mprn);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

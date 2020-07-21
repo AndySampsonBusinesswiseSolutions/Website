@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace ValidateUsageUploadTempFixedContractData.api.Controllers
 {
@@ -18,6 +19,7 @@ namespace ValidateUsageUploadTempFixedContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +83,22 @@ namespace ValidateUsageUploadTempFixedContractData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get data from [Temp.Customer].[FixedContract] table
+                var customerDataRows = _tempCustomerMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);               
+
+                if(!customerDataRows.Any())
+                {
+                    //Nothing to validate so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempFixedContractDataAPIId, false, null);
+                    return;
+                }               
+
+                //If any are empty records, store error
+                var requiredColumns = new Dictionary<string, string>
+                    {
+                    };
+
+                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempFixedContractDataAPIId, false, null);

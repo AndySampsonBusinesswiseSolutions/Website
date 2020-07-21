@@ -29,9 +29,9 @@ ALTER PROCEDURE [Temp.Customer].[Site_Insert]
     @SitePostCode VARCHAR(255),
     @SiteDescription VARCHAR(255),
     @ContactName VARCHAR(255),
+    @ContactRole VARCHAR(255),
     @ContactTelephoneNumber VARCHAR(255),
-    @ContactEmailAddress VARCHAR(255),
-    @ContactRole VARCHAR(255)
+    @ContactEmailAddress VARCHAR(255)
 AS
 BEGIN
     -- =============================================
@@ -56,9 +56,9 @@ BEGIN
         SitePostCode,
         SiteDescription,
         ContactName,
+        ContactRole,
         ContactTelephoneNumber,
-        ContactEmailAddress,
-        ContactRole
+        ContactEmailAddress
     )
     VALUES
     (
@@ -72,9 +72,9 @@ BEGIN
         @SitePostCode,
         @SiteDescription,
         @ContactName,
+        @ContactRole,
         @ContactTelephoneNumber,
-        @ContactEmailAddress,
-        @ContactRole
+        @ContactEmailAddress
     )
 END
 GO

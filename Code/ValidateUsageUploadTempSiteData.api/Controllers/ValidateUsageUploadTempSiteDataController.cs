@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Data;
 
 namespace ValidateUsageUploadTempSiteData.api.Controllers
 {
@@ -18,6 +20,7 @@ namespace ValidateUsageUploadTempSiteData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,7 +84,49 @@ namespace ValidateUsageUploadTempSiteData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get data from [Temp.Customer].[Site] table
+                var customerDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);               
+
+                if(!customerDataRows.Any())
+                {
+                    //Nothing to validate so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempSiteDataAPIId, false, null);
+                    return;
+                }
+                
+                //If any are empty records, store error
+                var requiredColumns = new Dictionary<string, string>
+                    {
+                    };
+                
+                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+
+                //Validate post code
+                var invalidPostCodeDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SitePostCode")) 
+                    && !_methods.IsValidPostCode(r.Field<string>("SitePostCode")));
+
+                foreach(var invalidPostCodeDataRow in invalidPostCodeDataRows)
+                {
+                    errors.Add($"Invalid Site Post Code '{invalidPostCodeDataRow["SitePostCode"]}' in row {invalidPostCodeDataRow["RowId"]}");
+                }
+
+                //Validate telephone number
+                var invalidTelephoneNumberDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactTelephoneNumber")) 
+                    && !_methods.IsValidPhoneNumber(r.Field<string>("ContactTelephoneNumber")));
+
+                foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
+                {
+                    errors.Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}' in row {invalidTelephoneNumberDataRow["RowId"]}");
+                }
+
+                //Validate email address
+                var invalidEmailAddressDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactEmailAddress")) 
+                    && !_methods.IsValidEmailAddress(r.Field<string>("ContactEmailAddress")));
+
+                foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)
+                {
+                    errors.Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}' in row {invalidEmailAddressDataRow["RowId"]}");
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempSiteDataAPIId, false, null);
