@@ -92,7 +92,7 @@ namespace StoreUsageUploadTempMeterExemptionData.api.Controllers
                     var dateTo = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[2])));
 
                     //Insert meter exemption data into [Temp.Customer].[MeterExemption]
-                    _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, values[0], dateFrom, dateTo, values[3], values[4]);
+                    _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3], values[4]);
                 }
 
                 //Update Process Queue

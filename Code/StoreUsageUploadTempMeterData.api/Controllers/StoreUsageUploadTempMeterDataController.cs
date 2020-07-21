@@ -91,7 +91,7 @@ namespace StoreUsageUploadTempMeterData.api.Controllers
                     var values = meterDictionary[row];
 
                     //Insert meter data into [Temp.Customer].[Meter]
-                    _tempCustomerMethods.Meter_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
+                    _tempCustomerMethods.Meter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
                 }
 
                 //Update Process Queue

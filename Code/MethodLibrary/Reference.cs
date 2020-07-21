@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Reflection;
 using System.Data;
 using System;
+using System.Linq;
 
 namespace MethodLibrary
 {
@@ -111,6 +112,24 @@ namespace MethodLibrary
             }
 
             return $"{time.Hour.ToString().PadLeft(2, '0')}:{time.Minute.ToString().PadLeft(2,'0')}";
+        }
+
+        public static DataTable TrimDataTable(DataTable dataTable)
+        {
+            var trimmedDataTable = dataTable.Copy();
+            var stringColumns = trimmedDataTable.Columns.Cast<DataColumn>()
+                .Where(c => c.DataType == typeof(string))
+                .Select(c => c.ColumnName);
+
+            foreach(DataRow dataRow in trimmedDataTable.Rows)
+            {
+                foreach (var dataColumn in stringColumns.Where(dataColumn => dataRow[dataColumn] != DBNull.Value))
+                {
+                    dataRow[dataColumn] = dataRow[dataColumn].ToString().Trim();
+                }
+            }
+
+            return trimmedDataTable;
         }
     }
 }

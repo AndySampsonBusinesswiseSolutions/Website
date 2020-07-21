@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[FlexReferenceVolume]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	ContractReference VARCHAR(255),
 	DateFrom VARCHAR(255),
 	DateTo VARCHAR(255),

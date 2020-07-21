@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[MeterUsage_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @MPXN VARCHAR(255),
     @Date VARCHAR(255),
     @TimePeriod VARCHAR(255),
@@ -38,6 +39,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[MeterUsage]
     (
         ProcessQueueGUID,
+        RowId,
         MPXN,
         Date,
         TimePeriod,
@@ -46,6 +48,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @MPXN,
         @Date,
         @TimePeriod,

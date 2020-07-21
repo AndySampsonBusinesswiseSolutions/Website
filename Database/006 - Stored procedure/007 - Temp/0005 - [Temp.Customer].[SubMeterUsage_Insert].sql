@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[SubMeterUsage_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @SubMeterIdentifier VARCHAR(255),
     @Date VARCHAR(255),
     @TimePeriod VARCHAR(255),
@@ -38,6 +39,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[SubMeterUsage]
     (
         ProcessQueueGUID,
+        RowId,
         SubMeterIdentifier,
         Date,
         TimePeriod,
@@ -46,6 +48,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @SubMeterIdentifier,
         @Date,
         @TimePeriod,

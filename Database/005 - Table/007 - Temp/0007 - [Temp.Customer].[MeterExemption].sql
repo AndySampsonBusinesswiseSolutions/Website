@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[MeterExemption]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	MPXN VARCHAR(255),
 	DateFrom VARCHAR(255),
 	DateTo VARCHAR(255),

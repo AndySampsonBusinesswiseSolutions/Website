@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[FlexTrade]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	BasketReference VARCHAR(255),
 	TradeDate VARCHAR(255),
 	TradeProduct VARCHAR(255),

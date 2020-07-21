@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[Customer_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @CustomerName VARCHAR(255),
     @ContactName VARCHAR(255),
     @ContactTelephoneNumber VARCHAR(255),
@@ -38,6 +39,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[Customer]
     (
         ProcessQueueGUID,
+        RowId,
         CustomerName,
         ContactName,
         ContactTelephoneNumber,
@@ -46,6 +48,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @CustomerName,
         @ContactName,
         @ContactTelephoneNumber,

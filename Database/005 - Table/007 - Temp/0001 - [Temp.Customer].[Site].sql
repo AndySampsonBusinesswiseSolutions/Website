@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[Site]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	CustomerName VARCHAR(255),
 	SiteName VARCHAR(255),
 	SiteAddress VARCHAR(255),

@@ -33,6 +33,7 @@ BEGIN
 
     SELECT
         ProcessQueueGUID,
+        RowId,
         ContractReference,
         DateFrom,
         DateTo,

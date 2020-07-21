@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[SubMeter]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	MPXN VARCHAR(255),
 	SubMeterIdentifier VARCHAR(255),
 	SerialNumber VARCHAR(255),

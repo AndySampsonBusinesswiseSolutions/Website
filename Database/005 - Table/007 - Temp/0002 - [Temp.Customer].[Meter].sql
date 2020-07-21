@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[Meter]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	SiteName VARCHAR(255),
 	MPXN VARCHAR(255),
 	GridSupplyPoint VARCHAR(255),

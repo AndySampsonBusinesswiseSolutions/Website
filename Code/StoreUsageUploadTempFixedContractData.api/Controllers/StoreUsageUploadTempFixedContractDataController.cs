@@ -96,7 +96,7 @@ namespace StoreUsageUploadTempFixedContractData.api.Controllers
                         var rate = (rateCount - 8).ToString();
 
                         //Insert fixed contract data into [Temp.Customer].[FlexContract]
-                        _tempCustomerMethods.FixedContract_Insert(processQueueGUID, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], values[7], values[8], rate, values[rateCount]);
+                        _tempCustomerMethods.FixedContract_Insert(processQueueGUID, row, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], values[7], values[8], rate, values[rateCount]);
                     }
                 }
 

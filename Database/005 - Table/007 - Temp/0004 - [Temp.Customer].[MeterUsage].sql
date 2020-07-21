@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[MeterUsage]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	MPXN VARCHAR(255),
 	Date VARCHAR(255),
 	TimePeriod VARCHAR(255),

@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[FixedContract_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @ContractReference VARCHAR(255),
     @MPXN VARCHAR(255),
     @Supplier VARCHAR(255),
@@ -45,6 +46,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[FixedContract]
     (
         ProcessQueueGUID,
+        RowId,
         ContractReference,
         MPXN,
         Supplier,
@@ -60,6 +62,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @ContractReference,
         @MPXN,
         @Supplier,

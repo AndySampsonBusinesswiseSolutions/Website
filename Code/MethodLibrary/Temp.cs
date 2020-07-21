@@ -76,158 +76,217 @@ namespace MethodLibrary
                     return Convert.ToInt16(String.Join("", cell.Where(char.IsDigit)));
                 }
 
-                public void Site_Insert(string processQueueGUID, string customerName, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode, string siteDescription, string contactName, string contactTelephoneNumber, string contactEmailAddress, string contactRole)
+                public void Site_Insert(string processQueueGUID, int rowId, string customerName, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode, string siteDescription, string contactName, string contactTelephoneNumber, string contactEmailAddress, string contactRole)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Site_Insert, 
-                        processQueueGUID, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactTelephoneNumber, contactEmailAddress, contactRole);
+                        processQueueGUID, rowId, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactTelephoneNumber, contactEmailAddress, contactRole);
                 }
 
-                public void Meter_Insert(string processQueueGUID, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchClass, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
+                public void Meter_Insert(string processQueueGUID, int rowId, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchClass, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Meter_Insert, 
-                        processQueueGUID, siteName, MPXN, gridSupplyPoint, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
+                        processQueueGUID, rowId, siteName, MPXN, gridSupplyPoint, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
                 }
 
-                public void SubMeter_Insert(string processQueueGUID, string MPXN, string subMeterIdentifier, string serialNumber, string subArea, string asset)
+                public void SubMeter_Insert(string processQueueGUID, int rowId, string MPXN, string subMeterIdentifier, string serialNumber, string subArea, string asset)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.SubMeter_Insert, 
-                        processQueueGUID, MPXN, subMeterIdentifier, serialNumber, subArea, asset);
+                        processQueueGUID, rowId, MPXN, subMeterIdentifier, serialNumber, subArea, asset);
                 }
 
-                public void Customer_Insert(string processQueueGUID, string customerName, string contactName, string contactTelephoneNumber, string contactEmailAddress)
+                public void Customer_Insert(string processQueueGUID, int rowId, string customerName, string contactName, string contactTelephoneNumber, string contactEmailAddress)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Customer_Insert, 
-                        processQueueGUID, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
+                        processQueueGUID, rowId, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
                 }
 
-                public void FixedContract_Insert(string processQueueGUID, string contractReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateCount, string standingCharge, string capacityCharge, string rate, string value)
+                public void FixedContract_Insert(string processQueueGUID, int rowId, string contractReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateCount, string standingCharge, string capacityCharge, string rate, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FixedContract_Insert, 
-                        processQueueGUID, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, standingCharge, capacityCharge, rate, value);
+                        processQueueGUID, rowId, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, standingCharge, capacityCharge, rate, value);
                 }
 
-                public void FlexContract_Insert(string processQueueGUID, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string standingCharge, string shapeFee, string adminFee, string imbalanceFee, string riskFee, string greenPremium)
+                public void FlexContract_Insert(string processQueueGUID, int rowId, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string standingCharge, string shapeFee, string adminFee, string imbalanceFee, string riskFee, string greenPremium)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FlexContract_Insert, 
-                        processQueueGUID, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, standingCharge, shapeFee, adminFee, imbalanceFee, riskFee, greenPremium);
+                        processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, standingCharge, shapeFee, adminFee, imbalanceFee, riskFee, greenPremium);
                 }
 
-                public void FlexReferenceVolume_Insert(string processQueueGUID, string contractReference, string dateFrom, string dateTo, string volume)
+                public void FlexReferenceVolume_Insert(string processQueueGUID, int rowId, string contractReference, string dateFrom, string dateTo, string volume)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FlexReferenceVolume_Insert, 
-                        processQueueGUID, contractReference, dateFrom, dateTo, volume);
+                        processQueueGUID, rowId, contractReference, dateFrom, dateTo, volume);
                 }
 
-                public void FlexTrade_Insert(string processQueueGUID, string basketReference, string tradeDate, string tradeProduct, string volume, string price, string direction)
+                public void FlexTrade_Insert(string processQueueGUID, int rowId, string basketReference, string tradeDate, string tradeProduct, string volume, string price, string direction)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FlexTrade_Insert, 
-                        processQueueGUID, basketReference, tradeDate, tradeProduct, volume, price, direction);
+                        processQueueGUID, rowId, basketReference, tradeDate, tradeProduct, volume, price, direction);
                 }
 
-                public void MeterExemption_Insert(string processQueueGUID, string MPXN, string dateFrom, string dateTo, string exemptionProduct, string exemptionProportion)
+                public void MeterExemption_Insert(string processQueueGUID, int rowId, string MPXN, string dateFrom, string dateTo, string exemptionProduct, string exemptionProportion)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.MeterExemption_Insert, 
-                        processQueueGUID, MPXN, dateFrom, dateTo, exemptionProduct, exemptionProportion);
+                        processQueueGUID, rowId, MPXN, dateFrom, dateTo, exemptionProduct, exemptionProportion);
                 }
 
-                public void MeterUsage_Insert(string processQueueGUID, string MPXN, string date, string timePeriod, string value)
+                public void MeterUsage_Insert(string processQueueGUID, int rowId, string MPXN, string date, string timePeriod, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.MeterUsage_Insert, 
-                        processQueueGUID, MPXN, date, timePeriod, value);
+                        processQueueGUID, rowId, MPXN, date, timePeriod, value);
                 }
 
-                public void SubMeterUsage_Insert(string processQueueGUID, string subMeterIdentifier, string date, string timePeriod, string value)
+                public void SubMeterUsage_Insert(string processQueueGUID, int rowId, string subMeterIdentifier, string date, string timePeriod, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.SubMeterUsage_Insert, 
-                        processQueueGUID, subMeterIdentifier, date, timePeriod, value);
+                        processQueueGUID, rowId, subMeterIdentifier, date, timePeriod, value);
                 }
 
-                public DataTable Site_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> Site_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.Site_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable Meter_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> Meter_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.Meter_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable SubMeter_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> SubMeter_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.SubMeter_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable Customer_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> Customer_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.Customer_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable FixedContract_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> FixedContract_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.FixedContract_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable FlexContract_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> FlexContract_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.FlexContract_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable FlexReferenceVolume_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> FlexReferenceVolume_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.FlexReferenceVolume_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable FlexTrade_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> FlexTrade_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.FlexTrade_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.MeterExemption_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.MeterUsage_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
                 }
 
-                public DataTable SubMeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                public IEnumerable<DataRow> SubMeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
-                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerEnums.SubMeterUsage_GetByProcessQueueGUID, 
                         processQueueGUID);
+
+                    return CleanedUpDataTable(dataTable);
+                }
+
+                public IEnumerable<DataRow> CleanedUpDataTable(DataTable dataTable)
+                {
+                    var trimmedDataTable = TrimDataTable(dataTable);
+                    var columns = trimmedDataTable.Columns
+                        .Cast<DataColumn>()
+                        .Where(c => c.ColumnName != _systemAPIRequiredDataKeyEnums.ProcessQueueGUID && c.ColumnName != "RowId")
+                        .Select(c => c.ColumnName);
+                        
+                    return GetPopulatedDataRows(trimmedDataTable.Rows.Cast<DataRow>(), columns);
+                }
+
+                private IEnumerable<DataRow> GetPopulatedDataRows(IEnumerable<DataRow> dataRows, IEnumerable<string> columns)
+                {
+                    var emptyDataRows = new List<DataRow>();
+
+                    foreach(var dataRow in dataRows)
+                    {
+                        var dataRowString = string.Empty;
+                        foreach(var column in columns)
+                        {
+                            dataRowString = $"{dataRowString}{column}";
+                        }
+
+                        if(dataRowString == string.Empty)
+                        {
+                            emptyDataRows.Add(dataRow);
+                        }
+                    }
+
+                    foreach(var emptyDataRow in emptyDataRows)
+                    {
+                        dataRows.ToList().Remove(emptyDataRow);
+                    }
+
+                    return dataRows;
                 }
             }
         }

@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[Site_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @CustomerName VARCHAR(255),
     @SiteName VARCHAR(255),
     @SiteAddress VARCHAR(255),
@@ -46,6 +47,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[Site]
     (
         ProcessQueueGUID,
+        RowId,
         CustomerName,
         SiteName,
         SiteAddress,
@@ -61,6 +63,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @CustomerName,
         @SiteName,
         @SiteAddress,

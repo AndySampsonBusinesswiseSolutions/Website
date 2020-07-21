@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace ValidateUsageUploadTempCustomerData.api.Controllers
 {
@@ -18,6 +20,7 @@ namespace ValidateUsageUploadTempCustomerData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -81,10 +84,29 @@ namespace ValidateUsageUploadTempCustomerData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get data from [Temp.Customer].[Customer] table
+                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);               
+
+                if(!customerDataRows.Any())
+                {
+                    //Nothing to validate so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempCustomerDataAPIId, false, null);
+                    return;
+                }        
+
+                var errors = new List<string>();        
+
+                //If any are empty customer names, store error
+                var emptyCustomerNames = customerDataRows.Where(c => string.IsNullOrWhiteSpace(c["CustomerName"].ToString()));
+
+                foreach(var emptyCustomerName in emptyCustomerNames)
+                {
+                    errors.Add($"Customer Name missing in row {emptyCustomerName["RowId"]}");
+                }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempCustomerDataAPIId, false, null);
+                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempCustomerDataAPIId, errors.Any(), errorMessage);
             }
             catch(Exception error)
             {

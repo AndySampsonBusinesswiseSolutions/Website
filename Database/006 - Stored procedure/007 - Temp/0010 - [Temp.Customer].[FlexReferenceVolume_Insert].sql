@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[FlexReferenceVolume_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @ContractReference VARCHAR(255),
     @DateFrom VARCHAR(255),
     @DateTo VARCHAR(255),
@@ -38,6 +39,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[FlexReferenceVolume]
     (
         ProcessQueueGUID,
+        RowId,
         ContractReference,
         DateFrom,
         DateTo,
@@ -46,6 +48,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @ContractReference,
         @DateFrom,
         @DateTo,

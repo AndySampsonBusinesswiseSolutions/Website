@@ -91,7 +91,7 @@ namespace StoreUsageUploadTempFlexTradeData.api.Controllers
                     var tradeDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
 
                     //Insert flex trade data into [Temp.Customer].[FlexTrade]
-                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, values[0], tradeDate, values[2], values[3], values[4], values[5]);
+                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, row, values[0], tradeDate, values[2], values[3], values[4], values[5]);
                 }
 
                 //Update Process Queue

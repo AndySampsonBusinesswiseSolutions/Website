@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[Meter_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @SiteName VARCHAR(255),
     @MPXN VARCHAR(255),
     @GridSupplyPoint VARCHAR(255),
@@ -48,6 +49,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[Meter]
     (
         ProcessQueueGUID,
+        RowId,
         SiteName,
         MPXN,
         GridSupplyPoint,
@@ -65,6 +67,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @SiteName,
         @MPXN,
         @GridSupplyPoint,

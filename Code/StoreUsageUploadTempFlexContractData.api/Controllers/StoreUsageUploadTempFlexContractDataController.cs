@@ -92,7 +92,7 @@ namespace StoreUsageUploadTempFlexContractData.api.Controllers
                     var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[5])));
 
                     //Insert flex contract data into [Temp.Customer].[FlexContract]
-                    _tempCustomerMethods.FlexContract_Insert(processQueueGUID, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
+                    _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
                 }
 
                 //Update Process Queue

@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[SubMeterUsage]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	SubMeterIdentifier VARCHAR(255),
 	Date VARCHAR(255),
 	TimePeriod VARCHAR(255),

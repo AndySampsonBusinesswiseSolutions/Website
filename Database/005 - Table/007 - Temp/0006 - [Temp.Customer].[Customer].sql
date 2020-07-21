@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[Customer]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	CustomerName VARCHAR(255),
 	ContactName VARCHAR(255),
 	ContactTelephoneNumber VARCHAR(255),

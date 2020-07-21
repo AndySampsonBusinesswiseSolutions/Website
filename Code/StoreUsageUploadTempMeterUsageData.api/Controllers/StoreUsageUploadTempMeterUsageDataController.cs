@@ -100,7 +100,7 @@ namespace StoreUsageUploadTempMeterUsageData.api.Controllers
                         var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
                         //Insert meter usage data into [Temp.Customer].[MeterUsage]
-                        _tempCustomerMethods.MeterUsage_Insert(processQueueGUID, mpxn, date, timePeriodString, values[timePeriod]);
+                        _tempCustomerMethods.MeterUsage_Insert(processQueueGUID, row, mpxn, date, timePeriodString, values[timePeriod]);
                     }
                 }
 

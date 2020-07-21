@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[FixedContract]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	ContractReference VARCHAR(255),
 	MPXN VARCHAR(255),
 	Supplier VARCHAR(255),

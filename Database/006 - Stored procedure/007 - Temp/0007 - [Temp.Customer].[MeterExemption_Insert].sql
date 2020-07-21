@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[MeterExemption_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @MPXN VARCHAR(255),
     @DateFrom VARCHAR(255),
     @DateTo VARCHAR(255),
@@ -39,6 +40,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[MeterExemption]
     (
         ProcessQueueGUID,
+        RowId,
         MPXN,
         DateFrom,
         DateTo,
@@ -48,6 +50,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @MPXN,
         @DateFrom,
         @DateTo,

@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[FlexTrade_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @BasketReference VARCHAR(255),
     @TradeDate VARCHAR(255),
     @TradeProduct VARCHAR(255),
@@ -40,6 +41,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[FlexTrade]
     (
         ProcessQueueGUID,
+        RowId,
         BasketReference,
         TradeDate,
         TradeProduct,
@@ -50,6 +52,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @BasketReference,
         @TradeDate,
         @TradeProduct,

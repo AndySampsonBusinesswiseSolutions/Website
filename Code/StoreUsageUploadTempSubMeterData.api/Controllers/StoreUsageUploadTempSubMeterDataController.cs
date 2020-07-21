@@ -90,7 +90,7 @@ namespace StoreUsageUploadTempSubMeterData.api.Controllers
                     var values = subMeterDictionary[row];
 
                     //Insert submeter data into [Temp.Customer].[SubMeter]
-                    _tempCustomerMethods.SubMeter_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4]);
+                    _tempCustomerMethods.SubMeter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4]);
                 }
 
                 //Update Process Queue

@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[SubMeter_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @MPXN VARCHAR(255),
     @SubMeterIdentifier VARCHAR(255),
     @SerialNumber VARCHAR(255),
@@ -40,6 +41,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[SubMeter]
     (
         ProcessQueueGUID,
+        RowId,
         MPXN,
         SubMeterIdentifier,
         SerialNumber,
@@ -49,6 +51,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @MPXN,
         @SubMeterIdentifier,
         @SerialNumber,

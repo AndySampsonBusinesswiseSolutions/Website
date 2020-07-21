@@ -91,7 +91,7 @@ namespace StoreUsageUploadTempSiteData.api.Controllers
                     var values = siteDictionary[row];
 
                     //Insert site data into [Temp.Customer].[Site]
-                    _tempCustomerMethods.Site_Insert(processQueueGUID, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10]);
+                    _tempCustomerMethods.Site_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10]);
                 }
 
                 //Update Process Queue

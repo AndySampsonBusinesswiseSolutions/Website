@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.Customer].[FlexContract_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @RowId INT,
     @ContractReference VARCHAR(255),
     @BasketReference VARCHAR(255),
     @MPXN VARCHAR(255),
@@ -47,6 +48,7 @@ BEGIN
     INSERT INTO [Temp.Customer].[FlexContract]
     (
         ProcessQueueGUID,
+        RowId,
         ContractReference,
         BasketReference,
         MPXN,
@@ -64,6 +66,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @RowId,
         @ContractReference,
         @BasketReference,
         @MPXN,

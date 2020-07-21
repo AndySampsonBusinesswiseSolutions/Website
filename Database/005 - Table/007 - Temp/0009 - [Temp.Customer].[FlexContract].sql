@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.Customer].[FlexContract]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
 	ContractReference VARCHAR(255),
 	BasketReference VARCHAR(255),
 	MPXN VARCHAR(255),
