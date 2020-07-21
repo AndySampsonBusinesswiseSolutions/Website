@@ -91,8 +91,13 @@ namespace StoreUsageUploadTempFixedContractData.api.Controllers
                     var contractStartDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[3])));
                     var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[4])));
 
-                    //Insert fixed contract data into [Temp.Customer].[FlexContract]
-                    _tempCustomerMethods.FixedContract_Insert(processQueueGUID, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], values[7], values[8], values[9], values[10]);
+                    for(var rateCount = 9; rateCount < values.Count(); rateCount++)
+                    {
+                        var rate = (rateCount - 8).ToString();
+
+                        //Insert fixed contract data into [Temp.Customer].[FlexContract]
+                        _tempCustomerMethods.FixedContract_Insert(processQueueGUID, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], values[7], values[8], rate, values[rateCount]);
+                    }
                 }
 
                 //Update Process Queue

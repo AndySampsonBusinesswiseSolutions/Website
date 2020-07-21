@@ -152,6 +152,83 @@ namespace MethodLibrary
                         _storedProcedureTempCustomerEnums.SubMeterUsage_Insert, 
                         processQueueGUID, subMeterIdentifier, date, timePeriod, value);
                 }
+
+                public DataTable Site_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.Site_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable Meter_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.Meter_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable SubMeter_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.SubMeter_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable Customer_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.Customer_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable FixedContract_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.FixedContract_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable FlexContract_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.FlexContract_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable FlexReferenceVolume_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.FlexReferenceVolume_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable FlexTrade_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.FlexTrade_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.MeterExemption_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.MeterUsage_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
+
+                public DataTable SubMeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                {
+                    return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureTempCustomerEnums.SubMeterUsage_GetByProcessQueueGUID, 
+                        processQueueGUID);
+                }
             }
         }
     }
