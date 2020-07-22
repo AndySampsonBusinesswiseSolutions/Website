@@ -32,6 +32,14 @@ namespace enums
                 }
             }
 
+            public class LocalDistributionZone
+            {
+                public class Attribute
+                {
+                    public string LocalDistributionZoneCode = "Local Distribution Zone Code";
+                }
+            }
+
             public class MeterTimeswitchClass
             {
                 public class Attribute

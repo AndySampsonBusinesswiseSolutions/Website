@@ -25,6 +25,7 @@ namespace MethodLibrary
         private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
         private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
         private static readonly Enums.Information.MeterTimeswitchClass.Attribute _informationMeterTimeswitchClassAttributeEnums = new Enums.Information.MeterTimeswitchClass.Attribute();
+        private static readonly Enums.Information.LocalDistributionZone.Attribute _informationLocalDistributionZoneAttributeEnums = new Enums.Information.LocalDistributionZone.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Information _informationMethods = new Information();
@@ -471,7 +472,10 @@ namespace MethodLibrary
 
         public bool IsValidLocalDistributionZone(string localDistributionZone)
         {
-            return true;
+            var localDistributionZoneGroupIdAttributeId = _informationMethods.LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(_informationLocalDistributionZoneAttributeEnums.LocalDistributionZoneCode);
+            var localDistributionZoneDetailId = _informationMethods.LocalDistributionZoneDetail_GetLocalDistributionZoneIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(localDistributionZoneGroupIdAttributeId, localDistributionZone);
+            
+            return localDistributionZoneDetailId != 0;
         }
 
         public bool IsValidExemptionProduct(string exemptionProduct)

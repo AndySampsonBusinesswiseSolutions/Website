@@ -179,6 +179,28 @@ namespace MethodLibrary
                     meterTimeswitchClassAttributeId);
             }
 
+            public long LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(string localDistributionZoneAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.LocalDistributionZoneAttribute_GetByLocalDistributionZoneAttributeDescription, 
+                    localDistributionZoneAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("LocalDistributionZoneAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public long LocalDistributionZoneDetail_GetLocalDistributionZoneIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(long localDistributionZoneAttributeId, string localDistributionZoneDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription, 
+                    localDistributionZoneAttributeId, localDistributionZoneDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("LocalDistributionZoneDetailId"))
+                    .FirstOrDefault();
+            }
+
             public long ExemptionDetail_GetExemptionIdByExemptionAttributeIdAndExemptionDetailDescription(long exemptionAttributeId, string exemptionDetailDescription)
             {
                 return 0;

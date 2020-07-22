@@ -22,6 +22,8 @@ namespace enums
                 public string MeterTimeswitchClassAttribute_GetByMeterTimeswitchClassAttributeDescription = "[Information].[MeterTimeswitchClassAttribute_GetByMeterTimeswitchClassAttributeDescription]";
                 public string MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeIdAndMeterTimeswitchClassDetailDescription = "[Information].[MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeIdAndMeterTimeswitchClassDetailDescription]";
                 public string MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId = "[Information].[MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId]";
+                public string LocalDistributionZoneAttribute_GetByLocalDistributionZoneAttributeDescription = "[Information].[LocalDistributionZoneAttribute_GetByLocalDistributionZoneAttributeDescription]";
+                public string LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription = "[Information].[LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription]";
             }
         }
     }
