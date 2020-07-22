@@ -103,6 +103,16 @@ namespace MethodLibrary
                     _storedProcedureCustomerEnums.CustomerDetail_Insert, 
                     createdByUserId, sourceId, customerId, customerAttributeId, customerDetailDescription);
             }
+
+            public long MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription(long meterAttributeId, string meterDetailDescription)
+            {
+                return 0;
+            }
+
+            public long SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription(long subMeterAttributeId, string subMeterDetailDescription)
+            {
+                return 0;
+            }
         }
     }
 }

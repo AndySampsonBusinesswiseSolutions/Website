@@ -24,6 +24,9 @@ namespace MethodLibrary
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private static readonly Information _informationMethods = new Information();
+
+        //TODO: Work out how many of these can be moved/integrated with database
 
         public static DatabaseInteraction _databaseInteraction;
 
@@ -283,6 +286,179 @@ namespace MethodLibrary
                 var mprnValue = Convert.ToInt64(mprn);
 
                 return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidUsage(string usage)
+        {
+            if (string.IsNullOrWhiteSpace(usage))
+            {
+                return true;
+            }
+
+            try
+            {
+                var usageValue = Convert.ToInt64(usage);
+
+                return usageValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidDate(string date)
+        {
+            if (string.IsNullOrWhiteSpace(date))
+            {
+                return false;
+            }
+
+            try
+            {
+                var dateValue = Convert.ToDateTime(date);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsOctoberClockChange(string date)
+        {
+            if (string.IsNullOrWhiteSpace(date)
+                || !IsValidDate(date))
+            {
+                return false;
+            }
+
+            var dateValue = Convert.ToDateTime(date);
+
+            if(dateValue.DayOfWeek == DayOfWeek.Sunday
+                && dateValue.Month == 10)
+            {
+                //To check for last sunday, add 7 days and see if the month has changed
+                var nextDateValue = dateValue.AddDays(7);
+
+                return dateValue.Month != nextDateValue.Month;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsAdditionalTimePeriod(string timePeriod)
+        {
+            if (string.IsNullOrWhiteSpace(timePeriod))
+            {
+                return false;
+            }
+
+            return timePeriod == "01:31" || timePeriod == "01:32";
+        }
+
+        public bool IsValidCapacity(string capacity)
+        {
+            if (string.IsNullOrWhiteSpace(capacity))
+            {
+                return false;
+            }
+
+            try
+            {
+                var capacityValue = Convert.ToInt64(capacity);
+
+                return capacityValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidStandardOfftakeQuantity(string standardOfftakeQuantity)
+        {
+            if (string.IsNullOrWhiteSpace(standardOfftakeQuantity))
+            {
+                return false;
+            }
+
+            try
+            {
+                var standardOfftakeQuantityValue = Convert.ToInt64(standardOfftakeQuantity);
+
+                return standardOfftakeQuantityValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidGridSupplyPoint(string gridSupplyPoint)
+        {
+            return true;
+        }
+
+        public bool IsValidProfileClass(string profileClass)
+        {
+            return true;
+        }
+
+        public bool IsValidMeterTimeswitchClass(string meterTimeswitchClass)
+        {
+            return true;
+        }
+
+        public bool IsValidLineLossFactorClass(string linelossFactorClass)
+        {
+            return true;
+        }
+
+        public bool IsValidLocalDistributionZone(string localDistributionZone)
+        {
+            return true;
+        }
+
+        public bool IsValidExemptionProduct(string exemptionProduct)
+        {
+            if (string.IsNullOrWhiteSpace(exemptionProduct))
+            {
+                return false;
+            }
+
+            return exemptionProduct == "CCA" || exemptionProduct == "EII" || exemptionProduct == "MINMET";
+        }
+
+        public bool IsValidExemptionProportion(string exemptionProduct, string exemptionProportion, DateTime dateFrom, DateTime dateTo)
+        {
+            if (string.IsNullOrWhiteSpace(exemptionProportion)
+                || !exemptionProportion.Contains('%'))
+            {
+                return false;
+            }
+
+            try
+            {
+                var exemptionProportionValue = Convert.ToInt64(exemptionProportion.Replace("%", string.Empty))/100M;
+
+                if(exemptionProduct == "CCA")
+                {
+                    return exemptionProportionValue >= 0 && exemptionProportionValue <= 1;
+                }
+
+                var exemptionProductId = _informationMethods.ExemptionDetail_GetExemptionIdByExemptionAttributeIdAndExemptionDetailDescription(0, exemptionProduct);
+                var currentExemptionProportionValue = _informationMethods.ExemptionDetail_GetExemptionProportionByExemptionProductId(exemptionProductId);
+
+                return currentExemptionProportionValue == exemptionProportionValue;
             }
             catch (Exception)
             {

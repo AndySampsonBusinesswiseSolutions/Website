@@ -116,6 +116,16 @@ namespace MethodLibrary
                 var fileContent = FileContent_GetFileContentByFileGUID(fileGUID);
                 return JObject.Parse(fileContent);
             }
+
+            public long ExemptionDetail_GetExemptionIdByExemptionAttributeIdAndExemptionDetailDescription(long exemptionAttributeId, string exemptionDetailDescription)
+            {
+                return 0;
+            }
+
+            public decimal ExemptionDetail_GetExemptionProportionByExemptionProductId(long exemptionProductId)
+            {
+                return 0.0M;
+            }
         }
     }
 }

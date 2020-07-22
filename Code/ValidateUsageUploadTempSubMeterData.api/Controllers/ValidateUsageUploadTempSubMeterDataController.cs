@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ValidateUsageUploadTempSubMeterData.api.Controllers
 {
@@ -18,6 +19,7 @@ namespace ValidateUsageUploadTempSubMeterData.api.Controllers
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -96,9 +98,23 @@ namespace ValidateUsageUploadTempSubMeterData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
+                        {"SubMeterIdentifier", "SubMeter Name"}
                     };
                 
                 var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+
+                //Get submeters not stored in database
+                var newSubMeterDataRecords = customerDataRows.Where(r => _customerMethods.SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription(0, r.Field<string>("SubMeterIdentifier")) > 0);
+
+                //MPXN, SerialNumber, SubArea and Asset must be populated
+                requiredColumns = new Dictionary<string, string>
+                    {
+                        {"MPXN", "MPAN/MPRN"},
+                        {"SerialNumber", "SubMeter Serial Number"},
+                        {"SubArea", "SubArea"},
+                        {"Asset", "Asset"}
+                    };
+                errors.AddRange(_tempCustomerMethods.GetMissingRecords(newSubMeterDataRecords, requiredColumns));
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempSubMeterDataAPIId, false, null);

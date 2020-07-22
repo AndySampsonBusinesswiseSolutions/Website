@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ValidateUsageUploadTempMeterUsageData.api.Controllers
 {
@@ -96,12 +97,40 @@ namespace ValidateUsageUploadTempMeterUsageData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
+                        {"MPXN", "MPAN/MPRN"},
+                        {"Date", "Read Date"}
                     };
                 
                 var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
 
+                //Check all dates are in the past
+                var futureDateDataRows = customerDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
+                    && r.Field<DateTime>("Date") >= DateTime.Today);
+
+                foreach(var futureDateDataRow in futureDateDataRows)
+                {
+                    errors.Add($"Future date {futureDateDataRow["Date"]} in row {futureDateDataRow["RowId"]}");
+                }
+
+                //Check usage is valid (if day is not October clock change, don't allow HH49 or HH50 to be populated)
+                var invalidUsageDataRows = customerDataRows.Where(r => !_methods.IsValidUsage(r.Field<string>("Value")));
+
+                foreach(var invalidUsageDataRow in invalidUsageDataRows)
+                {
+                    errors.Add($"Invalid usage {invalidUsageDataRow["Value"]} in row {invalidUsageDataRow["RowId"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}");
+                }
+
+                var additionalHalfHourDataRows = customerDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
+                var invalidAdditionalHalfHourDataRows = additionalHalfHourDataRows.Where(r => !_methods.IsOctoberClockChange(r.Field<string>("Date")));
+
+                foreach(var invalidUsageDataRow in invalidAdditionalHalfHourDataRows)
+                {
+                    errors.Add($"Usage found in additional half hour {invalidUsageDataRow["TimePeriod"]} but {invalidUsageDataRow["Date"]} is not an October clock change date");
+                }
+
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempMeterUsageDataAPIId, false, null);
+                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempMeterUsageDataAPIId, errors.Any(), errorMessage);
             }
             catch(Exception error)
             {

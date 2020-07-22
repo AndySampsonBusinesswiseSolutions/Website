@@ -97,6 +97,7 @@ namespace ValidateUsageUploadTempSiteData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
+                        {"SiteName", "Site Name"}
                     };
                 
                 var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();

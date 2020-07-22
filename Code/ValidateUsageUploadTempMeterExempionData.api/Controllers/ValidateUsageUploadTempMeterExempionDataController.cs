@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ValidateUsageUploadTempMeterExempionData.api.Controllers
 {
@@ -96,12 +97,38 @@ namespace ValidateUsageUploadTempMeterExempionData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
+                        {"MPXN", "MPAN/MPRN"},
+                        {"DateFrom", "Date From"},
+                        {"DateTo", "Date To"}
                     };
                 
                 var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
 
+                //Validate Exemption Product
+                var invalidExemptionProductDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProduct"))
+                    && !_methods.IsValidExemptionProduct(r.Field<string>("ExemptionProduct")));
+
+                foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
+                {
+                    errors.Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]} in row {invalidExemptionProductDataRecord["RowId"]}");
+                }
+
+                //Validate Exemption Proportion
+                var invalidExemptionProportionDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProportion"))
+                    && !_methods.IsValidExemptionProportion(r.Field<string>("ExemptionProduct"), 
+                                                            r.Field<string>("ExemptionProportion"), 
+                                                            r.Field<DateTime>("DateFrom"), 
+                                                            r.Field<DateTime>("DateTo"))
+                    );
+
+                foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
+                {
+                    errors.Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]} in row {invalidExemptionProportionDataRecord["RowId"]}");
+                }
+
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempMeterExempionDataAPIId, false, null);
+                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempMeterExempionDataAPIId, errors.Any(), errorMessage);
             }
             catch(Exception error)
             {

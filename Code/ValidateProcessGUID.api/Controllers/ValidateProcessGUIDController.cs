@@ -51,12 +51,12 @@ namespace ValidateProcessGUID.api.Controllers
             var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
-            try
-            {
-                //Get Queue GUID
-                var jsonObject = JObject.Parse(data.ToString());
-                var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            //Get Queue GUID
+            var jsonObject = JObject.Parse(data.ToString());
+            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
+            try
+            {               
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
@@ -80,7 +80,10 @@ namespace ValidateProcessGUID.api.Controllers
             }
             catch(Exception error)
             {
-                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateProcessGUIDAPIId, true, $"System Error Id {errorId}");
 
                 return 0;
             }    
