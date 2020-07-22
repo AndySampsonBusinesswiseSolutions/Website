@@ -22,6 +22,7 @@ namespace MethodLibrary
         private static readonly Enums.StoredProcedure.Information _storedProcedureInformationEnums = new Enums.StoredProcedure.Information();
         private static readonly Enums.StoredProcedure.Temp.Customer _storedProcedureTempCustomerEnums = new Enums.StoredProcedure.Temp.Customer();
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
+        private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Information _informationMethods = new Information();
@@ -405,7 +406,15 @@ namespace MethodLibrary
 
         public bool IsValidGridSupplyPoint(string gridSupplyPoint)
         {
-            return true;
+            if(!gridSupplyPoint.StartsWith('_'))
+            {
+                gridSupplyPoint = $"_{gridSupplyPoint}";
+            }
+
+            var gridSupplyPointGroupIdAttributeId = _informationMethods.GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(_informationGridSupplyPointAttributeEnums.GridSupplyPointGroupId);
+            var gridSupplyPointDetailId = _informationMethods.GridSupplyPointDetail_GetGridSupplyPointIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(gridSupplyPointGroupIdAttributeId, gridSupplyPoint);
+            
+            return gridSupplyPointDetailId != 0;
         }
 
         public bool IsValidProfileClass(string profileClass)

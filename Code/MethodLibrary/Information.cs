@@ -117,6 +117,28 @@ namespace MethodLibrary
                 return JObject.Parse(fileContent);
             }
 
+            public long GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(string gridSupplyPointAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.GridSupplyPointAttribute_GetByGridSupplyPointAttributeDescription, 
+                    gridSupplyPointAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GridSupplyPointAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public long GridSupplyPointDetail_GetGridSupplyPointIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(long gridSupplyPointAttributeId, string gridSupplyPointDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription, 
+                    gridSupplyPointAttributeId, gridSupplyPointDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GridSupplyPointDetailId"))
+                    .FirstOrDefault();
+            }
+
             public long ExemptionDetail_GetExemptionIdByExemptionAttributeIdAndExemptionDetailDescription(long exemptionAttributeId, string exemptionDetailDescription)
             {
                 return 0;

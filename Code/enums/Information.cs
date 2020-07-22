@@ -24,6 +24,14 @@ namespace enums
                 }
             }
 
+            public class GridSupplyPoint
+            {
+                public class Attribute
+                {
+                    public string GridSupplyPointGroupId = "Grid Supply Point Group Id";
+                }
+            }
+
             public class Source
             {
                 public class Attribute
