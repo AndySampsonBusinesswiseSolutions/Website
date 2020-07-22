@@ -23,6 +23,7 @@ namespace MethodLibrary
         private static readonly Enums.StoredProcedure.Temp.Customer _storedProcedureTempCustomerEnums = new Enums.StoredProcedure.Temp.Customer();
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
+        private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Information _informationMethods = new Information();
@@ -419,7 +420,12 @@ namespace MethodLibrary
 
         public bool IsValidProfileClass(string profileClass)
         {
-            return true;
+            profileClass = profileClass.PadLeft(2, '0');
+
+            var profileClassGroupIdAttributeId = _informationMethods.ProfileClassAttribute_GetProfileClassAttributeIdByProfileClassAttributeDescription(_informationProfileClassAttributeEnums.ProfileClassCode);
+            var profileClassDetailId = _informationMethods.ProfileClassDetail_GetProfileClassIdByProfileClassAttributeIdAndProfileClassDetailDescription(profileClassGroupIdAttributeId, profileClass);
+            
+            return profileClassDetailId != 0;
         }
 
         public bool IsValidMeterTimeswitchClass(string meterTimeswitchClass)

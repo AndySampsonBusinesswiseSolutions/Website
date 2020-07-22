@@ -32,6 +32,14 @@ namespace enums
                 }
             }
 
+            public class ProfileClass
+            {
+                public class Attribute
+                {
+                    public string ProfileClassCode = "Profile Class Code";
+                }
+            }
+
             public class Source
             {
                 public class Attribute

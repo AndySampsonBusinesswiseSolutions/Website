@@ -17,6 +17,8 @@ namespace enums
                 public string FileContent_GetByFileId = "[Information].[FileContent_GetByFileId]";
                 public string GridSupplyPointAttribute_GetByGridSupplyPointAttributeDescription = "[Information].[GridSupplyPointAttribute_GetByGridSupplyPointAttributeDescription]";
                 public string GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription = "[Information].[GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription]";
+                public string ProfileClassAttribute_GetByProfileClassAttributeDescription = "[Information].[ProfileClassAttribute_GetByProfileClassAttributeDescription]";
+                public string ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription = "[Information].[ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription]";
             }
         }
     }
