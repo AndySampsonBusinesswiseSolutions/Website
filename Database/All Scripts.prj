@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>371eebac-4150-42e7-bfe0-d497c4af7b88</ID>
-    <DateCreated>2020-07-22T19:01:34.14511+01:00</DateCreated>
+    <ID>2454eb1f-f492-4de8-a7fb-d9d970f36f9c</ID>
+    <DateCreated>2020-07-22T19:50:16.7820595+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>2F6WH1QxqQFq9fp6W8piwA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe60JjFejfzDuwAhQNT2o8jlU=</Password>
+    <Login>yY3PjkD7XiZd2MupNdylLg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe65uS9CFkgu1faBmqhkiOeO8=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1416,6 +1416,41 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>08d077ee-9cc9-47af-8451-8f83cdd416e4</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0022 - [Information].[ProfileClassAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9e9efb98-2aa9-4b00-a0a1-e3d79a85bc54</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0023 - [Information].[ProfileClassDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f62c0906-6d22-459b-8119-6aa29d193948</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0024 - [Information].[ProfileClass_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8abb08ac-3d68-47eb-a6e7-f3cddf6df454</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0025 - [Information].[ProfileClassAttribute_GetByProfileClassAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6aa5047d-1dc1-4c94-92f3-4c6acd2536cd</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0026 - [Information].[ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>96d8af55-3c63-4379-8055-f6ec7abeb0f4</ID>
     <ParentFolder_ID>abd48086-b7d4-4a9e-b246-667c1f74d947</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\003 - System\0001 - [System].[PageAttribute_Insert].sql</FullName>
@@ -2175,6 +2210,27 @@
     <ID>cf9a9332-1539-4cf5-bab4-36ec94640042</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0012 - GridSupplyPointDetail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>2ce5fa5c-de1c-44f2-aa38-721f60b298b8</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0013 - ProfileClassAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>31482422-0c48-4d7f-b5d6-71f8c9aae710</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0014 - ProfileClass.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>fab5c38f-7305-42c2-85c5-dbb402268822</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0015 - ProfileClassDetail.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
