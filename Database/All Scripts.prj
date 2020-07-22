@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>aca9a740-45e4-4b59-b0d3-7b31f6cb2feb</ID>
-    <DateCreated>2020-07-22T20:59:02.4628373+01:00</DateCreated>
+    <ID>3de55d39-fe1c-4903-b5c8-6b974be1a7ed</ID>
+    <DateCreated>2020-07-22T21:51:01.5146271+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>c3aRHEu0rtOh2oGniFPIBg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe69vrpDLqfmE+i/C3AM17R28=</Password>
+    <Login>7+lwE5AsW8CsrgHnEJdb9Q==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6yYW3c4mEPxYh3lohJ+jb/4=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -2294,6 +2294,27 @@
     <ID>667c86e5-a1b3-4918-acbb-b70e790b0482</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0018 - MeterTimeswitchCodeDetail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8b141d31-e818-4280-8d9a-643c42af2b47</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0019 - LocalDistributionZoneAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bbd27714-d22e-4b02-bfa4-c4e6d192c23b</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0020 - LocalDistributionZone.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>897254a3-b601-4d6a-b9df-f371cbad1d23</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0021 - LocalDistributionZoneDetail.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
