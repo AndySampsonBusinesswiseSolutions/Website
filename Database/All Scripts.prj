@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>be33a4f3-b032-4919-9981-b5bd30ca07f5</ID>
-    <DateCreated>2020-07-20T11:01:57.0581368+01:00</DateCreated>
+    <ID>371eebac-4150-42e7-bfe0-d497c4af7b88</ID>
+    <DateCreated>2020-07-22T19:01:34.14511+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>VSy8ZTE5SnKkigf/EDnBcw==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe65RnH+XsR8Sr40BewFWfy+E=</Password>
+    <Login>2F6WH1QxqQFq9fp6W8piwA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe60JjFejfzDuwAhQNT2o8jlU=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1381,6 +1381,41 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>a553ac1c-cd66-4d9f-b010-a8ae2dee0c7e</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0017 - [Information].[GridSupplyPointAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a9a990ac-81cf-4198-937f-c2d1fdf6ac85</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0018 - [Information].[GridSupplyPointDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8e27be0b-3e01-45d7-abaf-0372a4880913</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0019 - [Information].[GridSupplyPoint_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3b02d9ad-6f0d-441f-ada1-6fa87f5c57ac</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0020 - [Information].[GridSupplyPointAttribute_GetByGridSupplyPointAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>89ecf760-c8e8-4fe9-8686-5d14084995c6</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0021 - [Information].[GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>96d8af55-3c63-4379-8055-f6ec7abeb0f4</ID>
     <ParentFolder_ID>abd48086-b7d4-4a9e-b246-667c1f74d947</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\003 - System\0001 - [System].[PageAttribute_Insert].sql</FullName>
@@ -1829,6 +1864,83 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>1504be15-7dcb-4b13-8b50-2cd9d5f94abd</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0012 - [Temp.Customer].[Site_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a9ca531f-3e49-4113-b59f-6ef254206a16</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0013 - [Temp.Customer].[Meter_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>77944fcb-2960-432d-a71e-00c384b4a3ca</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0014 - [Temp.Customer].[SubMeter_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c4f5b189-3fe5-47f9-ad1a-03c4de224fc5</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0015 - [Temp.Customer].[MeterUsage_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>51b9565d-05cc-487c-b457-e12ca4043e03</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0016 - [Temp.Customer].[SubMeterUsage_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>91db2596-9f38-463c-b461-254e2563b018</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0017 - [Temp.Customer].[Customer_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5b9bbc22-ef77-4450-901a-0f6e8cbae5e4</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0018 - [Temp.Customer].[MeterExemption_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ee5efd87-9022-4721-b219-08f79b211279</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0019 - [Temp.Customer].[FixedContract_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5293c75f-f51c-40df-9802-89bf08d99d09</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0020 - [Temp.Customer].[FlexContract_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0a4b96f8-88ef-4f03-91d3-be19658bd698</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0021 - [Temp.Customer].[FlexReferenceVolume_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c4349dde-e8a8-464c-a7ea-7a7ad2e3d9e5</ID>
+    <ParentFolder_ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\007 - Temp\0022 - [Temp.Customer].[FlexTrade_GetByProcessQueueGUID].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>3b21f3a4-5d44-4a25-be38-45e0b89bc94d</ID>
     <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0001 - [Mapping].[PageToProcess_Insert].sql</FullName>
@@ -2042,6 +2154,27 @@
     <ID>a0d38887-9ab6-4350-bf07-930051e21ef6</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0009 - FileAttribute - Process Queue GUID.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b9f09d07-0a98-4d12-8708-85febe5d6a56</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0010 - GridSupplyPointAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3ce85144-450d-4404-b2ef-1599e3f3c151</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0011 - GridSupplyPoint.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cf9a9332-1539-4cf5-bab4-36ec94640042</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0012 - GridSupplyPointDetail.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
