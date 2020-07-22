@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>2454eb1f-f492-4de8-a7fb-d9d970f36f9c</ID>
-    <DateCreated>2020-07-22T19:50:16.7820595+01:00</DateCreated>
+    <ID>6daf0dae-e4d3-4010-86bc-0e74fdcb6b31</ID>
+    <DateCreated>2020-07-22T20:47:31.7643329+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>yY3PjkD7XiZd2MupNdylLg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe65uS9CFkgu1faBmqhkiOeO8=</Password>
+    <Login>I+7PMS51KEKUTVDyi5I9RQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe63ZfGpnzIjTQB8HJ5Xo2QBQ=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1451,6 +1451,41 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>c7201c60-da38-4c7d-ae46-bceb9c4fa2a9</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0027 - [Information].[MeterTimeswitchCodeAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c1c8d4cf-c568-47e2-a7e4-bd80e660ff9a</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0028 - [Information].[MeterTimeswitchCodeDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>85037408-6a0e-45e7-b754-198ac5ef72fc</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0029 - [Information].[MeterTimeswitchCode_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bf247e98-5045-43de-bd91-8a42b536f339</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0030 - [Information].[MeterTimeswitchCodeAttribute_GetByMeterTimeswitchCodeAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>465d099c-1dff-4b06-bb3a-eae8674ea333</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0031 - [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>96d8af55-3c63-4379-8055-f6ec7abeb0f4</ID>
     <ParentFolder_ID>abd48086-b7d4-4a9e-b246-667c1f74d947</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\003 - System\0001 - [System].[PageAttribute_Insert].sql</FullName>
@@ -2231,6 +2266,27 @@
     <ID>fab5c38f-7305-42c2-85c5-dbb402268822</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0015 - ProfileClassDetail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1d9f38d0-cdac-419d-9647-f860fa937038</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0016 - MeterTimeswitchCodeAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>4fe5489d-b52a-446e-a152-5b91fc79edda</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0017 - MeterTimeswitchCode.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>667c86e5-a1b3-4918-acbb-b70e790b0482</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0018 - MeterTimeswitchCodeDetail.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
