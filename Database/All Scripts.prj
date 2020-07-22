@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>6daf0dae-e4d3-4010-86bc-0e74fdcb6b31</ID>
-    <DateCreated>2020-07-22T20:47:31.7643329+01:00</DateCreated>
+    <ID>aca9a740-45e4-4b59-b0d3-7b31f6cb2feb</ID>
+    <DateCreated>2020-07-22T20:59:02.4628373+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>I+7PMS51KEKUTVDyi5I9RQ==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe63ZfGpnzIjTQB8HJ5Xo2QBQ=</Password>
+    <Login>c3aRHEu0rtOh2oGniFPIBg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe69vrpDLqfmE+i/C3AM17R28=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1482,6 +1482,13 @@
     <ID>465d099c-1dff-4b06-bb3a-eae8674ea333</ID>
     <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0031 - [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>13ec596c-9d55-4bed-989f-19e45180be3a</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0032 - [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

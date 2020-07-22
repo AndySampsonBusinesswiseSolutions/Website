@@ -161,6 +161,24 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public long MeterTimeswitchClassAttribute_GetMeterTimeswitchClassAttributeIdByMeterTimeswitchClassAttributeDescription(string meterTimeswitchClassAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.MeterTimeswitchClassAttribute_GetByMeterTimeswitchClassAttributeDescription, 
+                    meterTimeswitchClassAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterTimeswitchClassAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public DataTable MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId(long meterTimeswitchClassAttributeId)
+            {
+                return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId, 
+                    meterTimeswitchClassAttributeId);
+            }
+
             public long ExemptionDetail_GetExemptionIdByExemptionAttributeIdAndExemptionDetailDescription(long exemptionAttributeId, string exemptionDetailDescription)
             {
                 return 0;

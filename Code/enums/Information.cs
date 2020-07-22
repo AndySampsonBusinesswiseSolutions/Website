@@ -32,6 +32,15 @@ namespace enums
                 }
             }
 
+            public class MeterTimeswitchClass
+            {
+                public class Attribute
+                {
+                    public string MeterTimeswitchRangeStart = "Meter Timeswitch Class Range Start";
+                    public string MeterTimeswitchRangeEnd = "Meter Timeswitch Class Range End";
+                }
+            }
+
             public class ProfileClass
             {
                 public class Attribute

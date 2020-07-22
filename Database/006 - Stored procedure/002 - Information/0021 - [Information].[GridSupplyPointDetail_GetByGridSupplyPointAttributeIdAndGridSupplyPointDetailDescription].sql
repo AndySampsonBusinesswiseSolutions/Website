@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-22
--- Description:	Get GridSupplyPoint Detail info from [Information].[GridSupplyPointDetail] table by GridSupplyPoint Type Id And GridSupplyPoint Detail Description
+-- Description:	Get GridSupplyPoint Detail info from [Information].[GridSupplyPointDetail] table by GridSupplyPoint Attribute Id And GridSupplyPoint Detail Description
 -- =============================================
 
 ALTER PROCEDURE [Information].[GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription]

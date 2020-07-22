@@ -6,21 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-22
--- Description:	Get MeterTimeswitchCode Detail info from [Information].[MeterTimeswitchCodeDetail] table by MeterTimeswitchCode Attribute Id And MeterTimeswitchCode Detail Description
+-- Description:	Get MeterTimeswitchCode Detail info from [Information].[MeterTimeswitchCodeDetail] table by MeterTimeswitchCode Attribute Id
 -- =============================================
 
-ALTER PROCEDURE [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription]
+ALTER PROCEDURE [Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId]
     @MeterTimeswitchCodeAttributeId BIGINT,
-    @MeterTimeswitchCodeDetailDescription VARCHAR(255),
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -49,7 +48,6 @@ BEGIN
         [Information].[MeterTimeswitchCodeDetail] 
     WHERE 
         MeterTimeswitchCodeAttributeId = @MeterTimeswitchCodeAttributeId
-        AND MeterTimeswitchCodeDetailDescription = @MeterTimeswitchCodeDetailDescription
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

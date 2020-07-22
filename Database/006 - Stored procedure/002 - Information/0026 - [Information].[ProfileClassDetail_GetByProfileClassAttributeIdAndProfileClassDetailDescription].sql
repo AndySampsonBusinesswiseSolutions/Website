@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-22
--- Description:	Get ProfileClass Detail info from [Information].[ProfileClassDetail] table by ProfileClass Type Id And ProfileClass Detail Description
+-- Description:	Get ProfileClass Detail info from [Information].[ProfileClassDetail] table by ProfileClass Attribute Id And ProfileClass Detail Description
 -- =============================================
 
 ALTER PROCEDURE [Information].[ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription]

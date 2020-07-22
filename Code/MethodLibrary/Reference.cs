@@ -24,6 +24,7 @@ namespace MethodLibrary
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
         private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
+        private static readonly Enums.Information.MeterTimeswitchClass.Attribute _informationMeterTimeswitchClassAttributeEnums = new Enums.Information.MeterTimeswitchClass.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Information _informationMethods = new Information();
@@ -430,7 +431,37 @@ namespace MethodLibrary
 
         public bool IsValidMeterTimeswitchClass(string meterTimeswitchClass)
         {
-            return true;
+            if (string.IsNullOrWhiteSpace(meterTimeswitchClass))
+            {
+                return false;
+            }
+
+            var meterTimeswitchClassValue = 0L;
+
+            try
+            {
+                meterTimeswitchClassValue = Convert.ToInt64(meterTimeswitchClass);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            var meterTimeswitchClassRangeStartAttributeId = _informationMethods.MeterTimeswitchClassAttribute_GetMeterTimeswitchClassAttributeIdByMeterTimeswitchClassAttributeDescription(_informationMeterTimeswitchClassAttributeEnums.MeterTimeswitchRangeStart);
+            var meterTimeswitchClassRangeEndAttributeId = _informationMethods.MeterTimeswitchClassAttribute_GetMeterTimeswitchClassAttributeIdByMeterTimeswitchClassAttributeDescription(_informationMeterTimeswitchClassAttributeEnums.MeterTimeswitchRangeEnd);
+
+            var meterTimeswitchClassRangeStartDataTable = _informationMethods.MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId(meterTimeswitchClassRangeStartAttributeId);
+            var meterTimeswitchClassRangeEndDataTable = _informationMethods.MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId(meterTimeswitchClassRangeEndAttributeId);
+
+            var validRangeStartDataRecords = meterTimeswitchClassRangeStartDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") <= meterTimeswitchClassValue);
+            var validRangeEndDataRecords = meterTimeswitchClassRangeEndDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") >= meterTimeswitchClassValue);
+
+            var validRangeStartRows = validRangeStartDataRecords.Select(r => r.Field<int>("MeterDetailDescription"));
+            var validRangeEndRows = validRangeEndDataRecords.Select(r => r.Field<int>("MeterDetailDescription"));
+
+            var validRangeRows = validRangeStartRows.Intersect(validRangeEndRows);
+
+            return validRangeRows.Count() == 1;
         }
 
         public bool IsValidLineLossFactorClass(string linelossFactorClass)
