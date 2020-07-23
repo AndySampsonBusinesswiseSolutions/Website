@@ -116,9 +116,7 @@ namespace ValidateUsageUploadTempMeterExempionData.api.Controllers
                 //Validate Exemption Proportion
                 var invalidExemptionProportionDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProportion"))
                     && !_methods.IsValidExemptionProportion(r.Field<string>("ExemptionProduct"), 
-                                                            r.Field<string>("ExemptionProportion"), 
-                                                            r.Field<DateTime>("DateFrom"), 
-                                                            r.Field<DateTime>("DateTo"))
+                                                            r.Field<string>("ExemptionProportion"))
                     );
 
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)

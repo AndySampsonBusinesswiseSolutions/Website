@@ -26,6 +26,7 @@ namespace MethodLibrary
         private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
         private static readonly Enums.Information.MeterTimeswitchClass.Attribute _informationMeterTimeswitchClassAttributeEnums = new Enums.Information.MeterTimeswitchClass.Attribute();
         private static readonly Enums.Information.LocalDistributionZone.Attribute _informationLocalDistributionZoneAttributeEnums = new Enums.Information.LocalDistributionZone.Attribute();
+        private static readonly Enums.Information.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.Information.MeterExemption.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Information _informationMethods = new Information();
@@ -485,10 +486,13 @@ namespace MethodLibrary
                 return false;
             }
 
-            return exemptionProduct == "CCA" || exemptionProduct == "EII" || exemptionProduct == "MINMET";
+            var meterExemptionProductAttributeId = _informationMethods.MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(_informationMeterExemptionAttributeEnums.MeterExemptionProduct);
+            var meterExemptionProductId = _informationMethods.MeterExemptionDetail_GetMeterExemptionIdByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(meterExemptionProductAttributeId, exemptionProduct);
+
+            return meterExemptionProductId != 0;
         }
 
-        public bool IsValidExemptionProportion(string exemptionProduct, string exemptionProportion, DateTime dateFrom, DateTime dateTo)
+        public bool IsValidExemptionProportion(string exemptionProduct, string exemptionProportion)
         {
             if (string.IsNullOrWhiteSpace(exemptionProportion)
                 || !exemptionProportion.Contains('%'))
@@ -505,10 +509,12 @@ namespace MethodLibrary
                     return exemptionProportionValue >= 0 && exemptionProportionValue <= 1;
                 }
 
-                var exemptionProductId = _informationMethods.ExemptionDetail_GetExemptionIdByExemptionAttributeIdAndExemptionDetailDescription(0, exemptionProduct);
-                var currentExemptionProportionValue = _informationMethods.ExemptionDetail_GetExemptionProportionByExemptionProductId(exemptionProductId);
+                var meterExemptionProductAttributeId = _informationMethods.MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(_informationMeterExemptionAttributeEnums.MeterExemptionProduct);
+                var meterExemptionProductId = _informationMethods.MeterExemptionDetail_GetMeterExemptionIdByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(meterExemptionProductAttributeId, exemptionProduct);
+                var meterExemptionProportionAttributeId = _informationMethods.MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(_informationMeterExemptionAttributeEnums.MeterExemptionProportion);
+                var currentExemptionProportionValue = _informationMethods.MeterExemptionDetail_GetMeterExemptionDetailDescriptionByMeterExemptionIdAndMeterExemptionAttributeId(meterExemptionProductId, meterExemptionProportionAttributeId);
 
-                return currentExemptionProportionValue == exemptionProportionValue;
+                return currentExemptionProportionValue == exemptionProportionValue.ToString();
             }
             catch (Exception)
             {

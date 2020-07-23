@@ -40,6 +40,15 @@ namespace enums
                 }
             }
 
+            public class MeterExemption
+            {
+                public class Attribute
+                {
+                    public string MeterExemptionProduct = "Meter Exemption Product";
+                    public string MeterExemptionProportion = "Meter Exemption Proportion";
+                }
+            }
+
             public class MeterTimeswitchClass
             {
                 public class Attribute
