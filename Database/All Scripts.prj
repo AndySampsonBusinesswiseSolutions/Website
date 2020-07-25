@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>fd34f77c-7e06-4737-9ffc-4fcf8dac62ae</ID>
-    <DateCreated>2020-07-25T13:49:31.9487955+01:00</DateCreated>
+    <ID>0d4d56e8-e7e1-4c2d-9156-131704953ddd</ID>
+    <DateCreated>2020-07-25T14:41:32.0025941+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>H3nA/mPFdIFkmNbP6IxS7Q==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6+qWqyKBW/H2Aad2xLrJ2U8=</Password>
+    <Login>L+T5FighVykkQCl8UMjNpA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe69IC4g7aoI+9EAK8Ld+p1+s=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -2158,23 +2158,37 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>49ff0948-662e-41ef-bd4b-bd705aab2422</ID>
+    <ID>d81a0b57-dc73-4850-85c6-1014e83d9504</ID>
     <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0001 - [Customer].[CustomerAttribute_Insert].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0001 - [Supplier].[SupplierAttribute_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>b3bc18fd-ec81-4ff9-9fd1-b98e963de60c</ID>
+    <ID>33023dc4-975a-4fad-b0ab-519a8656bd06</ID>
     <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0002 - [Customer].[Customer_Insert].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0002 - [Supplier].[Supplier_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>efc27fae-be17-4f25-addc-5558703353b1</ID>
+    <ID>d3eb8cf3-f19f-46f4-89f1-65d5b76860ac</ID>
     <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0003 - [Customer].[CustomerDetail_Insert].sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0003 - [Supplier].[SupplierDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>06882b7e-60dd-420f-b50c-e06c1c100a3c</ID>
+    <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0004 - [Supplier].[SupplierAttribute_GetBySupplierAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>15dbe804-6403-454b-8709-8a99f713fd54</ID>
+    <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0005 - [Supplier].[SupplierDetail_GetBySupplierAttributeIdAndSupplierDetailDescription].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2714,6 +2728,13 @@
     <ID>e672a6df-2b5d-40da-abf8-55f3498f4bcc</ID>
     <ParentFolder_ID>47e7bc5c-ffff-4aa4-9484-9acfb36b4ad7</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\006 - DemandForecast\0002 - ForecastAgent.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>531b66e4-6bd2-4351-9949-c4529dd7da54</ID>
+    <ParentFolder_ID>b2ed1782-a000-4f32-a60f-5011fad20db6</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\008 - Supplier\0001 - SupplierAttribute.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -10108,6 +10129,11 @@
     <ID>587c85e2-5a7d-419c-b84b-a7d37b677dda</ID>
     <ParentFolder_ID>6be19193-9e4b-40fb-83ff-cb9fcd665760</ParentFolder_ID>
     <Name>007 - Temp</Name>
+  </ScriptFolder>
+  <ScriptFolder>
+    <ID>b2ed1782-a000-4f32-a60f-5011fad20db6</ID>
+    <ParentFolder_ID>6be19193-9e4b-40fb-83ff-cb9fcd665760</ParentFolder_ID>
+    <Name>008 - Supplier</Name>
   </ScriptFolder>
   <ScriptFolder>
     <ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ID>

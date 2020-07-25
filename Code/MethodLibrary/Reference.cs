@@ -20,6 +20,7 @@ namespace MethodLibrary
         private static readonly Enums.StoredProcedure.Administration _storedProcedureAdministrationEnums = new Enums.StoredProcedure.Administration();
         private static readonly Enums.StoredProcedure.Customer _storedProcedureCustomerEnums = new Enums.StoredProcedure.Customer();
         private static readonly Enums.StoredProcedure.Information _storedProcedureInformationEnums = new Enums.StoredProcedure.Information();
+        private static readonly Enums.StoredProcedure.Supplier _storedProcedureSupplierEnums = new Enums.StoredProcedure.Supplier();
         private static readonly Enums.StoredProcedure.Temp.Customer _storedProcedureTempCustomerEnums = new Enums.StoredProcedure.Temp.Customer();
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
@@ -27,9 +28,11 @@ namespace MethodLibrary
         private static readonly Enums.Information.MeterTimeswitchClass.Attribute _informationMeterTimeswitchClassAttributeEnums = new Enums.Information.MeterTimeswitchClass.Attribute();
         private static readonly Enums.Information.LocalDistributionZone.Attribute _informationLocalDistributionZoneAttributeEnums = new Enums.Information.LocalDistributionZone.Attribute();
         private static readonly Enums.Information.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.Information.MeterExemption.Attribute();
+        private static readonly Enums.Supplier.Attribute _supplierAttributeEnums = new Enums.Supplier.Attribute();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Information _informationMethods = new Information();
+        private static readonly Supplier _supplierMethods = new Supplier();
 
         //TODO: Work out how many of these can be moved/integrated with database
 
@@ -246,6 +249,11 @@ namespace MethodLibrary
             }
         }
 
+        public bool IsValidMPXN(string mpxn)
+        {
+            return IsValidMPAN(mpxn) || IsValidMPRN(mpxn);
+        }
+        
         public bool IsValidMPAN(string mpan)
         {
             if (string.IsNullOrWhiteSpace(mpan)
@@ -479,6 +487,19 @@ namespace MethodLibrary
             return localDistributionZoneDetailId != 0;
         }
 
+        public bool IsValidSupplier(string supplier)
+        {
+            if(string.IsNullOrWhiteSpace(supplier))
+            {
+                return false;
+            }
+
+            var supplierNameAttributeId = _supplierMethods.SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(_supplierAttributeEnums.SupplierName);
+            var supplierId = _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(supplierNameAttributeId, supplier);
+
+            return supplierId != 0;
+        }
+        
         public bool IsValidExemptionProduct(string exemptionProduct)
         {
             if (string.IsNullOrWhiteSpace(exemptionProduct))
@@ -515,6 +536,63 @@ namespace MethodLibrary
                 var currentExemptionProportionValue = _informationMethods.MeterExemptionDetail_GetMeterExemptionDetailDescriptionByMeterExemptionIdAndMeterExemptionAttributeId(meterExemptionProductId, meterExemptionProportionAttributeId);
 
                 return currentExemptionProportionValue == exemptionProportionValue.ToString();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFixedContractRate(string rate)
+        {
+            if (string.IsNullOrWhiteSpace(rate))
+            {
+                return false;
+            }
+
+            try
+            {
+                var rateValue = Convert.ToDecimal(rate);
+
+                return rateValue > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFixedContactStandingCharge(string standingCharge)
+        {
+            if (string.IsNullOrWhiteSpace(standingCharge))
+            {
+                return false;
+            }
+
+            try
+            {
+                var standingChargeValue = Convert.ToDecimal(standingCharge);
+
+                return standingChargeValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFixedContactCapacityCharge(string capacityCharge)
+        {
+            if (string.IsNullOrWhiteSpace(capacityCharge))
+            {
+                return false;
+            }
+
+            try
+            {
+                var capacityChargeValue = Convert.ToDecimal(capacityCharge);
+
+                return capacityChargeValue >= 0;
             }
             catch (Exception)
             {

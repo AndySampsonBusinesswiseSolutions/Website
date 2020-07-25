@@ -14,7 +14,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-25
--- Description:	Insert new customer attribute into [Supplier].[SupplierAttribute] table
+-- Description:	Insert new supplier attribute into [Supplier].[SupplierAttribute] table
 -- =============================================
 
 ALTER PROCEDURE [Supplier].[SupplierAttribute_Insert]

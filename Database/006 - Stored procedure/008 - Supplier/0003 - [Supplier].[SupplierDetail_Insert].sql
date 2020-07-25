@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-25
--- Description:	Insert new customer detail into [Supplier].[SupplierDetail] table
+-- Description:	Insert new supplier detail into [Supplier].[SupplierDetail] table
 -- =============================================
 
 ALTER PROCEDURE [Supplier].[SupplierDetail_Insert]
