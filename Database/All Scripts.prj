@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>3de55d39-fe1c-4903-b5c8-6b974be1a7ed</ID>
-    <DateCreated>2020-07-22T21:51:01.5146271+01:00</DateCreated>
+    <ID>fd34f77c-7e06-4737-9ffc-4fcf8dac62ae</ID>
+    <DateCreated>2020-07-25T13:49:31.9487955+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>7+lwE5AsW8CsrgHnEJdb9Q==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6yYW3c4mEPxYh3lohJ+jb/4=</Password>
+    <Login>H3nA/mPFdIFkmNbP6IxS7Q==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6+qWqyKBW/H2Aad2xLrJ2U8=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -240,6 +240,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>8638960c-fc27-45c0-a4e7-57804bfa5c98</ID>
+    <ParentFolder_ID>40f7a6af-ce55-43ee-8c8e-0cb1ae939f2a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\002 - Filegroup\0008 - Supplier.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>4bfb32a1-1d7a-4d05-873b-53fed5e38434</ID>
     <ParentFolder_ID>15457926-42fb-4cf7-9a0b-27603955b51e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\003 - File\0001 - Mapping.sql</FullName>
@@ -289,6 +296,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>6347e397-e818-4f82-b536-0ee9c1e099a7</ID>
+    <ParentFolder_ID>15457926-42fb-4cf7-9a0b-27603955b51e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\003 - File\0008 - Supplier.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>f674a18b-caec-469a-a284-03f4169086a7</ID>
     <ParentFolder_ID>53525575-0648-4d74-860a-e82ad8d07cb8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\004 - Schema\0001 - [Mapping].sql</FullName>
@@ -334,6 +348,13 @@
     <ID>dd28b12b-a879-4ae4-9729-a72656637553</ID>
     <ParentFolder_ID>53525575-0648-4d74-860a-e82ad8d07cb8</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\004 - Schema\0007 - [Temp.Customer].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>fa5d9ea1-282c-4968-92c5-f3b1965dfd7f</ID>
+    <ParentFolder_ID>53525575-0648-4d74-860a-e82ad8d07cb8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\004 - Schema\0008 - [Supplier].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -600,6 +621,27 @@
     <ID>4f18ee13-96aa-4696-a8d4-3cdc60960e51</ID>
     <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0029 - [Information].[FileContent].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>334e4b4e-da68-4ca9-a41b-5bd62e3247ec</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0030 - [Information].[MeterExemption].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b6445503-8384-4058-a881-f97df7663512</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0031 - [Information].[MeterExemptionAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>27c86d95-41a4-4e3c-9f26-fc1d747fc669</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0032 - [Information].[MeterExemptionDetail].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -964,6 +1006,27 @@
     <ID>0c31efcf-7629-4d97-b00b-d13ce59a5d09</ID>
     <ParentFolder_ID>4574f4d7-63d4-4322-80ed-2c3c48981193</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\007 - Temp\0011 - [Temp.Customer].[FlexTrade].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f1ebecec-c5a0-49a1-a136-a28196996100</ID>
+    <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0001 - [Supplier].[Supplier].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9713d69a-c536-4285-a62f-aa4c68ff6ca1</ID>
+    <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0002 - [Supplier].[SupplierAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ce707b14-0322-49c1-829e-a8e58c6d047f</ID>
+    <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0003 - [Supplier].[SupplierDetail].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1493,6 +1556,83 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>44697af6-bf61-4adc-993e-b1c4d11833c7</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0033 - [Information].[LocalDistributionZoneAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1053ab18-a369-499e-bfde-ca7bc251d8fc</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0034 - [Information].[LocalDistributionZoneDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>69e554d5-6297-48bb-b75e-e32b215156ef</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0035 - [Information].[LocalDistributionZone_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c8ebaa6d-8611-441f-9f9c-125ea78fdd44</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0036 - [Information].[LocalDistributionZoneAttribute_GetByLocalDistributionZoneAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8f2540b1-ccc0-4010-98c9-a89018d35842</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0037 - [Information].[LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cbf249e1-8c1c-43d5-8f41-793422d063e5</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0038 - [Information].[MeterExemptionAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cd5c89fe-2299-44fb-926f-b31b532270c6</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0039 - [Information].[MeterExemptionDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>12e33260-4072-4b83-96a8-70e02999e3fa</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0040 - [Information].[MeterExemption_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d6c0bdbf-dcbe-4406-b95f-6861b27a0080</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0041 - [Information].[MeterExemptionAttribute_GetByMeterExemptionAttributeDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>adfb371d-3c38-4170-84cd-8ed5ffd49069</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0042 - [Information].[MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0ed973c0-eae4-4591-9233-372bd6fb0e82</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0043 - [Information].[MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>96d8af55-3c63-4379-8055-f6ec7abeb0f4</ID>
     <ParentFolder_ID>abd48086-b7d4-4a9e-b246-667c1f74d947</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\003 - System\0001 - [System].[PageAttribute_Insert].sql</FullName>
@@ -2018,6 +2158,27 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>49ff0948-662e-41ef-bd4b-bd705aab2422</ID>
+    <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0001 - [Customer].[CustomerAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b3bc18fd-ec81-4ff9-9fd1-b98e963de60c</ID>
+    <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0002 - [Customer].[Customer_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>efc27fae-be17-4f25-addc-5558703353b1</ID>
+    <ParentFolder_ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\008 - Supplier\0003 - [Customer].[CustomerDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>3b21f3a4-5d44-4a25-be38-45e0b89bc94d</ID>
     <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0001 - [Mapping].[PageToProcess_Insert].sql</FullName>
@@ -2315,6 +2476,27 @@
     <ID>897254a3-b601-4d6a-b9df-f371cbad1d23</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0021 - LocalDistributionZoneDetail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>7f462a02-89b4-4f8f-b03e-b8a2714f2f95</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0022 - MeterExemptionAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5659ad69-e81f-4e7a-9fd1-023ac0f02056</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0023 - MeterExemption.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>860a5114-8052-41be-8b1b-c105b3651330</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0024 - MeterExemptionDetail.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -9813,6 +9995,11 @@
     <Name>007 - Temp</Name>
   </ScriptFolder>
   <ScriptFolder>
+    <ID>56491b79-f41f-4110-844c-72cd0d22897d</ID>
+    <ParentFolder_ID>17540d45-241f-4f43-b4f9-89141e3a4c14</ParentFolder_ID>
+    <Name>008 - Supplier</Name>
+  </ScriptFolder>
+  <ScriptFolder>
     <ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ID>
     <ParentFolder_ID>17540d45-241f-4f43-b4f9-89141e3a4c14</ParentFolder_ID>
     <Name>999 - Mapping</Name>
@@ -9856,6 +10043,11 @@
     <ID>fa4e2863-4325-4cd7-ac50-fd2cd81368af</ID>
     <ParentFolder_ID>c8ef2289-1608-4f3a-bece-53974751cdf1</ParentFolder_ID>
     <Name>007 - Temp</Name>
+  </ScriptFolder>
+  <ScriptFolder>
+    <ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ID>
+    <ParentFolder_ID>c8ef2289-1608-4f3a-bece-53974751cdf1</ParentFolder_ID>
+    <Name>008 - Supplier</Name>
   </ScriptFolder>
   <ScriptFolder>
     <ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ID>
