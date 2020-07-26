@@ -573,7 +573,7 @@ namespace MethodLibrary
             {
                 var rateValue = Convert.ToDecimal(rate);
 
-                return rateValue >= 0;
+                return true;
             }
             catch (Exception)
             {
@@ -617,6 +617,88 @@ namespace MethodLibrary
             {
                 return false;
             }
+        }
+
+        public bool IsValidFlexReferenceVolume(string volume)
+        {
+            if (string.IsNullOrWhiteSpace(volume))
+            {
+                return false;
+            }
+
+            try
+            {
+                var volumeValue = Convert.ToDecimal(volume);
+
+                return volumeValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFlexTradeReference(string tradeReference)
+        {
+            if (string.IsNullOrWhiteSpace(tradeReference))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsValidFlexTradeProduct(string tradeProduct)
+        {
+            if (string.IsNullOrWhiteSpace(tradeProduct))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsValidFlexTradeVolume(string volume)
+        {
+            if (string.IsNullOrWhiteSpace(volume))
+            {
+                return false;
+            }
+
+            try
+            {
+                var volumeValue = Convert.ToDecimal(volume);
+
+                return volumeValue > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFlexTradePrice(string price)
+        {
+            if (string.IsNullOrWhiteSpace(price))
+            {
+                return false;
+            }
+
+            try
+            {
+                var priceValue = Convert.ToDecimal(price);
+
+                return priceValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFlexTradeDirection(string direction)
+        {
+            return direction.StartsWith('B') || direction.StartsWith('S');
         }
     }
 }

@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 
 namespace ValidateUsageUploadTempFlexReferenceVolumeData.api.Controllers
 {
@@ -96,9 +97,47 @@ namespace ValidateUsageUploadTempFlexReferenceVolumeData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
+                        {"ContractReference", "Contract Reference"}
                     };
-                
+
                 var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+
+                //Validate Contract Dates
+                var invalidDateFromDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
+                    && !_methods.IsValidDate(r.Field<string>("DateFrom")));
+
+                foreach(var invalidDateFromDataRecord in invalidDateFromDataRecords)
+                {
+                    errors.Add($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}' in row {invalidDateFromDataRecord["RowId"]}");
+                }
+
+                var invalidDateToDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
+                    && !_methods.IsValidDate(r.Field<string>("DateTo")));
+
+                foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
+                {
+                    errors.Add($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}' in row {invalidDateToDataRecord["RowId"]}");
+                }
+
+                var invalidContractDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
+                    && !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
+                    && _methods.IsValidDate(r.Field<string>("DateFrom"))
+                    && _methods.IsValidDate(r.Field<string>("DateTo"))
+                    && r.Field<DateTime>("DateFrom") >= r.Field<DateTime>("DateTo"));
+
+                foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
+                {
+                    errors.Add($"Invalid Contract Dates '{invalidDateToDataRecord["DateFrom"]}' is equal to or later than '{invalidDateToDataRecord["DateTo"]}' in row {invalidDateToDataRecord["RowId"]}");
+                }
+
+                //Validate Volume
+                var invalidVolumeDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Volume"))
+                    && !_methods.IsValidFlexReferenceVolume(r.Field<string>("Volume")));
+
+                foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
+                {
+                    errors.Add($"Invalid Reference Volume '{invalidVolumeDataRecord["Volume"]}' in row {invalidVolumeDataRecord["RowId"]}");
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempFlexReferenceVolumeDataAPIId, false, null);
