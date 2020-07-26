@@ -562,6 +562,25 @@ namespace MethodLibrary
             }
         }
 
+        public bool IsValidFlexContractRate(string rate)
+        {
+            if (string.IsNullOrWhiteSpace(rate))
+            {
+                return false;
+            }
+
+            try
+            {
+                var rateValue = Convert.ToDecimal(rate);
+
+                return rateValue >= 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public bool IsValidFixedContactStandingCharge(string standingCharge)
         {
             if (string.IsNullOrWhiteSpace(standingCharge))
