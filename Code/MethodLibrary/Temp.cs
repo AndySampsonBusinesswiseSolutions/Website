@@ -111,11 +111,11 @@ namespace MethodLibrary
                         processQueueGUID, rowId, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, standingCharge, capacityCharge, rate, value);
                 }
 
-                public void FlexContract_Insert(string processQueueGUID, int rowId, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string standingCharge, string shapeFee, string adminFee, string imbalanceFee, string riskFee, string greenPremium)
+                public void FlexContract_Insert(string processQueueGUID, int rowId, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string standingCharge, string rateType, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FlexContract_Insert, 
-                        processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, standingCharge, shapeFee, adminFee, imbalanceFee, riskFee, greenPremium);
+                        processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, standingCharge, rateType, value);
                 }
 
                 public void FlexReferenceVolume_Insert(string processQueueGUID, int rowId, string contractReference, string dateFrom, string dateTo, string volume)

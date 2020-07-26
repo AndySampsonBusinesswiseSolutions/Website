@@ -29,16 +29,14 @@ ALTER PROCEDURE [Temp.Customer].[FlexContract_Insert]
     @ContractEndDate VARCHAR(255),
     @Product VARCHAR(255),
     @StandingCharge VARCHAR(255),
-    @ShapeFee VARCHAR(255),
-    @AdminFee VARCHAR(255),
-    @ImbalanceFee VARCHAR(255),
-    @RiskFee VARCHAR(255),
-    @GreenPremium VARCHAR(255)
+    @RateType VARCHAR(255),
+    @Value VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-20 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-26 -> Andrew Sampson -> Changed for scalability
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -57,11 +55,8 @@ BEGIN
         ContractEndDate,
         Product,
         StandingCharge,
-        ShapeFee,
-        AdminFee,
-        ImbalanceFee,
-        RiskFee,
-        GreenPremium
+        RateType,
+        Value
     )
     VALUES
     (
@@ -75,11 +70,8 @@ BEGIN
         @ContractEndDate,
         @Product,
         @StandingCharge,
-        @ShapeFee,
-        @AdminFee,
-        @ImbalanceFee,
-        @RiskFee,
-        @GreenPremium
+        @RateType,
+        @Value
     )
 END
 GO

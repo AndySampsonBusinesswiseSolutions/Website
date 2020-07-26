@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace StoreUsageUploadTempFlexContractData.api.Controllers
 {
@@ -84,6 +85,10 @@ namespace StoreUsageUploadTempFlexContractData.api.Controllers
 
                 //Get Flex Contract data from Customer Data Upload
                 var flexContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
+                var columns = new List<string>
+                {
+                    "ShapeFee", "AdminFee", "ImbalanceFee", "RiskFee", "GreenPremium", "OptimisationBenefit"                    
+                };
 
                 foreach(var row in flexContractDictionary.Keys)
                 {
@@ -91,8 +96,11 @@ namespace StoreUsageUploadTempFlexContractData.api.Controllers
                     var contractStartDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[4])));
                     var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[5])));
 
-                    //Insert flex contract data into [Temp.Customer].[FlexContract]
-                    _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], values[8], values[9], values[10], values[11], values[12]);
+                    for(var rateCount = 8; rateCount < values.Count(); rateCount++)
+                    {
+                        //Insert fixed contract data into [Temp.Customer].[FlexContract]
+                        _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], columns[rateCount - 8], values[rateCount]);
+                    }
                 }
 
                 //Update Process Queue

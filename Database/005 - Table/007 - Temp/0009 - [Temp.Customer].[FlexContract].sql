@@ -27,11 +27,8 @@ CREATE TABLE [Temp.Customer].[FlexContract]
 	ContractEndDate VARCHAR(255),
 	Product VARCHAR(255),
 	StandingCharge VARCHAR(255),	
-	ShapeFee VARCHAR(255),
-	AdminFee VARCHAR(255),
-	ImbalanceFee VARCHAR(255),
-	RiskFee VARCHAR(255),
-	GreenPremium VARCHAR(255)
+	RateType VARCHAR(255),
+	Value VARCHAR(255)
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.Customer].[FlexContract] SET (LOCK_ESCALATION = TABLE)
