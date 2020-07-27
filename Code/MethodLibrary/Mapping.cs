@@ -20,7 +20,7 @@ namespace MethodLibrary
                     .ToList();
             }
 
-            public long PasswordToUser_GetPasswordToUserIdByPasswordIdAndUserId(long passwordId, long userId)
+            public long PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(long passwordId, long userId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.PasswordToUser_GetByPasswordIdAndUserId, 

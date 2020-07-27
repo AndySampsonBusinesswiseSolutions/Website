@@ -5,7 +5,6 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 
 namespace UploadFile.api.Controllers
 {
@@ -18,13 +17,9 @@ namespace UploadFile.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.Information.File.Attribute _informationFileAttributeEnums = new Enums.Information.File.Attribute();
         private readonly Int64 uploadFileAPIId;
 
@@ -39,11 +34,8 @@ namespace UploadFile.api.Controllers
         [Route("UploadFile/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());            
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(uploadFileAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(uploadFileAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -53,12 +45,12 @@ namespace UploadFile.api.Controllers
         public void Upload([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -69,23 +61,13 @@ namespace UploadFile.api.Controllers
                     sourceId,
                     uploadFileAPIId);
 
-                //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-                //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.UploadFileAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-
-                if(erroredPrerequisiteAPIs.Any())
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UploadFileAPI, uploadFileAPIId, jsonObject))
                 {
-                    //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, uploadFileAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 
                 //Insert FileGUID into Information.File
-                var fileGUID = jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
+                var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
                 _informationMethods.File_Insert(createdByUserId, sourceId, fileGUID);
 
                 //Get FileId by FileGUID
@@ -98,14 +80,14 @@ namespace UploadFile.api.Controllers
                 var processQueueGUIDFileAttributeId = _informationMethods.FileAttribute_GetFileAttributeIdByFileAttributeDescription(_informationFileAttributeEnums.ProcessQueueGUID);
 
                 //Insert File Name into Information.FileDetail
-                var fileName = jsonObject[_systemAPIRequiredDataKeyEnums.FileName].ToString();
+                var fileName = _systemMethods.GetFileNameFromJObject(jsonObject);
                 _informationMethods.FileDetail_Insert(createdByUserId, sourceId, fileId, fileNameFileAttributeId, fileName);
 
                 //Insert Process Queue GUID into Information.FileDetail
                 _informationMethods.FileDetail_Insert(createdByUserId, sourceId, fileId, processQueueGUIDFileAttributeId, processQueueGUID);
 
                 //Insert File Content into Information.FileContent
-                var fileContent = jsonObject[_systemAPIRequiredDataKeyEnums.FileContent].ToString();
+                var fileContent = _systemMethods.GetFileContentFromJObject(jsonObject);
                 _informationMethods.FileContent_Insert(createdByUserId,sourceId, fileId, fileContent);
 
                 //Update Process Queue

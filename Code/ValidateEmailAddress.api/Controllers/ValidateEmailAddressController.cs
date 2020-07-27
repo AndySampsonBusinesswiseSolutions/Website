@@ -20,9 +20,7 @@ namespace ValidateEmailAddress.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Int64 validateEmailAddressAPIId;
 
         public ValidateEmailAddressController(ILogger<ValidateEmailAddressController> logger)
@@ -36,11 +34,8 @@ namespace ValidateEmailAddress.api.Controllers
         [Route("ValidateEmailAddress/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());            
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateEmailAddressAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validateEmailAddressAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -50,12 +45,12 @@ namespace ValidateEmailAddress.api.Controllers
         public void Validate([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -66,30 +61,24 @@ namespace ValidateEmailAddress.api.Controllers
                     sourceId,
                     validateEmailAddressAPIId);
 
-                //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressAPI, validateEmailAddressAPIId, jsonObject))
+                {
+                    return;
+                }
 
-                //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateEmailAddressAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-
-                string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+                string errorMessage = null;
                 long emailAddressId = 0;
 
-                if(!erroredPrerequisiteAPIs.Any())
+                //Get Email Address
+                var emailAddress = _systemMethods.GetEmailAddressFromJObject(jsonObject);
+
+                //Validate Email Address
+                emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+
+                //If emailAddressId == 0 then the email address provided isn't valid so create an error
+                if(emailAddressId == 0)
                 {
-                    //Get Email Address
-                    var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
-
-                    //Validate Email Address
-                    emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
-
-                    //If emailAddressId == 0 then the email address provided isn't valid so create an error
-                    if(emailAddressId == 0)
-                    {
-                        errorMessage = $"Email address {emailAddress} does not exist in [Administration.User].[UserDetail] table";
-                    }
+                    errorMessage = $"Email address {emailAddress} does not exist in [Administration.User].[UserDetail] table";
                 }
 
                 //Update Process Queue

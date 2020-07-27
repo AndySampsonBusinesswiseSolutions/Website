@@ -22,7 +22,6 @@ namespace Routing.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
 
         public RoutingController(ILogger<RoutingController> logger)
         {
@@ -39,7 +38,7 @@ namespace Routing.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(routingAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(routingAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -49,14 +48,14 @@ namespace Routing.api.Controllers
         public void Route([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
             {
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
-                var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+                var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
                 
                 //Get ValidateProcessGUID API Id
                 var validateProcessGUIDAPIId = _systemMethods.GetValidateProcessGUIDAPIId();

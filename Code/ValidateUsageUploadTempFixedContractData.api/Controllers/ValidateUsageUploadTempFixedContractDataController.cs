@@ -23,9 +23,7 @@ namespace ValidateUsageUploadTempFixedContractData.api.Controllers
         private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Int64 validateUsageUploadTempFixedContractDataAPIId;
 
         public ValidateUsageUploadTempFixedContractDataController(ILogger<ValidateUsageUploadTempFixedContractDataController> logger)
@@ -39,11 +37,8 @@ namespace ValidateUsageUploadTempFixedContractData.api.Controllers
         [Route("ValidateUsageUploadTempFixedContractData/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());            
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateUsageUploadTempFixedContractDataAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validateUsageUploadTempFixedContractDataAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -53,12 +48,12 @@ namespace ValidateUsageUploadTempFixedContractData.api.Controllers
         public void Validate([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -69,18 +64,8 @@ namespace ValidateUsageUploadTempFixedContractData.api.Controllers
                     sourceId,
                     validateUsageUploadTempFixedContractDataAPIId);
 
-                //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-                //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateUsageUploadTempFixedContractDataAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-
-                if(erroredPrerequisiteAPIs.Any())
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateUsageUploadTempFixedContractDataAPI, validateUsageUploadTempFixedContractDataAPIId, jsonObject))
                 {
-                    //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempFixedContractDataAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 

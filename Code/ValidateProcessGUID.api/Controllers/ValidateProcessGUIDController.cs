@@ -19,9 +19,7 @@ namespace ValidateProcessGUID.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Int64 validateProcessGUIDAPIId;
 
         public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger)
@@ -35,11 +33,8 @@ namespace ValidateProcessGUID.api.Controllers
         [Route("ValidateProcessGUID/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -48,12 +43,12 @@ namespace ValidateProcessGUID.api.Controllers
         [Route("ValidateProcessGUID/Validate")]
         public long Validate([FromBody] object data)
         {
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {               
@@ -65,7 +60,7 @@ namespace ValidateProcessGUID.api.Controllers
                     validateProcessGUIDAPIId);
 
                 //Get Process GUID
-                var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
+                var processGUID = _systemMethods.GetProcessGUIDFromJObject(jsonObject);
 
                 //Validate Process GUID
                 var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);

@@ -39,11 +39,8 @@ namespace LockUser.api.Controllers
         [Route("LockUser/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(lockUserAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(lockUserAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -58,7 +55,7 @@ namespace LockUser.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {

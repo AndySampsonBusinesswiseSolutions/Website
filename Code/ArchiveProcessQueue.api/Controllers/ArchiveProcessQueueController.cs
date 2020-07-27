@@ -22,26 +22,22 @@ namespace ArchiveProcessQueue.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
+        private readonly Int64 archiveProcessQueueAPIId;
 
         public ArchiveProcessQueueController(ILogger<ArchiveProcessQueueController> logger)
         {
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ArchiveProcessQueueAPI, _systemAPIPasswordEnums.ArchiveProcessQueueAPI);
+            archiveProcessQueueAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
         }
 
         [HttpPost]
         [Route("ArchiveProcessQueue/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());
-            var archiveProcessQueueAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(archiveProcessQueueAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(archiveProcessQueueAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -51,15 +47,15 @@ namespace ArchiveProcessQueue.api.Controllers
         public void Archive([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             //Get Process GUID
-            var processGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
+            var processGUID = _systemMethods.GetProcessGUIDFromJObject(jsonObject);
 
             try
             {

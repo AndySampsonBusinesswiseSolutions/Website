@@ -9,6 +9,11 @@ namespace MethodLibrary
     {
         public class Administration
         {
+            public long GetSystemUserId()
+            {
+                return User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            }
+
             public long Password_GetPasswordIdByPassword(string password)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -113,7 +118,7 @@ namespace MethodLibrary
 
             public long GetUserIdByEmailAddress(JObject jsonObject)
             {
-                var emailAddress = jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
+                var emailAddress = new System().GetEmailAddressFromJObject(jsonObject);
                 var userDetailId = UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
                 return User_GetUserIdByUserDetailId(userDetailId);
             }

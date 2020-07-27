@@ -5,7 +5,6 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 
 namespace StoreUsageUploadTempCustomerData.api.Controllers
 {
@@ -21,9 +20,7 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
         private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Int64 storeUsageUploadTempCustomerDataAPIId;
 
         public StoreUsageUploadTempCustomerDataController(ILogger<StoreUsageUploadTempCustomerDataController> logger)
@@ -37,11 +34,8 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
         [Route("StoreUsageUploadTempCustomerData/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());            
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeUsageUploadTempCustomerDataAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(storeUsageUploadTempCustomerDataAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -51,12 +45,12 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
         public void Store([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -67,18 +61,8 @@ namespace StoreUsageUploadTempCustomerData.api.Controllers
                     sourceId,
                     storeUsageUploadTempCustomerDataAPIId);
 
-                //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-                //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreUsageUploadTempCustomerDataAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-
-                if(erroredPrerequisiteAPIs.Any())
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreUsageUploadTempCustomerDataAPI, storeUsageUploadTempCustomerDataAPIId, jsonObject))
                 {
-                    //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, storeUsageUploadTempCustomerDataAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 

@@ -25,7 +25,6 @@ namespace Website.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 websiteAPIId;
@@ -41,14 +40,14 @@ namespace Website.api.Controllers
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
             {
                 //Get Process Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
-                var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+                var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
@@ -76,7 +75,7 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponse")]
         public IActionResult GetProcessResponse([FromBody] string processQueueGUID)
         {
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
@@ -124,7 +123,7 @@ namespace Website.api.Controllers
             var jsonObject = JObject.Parse(data.ToString());
 
             //Get Process Queue GUID
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             //Get Process Archive Id
             var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);

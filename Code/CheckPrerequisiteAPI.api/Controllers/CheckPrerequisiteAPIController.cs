@@ -21,10 +21,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.API.Attribute _systemAPIAttributes = new Enums.System.API.Attribute();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
 
         public CheckPrerequisiteAPIController(ILogger<CheckPrerequisiteAPIController> logger)
         {
@@ -36,12 +33,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
         [Route("CheckPrerequisiteAPI/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());
-            var checkPrerequisiteAPIAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CheckPrerequisiteAPIAPI);
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(_systemMethods.GetCheckPrerequisiteAPIAPIId(), JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -51,12 +44,12 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public List<string> Check([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             var prerequisiteAPIGUIDs = new List<string>();
             var completedPrerequisiteAPIGUIDs = new List<string>();
@@ -66,15 +59,15 @@ namespace CheckPrerequisiteAPI.api.Controllers
             try
             {
                 //If API list is passed through, then use that otherwise get API list from database
-                if(jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.APIGUIDList))
+                var APIGUIDList = _systemMethods.GetAPIGUIDListFromJObject(jsonObject);
+                if(!string.IsNullOrWhiteSpace(APIGUIDList))
                 {
-                    var APIGUIDList = jsonObject[_systemAPIRequiredDataKeyEnums.APIGUIDList].ToString();
                     prerequisiteAPIGUIDs = APIGUIDList.Replace("\"","").Replace("[", "").Replace("]", "").Split(',').ToList();
                 }
                 else
                 {
                     //Get prerequisite APIs from database
-                    var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+                    var callingGUID = _systemMethods.GetCallingGUIDFromJObject(jsonObject);
                     var prerequisiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(callingGUID);
                     var prerequisiteAPIGUIDAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.PrerequisiteAPIGUID);
                     prerequisiteAPIGUIDs = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);

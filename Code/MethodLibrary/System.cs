@@ -16,11 +16,113 @@ namespace MethodLibrary
     {
         public class System
         {
+            public string GetCallingGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+            }
+
+            public string GetProcessQueueGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            }
+
+            public string GetProcessGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
+            }
+
+            public string GetPasswordFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();
+            }
+
+            public string GetPageGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.PageGUID].ToString();
+            }
+
+            public string GetEmailAddressFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.EmailAddress].ToString();
+            }
+
+            public string GetFileGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.FileGUID].ToString();
+            }
+
+            public string GetFileNameFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.FileName].ToString();
+            }
+
+            public string GetFileContentFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.FileContent].ToString();
+            }
+
+            public string GetFileTypeFromJObject(JObject jsonObject)
+            {
+                return jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.FileType)
+                    ? jsonObject[_systemAPIRequiredDataKeyEnums.FileType].ToString()
+                    : string.Empty;
+            }
+
+            public string GetAPIGUIDListFromJObject(JObject jsonObject)
+            {
+                return jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.APIGUIDList)
+                    ? jsonObject[_systemAPIRequiredDataKeyEnums.APIGUIDList].ToString()
+                    : string.Empty;
+            }
+
+            public string GetCustomerGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+            }
+
+            public string GetCustomerDataFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.CustomerData].ToString();
+            }
+            
+            public string GetChildCustomerDataFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.ChildCustomerData].ToString();
+            }
+
+            public bool PrerequisiteAPIsAreSuccessful(string APIGUID, long APIID, JObject jsonObject)
+            {
+                var processQueueGUID = GetProcessQueueGUIDFromJObject(jsonObject);
+
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = GetCheckPrerequisiteAPIAPIId();
+
+                //Call CheckPrerequisiteAPI API
+                var API = PostAsJsonAsync(checkPrerequisiteAPIAPIId, APIGUID, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var erroredPrerequisiteAPIs = new Methods().GetArray(result.Result.ToString());
+
+                if(erroredPrerequisiteAPIs.Any())
+                {
+                    //Update Process Queue
+                    ProcessQueue_Update(processQueueGUID, APIID, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                }
+
+                return !erroredPrerequisiteAPIs.Any();
+            }
+
             public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, JObject jsonObject, bool buildJSONObject = true)
             {
                 var APIIsRunningRoute = GetAPIIsRunningRouteByAPIId(APIID);
 
                 return Post(APIID, callingGUID, APIIsRunningRoute, jsonObject, buildJSONObject);
+            }
+
+            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, JObject jsonObject, bool buildJSONObject = true)
+            {
+                var callingGUID = GetCallingGUIDFromJObject(jsonObject);
+
+                return PostAsJsonAsync(APIID, callingGUID, jsonObject, buildJSONObject);
             }
 
             public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string callingGUID, JObject jsonObject, bool buildJSONObject = true)

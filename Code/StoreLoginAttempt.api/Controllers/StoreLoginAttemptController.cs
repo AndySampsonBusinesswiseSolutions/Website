@@ -37,11 +37,8 @@ namespace StoreLoginAttempt.api.Controllers
         [Route("StoreLoginAttempt/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeLoginAttemptAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(storeLoginAttemptAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -96,7 +93,6 @@ namespace StoreLoginAttempt.api.Controllers
                         userId);
                 }
                 
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeLoginAttemptAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }

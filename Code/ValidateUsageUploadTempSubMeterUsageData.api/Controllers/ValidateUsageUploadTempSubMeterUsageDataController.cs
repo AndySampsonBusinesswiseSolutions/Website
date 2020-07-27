@@ -23,9 +23,7 @@ namespace ValidateUsageUploadTempSubMeterUsageData.api.Controllers
         private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private readonly Int64 validateUsageUploadTempSubMeterUsageDataAPIId;
 
         public ValidateUsageUploadTempSubMeterUsageDataController(ILogger<ValidateUsageUploadTempSubMeterUsageDataController> logger)
@@ -39,11 +37,8 @@ namespace ValidateUsageUploadTempSubMeterUsageData.api.Controllers
         [Route("ValidateUsageUploadTempSubMeterUsageData/IsRunning")]
         public bool IsRunning([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());            
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
-
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateUsageUploadTempSubMeterUsageDataAPIId, callingGUID, jsonObject);
+            _systemMethods.PostAsJsonAsync(validateUsageUploadTempSubMeterUsageDataAPIId, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -53,12 +48,12 @@ namespace ValidateUsageUploadTempSubMeterUsageData.api.Controllers
         public void Validate([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+            var createdByUserId = _administrationMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -69,18 +64,8 @@ namespace ValidateUsageUploadTempSubMeterUsageData.api.Controllers
                     sourceId,
                     validateUsageUploadTempSubMeterUsageDataAPIId);
 
-                //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
-
-                //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateUsageUploadTempSubMeterUsageDataAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-
-                if(erroredPrerequisiteAPIs.Any())
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateUsageUploadTempSubMeterUsageDataAPI, validateUsageUploadTempSubMeterUsageDataAPIId, jsonObject))
                 {
-                    //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateUsageUploadTempSubMeterUsageDataAPIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                     return;
                 }
 
