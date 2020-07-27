@@ -22,6 +22,7 @@ ALTER PROCEDURE [Temp.Customer].[FlexTrade_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
     @RowId INT,
     @BasketReference VARCHAR(255),
+    @TradeReference VARCHAR(255),
     @TradeDate VARCHAR(255),
     @TradeProduct VARCHAR(255),
     @Volume VARCHAR(255),
@@ -32,6 +33,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-20 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-25 -> Andrew Sampson -> Added TradeReference
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -43,6 +45,7 @@ BEGIN
         ProcessQueueGUID,
         RowId,
         BasketReference,
+        TradeReference,
         TradeDate,
         TradeProduct,
         Volume,
@@ -54,6 +57,7 @@ BEGIN
         @ProcessQueueGUID,
         @RowId,
         @BasketReference,
+        @TradeReference,
         @TradeDate,
         @TradeProduct,
         @Volume,
