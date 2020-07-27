@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-23
--- Description:	Insert new Local Distribution Zone detail into [Information].[MeterExemptionDetail] table
+-- Description:	Insert new Meter Exemption detail into [Information].[MeterExemptionDetail] table
 -- =============================================
 
 ALTER PROCEDURE [Information].[MeterExemptionDetail_Insert]

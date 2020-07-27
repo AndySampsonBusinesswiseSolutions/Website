@@ -6,47 +6,47 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[MeterExemption_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[RateUnit_Insert]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Information].[MeterExemption_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Information].[RateUnit_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-07-23
--- Description:	Insert new Meter Exemption into [Information].[MeterExemption] table
+-- Create date: 2020-07-27
+-- Description:	Insert new Rate Unit into [Information].[RateUnit] table
 -- =============================================
 
-ALTER PROCEDURE [Information].[MeterExemption_Insert]
+ALTER PROCEDURE [Information].[RateUnit_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @MeterExemptionGUID UNIQUEIDENTIFIER
+    @RateUnitDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-07-23 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-27 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[MeterExemption] WHERE MeterExemptionGUID = @MeterExemptionGUID
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[RateUnit] WHERE RateUnitDescription = @RateUnitDescription
         AND EffectiveToDateTime = '9999-12-31')
         BEGIN
-            INSERT INTO [Information].[MeterExemption]
+            INSERT INTO [Information].[RateUnit]
             (
                 CreatedByUserId,
                 SourceId,
-                MeterExemptionGUID
+                RateUnitDescription
             )
             VALUES
             (
                 @CreatedByUserId,
                 @SourceId,
-                @MeterExemptionGUID
+                @RateUnitDescription
             )
         END
 END
