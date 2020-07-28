@@ -5,6 +5,7 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/kWh'
-EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/day'
-EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/kVa/day'
+EXEC [Customer].[TradeAttribute_Insert] @CreatedByUserId, @SourceId, 'Trade Reference'
+EXEC [Customer].[TradeAttribute_Insert] @CreatedByUserId, @SourceId, 'Trade Date'
+EXEC [Customer].[TradeAttribute_Insert] @CreatedByUserId, @SourceId, 'Trade Volume'
+EXEC [Customer].[TradeAttribute_Insert] @CreatedByUserId, @SourceId, 'Trade Price'

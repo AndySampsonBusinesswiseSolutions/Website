@@ -5,6 +5,6 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/kWh'
-EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/day'
-EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/kVa/day'
+EXEC [Customer].[ContractMeterAttribute_Insert] @CreatedByUserId, @SourceId, 'Contract Start Date'
+EXEC [Customer].[ContractMeterAttribute_Insert] @CreatedByUserId, @SourceId, 'Contract End Date'
+EXEC [Customer].[ContractMeterAttribute_Insert] @CreatedByUserId, @SourceId, 'Rate Count'
