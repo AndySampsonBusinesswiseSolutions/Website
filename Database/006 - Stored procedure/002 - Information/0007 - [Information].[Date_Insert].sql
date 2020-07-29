@@ -24,12 +24,14 @@ ALTER PROCEDURE [Information].[Date_Insert]
     @DateDescription VARCHAR(255),
     @DayOfTheWeekId BIGINT,
     @MonthId BIGINT,
-    @YearId BIGINT
+    @YearId BIGINT,
+    @WeekId BIGINT
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-25 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-29 -> Andrew Sampson -> Added WeekId
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -46,7 +48,8 @@ BEGIN
                 DateDescription,
                 DayOfTheWeekId,
                 MonthId,
-                YearId
+                YearId,
+                WeekId
             )
             VALUES
             (
@@ -55,7 +58,8 @@ BEGIN
                 @DateDescription,
                 @DayOfTheWeekId,
                 @MonthId,
-                @YearId
+                @YearId,
+                @WeekId
             )
         END
 END
