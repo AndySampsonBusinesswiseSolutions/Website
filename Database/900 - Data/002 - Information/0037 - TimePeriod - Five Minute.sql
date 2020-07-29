@@ -293,3 +293,17 @@ EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '23:40:00', 
 EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '23:45:00', '23:50:00'
 EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '23:50:00', '23:55:00'
 EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '23:55:00', '00:00:00'
+
+--Extra Five Minute periods for October Clock Change day
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:31:00', '01:36:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:36:00', '01:41:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:41:00', '01:46:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:46:00', '01:51:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:51:00', '01:56:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:56:00', '02:01:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '02:01:00', '02:06:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '02:06:00', '02:11:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '02:11:00', '02:16:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '02:16:00', '02:21:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '02:21:00', '02:26:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '02:26:00', '02:31:00'

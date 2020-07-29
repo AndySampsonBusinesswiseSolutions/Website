@@ -53,5 +53,7 @@ EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '22:00:00', 
 EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '22:30:00', '23:00:00'
 EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '23:00:00', '23:30:00'
 EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '23:30:00', '00:00:00'
-EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:30:00', '01:31:00'
-EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:31:00', '01:32:00'
+
+--Extra Half Hour periods for October Clock Change day
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:01:00', '01:31:00'
+EXEC [Information].[TimePeriod_Insert] @CreatedByUserId, @SourceId, '01:02:00', '01:32:00'

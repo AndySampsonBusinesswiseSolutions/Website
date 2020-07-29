@@ -45,3 +45,47 @@ WHILE @TempTime <= @EndTime
 		SET @TempTime = DATEADD(MINUTE, 30, @TempTime)
         SET @Counter = @Counter + 1
 	END
+
+SET @TimePeriodId = (
+    SELECT
+        TimePeriodId
+    FROM
+        [Information].[TimePeriod]
+    WHERE
+        StartTime = '01:01:00'
+        AND EndTime = '01:31:00'
+        AND EffectiveToDateTime = '9999-12-31'
+)
+
+SET @HalfHourId = (
+    SELECT
+        HalfHourId
+    FROM
+        [Information].[HalfHour]
+    WHERE
+        HalfHourDescription = 'Half Hour 49'
+)
+
+EXEC [Mapping].[HalfHourToTimePeriod] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId
+
+SET @TimePeriodId = (
+    SELECT
+        TimePeriodId
+    FROM
+        [Information].[TimePeriod]
+    WHERE
+        StartTime = '01:02:00'
+        AND EndTime = '01:32:00'
+        AND EffectiveToDateTime = '9999-12-31'
+)
+
+SET @HalfHourId = (
+    SELECT
+        HalfHourId
+    FROM
+        [Information].[HalfHour]
+    WHERE
+        HalfHourDescription = 'Half Hour 50'
+)
+
+EXEC [Mapping].[HalfHourToTimePeriod] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId

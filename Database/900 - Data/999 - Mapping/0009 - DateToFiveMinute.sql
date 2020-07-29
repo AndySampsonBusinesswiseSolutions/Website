@@ -6,7 +6,7 @@ DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information]
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
 --if last sunday of march, ignore 01:00 to 01:55
---if last sunday of october, add ???
+--if last sunday of october, add 01:36 to 02:26
 
 SELECT
 	DATEADD(DAY, -7, CONVERT(DATE, [Date].[DateDescription])) ClockChangeDate
@@ -36,7 +36,7 @@ CROSS JOIN
     [Information].[FiveMinute]
 WHERE
 	ClockChangeDate.ClockChangeDate IS NULL
-    AND FiveMinute.FiveMinuteDescription NOT IN ('Extra Day Five Minutes')--TODO
+    AND FiveMinute.FiveMinuteDescription NOT IN ('Five Minute 289', 'Five Minute 290', 'Five Minute 291', 'Five Minute 292', 'Five Minute 293', 'Five Minute 294', 'Five Minute 295', 'Five Minute 296', 'Five Minute 297', 'Five Minute 298', 'Five Minute 299', 'Five Minute 300')
 
 INSERT INTO
     #DateToFiveMinuteMapping
@@ -57,7 +57,7 @@ CROSS JOIN
 WHERE
 	DATEPART(MONTH, ClockChangeDate.ClockChangeDate) = 3
     AND FiveMinute.FiveMinuteDescription NOT IN ('Five Minute 13', 'Five Minute 14', 'Five Minute 15', 'Five Minute 16', 'Five Minute 17', 'Five Minute 18', 'Five Minute 19', 'Five Minute 20', 'Five Minute 21', 'Five Minute 22', 'Five Minute 23', 'Five Minute 24')
-    AND FiveMinute.FiveMinuteDescription NOT IN ('Extra Day Five Minutes') --TODO
+    AND FiveMinute.FiveMinuteDescription NOT IN ('Five Minute 289', 'Five Minute 290', 'Five Minute 291', 'Five Minute 292', 'Five Minute 293', 'Five Minute 294', 'Five Minute 295', 'Five Minute 296', 'Five Minute 297', 'Five Minute 298', 'Five Minute 299', 'Five Minute 300')
 
 INSERT INTO
     #DateToFiveMinuteMapping
