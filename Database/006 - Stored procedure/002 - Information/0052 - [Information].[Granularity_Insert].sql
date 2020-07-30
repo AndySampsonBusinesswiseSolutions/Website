@@ -22,12 +22,14 @@ ALTER PROCEDURE [Information].[Granularity_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
     @GranularityDescription VARCHAR(255),
-    @GranularityDisplayDescription VARCHAR(255)
+    @GranularityDisplayDescription VARCHAR(255),
+    @IsTimePeriod BIT
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-29 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-30 -> Andrew Sampson -> Added IsTimePeriod
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -42,14 +44,16 @@ BEGIN
                 CreatedByUserId,
                 SourceId,
                 GranularityDescription,
-                GranularityDisplayDescription
+                GranularityDisplayDescription,
+                IsTimePeriod
             )
             VALUES
             (
                 @CreatedByUserId,
                 @SourceId,
                 @GranularityDescription,
-                @GranularityDisplayDescription
+                @GranularityDisplayDescription,
+                @IsTimePeriod
             )
         END
 END
