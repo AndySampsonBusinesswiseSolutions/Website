@@ -78,7 +78,7 @@ BEGIN
         SET NOCOUNT ON;
 
         UPDATE
-            [' + @SchemaName +'].[' + @StoredProcedureName + ']
+            [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'History]
         SET
             EffectiveToDateTime = GETUTCDATE()
         WHERE

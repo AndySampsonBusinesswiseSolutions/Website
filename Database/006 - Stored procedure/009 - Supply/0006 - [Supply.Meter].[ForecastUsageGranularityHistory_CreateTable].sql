@@ -5,9 +5,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[ForecastUsage' + @Granularity + 'History_CreateTable]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[ForecastUsageGranularityHistory_CreateTable]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply.Meter].[ForecastUsage' + @Granularity + 'History_CreateTable] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply.Meter].[ForecastUsageGranularityHistory_CreateTable] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -17,7 +17,7 @@ GO
 -- Description:	Create new ForecastUsageHistory table for a granularity for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply.Meter].[ForecastUsage' + @Granularity + 'History_CreateTable]
+ALTER PROCEDURE [Supply.Meter].[ForecastUsageGranularityHistory_CreateTable]
     @MeterId BIGINT,
     @Granularity VARCHAR(255)
 AS
@@ -56,7 +56,7 @@ BEGIN
             SET @SQL = @SQL + 'DateId BIGINT NOT NULL,'
         END
         
-    SET @SQL = @SQL + 'Usage DECIMAL(18,10)
+    SET @SQL = @SQL + 'Usage DECIMAL(18,10) NOT NULL
 	)  ON [Supply]'
     EXEC sp_sqlexec @SQL
 
