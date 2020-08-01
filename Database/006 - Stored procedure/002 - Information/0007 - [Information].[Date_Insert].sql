@@ -21,17 +21,15 @@ GO
 ALTER PROCEDURE [Information].[Date_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @DateDescription VARCHAR(255),
-    @DayOfTheWeekId BIGINT,
-    @MonthId BIGINT,
-    @YearId BIGINT,
-    @WeekId BIGINT
+    @DateDescription VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-25 -> Andrew Sampson -> Initial development of script
     -- 2020-07-29 -> Andrew Sampson -> Added WeekId
+    -- 2020-08-01 -> Andrew Sampson -> Removed DayOfTheWeek, Week, Month and Year
+    --                                 as these are now handled in mapping stored procedures                                       
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -45,21 +43,13 @@ BEGIN
             (
                 CreatedByUserId,
                 SourceId,
-                DateDescription,
-                DayOfTheWeekId,
-                MonthId,
-                YearId,
-                WeekId
+                DateDescription
             )
             VALUES
             (
                 @CreatedByUserId,
                 @SourceId,
-                @DateDescription,
-                @DayOfTheWeekId,
-                @MonthId,
-                @YearId,
-                @WeekId
+                @DateDescription
             )
         END
 END

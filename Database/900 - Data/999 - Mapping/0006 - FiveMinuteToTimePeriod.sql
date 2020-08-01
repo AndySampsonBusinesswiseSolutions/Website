@@ -5,10 +5,10 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-DECLARE @StartTime TIME = '00:00:00'
-DECLARE @EndTime TIME = '23:55:00'
-DECLARE @TempTime TIME
-DECLARE @TempEndTime TIME
+DECLARE @StartTime DATETIME = '2000-01-01 00:00:00'
+DECLARE @EndTime DATETIME = '2000-01-01 23:55:00'
+DECLARE @TempTime DATETIME
+DECLARE @TempEndTime DATETIME
 DECLARE @TimePeriodId BIGINT
 DECLARE @FiveMinuteId BIGINT
 DECLARE @Counter INT
@@ -37,17 +37,17 @@ WHILE @TempTime <= @EndTime
             FROM
                 [Information].[FiveMinute]
             WHERE
-                FiveMinuteDescription = 'Five Minute ' + @Counter
+                FiveMinuteDescription = 'Five Minute ' + CONVERT(VARCHAR, @Counter)
         )
 
-        EXEC [Mapping].[FiveMinuteToTimePeriod] @CreatedByUserId, @SourceId, @FiveMinuteId, @TimePeriodId
+        EXEC [Mapping].[FiveMinuteToTimePeriod_Insert] @CreatedByUserId, @SourceId, @FiveMinuteId, @TimePeriodId
 
 		SET @TempTime = DATEADD(MINUTE, 5, @TempTime)
         SET @Counter = @Counter + 1
 	END
 
-SET @StartTime = '01:31:00'
-SET @EndTime = '02:26:00'
+SET @StartTime = '2000-01-01 01:31:00'
+SET @EndTime = '2000-01-01 02:26:00'
 SET @TempTime = @StartTime
 
 WHILE @TempTime <= @EndTime
@@ -71,10 +71,10 @@ WHILE @TempTime <= @EndTime
             FROM
                 [Information].[FiveMinute]
             WHERE
-                FiveMinuteDescription = 'Five Minute ' + @Counter
+                FiveMinuteDescription = 'Five Minute ' + CONVERT(VARCHAR, @Counter)
         )
 
-        EXEC [Mapping].[FiveMinuteToTimePeriod] @CreatedByUserId, @SourceId, @FiveMinuteId, @TimePeriodId
+        EXEC [Mapping].[FiveMinuteToTimePeriod_Insert] @CreatedByUserId, @SourceId, @FiveMinuteId, @TimePeriodId
 
 		SET @TempTime = DATEADD(MINUTE, 5, @TempTime)
         SET @Counter = @Counter + 1

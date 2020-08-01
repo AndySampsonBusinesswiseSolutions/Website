@@ -42,11 +42,8 @@ BEGIN
         ContractEndDate,
         Product,
         StandingCharge,
-        ShapeFee,
-        AdminFee,
-        ImbalanceFee,
-        RiskFee,
-        GreenPremium
+        RateType,
+        Value
     FROM
         [Temp.Customer].[FlexContract]
     WHERE

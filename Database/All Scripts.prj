@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>f057c738-8510-4eab-8cb5-0e804e9b7a08</ID>
-    <DateCreated>2020-08-01T08:47:38.3934126+01:00</DateCreated>
+    <ID>743f4e74-7ebe-4fb1-879d-0d3921afe5f4</ID>
+    <DateCreated>2020-08-01T10:19:42.7157529+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>N1OYdm/R/Dyt8iVeNFL+GQ==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe60I1e36nScApST0/NZe0agI=</Password>
+    <Login>nFbx/CbKWTklWSSuaEtFlA==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6+NAwsK/1dFmQPPnNoPZU60=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -1615,6 +1615,34 @@
     <ID>7555cd59-b08c-4f98-a504-a157c80f2e24</ID>
     <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0049 - [Mapping].[DateToHalfHour].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>275aafff-0ee2-4059-8dee-4aa069a65223</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0050 - [Mapping].[DateToDayOfTheWeek].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b940c4f0-8e90-4eb7-95a4-f29b93a9a356</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0051 - [Mapping].[DateToMonth].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>79b4e64c-3f8e-4208-9fe1-3ac217a7e742</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0052 - [Mapping].[DateToYear].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>7dca7567-bd1c-4f26-9b33-70d6e995fd06</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0053 - [Mapping].[DateToWeek].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -3575,6 +3603,34 @@
     <ID>70d744de-461c-415e-b99a-9fafa58c4fe1</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0010 - DateToHalfHour.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6264a73c-7eaf-4d83-9051-4e7300b368ee</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0011 - DateToDayOfTheWeek.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8b4ab09e-8b27-40af-92cb-df22f7177571</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0012 - DateToWeek.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cdabc05b-3a76-4bdb-95fa-058308697d16</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0013 - DateToMonth.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>adcf03d0-c8fb-428f-9ec9-018a6c192938</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0014 - DateToYear.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>

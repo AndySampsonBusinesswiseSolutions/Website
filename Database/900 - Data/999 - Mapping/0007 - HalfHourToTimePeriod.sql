@@ -5,10 +5,10 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-DECLARE @StartTime TIME = '00:00:00'
-DECLARE @EndTime TIME = '23:30:00'
-DECLARE @TempTime TIME
-DECLARE @TempEndTime TIME
+DECLARE @StartTime DATETIME = '2000-01-01 00:00:00'
+DECLARE @EndTime DATETIME = '2000-01-01 23:30:00'
+DECLARE @TempTime DATETIME
+DECLARE @TempEndTime DATETIME
 DECLARE @TimePeriodId BIGINT
 DECLARE @HalfHourId BIGINT
 DECLARE @Counter INT
@@ -37,10 +37,10 @@ WHILE @TempTime <= @EndTime
             FROM
                 [Information].[HalfHour]
             WHERE
-                HalfHourDescription = 'Half Hour ' + @Counter
+                HalfHourDescription = 'Half Hour ' + CONVERT(VARCHAR, @Counter)
         )
 
-        EXEC [Mapping].[HalfHourToTimePeriod] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId
+        EXEC [Mapping].[HalfHourToTimePeriod_Insert] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId
 
 		SET @TempTime = DATEADD(MINUTE, 30, @TempTime)
         SET @Counter = @Counter + 1
@@ -66,7 +66,7 @@ SET @HalfHourId = (
         HalfHourDescription = 'Half Hour 49'
 )
 
-EXEC [Mapping].[HalfHourToTimePeriod] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId
+EXEC [Mapping].[HalfHourToTimePeriod_Insert] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId
 
 SET @TimePeriodId = (
     SELECT
@@ -88,4 +88,4 @@ SET @HalfHourId = (
         HalfHourDescription = 'Half Hour 50'
 )
 
-EXEC [Mapping].[HalfHourToTimePeriod] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId
+EXEC [Mapping].[HalfHourToTimePeriod_Insert] @CreatedByUserId, @SourceId, @HalfHourId, @TimePeriodId

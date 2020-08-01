@@ -35,7 +35,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[TimePeriod] WHERE StartTime = @StartTime
-        AND EndDate = @EndDate
+        AND EndTime = @EndTime
         AND EffectiveToDateTime = '9999-12-31')
         BEGIN
             INSERT INTO [Information].[TimePeriod]
