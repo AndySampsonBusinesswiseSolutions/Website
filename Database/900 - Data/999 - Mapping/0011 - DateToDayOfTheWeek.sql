@@ -23,11 +23,11 @@ INTO @DateId, @DateDescription
 
 WHILE @@FETCH_STATUS = 0
 	BEGIN
-		SET @DayOfTheWeekId = (SELECT DayOfTheWeekId FROM [Information].[DayOfTheWeek] WHERE [DayOfTheWeek].DayOfTheWeekDescription = DATEPART(dw, @DateDescription))
-		EXEC [Mapping].[DateToDayOfTheWeek_Insert] @CreatedByUserId, @SourceId, @DateDescription, @DayOfTheWeekId
+		SET @DayOfTheWeekId = (SELECT DayOfTheWeekId FROM [Information].[DayOfTheWeek] WHERE [DayOfTheWeek].DayOfTheWeekDescription = DATENAME(dw, @DateDescription))
+		EXEC [Mapping].[DateToDayOfTheWeek_Insert] @CreatedByUserId, @SourceId, @DateId, @DayOfTheWeekId
 
 		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateDescription
+		INTO @DateId, @DateDescription
 	END
 CLOSE DateDescriptionCursor;
 DEALLOCATE DateDescriptionCursor;

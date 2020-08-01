@@ -24,10 +24,10 @@ INTO @DateId, @DateDescription
 WHILE @@FETCH_STATUS = 0
 	BEGIN
 		SET @YearId = (SELECT YearId FROM [Information].[Year] WHERE [Year].YearDescription = DATEPART(year, @DateDescription))
-		EXEC [Mapping].[DateToYear_Insert] @CreatedByUserId, @SourceId, @DateDescription, @YearId
+		EXEC [Mapping].[DateToYear_Insert] @CreatedByUserId, @SourceId, @DateId, @YearId
 
 		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateDescription
+		INTO @DateId, @DateDescription
 	END
 CLOSE DateDescriptionCursor;
 DEALLOCATE DateDescriptionCursor;

@@ -23,11 +23,11 @@ INTO @DateId, @DateDescription
 
 WHILE @@FETCH_STATUS = 0
 	BEGIN
-		SET @WeekId = (SELECT WeekId FROM [Information].[Week] WHERE [Week].WeekDescription = DATEPART(wk, @DateDescription))
-		EXEC [Mapping].[DateToWeek_Insert] @CreatedByUserId, @SourceId, @DateDescription, @WeekId
+		SET @WeekId = (SELECT WeekId FROM [Information].[Week] WHERE [Week].WeekDescription = 'Week ' + CONVERT(VARCHAR, DATEPART(wk, @DateDescription)))
+		EXEC [Mapping].[DateToWeek_Insert] @CreatedByUserId, @SourceId, @DateId, @WeekId
 
 		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateDescription
+		INTO @DateId, @DateDescription
 	END
 CLOSE DateDescriptionCursor;
 DEALLOCATE DateDescriptionCursor;

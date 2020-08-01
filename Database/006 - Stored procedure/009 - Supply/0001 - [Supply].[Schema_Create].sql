@@ -30,7 +30,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SQL NVARCHAR(255) = N'CREATE SCHEMA [Supply.Meter' + CONVERT(NVARCHAR, @MeterId) + ']'
+    DECLARE @SQL NVARCHAR(MAX) = N'CREATE SCHEMA [Supply.Meter' + CONVERT(NVARCHAR, @MeterId) + ']'
     EXEC sp_sqlexec @SQL
 END
 GO

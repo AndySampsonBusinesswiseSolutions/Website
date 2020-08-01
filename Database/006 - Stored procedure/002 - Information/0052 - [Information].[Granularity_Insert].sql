@@ -21,6 +21,7 @@ GO
 ALTER PROCEDURE [Information].[Granularity_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
+    @GranularityCode VARCHAR(255),
     @GranularityDescription VARCHAR(255),
     @GranularityDisplayDescription VARCHAR(255),
     @IsTimePeriod BIT
@@ -43,6 +44,7 @@ BEGIN
             (
                 CreatedByUserId,
                 SourceId,
+                GranularityCode,
                 GranularityDescription,
                 GranularityDisplayDescription,
                 IsTimePeriod
@@ -51,6 +53,7 @@ BEGIN
             (
                 @CreatedByUserId,
                 @SourceId,
+                @GranularityCode,
                 @GranularityDescription,
                 @GranularityDisplayDescription,
                 @IsTimePeriod

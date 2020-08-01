@@ -33,21 +33,23 @@ BEGIN
     DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
     DECLARE @TodaysDate NVARCHAR(10) = (SELECT FORMAT(GetDate(), 'yyyy-MM-dd'))
 
-    DECLARE @SQL NVARCHAR(255) = N'
-    USE [EMaaS]
-    GO
-
+    DECLARE @SQL NVARCHAR(MAX) = N'
     SET ANSI_NULLS ON
-    GO
     SET QUOTED_IDENTIFIER ON
-    GO
     IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[' + @SchemaName +'].[LoadedUsage_Insert]''))
     BEGIN
         EXEC(''CREATE PROCEDURE [' + @SchemaName +'].[LoadedUsage_Insert] AS BEGIN SET NOCOUNT ON; END'')
-    END
-    GO
+    END'
+
+	DECLARE @MetaSQL NVARCHAR(MAX) = '
+	USE [EMaaS]
+	EXEC (''' + REPLACE(@SQL, '''', '''''') + ''')
+	'
+
+	EXEC sp_sqlexec @MetaSQL
     
-    -- =============================================
+    SET @SQL = '
+	-- =============================================
     -- Author:		System Generated
     -- Create date: ' + @TodaysDate + '
     -- Description:	Insert usage into [' + @SchemaName +'].[LoadedUsage] table
@@ -88,8 +90,14 @@ BEGIN
             @TimePeriodId,
             @UsageTypeId,
             @Usage
-        )'
+        )
+    END'
 
-    EXEC sp_sqlexec @SQL
+    SET @MetaSQL = '
+	USE [EMaaS]
+	EXEC (''' + REPLACE(@SQL, '''', '''''') + ''')
+	'
+
+    EXEC sp_sqlexec @MetaSQL
 END
 GO

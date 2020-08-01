@@ -19,7 +19,7 @@ GO
 
 ALTER PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateTable]
     @MeterId BIGINT,
-    @Granularity VARCHAR(255)
+    @GranularityCode VARCHAR(255)
 AS
 BEGIN
     -- =============================================
@@ -32,18 +32,18 @@ BEGIN
 	SET NOCOUNT ON;
 
     DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
-    DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'Latest'
-    DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityDescription = @Granularity)
+    DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @GranularityCode + 'Latest'
+    DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
     DECLARE @ForeignKeyName NVARCHAR(255)
     DECLARE @v sql_variant 
 
     --Create base table
-    DECLARE @SQL NVARCHAR(255) = N'
+    DECLARE @SQL NVARCHAR(MAX) = N'
     USE [EMaaS]
 
     CREATE TABLE [' + @SchemaName + '].[' + @TableName + ']
 	(
-        ' + @Granularity + 'Id BIGINT NOT NULL,'
+        ' + @GranularityCode + 'Id BIGINT NOT NULL,'
 
     IF @RequiresDateColumn = 1
         BEGIN
@@ -55,22 +55,22 @@ BEGIN
     EXEC sp_sqlexec @SQL
 
     --Add Granularity Foreign Key
-    SET @ForeignKeyName = 'FK_' + @TableName + '_' + @Granularity + 'Id'
+    SET @ForeignKeyName = 'FK_' + @TableName + '_' + @GranularityCode + 'Id'
     SET @SQL = N'
     USE [EMaaS]
     
     ALTER TABLE [' + @SchemaName + '].[' + @TableName + '] ADD CONSTRAINT
 	' + @ForeignKeyName + ' FOREIGN KEY
 	(
-	' + @Granularity + 'Id
-	) REFERENCES [Information].[' + @Granularity + ']
+	' + @GranularityCode + 'Id
+	) REFERENCES [Information].[' + @GranularityCode + ']
 	(
-	' + @Granularity + 'Id
+	' + @GranularityCode + 'Id
 	) ON UPDATE NO ACTION 
 	 ON DELETE NO ACTION'
     EXEC sp_sqlexec @SQL
 
-    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @Granularity + 'Id to [Information].[' + @Granularity + '].' + @Granularity + 'Id'
+    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @GranularityCode + 'Id to [Information].[' + @GranularityCode + '].' + @GranularityCode + 'Id'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', @TableName, N'CONSTRAINT', @ForeignKeyName
 
     --Add Date Foreign Key if required

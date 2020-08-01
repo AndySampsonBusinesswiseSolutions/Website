@@ -34,7 +34,7 @@ BEGIN
     DECLARE @v sql_variant 
 
     --Create base table
-    DECLARE @SQL NVARCHAR(255) = N'
+    DECLARE @SQL NVARCHAR(MAX) = N'
     USE [EMaaS]
 
     CREATE TABLE [' + @SchemaName + '].[EstimatedAnnualUsage]

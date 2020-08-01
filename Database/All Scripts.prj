@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>743f4e74-7ebe-4fb1-879d-0d3921afe5f4</ID>
-    <DateCreated>2020-08-01T10:19:42.7157529+01:00</DateCreated>
+    <ID>caab6297-d5aa-402f-b868-7804e7457546</ID>
+    <DateCreated>2020-08-01T13:38:46.4263972+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>nFbx/CbKWTklWSSuaEtFlA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6+NAwsK/1dFmQPPnNoPZU60=</Password>
+    <Login>0lKjYCynCX5LjgH2k0M4uw==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe629sKBD8W7OAM4keDS1k7oo=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -2725,6 +2725,97 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>82c6a2be-123f-43bb-a0d6-4a1017e366bb</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0001 - [Supply].[Schema_Create].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bf505af1-7cf4-4059-9a05-75c0be07d3c0</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0002 - [Supply].[ForecastUsageGranularityLatest_CreateTable].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>872ec7b0-d1ae-4753-8466-bb85e35a499f</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0003 - [Supply].[ForecastUsageGranularityLatest_CreateDeleteStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>57d1e5a6-442c-42c6-9a64-25de64e9422a</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0004 - [Supply].[ForecastUsageGranularityLatest_CreateInsertStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b5ef858f-7747-4643-8043-caffa85bc8d0</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0005 - [Supply].[ForecastUsageGranularityHistory_CreateTable].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f8d4cd1f-fc44-4cc6-a518-a73b2a719874</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0006 - [Supply].[ForecastUsageGranularityHistory_CreateDeleteStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cc96b69d-1c2d-4298-9ebb-316cd121762e</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0007 - [Supply].[ForecastUsageGranularityHistory_CreateInsertStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>354487bb-c761-4a67-b8e3-8ae96f293934</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0008 - [Supply].[EstimatedAnnualUsage_CreateTable].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>278032a3-ac9e-4db2-8551-48025a478e85</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0009 - [Supply].[EstimatedAnnualUsage_CreateDeleteStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>340982c4-7c8a-43fb-9bab-a72d08b7fc44</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0010 - [Supply].[EstimatedAnnualUsage_CreateInsertStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f21752ce-938d-4ced-a711-27d66fb60e63</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0011 - [Supply].[LoadedUsage_CreateTable].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>efdc4dc6-6fc2-4c44-90de-43176f51b5ca</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0012 - [Supply].[LoadedUsage_CreateDeleteStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>74ada187-dfb2-4af0-81dc-357ec8ed1779</ID>
+    <ParentFolder_ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\009 - Supply\0013 - [Supply].[LoadedUsage_CreateInsertStoredProcedure].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>3b21f3a4-5d44-4a25-be38-45e0b89bc94d</ID>
     <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0001 - [Mapping].[PageToProcess_Insert].sql</FullName>
@@ -2973,6 +3064,34 @@
     <ID>c56646bc-1dbb-4d25-9466-4a92a11c9021</ID>
     <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0036 - [Mapping].[DateToHalfHour_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>589581c1-386a-46c0-b31a-be3a80cd088e</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0037 - [Mapping].[DateToDayOfTheWeek_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>483543be-3bc0-4256-8200-d9594fcc424b</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0038 - [Mapping].[DateToWeek_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>74bb0aa7-3dd0-4de5-b0ca-46e913b0ee9a</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0039 - [Mapping].[DateToMonth_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bd04dd02-230b-41eb-b192-bee2184ec6b4</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0040 - [Mapping].[DateToYear_Insert].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -3593,44 +3712,44 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>888d2974-f0d5-4fb8-b918-87fa00a92f30</ID>
+    <ID>86571198-1ecb-485e-a9dc-efd5295fbe0a</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0009 - DateToFiveMinute.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0009 - DateToYear.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>70d744de-461c-415e-b99a-9fafa58c4fe1</ID>
+    <ID>82d311e9-2afc-46a1-a9b2-eaf49bd4438e</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0010 - DateToHalfHour.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>6264a73c-7eaf-4d83-9051-4e7300b368ee</ID>
+    <ID>8e8050ab-deea-496d-af05-8d23efdb52a1</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0011 - DateToDayOfTheWeek.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>8b4ab09e-8b27-40af-92cb-df22f7177571</ID>
+    <ID>3d65e169-e968-418b-8810-73fe3a0fa5e0</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0012 - DateToWeek.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>cdabc05b-3a76-4bdb-95fa-058308697d16</ID>
+    <ID>a73412fb-d9b6-4593-829f-509bb4359add</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0013 - DateToMonth.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>adcf03d0-c8fb-428f-9ec9-018a6c192938</ID>
+    <ID>c010f33e-e38f-48f8-9f75-30c951fab5f5</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0014 - DateToYear.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0014 - DateToFiveMinute.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -10930,6 +11049,11 @@
     <ID>44cc1cf4-6d27-47ac-bc67-010b87cb4f77</ID>
     <ParentFolder_ID>c8ef2289-1608-4f3a-bece-53974751cdf1</ParentFolder_ID>
     <Name>008 - Supplier</Name>
+  </ScriptFolder>
+  <ScriptFolder>
+    <ID>a55c15d3-0dfb-406c-a993-3c8d281f72c2</ID>
+    <ParentFolder_ID>c8ef2289-1608-4f3a-bece-53974751cdf1</ParentFolder_ID>
+    <Name>009 - Supply</Name>
   </ScriptFolder>
   <ScriptFolder>
     <ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ID>

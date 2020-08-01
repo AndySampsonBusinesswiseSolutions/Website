@@ -5,10 +5,10 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Five Minute', 'Five Minutely', 1
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Half Hour', 'Half Hourly', 1
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Day', 'Daily', 0
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Week', 'Weekly', 0
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Month', 'Monthly', 0
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Quarter', 'Quarterly', 0
-EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Year', 'Yearly', 0
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'FiveMinute', 'Five Minute', 'Five Minutely', 1
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'HalfHour', 'Half Hour', 'Half Hourly', 1
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Date', 'Day', 'Daily', 0
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Week', 'Week', 'Weekly', 0
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Month', 'Month', 'Monthly', 0
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Quarter', 'Quarter', 'Quarterly', 0
+EXEC [Information].[Granularity_Insert] @CreatedByUserId, @SourceId, 'Year', 'Year', 'Yearly', 0

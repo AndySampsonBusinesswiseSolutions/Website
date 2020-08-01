@@ -19,7 +19,7 @@ GO
 
 ALTER PROCEDURE [Supply].[ForecastUsageGranularityHistory_CreateTable]
     @MeterId BIGINT,
-    @Granularity VARCHAR(255)
+    @GranularityCode VARCHAR(255)
 AS
 BEGIN
     -- =============================================
@@ -32,24 +32,24 @@ BEGIN
 	SET NOCOUNT ON;
 
     DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
-    DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'History'
-    DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityDescription = @Granularity)
+    DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @GranularityCode + 'History'
+    DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
     DECLARE @KeyName NVARCHAR(255)
     DECLARE @v sql_variant 
 
     --Create base table
-    DECLARE @SQL NVARCHAR(255) = N'
+    DECLARE @SQL NVARCHAR(MAX) = N'
     USE [EMaaS]
 
     CREATE TABLE [' + @SchemaName + '].[' + @TableName + ']
 	(
-        ForecastUsage' + @Granularity + 'HistoryId BIGINT NOT NULL,
+        ForecastUsage' + @GranularityCode + 'HistoryId BIGINT NOT NULL,
         EffectiveFromDateTime DATETIME NOT NULL,
         EffectiveToDateTime DATETIME NOT NULL,
         CreatedDateTime DATETIME NOT NULL,
         CreatedByUserId BIGINT NOT NULL,
         SourceId BIGINT NOT NULL,
-        ' + @Granularity + 'Id BIGINT NOT NULL,'
+        ' + @GranularityCode + 'Id BIGINT NOT NULL,'
 
     IF @RequiresDateColumn = 1
         BEGIN
@@ -130,22 +130,22 @@ BEGIN
     SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].SourceId to [Information].[Source].SourceId'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', @TableName, N'CONSTRAINT', @KeyName
 
-    SET @KeyName = 'FK_' + @TableName + '_' + @Granularity + 'Id'
+    SET @KeyName = 'FK_' + @TableName + '_' + @GranularityCode + 'Id'
     SET @SQL = N'
     USE [EMaaS]
     
     ALTER TABLE [' + @SchemaName + '].[' + @TableName + '] ADD CONSTRAINT
 	' + @KeyName + ' FOREIGN KEY
 	(
-	' + @Granularity + 'Id
-	) REFERENCES [Information].[' + @Granularity + ']
+	' + @GranularityCode + 'Id
+	) REFERENCES [Information].[' + @GranularityCode + ']
 	(
-	' + @Granularity + 'Id
+	' + @GranularityCode + 'Id
 	) ON UPDATE NO ACTION 
 	 ON DELETE NO ACTION'
     EXEC sp_sqlexec @SQL
 
-    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @Granularity + 'Id to [Information].[' + @Granularity + '].' + @Granularity + 'Id'
+    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @GranularityCode + 'Id to [Information].[' + @GranularityCode + '].' + @GranularityCode + 'Id'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', @TableName, N'CONSTRAINT', @KeyName
 
     IF @RequiresDateColumn = 1

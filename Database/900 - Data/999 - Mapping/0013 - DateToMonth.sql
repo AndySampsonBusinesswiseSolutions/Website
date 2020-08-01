@@ -23,11 +23,11 @@ INTO @DateId, @DateDescription
 
 WHILE @@FETCH_STATUS = 0
 	BEGIN
-		SET @MonthId = (SELECT MonthId FROM [Information].[Month] WHERE [Month].MonthDescription = DATEPART(mm, @DateDescription))
-		EXEC [Mapping].[DateToMonth_Insert] @CreatedByUserId, @SourceId, @DateDescription, @MonthId
+		SET @MonthId = (SELECT MonthId FROM [Information].[Month] WHERE [Month].MonthDescription = DATENAME(mm, @DateDescription))
+		EXEC [Mapping].[DateToMonth_Insert] @CreatedByUserId, @SourceId, @DateId, @MonthId
 
 		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateDescription
+		INTO @DateId, @DateDescription
 	END
 CLOSE DateDescriptionCursor;
 DEALLOCATE DateDescriptionCursor;
