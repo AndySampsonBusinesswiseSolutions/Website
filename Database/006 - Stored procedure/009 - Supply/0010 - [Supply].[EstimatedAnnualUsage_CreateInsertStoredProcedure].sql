@@ -5,19 +5,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[EstimatedAnnualUsage_CreateDeleteStoredProcedure]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[EstimatedAnnualUsage_CreateInsertStoredProcedure]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply.Meter].[EstimatedAnnualUsage_CreateDeleteStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[EstimatedAnnualUsage_CreateInsertStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-30
--- Description:	Create new EstimatedAnnualUsage Delete Stored Procedure for MeterId
+-- Description:	Create new EstimatedAnnualUsage Insert Stored Procedure for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply.Meter].[EstimatedAnnualUsage_CreateDeleteStoredProcedure]
+ALTER PROCEDURE [Supply].[EstimatedAnnualUsage_CreateInsertStoredProcedure]
     @MeterId BIGINT
 AS
 BEGIN
@@ -30,7 +30,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + @MeterId
+    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
     DECLARE @TodaysDate NVARCHAR(10) = (SELECT FORMAT(GetDate(), 'yyyy-MM-dd'))
 
     DECLARE @SQL NVARCHAR(255) = N'
@@ -41,19 +41,22 @@ BEGIN
     GO
     SET QUOTED_IDENTIFIER ON
     GO
-    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[' + @SchemaName +'].[EstimatedAnnualUsage_Delete]''))
+    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[' + @SchemaName +'].[EstimatedAnnualUsage_Insert]''))
     BEGIN
-        EXEC(''CREATE PROCEDURE [' + @SchemaName +'].[EstimatedAnnualUsage_Delete] AS BEGIN SET NOCOUNT ON; END'')
+        EXEC(''CREATE PROCEDURE [' + @SchemaName +'].[EstimatedAnnualUsage_Insert] AS BEGIN SET NOCOUNT ON; END'')
     END
     GO
     
     -- =============================================
     -- Author:		System Generated
     -- Create date: ' + @TodaysDate + '
-    -- Description:	Delete usage from [' + @SchemaName +'].[EstimatedAnnualUsage] table
+    -- Description:	Insert usage into [' + @SchemaName +'].[EstimatedAnnualUsage] table
     -- =============================================
 
-    ALTER PROCEDURE [' + @SchemaName +'].[EstimatedAnnualUsage_Delete]
+    ALTER PROCEDURE [' + @SchemaName +'].[EstimatedAnnualUsage_Insert]
+        @CreatedByUserId BIGINT,
+        @SourceId BIGINT,
+        @Usage DECIMAL(18,10)
     AS
     BEGIN
         -- =============================================
@@ -65,11 +68,18 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
-        UPDATE
-            [' + @SchemaName +'].[EstimatedAnnualUsage]
-        SET
-            EffectiveToDateTime = GETUTCDATE()
-        
+        INSERT INTO [' + @SchemaName +'].[EstimatedAnnualUsage_Insert]
+            (
+                CreatedByUserId,
+                SourceId,
+                Usage
+            )
+            VALUES
+            (
+                @CreatedByUserId,
+                @SourceId,
+                @Usage
+            )
         END'
 
     EXEC sp_sqlexec @SQL

@@ -5,9 +5,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[LoadedUsage_CreateTable]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[LoadedUsage_CreateTable]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply.Meter].[LoadedUsage_CreateTable] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[LoadedUsage_CreateTable] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -17,7 +17,7 @@ GO
 -- Description:	Create new ForecastUsageHistory table for a granularity for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply.Meter].[LoadedUsage_CreateTable]
+ALTER PROCEDURE [Supply].[LoadedUsage_CreateTable]
     @MeterId BIGINT
 AS
 BEGIN
@@ -30,7 +30,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + @MeterId
+    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
     DECLARE @v sql_variant 
 
     --Create base table

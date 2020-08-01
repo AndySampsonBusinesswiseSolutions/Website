@@ -5,9 +5,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[ForecastUsageGranularityLatest_CreateTable]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[ForecastUsageGranularityLatest_CreateTable]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply.Meter].[ForecastUsageGranularityLatest_CreateTable] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateTable] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -17,7 +17,7 @@ GO
 -- Description:	Create new ForecastUsageLatest table for a granularity for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply.Meter].[ForecastUsageGranularityLatest_CreateTable]
+ALTER PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateTable]
     @MeterId BIGINT,
     @Granularity VARCHAR(255)
 AS
@@ -31,7 +31,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + @MeterId
+    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
     DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'Latest'
     DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityDescription = @Granularity)
     DECLARE @ForeignKeyName NVARCHAR(255)

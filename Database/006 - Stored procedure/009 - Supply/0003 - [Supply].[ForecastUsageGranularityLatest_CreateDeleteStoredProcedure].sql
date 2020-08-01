@@ -5,34 +5,34 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[ForecastUsageGranularityHistory_CreateDeleteStoredProcedure]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[ForecastUsageGranularityLatest_CreateDeleteStoredProcedure]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply.Meter].[ForecastUsageGranularityHistory_CreateDeleteStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateDeleteStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-07-30
--- Description:	Create new ForecastUsageGranularityHistory Delete Stored Procedure for MeterId
+-- Create date: 2020-07-29
+-- Description:	Create new ForecastUsageGranularityLatest Delete Stored Procedure for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply.Meter].[ForecastUsageGranularityHistory_CreateDeleteStoredProcedure]
+ALTER PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateDeleteStoredProcedure]
     @MeterId BIGINT,
     @Granularity VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-07-30 -> Andrew Sampson -> Initial development of script
+    -- 2020-07-29 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + @MeterId
-    DECLARE @StoredProcedureName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'History_Delete'
+    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
+    DECLARE @StoredProcedureName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'Latest_Delete'
     DECLARE @TodaysDate NVARCHAR(10) = (SELECT FORMAT(GetDate(), 'yyyy-MM-dd'))
     DECLARE @RequiresDateParameter BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityDescription = @Granularity)
 
@@ -53,7 +53,7 @@ BEGIN
     -- =============================================
     -- Author:		System Generated
     -- Create date: ' + @TodaysDate + '
-    -- Description:	Delete usage from [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'History] table
+    -- Description:	Delete usage from [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'Latest] table
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[' + @StoredProcedureName + ']
@@ -77,10 +77,9 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
-        UPDATE
-            [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'History]
-        SET
-            EffectiveToDateTime = GETUTCDATE()
+        DELETE
+        FROM
+            [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'Latest]
         WHERE
             ' + @Granularity + 'Id = @' + @Granularity + 'Id'
         

@@ -5,19 +5,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply.Meter].[ForecastUsageGranularityHistory_CreateInsertStoredProcedure]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[ForecastUsageGranularityLatest_CreateInsertStoredProcedure]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply.Meter].[ForecastUsageGranularityHistory_CreateInsertStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateInsertStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-30
--- Description:	Create new ForecastUsageGranularityHistory Insert Stored Procedure for MeterId
+-- Description:	Create new ForecastUsageGranularityLatest Insert Stored Procedure for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply.Meter].[ForecastUsageGranularityHistory_CreateInsertStoredProcedure]
+ALTER PROCEDURE [Supply].[ForecastUsageGranularityLatest_CreateInsertStoredProcedure]
     @MeterId BIGINT,
     @Granularity VARCHAR(255)
 AS
@@ -31,8 +31,8 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + @MeterId
-    DECLARE @StoredProcedureName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'History_Insert'
+    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
+    DECLARE @StoredProcedureName NVARCHAR(255) = 'ForecastUsage' + @Granularity + 'Latest_Insert'
     DECLARE @TodaysDate NVARCHAR(10) = (SELECT FORMAT(GetDate(), 'yyyy-MM-dd'))
     DECLARE @RequiresDateParameter BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityDescription = @Granularity)
 
@@ -53,12 +53,10 @@ BEGIN
     -- =============================================
     -- Author:		System Generated
     -- Create date: ' + @TodaysDate + '
-    -- Description:	Insert usage into [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'History] table
+    -- Description:	Insert usage into [' + @SchemaName +'].[ForecastUsage' + @Granularity + 'Latest] table
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[' + @StoredProcedureName + ']
-        @CreatedByUserId BIGINT,
-        @SourceId BIGINT,
         @' + @Granularity + 'Id BIGINT'
         
     IF @RequiresDateParameter = 1
@@ -92,8 +90,6 @@ BEGIN
         BEGIN
             INSERT INTO [' + @SchemaName +'].[' + @StoredProcedureName + ']
             (
-                CreatedByUserId,
-                SourceId,
                 ' + @Granularity + 'Id,'
         
     IF @RequiresDateParameter = 1
@@ -107,8 +103,6 @@ BEGIN
             )
             VALUES
             (
-                @CreatedByUserId,
-                @SourceId,
                 @' + @Granularity + 'Id,'
         
     IF @RequiresDateParameter = 1
