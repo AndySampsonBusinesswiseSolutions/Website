@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>0d4d56e8-e7e1-4c2d-9156-131704953ddd</ID>
-    <DateCreated>2020-07-25T14:41:32.0025941+01:00</DateCreated>
+    <ID>f057c738-8510-4eab-8cb5-0e804e9b7a08</ID>
+    <DateCreated>2020-08-01T08:47:38.3934126+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>L+T5FighVykkQCl8UMjNpA==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe69IC4g7aoI+9EAK8Ld+p1+s=</Password>
+    <Login>N1OYdm/R/Dyt8iVeNFL+GQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe60I1e36nScApST0/NZe0agI=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -359,6 +359,13 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>32c77ae5-5c0b-4cab-8415-f9997af3b09e</ID>
+    <ParentFolder_ID>53525575-0648-4d74-860a-e82ad8d07cb8</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\004 - Schema\0009 - [Supply].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>6fc2a661-db68-43f3-9a25-9838f739768a</ID>
     <ParentFolder_ID>f7856ea5-db81-4c38-89ae-bbe86191c77b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\001 - Administration\0001 - [Administration.User].[UserAttribute].sql</FullName>
@@ -646,6 +653,97 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>efc66f55-057b-487c-a30d-fb7aa227e0ec</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0033 - [Information].[ContractType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f7f35e49-d4f7-4e93-9211-e6e259e4e087</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0034 - [Information].[RateUnit].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d12a25f3-2dcf-4bc9-8e94-296f52ab2d66</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0035 - [Information].[RateType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>28958fe6-989d-4149-b43c-c9e98b42524d</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0036 - [Information].[VolumeUnit].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>66881f20-d8d7-4b02-bf86-ada33e14d42e</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0037 - [Information].[TradeProduct].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>871acaae-96ba-4ae5-97c5-de2e863f10e9</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0038 - [Information].[TradeDirection].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>55a176c3-0934-4463-857f-fcf28eee43ab</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0039 - [Information].[UsageType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ba485852-a4ec-4455-8552-a8d945069d81</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0040 - [Information].[TimePeriod].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>2d0d070c-59c8-43f2-b019-a841d72ed9b3</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0041 - [Information].[Granularity].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>073f6c8b-2a68-4092-a462-f8a8a326b4da</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0042 - [Information].[FiveMinute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>77a1e665-7253-4a5e-894c-90f40a6e124f</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0043 - [Information].[HalfHour].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5e5f53a9-0761-40d2-a4d8-416c1588a5f6</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0044 - [Information].[Week].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ac70ea11-8e87-492b-b7d5-23f87fc24308</ID>
+    <ParentFolder_ID>a95ad4c4-8767-4935-b1b5-64020b81fc8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\002 - Information\0045 - [Information].[Quarter].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>6c3048a7-bed1-4226-8f28-6651ae4510ef</ID>
     <ParentFolder_ID>33680a27-22d6-487d-a54d-7ce5336f53e0</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\003 - System\0001 - [System].[Page].sql</FullName>
@@ -891,6 +989,132 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>8202a804-bb87-48dc-9a4e-b32d6b71862b</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0016 - [Customer].[Contract].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>e25f7d13-aa1e-439c-b8d6-a0dc5713a86a</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0017 - [Customer].[ContractAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a56f35b5-6c73-4c7c-89d0-43ec998397ad</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0018 - [Customer].[ContractDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b21e2c41-bfa0-4da3-a88e-ac35ecd6a991</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0019 - [Customer].[ContractMeterAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1c059bda-66bf-4085-8cea-2296923a70d7</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0020 - [Customer].[ContractMeter].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6fc316db-fe87-49d3-9ad0-cb648dbdd360</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0021 - [Customer].[ContractMeterDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>429851a7-d2bd-4aa6-b237-7190b0cf09c4</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0022 - [Customer].[ContractMeterRateAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9ab51598-c876-41cf-bda6-8af7a8726910</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0023 - [Customer].[ContractMeterRate].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6d73cbfb-0693-464c-a3e4-1a29fed660f3</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0024 - [Customer].[ContractMeterRateDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6d15344e-3f9a-4632-abeb-bffe1d6a107f</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0025 - [Customer].[Basket].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b73dcd9e-77d9-4d96-90de-96b216af1c7f</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0026 - [Customer].[BasketAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>31e15242-b35e-4a7a-9d27-6eb2ca636439</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0027 - [Customer].[BasketDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d90d7b3f-ea02-4af7-b98e-837a085aed50</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0028 - [Customer].[Trade].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3683e4da-c2cc-4277-b160-c0b5c4c14ca3</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0029 - [Customer].[TradeAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>590822b8-7a95-495d-abc9-02c0dcb75be3</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0030 - [Customer].[TradeDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>96483555-6cfe-42cd-a6af-5771fb5b7409</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0031 - [Customer].[ReferenceVolume].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>04b332e2-25d0-4489-9727-d649bf1d7e22</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0032 - [Customer].[ReferenceVolumeAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b2087871-13db-416d-ac8a-88264a68d790</ID>
+    <ParentFolder_ID>a00a27bc-3582-43d1-aefa-12941be2fbe5</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\005 - Customer\0033 - [Customer].[ReferenceVolumeDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>4a345100-904d-46ad-a598-b15d85a7af38</ID>
     <ParentFolder_ID>dbf811ac-f523-4631-ae41-7544058cc4fd</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\006 - DemandForecast\0001 - [DemandForecast].[ForecastGroup].sql</FullName>
@@ -1027,6 +1251,27 @@
     <ID>ce707b14-0322-49c1-829e-a8e58c6d047f</ID>
     <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0003 - [Supplier].[SupplierDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>935f0152-701d-4ea9-be31-80566087bdaa</ID>
+    <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0004 - [Supplier].[Product].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c76f1792-f21f-4ae8-86a3-6cc666cdb462</ID>
+    <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0005 - [Supplier].[ProductAttribute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>15a07f7e-6a79-4877-aac4-1ac61cec3e3c</ID>
+    <ParentFolder_ID>56491b79-f41f-4110-844c-72cd0d22897d</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\008 - Supplier\0006 - [Supplier].[ProductDetail].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1244,6 +1489,132 @@
     <ID>25b51e17-8af3-4a08-9e67-695fea50df5d</ID>
     <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0031 - [Mapping].[FileToFileType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>308e44b4-a9c1-4393-9b24-e935dbc56996</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0032 - [Mapping].[ProductToSupplier].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>481ffb29-9499-4cee-adcd-ea3830d02e8e</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0033 - [Mapping].[ContractToContractMeter].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>de94999a-1382-4e9c-9f56-f8475b916ea2</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0034 - [Mapping].[ContractMeterToMeter].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>764d9887-26a6-4b9d-ad8b-7b1097547549</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0035 - [Mapping].[ContractMeterToProduct].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bf7de477-f166-4f0e-8e72-32640e305e73</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0036 - [Mapping].[ContractToSupplier].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>814c3ac0-2abc-4c53-a76b-cb523f502dee</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0037 - [Mapping].[ContractMeterRateDetailToRateType].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>23ba2bbc-b4e0-4d6a-b44d-c4b30e4d4214</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0038 - [Mapping].[RateTypeToRateUnit].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>25f1372b-c0e8-4f81-a5ca-dacfde18c1ab</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0039 - [Mapping].[BasketToContractMeter].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>dc4ae8c7-3834-4798-b592-4062f48088f5</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0040 - [Mapping].[BasketToTrade].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>824f448e-0de3-4988-9242-fcec6727561e</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0041 - [Mapping].[RateUnitToTradeDetail].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>dbf65fb7-a9bb-436d-97e6-222a256036b0</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0042 - [Mapping].[TradeDetailToVolumeUnit].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>168151b1-29d4-4e8c-9cd8-1ae78caae1c1</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0043 - [Mapping].[ContractToReferenceVolume].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>ce7fe8e7-beba-4d36-adcd-1aba9249b6f0</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0044 - [Mapping].[ReferenceVolumeDetailToVolumeUnit].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d2933b4b-3244-44ca-a9d2-3dcfa4e243a1</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0045 - [Mapping].[FiveMinuteToTimePeriod].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f17f837b-0cdb-414b-bbb0-38c8e3c3c99c</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0046 - [Mapping].[HalfHourToTimePeriod].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>700fcd46-e5ca-47eb-87dd-29a1092322ba</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0047 - [Mapping].[MonthToQuarter].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a10e686c-cc0b-4cc2-9904-4fb6c0d52587</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0048 - [Mapping].[DateToFiveMinute].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>7555cd59-b08c-4f98-a504-a157c80f2e24</ID>
+    <ParentFolder_ID>b61763fe-403d-4c3b-8a2b-582d54e9608a</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\005 - Table\999 - Mapping\0049 - [Mapping].[DateToHalfHour].sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -1633,6 +2004,97 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>0b508a09-0436-4fe1-9595-7a717dcd3edc</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0044 - [Information].[RateUnit_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0eb59a61-f5ad-454c-ae42-8de0a1d661bd</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0045 - [Information].[ContractType_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>746ec659-ccd2-4446-8f3f-f5e088b71f89</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0046 - [Information].[RateType_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>2e0cd97b-fd96-45ca-b231-e824ebf2f384</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0047 - [Information].[VolumeUnit_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>5accde3c-5944-4c25-a236-50eaf267414b</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0048 - [Information].[TradeProduct_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>433d9d7b-8bb7-48d6-8c2b-1169523a28ae</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0049 - [Information].[TradeDirection_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0c296323-faad-49f9-aa0a-8537add25d2e</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0050 - [Information].[UsageType_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>3612432e-8c4d-4a21-b170-3fb334be1086</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0051 - [Information].[TimePeriod_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1b346d25-0054-4d08-8da2-e99649f00c95</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0052 - [Information].[Granularity_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>fbb06cc2-0449-4b90-8414-ea0902f625f7</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0053 - [Information].[FiveMinute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>221c16c3-88e3-4375-a556-6f45b827e0b2</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0054 - [Information].[HalfHour_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>949a152a-0645-483e-9071-5e5455b4f187</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0055 - [Information].[Week_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b15ca90f-fba9-41b1-b569-fab15f0ea1fa</ID>
+    <ParentFolder_ID>eb5339af-fbbd-46c7-a8f6-adcc6d54e63f</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\002 - Information\0056 - [Information].[Quarter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>96d8af55-3c63-4379-8055-f6ec7abeb0f4</ID>
     <ParentFolder_ID>abd48086-b7d4-4a9e-b246-667c1f74d947</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\003 - System\0001 - [System].[PageAttribute_Insert].sql</FullName>
@@ -1990,6 +2452,48 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>24458560-407d-4f8b-8c40-8baaf76c060a</ID>
+    <ParentFolder_ID>751a3ca6-0310-438d-9295-7702355c22a1</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\005 - Customer\0011 - [Customer].[ContractAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cd47795a-fa71-4e14-af66-cbcf5bcdc345</ID>
+    <ParentFolder_ID>751a3ca6-0310-438d-9295-7702355c22a1</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\005 - Customer\0012 - [Customer].[ContractMeterAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>bbb66397-bf5f-425a-a027-faa56a4c8a16</ID>
+    <ParentFolder_ID>751a3ca6-0310-438d-9295-7702355c22a1</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\005 - Customer\0013 - [Customer].[ContractMeterRateAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>cd876409-36e4-4469-beb3-c325ebefea86</ID>
+    <ParentFolder_ID>751a3ca6-0310-438d-9295-7702355c22a1</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\005 - Customer\0014 - [Customer].[BasketAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>24f14e5b-65a6-4bf9-b609-5f1e99359e07</ID>
+    <ParentFolder_ID>751a3ca6-0310-438d-9295-7702355c22a1</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\005 - Customer\0015 - [Customer].[TradeAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>1efc6d7f-6529-40e5-a3ef-27230cda12ec</ID>
+    <ParentFolder_ID>751a3ca6-0310-438d-9295-7702355c22a1</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\005 - Customer\0016 - [Customer].[ReferenceVolumeAttribute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>a389cad6-cbc4-47a2-8943-c67318cb6e90</ID>
     <ParentFolder_ID>0427121f-7cea-4690-8769-2dee13e5b4e0</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\006 - DemandForecast\0001 - [DemandForecast].[ForecastGroup_Insert].sql</FullName>
@@ -2319,6 +2823,132 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>3ca187c0-1d43-4eb7-afe5-5192e5665c9b</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0019 - [Mapping].[ProductToSupplier_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>426d13cc-d517-40c6-ba4e-2fde02fdff40</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0020 - [Mapping].[ContractToContractMeter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c46193f5-d1ed-42b4-a34b-e90803a9d1ab</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0021 - [Mapping].[ContractMeterToMeter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>642402ad-d784-42e8-ae3c-5d8fd9a146a9</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0022 - [Mapping].[ContractMeterToProduct_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b5842c25-b6bd-434b-af87-274d9426f51a</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0023 - [Mapping].[ContractToSupplier_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>135301ff-13b0-4ef8-8ad4-3dd9716b12a5</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0024 - [Mapping].[ContractMeterRateDetailToRateType_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8ab18bc5-79de-4d28-aa7e-a83a80bc69fc</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0025 - [Mapping].[RateTypeToRateUnit_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6854887c-c28f-4906-9772-41616739c472</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0026 - [Mapping].[BasketToContractMeter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>af110ff2-bcb9-474e-a7d6-f0d0c14706e3</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0027 - [Mapping].[BasketToTrade_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>eec3851a-872b-438a-8b62-5cfaf60f51e5</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0028 - [Mapping].[RateUnitToTradeDetail_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a897686a-3f0a-4642-b0c5-89aee46b7346</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0029 - [Mapping].[TradeDetailToVolumeUnit_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>155f48cd-45bb-4dc7-a93a-2904cf02e31e</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0030 - [Mapping].[ContractToReferenceVolume_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>58f42991-fe4d-4462-b84f-45721a6e3545</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0031 - [Mapping].[ReferenceVolumeDetailToVolumeUnit_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f1534c4f-e1aa-4f85-802f-ac143ddeec00</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0032 - [Mapping].[FiveMinuteToTimePeriod_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>a556219c-eeea-4458-9d2f-0c38ad049cc4</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0033 - [Mapping].[HalfHourToTimePeriod_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>89b449c8-264b-4883-b7e8-6ea1a9a51334</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0034 - [Mapping].[MonthToQuarter_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f3d6cd83-8b0c-4aed-8aee-7760e20dcb5a</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0035 - [Mapping].[DateToFiveMinute_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c56646bc-1dbb-4d25-9466-4a92a11c9021</ID>
+    <ParentFolder_ID>f00d4ce9-e4e7-40ae-b9ab-94dcb93a15cb</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\006 - Stored procedure\999 - Mapping\0036 - [Mapping].[DateToHalfHour_Insert].sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>c7c1b875-57a8-427a-9e09-bc4b04ee3f78</ID>
     <ParentFolder_ID>07fd139f-e12d-4ef8-996c-00c0e09f5041</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\001 - Administration\0001 - User Attribute - Email Address.sql</FullName>
@@ -2511,6 +3141,104 @@
     <ID>860a5114-8052-41be-8b1b-c105b3651330</ID>
     <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0024 - MeterExemptionDetail.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9922d42d-e48b-4dc2-a567-d2639be2cf9d</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0025 - ContractType.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>f21aa8ab-10a2-4c18-9e27-b0101bff30c9</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0026 - RateUnit.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>906f9f42-aaca-4001-9b06-dc51fac8c8cd</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0027 - RateType.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>e8f2fd0e-018c-402d-b2d4-64e15b302d3a</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0028 - VolumeUnit.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b3e0c36f-10ea-4280-8a9a-29b65ae8df07</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0029 - TradeDirection.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b040751a-ff63-4673-bbb6-bc6f9f1027ed</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0030 - UsageType.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>184c5f25-8d5e-46fd-90d1-8e6410cbdb8e</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0031 - Granularity.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>2d3963ae-4093-4545-a138-3aca341e6a3b</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0032 - FiveMinute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>d7ba1227-440f-4070-970f-1e64a1eb208d</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0033 - HalfHour.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>8c3ab67d-9be9-47d4-9d2c-766188f5097c</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0034 - Week.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>809c4fcd-93c6-429f-b7d5-db89d0f2fbc5</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0035 - Quarter.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>71c1fe13-6aef-4092-b792-bef4cd3bc57b</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0036 - TimePeriod - Half Hour.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9de229a4-5a15-4507-b347-02c4537867a9</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0037 - TimePeriod - Five Minute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>eb030c36-3780-430d-b8de-021defc428d5</ID>
+    <ParentFolder_ID>003516e0-218e-4559-abe7-5773d01d1d7e</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\002 - Information\0038 - TimePeriod - Day.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
@@ -2718,6 +3446,48 @@
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
+    <ID>a9c2c4a8-b75b-4bce-aff6-115588d95d1d</ID>
+    <ParentFolder_ID>f23b4579-4feb-46b2-9c8d-aa292a30b2d9</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\005 - Customer\0002 - ContractAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>b710df67-dec9-4cb2-836e-3a9dd3cb28be</ID>
+    <ParentFolder_ID>f23b4579-4feb-46b2-9c8d-aa292a30b2d9</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\005 - Customer\0003 - ContractMeterAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>9c498d19-32c3-4c49-baf7-4bf72c265f7d</ID>
+    <ParentFolder_ID>f23b4579-4feb-46b2-9c8d-aa292a30b2d9</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\005 - Customer\0004 - ContractMeterRateAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>0ca1e4bf-b4b0-44ea-97f2-2da323145ea8</ID>
+    <ParentFolder_ID>f23b4579-4feb-46b2-9c8d-aa292a30b2d9</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\005 - Customer\0005 - BasketAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>6174212b-f8e6-4f84-b53f-98f874cfc1c2</ID>
+    <ParentFolder_ID>f23b4579-4feb-46b2-9c8d-aa292a30b2d9</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\005 - Customer\0006 - TradeAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c29ccc23-7692-4c44-9165-35348516d67e</ID>
+    <ParentFolder_ID>f23b4579-4feb-46b2-9c8d-aa292a30b2d9</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\005 - Customer\0007 - ReferenceVolumeAttribute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
     <ID>d1563f6f-7c87-4706-ab3a-9873d8083e42</ID>
     <ParentFolder_ID>47e7bc5c-ffff-4aa4-9484-9acfb36b4ad7</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\006 - DemandForecast\0001 - ForecastGroup.sql</FullName>
@@ -2770,6 +3540,41 @@
     <ID>ee029bac-d68e-44ac-ba07-a1cca1009f7d</ID>
     <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0005 - PageToProcess - Site Management To File Upload.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>c717112e-0bae-48c7-9a96-53a5f25fb828</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0006 - FiveMinuteToTimePeriod.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>86be2e12-5b27-4e28-9d67-7e7cdafd854e</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0007 - HalfHourToTimePeriod.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>50d7b031-4d24-4e98-9b44-d6c3da130cae</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0008 - MonthToQuarter.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>888d2974-f0d5-4fb8-b918-87fa00a92f30</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0009 - DateToFiveMinute.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>true</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>70d744de-461c-415e-b99a-9fafa58c4fe1</ID>
+    <ParentFolder_ID>97a4b335-fedf-4279-9498-716c8d9bab8b</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\900 - Data\999 - Mapping\0010 - DateToHalfHour.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>true</IsStaticFile>
   </ScriptFile>
