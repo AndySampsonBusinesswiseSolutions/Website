@@ -4,14 +4,14 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
-        {"name": "ValidateUsageUploadTempFlexTradeData.api",
+        {"name": "ValidateFlexTradeData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexTradeData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempFlexTradeData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFlexTradeData.api/bin/Debug/netcoreapp3.1/ValidateFlexTradeData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexTradeData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFlexTradeData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -22,17 +22,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexTradeData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFlexTradeData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempFlexReferenceVolumeData.api",
+        {"name": "ValidateFlexReferenceVolumeData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempFlexReferenceVolumeData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/ValidateFlexReferenceVolumeData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexReferenceVolumeData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFlexReferenceVolumeData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -43,17 +43,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexReferenceVolumeData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFlexReferenceVolumeData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempFlexContractData.api",
+        {"name": "ValidateFlexContractData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexContractData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempFlexContractData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFlexContractData.api/bin/Debug/netcoreapp3.1/ValidateFlexContractData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexContractData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFlexContractData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -64,17 +64,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFlexContractData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFlexContractData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempFixedContractData.api",
+        {"name": "ValidateFixedContractData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFixedContractData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempFixedContractData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api/bin/Debug/netcoreapp3.1/ValidateFixedContractData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFixedContractData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -85,17 +85,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempFixedContractData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempMeterExempionData.api",
+        {"name": "ValidateMeterExempionData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterExempionData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempMeterExempionData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExempionData.api/bin/Debug/netcoreapp3.1/ValidateMeterExempionData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterExempionData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExempionData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -106,17 +106,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterExempionData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExempionData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempCustomerData.api",
+        {"name": "ValidateCustomerData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempCustomerData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempCustomerData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateCustomerData.api/bin/Debug/netcoreapp3.1/ValidateCustomerData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempCustomerData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateCustomerData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -127,17 +127,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempCustomerData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateCustomerData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempFlexTradeData.api",
+        {"name": "StoreFlexTradeData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexTradeData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempFlexTradeData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFlexTradeData.api/bin/Debug/netcoreapp3.1/StoreFlexTradeData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexTradeData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFlexTradeData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -148,17 +148,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexTradeData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFlexTradeData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempFlexReferenceVolumeData.api",
+        {"name": "StoreFlexReferenceVolumeData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempFlexReferenceVolumeData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/StoreFlexReferenceVolumeData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexReferenceVolumeData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFlexReferenceVolumeData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -169,17 +169,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexReferenceVolumeData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFlexReferenceVolumeData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempFlexContractData.api",
+        {"name": "StoreFlexContractData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexContractData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempFlexContractData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFlexContractData.api/bin/Debug/netcoreapp3.1/StoreFlexContractData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexContractData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFlexContractData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -190,17 +190,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFlexContractData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFlexContractData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempFixedContractData.api",
+        {"name": "StoreFixedContractData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFixedContractData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempFixedContractData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFixedContractData.api/bin/Debug/netcoreapp3.1/StoreFixedContractData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFixedContractData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFixedContractData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -211,17 +211,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempFixedContractData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFixedContractData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempMeterExemptionData.api",
+        {"name": "StoreMeterExemptionData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterExemptionData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempMeterExemptionData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreMeterExemptionData.api/bin/Debug/netcoreapp3.1/StoreMeterExemptionData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterExemptionData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreMeterExemptionData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -232,17 +232,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterExemptionData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreMeterExemptionData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempCustomerData.api",
+        {"name": "StoreCustomerData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempCustomerData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempCustomerData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreCustomerData.api/bin/Debug/netcoreapp3.1/StoreCustomerData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempCustomerData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreCustomerData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -253,17 +253,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempCustomerData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreCustomerData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempSubMeterUsageData.api",
+        {"name": "ValidateSubMeterUsageData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSubMeterUsageData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempSubMeterUsageData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterUsageData.api/bin/Debug/netcoreapp3.1/ValidateSubMeterUsageData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSubMeterUsageData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterUsageData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -274,17 +274,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSubMeterUsageData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterUsageData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempMeterUsageData.api",
+        {"name": "ValidateMeterUsageData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterUsageData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempMeterUsageData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterUsageData.api/bin/Debug/netcoreapp3.1/ValidateMeterUsageData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterUsageData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterUsageData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -295,17 +295,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterUsageData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterUsageData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempSubMeterData.api",
+        {"name": "ValidateSubMeterData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSubMeterData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempSubMeterData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterData.api/bin/Debug/netcoreapp3.1/ValidateSubMeterData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSubMeterData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -316,17 +316,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSubMeterData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempMeterData.api",
+        {"name": "ValidateMeterData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempMeterData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterData.api/bin/Debug/netcoreapp3.1/ValidateMeterData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -337,17 +337,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempMeterData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterData.api/Views"
             }
         },
-        {"name": "ValidateUsageUploadTempSiteData.api",
+        {"name": "ValidateSiteData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSiteData.api/bin/Debug/netcoreapp3.1/ValidateUsageUploadTempSiteData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateSiteData.api/bin/Debug/netcoreapp3.1/ValidateSiteData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSiteData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateSiteData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -358,17 +358,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateUsageUploadTempSiteData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateSiteData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempSubMeterUsageData.api",
+        {"name": "StoreSubMeterUsageData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSubMeterUsageData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempSubMeterUsageData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterUsageData.api/bin/Debug/netcoreapp3.1/StoreSubMeterUsageData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSubMeterUsageData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterUsageData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -379,17 +379,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSubMeterUsageData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterUsageData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempMeterUsageData.api",
+        {"name": "StoreMeterUsageData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterUsageData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempMeterUsageData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreMeterUsageData.api/bin/Debug/netcoreapp3.1/StoreMeterUsageData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterUsageData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreMeterUsageData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -400,17 +400,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterUsageData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreMeterUsageData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempSubMeterData.api",
+        {"name": "StoreSubMeterData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSubMeterData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempSubMeterData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterData.api/bin/Debug/netcoreapp3.1/StoreSubMeterData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSubMeterData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -421,17 +421,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSubMeterData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempMeterData.api",
+        {"name": "StoreMeterData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempMeterData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreMeterData.api/bin/Debug/netcoreapp3.1/StoreMeterData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreMeterData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -442,17 +442,17 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempMeterData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreMeterData.api/Views"
             }
         },
-        {"name": "StoreUsageUploadTempSiteData.api",
+        {"name": "StoreSiteData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSiteData.api/bin/Debug/netcoreapp3.1/StoreUsageUploadTempSiteData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreSiteData.api/bin/Debug/netcoreapp3.1/StoreSiteData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSiteData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreSiteData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -463,7 +463,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreUsageUploadTempSiteData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreSiteData.api/Views"
             }
         },
         {"name": "DetermineFileType.api",
@@ -827,16 +827,16 @@
                 "MapCustomerToChildCustomer.api",
                 "UploadFile.api",
                 "DetermineFileType.api",
-                "StoreUsageUploadTempSiteData.api",
-                "StoreUsageUploadTempMeterData.api",
-                "StoreUsageUploadTempSubMeterData.api",
-                "StoreUsageUploadTempMeterUsageData.api",
-                "StoreUsageUploadTempSubMeterUsageData.api",
-                "ValidateUsageUploadTempSiteData.api",
-                "ValidateUsageUploadTempMeterData.api",
-                "ValidateUsageUploadTempSubMeterData.api",
-                "ValidateUsageUploadTempMeterUsageData.api",
-                "ValidateUsageUploadTempSubMeterUsageData.api",
+                "StoreSiteData.api",
+                "StoreMeterData.api",
+                "StoreSubMeterData.api",
+                "StoreMeterUsageData.api",
+                "StoreSubMeterUsageData.api",
+                "ValidateSiteData.api",
+                "ValidateMeterData.api",
+                "ValidateSubMeterData.api",
+                "ValidateMeterUsageData.api",
+                "ValidateSubMeterUsageData.api",
             ]
         },
         {"name": "Login",
@@ -885,28 +885,28 @@
                 "ArchiveProcessQueue.api",
                 "CheckPrerequisiteAPI.api",
                 "ValidateProcessGUID.api",
-                "StoreUsageUploadTempSiteData.api",
-                "StoreUsageUploadTempMeterData.api",
-                "StoreUsageUploadTempSubMeterData.api",
-                "StoreUsageUploadTempMeterUsageData.api",
-                "StoreUsageUploadTempSubMeterUsageData.api",
-                "ValidateUsageUploadTempSiteData.api",
-                "ValidateUsageUploadTempMeterData.api",
-                "ValidateUsageUploadTempSubMeterData.api",
-                "ValidateUsageUploadTempMeterUsageData.api",
-                "ValidateUsageUploadTempSubMeterUsageData.api",
-                "StoreUsageUploadTempCustomerData.api",
-                "StoreUsageUploadTempMeterExemptionData.api",
-                "StoreUsageUploadTempFixedContractData.api",
-                "StoreUsageUploadTempFlexContractData.api",
-                "StoreUsageUploadTempFlexReferenceVolumeData.api",
-                "StoreUsageUploadTempFlexTradeData.api",
-                "ValidateUsageUploadTempCustomerData.api",
-                "ValidateUsageUploadTempMeterExempionData.api",
-                "ValidateUsageUploadTempFixedContractData.api",
-                "ValidateUsageUploadTempFlexContractData.api",
-                "ValidateUsageUploadTempFlexReferenceVolumeData.api",
-                "ValidateUsageUploadTempFlexTradeData.api",
+                "StoreSiteData.api",
+                "StoreMeterData.api",
+                "StoreSubMeterData.api",
+                "StoreMeterUsageData.api",
+                "StoreSubMeterUsageData.api",
+                "ValidateSiteData.api",
+                "ValidateMeterData.api",
+                "ValidateSubMeterData.api",
+                "ValidateMeterUsageData.api",
+                "ValidateSubMeterUsageData.api",
+                "StoreCustomerData.api",
+                "StoreMeterExemptionData.api",
+                "StoreFixedContractData.api",
+                "StoreFlexContractData.api",
+                "StoreFlexReferenceVolumeData.api",
+                "StoreFlexTradeData.api",
+                "ValidateCustomerData.api",
+                "ValidateMeterExempionData.api",
+                "ValidateFixedContractData.api",
+                "ValidateFlexContractData.api",
+                "ValidateFlexReferenceVolumeData.api",
+                "ValidateFlexTradeData.api",
             ]
         }
     ]
