@@ -63,16 +63,26 @@ namespace MethodLibrary
 
             public string GetFileTypeFromJObject(JObject jsonObject)
             {
-                return jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.FileType)
-                    ? jsonObject[_systemAPIRequiredDataKeyEnums.FileType].ToString()
-                    : string.Empty;
+                try
+                {
+                    return jsonObject[_systemAPIRequiredDataKeyEnums.FileType].ToString();
+                }
+                catch
+                {
+                    return string.Empty;
+                }
             }
 
             public string GetAPIGUIDListFromJObject(JObject jsonObject)
             {
-                return jsonObject.ContainsKey(_systemAPIRequiredDataKeyEnums.APIGUIDList)
-                    ? jsonObject[_systemAPIRequiredDataKeyEnums.APIGUIDList].ToString()
-                    : string.Empty;
+                try
+                {
+                    return jsonObject[_systemAPIRequiredDataKeyEnums.APIGUIDList].ToString();
+                }
+                catch
+                {
+                    return string.Empty;
+                }
             }
 
             public string GetCustomerGUIDFromJObject(JObject jsonObject)

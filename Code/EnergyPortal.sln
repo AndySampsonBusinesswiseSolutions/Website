@@ -3,87 +3,87 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveProcessQueue.api", "ArchiveProcessQueue.api\ArchiveProcessQueue.api.csproj", "{AF4928B1-489D-4423-82E0-7AC04A0B6CD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchiveProcessQueue.api", "General\ArchiveProcessQueue.api\ArchiveProcessQueue.api.csproj", "{AF4928B1-489D-4423-82E0-7AC04A0B6CD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckPrerequisiteAPI.api", "CheckPrerequisiteAPI.api\CheckPrerequisiteAPI.api.csproj", "{2B18DA54-7F37-4870-A5B5-2A36F146FF91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CheckPrerequisiteAPI.api", "General\CheckPrerequisiteAPI.api\CheckPrerequisiteAPI.api.csproj", "{2B18DA54-7F37-4870-A5B5-2A36F146FF91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routing.api", "Routing.api\Routing.api.csproj", "{27CF21A5-B11F-4F88-A604-0F6380E8D5F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routing.api", "General\Routing.api\Routing.api.csproj", "{27CF21A5-B11F-4F88-A604-0F6380E8D5F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatePageGUID.api", "ValidatePageGUID.api\ValidatePageGUID.api.csproj", "{13D9634A-763B-42ED-94CE-D8B26C9A822F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatePageGUID.api", "General\ValidatePageGUID.api\ValidatePageGUID.api.csproj", "{13D9634A-763B-42ED-94CE-D8B26C9A822F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateProcessGUID.api", "ValidateProcessGUID.api\ValidateProcessGUID.api.csproj", "{48916CC0-53A5-4CAB-B298-7CBCC31E6D50}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateProcessGUID.api", "General\ValidateProcessGUID.api\ValidateProcessGUID.api.csproj", "{48916CC0-53A5-4CAB-B298-7CBCC31E6D50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.api", "Website.api\Website.api.csproj", "{72283250-E524-4772-B830-7B745633E808}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Website.api", "General\Website.api\Website.api.csproj", "{72283250-E524-4772-B830-7B745633E808}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "databaseInteraction", "databaseInteraction\databaseInteraction.csproj", "{427CB0DE-5D26-4257-A93F-BBDB4DF490B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateEmailAddress.api", "ValidateEmailAddress.api\ValidateEmailAddress.api.csproj", "{74127683-62B9-4225-ABA6-1BEB018A31DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateEmailAddress.api", "Login\ValidateEmailAddress.api\ValidateEmailAddress.api.csproj", "{74127683-62B9-4225-ABA6-1BEB018A31DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatePassword.api", "ValidatePassword.api\ValidatePassword.api.csproj", "{A54F80E8-7062-4394-9040-340866F06541}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidatePassword.api", "Login\ValidatePassword.api\ValidatePassword.api.csproj", "{A54F80E8-7062-4394-9040-340866F06541}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateEmailAddressPasswordMapping.api", "ValidateEmailAddressPasswordMapping.api\ValidateEmailAddressPasswordMapping.api.csproj", "{F1CEA6FA-8BFF-4F4E-B280-828E4AD340A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateEmailAddressPasswordMapping.api", "Login\ValidateEmailAddressPasswordMapping.api\ValidateEmailAddressPasswordMapping.api.csproj", "{F1CEA6FA-8BFF-4F4E-B280-828E4AD340A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreLoginAttempt.api", "StoreLoginAttempt.api\StoreLoginAttempt.api.csproj", "{278AA31A-709B-4200-A51B-D435CA4BAA74}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreLoginAttempt.api", "Login\StoreLoginAttempt.api\StoreLoginAttempt.api.csproj", "{278AA31A-709B-4200-A51B-D435CA4BAA74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockUser.api", "LockUser.api\LockUser.api.csproj", "{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockUser.api", "Login\LockUser.api\LockUser.api.csproj", "{0A258D07-0BE8-40CA-A1AE-6830630EA8CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "enums", "enums\enums.csproj", "{26A5ECDE-BBBA-42ED-8CB9-D3AB0EB00E14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MethodLibrary", "MethodLibrary\MethodLibrary.csproj", "{40FAD0EF-152D-483A-BA6D-14F51A79FA9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddNewCustomer.api", "AddNewCustomer.api\AddNewCustomer.api.csproj", "{7D605FC9-40FE-4909-8006-F0536EDCB717}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddNewCustomer.api", "UpdateCustomer\AddNewCustomer.api\AddNewCustomer.api.csproj", "{7D605FC9-40FE-4909-8006-F0536EDCB717}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateCustomerDetail.api", "UpdateCustomerDetail.api\UpdateCustomerDetail.api.csproj", "{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UpdateCustomerDetail.api", "UpdateCustomer\UpdateCustomerDetail.api\UpdateCustomerDetail.api.csproj", "{3DD1D21F-CCC6-4E73-9DE8-07E145D81218}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapCustomerToChildCustomer.api", "MapCustomerToChildCustomer.api\MapCustomerToChildCustomer.api.csproj", "{1E6AFE37-20BC-4DDA-87D5-055908881477}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapCustomerToChildCustomer.api", "UpdateCustomer\MapCustomerToChildCustomer.api\MapCustomerToChildCustomer.api.csproj", "{1E6AFE37-20BC-4DDA-87D5-055908881477}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadFile.api", "UploadFile.api\UploadFile.api.csproj", "{F0176B35-50EE-41C5-9E73-513DA32BC2ED}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadFile.api", "FileUpload\UploadFile.api\UploadFile.api.csproj", "{F0176B35-50EE-41C5-9E73-513DA32BC2ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetermineFileType.api", "DetermineFileType.api\DetermineFileType.api.csproj", "{29F79CA2-24FD-4C1F-8007-613712AD21CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetermineFileType.api", "FileUpload\DetermineFileType.api\DetermineFileType.api.csproj", "{29F79CA2-24FD-4C1F-8007-613712AD21CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSiteData.api", "StoreUsageUploadTempSiteData.api\StoreUsageUploadTempSiteData.api.csproj", "{05A8667F-ACDA-4FEF-A083-521C68CBA393}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSiteData.api", "CustomerDataUpload\StoreUsageUploadTempSiteData.api\StoreUsageUploadTempSiteData.api.csproj", "{05A8667F-ACDA-4FEF-A083-521C68CBA393}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterData.api", "StoreUsageUploadTempMeterData.api\StoreUsageUploadTempMeterData.api.csproj", "{1CB8493C-E6D1-401E-B81C-3C1B073168B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterData.api", "CustomerDataUpload\StoreUsageUploadTempMeterData.api\StoreUsageUploadTempMeterData.api.csproj", "{1CB8493C-E6D1-401E-B81C-3C1B073168B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSubMeterData.api", "StoreUsageUploadTempSubMeterData.api\StoreUsageUploadTempSubMeterData.api.csproj", "{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSubMeterData.api", "CustomerDataUpload\StoreUsageUploadTempSubMeterData.api\StoreUsageUploadTempSubMeterData.api.csproj", "{B0ED7E24-A0AE-4C7B-94EE-ECA8DA65581E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterUsageData.api", "StoreUsageUploadTempMeterUsageData.api\StoreUsageUploadTempMeterUsageData.api.csproj", "{0F21C91A-5ABC-4445-9587-2BCB5DCEE94E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterUsageData.api", "CustomerDataUpload\StoreUsageUploadTempMeterUsageData.api\StoreUsageUploadTempMeterUsageData.api.csproj", "{0F21C91A-5ABC-4445-9587-2BCB5DCEE94E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSubMeterUsageData.api", "StoreUsageUploadTempSubMeterUsageData.api\StoreUsageUploadTempSubMeterUsageData.api.csproj", "{E3BD95CB-9C58-4D83-8BAF-286D46FAC3FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempSubMeterUsageData.api", "CustomerDataUpload\StoreUsageUploadTempSubMeterUsageData.api\StoreUsageUploadTempSubMeterUsageData.api.csproj", "{E3BD95CB-9C58-4D83-8BAF-286D46FAC3FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSiteData.api", "ValidateUsageUploadTempSiteData.api\ValidateUsageUploadTempSiteData.api.csproj", "{27901BC3-9482-4432-AB85-0EB261537CE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSiteData.api", "CustomerDataUpload\ValidateUsageUploadTempSiteData.api\ValidateUsageUploadTempSiteData.api.csproj", "{27901BC3-9482-4432-AB85-0EB261537CE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterData.api", "ValidateUsageUploadTempMeterData.api\ValidateUsageUploadTempMeterData.api.csproj", "{44EDB96F-3D47-44CC-8673-BE97898BA77B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterData.api", "CustomerDataUpload\ValidateUsageUploadTempMeterData.api\ValidateUsageUploadTempMeterData.api.csproj", "{44EDB96F-3D47-44CC-8673-BE97898BA77B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSubMeterData.api", "ValidateUsageUploadTempSubMeterData.api\ValidateUsageUploadTempSubMeterData.api.csproj", "{9F1CAB24-BDDB-4D33-95A0-A1869DE0BA92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSubMeterData.api", "CustomerDataUpload\ValidateUsageUploadTempSubMeterData.api\ValidateUsageUploadTempSubMeterData.api.csproj", "{9F1CAB24-BDDB-4D33-95A0-A1869DE0BA92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterUsageData.api", "ValidateUsageUploadTempMeterUsageData.api\ValidateUsageUploadTempMeterUsageData.api.csproj", "{22985BD7-8614-48B6-8D19-DB9381BF095B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterUsageData.api", "CustomerDataUpload\ValidateUsageUploadTempMeterUsageData.api\ValidateUsageUploadTempMeterUsageData.api.csproj", "{22985BD7-8614-48B6-8D19-DB9381BF095B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSubMeterUsageData.api", "ValidateUsageUploadTempSubMeterUsageData.api\ValidateUsageUploadTempSubMeterUsageData.api.csproj", "{F5C8FB4F-014E-491B-A937-A0245F1F473B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempSubMeterUsageData.api", "CustomerDataUpload\ValidateUsageUploadTempSubMeterUsageData.api\ValidateUsageUploadTempSubMeterUsageData.api.csproj", "{F5C8FB4F-014E-491B-A937-A0245F1F473B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempCustomerData.api", "StoreUsageUploadTempCustomerData.api\StoreUsageUploadTempCustomerData.api.csproj", "{01B46003-DC2A-4CB2-9660-1A6F077346F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempCustomerData.api", "CustomerDataUpload\StoreUsageUploadTempCustomerData.api\StoreUsageUploadTempCustomerData.api.csproj", "{01B46003-DC2A-4CB2-9660-1A6F077346F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterExemptionData.api", "StoreUsageUploadTempMeterExemptionData.api\StoreUsageUploadTempMeterExemptionData.api.csproj", "{F00D0714-502A-4F96-A375-A50BA0121A73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempMeterExemptionData.api", "CustomerDataUpload\StoreUsageUploadTempMeterExemptionData.api\StoreUsageUploadTempMeterExemptionData.api.csproj", "{F00D0714-502A-4F96-A375-A50BA0121A73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFixedContractData.api", "StoreUsageUploadTempFixedContractData.api\StoreUsageUploadTempFixedContractData.api.csproj", "{683D2662-5852-480C-B3A0-B7B459F31CD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFixedContractData.api", "CustomerDataUpload\StoreUsageUploadTempFixedContractData.api\StoreUsageUploadTempFixedContractData.api.csproj", "{683D2662-5852-480C-B3A0-B7B459F31CD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexContractData.api", "StoreUsageUploadTempFlexContractData.api\StoreUsageUploadTempFlexContractData.api.csproj", "{6C8E112F-7E21-4793-B35B-A9D939E8E4A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexContractData.api", "CustomerDataUpload\StoreUsageUploadTempFlexContractData.api\StoreUsageUploadTempFlexContractData.api.csproj", "{6C8E112F-7E21-4793-B35B-A9D939E8E4A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexReferenceVolumeData.api", "StoreUsageUploadTempFlexReferenceVolumeData.api\StoreUsageUploadTempFlexReferenceVolumeData.api.csproj", "{6816593E-03E0-4C02-9744-3F6CC9482424}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexReferenceVolumeData.api", "CustomerDataUpload\StoreUsageUploadTempFlexReferenceVolumeData.api\StoreUsageUploadTempFlexReferenceVolumeData.api.csproj", "{6816593E-03E0-4C02-9744-3F6CC9482424}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexTradeData.api", "StoreUsageUploadTempFlexTradeData.api\StoreUsageUploadTempFlexTradeData.api.csproj", "{491C50C0-F740-439C-A479-167E2329157B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StoreUsageUploadTempFlexTradeData.api", "CustomerDataUpload\StoreUsageUploadTempFlexTradeData.api\StoreUsageUploadTempFlexTradeData.api.csproj", "{491C50C0-F740-439C-A479-167E2329157B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempCustomerData.api", "ValidateUsageUploadTempCustomerData.api\ValidateUsageUploadTempCustomerData.api.csproj", "{F2527505-F0C2-4EA8-9E1F-3AA190745C79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempCustomerData.api", "CustomerDataUpload\ValidateUsageUploadTempCustomerData.api\ValidateUsageUploadTempCustomerData.api.csproj", "{F2527505-F0C2-4EA8-9E1F-3AA190745C79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexContractData.api", "ValidateUsageUploadTempFlexContractData.api\ValidateUsageUploadTempFlexContractData.api.csproj", "{D6D6AF84-A91F-4AC1-8796-A86CBAD1C24C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexContractData.api", "CustomerDataUpload\ValidateUsageUploadTempFlexContractData.api\ValidateUsageUploadTempFlexContractData.api.csproj", "{D6D6AF84-A91F-4AC1-8796-A86CBAD1C24C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexReferenceVolumeData.api", "ValidateUsageUploadTempFlexReferenceVolumeData.api\ValidateUsageUploadTempFlexReferenceVolumeData.api.csproj", "{5AB725F6-AACF-4F1B-ADA2-71A21CC1E27D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexReferenceVolumeData.api", "CustomerDataUpload\ValidateUsageUploadTempFlexReferenceVolumeData.api\ValidateUsageUploadTempFlexReferenceVolumeData.api.csproj", "{5AB725F6-AACF-4F1B-ADA2-71A21CC1E27D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexTradeData.api", "ValidateUsageUploadTempFlexTradeData.api\ValidateUsageUploadTempFlexTradeData.api.csproj", "{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFlexTradeData.api", "CustomerDataUpload\ValidateUsageUploadTempFlexTradeData.api\ValidateUsageUploadTempFlexTradeData.api.csproj", "{F9FD6E88-36F9-4386-B218-B7DB991DBCBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFixedContractData.api", "ValidateUsageUploadTempFixedContractData.api\ValidateUsageUploadTempFixedContractData.api.csproj", "{3396249F-C3EE-467F-9AD0-64607D519FDB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempFixedContractData.api", "CustomerDataUpload\ValidateUsageUploadTempFixedContractData.api\ValidateUsageUploadTempFixedContractData.api.csproj", "{3396249F-C3EE-467F-9AD0-64607D519FDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterExempionData.api", "ValidateUsageUploadTempMeterExempionData.api\ValidateUsageUploadTempMeterExempionData.api.csproj", "{1D3C6635-9BB5-45EE-83EC-43C8CDD59253}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateUsageUploadTempMeterExempionData.api", "CustomerDataUpload\ValidateUsageUploadTempMeterExempionData.api\ValidateUsageUploadTempMeterExempionData.api.csproj", "{1D3C6635-9BB5-45EE-83EC-43C8CDD59253}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
