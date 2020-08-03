@@ -23,8 +23,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[SubMeter]
 	SubMeterIdentifier VARCHAR(255),
 	SerialNumber VARCHAR(255),
 	SubArea VARCHAR(255),
-	Asset VARCHAR(255)
+	Asset VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[SubMeter] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[SubMeter] SET (LOCK_ESCALATION = TABLE)
 GO

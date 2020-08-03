@@ -29,8 +29,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[FixedContract]
 	StandingCharge VARCHAR(255),
 	CapacityCharge VARCHAR(255),
 	Rate VARCHAR(255),
-	Value VARCHAR(255)
+	Value VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[FixedContract] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[FixedContract] SET (LOCK_ESCALATION = TABLE)
 GO

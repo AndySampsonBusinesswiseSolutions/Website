@@ -31,8 +31,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[Meter]
 	AnnualUsage VARCHAR(255),
 	MeterSerialNumber VARCHAR(255),
 	Area VARCHAR(255),
-	ImportExport VARCHAR(255)
+	ImportExport VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[Meter] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[Meter] SET (LOCK_ESCALATION = TABLE)
 GO

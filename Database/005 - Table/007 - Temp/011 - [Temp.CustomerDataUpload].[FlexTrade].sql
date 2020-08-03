@@ -25,8 +25,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[FlexTrade]
 	TradeProduct VARCHAR(255),
 	Volume VARCHAR(255),
 	Price VARCHAR(255),
-	Direction VARCHAR(255)
+	Direction VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[FlexTrade] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[FlexTrade] SET (LOCK_ESCALATION = TABLE)
 GO

@@ -22,8 +22,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[Customer]
 	CustomerName VARCHAR(255),
 	ContactName VARCHAR(255),
 	ContactTelephoneNumber VARCHAR(255),
-	ContactEmailAddress VARCHAR(255)
+	ContactEmailAddress VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[Customer] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[Customer] SET (LOCK_ESCALATION = TABLE)
 GO

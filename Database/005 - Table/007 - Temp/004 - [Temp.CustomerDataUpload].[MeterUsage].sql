@@ -22,8 +22,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[MeterUsage]
 	MPXN VARCHAR(255),
 	Date VARCHAR(255),
 	TimePeriod VARCHAR(255),
-	Value VARCHAR(255)
+	Value VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[MeterUsage] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[MeterUsage] SET (LOCK_ESCALATION = TABLE)
 GO

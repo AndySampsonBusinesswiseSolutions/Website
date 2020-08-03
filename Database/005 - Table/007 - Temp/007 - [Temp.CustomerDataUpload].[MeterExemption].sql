@@ -23,8 +23,12 @@ CREATE TABLE [Temp.CustomerDataUpload].[MeterExemption]
 	DateFrom VARCHAR(255),
 	DateTo VARCHAR(255),
 	ExemptionProduct VARCHAR(255),
-	ExemptionProportion VARCHAR(255)
+	ExemptionProportion VARCHAR(255),
+	CanCommit BIT
 	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[MeterExemption] ADD CONSTRAINT
+	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[MeterExemption] SET (LOCK_ESCALATION = TABLE)
 GO
