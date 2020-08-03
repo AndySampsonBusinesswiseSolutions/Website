@@ -69,7 +69,7 @@ namespace ValidateCustomerData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[Customer] table
+                //Get data from [Temp.CustomerDataUpload].[Customer] table
                 var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())

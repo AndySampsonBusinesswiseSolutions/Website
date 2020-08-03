@@ -73,7 +73,7 @@ namespace StoreSubMeterData.api.Controllers
                 {
                     var values = subMeterDictionary[row];
 
-                    //Insert submeter data into [Temp.Customer].[SubMeter]
+                    //Insert submeter data into [Temp.CustomerDataUpload].[SubMeter]
                     _tempCustomerMethods.SubMeter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4]);
                 }
 

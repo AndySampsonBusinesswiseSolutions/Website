@@ -73,7 +73,7 @@ namespace StoreCustomerData.api.Controllers
                 {
                     var values = customerDictionary[row];
 
-                    //Insert customer data into [Temp.Customer].[FlexContract]
+                    //Insert customer data into [Temp.CustomerDataUpload].[FlexContract]
                     _tempCustomerMethods.Customer_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3]);
                 }
 

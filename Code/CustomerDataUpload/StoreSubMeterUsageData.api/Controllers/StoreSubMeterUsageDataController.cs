@@ -81,7 +81,7 @@ namespace StoreSubMeterUsageData.api.Controllers
                     {
                         var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
-                        //Insert submeter usage data into [Temp.Customer].[SubMeterUsage]
+                        //Insert submeter usage data into [Temp.CustomerDataUpload].[SubMeterUsage]
                         _tempCustomerMethods.SubMeterUsage_Insert(processQueueGUID, row, subMeterIdentifier, date, timePeriodString, values[timePeriod]);
                     }
                 }

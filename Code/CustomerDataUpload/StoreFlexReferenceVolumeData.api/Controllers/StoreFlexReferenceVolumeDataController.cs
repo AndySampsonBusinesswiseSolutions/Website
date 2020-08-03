@@ -75,7 +75,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                     var dateFrom = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
                     var dateTo = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[2])));
 
-                    //Insert flex reference volume data into [Temp.Customer].[FlexReferenceVolume]
+                    //Insert flex reference volume data into [Temp.CustomerDataUpload].[FlexReferenceVolume]
                     _tempCustomerMethods.FlexReferenceVolume_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3]);
                 }
 

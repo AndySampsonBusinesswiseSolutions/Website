@@ -69,7 +69,7 @@ namespace ValidateMeterExempionData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[MeterExemption] table
+                //Get data from [Temp.CustomerDataUpload].[MeterExemption] table
                 var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())

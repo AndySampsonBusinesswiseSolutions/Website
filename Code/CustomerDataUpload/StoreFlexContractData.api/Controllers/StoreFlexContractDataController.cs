@@ -83,7 +83,7 @@ namespace StoreFlexContractData.api.Controllers
 
                     for(var rateCount = 8; rateCount < values.Count(); rateCount++)
                     {
-                        //Insert fixed contract data into [Temp.Customer].[FlexContract]
+                        //Insert fixed contract data into [Temp.CustomerDataUpload].[FlexContract]
                         _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], columns[rateCount - 8], values[rateCount]);
                     }
                 }

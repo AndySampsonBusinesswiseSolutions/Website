@@ -69,7 +69,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[SubMeterUsage] table
+                //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] table
                 var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())

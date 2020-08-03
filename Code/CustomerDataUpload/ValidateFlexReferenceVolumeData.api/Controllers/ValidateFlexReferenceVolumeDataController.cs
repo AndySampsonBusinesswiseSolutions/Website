@@ -69,7 +69,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[FlexReferenceVolume] table
+                //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] table
                 var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())

@@ -75,7 +75,7 @@ namespace StoreMeterExemptionData.api.Controllers
                     var dateFrom = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
                     var dateTo = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[2])));
 
-                    //Insert meter exemption data into [Temp.Customer].[MeterExemption]
+                    //Insert meter exemption data into [Temp.CustomerDataUpload].[MeterExemption]
                     _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3], values[4]);
                 }
 

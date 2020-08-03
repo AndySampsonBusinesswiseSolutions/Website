@@ -69,7 +69,7 @@ namespace ValidateFlexContractData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[FlexContract] table
+                //Get data from [Temp.CustomerDataUpload].[FlexContract] table
                 var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())

@@ -69,7 +69,7 @@ namespace ValidateFixedContractData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[FixedContract] table
+                //Get data from [Temp.CustomerDataUpload].[FixedContract] table
                 var customerDataRows = _tempCustomerMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())

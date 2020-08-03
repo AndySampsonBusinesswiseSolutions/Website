@@ -10,3 +10,4 @@ EXEC [Customer].[DataUploadValidationErrorAttribute_Insert] @CreatedByUserId, @S
 EXEC [Customer].[DataUploadValidationErrorAttribute_Insert] @CreatedByUserId, @SourceId, 'Entity'
 EXEC [Customer].[DataUploadValidationErrorAttribute_Insert] @CreatedByUserId, @SourceId, 'Validation Error Message'
 EXEC [Customer].[DataUploadValidationErrorAttribute_Insert] @CreatedByUserId, @SourceId, 'Can Commit'
+EXEC [Customer].[DataUploadValidationErrorAttribute_Insert] @CreatedByUserId, @SourceId, 'Process Queue GUID'

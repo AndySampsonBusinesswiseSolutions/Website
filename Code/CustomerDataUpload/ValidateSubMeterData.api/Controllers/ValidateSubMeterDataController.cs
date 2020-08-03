@@ -70,7 +70,7 @@ namespace ValidateSubMeterData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.Customer].[SubMeter] table
+                //Get data from [Temp.CustomerDataUpload].[SubMeter] table
                 var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
 
                 if(!customerDataRows.Any())
