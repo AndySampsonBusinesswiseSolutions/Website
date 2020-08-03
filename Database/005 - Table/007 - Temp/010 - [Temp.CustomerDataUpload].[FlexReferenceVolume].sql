@@ -27,7 +27,7 @@ CREATE TABLE [Temp.CustomerDataUpload].[FlexReferenceVolume]
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[FlexReferenceVolume] ADD CONSTRAINT
-	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
+	DF_FlexReferenceVolume_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[FlexReferenceVolume] SET (LOCK_ESCALATION = TABLE)
 GO

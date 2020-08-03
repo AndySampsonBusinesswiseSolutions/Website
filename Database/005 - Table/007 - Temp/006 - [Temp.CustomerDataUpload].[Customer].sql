@@ -27,7 +27,7 @@ CREATE TABLE [Temp.CustomerDataUpload].[Customer]
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[Customer] ADD CONSTRAINT
-	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
+	DF_Customer_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[Customer] SET (LOCK_ESCALATION = TABLE)
 GO

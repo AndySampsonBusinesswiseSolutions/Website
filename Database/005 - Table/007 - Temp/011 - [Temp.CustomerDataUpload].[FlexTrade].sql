@@ -30,7 +30,7 @@ CREATE TABLE [Temp.CustomerDataUpload].[FlexTrade]
 	)  ON [Temp]
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[FlexTrade] ADD CONSTRAINT
-	DF_Site_CanCommit DEFAULT 0 FOR CanCommit
+	DF_FlexTrade_CanCommit DEFAULT 0 FOR CanCommit
 GO
 ALTER TABLE [Temp.CustomerDataUpload].[FlexTrade] SET (LOCK_ESCALATION = TABLE)
 GO
