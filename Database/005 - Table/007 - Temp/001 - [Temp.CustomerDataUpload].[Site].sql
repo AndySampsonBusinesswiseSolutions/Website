@@ -1,0 +1,37 @@
+USE [EMaaS]
+GO
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[Temp.CustomerDataUpload].[Site]') AND type in (N'U'))
+DROP TABLE [Temp.CustomerDataUpload].[Site]
+GO
+CREATE TABLE [Temp.CustomerDataUpload].[Site]
+	(
+	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
+	CustomerName VARCHAR(255),
+	SiteName VARCHAR(255),
+	SiteAddress VARCHAR(255),
+	SiteTown VARCHAR(255),
+	SiteCounty VARCHAR(255),
+	SitePostCode VARCHAR(255),
+	SiteDescription VARCHAR(255),
+	ContactName VARCHAR(255),
+	ContactRole VARCHAR(255),
+	ContactTelephoneNumber VARCHAR(255),
+	ContactEmailAddress VARCHAR(255)
+	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[Site] SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
