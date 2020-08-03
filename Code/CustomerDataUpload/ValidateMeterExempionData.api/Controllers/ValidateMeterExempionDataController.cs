@@ -24,6 +24,7 @@ namespace ValidateMeterExempionData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateMeterExempionDataAPIId;
 
         public ValidateMeterExempionDataController(ILogger<ValidateMeterExempionDataController> logger)
@@ -87,7 +88,7 @@ namespace ValidateMeterExempionData.api.Controllers
                         {"DateTo", "Date To"}
                     };
                 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
                 //Validate Exemption Product
                 var invalidExemptionProductDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProduct"))
@@ -95,7 +96,8 @@ namespace ValidateMeterExempionData.api.Controllers
 
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
                 {
-                    errors.Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]} in row {invalidExemptionProductDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidExemptionProductDataRecord["RowId"]);
+                    records[rowId]["ExemptionProduct"].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]} in row {invalidExemptionProductDataRecord["RowId"]}");
                 }
 
                 //Validate Exemption Proportion
@@ -106,12 +108,13 @@ namespace ValidateMeterExempionData.api.Controllers
 
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
                 {
-                    errors.Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]} in row {invalidExemptionProportionDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidExemptionProportionDataRecord["RowId"]);
+                    records[rowId]["ExemptionProportion"].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]} in row {invalidExemptionProportionDataRecord["RowId"]}");
                 }
 
                 //Update Process Queue
-                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterExempionDataAPIId, errors.Any(), errorMessage);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.MeterExemption);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterExempionDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

@@ -25,6 +25,7 @@ namespace ValidateMeterData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateMeterDataAPIId;
 
         public ValidateMeterDataController(ILogger<ValidateMeterDataController> logger)
@@ -87,7 +88,7 @@ namespace ValidateMeterData.api.Controllers
                         {"AnnualUsage", "Annual Usage"}
                     };
                 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
                 //Get MPANs
                 var mpanDataRecords = customerDataRows.Where(r => _methods.IsValidMPAN(r.Field<string>("MPXN")));
@@ -103,10 +104,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var row in invalidMPXNRows)
                 {
                     var dataRow = customerDataRows.First(r => r.Field<int>("RowId") == row);
-                    errors.Add($"Invalid MPAN/MPRN {dataRow["MPXN"]} in row {row}");
+                    records[row]["MPXN"].Add($"Invalid MPAN/MPRN {dataRow["MPXN"]}");
                 }
 
-                //Get MPANs not stored in database
+                //TODO: Get MPANs not stored in database
                 var newMPANDataRecords = mpanDataRecords.Where(r => _customerMethods.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription(0, r.Field<string>("MPXN")) > 0);
 
                 //Site, GSP, PC, MTC, LLFC and Area must be populated
@@ -119,7 +120,8 @@ namespace ValidateMeterData.api.Controllers
                         {"LineLossFactorClass", "LLFC"},
                         {"Area", "Area"}
                     };
-                errors.AddRange(_tempCustomerMethods.GetMissingRecords(newMPANDataRecords, requiredColumns));
+                var newMPANErrors =_tempCustomerMethods.GetMissingRecords(newMPANDataRecords, requiredColumns);
+                _tempCustomerMethods.AddErrorsToRecords(records, newMPANErrors);
 
                 //Validate GSP
                 var invalidGridSupplyPointDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("GridSupplyPoint"))
@@ -127,7 +129,8 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidGridSupplyPointDataRecord in invalidGridSupplyPointDataRecords)
                 {
-                    errors.Add($"Invalid GSP {invalidGridSupplyPointDataRecord["GridSupplyPoint"]} in row {invalidGridSupplyPointDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidGridSupplyPointDataRecord["RowId"]);
+                    records[rowId]["GridSupplyPoint"].Add($"Invalid GSP {invalidGridSupplyPointDataRecord["GridSupplyPoint"]}");
                 }
 
                 //Validate Profile Class
@@ -136,7 +139,8 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidProfileClassDataRecord in invalidProfileClassDataRecords)
                 {
-                    errors.Add($"Invalid Profile Class {invalidProfileClassDataRecord["ProfileClass"]} in row {invalidProfileClassDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidProfileClassDataRecord["RowId"]);
+                    records[rowId]["ProfileClass"].Add($"Invalid Profile Class {invalidProfileClassDataRecord["ProfileClass"]}");
                 }
 
                 //Validate MTC
@@ -145,7 +149,8 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidMeterTimeswitchClassDataRecord in invalidMeterTimeswitchClassDataRecords)
                 {
-                    errors.Add($"Invalid MTC {invalidMeterTimeswitchClassDataRecord["MeterTimeswitchClass"]} in row {invalidMeterTimeswitchClassDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidMeterTimeswitchClassDataRecord["RowId"]);
+                    records[rowId]["MeterTimeswitchClass"].Add($"Invalid MTC {invalidMeterTimeswitchClassDataRecord["MeterTimeswitchClass"]}");
                 }
 
                 //Validate LLFC
@@ -154,12 +159,19 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidLineLossFactorClassDataRecord in invalidLineLossFactorClassDataRecords)
                 {
-                    errors.Add($"Invalid LLFC {invalidLineLossFactorClassDataRecord["LineLossFactorClass"]} in row {invalidLineLossFactorClassDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidLineLossFactorClassDataRecord["RowId"]);
+                    records[rowId]["LineLossFactorClass"].Add($"Invalid LLFC {invalidLineLossFactorClassDataRecord["LineLossFactorClass"]}");
                 }
 
                 //Validate Capacity if it is populated
                 var invalidCapacityDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Capacity"))
                     && !_methods.IsValidCapacity(r.Field<string>("Capacity")));
+
+                foreach(var invalidCapacityDataRecord in invalidCapacityDataRecords)
+                {
+                    var rowId = Convert.ToInt32(invalidCapacityDataRecord["RowId"]);
+                    records[rowId]["Capacity"].Add($"Invalid Capacity {invalidCapacityDataRecord["Capacity"]}");
+                }
 
                 //Get MPRNs not stored in database
                 var newMPRNDataRecords = mprnDataRecords.Where(r => _customerMethods.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription(0, r.Field<string>("MPXN")) > 0);
@@ -171,7 +183,8 @@ namespace ValidateMeterData.api.Controllers
                         {"LocalDistributionZone", "LDZ"},
                         {"Area", "Area"}
                     };
-                errors.AddRange(_tempCustomerMethods.GetMissingRecords(newMPANDataRecords, requiredColumns));
+                var newMPRNErrors =_tempCustomerMethods.GetMissingRecords(newMPRNDataRecords, requiredColumns);
+                _tempCustomerMethods.AddErrorsToRecords(records, newMPRNErrors);
 
                 //Validate LDZ
                 var invalidLocalDistributionZoneDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("LocalDistributionZone"))
@@ -179,16 +192,23 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidLocalDistributionZoneDataRecord in invalidLocalDistributionZoneDataRecords)
                 {
-                    errors.Add($"Invalid LDZ {invalidLocalDistributionZoneDataRecord["LocalDistributionZone"]} in row {invalidLocalDistributionZoneDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidLocalDistributionZoneDataRecord["RowId"]);
+                    records[rowId]["LocalDistributionZone"].Add($"Invalid LDZ {invalidLocalDistributionZoneDataRecord["LocalDistributionZone"]}");
                 }
 
                 //Validate SOQ if it is populated
                 var invalidStandardOfftakeQuantityDataRecords = mprnDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SOQ"))
                     && !_methods.IsValidStandardOfftakeQuantity(r.Field<string>("SOQ")));
 
+                foreach(var invalidStandardOfftakeQuantityDataRecord in invalidStandardOfftakeQuantityDataRecords)
+                {
+                    var rowId = Convert.ToInt32(invalidStandardOfftakeQuantityDataRecord["RowId"]);
+                    records[rowId]["SOQ"].Add($"Invalid Standard Offtake Quantity {invalidStandardOfftakeQuantityDataRecord["SOQ"]}");
+                }
+
                 //Update Process Queue
-                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterDataAPIId, errors.Any(), errorMessage);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.Meter);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

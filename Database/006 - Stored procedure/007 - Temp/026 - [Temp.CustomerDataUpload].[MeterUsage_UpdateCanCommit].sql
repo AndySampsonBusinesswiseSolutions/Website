@@ -21,7 +21,6 @@ GO
 ALTER PROCEDURE [Temp.CustomerDataUpload].[MeterUsage_UpdateCanCommit]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
     @RowId INT,
-    @TimePeriod VARCHAR(255),
     @CanCommit BIT
 AS
 BEGIN
@@ -41,6 +40,5 @@ BEGIN
     WHERE
         ProcessQueueGUID = @ProcessQueueGUID
         AND RowId = @RowId
-        AND TimePeriod = @TimePeriod
 END
 GO

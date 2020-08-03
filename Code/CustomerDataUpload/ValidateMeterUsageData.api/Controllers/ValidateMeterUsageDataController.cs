@@ -24,6 +24,7 @@ namespace ValidateMeterUsageData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateMeterUsageDataAPIId;
 
         public ValidateMeterUsageDataController(ILogger<ValidateMeterUsageDataController> logger)
@@ -86,7 +87,7 @@ namespace ValidateMeterUsageData.api.Controllers
                         {"Date", "Read Date"}
                     };
                 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
                 //Check all dates are in the past
                 var futureDateDataRows = customerDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
@@ -94,7 +95,8 @@ namespace ValidateMeterUsageData.api.Controllers
 
                 foreach(var futureDateDataRow in futureDateDataRows)
                 {
-                    errors.Add($"Future date {futureDateDataRow["Date"]} in row {futureDateDataRow["RowId"]}");
+                    var rowId = Convert.ToInt32(futureDateDataRow["RowId"]);
+                    records[rowId]["Date"].Add($"Future date {futureDateDataRow["Date"]} found");
                 }
 
                 //Check usage is valid (if day is not October clock change, don't allow HH49 or HH50 to be populated)
@@ -102,7 +104,8 @@ namespace ValidateMeterUsageData.api.Controllers
 
                 foreach(var invalidUsageDataRow in invalidUsageDataRows)
                 {
-                    errors.Add($"Invalid usage {invalidUsageDataRow["Value"]} in row {invalidUsageDataRow["RowId"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}");
+                    var rowId = Convert.ToInt32(invalidUsageDataRow["RowId"]);
+                    records[rowId]["Value"].Add($"Invalid usage {invalidUsageDataRow["Value"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}");
                 }
 
                 var additionalHalfHourDataRows = customerDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
@@ -110,12 +113,13 @@ namespace ValidateMeterUsageData.api.Controllers
 
                 foreach(var invalidUsageDataRow in invalidAdditionalHalfHourDataRows)
                 {
-                    errors.Add($"Usage found in additional half hour {invalidUsageDataRow["TimePeriod"]} but {invalidUsageDataRow["Date"]} is not an October clock change date");
+                    var rowId = Convert.ToInt32(invalidUsageDataRow["RowId"]);
+                    records[rowId]["Date"].Add($"Usage found in additional half hour {invalidUsageDataRow["TimePeriod"]} but {invalidUsageDataRow["Date"]} is not an October clock change date");
                 }
 
                 //Update Process Queue
-                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, errors.Any(), errorMessage);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.MeterUsage);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

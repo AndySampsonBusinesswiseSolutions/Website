@@ -24,6 +24,7 @@ namespace ValidateFlexTradeData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateFlexTradeDataAPIId;
 
         public ValidateFlexTradeDataController(ILogger<ValidateFlexTradeDataController> logger)
@@ -85,9 +86,23 @@ namespace ValidateFlexTradeData.api.Controllers
                         {"BasketReference", "Basket Reference"}
                     };
 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
-                //TODO: If Trade Reference is not populated, all other fields are required
+                //If Trade Reference is not populated, all other fields are required
+                //Get Trade References not populated
+                var emptyTradeReferenceDataRecords = customerDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
+
+                //Trade Date, Trade Product, Volume, Price and Direction must be populated
+                requiredColumns = new Dictionary<string, string>
+                    {
+                        {"TradeDate", "Trade Date"},
+                        {"TradeProduct", "Trade Product"},
+                        {"Volume", "Volume"},
+                        {"Price", "Price"},
+                        {"Direction (B/S)", "Trade Direction"}
+                    };
+                var emptyTradeReferenceErrors =_tempCustomerMethods.GetMissingRecords(emptyTradeReferenceDataRecords, requiredColumns);
+                _tempCustomerMethods.AddErrorsToRecords(records, emptyTradeReferenceErrors);
 
                 //Validate Trade Reference
                 var invalidTradeReferenceDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeReference"))
@@ -95,7 +110,8 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidTradeReferenceDataRecord in invalidTradeReferenceDataRecords)
                 {
-                    errors.Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}' in row {invalidTradeReferenceDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidTradeReferenceDataRecord["RowId"]);
+                    records[rowId]["TradeReference"].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}'");
                 }
 
                 //Validate Trade Date
@@ -104,7 +120,8 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidTradeDateDataRecord in invalidTradeDateDataRecords)
                 {
-                    errors.Add($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}' in row {invalidTradeDateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidTradeDateDataRecord["RowId"]);
+                    records[rowId]["TradeDate"].Add($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}'");
                 }
 
                 //Validate Trade Product
@@ -113,7 +130,8 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidTradeProductDataRecord in invalidTradeProductDataRecords)
                 {
-                    errors.Add($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}' in row {invalidTradeProductDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidTradeProductDataRecord["RowId"]);
+                    records[rowId]["TradeProduct"].Add($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}'");
                 }
 
                 //Validate Volume
@@ -122,7 +140,8 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
-                    errors.Add($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}' in row {invalidVolumeDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidVolumeDataRecord["RowId"]);
+                    records[rowId]["Volume"].Add($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}'");
                 }
 
                 //Validate Price
@@ -131,7 +150,8 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidPriceDataRecord in invalidPriceDataRecords)
                 {
-                    errors.Add($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}' in row {invalidPriceDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidPriceDataRecord["RowId"]);
+                    records[rowId]["Price"].Add($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}'");
                 }
 
                 //Validate Direction
@@ -140,11 +160,13 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidDirectionDataRecord in invalidDirectionDataRecords)
                 {
-                    errors.Add($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}' in row {invalidDirectionDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidDirectionDataRecord["RowId"]);
+                    records[rowId]["Direction"].Add($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}'");
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, false, null);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.FlexTrade);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

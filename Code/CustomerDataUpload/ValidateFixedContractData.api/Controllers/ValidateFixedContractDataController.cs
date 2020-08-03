@@ -24,6 +24,7 @@ namespace ValidateFixedContractData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateFixedContractDataAPIId;
 
         public ValidateFixedContractDataController(ILogger<ValidateFixedContractDataController> logger)
@@ -89,9 +90,20 @@ namespace ValidateFixedContractData.api.Controllers
                         {"ContractEndDate", "Contract End Date"}
                     };
 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
                 //TODO: If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
+                //Get new contracts
+                var newContractDataRecords = customerDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
+
+                //Product must be populated
+                requiredColumns = new Dictionary<string, string>
+                    {
+                        {"Product", "Product"},
+                        {"RateCount", "Rate Count"}
+                    };
+                var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractDataRecords, requiredColumns);
+                _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
                 
                 //Validate MPXN
                 var invalidMPXNDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MPXN"))
@@ -99,7 +111,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidMPXNDataRecord in invalidMPXNDataRecords)
                 {
-                    errors.Add($"Invalid MPAN/MPRN '{invalidMPXNDataRecord["MPXN"]}' in row {invalidMPXNDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidMPXNDataRecord["RowId"]);
+                    records[rowId]["MPXN"].Add($"Invalid MPAN/MPRN '{invalidMPXNDataRecord["MPXN"]}'");
                 }
 
                 //Validate Supplier
@@ -108,7 +121,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidSupplierDataRecord in invalidSupplierDataRecords)
                 {
-                    errors.Add($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}' in row {invalidSupplierDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidSupplierDataRecord["RowId"]);
+                    records[rowId]["Supplier"].Add($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'");
                 }
 
                 //Validate Contract Dates
@@ -117,7 +131,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractStartDateDataRecord in invalidContractStartDateDataRecords)
                 {
-                    errors.Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}' in row {invalidContractStartDateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidContractStartDateDataRecord["RowId"]);
+                    records[rowId]["ContractStartDate"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'");
                 }
 
                 var invalidContractEndDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractEndDate"))
@@ -125,7 +140,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
-                    errors.Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}' in row {invalidContractEndDateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
+                    records[rowId]["ContractEndDate"].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
                 }
 
                 var invalidContractDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
@@ -136,7 +152,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
-                    errors.Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}' in row {invalidContractEndDateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
+                    records[rowId]["ContractStartDate"].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
                 }
 
                 //Validate Rates
@@ -145,7 +162,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
-                    errors.Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}' in row {invalidRateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
+                    records[rowId]["Value"].Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}'");
                 }
 
                 invalidRateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
@@ -153,7 +171,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
-                    errors.Add($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}' in row {invalidRateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
+                    records[rowId]["StandingCharge"].Add($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'");
                 }
 
                 invalidRateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("CapacityCharge"))
@@ -161,7 +180,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
-                    errors.Add($"Invalid Capacity Charge Value '{invalidRateDataRecord["CapacityCharge"]}' in row {invalidRateDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
+                    records[rowId]["CapacityCharge"].Add($"Invalid Capacity Charge Value '{invalidRateDataRecord["CapacityCharge"]}'");
                 }
 
                 //Validate Rate Count
@@ -192,14 +212,15 @@ namespace ValidateFixedContractData.api.Controllers
 
                         if(rateCount != fixedContractDataRecords.Count())
                         {
-                            errors.Add($"Rate Count '{rateCount}' does not match number of rates provided in row {fixedContractDataRecords.First()["RowId"]}");
+                            var rowId = Convert.ToInt32(fixedContractDataRecords.First()["RowId"]);
+                            records[rowId]["RateCount"].Add($"Rate Count '{rateCount}' does not match number of rates provided");
                         }
                     }
                 }
 
                 //Update Process Queue
-                var errorMessage = errors.Any() ? string.Join(';', errors) : null;
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFixedContractDataAPIId, errors.Any(), errorMessage);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.FixedContract);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFixedContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

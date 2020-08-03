@@ -16,5 +16,32 @@ namespace enums
                     public string ContactEmailAddress = "Contact Email Address";
                 }
         }
+
+        public class DataUploadValidation
+        {
+            public class Attribute
+            {
+                public string SheetName = "Sheet Name";
+                public string RowNumber = "Row Number";
+                public string Entity = "Entity";
+                public string ValidationErrorMessage = "Validation Error Message";
+                public string CanCommit = "Can Commit";
+            }
+
+            public class SheetName
+            {
+                public string Customer = "Customers";
+                public string Site = "Sites";
+                public string Meter = "Meters";
+                public string SubMeter = "SubMeters";
+                public string MeterUsage = "Meter HH Data";
+                public string MeterExemption = "Meter Exemptions";
+                public string SubMeterUsage = "SubMeter HH Data";
+                public string FixedContract = "Fixed Contracts";
+                public string FlexContract = "Flex Contracts";
+                public string FlexReferenceVolume = "Flex Reference Volumes";
+                public string FlexTrade = "Flex Trades";
+            }
+        }
     }
 }

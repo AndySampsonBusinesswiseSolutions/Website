@@ -289,9 +289,21 @@ namespace MethodLibrary
                     return dataRows;
                 }
 
-                public IEnumerable<string> GetMissingRecords(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                public Dictionary<int, Dictionary<string, List<string>>> GetMissingRecords(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
                 {
-                    var errors = new List<string>();
+                    //row, entity, error message
+                    var errors = new Dictionary<int, Dictionary<string, List<string>>>();
+                    var rowIds = dataRows.Select(d => d.Field<int>("RowId")).Distinct();
+
+                    foreach(var rowId in rowIds)
+                    {
+                        errors.Add(rowId, new Dictionary<string, List<string>>());
+
+                        foreach(var column in columns)
+                        {
+                            errors[rowId].Add(column.Value, new List<string>());
+                        }
+                    }
 
                     foreach(var column in columns)
                     {
@@ -299,11 +311,138 @@ namespace MethodLibrary
 
                         foreach(var emptyRecord in emptyRecords)
                         {
-                            errors.Add($"{column.Value} missing in row {emptyRecord["RowId"]}");
+                            var rowId = Convert.ToInt32(emptyRecord["RowId"]);
+                            errors[rowId][column.Value].Add($"Required column {column.Value} has no value");
                         }
                     }
 
                     return errors;
+                }
+
+                public string FinaliseValidation(Dictionary<int, Dictionary<string, List<string>>> records, string processQueueGUID, long createdByUserId, long sourceId, string sheetName)
+                {
+                    //Split into two dictionaries
+                    //Those rows with errors need to be inserted into [Customer].[DataUploadValidationError]
+                    //Those rows without errors update [Temp.CustomerDataUpload].[sheetName].CanCommit to 1
+
+                    //Error records
+                    var errorRows = records.Where(r => r.Value.Values.Any()).ToDictionary(x => x.Key, x => x.Value);
+
+                    //Valid records
+                    var validRows = records.Where(r => !r.Value.Values.Any()).ToDictionary(x => x.Key, x => x.Value);
+
+                    //Insert error records
+                    var customerMethods = new Methods.Customer();
+                    customerMethods.InsertDataUploadValidationErrors(
+                        processQueueGUID, 
+                        createdByUserId,
+                        sourceId,
+                        sheetName,
+                        errorRows);
+
+                    //Update valid records
+                    UpdateCanCommit(processQueueGUID, sheetName, validRows);
+
+                    return errorRows.Any() ? "Validation errors found" : null;
+                }
+
+                public void AddErrorsToRecords(Dictionary<int, Dictionary<string, List<string>>> records, Dictionary<int, Dictionary<string, List<string>>> errors)
+                {
+                    foreach(var errorRow in errors)
+                    {
+                        if(!records.ContainsKey(errorRow.Key))
+                        {
+                            records.Add(errorRow.Key, errorRow.Value);
+                        }
+                        else
+                        {
+                            var errorRecords = records[errorRow.Key];
+                            foreach(var errorEntity in errorRow.Value)
+                            {
+                                if(!errorRecords.ContainsKey(errorEntity.Key))
+                                {
+                                    errorRecords.Add(errorEntity.Key, errorEntity.Value);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                public void UpdateCanCommit(string processQueueGUID, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validRecords)
+                {
+                    var storedProcedure = DetermineUpdateCanCommitStoredProcedureFromSheetName(sheetName);
+
+                    foreach(var rowId in validRecords.Keys)
+                    {
+                        CanCommit_Update(storedProcedure, processQueueGUID, rowId, true);
+                    }
+                }
+
+                private string DetermineUpdateCanCommitStoredProcedureFromSheetName(string sheetName)
+                {
+                    if(sheetName == _dataUploadValidationSheetNameEnums.Customer)
+                    {
+                        return _storedProcedureTempCustomerEnums.Customer_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.Site)
+                    {
+                        return _storedProcedureTempCustomerEnums.Site_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.Meter)
+                    {
+                        return _storedProcedureTempCustomerEnums.Meter_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.SubMeter)
+                    {
+                        return _storedProcedureTempCustomerEnums.SubMeter_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.MeterUsage)
+                    {
+                        return _storedProcedureTempCustomerEnums.MeterUsage_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.MeterExemption)
+                    {
+                        return _storedProcedureTempCustomerEnums.MeterExemption_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.SubMeterUsage)
+                    {
+                        return _storedProcedureTempCustomerEnums.SubMeterUsage_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.FixedContract)
+                    {
+                        return _storedProcedureTempCustomerEnums.FixedContract_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.FlexContract)
+                    {
+                        return _storedProcedureTempCustomerEnums.FlexContract_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.FlexReferenceVolume)
+                    {
+                        return _storedProcedureTempCustomerEnums.FlexReferenceVolume_UpdateCanCommit;
+                    }
+
+                    if(sheetName == _dataUploadValidationSheetNameEnums.FlexTrade)
+                    {
+                        return _storedProcedureTempCustomerEnums.FlexTrade_UpdateCanCommit;
+                    }                    
+
+                    return string.Empty;
+                }
+
+                private void CanCommit_Update(string storedProcedure, string processQueueGUID, int rowId, bool canCommit)
+                {
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        storedProcedure, 
+                        processQueueGUID, rowId, canCommit);
                 }
             }
         }

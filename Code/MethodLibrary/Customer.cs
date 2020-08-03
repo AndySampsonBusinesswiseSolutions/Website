@@ -113,6 +113,43 @@ namespace MethodLibrary
             {
                 return 0;
             }
+
+            public void InsertDataUploadValidationErrors(string processQueueGUID, long createdByUserId, long sourceId, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validationErrors)
+            {
+                //TODO
+                //Insert into DataUploadValidationError
+
+                //Get DataUploadValidationErrorId
+
+                //Get DataUploadValidationErrorAttributes
+
+                //Insert into DataUploadValidationErrorDetail
+            }
+
+            public void DataUploadValidationError_Insert(long createdByUserId, long sourceId, string dataUploadValidationErrorGUID)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureCustomerEnums.DataUploadValidationError_Insert, 
+                    createdByUserId, sourceId, dataUploadValidationErrorGUID);
+            }
+
+            public void DataUploadValidationErrorDetail_Insert(long createdByUserId, long sourceId, long dataUploadValidationErrorId, long dataUploadValidationErrorAttributeId, string dataUploadValidationErrorDetailDescription)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorDetail_Insert, 
+                    createdByUserId, sourceId, dataUploadValidationErrorId, dataUploadValidationErrorAttributeId, dataUploadValidationErrorDetailDescription);
+            }
+
+            public long DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(string dataUploadValidationErrorGUID)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationError_GetByDataUploadValidationErrorGUID, 
+                    dataUploadValidationErrorGUID);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorId"))
+                    .FirstOrDefault();
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ namespace ValidateSubMeterData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateSubMeterDataAPIId;
 
         public ValidateSubMeterDataController(ILogger<ValidateSubMeterDataController> logger)
@@ -86,9 +87,9 @@ namespace ValidateSubMeterData.api.Controllers
                         {"SubMeterIdentifier", "SubMeter Name"}
                     };
                 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
-                //Get submeters not stored in database
+                //TODO: Get submeters not stored in database
                 var newSubMeterDataRecords = customerDataRows.Where(r => _customerMethods.SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription(0, r.Field<string>("SubMeterIdentifier")) > 0);
 
                 //MPXN, SerialNumber, SubArea and Asset must be populated
@@ -99,10 +100,12 @@ namespace ValidateSubMeterData.api.Controllers
                         {"SubArea", "SubArea"},
                         {"Asset", "Asset"}
                     };
-                errors.AddRange(_tempCustomerMethods.GetMissingRecords(newSubMeterDataRecords, requiredColumns));
+                var newSubMeterErrors = _tempCustomerMethods.GetMissingRecords(newSubMeterDataRecords, requiredColumns);
+                _tempCustomerMethods.AddErrorsToRecords(records, newSubMeterErrors);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterDataAPIId, false, null);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.SubMeter);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

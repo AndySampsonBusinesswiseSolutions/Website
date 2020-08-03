@@ -14,6 +14,11 @@ namespace enums
                 public string CustomerDetail_Insert = "[Customer].[CustomerDetail_Insert]";
                 public string Customer_GetByCustomerGUID = "[Customer].[Customer_GetByCustomerGUID]";
                 public string Customer_GetList = "[Customer].[Customer_GetList]";
+                public string DataUploadValidationErrorAttribute_Insert = "[Customer].[DataUploadValidationErrorAttribute_Insert]";
+                public string DataUploadValidationError_Insert = "[Customer].[DataUploadValidationError_Insert]";
+                public string DataUploadValidationErrorDetail_Insert = "[Customer].[DataUploadValidationErrorDetail_Insert]";
+                public string DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription = "[Customer].[DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription]";
+                public string DataUploadValidationError_GetByDataUploadValidationErrorGUID = "[Customer].[DataUploadValidationError_GetByDataUploadValidationErrorGUID]";
             }
         }
     }

@@ -24,6 +24,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateFlexReferenceVolumeDataAPIId;
 
         public ValidateFlexReferenceVolumeDataController(ILogger<ValidateFlexReferenceVolumeDataController> logger)
@@ -85,7 +86,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                         {"ContractReference", "Contract Reference"}
                     };
 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
                 //Validate Contract Dates
                 var invalidDateFromDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
@@ -93,7 +94,8 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidDateFromDataRecord in invalidDateFromDataRecords)
                 {
-                    errors.Add($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}' in row {invalidDateFromDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidDateFromDataRecord["RowId"]);
+                    records[rowId]["DateFrom"].Add($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}'");
                 }
 
                 var invalidDateToDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
@@ -101,7 +103,8 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
-                    errors.Add($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}' in row {invalidDateToDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidDateToDataRecord["RowId"]);
+                    records[rowId]["DateTo"].Add($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}'");
                 }
 
                 var invalidContractDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
@@ -112,7 +115,8 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
-                    errors.Add($"Invalid Contract Dates '{invalidDateToDataRecord["DateFrom"]}' is equal to or later than '{invalidDateToDataRecord["DateTo"]}' in row {invalidDateToDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidDateToDataRecord["RowId"]);
+                    records[rowId]["DateFrom"].Add($"Invalid Contract Dates '{invalidDateToDataRecord["DateFrom"]}' is equal to or later than '{invalidDateToDataRecord["DateTo"]}'");
                 }
 
                 //Validate Volume
@@ -121,11 +125,13 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
-                    errors.Add($"Invalid Reference Volume '{invalidVolumeDataRecord["Volume"]}' in row {invalidVolumeDataRecord["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidVolumeDataRecord["RowId"]);
+                    records[rowId]["Volume"].Add($"Invalid Reference Volume '{invalidVolumeDataRecord["Volume"]}'");
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexReferenceVolumeDataAPIId, false, null);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.FlexReferenceVolume);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexReferenceVolumeDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {

@@ -19,7 +19,6 @@ namespace enums
                     public string FlexContract_Insert = "[Temp.CustomerDataUpload].[FlexContract_Insert]";
                     public string FixedContract_Insert = "[Temp.CustomerDataUpload].[FixedContract_Insert]";
                     public string Customer_Insert = "[Temp.CustomerDataUpload].[Customer_Insert]";
-
                     public string Site_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[Site_GetByProcessQueueGUID]";
                     public string Meter_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[Meter_GetByProcessQueueGUID]";
                     public string MeterUsage_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[MeterUsage_GetByProcessQueueGUID]";
@@ -31,6 +30,17 @@ namespace enums
                     public string FlexContract_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[FlexContract_GetByProcessQueueGUID]";
                     public string FixedContract_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[FixedContract_GetByProcessQueueGUID]";
                     public string Customer_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[Customer_GetByProcessQueueGUID]";
+                    public string Site_UpdateCanCommit = "[Temp.CustomerDataUpload].[Site_UpdateCanCommit]";
+                    public string Meter_UpdateCanCommit = "[Temp.CustomerDataUpload].[Meter_UpdateCanCommit]";
+                    public string SubMeter_UpdateCanCommit = "[Temp.CustomerDataUpload].[SubMeter_UpdateCanCommit]";
+                    public string MeterUsage_UpdateCanCommit = "[Temp.CustomerDataUpload].[MeterUsage_UpdateCanCommit]";
+                    public string SubMeterUsage_UpdateCanCommit = "[Temp.CustomerDataUpload].[SubMeterUsage_UpdateCanCommit]";
+                    public string Customer_UpdateCanCommit = "[Temp.CustomerDataUpload].[Customer_UpdateCanCommit]";
+                    public string MeterExemption_UpdateCanCommit = "[Temp.CustomerDataUpload].[MeterExemption_UpdateCanCommit]";
+                    public string FixedContract_UpdateCanCommit = "[Temp.CustomerDataUpload].[FixedContract_UpdateCanCommit]";
+                    public string FlexContract_UpdateCanCommit = "[Temp.CustomerDataUpload].[FlexContract_UpdateCanCommit]";
+                    public string FlexReferenceVolume_UpdateCanCommit = "[Temp.CustomerDataUpload].[FlexReferenceVolume_UpdateCanCommit]";
+                    public string FlexTrade_UpdateCanCommit = "[Temp.CustomerDataUpload].[FlexTrade_UpdateCanCommit]";
                 }
             }
         }

@@ -24,6 +24,7 @@ namespace ValidateSiteData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
         private readonly Int64 validateSiteDataAPIId;
 
         public ValidateSiteDataController(ILogger<ValidateSiteDataController> logger)
@@ -85,7 +86,7 @@ namespace ValidateSiteData.api.Controllers
                         {"SiteName", "Site Name"}
                     };
                 
-                var errors = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns).ToList();
+                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
                 //Validate post code
                 var invalidPostCodeDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SitePostCode")) 
@@ -93,7 +94,8 @@ namespace ValidateSiteData.api.Controllers
 
                 foreach(var invalidPostCodeDataRow in invalidPostCodeDataRows)
                 {
-                    errors.Add($"Invalid Site Post Code '{invalidPostCodeDataRow["SitePostCode"]}' in row {invalidPostCodeDataRow["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidPostCodeDataRow["RowId"]);
+                    records[rowId]["SitePostCode"].Add($"Invalid Site Post Code '{invalidPostCodeDataRow["SitePostCode"]}'");
                 }
 
                 //Validate telephone number
@@ -102,7 +104,8 @@ namespace ValidateSiteData.api.Controllers
 
                 foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
                 {
-                    errors.Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}' in row {invalidTelephoneNumberDataRow["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidTelephoneNumberDataRow["RowId"]);
+                    records[rowId]["ContactTelephoneNumber"].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}'");
                 }
 
                 //Validate email address
@@ -111,11 +114,13 @@ namespace ValidateSiteData.api.Controllers
 
                 foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)
                 {
-                    errors.Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}' in row {invalidEmailAddressDataRow["RowId"]}");
+                    var rowId = Convert.ToInt32(invalidEmailAddressDataRow["RowId"]);
+                    records[rowId]["ContactEmailAddress"].Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}'");
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, false, null);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.Site);
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
