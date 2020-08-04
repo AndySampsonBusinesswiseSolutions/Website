@@ -25,7 +25,7 @@ namespace enums
                     public string ValidateFlexReferenceVolumeDataAPI = "D520F4DC-F582-45D7-A53C-608156991C6E";
                     public string ValidateFlexContractDataAPI = "BE59D94B-61BE-4900-B336-36AEB8904973";
                     public string ValidateFixedContractDataAPI = "B8F5A9D3-CD9F-44F2-B3EA-DCECA0F7CCFF";
-                    public string ValidateMeterExempionDataAPI = "0BA4C8E7-3723-4106-A117-656F6871BC99";
+                    public string ValidateMeterExemptionDataAPI = "0BA4C8E7-3723-4106-A117-656F6871BC99";
                     public string ValidateCustomerDataAPI = "8253F798-A8F4-404D-B2BC-5DC87EFE839B";
                     public string StoreFlexTradeDataAPI = "115603E8-400A-43F0-AC36-44DDCF7031D8";
                     public string StoreFlexReferenceVolumeDataAPI = "D2973575-B026-4D17-8879-3E963E9C438E";
@@ -69,7 +69,7 @@ namespace enums
                     public string ValidateFlexReferenceVolumeDataAPI = "ValidateFlexReferenceVolumeData.api";
                     public string ValidateFlexContractDataAPI = "ValidateFlexContractData.api";
                     public string ValidateFixedContractDataAPI = "ValidateFixedContractData.api";
-                    public string ValidateMeterExempionDataAPI = "ValidateMeterExempionData.api";
+                    public string ValidateMeterExemptionDataAPI = "ValidateMeterExemptionData.api";
                     public string ValidateCustomerDataAPI = "ValidateCustomerData.api";
                     public string StoreFlexTradeDataAPI = "StoreFlexTradeData.api";
                     public string StoreFlexReferenceVolumeDataAPI = "StoreFlexReferenceVolumeData.api";
@@ -114,7 +114,7 @@ namespace enums
                     public string ValidateFlexReferenceVolumeDataAPI = "h9CMbkML68NCyMNj";
                     public string ValidateFlexContractDataAPI = "FMTXVhfa5Yu8s6vQ";
                     public string ValidateFixedContractDataAPI = "aHG2nFuzttAHQDCN";
-                    public string ValidateMeterExempionDataAPI = "XdUWncBgXVs2hmvE";
+                    public string ValidateMeterExemptionDataAPI = "XdUWncBgXVs2hmvE";
                     public string ValidateCustomerDataAPI = "Mkf2GTm2crKuk6jh";
                     public string StoreFlexTradeDataAPI = "A5BYZuEtTQE5TENu";
                     public string StoreFlexReferenceVolumeDataAPI = "L5msq6pjxEqMAAf4";

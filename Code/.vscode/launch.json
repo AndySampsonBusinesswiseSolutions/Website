@@ -88,14 +88,14 @@
                 "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api/Views"
             }
         },
-        {"name": "ValidateMeterExempionData.api",
+        {"name": "ValidateMeterExemptionData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExempionData.api/bin/Debug/netcoreapp3.1/ValidateMeterExempionData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExemptionData.api/bin/Debug/netcoreapp3.1/ValidateMeterExemptionData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExempionData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExemptionData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -106,7 +106,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExempionData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExemptionData.api/Views"
             }
         },
         {"name": "ValidateCustomerData.api",
@@ -902,7 +902,7 @@
                 "StoreFlexReferenceVolumeData.api",
                 "StoreFlexTradeData.api",
                 "ValidateCustomerData.api",
-                "ValidateMeterExempionData.api",
+                "ValidateMeterExemptionData.api",
                 "ValidateFixedContractData.api",
                 "ValidateFlexContractData.api",
                 "ValidateFlexReferenceVolumeData.api",

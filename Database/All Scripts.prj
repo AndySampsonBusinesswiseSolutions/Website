@@ -585,7 +585,7 @@
   <ScriptFile>
     <ID>d891252e-3e03-41b7-aaed-183c47c74bbe</ID>
     <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\018 - ValidateMeterExempionData.api\*.sql</FullName>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\018 - ValidateMeterExemptionData.api\*.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>false</IsStaticFile>
   </ScriptFile>

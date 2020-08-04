@@ -83,7 +83,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateFlexTradeData.api",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateFixedContractData.api", "CustomerDataUpload\ValidateFixedContractData.api\ValidateFixedContractData.api.csproj", "{B8F5A9D3-CD9F-44F2-B3EA-DCECA0F7CCFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateMeterExempionData.api", "CustomerDataUpload\ValidateMeterExempionData.api\ValidateMeterExempionData.api.csproj", "{0BA4C8E7-3723-4106-A117-656F6871BC99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateMeterExemptionData.api", "CustomerDataUpload\ValidateMeterExemptionData.api\ValidateMeterExemptionData.api.csproj", "{0BA4C8E7-3723-4106-A117-656F6871BC99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
