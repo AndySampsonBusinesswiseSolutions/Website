@@ -20,6 +20,7 @@ namespace ValidateFlexContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
@@ -95,14 +96,15 @@ namespace ValidateFlexContractData.api.Controllers
 
                 //TODO: If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
-                var newContractDataRecords = customerDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
+                var newContractMeterDataRecords = customerDataRows.Where(r => 
+                    !_customerMethods.ContractBasketMeterExists(r.Field<string>("ContractReference"), r.Field<string>("BasketReference"), r.Field<string>("MPXN")));
 
                 //Product must be populated
                 requiredColumns = new Dictionary<string, string>
                     {
                         {"Product", "Product"}
                     };
-                var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractDataRecords, requiredColumns);
+                var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractMeterDataRecords, requiredColumns);
                 _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
                 
                 //Validate MPXN

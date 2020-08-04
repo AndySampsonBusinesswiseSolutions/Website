@@ -154,6 +154,17 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("ContractMeterId"))
                     .ToList();
             }
+
+            public List<long> BasketToContractMeter_GetContractMeterIdListByBasketId(long basketId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.BasketToContractMeter_GetByBasketId, 
+                    basketId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterId"))
+                    .ToList();
+            }
         }
     }
 }

@@ -31,6 +31,9 @@ namespace enums
                 public string MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription = "[Customer].[MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription]";
                 public string ContractAttribute_GetByContractAttributeDescription = "[Customer].[ContractAttribute_GetByContractAttributeDescription]";
                 public string ContractDetail_GetByContractAttributeIdAndContractDetailDescription = "[Customer].[ContractDetail_GetByContractAttributeIdAndContractDetailDescription]";
+                public string BasketAttribute_GetByBasketAttributeDescription = "[Customer].[BasketAttribute_GetByBasketAttributeDescription]";
+                public string BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription = "[Customer].[BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription]";
+
             }
         }
     }

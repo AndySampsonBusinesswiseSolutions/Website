@@ -16,6 +16,14 @@ namespace enums
                 public string ContactEmailAddress = "Contact Email Address";
             }
 
+            public class Basket
+            {
+                public class Attribute
+                {
+                    public string BasketReference = "Basket Reference";
+                }
+            }
+
             public class Contract
             {
                 public class Attribute
