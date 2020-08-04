@@ -380,57 +380,57 @@ namespace MethodLibrary
 
                 private string DetermineUpdateCanCommitStoredProcedureFromSheetName(string sheetName)
                 {
-                    if(sheetName == _dataUploadValidationSheetNameEnums.Customer)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.Customer)
                     {
                         return _storedProcedureTempCustomerEnums.Customer_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.Site)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.Site)
                     {
                         return _storedProcedureTempCustomerEnums.Site_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.Meter)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.Meter)
                     {
                         return _storedProcedureTempCustomerEnums.Meter_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.SubMeter)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeter)
                     {
                         return _storedProcedureTempCustomerEnums.SubMeter_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.MeterUsage)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.MeterUsage)
                     {
                         return _storedProcedureTempCustomerEnums.MeterUsage_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.MeterExemption)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.MeterExemption)
                     {
                         return _storedProcedureTempCustomerEnums.MeterExemption_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.SubMeterUsage)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeterUsage)
                     {
                         return _storedProcedureTempCustomerEnums.SubMeterUsage_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.FixedContract)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.FixedContract)
                     {
                         return _storedProcedureTempCustomerEnums.FixedContract_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.FlexContract)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexContract)
                     {
                         return _storedProcedureTempCustomerEnums.FlexContract_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.FlexReferenceVolume)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume)
                     {
                         return _storedProcedureTempCustomerEnums.FlexReferenceVolume_UpdateCanCommit;
                     }
 
-                    if(sheetName == _dataUploadValidationSheetNameEnums.FlexTrade)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
                     {
                         return _storedProcedureTempCustomerEnums.FlexTrade_UpdateCanCommit;
                     }                    

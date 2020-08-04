@@ -25,7 +25,8 @@ namespace ValidateSubMeterData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
+        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
+        private static readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Int64 validateSubMeterDataAPIId;
 
         public ValidateSubMeterDataController(ILogger<ValidateSubMeterDataController> logger)
@@ -89,8 +90,10 @@ namespace ValidateSubMeterData.api.Controllers
                 
                 var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
-                //TODO: Get submeters not stored in database
-                var newSubMeterDataRecords = customerDataRows.Where(r => _customerMethods.SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription(0, r.Field<string>("SubMeterIdentifier")) > 0);
+                //Get submeters not stored in database
+                var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
+                var newSubMeterDataRecords = customerDataRows.Where(r => 
+                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>("SubMeterIdentifier")) == 0);
 
                 //MPXN, SerialNumber, SubArea and Asset must be populated
                 requiredColumns = new Dictionary<string, string>
@@ -104,7 +107,7 @@ namespace ValidateSubMeterData.api.Controllers
                 _tempCustomerMethods.AddErrorsToRecords(records, newSubMeterErrors);
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _dataUploadValidationSheetNameEnums.SubMeter);
+                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.SubMeter);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

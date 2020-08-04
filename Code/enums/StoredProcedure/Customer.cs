@@ -19,6 +19,11 @@ namespace enums
                 public string DataUploadValidationErrorDetail_Insert = "[Customer].[DataUploadValidationErrorDetail_Insert]";
                 public string DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription = "[Customer].[DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription]";
                 public string DataUploadValidationError_GetByDataUploadValidationErrorGUID = "[Customer].[DataUploadValidationError_GetByDataUploadValidationErrorGUID]";
+                public string SubMeterAttribute_Insert = "[Customer].[SubMeterAttribute_Insert]";
+                public string SubMeter_Insert = "[Customer].[SubMeter_Insert]";
+                public string SubMeterDetail_Insert = "[Customer].[SubMeterDetail_Insert]";
+                public string SubMeterAttribute_GetBySubMeterAttributeDescription = "[Customer].[SubMeterAttribute_GetBySubMeterAttributeDescription]";
+                public string SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription = "[Customer].[SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription]";
             }
         }
     }
