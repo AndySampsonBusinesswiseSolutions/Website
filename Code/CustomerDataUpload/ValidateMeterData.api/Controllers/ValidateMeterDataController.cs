@@ -26,6 +26,7 @@ namespace ValidateMeterData.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
+        private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Int64 validateMeterDataAPIId;
 
         public ValidateMeterDataController(ILogger<ValidateMeterDataController> logger)
@@ -107,8 +108,10 @@ namespace ValidateMeterData.api.Controllers
                     records[row]["MPXN"].Add($"Invalid MPAN/MPRN {dataRow["MPXN"]}");
                 }
 
-                //TODO: Get MPANs not stored in database
-                var newMPANDataRecords = mpanDataRecords.Where(r => _customerMethods.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription(0, r.Field<string>("MPXN")) > 0);
+                //Get MPANs not stored in database
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var newMPANDataRecords = mpanDataRecords.Where(r => 
+                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>("MPXN")) == 0);
 
                 //Site, GSP, PC, MTC, LLFC and Area must be populated
                 requiredColumns = new Dictionary<string, string>
@@ -174,7 +177,8 @@ namespace ValidateMeterData.api.Controllers
                 }
 
                 //Get MPRNs not stored in database
-                var newMPRNDataRecords = mprnDataRecords.Where(r => _customerMethods.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription(0, r.Field<string>("MPXN")) > 0);
+                var newMPRNDataRecords = mprnDataRecords.Where(r => 
+                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>("MPXN")) == 0);
 
                 //Site, LDZ and Area must be populated
                 requiredColumns = new Dictionary<string, string>

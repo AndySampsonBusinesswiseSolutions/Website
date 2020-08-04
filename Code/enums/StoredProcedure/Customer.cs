@@ -24,6 +24,11 @@ namespace enums
                 public string SubMeterDetail_Insert = "[Customer].[SubMeterDetail_Insert]";
                 public string SubMeterAttribute_GetBySubMeterAttributeDescription = "[Customer].[SubMeterAttribute_GetBySubMeterAttributeDescription]";
                 public string SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription = "[Customer].[SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription]";
+                public string MeterAttribute_Insert = "[Customer].[MeterAttribute_Insert]";
+                public string Meter_Insert = "[Customer].[Meter_Insert]";
+                public string MeterDetail_Insert = "[Customer].[MeterDetail_Insert]";
+                public string MeterAttribute_GetByMeterAttributeDescription = "[Customer].[MeterAttribute_GetByMeterAttributeDescription]";
+                public string MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription = "[Customer].[MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription]";
             }
         }
     }

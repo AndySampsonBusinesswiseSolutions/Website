@@ -43,6 +43,19 @@ namespace enums
                 }
             }
 
+            public class Meter
+            {
+                public class Attribute
+                {
+                    public string MeterIdentifier = "Meter Identifier";
+                    public string MeterSerialNumber = "Meter Serial Number";
+                    public string SupplyCapacity = "Supply Capacity";
+                    public string StandardOfftakeQuantity = "Standard Offtake Quantity";
+                    public string AnnualUsage = "Annual Usage";
+                    public string ImportExport = "Import/Export";
+                }
+            }
+
             public class SubMeter
             {
                 public class Attribute
