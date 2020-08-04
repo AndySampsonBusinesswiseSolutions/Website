@@ -32,6 +32,7 @@ namespace MethodLibrary
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Enums.DataUploadValidation.SheetName _dataUploadValidationSheetNameEnums = new Enums.DataUploadValidation.SheetName();
+        private static readonly Enums.DataUploadValidation.Attribute _dataUploadValidationAttributeEnums = new Enums.DataUploadValidation.Attribute();
         private static readonly Information _informationMethods = new Information();
         private static readonly Supplier _supplierMethods = new Supplier();
 

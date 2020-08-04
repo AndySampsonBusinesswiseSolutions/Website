@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -116,14 +117,37 @@ namespace MethodLibrary
 
             public void InsertDataUploadValidationErrors(string processQueueGUID, long createdByUserId, long sourceId, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validationErrors)
             {
-                //TODO
                 //Insert into DataUploadValidationError
+                var dataUploadValidationErrorGUID = Guid.NewGuid().ToString();
+                DataUploadValidationError_Insert(createdByUserId, sourceId, dataUploadValidationErrorGUID);
 
                 //Get DataUploadValidationErrorId
+                var dataUploadValidationErrorId = DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(dataUploadValidationErrorGUID);
 
                 //Get DataUploadValidationErrorAttributes
+                var sheetNameDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_dataUploadValidationAttributeEnums.SheetName);
+                var rowNumberDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_dataUploadValidationAttributeEnums.RowNumber);
+                var entityDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_dataUploadValidationAttributeEnums.Entity);
+                var validationErrorMessageDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_dataUploadValidationAttributeEnums.ValidationErrorMessage);
+                var processQueueGUIDDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_systemAPIRequiredDataKeyEnums.ProcessQueueGUID);
 
                 //Insert into DataUploadValidationErrorDetail
+                foreach(var validationError in validationErrors)
+                {
+                    var rowNumber = validationError.Key.ToString();
+                    foreach(var validationErrorEntity in validationError.Value)
+                    {
+                        var entity = validationErrorEntity.Key;
+                        foreach(var validationErrorMessage in validationErrorEntity.Value)
+                        {
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, sheetNameDataUploadValidationErrorAttributeId, sheetName);
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, rowNumberDataUploadValidationErrorAttributeId, rowNumber);
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, entityDataUploadValidationErrorAttributeId, entity);
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, validationErrorMessageDataUploadValidationErrorAttributeId, processQueueGUID);
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, processQueueGUIDDataUploadValidationErrorAttributeId, validationErrorMessage);
+                        }
+                    }
+                }
             }
 
             public void DataUploadValidationError_Insert(long createdByUserId, long sourceId, string dataUploadValidationErrorGUID)
@@ -148,6 +172,17 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("DataUploadValidationErrorId"))
+                    .FirstOrDefault();
+            }
+
+            public long DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(string dataUploadValidationErrorAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription, 
+                    dataUploadValidationErrorAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorAttributeId"))
                     .FirstOrDefault();
             }
         }

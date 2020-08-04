@@ -6,20 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Customer].[DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Customer].[DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Customer].[DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Customer].[DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-03
--- Description:	Get DataUploadValidationErrorDescription info from [Customer].[DataUploadValidationErrorDescription] table by DataUploadValidationErrorDescriptionDescription
+-- Description:	Get DataUploadValidationErrorAttribute info from [Customer].[DataUploadValidationErrorAttribute] table by DataUploadValidationErrorAttributeDescription
 -- =============================================
 
-ALTER PROCEDURE [Customer].[DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription]
-    @DataUploadValidationErrorDescriptionDescription VARCHAR(255),
+ALTER PROCEDURE [Customer].[DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription]
+    @DataUploadValidationErrorAttributeDescription VARCHAR(255),
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -35,17 +35,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        DataUploadValidationErrorDescriptionId,
+        DataUploadValidationErrorAttributeId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        DataUploadValidationErrorDescriptionDescription
+        DataUploadValidationErrorAttributeDescription
     FROM 
-        [Customer].[DataUploadValidationErrorDescription] 
+        [Customer].[DataUploadValidationErrorAttribute] 
     WHERE 
-        DataUploadValidationErrorDescriptionDescription = @DataUploadValidationErrorDescriptionDescription
+        DataUploadValidationErrorAttributeDescription = @DataUploadValidationErrorAttributeDescription
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

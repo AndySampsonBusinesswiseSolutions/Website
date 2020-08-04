@@ -17,7 +17,7 @@ namespace enums
                 public string DataUploadValidationErrorAttribute_Insert = "[Customer].[DataUploadValidationErrorAttribute_Insert]";
                 public string DataUploadValidationError_Insert = "[Customer].[DataUploadValidationError_Insert]";
                 public string DataUploadValidationErrorDetail_Insert = "[Customer].[DataUploadValidationErrorDetail_Insert]";
-                public string DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription = "[Customer].[DataUploadValidationErrorDescription_GetByDataUploadValidationErrorDescriptionDescription]";
+                public string DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription = "[Customer].[DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription]";
                 public string DataUploadValidationError_GetByDataUploadValidationErrorGUID = "[Customer].[DataUploadValidationError_GetByDataUploadValidationErrorGUID]";
             }
         }
