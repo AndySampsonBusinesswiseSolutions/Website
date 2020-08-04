@@ -94,7 +94,7 @@ namespace ValidateFlexContractData.api.Controllers
 
                 var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
-                //TODO: If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
+                //If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
                 var newContractMeterDataRecords = customerDataRows.Where(r => 
                     !_customerMethods.ContractBasketMeterExists(r.Field<string>("ContractReference"), r.Field<string>("BasketReference"), r.Field<string>("MPXN")));
