@@ -119,39 +119,6 @@ namespace MethodLibrary
                     createdByUserId, sourceId, customerId, childCustomerId);
             }
 
-            public List<long> FolderToRootFolderType_GetFolderIdListByRootFolderTypeId(long rootFolderTypeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.FolderToRootFolderType_GetByRootFolderTypeId, 
-                    rootFolderTypeId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FolderId"))
-                    .ToList();
-            }
-
-            public List<long> FolderToFolderExtension_GetFolderExtensionIdByFolderId(long folderId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.FolderToFolderExtension_GetByFolderId, 
-                    folderId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FolderExtensionId"))
-                    .ToList();
-            }
-
-            public List<long> FolderToFolderExtensionType_GetFolderIdListByFolderExtensionTypeId(long folderExtensionTypeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.FolderToFolderExtensionType_GetByFolderExtensionTypeId, 
-                    folderExtensionTypeId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FolderId"))
-                    .ToList();
-            }
-
             public void CustomerToFile_Insert(long createdByUserId, long sourceId, long customerId, long fileId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
@@ -164,6 +131,28 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.FileToFileType_Insert, 
                     createdByUserId, sourceId, fileId, fileTypeId);
+            }
+
+            public List<long> ContractToContractMeter_GetContractMeterIdListByContractId(long contractId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToContractMeter_GetByContractId, 
+                    contractId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterId"))
+                    .ToList();
+            }
+
+            public List<long> ContractMeterToMeter_GetContractMeterIdListByMeterId(long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractMeterToMeter_GetByContractMeterId, 
+                    meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterId"))
+                    .ToList();
             }
         }
     }

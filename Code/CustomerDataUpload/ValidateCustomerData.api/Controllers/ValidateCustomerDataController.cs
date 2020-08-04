@@ -91,9 +91,6 @@ namespace ValidateCustomerData.api.Controllers
                 
                 var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
-                //TODO: If Customer already exists, check that User is linked to Customer
-                //If not, then reject - this is to stop people updating details of other customers
-
                 //Validate telephone number
                 var invalidTelephoneNumberDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactTelephoneNumber")) 
                     && !_methods.IsValidPhoneNumber(r.Field<string>("ContactTelephoneNumber")));

@@ -219,6 +219,74 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("DataUploadValidationErrorAttributeId"))
                     .FirstOrDefault();
             }
+
+            public long ContractAttribute_GetContractAttributeIdByContractAttributeDescription(string contractAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.ContractAttribute_GetByContractAttributeDescription, 
+                    contractAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public long ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(long contractAttributeId, string contractDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.ContractDetail_GetByContractAttributeIdAndContractDetailDescription, 
+                    contractAttributeId, contractDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractDetailId"))
+                    .FirstOrDefault();
+            }
+
+            public bool ContractMeterExists(string contractReference, string mpxn)
+                {
+                    //Get ContractId from ContractReference
+                    var contractReferenceContractAttributeId = ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
+                    var contractId = ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
+
+                    //If ContractId == 0 then not valid
+                    if(contractId == 0)
+                    {
+                        return false;
+                    }
+
+                    //Get MeterId from MPXN
+                    var meterIdentifierMeterAttributeId = MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                    var meterId = MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+
+                    //If MeterId == 0 then not valid
+                    if(meterId == 0)
+                    {
+                        return false;
+                    }
+
+                    //Get ContractMeterIds from ContractId
+                    var contractMeterIdFromContractId = new Mapping().ContractToContractMeter_GetContractMeterIdListByContractId(contractId);
+
+                    //If no ContractMeterIds then not valid
+                    if(!contractMeterIdFromContractId.Any())
+                    {
+                        return false;
+                    }
+
+                    //Get ContractMeterIds from MeterId
+                    var contractMeterIdFromMeterId = new Mapping().ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
+
+                    //If no ContractMeterIds then not valid
+                    if(!contractMeterIdFromMeterId.Any())
+                    {
+                        return false;
+                    }
+
+                    //Get ContractMeterIds that exist in both lists
+                    var matchingContractMeterIds = contractMeterIdFromContractId.Intersect(contractMeterIdFromMeterId);
+
+                    return matchingContractMeterIds.Any();
+                }
         }
     }
 }

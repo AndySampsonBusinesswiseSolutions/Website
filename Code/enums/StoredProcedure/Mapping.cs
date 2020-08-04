@@ -23,6 +23,8 @@ namespace enums
                 public string FolderToFolderExtensionType_GetByFolderExtensionTypeId = "[Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId]";
                 public string CustomerToFile_Insert = "[Mapping].[CustomerToFile_Insert]";
                 public string FileToFileType_Insert = "[Mapping].[FileToFileType_Insert]";
+                public string ContractToContractMeter_GetByContractId = "[Mapping].[ContractToContractMeter_GetByContractId]";
+                public string ContractMeterToMeter_GetByContractMeterId = "[Mapping].[ContractMeterToMeter_GetByContractMeterId]";
             }
         }
     }

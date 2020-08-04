@@ -16,6 +16,14 @@ namespace enums
                 public string ContactEmailAddress = "Contact Email Address";
             }
 
+            public class Contract
+            {
+                public class Attribute
+                {
+                    public string ContractReference = "Contract Reference";
+                }
+            }
+
             public class DataUploadValidation
             {
                 public class Attribute

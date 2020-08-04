@@ -33,6 +33,8 @@ namespace MethodLibrary
         private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
         private static readonly Enums.Customer.DataUploadValidation.Attribute _customerDataUploadValidationAttributeEnums = new Enums.Customer.DataUploadValidation.Attribute();
+        private static readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
+        private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private static readonly Information _informationMethods = new Information();
         private static readonly Supplier _supplierMethods = new Supplier();
 

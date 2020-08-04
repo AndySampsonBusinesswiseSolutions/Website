@@ -20,6 +20,7 @@ namespace ValidateFixedContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
@@ -92,9 +93,22 @@ namespace ValidateFixedContractData.api.Controllers
 
                 var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
 
-                //TODO: If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
+                //If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
+                var newContractMeterDataRecords = customerDataRows.Where(r => 
+                    !_customerMethods.ContractMeterExists(r.Field<string>("ContractReference"), r.Field<string>("MPXN")));
+
+                requiredColumns = new Dictionary<string, string>
+                    {
+                        {"Product", "Product"},
+                        {"RateCount", "Rate Count"},
+                        {"Standingcharge", "Standing Charge"},
+                        {"CapacityCharge", "Capacity Charge"}
+                    };
+                var newContractMeterErrors =_tempCustomerMethods.GetMissingRecords(newContractMeterDataRecords, requiredColumns);
+                _tempCustomerMethods.AddErrorsToRecords(records, newContractMeterErrors);
+
                 //Get new contracts
-                var newContractDataRecords = customerDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
+                var newContractDataRecords = customerDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("ContractReference")));
 
                 //Product must be populated
                 requiredColumns = new Dictionary<string, string>
