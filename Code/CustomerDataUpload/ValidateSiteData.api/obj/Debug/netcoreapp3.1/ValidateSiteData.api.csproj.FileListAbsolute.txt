@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateSiteData.api\obj\Debug\net
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateSiteData.api\obj\Debug\netcoreapp3.1\ValidateSiteData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateSiteData.api\obj\Debug\netcoreapp3.1\ValidateSiteData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateSiteData.api\obj\Debug\netcoreapp3.1\ValidateSiteData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateSiteData.api\obj\Debug\netcoreapp3.1\ValidateSiteData.api.csprojAssemblyReference.cache

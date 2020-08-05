@@ -9,9 +9,9 @@
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/ValidateCrossSheetEntityData.api/bin/Debug/netcoreapp3.1/ValidateCrossSheetEntityData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateCrossSheetEntityData.api/bin/Debug/netcoreapp3.1/ValidateCrossSheetEntityData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/ValidateCrossSheetEntityData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateCrossSheetEntityData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -22,7 +22,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/ValidateCrossSheetEntityData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateCrossSheetEntityData.api/Views"
             }
         },
         {"name": "ValidateFlexTradeData.api",

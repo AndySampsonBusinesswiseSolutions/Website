@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
 
 namespace StoreSubMeterUsageData.api.Controllers
 {
@@ -70,7 +71,16 @@ namespace StoreSubMeterUsageData.api.Controllers
                 //Get SubMeter Usage data from Customer Data Upload
                 var subMeterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['SubMeter HH Data']");
 
-                //TODO: Make into BulkInsert
+                //Create data table
+                var subMeterUsageDataTable = new DataTable();
+                subMeterUsageDataTable.Columns.Add("ProcessQueueGUID", typeof(Guid));
+                subMeterUsageDataTable.Columns.Add("RowId", typeof(int));
+                subMeterUsageDataTable.Columns.Add("SubMeterIdentifier", typeof(string));
+                subMeterUsageDataTable.Columns.Add("Date", typeof(string));
+                subMeterUsageDataTable.Columns.Add("TimePeriod", typeof(string));
+                subMeterUsageDataTable.Columns.Add("Value", typeof(string));
+                subMeterUsageDataTable.Columns.Add("CanCommit", typeof(bool));
+
                 foreach(var row in subMeterUsageDictionary.Keys)
                 {
                     var values = subMeterUsageDictionary[row];
@@ -81,10 +91,22 @@ namespace StoreSubMeterUsageData.api.Controllers
                     {
                         var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
-                        //Insert submeter usage data into [Temp.CustomerDataUpload].[SubMeterUsage]
-                        _tempCustomerMethods.SubMeterUsage_Insert(processQueueGUID, row, subMeterIdentifier, date, timePeriodString, values[timePeriod]);
+                        //Insert data into subMeterUsageDataTable
+                        var subMeterUsageDataRow = subMeterUsageDataTable.NewRow();
+                        subMeterUsageDataRow["ProcessQueueGUID"] = processQueueGUID;
+                        subMeterUsageDataRow["RowId"] = row;
+                        subMeterUsageDataRow["SubMeterIdentifier"] = subMeterIdentifier;
+                        subMeterUsageDataRow["Date"] = date;
+                        subMeterUsageDataRow["TimePeriod"] = timePeriodString;
+                        subMeterUsageDataRow["Value"] = values[timePeriod];
+                        subMeterUsageDataRow["CanCommit"] = false;
+
+                        subMeterUsageDataTable.Rows.Add(subMeterUsageDataRow);
                     }
                 }
+
+                //Bulk Insert subMeterUsageDataTable
+                _methods.BulkInsert(subMeterUsageDataTable, "[Temp.CustomerDataUpload].[SubMeterUsage]");
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeSubMeterUsageDataAPIId, false, null);

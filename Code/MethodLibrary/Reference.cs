@@ -48,6 +48,11 @@ namespace MethodLibrary
             _databaseInteraction = new DatabaseInteraction(userName, password);
         }
 
+        public void BulkInsert(DataTable dataTable, string destinationTable)
+        {
+            _databaseInteraction.BulkInsert(dataTable, destinationTable);
+        }
+
         private static List<SqlParameter> CreateSqlParameters(ParameterInfo[] parameters, params object[] values)
         {
             //Set up stored procedure parameters

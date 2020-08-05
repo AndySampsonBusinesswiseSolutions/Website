@@ -84,6 +84,7 @@ namespace databaseInteraction
                 using (var sqlCommand = new SqlCommand(storedProcedure, sqlConnection))
                 {
                     sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.CommandTimeout = 0;
 
                     if (sqlParameters.Any())
                     {

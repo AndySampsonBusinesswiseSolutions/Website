@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
 
 namespace StoreMeterUsageData.api.Controllers
 {
@@ -70,7 +71,16 @@ namespace StoreMeterUsageData.api.Controllers
                 //Get Meter Usage data from Customer Data Upload
                 var meterUsageDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter HH Data']");
 
-                //TODO: Make into BulkInsert
+                //Create data table
+                var meterUsageDataTable = new DataTable();
+                meterUsageDataTable.Columns.Add("ProcessQueueGUID", typeof(Guid));
+                meterUsageDataTable.Columns.Add("RowId", typeof(int));
+                meterUsageDataTable.Columns.Add("MPXN", typeof(string));
+                meterUsageDataTable.Columns.Add("Date", typeof(string));
+                meterUsageDataTable.Columns.Add("TimePeriod", typeof(string));
+                meterUsageDataTable.Columns.Add("Value", typeof(string));
+                meterUsageDataTable.Columns.Add("CanCommit", typeof(bool));
+
                 foreach(var row in meterUsageDictionary.Keys)
                 {
                     var values = meterUsageDictionary[row];
@@ -81,10 +91,22 @@ namespace StoreMeterUsageData.api.Controllers
                     {                       
                         var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
-                        //Insert meter usage data into [Temp.CustomerDataUpload].[MeterUsage]
-                        _tempCustomerMethods.MeterUsage_Insert(processQueueGUID, row, mpxn, date, timePeriodString, values[timePeriod]);
+                        //Insert data into meterUsageDataTable
+                        var meterUsageDataRow = meterUsageDataTable.NewRow();
+                        meterUsageDataRow["ProcessQueueGUID"] = processQueueGUID;
+                        meterUsageDataRow["RowId"] = row;
+                        meterUsageDataRow["MPXN"] = mpxn;
+                        meterUsageDataRow["Date"] = date;
+                        meterUsageDataRow["TimePeriod"] = timePeriodString;
+                        meterUsageDataRow["Value"] = values[timePeriod];
+                        meterUsageDataRow["CanCommit"] = false;
+
+                        meterUsageDataTable.Rows.Add(meterUsageDataRow);
                     }
                 }
+
+                //Bulk Insert meterUsageDataTable
+                _methods.BulkInsert(meterUsageDataTable, "[Temp.CustomerDataUpload].[MeterUsage]");
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, storeMeterUsageDataAPIId, false, null);
