@@ -29,7 +29,8 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         private static readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private static readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
-        private static readonly Enums.Customer.FlexContract.Attribute _customerFlexContractAttributeEnums = new Enums.Customer.FlexContract.Attribute();
+        private static readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
+        private static readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
         private readonly Int64 validateCrossSheetEntityDataAPIId;
 
@@ -128,13 +129,13 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Flex Reference Volumes - If Contract Reference is populated, check it exists and if not, check it is in the Flex Contracts table
-                var contractReferenceFlexContractAttributeId = _customerMethods.FlexContractAttribute_GetFlexContractAttributeIdByFlexContractAttributeDescription(_customerFlexContractAttributeEnums.ContractReference);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexReferenceVolumeDataRows, flexContractDataRows, contractReferenceFlexContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume);
+                var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexReferenceVolumeDataRows, flexContractDataRows, contractReferenceContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Flex Trades - If Basket Reference is populated, check it exists and if not, check it is in the Flex Contracts table
-                var basketReferenceFlexContractAttributeId = _customerMethods.FlexContractAttribute_GetFlexContractAttributeIdByFlexContractAttributeDescription(_customerFlexContractAttributeEnums.BasketReference);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexTradeDataRows, flexContractDataRows, basketReferenceFlexContractAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade);
+                var basketReferenceBasketAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerBasketAttributeEnums.BasketReference);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexTradeDataRows, flexContractDataRows, basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);                
 
                 //Update Process Queue
@@ -193,11 +194,15 @@ namespace ValidateCrossSheetEntityData.api.Controllers
             {
                 return _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(attributeId, detailDescription);
             }
-            
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume
-                || sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
+
+            if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume)
             {
-                return _customerMethods.FlexContractDetail_GetFlexContractDetailIdByFlexContractAttributeIdAndFlexContractDetailDescription(attributeId, detailDescription);
+                return _customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(attributeId, detailDescription);
+            }
+            
+            if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
+            {
+                return _customerMethods.BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(attributeId, detailDescription);
             }
             
             return 0;

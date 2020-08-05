@@ -171,28 +171,6 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public long FlexContractDetail_GetFlexContractDetailIdByFlexContractAttributeIdAndFlexContractDetailDescription(long flexContractAttributeId, string flexContractDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.FlexContractDetail_GetByFlexContractAttributeIdAndFlexContractDetailDescription, 
-                    flexContractAttributeId, flexContractDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FlexContractDetailId"))
-                    .FirstOrDefault();
-            }
-
-            public long FlexContractAttribute_GetFlexContractAttributeIdByFlexContractAttributeDescription(string flexContractAttributeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.FlexContractAttribute_GetByFlexContractAttributeDescription, 
-                    flexContractAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("FlexContractAttributeId"))
-                    .FirstOrDefault();
-            }
-
             public void InsertDataUploadValidationErrors(string processQueueGUID, long createdByUserId, long sourceId, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validationErrors)
             {
                 //Insert into DataUploadValidationError
