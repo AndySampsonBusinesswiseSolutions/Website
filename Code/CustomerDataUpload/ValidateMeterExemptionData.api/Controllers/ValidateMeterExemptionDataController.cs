@@ -71,9 +71,9 @@ namespace ValidateMeterExemptionData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var meterExemptionDataRows = _tempCustomerMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!meterExemptionDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, ValidateMeterExemptionDataAPIId, false, null);
@@ -88,10 +88,10 @@ namespace ValidateMeterExemptionData.api.Controllers
                         {"DateTo", "Date To"}
                     };
                 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(meterExemptionDataRows, requiredColumns);
 
                 //Validate Exemption Product
-                var invalidExemptionProductDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProduct"))
+                var invalidExemptionProductDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProduct"))
                     && !_methods.IsValidExemptionProduct(r.Field<string>("ExemptionProduct")));
 
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
@@ -101,7 +101,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                 }
 
                 //Validate Exemption Proportion
-                var invalidExemptionProportionDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProportion"))
+                var invalidExemptionProportionDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProportion"))
                     && !_methods.IsValidExemptionProportion(r.Field<string>("ExemptionProduct"), 
                                                             r.Field<string>("ExemptionProportion"))
                     );

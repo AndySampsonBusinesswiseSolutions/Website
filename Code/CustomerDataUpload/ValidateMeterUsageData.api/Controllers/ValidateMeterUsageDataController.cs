@@ -71,9 +71,9 @@ namespace ValidateMeterUsageData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var meterUsageDataRows = _tempCustomerMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!meterUsageDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, false, null);
@@ -87,10 +87,10 @@ namespace ValidateMeterUsageData.api.Controllers
                         {"Date", "Read Date"}
                     };
                 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(meterUsageDataRows, requiredColumns);
 
                 //Check all dates are in the past
-                var futureDateDataRows = customerDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
+                var futureDateDataRows = meterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
                     && r.Field<DateTime>("Date") >= DateTime.Today);
 
                 foreach(var futureDateDataRow in futureDateDataRows)
@@ -100,7 +100,7 @@ namespace ValidateMeterUsageData.api.Controllers
                 }
 
                 //Check usage is valid (if day is not October clock change, don't allow HH49 or HH50 to be populated)
-                var invalidUsageDataRows = customerDataRows.Where(r => !_methods.IsValidUsage(r.Field<string>("Value")));
+                var invalidUsageDataRows = meterUsageDataRows.Where(r => !_methods.IsValidUsage(r.Field<string>("Value")));
 
                 foreach(var invalidUsageDataRow in invalidUsageDataRows)
                 {
@@ -108,7 +108,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     records[rowId]["Value"].Add($"Invalid usage {invalidUsageDataRow["Value"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}");
                 }
 
-                var additionalHalfHourDataRows = customerDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
+                var additionalHalfHourDataRows = meterUsageDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
                 var invalidAdditionalHalfHourDataRows = additionalHalfHourDataRows.Where(r => !_methods.IsOctoberClockChange(r.Field<string>("Date")));
 
                 foreach(var invalidUsageDataRow in invalidAdditionalHalfHourDataRows)

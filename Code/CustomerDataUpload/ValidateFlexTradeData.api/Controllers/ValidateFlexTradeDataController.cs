@@ -71,9 +71,9 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var flexTradeDataRows = _tempCustomerMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!flexTradeDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, false, null);
@@ -86,11 +86,11 @@ namespace ValidateFlexTradeData.api.Controllers
                         {"BasketReference", "Basket Reference"}
                     };
 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(flexTradeDataRows, requiredColumns);
 
                 //If Trade Reference is not populated, all other fields are required
                 //Get Trade References not populated
-                var emptyTradeReferenceDataRecords = customerDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
+                var emptyTradeReferenceDataRecords = flexTradeDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
 
                 //Trade Date, Trade Product, Volume, Price and Direction must be populated
                 requiredColumns = new Dictionary<string, string>
@@ -105,7 +105,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 _tempCustomerMethods.AddErrorsToRecords(records, emptyTradeReferenceErrors);
 
                 //Validate Trade Reference
-                var invalidTradeReferenceDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeReference"))
+                var invalidTradeReferenceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeReference"))
                     && !_methods.IsValidFlexTradeReference(r.Field<string>("TradeReference")));
 
                 foreach(var invalidTradeReferenceDataRecord in invalidTradeReferenceDataRecords)
@@ -115,7 +115,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Validate Trade Date
-                var invalidTradeDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeDate"))
+                var invalidTradeDateDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeDate"))
                     && !_methods.IsValidDate(r.Field<string>("TradeDate")));
 
                 foreach(var invalidTradeDateDataRecord in invalidTradeDateDataRecords)
@@ -125,7 +125,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Validate Trade Product
-                var invalidTradeProductDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeProduct"))
+                var invalidTradeProductDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeProduct"))
                     && !_methods.IsValidFlexTradeProduct(r.Field<string>("TradeProduct")));
 
                 foreach(var invalidTradeProductDataRecord in invalidTradeProductDataRecords)
@@ -135,7 +135,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Validate Volume
-                var invalidVolumeDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Volume"))
+                var invalidVolumeDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Volume"))
                     && !_methods.IsValidFlexTradeVolume(r.Field<string>("Volume")));
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
@@ -145,7 +145,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Validate Price
-                var invalidPriceDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Price"))
+                var invalidPriceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Price"))
                     && !_methods.IsValidFlexTradePrice(r.Field<string>("Price")));
 
                 foreach(var invalidPriceDataRecord in invalidPriceDataRecords)
@@ -155,7 +155,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Validate Direction
-                var invalidDirectionDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Direction"))
+                var invalidDirectionDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Direction"))
                     && !_methods.IsValidFlexTradeDirection(r.Field<string>("Direction")));
 
                 foreach(var invalidDirectionDataRecord in invalidDirectionDataRecords)

@@ -105,6 +105,28 @@ namespace MethodLibrary
                     createdByUserId, sourceId, customerId, customerAttributeId, customerDetailDescription);
             }
 
+            public long SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(string siteAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.SiteAttribute_GetBySiteAttributeDescription, 
+                    siteAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SiteAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public long SiteDetail_GetSiteDetailIdBySiteAttributeIdAndSiteDetailDescription(long siteAttributeId, string siteDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.SiteDetail_GetBySiteAttributeIdAndSiteDetailDescription, 
+                    siteAttributeId, siteDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SiteDetailId"))
+                    .FirstOrDefault();
+            }
+
             public long MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(long MeterAttributeId, string MeterDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -146,6 +168,28 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("SubMeterAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public long FlexContractDetail_GetFlexContractDetailIdByFlexContractAttributeIdAndFlexContractDetailDescription(long flexContractAttributeId, string flexContractDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.FlexContractDetail_GetByFlexContractAttributeIdAndFlexContractDetailDescription, 
+                    flexContractAttributeId, flexContractDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("FlexContractDetailId"))
+                    .FirstOrDefault();
+            }
+
+            public long FlexContractAttribute_GetFlexContractAttributeIdByFlexContractAttributeDescription(string flexContractAttributeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.FlexContractAttribute_GetByFlexContractAttributeDescription, 
+                    flexContractAttributeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("FlexContractAttributeId"))
                     .FirstOrDefault();
             }
 

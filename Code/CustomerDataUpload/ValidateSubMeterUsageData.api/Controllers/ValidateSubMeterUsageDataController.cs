@@ -71,9 +71,9 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var subMeterUsageDataRows = _tempCustomerMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!subMeterUsageDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterUsageDataAPIId, false, null);
@@ -89,10 +89,10 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 
                 //Creates dictionary string, int, list<string>
                 //and populates any required columns that are missing
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(subMeterUsageDataRows, requiredColumns);
 
                 //Check all dates are in the past
-                var futureDateDataRows = customerDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
+                var futureDateDataRows = subMeterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
                     && r.Field<DateTime>("Date") >= DateTime.Today);
 
                 foreach(var futureDateDataRow in futureDateDataRows)
@@ -102,7 +102,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 }
 
                 //Check usage is valid
-                var invalidUsageDataRows = customerDataRows.Where(r => !_methods.IsValidUsage(r.Field<string>("Value")));
+                var invalidUsageDataRows = subMeterUsageDataRows.Where(r => !_methods.IsValidUsage(r.Field<string>("Value")));
 
                 foreach(var invalidUsageDataRow in invalidUsageDataRows)
                 {
@@ -111,7 +111,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 }
 
                 //If day is not October clock change, don't allow HH49 or HH50 to be populated
-                var additionalHalfHourDataRows = customerDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
+                var additionalHalfHourDataRows = subMeterUsageDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
                 var invalidAdditionalHalfHourDataRows = additionalHalfHourDataRows.Where(r => !_methods.IsOctoberClockChange(r.Field<string>("Date")));
 
                 foreach(var invalidAdditionalHalfHourDataRow in invalidAdditionalHalfHourDataRows)

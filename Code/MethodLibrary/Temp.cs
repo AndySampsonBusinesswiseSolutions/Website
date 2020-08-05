@@ -289,21 +289,27 @@ namespace MethodLibrary
                     return dataRows;
                 }
 
-                public Dictionary<int, Dictionary<string, List<string>>> GetMissingRecords(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                public Dictionary<int, Dictionary<string, List<string>>> InitialiseRecordsDictionary(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
                 {
-                    //row, entity, error message
-                    var errors = new Dictionary<int, Dictionary<string, List<string>>>();
+                    var records = new Dictionary<int, Dictionary<string, List<string>>>();
                     var rowIds = dataRows.Select(d => d.Field<int>("RowId")).Distinct();
 
                     foreach(var rowId in rowIds)
                     {
-                        errors.Add(rowId, new Dictionary<string, List<string>>());
+                        records.Add(rowId, new Dictionary<string, List<string>>());
 
                         foreach(var column in columns)
                         {
-                            errors[rowId].Add(column.Value, new List<string>());
+                            records[rowId].Add(column.Value, new List<string>());
                         }
                     }
+
+                    return records;
+                }
+
+                public Dictionary<int, Dictionary<string, List<string>>> GetMissingRecords(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                {
+                    var records = InitialiseRecordsDictionary(dataRows, columns);
 
                     foreach(var column in columns)
                     {
@@ -312,11 +318,11 @@ namespace MethodLibrary
                         foreach(var emptyRecord in emptyRecords)
                         {
                             var rowId = Convert.ToInt32(emptyRecord["RowId"]);
-                            errors[rowId][column.Value].Add($"Required column {column.Value} has no value");
+                            records[rowId][column.Value].Add($"Required column {column.Value} has no value");
                         }
                     }
 
-                    return errors;
+                    return records;
                 }
 
                 public string FinaliseValidation(Dictionary<int, Dictionary<string, List<string>>> records, string processQueueGUID, long createdByUserId, long sourceId, string sheetName)

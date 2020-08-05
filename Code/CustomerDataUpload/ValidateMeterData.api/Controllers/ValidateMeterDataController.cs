@@ -73,9 +73,9 @@ namespace ValidateMeterData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!meterDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterDataAPIId, false, null);
@@ -89,22 +89,22 @@ namespace ValidateMeterData.api.Controllers
                         {"AnnualUsage", "Annual Usage"}
                     };
                 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(meterDataRows, requiredColumns);
 
                 //Get MPANs
-                var mpanDataRecords = customerDataRows.Where(r => _methods.IsValidMPAN(r.Field<string>("MPXN")));
+                var mpanDataRecords = meterDataRows.Where(r => _methods.IsValidMPAN(r.Field<string>("MPXN")));
                 var mpanRows = mpanDataRecords.Select(r => r.Field<int>("RowId"));
 
                 //Get MPRNs
-                var mprnDataRecords = customerDataRows.Where(r => _methods.IsValidMPRN(r.Field<string>("MPXN")));
+                var mprnDataRecords = meterDataRows.Where(r => _methods.IsValidMPRN(r.Field<string>("MPXN")));
                 var mprnRows = mprnDataRecords.Select(r => r.Field<int>("RowId"));
 
                 //Get any MPXNs not in MPANs or MPRNs
-                var invalidMPXNRows = customerDataRows.Select(r => r.Field<int>("RowId")).Except(mpanRows).Except(mprnRows);
+                var invalidMPXNRows = meterDataRows.Select(r => r.Field<int>("RowId")).Except(mpanRows).Except(mprnRows);
 
                 foreach(var row in invalidMPXNRows)
                 {
-                    var dataRow = customerDataRows.First(r => r.Field<int>("RowId") == row);
+                    var dataRow = meterDataRows.First(r => r.Field<int>("RowId") == row);
                     records[row]["MPXN"].Add($"Invalid MPAN/MPRN {dataRow["MPXN"]}");
                 }
 

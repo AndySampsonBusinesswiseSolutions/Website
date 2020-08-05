@@ -71,7 +71,7 @@ namespace ValidateCustomerData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Customer] table
-                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);               
+                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!customerDataRows.Any())
                 {

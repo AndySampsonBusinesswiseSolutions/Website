@@ -71,9 +71,9 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var flexReferenceVolumeDataRows = _tempCustomerMethods.FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!flexReferenceVolumeDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexReferenceVolumeDataAPIId, false, null);
@@ -86,10 +86,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                         {"ContractReference", "Contract Reference"}
                     };
 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(flexReferenceVolumeDataRows, requiredColumns);
 
                 //Validate Contract Dates
-                var invalidDateFromDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
+                var invalidDateFromDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
                     && !_methods.IsValidDate(r.Field<string>("DateFrom")));
 
                 foreach(var invalidDateFromDataRecord in invalidDateFromDataRecords)
@@ -98,7 +98,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     records[rowId]["DateFrom"].Add($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}'");
                 }
 
-                var invalidDateToDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
+                var invalidDateToDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
                     && !_methods.IsValidDate(r.Field<string>("DateTo")));
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
@@ -107,7 +107,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     records[rowId]["DateTo"].Add($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}'");
                 }
 
-                var invalidContractDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
+                var invalidContractDateDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
                     && !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
                     && _methods.IsValidDate(r.Field<string>("DateFrom"))
                     && _methods.IsValidDate(r.Field<string>("DateTo"))
@@ -120,7 +120,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 }
 
                 //Validate Volume
-                var invalidVolumeDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Volume"))
+                var invalidVolumeDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Volume"))
                     && !_methods.IsValidFlexReferenceVolume(r.Field<string>("Volume")));
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)

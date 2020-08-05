@@ -33,6 +33,16 @@ namespace enums
                 public string ContractDetail_GetByContractAttributeIdAndContractDetailDescription = "[Customer].[ContractDetail_GetByContractAttributeIdAndContractDetailDescription]";
                 public string BasketAttribute_GetByBasketAttributeDescription = "[Customer].[BasketAttribute_GetByBasketAttributeDescription]";
                 public string BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription = "[Customer].[BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription]";
+                public string SiteAttribute_Insert = "[Customer].[SiteAttribute_Insert]";
+                public string Site_Insert = "[Customer].[Site_Insert]";
+                public string SiteDetail_Insert = "[Customer].[SiteDetail_Insert]";
+                public string SiteAttribute_GetBySiteAttributeDescription = "[Customer].[SiteAttribute_GetBySiteAttributeDescription]";
+                public string SiteDetail_GetBySiteAttributeIdAndSiteDetailDescription = "[Customer].[SiteDetail_GetBySiteAttributeIdAndSiteDetailDescription]";
+                public string FlexContractAttribute_Insert = "[Customer].[FlexContractAttribute_Insert]";
+                public string FlexContract_Insert = "[Customer].[FlexContract_Insert]";
+                public string FlexContractDetail_Insert = "[Customer].[FlexContractDetail_Insert]";
+                public string FlexContractAttribute_GetByFlexContractAttributeDescription = "[Customer].[FlexContractAttribute_GetByFlexContractAttributeDescription]";
+                public string FlexContractDetail_GetByFlexContractAttributeIdAndFlexContractDetailDescription = "[Customer].[FlexContractDetail_GetByFlexContractAttributeIdAndFlexContractDetailDescription]";
 
             }
         }

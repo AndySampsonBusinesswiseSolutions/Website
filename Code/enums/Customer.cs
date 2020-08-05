@@ -59,6 +59,15 @@ namespace enums
                 }
             }
 
+            public class FlexContract
+            {
+                public class Attribute
+                {
+                    public string BasketReference = "Basket Reference";
+                    public string ContractReference = "Contract Reference";
+                }
+            }
+
             public class Meter
             {
                 public class Attribute
@@ -69,6 +78,14 @@ namespace enums
                     public string StandardOfftakeQuantity = "Standard Offtake Quantity";
                     public string AnnualUsage = "Annual Usage";
                     public string ImportExport = "Import/Export";
+                }
+            }
+
+            public class Site
+            {
+                public class Attribute
+                {
+                    public string SiteName = "Site Name";
                 }
             }
 

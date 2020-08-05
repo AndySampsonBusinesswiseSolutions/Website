@@ -71,9 +71,9 @@ namespace ValidateSiteData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Site] table
-                var customerDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);               
+                var siteDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!siteDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, false, null);
@@ -86,10 +86,10 @@ namespace ValidateSiteData.api.Controllers
                         {"SiteName", "Site Name"}
                     };
                 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(siteDataRows, requiredColumns);
 
                 //Validate post code
-                var invalidPostCodeDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SitePostCode")) 
+                var invalidPostCodeDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SitePostCode")) 
                     && !_methods.IsValidPostCode(r.Field<string>("SitePostCode")));
 
                 foreach(var invalidPostCodeDataRow in invalidPostCodeDataRows)
@@ -99,7 +99,7 @@ namespace ValidateSiteData.api.Controllers
                 }
 
                 //Validate telephone number
-                var invalidTelephoneNumberDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactTelephoneNumber")) 
+                var invalidTelephoneNumberDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactTelephoneNumber")) 
                     && !_methods.IsValidPhoneNumber(r.Field<string>("ContactTelephoneNumber")));
 
                 foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
@@ -109,7 +109,7 @@ namespace ValidateSiteData.api.Controllers
                 }
 
                 //Validate email address
-                var invalidEmailAddressDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactEmailAddress")) 
+                var invalidEmailAddressDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactEmailAddress")) 
                     && !_methods.IsValidEmailAddress(r.Field<string>("ContactEmailAddress")));
 
                 foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)

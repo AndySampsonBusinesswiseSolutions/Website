@@ -72,9 +72,9 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var flexContractDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!flexContractDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexContractDataAPIId, false, null);
@@ -92,11 +92,11 @@ namespace ValidateFlexContractData.api.Controllers
                         {"ContractEndDate", "Contract End Date"}
                     };
 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(flexContractDataRows, requiredColumns);
 
                 //If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
-                var newContractMeterDataRecords = customerDataRows.Where(r => 
+                var newContractMeterDataRecords = flexContractDataRows.Where(r => 
                     !_customerMethods.ContractBasketMeterExists(r.Field<string>("ContractReference"), r.Field<string>("BasketReference"), r.Field<string>("MPXN")));
 
                 //Product must be populated
@@ -108,7 +108,7 @@ namespace ValidateFlexContractData.api.Controllers
                 _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
                 
                 //Validate MPXN
-                var invalidMPXNDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MPXN"))
+                var invalidMPXNDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MPXN"))
                     && !_methods.IsValidMPXN(r.Field<string>("MPXN")));
 
                 foreach(var invalidMPXNDataRecord in invalidMPXNDataRecords)
@@ -118,7 +118,7 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 //Validate Supplier
-                var invalidSupplierDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Supplier"))
+                var invalidSupplierDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Supplier"))
                     && !_methods.IsValidSupplier(r.Field<string>("Supplier")));
 
                 foreach(var invalidSupplierDataRecord in invalidSupplierDataRecords)
@@ -128,7 +128,7 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 //Validate Contract Dates
-                var invalidContractStartDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
+                var invalidContractStartDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
                     && !_methods.IsValidDate(r.Field<string>("ContractStartDate")));
 
                 foreach(var invalidContractStartDateDataRecord in invalidContractStartDateDataRecords)
@@ -137,7 +137,7 @@ namespace ValidateFlexContractData.api.Controllers
                     records[rowId]["TradeRContractStartDateference"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'");
                 }
 
-                var invalidContractEndDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractEndDate"))
+                var invalidContractEndDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractEndDate"))
                     && !_methods.IsValidDate(r.Field<string>("ContractEndDate")));
 
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
@@ -146,7 +146,7 @@ namespace ValidateFlexContractData.api.Controllers
                     records[rowId]["ContractEndDate"].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
                 }
 
-                var invalidContractDateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
+                var invalidContractDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
                     && !string.IsNullOrWhiteSpace(r.Field<string>("ContractEndDate"))
                     && _methods.IsValidDate(r.Field<string>("ContractStartDate"))
                     && _methods.IsValidDate(r.Field<string>("ContractEndDate"))
@@ -159,7 +159,7 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 //Validate Rates
-                var invalidRateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Value"))
+                var invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Value"))
                     && !_methods.IsValidFixedContractRate(r.Field<string>("Value")));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
@@ -168,7 +168,7 @@ namespace ValidateFlexContractData.api.Controllers
                     records[rowId]["Value"].Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}'");
                 }
 
-                invalidRateDataRecords = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
+                invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
                     && !_methods.IsValidFixedContactStandingCharge(r.Field<string>("StandingCharge")));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)

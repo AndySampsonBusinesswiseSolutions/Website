@@ -73,9 +73,9 @@ namespace ValidateSubMeterData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] table
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);               
+                var subMeterDataRows = _tempCustomerMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!subMeterDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterDataAPIId, false, null);
@@ -88,11 +88,11 @@ namespace ValidateSubMeterData.api.Controllers
                         {"SubMeterIdentifier", "SubMeter Name"}
                     };
                 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                var records = _tempCustomerMethods.GetMissingRecords(subMeterDataRows, requiredColumns);
 
                 //Get submeters not stored in database
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-                var newSubMeterDataRecords = customerDataRows.Where(r => 
+                var newSubMeterDataRecords = subMeterDataRows.Where(r => 
                     _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>("SubMeterIdentifier")) == 0);
 
                 //MPXN, SerialNumber, SubArea and Asset must be populated
