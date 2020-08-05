@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string ValidateCrossSheetEntityDataAPI = "E78B2351-B1E6-464F-8D90-3793FACDABF4";
                     public string ValidateFlexTradeDataAPI = "AFFEE0C0-D660-4859-A7E9-93C3F2BC5492";
                     public string ValidateFlexReferenceVolumeDataAPI = "D520F4DC-F582-45D7-A53C-608156991C6E";
                     public string ValidateFlexContractDataAPI = "BE59D94B-61BE-4900-B336-36AEB8904973";
@@ -65,6 +66,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string ValidateCrossSheetEntityDataAPI = "ValidateCrossSheetEntityData.api";
                     public string ValidateFlexTradeDataAPI = "ValidateFlexTradeData.api";
                     public string ValidateFlexReferenceVolumeDataAPI = "ValidateFlexReferenceVolumeData.api";
                     public string ValidateFlexContractDataAPI = "ValidateFlexContractData.api";
@@ -110,6 +112,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string ValidateCrossSheetEntityDataAPI = "SQTP72kBj36cntMn";
                     public string ValidateFlexTradeDataAPI = "89zfZ2GTajb4B94y";
                     public string ValidateFlexReferenceVolumeDataAPI = "h9CMbkML68NCyMNj";
                     public string ValidateFlexContractDataAPI = "FMTXVhfa5Yu8s6vQ";
