@@ -118,16 +118,6 @@ namespace ValidateFixedContractData.api.Controllers
                     };
                 var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractDataRecords, requiredColumns);
                 _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
-                
-                //Validate MPXN
-                var invalidMPXNDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MPXN"))
-                    && !_methods.IsValidMPXN(r.Field<string>("MPXN")));
-
-                foreach(var invalidMPXNDataRecord in invalidMPXNDataRecords)
-                {
-                    var rowId = Convert.ToInt32(invalidMPXNDataRecord["RowId"]);
-                    records[rowId]["MPXN"].Add($"Invalid MPAN/MPRN '{invalidMPXNDataRecord["MPXN"]}'");
-                }
 
                 //Validate Supplier
                 var invalidSupplierDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Supplier"))

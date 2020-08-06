@@ -85,7 +85,7 @@ namespace StoreSubMeterUsageData.api.Controllers
                 {
                     var values = subMeterUsageDictionary[row];
                     var subMeterIdentifier = values[0];
-                    var date = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
+                    var date = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
 
                     for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
                     {

@@ -108,6 +108,24 @@ namespace MethodLibrary
                 .Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries);
         }
 
+        public string GetDateTimeSqlParameterFromDateTimeString(string dateValue)
+        {
+            if(string.IsNullOrWhiteSpace(dateValue))
+            {
+                return string.Empty;
+            }
+
+            try
+            {
+                var dateInteger = Convert.ToInt64(dateValue);
+                return ConvertDateTimeToSqlParameter(DateTime.FromOADate(dateInteger));
+            }
+            catch
+            {
+                return dateValue;
+            }            
+        }
+
         public string ConvertDateTimeToSqlParameter(DateTime dateTime)
         {
             var year = dateTime.Year;

@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexReferenceVolumeData.api\o
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexReferenceVolumeData.api\obj\Debug\netcoreapp3.1\StoreFlexReferenceVolumeData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexReferenceVolumeData.api\obj\Debug\netcoreapp3.1\StoreFlexReferenceVolumeData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexReferenceVolumeData.api\obj\Debug\netcoreapp3.1\StoreFlexReferenceVolumeData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexReferenceVolumeData.api\obj\Debug\netcoreapp3.1\StoreFlexReferenceVolumeData.api.csprojAssemblyReference.cache

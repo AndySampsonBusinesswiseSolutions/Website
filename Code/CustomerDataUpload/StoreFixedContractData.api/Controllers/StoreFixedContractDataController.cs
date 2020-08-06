@@ -73,8 +73,8 @@ namespace StoreFixedContractData.api.Controllers
                 foreach(var row in fixedContractDictionary.Keys)
                 {
                     var values = fixedContractDictionary[row];
-                    var contractStartDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[3])));
-                    var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[4])));
+                    var contractStartDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[3]);
+                    var contractEndDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[4]);
 
                     for(var rateCount = 9; rateCount < values.Count(); rateCount++)
                     {

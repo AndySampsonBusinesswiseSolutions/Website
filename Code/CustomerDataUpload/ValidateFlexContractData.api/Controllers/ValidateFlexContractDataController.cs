@@ -106,16 +106,6 @@ namespace ValidateFlexContractData.api.Controllers
                     };
                 var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractMeterDataRecords, requiredColumns);
                 _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
-                
-                //Validate MPXN
-                var invalidMPXNDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MPXN"))
-                    && !_methods.IsValidMPXN(r.Field<string>("MPXN")));
-
-                foreach(var invalidMPXNDataRecord in invalidMPXNDataRecords)
-                {
-                    var rowId = Convert.ToInt32(invalidMPXNDataRecord["RowId"]);
-                    records[rowId]["MPXN"].Add($"Invalid MPAN/MPRN '{invalidMPXNDataRecord["MPXN"]}'");
-                }
 
                 //Validate Supplier
                 var invalidSupplierDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Supplier"))

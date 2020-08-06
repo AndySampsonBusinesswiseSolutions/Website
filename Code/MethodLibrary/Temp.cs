@@ -125,11 +125,11 @@ namespace MethodLibrary
                         processQueueGUID, rowId, contractReference, dateFrom, dateTo, volume);
                 }
 
-                public void FlexTrade_Insert(string processQueueGUID, int rowId, string basketReference, string tradeDate, string tradeProduct, string volume, string price, string direction)
+                public void FlexTrade_Insert(string processQueueGUID, int rowId, string basketReference, string tradeReference, string tradeDate, string tradeProduct, string volume, string price, string direction)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FlexTrade_Insert, 
-                        processQueueGUID, rowId, basketReference, tradeDate, tradeProduct, volume, price, direction);
+                        processQueueGUID, rowId, basketReference, tradeReference, tradeDate, tradeProduct, volume, price, direction);
                 }
 
                 public void MeterExemption_Insert(string processQueueGUID, int rowId, string MPXN, string dateFrom, string dateTo, string exemptionProduct, string exemptionProportion)

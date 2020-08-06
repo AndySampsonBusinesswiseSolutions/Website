@@ -72,10 +72,10 @@ namespace StoreFlexTradeData.api.Controllers
                 foreach(var row in flexTradeDictionary.Keys)
                 {
                     var values = flexTradeDictionary[row];
-                    var tradeDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[1])));
+                    var tradeDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert flex trade data into [Temp.CustomerDataUpload].[FlexTrade]
-                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, row, values[0], tradeDate, values[2], values[3], values[4], values[5]);
+                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, row, values[0], values[1], tradeDate, values[3], values[4], values[5], values[6]);
                 }
 
                 //Update Process Queue

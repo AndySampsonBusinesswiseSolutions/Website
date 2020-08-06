@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexContractData.api\obj\D
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexContractData.api\obj\Debug\netcoreapp3.1\ValidateFlexContractData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexContractData.api\obj\Debug\netcoreapp3.1\ValidateFlexContractData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexContractData.api\obj\Debug\netcoreapp3.1\ValidateFlexContractData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexContractData.api\obj\Debug\netcoreapp3.1\ValidateFlexContractData.api.csprojAssemblyReference.cache

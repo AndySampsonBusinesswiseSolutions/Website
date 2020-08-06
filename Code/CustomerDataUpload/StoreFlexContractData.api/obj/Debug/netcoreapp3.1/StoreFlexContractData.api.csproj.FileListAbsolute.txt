@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexContractData.api\obj\Debu
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexContractData.api\obj\Debug\netcoreapp3.1\StoreFlexContractData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexContractData.api\obj\Debug\netcoreapp3.1\StoreFlexContractData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexContractData.api\obj\Debug\netcoreapp3.1\StoreFlexContractData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexContractData.api\obj\Debug\netcoreapp3.1\StoreFlexContractData.api.csprojAssemblyReference.cache

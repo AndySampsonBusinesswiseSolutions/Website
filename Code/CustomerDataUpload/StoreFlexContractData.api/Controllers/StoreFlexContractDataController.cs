@@ -78,8 +78,8 @@ namespace StoreFlexContractData.api.Controllers
                 foreach(var row in flexContractDictionary.Keys)
                 {
                     var values = flexContractDictionary[row];
-                    var contractStartDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[4])));
-                    var contractEndDate = _methods.ConvertDateTimeToSqlParameter(DateTime.FromOADate(Convert.ToInt64(values[5])));
+                    var contractStartDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[4]);
+                    var contractEndDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[5]);
 
                     for(var rateCount = 8; rateCount < values.Count(); rateCount++)
                     {
