@@ -79,7 +79,27 @@ namespace ValidateFlexContractData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexContractDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"ContractReference", "Contract Reference"},
+                        {"BasketReference", "Basket Reference"},
+                        {"MPXN", "MPAN/MPRN"},
+                        {"Supplier", "Supplier"},
+                        {"ContractStartDate", "Contract Start Date"},
+                        {"ContractEndDate", "Contract End Date"},
+                        {"Product", "Product"},
+                        {"StandingCharge", "Standing Charge"},
+                        {"ShapeFee", "Shape Fee"},
+                        {"AdminFee", "Admin Fee"},
+                        {"ImbalanceFee", "Imbalance Fee"},
+                        {"RiskFee", "Risk Fee"},
+                        {"GreenPremium", "Green Premium"},
+                        {"OptimisationBenefit", "Optimisation Benefit"},
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexContractDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -92,7 +112,7 @@ namespace ValidateFlexContractData.api.Controllers
                         {"ContractEndDate", "Contract End Date"}
                     };
 
-                var records = _tempCustomerMethods.GetMissingRecords(flexContractDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, flexContractDataRows, requiredColumns);
 
                 //If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
@@ -104,8 +124,7 @@ namespace ValidateFlexContractData.api.Controllers
                     {
                         {"Product", "Product"}
                     };
-                var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractMeterDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
+                _tempCustomerMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
                 //Validate Supplier
                 var invalidSupplierDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Supplier"))
@@ -159,7 +178,7 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
-                    && !_methods.IsValidFixedContactStandingCharge(r.Field<string>("StandingCharge")));
+                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>("StandingCharge")));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {

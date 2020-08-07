@@ -78,15 +78,24 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexReferenceVolumeDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"ContractReference", "Contract Reference"},
+                        {"DateFrom", "Date From"},
+                        {"Date To", "Date To"},
+                        {"Volume", "Volume"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexReferenceVolumeDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {"ContractReference", "Contract Reference"}
                     };
-
-                var records = _tempCustomerMethods.GetMissingRecords(flexReferenceVolumeDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, flexReferenceVolumeDataRows, requiredColumns);
 
                 //Validate Contract Dates
                 var invalidDateFromDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))

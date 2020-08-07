@@ -78,7 +78,17 @@ namespace ValidateSubMeterUsageData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterUsageDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"SubMeterName", "SubMeter Identifier"},
+                        {"Date", "Read Date"},
+                        {"TimePeriod", "Time Period"},
+                        {"Value", "Volume"},
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(subMeterUsageDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -87,9 +97,8 @@ namespace ValidateSubMeterUsageData.api.Controllers
                         {"Date", "Read Date"}
                     };
                 
-                //Creates dictionary string, int, list<string>
-                //and populates any required columns that are missing
-                var records = _tempCustomerMethods.GetMissingRecords(subMeterUsageDataRows, requiredColumns);
+                //If any are empty records, store error
+                _tempCustomerMethods.GetMissingRecords(records, subMeterUsageDataRows, requiredColumns);
 
                 //Check all dates are in the past
                 var futureDateDataRows = subMeterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 

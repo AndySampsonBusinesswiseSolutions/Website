@@ -80,7 +80,26 @@ namespace ValidateMeterData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"SiteName", "Site Name"},
+                        {"MPXN", "MPAN/MPRN"},
+                        {"GridSupplyPoint", "GSP"},
+                        {"ProfileClass", "Profile Class"},
+                        {"MeterTimeswitchCode", "MTC"},
+                        {"LineLossFactorClass", "LLFC"},
+                        {"Capacity", "Capacity"},
+                        {"LocalDistributionZone", "LDZ"},
+                        {"SOQ", "Standard Offtake Quantity"},
+                        {"AnnualUsage", "Annual Usage"},
+                        {"MeterSerialNumber", "Meter Serial Number"},
+                        {"Area", "Area"},
+                        {"ImportExport", "Import/Export"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(meterDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -88,8 +107,7 @@ namespace ValidateMeterData.api.Controllers
                         {"MPXN", "MPAN/MPRN"},
                         {"AnnualUsage", "Annual Usage"}
                     };
-                
-                var records = _tempCustomerMethods.GetMissingRecords(meterDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, meterDataRows, requiredColumns);
 
                 //Get MPANs
                 var mpanDataRecords = meterDataRows.Where(r => _methods.IsValidMPAN(r.Field<string>("MPXN")));
@@ -119,12 +137,11 @@ namespace ValidateMeterData.api.Controllers
                         {"SiteName", "Site Name"},
                         {"GridSupplyPoint", "GSP"},
                         {"ProfileClass", "Profile Class"},
-                        {"MeterTimeswitchClass", "MTC"},
+                        {"MeterTimeswitchCode", "MTC"},
                         {"LineLossFactorClass", "LLFC"},
                         {"Area", "Area"}
                     };
-                var newMPANErrors =_tempCustomerMethods.GetMissingRecords(newMPANDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, newMPANErrors);
+                _tempCustomerMethods.GetMissingRecords(records, newMPANDataRecords, requiredColumns);
 
                 //Validate GSP
                 var invalidGridSupplyPointDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("GridSupplyPoint"))
@@ -147,13 +164,13 @@ namespace ValidateMeterData.api.Controllers
                 }
 
                 //Validate MTC
-                var invalidMeterTimeswitchClassDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MeterTimeswitchClass"))
-                    && !_methods.IsValidMeterTimeswitchClass(r.Field<string>("MeterTimeswitchClass")));
+                var invalidMeterTimeswitchCodeDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("MeterTimeswitchCode"))
+                    && !_methods.IsValidMeterTimeswitchCode(r.Field<string>("MeterTimeswitchCode")));
 
-                foreach(var invalidMeterTimeswitchClassDataRecord in invalidMeterTimeswitchClassDataRecords)
+                foreach(var invalidMeterTimeswitchCodeDataRecord in invalidMeterTimeswitchCodeDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidMeterTimeswitchClassDataRecord["RowId"]);
-                    records[rowId]["MeterTimeswitchClass"].Add($"Invalid MTC {invalidMeterTimeswitchClassDataRecord["MeterTimeswitchClass"]}");
+                    var rowId = Convert.ToInt32(invalidMeterTimeswitchCodeDataRecord["RowId"]);
+                    records[rowId]["MeterTimeswitchCode"].Add($"Invalid MTC {invalidMeterTimeswitchCodeDataRecord["MeterTimeswitchCode"]}");
                 }
 
                 //Validate LLFC
@@ -187,8 +204,7 @@ namespace ValidateMeterData.api.Controllers
                         {"LocalDistributionZone", "LDZ"},
                         {"Area", "Area"}
                     };
-                var newMPRNErrors =_tempCustomerMethods.GetMissingRecords(newMPRNDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, newMPRNErrors);
+                _tempCustomerMethods.GetMissingRecords(records, newMPRNDataRecords, requiredColumns);
 
                 //Validate LDZ
                 var invalidLocalDistributionZoneDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("LocalDistributionZone"))

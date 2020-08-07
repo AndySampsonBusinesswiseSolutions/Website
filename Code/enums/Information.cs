@@ -49,7 +49,7 @@ namespace enums
                 }
             }
 
-            public class MeterTimeswitchClass
+            public class MeterTimeswitchCode
             {
                 public class Attribute
                 {

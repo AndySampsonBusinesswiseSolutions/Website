@@ -79,14 +79,30 @@ namespace ValidateSiteData.api.Controllers
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, false, null);
                     return;
                 }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"CustomerName", "Customer Name"},
+                        {"SiteName", "Site Name"},
+                        {"SiteAddress", "Site Address"},
+                        {"SiteTown", "Site Town"},
+                        {"SiteCounty", "Site County"},
+                        {"SitePostCode", "Site Post Code"},
+                        {"SiteDescription", "Site Description"},
+                        {"ContactName", "Contact Name"},
+                        {"ContactRole", "ContactRole"},
+                        {"ContactTelephoneNumber", "Contact Telephone Number"},
+                        {"ContactEmailAddress", "Contact Email Address"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(siteDataRows, columns);
                 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {"SiteName", "Site Name"}
                     };
-                
-                var records = _tempCustomerMethods.GetMissingRecords(siteDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, siteDataRows, requiredColumns);
 
                 //Validate post code
                 var invalidPostCodeDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SitePostCode")) 

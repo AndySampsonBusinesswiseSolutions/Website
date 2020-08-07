@@ -19,9 +19,9 @@ namespace enums
                 public string GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription = "[Information].[GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription]";
                 public string ProfileClassAttribute_GetByProfileClassAttributeDescription = "[Information].[ProfileClassAttribute_GetByProfileClassAttributeDescription]";
                 public string ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription = "[Information].[ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription]";
-                public string MeterTimeswitchClassAttribute_GetByMeterTimeswitchClassAttributeDescription = "[Information].[MeterTimeswitchClassAttribute_GetByMeterTimeswitchClassAttributeDescription]";
-                public string MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeIdAndMeterTimeswitchClassDetailDescription = "[Information].[MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeIdAndMeterTimeswitchClassDetailDescription]";
-                public string MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId = "[Information].[MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId]";
+                public string MeterTimeswitchCodeAttribute_GetByMeterTimeswitchCodeAttributeDescription = "[Information].[MeterTimeswitchCodeAttribute_GetByMeterTimeswitchCodeAttributeDescription]";
+                public string MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription = "[Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeIdAndMeterTimeswitchCodeDetailDescription]";
+                public string MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId = "[Information].[MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId]";
                 public string LocalDistributionZoneAttribute_GetByLocalDistributionZoneAttributeDescription = "[Information].[LocalDistributionZoneAttribute_GetByLocalDistributionZoneAttributeDescription]";
                 public string LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription = "[Information].[LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription]";
                 public string MeterExemptionAttribute_GetByMeterExemptionAttributeDescription = "[Information].[MeterExemptionAttribute_GetByMeterExemptionAttributeDescription]";

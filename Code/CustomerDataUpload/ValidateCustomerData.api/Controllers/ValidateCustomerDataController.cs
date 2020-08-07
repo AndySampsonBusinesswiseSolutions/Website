@@ -78,7 +78,17 @@ namespace ValidateCustomerData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateCustomerDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"CustomerName", "Customer Name"},
+                        {"ContactName", "Contact Name"},
+                        {"ContactTelephoneNumber", "Contact Telephone Number"},
+                        {"ContactEmailAddress", "Contact Email Address"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(customerDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -89,7 +99,7 @@ namespace ValidateCustomerData.api.Controllers
                         {"ContactEmailAddress", "Contact Email Address"}
                     };
                 
-                var records = _tempCustomerMethods.GetMissingRecords(customerDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, customerDataRows, requiredColumns);
 
                 //Validate telephone number
                 var invalidTelephoneNumberDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContactTelephoneNumber")) 

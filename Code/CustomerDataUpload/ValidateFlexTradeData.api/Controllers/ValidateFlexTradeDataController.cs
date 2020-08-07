@@ -78,15 +78,27 @@ namespace ValidateFlexTradeData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"BasketReference", "Basket Reference"},
+                        {"TradeReference", "Trade Reference"},
+                        {"TradeDate", "Trade Date"},
+                        {"TradeProduct", "Trade Product"},
+                        {"Volume", "Volume"},
+                        {"Price", "Price"},
+                        {"Direction", "Trade Direction"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexTradeDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {"BasketReference", "Basket Reference"}
                     };
-
-                var records = _tempCustomerMethods.GetMissingRecords(flexTradeDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, flexTradeDataRows, requiredColumns);
 
                 //If Trade Reference is not populated, all other fields are required
                 //Get Trade References not populated
@@ -99,10 +111,9 @@ namespace ValidateFlexTradeData.api.Controllers
                         {"TradeProduct", "Trade Product"},
                         {"Volume", "Volume"},
                         {"Price", "Price"},
-                        {"Direction (B/S)", "Trade Direction"}
+                        {"Direction", "Trade Direction"}
                     };
-                var emptyTradeReferenceErrors =_tempCustomerMethods.GetMissingRecords(emptyTradeReferenceDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, emptyTradeReferenceErrors);
+                _tempCustomerMethods.GetMissingRecords(records, emptyTradeReferenceDataRecords, requiredColumns);
 
                 //Validate Trade Reference
                 var invalidTradeReferenceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeReference"))

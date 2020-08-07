@@ -25,7 +25,7 @@ namespace MethodLibrary
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
         private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
-        private static readonly Enums.Information.MeterTimeswitchClass.Attribute _informationMeterTimeswitchClassAttributeEnums = new Enums.Information.MeterTimeswitchClass.Attribute();
+        private static readonly Enums.Information.MeterTimeswitchCode.Attribute _informationMeterTimeswitchCodeAttributeEnums = new Enums.Information.MeterTimeswitchCode.Attribute();
         private static readonly Enums.Information.LocalDistributionZone.Attribute _informationLocalDistributionZoneAttributeEnums = new Enums.Information.LocalDistributionZone.Attribute();
         private static readonly Enums.Information.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.Information.MeterExemption.Attribute();
         private static readonly Enums.Supplier.Attribute _supplierAttributeEnums = new Enums.Supplier.Attribute();
@@ -468,7 +468,7 @@ namespace MethodLibrary
             return profileClassDetailId != 0;
         }
 
-        public bool IsValidMeterTimeswitchClass(string meterTimeswitchClass)
+        public bool IsValidMeterTimeswitchCode(string meterTimeswitchClass)
         {
             if (string.IsNullOrWhiteSpace(meterTimeswitchClass))
             {
@@ -486,11 +486,11 @@ namespace MethodLibrary
                 return false;
             }
 
-            var meterTimeswitchClassRangeStartAttributeId = _informationMethods.MeterTimeswitchClassAttribute_GetMeterTimeswitchClassAttributeIdByMeterTimeswitchClassAttributeDescription(_informationMeterTimeswitchClassAttributeEnums.MeterTimeswitchRangeStart);
-            var meterTimeswitchClassRangeEndAttributeId = _informationMethods.MeterTimeswitchClassAttribute_GetMeterTimeswitchClassAttributeIdByMeterTimeswitchClassAttributeDescription(_informationMeterTimeswitchClassAttributeEnums.MeterTimeswitchRangeEnd);
+            var meterTimeswitchClassRangeStartAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchRangeStart);
+            var meterTimeswitchClassRangeEndAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchRangeEnd);
 
-            var meterTimeswitchClassRangeStartDataTable = _informationMethods.MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId(meterTimeswitchClassRangeStartAttributeId);
-            var meterTimeswitchClassRangeEndDataTable = _informationMethods.MeterTimeswitchClassDetail_GetByMeterTimeswitchClassAttributeId(meterTimeswitchClassRangeEndAttributeId);
+            var meterTimeswitchClassRangeStartDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchClassRangeStartAttributeId);
+            var meterTimeswitchClassRangeEndDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchClassRangeEndAttributeId);
 
             var validRangeStartDataRecords = meterTimeswitchClassRangeStartDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") <= meterTimeswitchClassValue);
             var validRangeEndDataRecords = meterTimeswitchClassRangeEndDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") >= meterTimeswitchClassValue);
@@ -505,6 +505,7 @@ namespace MethodLibrary
 
         public bool IsValidLineLossFactorClass(string linelossFactorClass)
         {
+            //TODO: How to validate? Is it being a number enough? Or do we need to use DUoS Charging Statements?
             return true;
         }
 
@@ -610,7 +611,7 @@ namespace MethodLibrary
             }
         }
 
-        public bool IsValidFixedContactStandingCharge(string standingCharge)
+        public bool IsValidFixedContractStandingCharge(string standingCharge)
         {
             if (string.IsNullOrWhiteSpace(standingCharge))
             {
@@ -629,7 +630,7 @@ namespace MethodLibrary
             }
         }
 
-        public bool IsValidFixedContactCapacityCharge(string capacityCharge)
+        public bool IsValidFixedContractCapacityCharge(string capacityCharge)
         {
             if (string.IsNullOrWhiteSpace(capacityCharge))
             {

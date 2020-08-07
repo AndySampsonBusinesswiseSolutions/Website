@@ -78,7 +78,18 @@ namespace ValidateMeterExemptionData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, ValidateMeterExemptionDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"MPXN", "MPAN/MPRN"},
+                        {"DateFrom", "Date From"},
+                        {"DateTo", "Date To"},
+                        {"ExemptionProduct", "Exemption Product"},
+                        {"ExemptionProportion", "Exemption Proportion"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(meterExemptionDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -87,8 +98,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                         {"DateFrom", "Date From"},
                         {"DateTo", "Date To"}
                     };
-                
-                var records = _tempCustomerMethods.GetMissingRecords(meterExemptionDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, meterExemptionDataRows, requiredColumns);
 
                 //Validate Exemption Product
                 var invalidExemptionProductDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProduct"))
@@ -97,7 +107,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidExemptionProductDataRecord["RowId"]);
-                    records[rowId]["ExemptionProduct"].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]} in row {invalidExemptionProductDataRecord["RowId"]}");
+                    records[rowId]["ExemptionProduct"].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]}");
                 }
 
                 //Validate Exemption Proportion
@@ -109,7 +119,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidExemptionProportionDataRecord["RowId"]);
-                    records[rowId]["ExemptionProportion"].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]} in row {invalidExemptionProportionDataRecord["RowId"]}");
+                    records[rowId]["ExemptionProportion"].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]}");
                 }
 
                 //Update Process Queue

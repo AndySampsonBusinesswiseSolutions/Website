@@ -300,17 +300,15 @@ namespace MethodLibrary
 
                         foreach(var column in columns)
                         {
-                            records[rowId].Add(column.Value, new List<string>());
+                            records[rowId].Add(column.Key, new List<string>());
                         }
                     }
 
                     return records;
                 }
 
-                public Dictionary<int, Dictionary<string, List<string>>> GetMissingRecords(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                public void GetMissingRecords(Dictionary<int, Dictionary<string, List<string>>> records, IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
                 {
-                    var records = InitialiseRecordsDictionary(dataRows, columns);
-
                     foreach(var column in columns)
                     {
                         var emptyRecords = dataRows.Where(c => string.IsNullOrWhiteSpace(c[column.Key].ToString()));
@@ -318,11 +316,9 @@ namespace MethodLibrary
                         foreach(var emptyRecord in emptyRecords)
                         {
                             var rowId = Convert.ToInt32(emptyRecord["RowId"]);
-                            records[rowId][column.Value].Add($"Required column {column.Value} has no value");
+                            records[rowId][column.Key].Add($"Required column {column.Value} has no value");
                         }
                     }
-
-                    return records;
                 }
 
                 public string FinaliseValidation(Dictionary<int, Dictionary<string, List<string>>> records, string processQueueGUID, long createdByUserId, long sourceId, string sheetName)
@@ -332,15 +328,15 @@ namespace MethodLibrary
                     //Those rows without errors update [Temp.CustomerDataUpload].[sheetName].CanCommit to 1
 
                     //Error records
-                    var errorRows = records.Where(r => r.Value.Values.Any()).ToDictionary(x => x.Key, x => x.Value);
+                    var errorRows = GetReturnRows(records, true);
 
                     //Valid records
-                    var validRows = records.Where(r => !r.Value.Values.Any()).ToDictionary(x => x.Key, x => x.Value);
+                    var validRows = GetReturnRows(records, false).Where(r => !errorRows.ContainsKey(r.Key)).ToDictionary(x => x.Key, x => x.Value);
 
                     //Insert error records
                     var customerMethods = new Methods.Customer();
                     customerMethods.InsertDataUploadValidationErrors(
-                        processQueueGUID, 
+                        processQueueGUID,
                         createdByUserId,
                         sourceId,
                         sheetName,
@@ -352,35 +348,38 @@ namespace MethodLibrary
                     return errorRows.Any() ? "Validation errors found" : null;
                 }
 
-                public void AddErrorsToRecords(Dictionary<int, Dictionary<string, List<string>>> records, Dictionary<int, Dictionary<string, List<string>>> errors)
+                private Dictionary<int, Dictionary<string, List<string>>> GetReturnRows(Dictionary<int, Dictionary<string, List<string>>> records, bool hasError)
                 {
-                    foreach(var errorRow in errors)
+                    var returnRows = new Dictionary<int, Dictionary<string, List<string>>>();
+                    foreach (var (record, recordValue) in from record in records
+                                                          from recordValue in
+                                                              from recordValue in record.Value
+                                                              where recordValue.Value.Any() == hasError
+                                                              select recordValue
+                                                          select (record, recordValue))
                     {
-                        if(!records.ContainsKey(errorRow.Key))
+                        if (!returnRows.ContainsKey(record.Key))
                         {
-                            records.Add(errorRow.Key, errorRow.Value);
+                            returnRows.Add(record.Key, new Dictionary<string, List<string>>());
                         }
-                        else
+
+                        var returnRow = returnRows[record.Key];
+                        if (!returnRow.ContainsKey(recordValue.Key))
                         {
-                            var errorRecords = records[errorRow.Key];
-                            foreach(var errorEntity in errorRow.Value)
-                            {
-                                if(!errorRecords.ContainsKey(errorEntity.Key))
-                                {
-                                    errorRecords.Add(errorEntity.Key, errorEntity.Value);
-                                }
-                            }
+                            returnRow.Add(recordValue.Key, recordValue.Value);
                         }
                     }
+
+                    return returnRows;
                 }
 
                 public void UpdateCanCommit(string processQueueGUID, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validRecords)
                 {
-                    var storedProcedure = DetermineUpdateCanCommitStoredProcedureFromSheetName(sheetName);
+                    var newProcessQueueGUID = $"{DetermineUpdateCanCommitStoredProcedureFromSheetName(sheetName)}|{processQueueGUID}";
 
                     foreach(var rowId in validRecords.Keys)
                     {
-                        CanCommit_Update(storedProcedure, processQueueGUID, rowId, true);
+                        CanCommit_Update(newProcessQueueGUID, rowId, true);
                     }
                 }
 
@@ -444,11 +443,12 @@ namespace MethodLibrary
                     return string.Empty;
                 }
 
-                private void CanCommit_Update(string storedProcedure, string processQueueGUID, int rowId, bool canCommit)
+                private void CanCommit_Update(string processQueueGUID, int rowId, bool canCommit)
                 {
+                    var processQueueGUIDArray = processQueueGUID.Split('|');
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        storedProcedure, 
-                        processQueueGUID, rowId, canCommit);
+                        processQueueGUIDArray[0], 
+                        processQueueGUIDArray[1], rowId, canCommit);
                 }
             }
         }

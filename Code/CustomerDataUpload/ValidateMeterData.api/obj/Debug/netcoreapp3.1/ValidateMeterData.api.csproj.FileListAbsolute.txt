@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateMeterData.api\obj\Debug\ne
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateMeterData.api\obj\Debug\netcoreapp3.1\ValidateMeterData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateMeterData.api\obj\Debug\netcoreapp3.1\ValidateMeterData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateMeterData.api\obj\Debug\netcoreapp3.1\ValidateMeterData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateMeterData.api\obj\Debug\netcoreapp3.1\ValidateMeterData.api.csprojAssemblyReference.cache

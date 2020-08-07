@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexTradeData.api\obj\Debu
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexTradeData.api\obj\Debug\netcoreapp3.1\ValidateFlexTradeData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexTradeData.api\obj\Debug\netcoreapp3.1\ValidateFlexTradeData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexTradeData.api\obj\Debug\netcoreapp3.1\ValidateFlexTradeData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\ValidateFlexTradeData.api\obj\Debug\netcoreapp3.1\ValidateFlexTradeData.api.csprojAssemblyReference.cache

@@ -80,15 +80,25 @@ namespace ValidateSubMeterData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"MPXN", "MPAN/MPRN"},
+                        {"SubMeterIdentifier", "SubMeter Name"},
+                        {"SerialNumber", "SubMeter Serial Number"},
+                        {"SubArea", "SubArea"},
+                        {"Asset", "Asset"}
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(subMeterDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {"SubMeterIdentifier", "SubMeter Name"}
                     };
-                
-                var records = _tempCustomerMethods.GetMissingRecords(subMeterDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, subMeterDataRows, requiredColumns);
 
                 //Get submeters not stored in database
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
@@ -103,8 +113,7 @@ namespace ValidateSubMeterData.api.Controllers
                         {"SubArea", "SubArea"},
                         {"Asset", "Asset"}
                     };
-                var newSubMeterErrors = _tempCustomerMethods.GetMissingRecords(newSubMeterDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, newSubMeterErrors);
+                _tempCustomerMethods.GetMissingRecords(records, newSubMeterDataRecords, requiredColumns);
 
                 //Update Process Queue
                 var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.SubMeter);

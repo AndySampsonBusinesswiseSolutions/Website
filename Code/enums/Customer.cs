@@ -41,6 +41,7 @@ namespace enums
                     public string Entity = "Entity";
                     public string ValidationErrorMessage = "Validation Error Message";
                     public string CanCommit = "Can Commit";
+                    public string ProcessQueueGUID = "Process Queue GUID";
                 }
 
                 public class SheetName

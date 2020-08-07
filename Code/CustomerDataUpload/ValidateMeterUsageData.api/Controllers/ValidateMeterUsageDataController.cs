@@ -78,7 +78,17 @@ namespace ValidateMeterUsageData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"MPXN", "MPAN/MPRN"},
+                        {"Date", "Read Date"},
+                        {"TimePeriod", "Time Period"},
+                        {"Value", "Volume"},
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(meterUsageDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -86,8 +96,7 @@ namespace ValidateMeterUsageData.api.Controllers
                         {"MPXN", "MPAN/MPRN"},
                         {"Date", "Read Date"}
                     };
-                
-                var records = _tempCustomerMethods.GetMissingRecords(meterUsageDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, meterUsageDataRows, requiredColumns);
 
                 //Check all dates are in the past
                 var futureDateDataRows = meterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 

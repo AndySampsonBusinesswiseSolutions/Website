@@ -79,7 +79,32 @@ namespace ValidateFixedContractData.api.Controllers
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, validateFixedContractDataAPIId, false, null);
                     return;
-                }               
+                }
+
+                var columns = new Dictionary<string, string>
+                    {
+                        {"ContractReference", "Contract Reference"},
+                        {"MPXN", "MPAN/MPRN"},
+                        {"Supplier", "Supplier"},
+                        {"ContractStartDate", "Contract Start Date"},
+                        {"ContractEndDate", "Contract End Date"},
+                        {"Product", "Product"},
+                        {"RateCount", "Rate Count"},
+                        {"StandingCharge", "Standing Charge"},
+                        {"CapacityCharge", "Capacity Charge"},
+                        {"Rate1", "Rate 1 p/kWh"},
+                        {"Rate2", "Rate 2 p/kWh"},
+                        {"Rate3", "Rate 3 p/kWh"},
+                        {"Rate4", "Rate 4 p/kWh"},
+                        {"Rate5", "Rate 5 p/kWh"},
+                        {"Rate6", "Rate 6 p/kWh"},
+                        {"Rate7", "Rate 7 p/kWh"},
+                        {"Rate8", "Rate 8 p/kWh"},
+                        {"Rate9", "Rate 9 p/kWh"},
+                        {"Rate10", "Rate 10 p/kWh"},
+                    };
+
+                var records = _tempCustomerMethods.InitialiseRecordsDictionary(fixedContractDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -91,7 +116,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {"ContractEndDate", "Contract End Date"}
                     };
 
-                var records = _tempCustomerMethods.GetMissingRecords(fixedContractDataRows, requiredColumns);
+                _tempCustomerMethods.GetMissingRecords(records, fixedContractDataRows, requiredColumns);
 
                 //If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
                 var newContractMeterDataRecords = fixedContractDataRows.Where(r => 
@@ -104,8 +129,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {"Standingcharge", "Standing Charge"},
                         {"CapacityCharge", "Capacity Charge"}
                     };
-                var newContractMeterErrors =_tempCustomerMethods.GetMissingRecords(newContractMeterDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, newContractMeterErrors);
+                _tempCustomerMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
                 //Get new contracts
                 var newContractDataRecords = fixedContractDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("ContractReference")));
@@ -116,8 +140,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {"Product", "Product"},
                         {"RateCount", "Rate Count"}
                     };
-                var newContractErrors =_tempCustomerMethods.GetMissingRecords(newContractDataRecords, requiredColumns);
-                _tempCustomerMethods.AddErrorsToRecords(records, newContractErrors);
+                _tempCustomerMethods.GetMissingRecords(records, newContractDataRecords, requiredColumns);
 
                 //Validate Supplier
                 var invalidSupplierDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Supplier"))
@@ -171,7 +194,7 @@ namespace ValidateFixedContractData.api.Controllers
                 }
 
                 invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
-                    && !_methods.IsValidFixedContactStandingCharge(r.Field<string>("StandingCharge")));
+                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>("StandingCharge")));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
@@ -180,7 +203,7 @@ namespace ValidateFixedContractData.api.Controllers
                 }
 
                 invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("CapacityCharge"))
-                    && !_methods.IsValidFixedContactCapacityCharge(r.Field<string>("CapacityCharge")));
+                    && !_methods.IsValidFixedContractCapacityCharge(r.Field<string>("CapacityCharge")));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {

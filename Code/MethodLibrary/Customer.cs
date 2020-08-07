@@ -185,7 +185,7 @@ namespace MethodLibrary
                 var rowNumberDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_customerDataUploadValidationAttributeEnums.RowNumber);
                 var entityDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_customerDataUploadValidationAttributeEnums.Entity);
                 var validationErrorMessageDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_customerDataUploadValidationAttributeEnums.ValidationErrorMessage);
-                var processQueueGUIDDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_systemAPIRequiredDataKeyEnums.ProcessQueueGUID);
+                var processQueueGUIDDataUploadValidationErrorAttributeId = DataUploadValidationErrorAttribute_GetDataUploadValidationErrorAttributeIdByDataUploadValidationErrorAttributeDescription(_customerDataUploadValidationAttributeEnums.ProcessQueueGUID);
 
                 //Insert into DataUploadValidationErrorDetail
                 foreach(var validationError in validationErrors)
@@ -199,8 +199,8 @@ namespace MethodLibrary
                             DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, sheetNameDataUploadValidationErrorAttributeId, sheetName);
                             DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, rowNumberDataUploadValidationErrorAttributeId, rowNumber);
                             DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, entityDataUploadValidationErrorAttributeId, entity);
-                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, validationErrorMessageDataUploadValidationErrorAttributeId, processQueueGUID);
-                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, processQueueGUIDDataUploadValidationErrorAttributeId, validationErrorMessage);
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, validationErrorMessageDataUploadValidationErrorAttributeId, validationErrorMessage);
+                            DataUploadValidationErrorDetail_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, processQueueGUIDDataUploadValidationErrorAttributeId, processQueueGUID);
                         }
                     }
                 }
