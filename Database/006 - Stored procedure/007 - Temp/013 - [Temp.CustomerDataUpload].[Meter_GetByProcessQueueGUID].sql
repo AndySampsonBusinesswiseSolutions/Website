@@ -38,7 +38,7 @@ BEGIN
         MPXN,
         GridSupplyPoint,
         ProfileClass,
-        MeterTimeswitchClass,
+        MeterTimeswitchCode,
         LineLossFactorClass,
         Capacity,
         LocalDistributionZone,

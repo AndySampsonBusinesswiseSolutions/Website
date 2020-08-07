@@ -23,7 +23,7 @@ CREATE TABLE [Temp.CustomerDataUpload].[Meter]
 	MPXN VARCHAR(255),
 	GridSupplyPoint VARCHAR(255),
 	ProfileClass VARCHAR(255),
-	MeterTimeswitchClass VARCHAR(255),
+	MeterTimeswitchCode VARCHAR(255),
 	LineLossFactorClass VARCHAR(255),
 	Capacity VARCHAR(255),
 	LocalDistributionZone VARCHAR(255),
