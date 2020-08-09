@@ -7,14 +7,14 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE APIGUID = 'E78B2351-B1E6-464F-8D90-3793FACDABF4')
 DECLARE @APIAttributeId BIGINT = (SELECT APIAttributeId FROM [System].[APIAttribute] WHERE APIAttributeDescription = 'Prerequisite API GUID')
 
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'AB6466A5-4CF0-4DA5-AE55-7EA93ACE8E13'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '9EDA4294-4FF7-45C3-8FD1-1CD50BD4B7C3'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'BDC8BA2C-C97A-4445-9B3E-31E0CE520AB8'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '3B054332-65F9-40A7-AD7E-8E8E4089DBC9'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '0AF991E7-EE90-4CB0-AD03-CE57F45450EF'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '8E2142F5-28D4-41A6-AB6A-FC1388855C40'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'A66500F1-9CD5-413C-BD74-A8A45CFDB06E'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '14405C13-7A14-4648-B19C-7A8D1AF974A5'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'A8476294-813A-44E2-952E-A51CB27207FE'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'D2973575-B026-4D17-8879-3E963E9C438E'
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '115603E8-400A-43F0-AC36-44DDCF7031D8'
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '535FDE7A-8720-4B72-BF68-DAC8FB95FBE9' --ValidateSiteData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '1DDDA8F8-F996-4B08-A28A-19F4FB0C922D' --ValidateMeterData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '35FA9EE3-77EC-4D1D-B622-443D28DA1608' --ValidateSubMeterData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '77B71231-880F-4470-83C9-0ED845BDDDCA' --ValidateMeterUsageData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '4E754A46-5F17-47BF-9D40-C7A95412EEFB' --ValidateSubMeterUsageData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '8253F798-A8F4-404D-B2BC-5DC87EFE839B' --ValidateCustomerData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, '0BA4C8E7-3723-4106-A117-656F6871BC99' --ValidateMeterExemptionData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'B8F5A9D3-CD9F-44F2-B3EA-DCECA0F7CCFF' --ValidateFixedContractData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'BE59D94B-61BE-4900-B336-36AEB8904973' --ValidateFlexContractData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'D520F4DC-F582-45D7-A53C-608156991C6E' --ValidateFlexReferenceVolumeData.api
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'AFFEE0C0-D660-4859-A7E9-93C3F2BC5492' --ValidateFlexTradeData.api

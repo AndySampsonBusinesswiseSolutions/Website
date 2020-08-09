@@ -777,7 +777,7 @@ async function uploadFile(file) {
 			ProcessGUID: "3AFF25CB-06BD-4BD1-A409-13D10A08044F", 
 			FileContent: workbookJSON,
 			FileGUID: fileGUID,
-			FileType: "Usage Upload",
+			FileType: "Customer Data Upload",
 			FileName: "Usage Upload.xlsx"
 		  };
 		postData(postBody);		

@@ -91,12 +91,8 @@ namespace ValidateFlexContractData.api.Controllers
                         {"ContractEndDate", "Contract End Date"},
                         {"Product", "Product"},
                         {"StandingCharge", "Standing Charge"},
-                        {"ShapeFee", "Shape Fee"},
-                        {"AdminFee", "Admin Fee"},
-                        {"ImbalanceFee", "Imbalance Fee"},
-                        {"RiskFee", "Risk Fee"},
-                        {"GreenPremium", "Green Premium"},
-                        {"OptimisationBenefit", "Optimisation Benefit"},
+                        {"RateType", "Rate Type"},
+                        {"Value", "Value"},
                     };
 
                 var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexContractDataRows, columns);
@@ -133,7 +129,10 @@ namespace ValidateFlexContractData.api.Controllers
                 foreach(var invalidSupplierDataRecord in invalidSupplierDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidSupplierDataRecord["RowId"]);
-                    records[rowId]["Supplier"].Add($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'");
+                    if(!records[rowId]["Supplier"].Contains($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'"))
+                    {
+                        records[rowId]["Supplier"].Add($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'");
+                    }
                 }
 
                 //Validate Contract Dates
@@ -143,7 +142,10 @@ namespace ValidateFlexContractData.api.Controllers
                 foreach(var invalidContractStartDateDataRecord in invalidContractStartDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidContractStartDateDataRecord["RowId"]);
-                    records[rowId]["TradeRContractStartDateference"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'");
+                    if(!records[rowId]["TradeRContractStartDateference"].Contains($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'"))
+                    {
+                        records[rowId]["TradeRContractStartDateference"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'");
+                    }
                 }
 
                 var invalidContractEndDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractEndDate"))
@@ -152,7 +154,10 @@ namespace ValidateFlexContractData.api.Controllers
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
-                    records[rowId]["ContractEndDate"].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    if(!records[rowId]["ContractEndDate"].Contains($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'"))
+                    {
+                        records[rowId]["ContractEndDate"].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    }
                 }
 
                 var invalidContractDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
@@ -164,7 +169,10 @@ namespace ValidateFlexContractData.api.Controllers
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
-                    records[rowId]["ContractStartDate"].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    if(!records[rowId]["ContractStartDate"].Contains($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'"))
+                    {
+                        records[rowId]["ContractStartDate"].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    }
                 }
 
                 //Validate Rates
@@ -174,7 +182,10 @@ namespace ValidateFlexContractData.api.Controllers
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    records[rowId]["Value"].Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}'");
+                    if(!records[rowId]["Value"].Contains($"Invalid Rate Value '{invalidRateDataRecord["Value"]}' for '{invalidRateDataRecord["RateType"]}'"))
+                    {
+                        records[rowId]["Value"].Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}' for '{invalidRateDataRecord["RateType"]}'");
+                    }
                 }
 
                 invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
@@ -183,7 +194,10 @@ namespace ValidateFlexContractData.api.Controllers
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    records[rowId]["StandingCharge"].Add($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'");
+                    if(!records[rowId]["StandingCharge"].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'"))
+                    {
+                        records[rowId]["StandingCharge"].Add($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'");
+                    }
                 }
 
                 //Update Process Queue

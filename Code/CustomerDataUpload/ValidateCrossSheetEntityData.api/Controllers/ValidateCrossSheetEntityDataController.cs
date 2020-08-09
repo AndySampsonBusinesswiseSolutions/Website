@@ -72,10 +72,12 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                     sourceId,
                     validateCrossSheetEntityDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateCrossSheetEntityDataAPI, validateCrossSheetEntityDataAPIId, jsonObject))
-                {
-                    return;
-                }
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+
+                //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateCrossSheetEntityDataAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 var errorsFound = false;
 
@@ -94,48 +96,48 @@ namespace ValidateCrossSheetEntityData.api.Controllers
 
                 //Sites - If Customer Name is populated, check it exists and if not, check it is in the Customers table
                 var customerNameCustomerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
-                var errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, siteDataRows, customerDataRows, customerNameCustomerAttributeId, "CustomerName", "Customer Name", _customerDataUploadValidationSheetNameEnums.Site);
+                var errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, siteDataRows, customerDataRows, customerNameCustomerAttributeId, "CustomerName", "Customer Name", _customerDataUploadValidationSheetNameEnums.Site, _customerDataUploadValidationSheetNameEnums.Customer);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
 
                 //Meters - If Site Name is populated, check it exists and if not, check it is in the Sites table
                 var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, meterDataRows, siteDataRows, siteNameSiteAttributeId, "SiteName", "Site Name", _customerDataUploadValidationSheetNameEnums.Meter);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, meterDataRows, siteDataRows, siteNameSiteAttributeId, "SiteName", "Site Name", _customerDataUploadValidationSheetNameEnums.Meter, _customerDataUploadValidationSheetNameEnums.Site);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
 
                 //SubMeters - If MPXN is populated, check it exists and if not, check it is in the Meters table
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, subMeterDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MeterIdentifier", "Meter Identifier", _customerDataUploadValidationSheetNameEnums.SubMeter);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, subMeterDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.SubMeter, _customerDataUploadValidationSheetNameEnums.Meter);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
 
                 //Meter HH Data - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, meterUsageDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MeterIdentifier", "Meter Identifier", _customerDataUploadValidationSheetNameEnums.MeterUsage);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, meterUsageDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN", _customerDataUploadValidationSheetNameEnums.MeterUsage, _customerDataUploadValidationSheetNameEnums.Meter);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Meter Exemptions - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, meterExemptionDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MeterIdentifier", "Meter Identifier", _customerDataUploadValidationSheetNameEnums.MeterExemption);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, meterExemptionDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.MeterExemption, _customerDataUploadValidationSheetNameEnums.Meter);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //SubMeter HH Data - If SubMeter Identifier is populated, check it exists and if not, check it is in the SubMeters table
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, subMeterUsageDataRows, subMeterDataRows, subMeterIdentifierSubMeterAttributeId, "SubMeterIdentifier", "SubMeter Identifier", _customerDataUploadValidationSheetNameEnums.SubMeterUsage);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, subMeterUsageDataRows, subMeterDataRows, subMeterIdentifierSubMeterAttributeId, "SubMeterIdentifier", "SubMeter Identifier", _customerDataUploadValidationSheetNameEnums.SubMeterUsage, _customerDataUploadValidationSheetNameEnums.SubMeterUsage);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Fixed Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, fixedContractDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MeterIdentifier", "Meter Identifier", _customerDataUploadValidationSheetNameEnums.FixedContract);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, fixedContractDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FixedContract, _customerDataUploadValidationSheetNameEnums.Meter);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Flex Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexContractDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MeterIdentifier", "Meter Identifier", _customerDataUploadValidationSheetNameEnums.FlexContract);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexContractDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FlexContract, _customerDataUploadValidationSheetNameEnums.Meter);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Flex Reference Volumes - If Contract Reference is populated, check it exists and if not, check it is in the Flex Contracts table
                 var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexReferenceVolumeDataRows, flexContractDataRows, contractReferenceContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexReferenceVolumeDataRows, flexContractDataRows, contractReferenceContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume, _customerDataUploadValidationSheetNameEnums.FlexContract);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
                 
                 //Flex Trades - If Basket Reference is populated, check it exists and if not, check it is in the Flex Contracts table
                 var basketReferenceBasketAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerBasketAttributeEnums.BasketReference);
-                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexTradeDataRows, flexContractDataRows, basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade);
+                errorMessage = ValidateCrossEntities(createdByUserId, sourceId, processQueueGUID, flexTradeDataRows, flexContractDataRows, basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade, _customerDataUploadValidationSheetNameEnums.FlexContract);
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);                
 
                 //Update Process Queue
@@ -150,7 +152,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
             }
         }
 
-        private string ValidateCrossEntities(long createdByUserId, long sourceId, string processQueueGUID, IEnumerable<DataRow> mainDataRows, IEnumerable<DataRow> crossEntityDataRows, long attributeId, string columnName, string columnDisplayName, string sheetName)
+        private string ValidateCrossEntities(long createdByUserId, long sourceId, string processQueueGUID, IEnumerable<DataRow> mainDataRows, IEnumerable<DataRow> crossEntityDataRows, long attributeId, string columnName, string columnDisplayName, string sheetName, string otherSheetName)
         {
             var entities = new Dictionary<string, string>
                 {
@@ -164,10 +166,10 @@ namespace ValidateCrossSheetEntityData.api.Controllers
             foreach (var invalidMainCrossEntityDataRow in invalidMainCrossEntityDataRows)
             {
                 var rowId = Convert.ToInt32(invalidMainCrossEntityDataRow["RowId"]);
-                records[rowId][columnName].Add($"New {columnDisplayName} entered'{invalidMainCrossEntityDataRow[columnName]}' but not entered in Customers sheet");
+                records[rowId][columnName].Add($"New {columnDisplayName} entered'{invalidMainCrossEntityDataRow[columnName]}' but not entered in {otherSheetName} sheet");
             }
 
-            return _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, sheetName);
+            return _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, sheetName, false);
         }
 
         private long GetDetailId(long attributeId, string detailDescription, string sheetName)

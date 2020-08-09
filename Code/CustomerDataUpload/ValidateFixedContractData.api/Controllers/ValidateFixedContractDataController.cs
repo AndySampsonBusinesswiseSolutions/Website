@@ -92,16 +92,8 @@ namespace ValidateFixedContractData.api.Controllers
                         {"RateCount", "Rate Count"},
                         {"StandingCharge", "Standing Charge"},
                         {"CapacityCharge", "Capacity Charge"},
-                        {"Rate1", "Rate 1 p/kWh"},
-                        {"Rate2", "Rate 2 p/kWh"},
-                        {"Rate3", "Rate 3 p/kWh"},
-                        {"Rate4", "Rate 4 p/kWh"},
-                        {"Rate5", "Rate 5 p/kWh"},
-                        {"Rate6", "Rate 6 p/kWh"},
-                        {"Rate7", "Rate 7 p/kWh"},
-                        {"Rate8", "Rate 8 p/kWh"},
-                        {"Rate9", "Rate 9 p/kWh"},
-                        {"Rate10", "Rate 10 p/kWh"},
+                        {"Rate", "Rate"},
+                        {"Value", "Value"}
                     };
 
                 var records = _tempCustomerMethods.InitialiseRecordsDictionary(fixedContractDataRows, columns);
@@ -149,7 +141,10 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidSupplierDataRecord in invalidSupplierDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidSupplierDataRecord["RowId"]);
-                    records[rowId]["Supplier"].Add($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'");
+                    if(!records[rowId]["Supplier"].Contains($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'"))
+                    {
+                        records[rowId]["Supplier"].Add($"Invalid Supplier '{invalidSupplierDataRecord["Supplier"]}'");
+                    }
                 }
 
                 //Validate Contract Dates
@@ -159,7 +154,10 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidContractStartDateDataRecord in invalidContractStartDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidContractStartDateDataRecord["RowId"]);
-                    records[rowId]["ContractStartDate"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'");
+                    if(!records[rowId]["ContractStartDate"].Contains($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'"))
+                    {
+                        records[rowId]["ContractStartDate"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord["ContractStartDate"]}'");
+                    }
                 }
 
                 var invalidContractEndDateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractEndDate"))
@@ -168,7 +166,10 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
-                    records[rowId]["ContractEndDate"].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    if(!records[rowId]["ContractEndDate"].Contains($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'"))
+                    {
+                        records[rowId]["ContractEndDate"].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    }
                 }
 
                 var invalidContractDateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ContractStartDate"))
@@ -180,7 +181,10 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
-                    records[rowId]["ContractStartDate"].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    if(!records[rowId]["ContractStartDate"].Contains($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'"))
+                    {
+                        records[rowId]["ContractStartDate"].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord["ContractStartDate"]}' is equal to or later than '{invalidContractEndDateDataRecord["ContractEndDate"]}'");
+                    }
                 }
 
                 //Validate Rates
@@ -190,7 +194,10 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    records[rowId]["Value"].Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}'");
+                    if(!records[rowId]["Value"].Contains($"Invalid Rate Value '{invalidRateDataRecord["Value"]}' for 'Rate {invalidRateDataRecord["Rate"]}'"))
+                    {
+                        records[rowId]["Value"].Add($"Invalid Rate Value '{invalidRateDataRecord["Value"]}' for 'Rate {invalidRateDataRecord["Rate"]}'");
+                    }
                 }
 
                 invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandingCharge"))
@@ -199,7 +206,10 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    records[rowId]["StandingCharge"].Add($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'");
+                    if(!records[rowId]["StandingCharge"].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'"))
+                    {
+                        records[rowId]["StandingCharge"].Add($"Invalid Standing Charge Value '{invalidRateDataRecord["StandingCharge"]}'");
+                    }
                 }
 
                 invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("CapacityCharge"))
@@ -208,12 +218,28 @@ namespace ValidateFixedContractData.api.Controllers
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    records[rowId]["CapacityCharge"].Add($"Invalid Capacity Charge Value '{invalidRateDataRecord["CapacityCharge"]}'");
+                    if(!records[rowId]["CapacityCharge"].Contains($"Invalid Capacity Charge Value '{invalidRateDataRecord["CapacityCharge"]}'"))
+                    {
+                        records[rowId]["CapacityCharge"].Add($"Invalid Capacity Charge Value '{invalidRateDataRecord["CapacityCharge"]}'");
+                    }
                 }
 
                 //Validate Rate Count
+                var invalidRateCountDataRecords = fixedContractDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("RateCount"))
+                    || !_methods.IsValidFixedContractRateCount(r.Field<string>("RateCount")));
+
+                foreach(var invalidRateCountDataRecord in invalidRateCountDataRecords)
+                {
+                    var rowId = Convert.ToInt32(invalidRateCountDataRecord["RowId"]);
+                    if(!records[rowId]["RateCount"].Contains($"Invalid Rate Count Value '{invalidRateCountDataRecord["RateCount"]}'"))
+                    {
+                        records[rowId]["RateCount"].Add($"Invalid Rate Count Value '{invalidRateCountDataRecord["RateCount"]}'");
+                    }
+                }
+
                 var validRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Value"))
-                    && _methods.IsValidFixedContractRate(r.Field<string>("Value")));
+                    && _methods.IsValidFixedContractRate(r.Field<string>("Value"))
+                    && _methods.IsValidFixedContractRateCount(r.Field<string>("RateCount")));
 
                 var contractMPXNDictionary = new Dictionary<string, List<string>>();
                 foreach(var validRateDataRecord in validRateDataRecords)
@@ -235,12 +261,15 @@ namespace ValidateFixedContractData.api.Controllers
                     {
                         var fixedContractDataRecords = validRateDataRecords.Where(r => r.Field<string>("ContractReference") == contract.Key
                             && r.Field<string>("MPXN") == mpxn);
-                        var rateCount = fixedContractDataRecords.Select(r => r.Field<int>("RateCount")).First();
+                        var rateCount = fixedContractDataRecords.Select(r => r.Field<string>("RateCount")).First();
 
-                        if(rateCount != fixedContractDataRecords.Count())
+                        if(rateCount != fixedContractDataRecords.Count().ToString())
                         {
                             var rowId = Convert.ToInt32(fixedContractDataRecords.First()["RowId"]);
-                            records[rowId]["RateCount"].Add($"Rate Count '{rateCount}' does not match number of rates provided");
+                            if(!records[rowId]["RateCount"].Contains($"Rate Count '{rateCount}' does not match number of rates provided"))
+                            {
+                                records[rowId]["RateCount"].Add($"Rate Count '{rateCount}' does not match number of rates provided");
+                            }
                         }
                     }
                 }

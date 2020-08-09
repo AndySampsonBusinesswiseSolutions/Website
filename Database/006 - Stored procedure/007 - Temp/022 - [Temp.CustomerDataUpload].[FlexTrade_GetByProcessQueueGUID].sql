@@ -35,6 +35,7 @@ BEGIN
         ProcessQueueGUID,
         RowId,
         BasketReference,
+        TradeReference,
         TradeDate,
         TradeProduct,
         Volume,

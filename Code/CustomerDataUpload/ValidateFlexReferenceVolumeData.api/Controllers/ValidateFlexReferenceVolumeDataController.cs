@@ -104,7 +104,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 foreach(var invalidDateFromDataRecord in invalidDateFromDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidDateFromDataRecord["RowId"]);
-                    records[rowId]["DateFrom"].Add($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}'");
+                    if(!records[rowId]["DateFrom"].Contains($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}'"))
+                    {
+                        records[rowId]["DateFrom"].Add($"Invalid Date From '{invalidDateFromDataRecord["DateFrom"]}'");
+                    }
                 }
 
                 var invalidDateToDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateTo"))
@@ -113,7 +116,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidDateToDataRecord["RowId"]);
-                    records[rowId]["DateTo"].Add($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}'");
+                    if(!records[rowId]["DateTo"].Contains($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}'"))
+                    {
+                        records[rowId]["DateTo"].Add($"Invalid Date to '{invalidDateToDataRecord["DateTo"]}'");
+                    }
                 }
 
                 var invalidContractDateDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("DateFrom"))
@@ -125,7 +131,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidDateToDataRecord["RowId"]);
-                    records[rowId]["DateFrom"].Add($"Invalid Contract Dates '{invalidDateToDataRecord["DateFrom"]}' is equal to or later than '{invalidDateToDataRecord["DateTo"]}'");
+                    if(!records[rowId]["DateFrom"].Contains($"Invalid Contract Dates '{invalidDateToDataRecord["DateFrom"]}' is equal to or later than '{invalidDateToDataRecord["DateTo"]}'"))
+                    {
+                        records[rowId]["DateFrom"].Add($"Invalid Contract Dates '{invalidDateToDataRecord["DateFrom"]}' is equal to or later than '{invalidDateToDataRecord["DateTo"]}'");
+                    }
                 }
 
                 //Validate Volume
@@ -135,7 +144,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidVolumeDataRecord["RowId"]);
-                    records[rowId]["Volume"].Add($"Invalid Reference Volume '{invalidVolumeDataRecord["Volume"]}'");
+                    if(!records[rowId]["Volume"].Contains($"Invalid Reference Volume '{invalidVolumeDataRecord["Volume"]}'"))
+                    {
+                        records[rowId]["Volume"].Add($"Invalid Reference Volume '{invalidVolumeDataRecord["Volume"]}'");
+                    }
                 }
 
                 //Update Process Queue

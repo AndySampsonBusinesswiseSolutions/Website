@@ -161,22 +161,22 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public long MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(string meterTimeswitchClassAttributeDescription)
+            public long MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(string meterTimeswitchCodeAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.MeterTimeswitchCodeAttribute_GetByMeterTimeswitchCodeAttributeDescription, 
-                    meterTimeswitchClassAttributeDescription);
+                    meterTimeswitchCodeAttributeDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("MeterTimeswitchCodeAttributeId"))
                     .FirstOrDefault();
             }
 
-            public DataTable MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(long meterTimeswitchClassAttributeId)
+            public DataTable MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(long meterTimeswitchCodeAttributeId)
             {
                 return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId, 
-                    meterTimeswitchClassAttributeId);
+                    meterTimeswitchCodeAttributeId);
             }
 
             public long LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(string localDistributionZoneAttributeDescription)

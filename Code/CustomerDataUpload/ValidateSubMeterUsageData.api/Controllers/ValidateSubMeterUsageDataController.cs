@@ -82,7 +82,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
 
                 var columns = new Dictionary<string, string>
                     {
-                        {"SubMeterName", "SubMeter Identifier"},
+                        {"SubMeterIdentifier", "SubMeter Identifier"},
                         {"Date", "Read Date"},
                         {"TimePeriod", "Time Period"},
                         {"Value", "Volume"},
@@ -93,21 +93,36 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
-                        {"SubMeterName", "SubMeter Identifier"},
+                        {"SubMeterIdentifier", "SubMeter Identifier"},
                         {"Date", "Read Date"}
                     };
                 
                 //If any are empty records, store error
                 _tempCustomerMethods.GetMissingRecords(records, subMeterUsageDataRows, requiredColumns);
 
+                //Check dates are valid
+                var invalidDateDataRows = subMeterUsageDataRows.Where(r => !_methods.IsValidDate(r.Field<string>("Date")));
+
+                foreach(var invalidDateDataRow in invalidDateDataRows)
+                {
+                    var rowId = Convert.ToInt32(invalidDateDataRow["RowId"]);
+                    if(!records[rowId]["Date"].Contains($"Invalid date {invalidDateDataRow["Date"]} found"))
+                    {
+                        records[rowId]["Date"].Add($"Invalid date {invalidDateDataRow["Date"]} found");
+                    }
+                }
+
                 //Check all dates are in the past
-                var futureDateDataRows = subMeterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")) 
-                    && r.Field<DateTime>("Date") >= DateTime.Today);
+                var validDateDataRows = subMeterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>("Date")));
+                var futureDateDataRows = validDateDataRows.Where(r => Convert.ToDateTime(r.Field<string>("Date")) >= DateTime.Today);
 
                 foreach(var futureDateDataRow in futureDateDataRows)
                 {
                     var rowId = Convert.ToInt32(futureDateDataRow["RowId"]);
-                    records[rowId]["Date"].Add($"Future date {futureDateDataRow["Date"]} found");
+                    if(!records[rowId]["Date"].Contains($"Future date {futureDateDataRow["Date"]} found"))
+                    {
+                        records[rowId]["Date"].Add($"Future date {futureDateDataRow["Date"]} found");
+                    }
                 }
 
                 //Check usage is valid
@@ -116,17 +131,24 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 foreach(var invalidUsageDataRow in invalidUsageDataRows)
                 {
                     var rowId = Convert.ToInt32(invalidUsageDataRow["RowId"]);
-                    records[rowId]["Value"].Add($"Invalid usage {invalidUsageDataRow["Value"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}");
+                    if(!records[rowId]["Value"].Contains($"Invalid usage {invalidUsageDataRow["Value"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}"))
+                    {
+                        records[rowId]["Value"].Add($"Invalid usage {invalidUsageDataRow["Value"]} for {invalidUsageDataRow["Date"]} {invalidUsageDataRow["TimePeriod"]}");
+                    }
                 }
 
                 //If day is not October clock change, don't allow HH49 or HH50 to be populated
-                var additionalHalfHourDataRows = subMeterUsageDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod")));
+                var additionalHalfHourDataRows = subMeterUsageDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>("TimePeriod"))
+                    && !string.IsNullOrWhiteSpace(r.Field<string>("Value")));
                 var invalidAdditionalHalfHourDataRows = additionalHalfHourDataRows.Where(r => !_methods.IsOctoberClockChange(r.Field<string>("Date")));
 
                 foreach(var invalidAdditionalHalfHourDataRow in invalidAdditionalHalfHourDataRows)
                 {
                     var rowId = Convert.ToInt32(invalidAdditionalHalfHourDataRow["RowId"]);
-                    records[rowId]["Date"].Add($"Usage found in additional half hour {invalidAdditionalHalfHourDataRow["TimePeriod"]} but {invalidAdditionalHalfHourDataRow["Date"]} is not an October clock change date");
+                    if(!records[rowId]["Date"].Contains($"Usage found in additional half hour {invalidAdditionalHalfHourDataRow["TimePeriod"]} but {invalidAdditionalHalfHourDataRow["Date"]} is not an October clock change date"))
+                    {
+                        records[rowId]["Date"].Add($"Usage found in additional half hour {invalidAdditionalHalfHourDataRow["TimePeriod"]} but {invalidAdditionalHalfHourDataRow["Date"]} is not an October clock change date");
+                    }
                 }
 
                 //Update Process Queue

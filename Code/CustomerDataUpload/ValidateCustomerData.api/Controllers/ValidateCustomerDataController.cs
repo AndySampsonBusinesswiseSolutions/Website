@@ -108,7 +108,10 @@ namespace ValidateCustomerData.api.Controllers
                 foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
                 {
                     var rowId = Convert.ToInt32(invalidTelephoneNumberDataRow["RowId"]);
-                    records[rowId]["ContactTelephoneNumber"].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}'");
+                    if(!records[rowId]["ContactTelephoneNumber"].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}'"))
+                    {
+                        records[rowId]["ContactTelephoneNumber"].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow["ContactTelephoneNumber"]}'");
+                    }
                 }
 
                 //Validate email address
@@ -118,7 +121,10 @@ namespace ValidateCustomerData.api.Controllers
                 foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)
                 {
                     var rowId = Convert.ToInt32(invalidEmailAddressDataRow["RowId"]);
-                    records[rowId]["ContactEmailAddress"].Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}'");
+                    if(!records[rowId]["ContactEmailAddress"].Contains($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}'"))
+                    {
+                        records[rowId]["ContactEmailAddress"].Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow["ContactEmailAddress"]}'");
+                    }
                 }
 
                 //Update Process Queue

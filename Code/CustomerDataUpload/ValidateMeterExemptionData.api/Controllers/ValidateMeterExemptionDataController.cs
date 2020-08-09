@@ -107,7 +107,10 @@ namespace ValidateMeterExemptionData.api.Controllers
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidExemptionProductDataRecord["RowId"]);
-                    records[rowId]["ExemptionProduct"].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]}");
+                    if(!records[rowId]["ExemptionProduct"].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]}"))
+                    {
+                        records[rowId]["ExemptionProduct"].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]}");
+                    }
                 }
 
                 //Validate Exemption Proportion
@@ -119,7 +122,10 @@ namespace ValidateMeterExemptionData.api.Controllers
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidExemptionProportionDataRecord["RowId"]);
-                    records[rowId]["ExemptionProportion"].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]}");
+                    if(!records[rowId]["ExemptionProportion"].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]}"))
+                    {
+                        records[rowId]["ExemptionProportion"].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]}");
+                    }
                 }
 
                 //Update Process Queue

@@ -92,7 +92,7 @@ namespace ValidateMeterData.api.Controllers
                         {"LineLossFactorClass", "LLFC"},
                         {"Capacity", "Capacity"},
                         {"LocalDistributionZone", "LDZ"},
-                        {"SOQ", "Standard Offtake Quantity"},
+                        {"StandardOfftakeQuantity", "Standard Offtake Quantity"},
                         {"AnnualUsage", "Annual Usage"},
                         {"MeterSerialNumber", "Meter Serial Number"},
                         {"Area", "Area"},
@@ -123,7 +123,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var row in invalidMPXNRows)
                 {
                     var dataRow = meterDataRows.First(r => r.Field<int>("RowId") == row);
-                    records[row]["MPXN"].Add($"Invalid MPAN/MPRN {dataRow["MPXN"]}");
+                    if(!records[row]["MPXN"].Contains($"Invalid MPAN/MPRN {dataRow["MPXN"]}"))
+                    {
+                        records[row]["MPXN"].Add($"Invalid MPAN/MPRN {dataRow["MPXN"]}");
+                    }
                 }
 
                 //Get MPANs not stored in database
@@ -150,7 +153,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var invalidGridSupplyPointDataRecord in invalidGridSupplyPointDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidGridSupplyPointDataRecord["RowId"]);
-                    records[rowId]["GridSupplyPoint"].Add($"Invalid GSP {invalidGridSupplyPointDataRecord["GridSupplyPoint"]}");
+                    if(!records[rowId]["GridSupplyPoint"].Contains($"Invalid GSP {invalidGridSupplyPointDataRecord["GridSupplyPoint"]}"))
+                    {
+                        records[rowId]["GridSupplyPoint"].Add($"Invalid GSP {invalidGridSupplyPointDataRecord["GridSupplyPoint"]}");
+                    }
                 }
 
                 //Validate Profile Class
@@ -160,7 +166,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var invalidProfileClassDataRecord in invalidProfileClassDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidProfileClassDataRecord["RowId"]);
-                    records[rowId]["ProfileClass"].Add($"Invalid Profile Class {invalidProfileClassDataRecord["ProfileClass"]}");
+                    if(!records[rowId]["ProfileClass"].Contains($"Invalid Profile Class {invalidProfileClassDataRecord["ProfileClass"]}"))
+                    {
+                        records[rowId]["ProfileClass"].Add($"Invalid Profile Class {invalidProfileClassDataRecord["ProfileClass"]}");
+                    }
                 }
 
                 //Validate MTC
@@ -170,7 +179,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var invalidMeterTimeswitchCodeDataRecord in invalidMeterTimeswitchCodeDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidMeterTimeswitchCodeDataRecord["RowId"]);
-                    records[rowId]["MeterTimeswitchCode"].Add($"Invalid MTC {invalidMeterTimeswitchCodeDataRecord["MeterTimeswitchCode"]}");
+                    if(!records[rowId]["MeterTimeswitchCode"].Contains($"Invalid MTC {invalidMeterTimeswitchCodeDataRecord["MeterTimeswitchCode"]}"))
+                    {
+                        records[rowId]["MeterTimeswitchCode"].Add($"Invalid MTC {invalidMeterTimeswitchCodeDataRecord["MeterTimeswitchCode"]}");
+                    }
                 }
 
                 //Validate LLFC
@@ -180,7 +192,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var invalidLineLossFactorClassDataRecord in invalidLineLossFactorClassDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidLineLossFactorClassDataRecord["RowId"]);
-                    records[rowId]["LineLossFactorClass"].Add($"Invalid LLFC {invalidLineLossFactorClassDataRecord["LineLossFactorClass"]}");
+                    if(!records[rowId]["LineLossFactorClass"].Contains($"Invalid LLFC {invalidLineLossFactorClassDataRecord["LineLossFactorClass"]}"))
+                    {
+                        records[rowId]["LineLossFactorClass"].Add($"Invalid LLFC {invalidLineLossFactorClassDataRecord["LineLossFactorClass"]}");
+                    }
                 }
 
                 //Validate Capacity if it is populated
@@ -190,7 +205,10 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var invalidCapacityDataRecord in invalidCapacityDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidCapacityDataRecord["RowId"]);
-                    records[rowId]["Capacity"].Add($"Invalid Capacity {invalidCapacityDataRecord["Capacity"]}");
+                    if(!records[rowId]["Capacity"].Contains($"Invalid Capacity {invalidCapacityDataRecord["Capacity"]}"))
+                    {
+                        records[rowId]["Capacity"].Add($"Invalid Capacity {invalidCapacityDataRecord["Capacity"]}");
+                    }
                 }
 
                 //Get MPRNs not stored in database
@@ -213,17 +231,23 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var invalidLocalDistributionZoneDataRecord in invalidLocalDistributionZoneDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidLocalDistributionZoneDataRecord["RowId"]);
-                    records[rowId]["LocalDistributionZone"].Add($"Invalid LDZ {invalidLocalDistributionZoneDataRecord["LocalDistributionZone"]}");
+                    if(!records[rowId]["LocalDistributionZone"].Contains($"Invalid LDZ {invalidLocalDistributionZoneDataRecord["LocalDistributionZone"]}"))
+                    {
+                        records[rowId]["LocalDistributionZone"].Add($"Invalid LDZ {invalidLocalDistributionZoneDataRecord["LocalDistributionZone"]}");
+                    }
                 }
 
                 //Validate SOQ if it is populated
-                var invalidStandardOfftakeQuantityDataRecords = mprnDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("SOQ"))
-                    && !_methods.IsValidStandardOfftakeQuantity(r.Field<string>("SOQ")));
+                var invalidStandardOfftakeQuantityDataRecords = mprnDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("StandardOfftakeQuantity"))
+                    && !_methods.IsValidStandardOfftakeQuantity(r.Field<string>("StandardOfftakeQuantity")));
 
                 foreach(var invalidStandardOfftakeQuantityDataRecord in invalidStandardOfftakeQuantityDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidStandardOfftakeQuantityDataRecord["RowId"]);
-                    records[rowId]["SOQ"].Add($"Invalid Standard Offtake Quantity {invalidStandardOfftakeQuantityDataRecord["SOQ"]}");
+                    if(!records[rowId]["StandardOfftakeQuantity"].Contains($"Invalid Standard Offtake Quantity {invalidStandardOfftakeQuantityDataRecord["StandardOfftakeQuantity"]}"))
+                    {
+                        records[rowId]["StandardOfftakeQuantity"].Add($"Invalid Standard Offtake Quantity {invalidStandardOfftakeQuantityDataRecord["StandardOfftakeQuantity"]}");
+                    }
                 }
 
                 //Update Process Queue

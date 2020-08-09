@@ -468,32 +468,32 @@ namespace MethodLibrary
             return profileClassDetailId != 0;
         }
 
-        public bool IsValidMeterTimeswitchCode(string meterTimeswitchClass)
+        public bool IsValidMeterTimeswitchCode(string meterTimeswitchCode)
         {
-            if (string.IsNullOrWhiteSpace(meterTimeswitchClass))
+            if (string.IsNullOrWhiteSpace(meterTimeswitchCode))
             {
                 return false;
             }
 
-            var meterTimeswitchClassValue = 0L;
+            var meterTimeswitchCodeValue = 0L;
 
             try
             {
-                meterTimeswitchClassValue = Convert.ToInt64(meterTimeswitchClass);
+                meterTimeswitchCodeValue = Convert.ToInt64(meterTimeswitchCode);
             }
             catch (Exception)
             {
                 return false;
             }
 
-            var meterTimeswitchClassRangeStartAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchRangeStart);
-            var meterTimeswitchClassRangeEndAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchRangeEnd);
+            var meterTimeswitchCodeRangeStartAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchRangeStart);
+            var meterTimeswitchCodeRangeEndAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchRangeEnd);
 
-            var meterTimeswitchClassRangeStartDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchClassRangeStartAttributeId);
-            var meterTimeswitchClassRangeEndDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchClassRangeEndAttributeId);
+            var meterTimeswitchCodeRangeStartDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeStartAttributeId);
+            var meterTimeswitchCodeRangeEndDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeEndAttributeId);
 
-            var validRangeStartDataRecords = meterTimeswitchClassRangeStartDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") <= meterTimeswitchClassValue);
-            var validRangeEndDataRecords = meterTimeswitchClassRangeEndDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") >= meterTimeswitchClassValue);
+            var validRangeStartDataRecords = meterTimeswitchCodeRangeStartDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") <= meterTimeswitchCodeValue);
+            var validRangeEndDataRecords = meterTimeswitchCodeRangeEndDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") >= meterTimeswitchCodeValue);
 
             var validRangeStartRows = validRangeStartDataRecords.Select(r => r.Field<int>("MeterDetailDescription"));
             var validRangeEndRows = validRangeEndDataRecords.Select(r => r.Field<int>("MeterDetailDescription"));
@@ -566,6 +566,25 @@ namespace MethodLibrary
                 var currentExemptionProportionValue = _informationMethods.MeterExemptionDetail_GetMeterExemptionDetailDescriptionByMeterExemptionIdAndMeterExemptionAttributeId(meterExemptionProductId, meterExemptionProportionAttributeId);
 
                 return currentExemptionProportionValue == exemptionProportionValue.ToString();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool IsValidFixedContractRateCount(string rateCount)
+        {
+            if (string.IsNullOrWhiteSpace(rateCount))
+            {
+                return false;
+            }
+
+            try
+            {
+                var rateCountValue = Convert.ToInt64(rateCount);
+
+                return rateCountValue > 0;
             }
             catch (Exception)
             {

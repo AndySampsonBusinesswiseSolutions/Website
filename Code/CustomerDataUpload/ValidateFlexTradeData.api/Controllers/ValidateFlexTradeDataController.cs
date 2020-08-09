@@ -122,7 +122,10 @@ namespace ValidateFlexTradeData.api.Controllers
                 foreach(var invalidTradeReferenceDataRecord in invalidTradeReferenceDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidTradeReferenceDataRecord["RowId"]);
-                    records[rowId]["TradeReference"].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}'");
+                    if(!records[rowId]["TradeReference"].Contains($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}'"))
+                    {
+                        records[rowId]["TradeReference"].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}'");
+                    }
                 }
 
                 //Validate Trade Date
@@ -132,7 +135,10 @@ namespace ValidateFlexTradeData.api.Controllers
                 foreach(var invalidTradeDateDataRecord in invalidTradeDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidTradeDateDataRecord["RowId"]);
-                    records[rowId]["TradeDate"].Add($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}'");
+                    if(!records[rowId]["TradeDate"].Contains($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}'"))
+                    {
+                        records[rowId]["TradeDate"].Add($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}'");
+                    }
                 }
 
                 //Validate Trade Product
@@ -142,7 +148,10 @@ namespace ValidateFlexTradeData.api.Controllers
                 foreach(var invalidTradeProductDataRecord in invalidTradeProductDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidTradeProductDataRecord["RowId"]);
-                    records[rowId]["TradeProduct"].Add($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}'");
+                    if(!records[rowId]["TradeProduct"].Contains($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}'"))
+                    {
+                        records[rowId]["TradeProduct"].Add($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}'");
+                    }
                 }
 
                 //Validate Volume
@@ -152,7 +161,10 @@ namespace ValidateFlexTradeData.api.Controllers
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidVolumeDataRecord["RowId"]);
-                    records[rowId]["Volume"].Add($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}'");
+                    if(!records[rowId]["Volume"].Contains($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}'"))
+                    {
+                        records[rowId]["Volume"].Add($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}'");
+                    }
                 }
 
                 //Validate Price
@@ -162,7 +174,10 @@ namespace ValidateFlexTradeData.api.Controllers
                 foreach(var invalidPriceDataRecord in invalidPriceDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidPriceDataRecord["RowId"]);
-                    records[rowId]["Price"].Add($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}'");
+                    if(!records[rowId]["Price"].Contains($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}'"))
+                    {
+                        records[rowId]["Price"].Add($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}'");
+                    }
                 }
 
                 //Validate Direction
@@ -172,7 +187,10 @@ namespace ValidateFlexTradeData.api.Controllers
                 foreach(var invalidDirectionDataRecord in invalidDirectionDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidDirectionDataRecord["RowId"]);
-                    records[rowId]["Direction"].Add($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}'");
+                    if(!records[rowId]["Direction"].Contains($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}'"))
+                    {
+                        records[rowId]["Direction"].Add($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}'");
+                    }
                 }
 
                 //Update Process Queue
