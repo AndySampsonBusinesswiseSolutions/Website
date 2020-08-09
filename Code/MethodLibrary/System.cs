@@ -26,6 +26,11 @@ namespace MethodLibrary
                 return jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
             }
 
+            public void SetProcessQueueGUIDInJObject(JObject jsonObject, string processQueueGUID)
+            {
+                jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID] = processQueueGUID;
+            }
+
             public string GetProcessGUIDFromJObject(JObject jsonObject)
             {
                 return jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
@@ -356,6 +361,18 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("ProcessId"))
                     .FirstOrDefault();
             }
+            
+            public string Process_GetProcessGUIDByProcessId(long processId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.Process_GetByProcessId, 
+                    processId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<Guid>("ProcessGUID"))
+                    .Select(r => r.ToString())
+                    .FirstOrDefault();
+            }
 
             public void InsertProcessQueueError(string processQueueGUID, long createdByUserId, long sourceId, long APIId, string errorMessage = null)
             {
@@ -567,6 +584,13 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ErrorId"))
                     .FirstOrDefault();
+            }
+
+            public void ProcessQueueProgression_Insert(long createdByUserId, long sourceId, string fromProcessQueueGUID, string toProcessQueueGUID)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessQueueProgression_Insert, 
+                    createdByUserId, sourceId, fromProcessQueueGUID, toProcessQueueGUID);
             }
         }
     }

@@ -5,7 +5,7 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [Information].[FileType_Insert] @CreatedByUserId, @SourceId, 'Usage Upload';
+EXEC [Information].[FileType_Insert] @CreatedByUserId, @SourceId, 'Customer Data Upload';
 EXEC [Information].[FileType_Insert] @CreatedByUserId, @SourceId, 'Letter Of Authority';
 EXEC [Information].[FileType_Insert] @CreatedByUserId, @SourceId, 'Supplier Contract';
 EXEC [Information].[FileType_Insert] @CreatedByUserId, @SourceId, 'EMaaS Contract';

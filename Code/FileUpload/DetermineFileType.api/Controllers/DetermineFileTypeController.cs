@@ -22,6 +22,7 @@ namespace DetermineFileType.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 determineFileTypeAPIId;
 
         public DetermineFileTypeController(ILogger<DetermineFileTypeController> logger)
@@ -73,11 +74,12 @@ namespace DetermineFileType.api.Controllers
 
                 //Check if FileType has been passed through
                 var fileType = _systemMethods.GetFileTypeFromJObject(jsonObject);
+                var fileTypeId = 0L;
 
                 if(!string.IsNullOrWhiteSpace(fileType))
                 {
                     //FileType was passed through so get the FileTypeId
-                    var fileTypeId = _informationMethods.FileType_GetFileTypeIdByFileTypeDescription(fileType);
+                    fileTypeId = _informationMethods.FileType_GetFileTypeIdByFileTypeDescription(fileType);
 
                     if(fileTypeId == 0)
                     {
@@ -85,14 +87,11 @@ namespace DetermineFileType.api.Controllers
                         _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, true, $"Invalid FileType {fileType} provided for FileId {fileId}");
                         return;
                     }
-
-                    //Insert File To FileType Mapping
-                    _mappingMethods.FileToFileType_Insert(createdByUserId, sourceId, fileId, fileTypeId);
                 }
                 else
                 {
                     //TODO: Read file to determine what type it is
-                    if(0 == 0)
+                    if(fileTypeId == 0)
                     {
                         //A FileType could not be determined so error
                         _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, true, $"Unable to determine FileType for FileId {fileId}");
@@ -100,12 +99,33 @@ namespace DetermineFileType.api.Controllers
                     }
                 }
 
+                //Insert File To FileType Mapping
+                _mappingMethods.FileToFileType_Insert(createdByUserId, sourceId, fileId, fileTypeId);
+
+                //Get ProcessGUID related to FileType
+                var processId = _mappingMethods.FileTypeToProcess_GetProcessIdByFileTypeId(fileTypeId);
+                var processGUID = _systemMethods.Process_GetProcessGUIDByProcessId(processId);
+
+                //Add ProcessGUID into jsonObject
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ProcessGUID, processGUID);
+
+                //Create new ProcessQueueGUID
+                var newProcessQueueGUID = Guid.NewGuid().ToString();
+
+                //Link ProcessQueueGUIDs
+                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+
+                //Update ProcessQueueGUID in jsonObject
+                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+
+                //Get Routing.API URL
+                var routingAPIId = _systemMethods.GetRoutingAPIId();
+
+                //Connect to Routing API and POST data
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, jsonObject);
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, false, null);
-
-                //TODO: Get ProcessGUID related to FileType
-
-                //TODO: Call RoutingAPI for ProcessGUID
             }
             catch(Exception error)
             {

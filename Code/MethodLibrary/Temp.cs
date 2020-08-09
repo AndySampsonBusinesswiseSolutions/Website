@@ -83,11 +83,11 @@ namespace MethodLibrary
                         processQueueGUID, rowId, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactRole, contactTelephoneNumber, contactEmailAddress);
                 }
 
-                public void Meter_Insert(string processQueueGUID, int rowId, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchClass, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
+                public void Meter_Insert(string processQueueGUID, int rowId, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchCode, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.Meter_Insert, 
-                        processQueueGUID, rowId, siteName, MPXN, gridSupplyPoint, profileClass, meterTimeswitchClass, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
+                        processQueueGUID, rowId, siteName, MPXN, gridSupplyPoint, profileClass, meterTimeswitchCode, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
                 }
 
                 public void SubMeter_Insert(string processQueueGUID, int rowId, string MPXN, string subMeterIdentifier, string serialNumber, string subArea, string asset)
@@ -316,12 +316,15 @@ namespace MethodLibrary
                         foreach(var emptyRecord in emptyRecords)
                         {
                             var rowId = Convert.ToInt32(emptyRecord["RowId"]);
-                            records[rowId][column.Key].Add($"Required column {column.Value} has no value");
+                            if(!records[rowId][column.Key].Contains($"Required column {column.Value} has no value"))
+                            {
+                                records[rowId][column.Key].Add($"Required column {column.Value} has no value");
+                            }
                         }
                     }
                 }
 
-                public string FinaliseValidation(Dictionary<int, Dictionary<string, List<string>>> records, string processQueueGUID, long createdByUserId, long sourceId, string sheetName)
+                public string FinaliseValidation(Dictionary<int, Dictionary<string, List<string>>> records, string processQueueGUID, long createdByUserId, long sourceId, string sheetName, bool canUpdateValidRecords = true)
                 {
                     //Split into two dictionaries
                     //Those rows with errors need to be inserted into [Customer].[DataUploadValidationError]
@@ -330,8 +333,14 @@ namespace MethodLibrary
                     //Error records
                     var errorRows = GetReturnRows(records, true);
 
-                    //Valid records
-                    var validRows = GetReturnRows(records, false).Where(r => !errorRows.ContainsKey(r.Key)).ToDictionary(x => x.Key, x => x.Value);
+                    //Update valid records
+                    if(canUpdateValidRecords)
+                    {
+                        //Valid records
+                        var validRows = GetReturnRows(records, false).Where(r => !errorRows.ContainsKey(r.Key)).ToDictionary(x => x.Key, x => x.Value);
+
+                        UpdateCanCommit(processQueueGUID, sheetName, validRows, true);
+                    }                    
 
                     //Insert error records
                     var customerMethods = new Methods.Customer();
@@ -341,9 +350,7 @@ namespace MethodLibrary
                         sourceId,
                         sheetName,
                         errorRows);
-
-                    //Update valid records
-                    UpdateCanCommit(processQueueGUID, sheetName, validRows);
+                    UpdateCanCommit(processQueueGUID, sheetName, errorRows, false);
 
                     return errorRows.Any() ? "Validation errors found" : null;
                 }
@@ -373,13 +380,13 @@ namespace MethodLibrary
                     return returnRows;
                 }
 
-                public void UpdateCanCommit(string processQueueGUID, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validRecords)
+                public void UpdateCanCommit(string processQueueGUID, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validRecords, bool canCommit)
                 {
                     var newProcessQueueGUID = $"{DetermineUpdateCanCommitStoredProcedureFromSheetName(sheetName)}|{processQueueGUID}";
 
                     foreach(var rowId in validRecords.Keys)
                     {
-                        CanCommit_Update(newProcessQueueGUID, rowId, true);
+                        CanCommit_Update(newProcessQueueGUID, rowId, canCommit);
                     }
                 }
 

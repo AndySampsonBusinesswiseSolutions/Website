@@ -30,6 +30,8 @@ namespace enums
                 public string ProcessArchiveDetail_Insert = "[System].[ProcessArchiveDetail_Insert]";
                 public string ProcessArchiveDetail_InsertAll = "[System].[ProcessArchiveDetail_InsertAll]";
                 public string ProcessArchiveDetail_GetByProcessArchiveDetailId = "[System].[ProcessArchiveDetail_GetByProcessArchiveDetailId]";
+                public string Process_GetByProcessId = "[System].[Process_GetByProcessId]";
+                public string ProcessQueueProgression_Insert = "[System].[ProcessQueueProgression_Insert]";
             }
         }
     }

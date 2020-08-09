@@ -18,14 +18,12 @@ namespace enums
                 public string CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId = "[Mapping].[CustomertoChildCustomer_DeleteByCustomerIdAndChildCustomerId]";
                 public string CustomerToChildCustomer_GetList = "[Mapping].[CustomerToChildCustomer_GetList]";
                 public string APIToProcessArchiveDetail_GetByAPIId = "[Mapping].[APIToProcessArchiveDetail_GetByAPIId]";
-                public string FolderToRootFolderType_GetByRootFolderTypeId = "[Mapping].[FolderToRootFolderType_GetByRootFolderTypeId]";
-                public string FolderToFolderExtension_GetByFolderId = "[Mapping].[FolderToFolderExtension_GetByFolderId]";
-                public string FolderToFolderExtensionType_GetByFolderExtensionTypeId = "[Mapping].[FolderToFolderExtensionType_GetByFolderExtensionTypeId]";
                 public string CustomerToFile_Insert = "[Mapping].[CustomerToFile_Insert]";
                 public string FileToFileType_Insert = "[Mapping].[FileToFileType_Insert]";
                 public string ContractToContractMeter_GetByContractId = "[Mapping].[ContractToContractMeter_GetByContractId]";
                 public string ContractMeterToMeter_GetByContractMeterId = "[Mapping].[ContractMeterToMeter_GetByContractMeterId]";
                 public string BasketToContractMeter_GetByBasketId = "[Mapping].[BasketToContractMeter_GetByBasketId]";
+                public string FileTypeToProcess_GetByFileTypeId = "[Mapping].[FileTypeToProcess_GetByFileTypeId]";
             }
         }
     }
