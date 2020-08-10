@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>de283bcb-41d4-4ef7-a285-cd1ab0811837</ID>
-    <DateCreated>2020-08-04T15:56:59.7065637+01:00</DateCreated>
+    <ID>b725ec53-6890-449b-a33a-0d85ccff7097</ID>
+    <DateCreated>2020-08-10T20:01:05.7332172+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>ZCW3FQYuudnwoOM8q6Lprg==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6ydNPtaiwfBjESEUTNm+YdM=</Password>
+    <Login>9hmgwrVjmEQCxhHU7TQVQQ==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe6wCZhpUA8mjIRc5Thu1jQD0=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -618,9 +618,16 @@
     <IsStaticFile>false</IsStaticFile>
   </ScriptFile>
   <ScriptFile>
-    <ID>E78B2351-B1E6-464F-8D90-3793FACDABF4</ID>
+    <ID>e78b2351-b1e6-464f-8d90-3793facdabf4</ID>
     <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\023 - ValidateCrossSheetEntityData.api\*.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>false</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>305de30e-9e99-4009-82c2-cd91f43602e2</ID>
+    <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\024 - ProcessCustomerDataUploadValidation.api\*.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>false</IsStaticFile>
   </ScriptFile>
