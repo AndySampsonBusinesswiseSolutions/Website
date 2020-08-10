@@ -25,6 +25,7 @@ namespace ValidateFlexTradeData.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
+        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateFlexTradeDataAPIId;
 
         public ValidateFlexTradeDataController(ILogger<ValidateFlexTradeDataController> logger)
@@ -82,13 +83,13 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 var columns = new Dictionary<string, string>
                     {
-                        {"BasketReference", "Basket Reference"},
-                        {"TradeReference", "Trade Reference"},
-                        {"TradeDate", "Trade Date"},
-                        {"TradeProduct", "Trade Product"},
-                        {"Volume", "Volume"},
-                        {"Price", "Price"},
-                        {"Direction", "Trade Direction"}
+                        {_customerDataUploadValidationEntityEnums.BasketReference, "Basket Reference"},
+                        {_customerDataUploadValidationEntityEnums.TradeReference, "Trade Reference"},
+                        {_customerDataUploadValidationEntityEnums.TradeDate, "Trade Date"},
+                        {_customerDataUploadValidationEntityEnums.TradeProduct, "Trade Product"},
+                        {_customerDataUploadValidationEntityEnums.Volume, _customerDataUploadValidationEntityEnums.Volume},
+                        {_customerDataUploadValidationEntityEnums.Price, _customerDataUploadValidationEntityEnums.Price},
+                        {_customerDataUploadValidationEntityEnums.Direction, "Trade Direction"}
                     };
 
                 var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexTradeDataRows, columns);
@@ -96,100 +97,100 @@ namespace ValidateFlexTradeData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
-                        {"BasketReference", "Basket Reference"}
+                        {_customerDataUploadValidationEntityEnums.BasketReference, "Basket Reference"}
                     };
                 _tempCustomerMethods.GetMissingRecords(records, flexTradeDataRows, requiredColumns);
 
                 //If Trade Reference is not populated, all other fields are required
                 //Get Trade References not populated
-                var emptyTradeReferenceDataRecords = flexTradeDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>("TradeReference")));
+                var emptyTradeReferenceDataRecords = flexTradeDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference)));
 
                 //Trade Date, Trade Product, Volume, Price and Direction must be populated
                 requiredColumns = new Dictionary<string, string>
                     {
-                        {"TradeDate", "Trade Date"},
-                        {"TradeProduct", "Trade Product"},
-                        {"Volume", "Volume"},
-                        {"Price", "Price"},
-                        {"Direction", "Trade Direction"}
+                        {_customerDataUploadValidationEntityEnums.TradeDate, "Trade Date"},
+                        {_customerDataUploadValidationEntityEnums.TradeProduct, "Trade Product"},
+                        {_customerDataUploadValidationEntityEnums.Volume, _customerDataUploadValidationEntityEnums.Volume},
+                        {_customerDataUploadValidationEntityEnums.Price, _customerDataUploadValidationEntityEnums.Price},
+                        {_customerDataUploadValidationEntityEnums.Direction, "Trade Direction"}
                     };
                 _tempCustomerMethods.GetMissingRecords(records, emptyTradeReferenceDataRecords, requiredColumns);
 
                 //Validate Trade Reference
-                var invalidTradeReferenceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeReference"))
-                    && !_methods.IsValidFlexTradeReference(r.Field<string>("TradeReference")));
+                var invalidTradeReferenceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference))
+                    && !_methods.IsValidFlexTradeReference(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference)));
 
                 foreach(var invalidTradeReferenceDataRecord in invalidTradeReferenceDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidTradeReferenceDataRecord["RowId"]);
-                    if(!records[rowId]["TradeReference"].Contains($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.TradeReference].Contains($"Invalid Trade Reference '{invalidTradeReferenceDataRecord[_customerDataUploadValidationEntityEnums.TradeReference]}'"))
                     {
-                        records[rowId]["TradeReference"].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord["TradeReference"]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.TradeReference].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord[_customerDataUploadValidationEntityEnums.TradeReference]}'");
                     }
                 }
 
                 //Validate Trade Date
-                var invalidTradeDateDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeDate"))
-                    && !_methods.IsValidDate(r.Field<string>("TradeDate")));
+                var invalidTradeDateDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeDate))
+                    && !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeDate)));
 
                 foreach(var invalidTradeDateDataRecord in invalidTradeDateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidTradeDateDataRecord["RowId"]);
-                    if(!records[rowId]["TradeDate"].Contains($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.TradeDate].Contains($"Invalid Trade Date '{invalidTradeDateDataRecord[_customerDataUploadValidationEntityEnums.TradeDate]}'"))
                     {
-                        records[rowId]["TradeDate"].Add($"Invalid Trade Date '{invalidTradeDateDataRecord["TradeDate"]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.TradeDate].Add($"Invalid Trade Date '{invalidTradeDateDataRecord[_customerDataUploadValidationEntityEnums.TradeDate]}'");
                     }
                 }
 
                 //Validate Trade Product
-                var invalidTradeProductDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("TradeProduct"))
-                    && !_methods.IsValidFlexTradeProduct(r.Field<string>("TradeProduct")));
+                var invalidTradeProductDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct))
+                    && !_methods.IsValidFlexTradeProduct(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct)));
 
                 foreach(var invalidTradeProductDataRecord in invalidTradeProductDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidTradeProductDataRecord["RowId"]);
-                    if(!records[rowId]["TradeProduct"].Contains($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.TradeProduct].Contains($"Invalid Trade Product '{invalidTradeProductDataRecord[_customerDataUploadValidationEntityEnums.TradeProduct]}'"))
                     {
-                        records[rowId]["TradeProduct"].Add($"Invalid Trade Product '{invalidTradeProductDataRecord["TradeProduct"]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.TradeProduct].Add($"Invalid Trade Product '{invalidTradeProductDataRecord[_customerDataUploadValidationEntityEnums.TradeProduct]}'");
                     }
                 }
 
                 //Validate Volume
-                var invalidVolumeDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Volume"))
-                    && !_methods.IsValidFlexTradeVolume(r.Field<string>("Volume")));
+                var invalidVolumeDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Volume))
+                    && !_methods.IsValidFlexTradeVolume(r.Field<string>(_customerDataUploadValidationEntityEnums.Volume)));
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidVolumeDataRecord["RowId"]);
-                    if(!records[rowId]["Volume"].Contains($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Trade Volume '{invalidVolumeDataRecord[_customerDataUploadValidationEntityEnums.Volume]}'"))
                     {
-                        records[rowId]["Volume"].Add($"Invalid Trade Volume '{invalidVolumeDataRecord["Volume"]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Trade Volume '{invalidVolumeDataRecord[_customerDataUploadValidationEntityEnums.Volume]}'");
                     }
                 }
 
                 //Validate Price
-                var invalidPriceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Price"))
-                    && !_methods.IsValidFlexTradePrice(r.Field<string>("Price")));
+                var invalidPriceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Price))
+                    && !_methods.IsValidFlexTradePrice(r.Field<string>(_customerDataUploadValidationEntityEnums.Price)));
 
                 foreach(var invalidPriceDataRecord in invalidPriceDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidPriceDataRecord["RowId"]);
-                    if(!records[rowId]["Price"].Contains($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Price].Contains($"Invalid Trade Price '{invalidPriceDataRecord[_customerDataUploadValidationEntityEnums.Price]}'"))
                     {
-                        records[rowId]["Price"].Add($"Invalid Trade Price '{invalidPriceDataRecord["Price"]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Price].Add($"Invalid Trade Price '{invalidPriceDataRecord[_customerDataUploadValidationEntityEnums.Price]}'");
                     }
                 }
 
                 //Validate Direction
-                var invalidDirectionDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("Direction"))
-                    && !_methods.IsValidFlexTradeDirection(r.Field<string>("Direction")));
+                var invalidDirectionDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Direction))
+                    && !_methods.IsValidFlexTradeDirection(r.Field<string>(_customerDataUploadValidationEntityEnums.Direction)));
 
                 foreach(var invalidDirectionDataRecord in invalidDirectionDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidDirectionDataRecord["RowId"]);
-                    if(!records[rowId]["Direction"].Contains($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Direction].Contains($"Invalid Trade Direction '{invalidDirectionDataRecord[_customerDataUploadValidationEntityEnums.Direction]}'"))
                     {
-                        records[rowId]["Direction"].Add($"Invalid Trade Direction '{invalidDirectionDataRecord["Direction"]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Direction].Add($"Invalid Trade Direction '{invalidDirectionDataRecord[_customerDataUploadValidationEntityEnums.Direction]}'");
                     }
                 }
 

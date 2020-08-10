@@ -23,7 +23,7 @@ CREATE TABLE [Customer].[DataUploadValidationError]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	DataUploadValidationErrorGUID UNIQUEIDENTIFIER NOT NULL,
+	DataUploadValidationErrorGUID UNIQUEIDENTIFIER NOT NULL
 	)  ON [Customer]
 GO
 ALTER TABLE [Customer].[DataUploadValidationError] ADD CONSTRAINT

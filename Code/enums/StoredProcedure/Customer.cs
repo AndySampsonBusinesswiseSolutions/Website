@@ -14,11 +14,6 @@ namespace enums
                 public string CustomerDetail_Insert = "[Customer].[CustomerDetail_Insert]";
                 public string Customer_GetByCustomerGUID = "[Customer].[Customer_GetByCustomerGUID]";
                 public string Customer_GetList = "[Customer].[Customer_GetList]";
-                public string DataUploadValidationErrorAttribute_Insert = "[Customer].[DataUploadValidationErrorAttribute_Insert]";
-                public string DataUploadValidationError_Insert = "[Customer].[DataUploadValidationError_Insert]";
-                public string DataUploadValidationErrorDetail_Insert = "[Customer].[DataUploadValidationErrorDetail_Insert]";
-                public string DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription = "[Customer].[DataUploadValidationErrorAttribute_GetByDataUploadValidationErrorAttributeDescription]";
-                public string DataUploadValidationError_GetByDataUploadValidationErrorGUID = "[Customer].[DataUploadValidationError_GetByDataUploadValidationErrorGUID]";
                 public string SubMeterAttribute_Insert = "[Customer].[SubMeterAttribute_Insert]";
                 public string SubMeter_Insert = "[Customer].[SubMeter_Insert]";
                 public string SubMeterDetail_Insert = "[Customer].[SubMeterDetail_Insert]";
@@ -43,7 +38,19 @@ namespace enums
                 public string FlexContractDetail_Insert = "[Customer].[FlexContractDetail_Insert]";
                 public string FlexContractAttribute_GetByFlexContractAttributeDescription = "[Customer].[FlexContractAttribute_GetByFlexContractAttributeDescription]";
                 public string FlexContractDetail_GetByFlexContractAttributeIdAndFlexContractDetailDescription = "[Customer].[FlexContractDetail_GetByFlexContractAttributeIdAndFlexContractDetailDescription]";
-
+                public string DataUploadValidationErrorSheetAttribute_Insert = "[Customer].[DataUploadValidationErrorSheetAttribute_Insert]";
+                public string DataUploadValidationError_Insert = "[Customer].[DataUploadValidationError_Insert]";
+                public string DataUploadValidationErrorSheet_Insert = "[Customer].[DataUploadValidationErrorSheet_Insert]";
+                public string DataUploadValidationErrorRow_Insert = "[Customer].[DataUploadValidationErrorRow_Insert]";
+                public string DataUploadValidationError_GetByDataUploadValidationErrorGUID = "[Customer].[DataUploadValidationError_GetByDataUploadValidationErrorGUID]";
+                public string DataUploadValidationErrorEntityAttribute_Insert = "[Customer].[DataUploadValidationErrorEntityAttribute_Insert]";
+                public string DataUploadValidationErrorEntity_Insert = "[Customer].[DataUploadValidationErrorEntity_Insert]";
+                public string DataUploadValidationErrorMessage_Insert = "[Customer].[DataUploadValidationErrorMessage_Insert]";
+                public string DataUploadValidationErrorSheetAttribute_GetByDataUploadValidationErrorSheetAttributeDescription = "[Customer].[DataUploadValidationErrorSheetAttribute_GetByDataUploadValidationErrorSheetAttributeDescription]";
+                public string DataUploadValidationErrorSheet_GetByDataUploadValidationErrorIdAndDataUploadValidationErrorSheetAttributeId = "[Customer].[DataUploadValidationErrorSheet_GetByDataUploadValidationErrorIdAndDataUploadValidationErrorSheetAttributeId]";
+                public string DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeDescription = "[Customer].[DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeDescription]";
+                public string DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetIdAndDataUploadValidationErrorRow = "[Customer].[DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetIdAndDataUploadValidationErrorRow]";
+                public string DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowIdAndDataUploadValidationErrorEntityAttributeId = "[Customer].[DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowIdAndDataUploadValidationErrorEntityAttributeId]";
             }
         }
     }

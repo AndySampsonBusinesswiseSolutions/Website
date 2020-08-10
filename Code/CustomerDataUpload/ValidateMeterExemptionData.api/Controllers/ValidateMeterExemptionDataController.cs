@@ -25,6 +25,7 @@ namespace ValidateMeterExemptionData.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
+        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 ValidateMeterExemptionDataAPIId;
 
         public ValidateMeterExemptionDataController(ILogger<ValidateMeterExemptionDataController> logger)
@@ -82,11 +83,11 @@ namespace ValidateMeterExemptionData.api.Controllers
 
                 var columns = new Dictionary<string, string>
                     {
-                        {"MPXN", "MPAN/MPRN"},
-                        {"DateFrom", "Date From"},
-                        {"DateTo", "Date To"},
-                        {"ExemptionProduct", "Exemption Product"},
-                        {"ExemptionProportion", "Exemption Proportion"}
+                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
+                        {_customerDataUploadValidationEntityEnums.DateFrom, "Date From"},
+                        {_customerDataUploadValidationEntityEnums.DateTo, "Date To"},
+                        {_customerDataUploadValidationEntityEnums.ExemptionProduct, "Exemption Product"},
+                        {_customerDataUploadValidationEntityEnums.ExemptionProportion, "Exemption Proportion"}
                     };
 
                 var records = _tempCustomerMethods.InitialiseRecordsDictionary(meterExemptionDataRows, columns);
@@ -94,37 +95,37 @@ namespace ValidateMeterExemptionData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
-                        {"MPXN", "MPAN/MPRN"},
-                        {"DateFrom", "Date From"},
-                        {"DateTo", "Date To"}
+                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
+                        {_customerDataUploadValidationEntityEnums.DateFrom, "Date From"},
+                        {_customerDataUploadValidationEntityEnums.DateTo, "Date To"}
                     };
                 _tempCustomerMethods.GetMissingRecords(records, meterExemptionDataRows, requiredColumns);
 
                 //Validate Exemption Product
-                var invalidExemptionProductDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProduct"))
-                    && !_methods.IsValidExemptionProduct(r.Field<string>("ExemptionProduct")));
+                var invalidExemptionProductDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct))
+                    && !_methods.IsValidExemptionProduct(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct)));
 
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidExemptionProductDataRecord["RowId"]);
-                    if(!records[rowId]["ExemptionProduct"].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]}"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProduct]}"))
                     {
-                        records[rowId]["ExemptionProduct"].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord["ExemptionProduct"]}");
+                        records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProduct]}");
                     }
                 }
 
                 //Validate Exemption Proportion
-                var invalidExemptionProportionDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>("ExemptionProportion"))
-                    && !_methods.IsValidExemptionProportion(r.Field<string>("ExemptionProduct"), 
-                                                            r.Field<string>("ExemptionProportion"))
+                var invalidExemptionProportionDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProportion))
+                    && !_methods.IsValidExemptionProportion(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct), 
+                                                            r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProportion))
                     );
 
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidExemptionProportionDataRecord["RowId"]);
-                    if(!records[rowId]["ExemptionProportion"].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]}"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProportion]}"))
                     {
-                        records[rowId]["ExemptionProportion"].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord["ExemptionProportion"]}");
+                        records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProportion]}");
                     }
                 }
 

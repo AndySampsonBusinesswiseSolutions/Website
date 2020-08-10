@@ -26,6 +26,7 @@ namespace ValidateSubMeterData.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
+        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private static readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Int64 validateSubMeterDataAPIId;
 
@@ -84,11 +85,11 @@ namespace ValidateSubMeterData.api.Controllers
 
                 var columns = new Dictionary<string, string>
                     {
-                        {"MPXN", "MPAN/MPRN"},
-                        {"SubMeterIdentifier", "SubMeter Name"},
-                        {"SerialNumber", "SubMeter Serial Number"},
-                        {"SubArea", "SubArea"},
-                        {"Asset", "Asset"}
+                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
+                        {_customerDataUploadValidationEntityEnums.SubMeterIdentifier, "SubMeter Name"},
+                        {_customerDataUploadValidationEntityEnums.SerialNumber, "SubMeter Serial Number"},
+                        {_customerDataUploadValidationEntityEnums.SubArea, _customerDataUploadValidationEntityEnums.SubArea},
+                        {_customerDataUploadValidationEntityEnums.Asset, _customerDataUploadValidationEntityEnums.Asset}
                     };
 
                 var records = _tempCustomerMethods.InitialiseRecordsDictionary(subMeterDataRows, columns);
@@ -96,22 +97,22 @@ namespace ValidateSubMeterData.api.Controllers
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
-                        {"SubMeterIdentifier", "SubMeter Name"}
+                        {_customerDataUploadValidationEntityEnums.SubMeterIdentifier, "SubMeter Name"}
                     };
                 _tempCustomerMethods.GetMissingRecords(records, subMeterDataRows, requiredColumns);
 
                 //Get submeters not stored in database
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
                 var newSubMeterDataRecords = subMeterDataRows.Where(r => 
-                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>("SubMeterIdentifier")) == 0);
+                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)) == 0);
 
                 //MPXN, SerialNumber, SubArea and Asset must be populated
                 requiredColumns = new Dictionary<string, string>
                     {
-                        {"MPXN", "MPAN/MPRN"},
-                        {"SerialNumber", "SubMeter Serial Number"},
-                        {"SubArea", "SubArea"},
-                        {"Asset", "Asset"}
+                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
+                        {_customerDataUploadValidationEntityEnums.SerialNumber, "SubMeter Serial Number"},
+                        {_customerDataUploadValidationEntityEnums.SubArea, _customerDataUploadValidationEntityEnums.SubArea},
+                        {_customerDataUploadValidationEntityEnums.Asset, _customerDataUploadValidationEntityEnums.Asset}
                     };
                 _tempCustomerMethods.GetMissingRecords(records, newSubMeterDataRecords, requiredColumns);
 
