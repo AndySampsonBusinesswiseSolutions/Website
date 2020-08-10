@@ -51,6 +51,13 @@ namespace enums
                 public string DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeDescription = "[Customer].[DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeDescription]";
                 public string DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetIdAndDataUploadValidationErrorRow = "[Customer].[DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetIdAndDataUploadValidationErrorRow]";
                 public string DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowIdAndDataUploadValidationErrorEntityAttributeId = "[Customer].[DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowIdAndDataUploadValidationErrorEntityAttributeId]";
+                public string DataUploadValidationErrorSheetAttribute_GetByDataUploadValidationErrorSheetAttributeId = "[Customer].[DataUploadValidationErrorSheetAttribute_GetByDataUploadValidationErrorSheetAttributeId]";
+                public string DataUploadValidationErrorSheet_GetByDataUploadValidationErrorId = "[Customer].[DataUploadValidationErrorSheet_GetByDataUploadValidationErrorId]";
+                public string DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetId = "[Customer].[DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetId]";
+                public string DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowId = "[Customer].[DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowId]";
+                public string DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeId = "[Customer].[DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeId]";
+                public string DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId = "[Customer].[DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId]";
+                public string DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId = "[Customer].[DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId]";
             }
         }
     }

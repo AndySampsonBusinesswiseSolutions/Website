@@ -5,7 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
+using System.Text;
 
 namespace ProcessCustomerDataUploadValidation.api.Controllers
 {
@@ -17,10 +17,13 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Int64 processCustomerDataUploadValidationAPIId;
 
         public ProcessCustomerDataUploadValidationController(ILogger<ProcessCustomerDataUploadValidationController> logger)
@@ -66,7 +69,88 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get DataUploadValidationErrorId
+                var dataUploadValidationErrorId = _customerMethods.DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(processQueueGUID);
+
+                //Get Routing.API URL
+                var routingAPIId = _systemMethods.GetRoutingAPIId();
+
+                //Update Process GUID to CommitCustomerDataUpload Process GUID
+                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitCustomerDataUpload);
+
+                //Create new ProcessQueueGUID
+                var newProcessQueueGUID = Guid.NewGuid().ToString();
+
+                //Map current ProcessQueueGUID to new ProcessQueueGUID
+                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+
+                //Connect to Routing API and POST data
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
+
+                //Get FileGUID
+                var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
+
+                //Get FileId
+                var fileId = _informationMethods.File_GetFileIdByFileGUID(fileGUID);
+
+                //Map DataUploadValidationErrorId To FileId
+                _mappingMethods.DataUploadValidationErrorToFile_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, fileId);
+
+                //Create new ProcessQueueGUID
+                newProcessQueueGUID = Guid.NewGuid().ToString();
+
+                //Map current ProcessQueueGUID to new ProcessQueueGUID
+                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+
+                //Setup Email Message StringBuilder
+                var emailMessage = new StringBuilder("The following validation errors were found:");
+
+                //Get DataUploadValidationErrorSheetId by DataUploadValidationErrorId
+                var dataUploadValidationErrorSheetIdList = _customerMethods.DataUploadValidationErrorSheet_GetDataUploadValidationErrorSheetIdListByDataUploadValidationErrorId(dataUploadValidationErrorId);
+                
+                foreach(var dataUploadValidationErrorSheetId in dataUploadValidationErrorSheetIdList)
+                {
+                    //Get SheetName
+                    var sheetName = _customerMethods.DataUploadValidationErrorSheetAttribute_GetDataUploadValidationErrorSheetAttributeDescriptionByDataUploadValidationErrorSheetAttributeId(dataUploadValidationErrorSheetId);
+
+                    //Get DataUploadValidationErrorRowId by DataUploadValidationErrorSheetId
+                    var dataUploadValidationErrorRowIdList = _customerMethods.DataUploadValidationErrorRow_GetDataUploadValidationErrorRowIdListByDataUploadValidationErrorSheetId(dataUploadValidationErrorSheetId);
+
+                    foreach(var dataUploadValidationErrorRowId in dataUploadValidationErrorRowIdList)
+                    {
+                        //Get DataUploadValidationErrorEntityId by DataUploadValidationErrorRowId
+                        var dataUploadValidationErrorEntityIdList = _customerMethods.DataUploadValidationErrorEntity_GetDataUploadValidationErrorEntityIdListByDataUploadValidationErrorRowId(dataUploadValidationErrorRowId);
+
+                        foreach(var dataUploadValidationErrorEntityId in dataUploadValidationErrorEntityIdList)
+                        {
+                            //Get DataUploadValidationErrorEntityAttributeId
+                            var dataUploadValidationErrorEntityAttributeId = _customerMethods.DataUploadValidationErrorEntity_GetDataUploadValidationErrorEntityAttributeIdByDataUploadValidationErrorEntityId(dataUploadValidationErrorEntityId);
+
+                            //Get EntityName
+                            var entityName = _customerMethods.DataUploadValidationErrorEntityAttribute_GetDataUploadValidationErrorEntityAttributeDescriptionByDataUploadValidationErrorEntityAttributeId(dataUploadValidationErrorEntityAttributeId);
+
+                            //Get DataUploadValidationErrorMessage by DataUploadValidationErrorEntityId
+                            var dataUploadValidationErrorMessageList = _customerMethods.DataUploadValidationErrorMessage_GetDataUploadValidationErrorMessageDescriptionListByDataUploadValidationErrorEntityId(dataUploadValidationErrorEntityId);
+
+                            foreach(var dataUploadValidationErrorMessage in dataUploadValidationErrorMessageList)
+                            {
+                                //Add details to emailMessage
+                                emailMessage.AppendLine($"Sheet {sheetName} -> Row {dataUploadValidationErrorRowId} -> Column {entityName} -> {dataUploadValidationErrorMessage}");
+                            }
+                        }
+                    }
+                }
+
+                //TODO: Create Email headers/footers/additional info
+                //TODO: Create Email API
+
+                //Update Process GUID to SendEmail Process GUID
+                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.SendEmail);
+
+                //Connect to Routing API and POST data
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, processCustomerDataUploadValidationAPIId, false, null);

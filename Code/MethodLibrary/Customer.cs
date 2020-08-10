@@ -246,6 +246,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public string DataUploadValidationErrorSheetAttribute_GetDataUploadValidationErrorSheetAttributeDescriptionByDataUploadValidationErrorSheetAttributeId(long dataUploadValidationErrorSheetAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorSheetAttribute_GetByDataUploadValidationErrorSheetAttributeId, 
+                    dataUploadValidationErrorSheetAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("DataUploadValidationErrorSheetAttributeDescription"))
+                    .FirstOrDefault();
+            }
+
             public void DataUploadValidationErrorSheet_Insert(long createdByUserId, long sourceId, long dataUploadValidationErrorId, long dataUploadValidationErrorSheetAttributeId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
@@ -262,6 +273,17 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("DataUploadValidationErrorSheetId"))
                     .FirstOrDefault();
+            }
+
+            public List<long> DataUploadValidationErrorSheet_GetDataUploadValidationErrorSheetIdListByDataUploadValidationErrorId(long dataUploadValidationErrorId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorSheet_GetByDataUploadValidationErrorIdAndDataUploadValidationErrorSheetAttributeId, 
+                    dataUploadValidationErrorId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorSheetId"))
+                    .ToList();
             }
 
             public void DataUploadValidationErrorRow_Insert(long createdByUserId, long sourceId, long dataUploadValidationErrorSheetId, long dataUploadValidationErrorRow)
@@ -282,6 +304,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public List<long> DataUploadValidationErrorRow_GetDataUploadValidationErrorRowIdListByDataUploadValidationErrorSheetId(long dataUploadValidationErrorSheetId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorRow_GetByDataUploadValidationErrorSheetId, 
+                    dataUploadValidationErrorSheetId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorRowId"))
+                    .ToList();
+            }
+
             public long DataUploadValidationErrorEntityAttribute_GetDataUploadValidationErrorEntityAttributeIdByDataUploadValidationErrorEntityAttributeDescription(string dataUploadValidationErrorEntityAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -290,6 +323,17 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("DataUploadValidationErrorEntityAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public string DataUploadValidationErrorEntityAttribute_GetDataUploadValidationErrorEntityAttributeDescriptionByDataUploadValidationErrorEntityAttributeId(long dataUploadValidationErrorEntityAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeId, 
+                    dataUploadValidationErrorEntityAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("DataUploadValidationErrorEntityAttributeId"))
                     .FirstOrDefault();
             }
 
@@ -311,11 +355,44 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public long DataUploadValidationErrorEntity_GetDataUploadValidationErrorEntityAttributeIdByDataUploadValidationErrorEntityId(long dataUploadValidationErrorEntityId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId, 
+                    dataUploadValidationErrorEntityId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorEntityAttributeId"))
+                    .FirstOrDefault();
+            }
+
+            public List<long> DataUploadValidationErrorEntity_GetDataUploadValidationErrorEntityIdListByDataUploadValidationErrorRowId(long dataUploadValidationErrorRowId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorEntity_GetByDataUploadValidationErrorRowId, 
+                    dataUploadValidationErrorRowId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorEntityId"))
+                    .ToList();
+            }
+
             public void DataUploadValidationErrorMessage_Insert(long createdByUserId, long sourceId, long dataUploadValidationErrorEntityId, string dataUploadValidationErrorMessageDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureCustomerEnums.DataUploadValidationErrorMessage_Insert, 
                     createdByUserId, sourceId, dataUploadValidationErrorEntityId, dataUploadValidationErrorMessageDescription);
+            }
+
+            public List<string> DataUploadValidationErrorMessage_GetDataUploadValidationErrorMessageDescriptionListByDataUploadValidationErrorEntityId(long dataUploadValidationErrorEntityId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId, 
+                    dataUploadValidationErrorEntityId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("DataUploadValidationErrorMessageDescription"))
+                    .ToList();
             }
 
             public long ContractAttribute_GetContractAttributeIdByContractAttributeDescription(string contractAttributeDescription)

@@ -36,6 +36,11 @@ namespace MethodLibrary
                 return jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID].ToString();
             }
 
+            public void SetProcessGUIDInJObject(JObject jsonObject, string processGUID)
+            {
+                jsonObject[_systemAPIRequiredDataKeyEnums.ProcessGUID] = processGUID;
+            }
+
             public string GetPasswordFromJObject(JObject jsonObject)
             {
                 return jsonObject[_systemAPIRequiredDataKeyEnums.Password].ToString();

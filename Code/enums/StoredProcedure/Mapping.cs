@@ -24,6 +24,7 @@ namespace enums
                 public string ContractMeterToMeter_GetByContractMeterId = "[Mapping].[ContractMeterToMeter_GetByContractMeterId]";
                 public string BasketToContractMeter_GetByBasketId = "[Mapping].[BasketToContractMeter_GetByBasketId]";
                 public string FileTypeToProcess_GetByFileTypeId = "[Mapping].[FileTypeToProcess_GetByFileTypeId]";
+                public string DataUploadValidationErrorToFile_Insert = "[Mapping].[DataUploadValidationErrorToFile_Insert]";
             }
         }
     }
