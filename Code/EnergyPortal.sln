@@ -117,6 +117,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToSiteData.api",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToSubMeterData.api", "CustomerDataUpload\CommitMeterToSubMeterData.api\CommitMeterToSubMeterData.api.csproj", "{BBA77F1B-F9A3-4CAA-B213-D11285994B0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitAreaToMeterData.api", "CustomerDataUpload\CommitAreaToMeterData.api\CommitAreaToMeterData.api.csproj", "{8D6FE490-F451-4F2F-B429-CBBD3C217220}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -826,8 +828,22 @@ Global
         {BBA77F1B-F9A3-4CAA-B213-D11285994B0A}.Release|x64.Build.0 = Release|Any CPU
         {BBA77F1B-F9A3-4CAA-B213-D11285994B0A}.Release|x86.ActiveCfg = Release|Any CPU
         {BBA77F1B-F9A3-4CAA-B213-D11285994B0A}.Release|x86.Build.0 = Release|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Debug|x64.Build.0 = Debug|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Debug|x86.Build.0 = Debug|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Release|Any CPU.Build.0 = Release|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Release|x64.ActiveCfg = Release|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Release|x64.Build.0 = Release|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Release|x86.ActiveCfg = Release|Any CPU
+        {8D6FE490-F451-4F2F-B429-CBBD3C217220}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 

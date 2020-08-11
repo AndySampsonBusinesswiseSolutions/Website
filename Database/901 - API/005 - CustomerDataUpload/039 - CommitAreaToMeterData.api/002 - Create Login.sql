@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CommitAreaToMeterData.api')
+    BEGIN
+       CREATE LOGIN [CommitAreaToMeterData.api] WITH PASSWORD=N'x4dzGMHS2CCJgyqD', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO
