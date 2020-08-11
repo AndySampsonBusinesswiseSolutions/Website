@@ -64,10 +64,12 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                     sourceId,
                     processCustomerDataUploadValidationAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, processCustomerDataUploadValidationAPIId, jsonObject))
-                {
-                    return;
-                }
+                //Get CheckPrerequisiteAPI API Id
+                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+
+                //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get DataUploadValidationErrorId
                 var dataUploadValidationErrorId = _customerMethods.DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(processQueueGUID);
@@ -112,8 +114,11 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 
                 foreach(var dataUploadValidationErrorSheetId in dataUploadValidationErrorSheetIdList)
                 {
+                    //Get DataUploadValidationErrorSheetAttributeId
+                    var dataUploadValidationErrorSheetAttributeId = _customerMethods.DataUploadValidationErrorSheet_GetDataUploadValidationErrorSheetAttributeIdByDataUploadValidationErrorSheetId(dataUploadValidationErrorSheetId);
+
                     //Get SheetName
-                    var sheetName = _customerMethods.DataUploadValidationErrorSheetAttribute_GetDataUploadValidationErrorSheetAttributeDescriptionByDataUploadValidationErrorSheetAttributeId(dataUploadValidationErrorSheetId);
+                    var sheetName = _customerMethods.DataUploadValidationErrorSheetAttribute_GetDataUploadValidationErrorSheetAttributeDescriptionByDataUploadValidationErrorSheetAttributeId(dataUploadValidationErrorSheetAttributeId);
 
                     //Get DataUploadValidationErrorRowId by DataUploadValidationErrorSheetId
                     var dataUploadValidationErrorRowIdList = _customerMethods.DataUploadValidationErrorRow_GetDataUploadValidationErrorRowIdListByDataUploadValidationErrorSheetId(dataUploadValidationErrorSheetId);
@@ -129,6 +134,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                             var dataUploadValidationErrorEntityAttributeId = _customerMethods.DataUploadValidationErrorEntity_GetDataUploadValidationErrorEntityAttributeIdByDataUploadValidationErrorEntityId(dataUploadValidationErrorEntityId);
 
                             //Get EntityName
+                            //TODO: Change to EntityDisplayName
                             var entityName = _customerMethods.DataUploadValidationErrorEntityAttribute_GetDataUploadValidationErrorEntityAttributeDescriptionByDataUploadValidationErrorEntityAttributeId(dataUploadValidationErrorEntityAttributeId);
 
                             //Get DataUploadValidationErrorMessage by DataUploadValidationErrorEntityId

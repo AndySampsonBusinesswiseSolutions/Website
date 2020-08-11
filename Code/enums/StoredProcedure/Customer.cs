@@ -58,6 +58,7 @@ namespace enums
                 public string DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeId = "[Customer].[DataUploadValidationErrorEntityAttribute_GetByDataUploadValidationErrorEntityAttributeId]";
                 public string DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId = "[Customer].[DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId]";
                 public string DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId = "[Customer].[DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId]";
+                public string DataUploadValidationErrorSheet_GetByDataUploadValidationErrorSheetId = "[Customer].[DataUploadValidationErrorSheet_GetByDataUploadValidationErrorSheetId]";
             }
         }
     }

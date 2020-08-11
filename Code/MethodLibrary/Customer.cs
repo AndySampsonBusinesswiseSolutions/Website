@@ -278,12 +278,23 @@ namespace MethodLibrary
             public List<long> DataUploadValidationErrorSheet_GetDataUploadValidationErrorSheetIdListByDataUploadValidationErrorId(long dataUploadValidationErrorId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.DataUploadValidationErrorSheet_GetByDataUploadValidationErrorIdAndDataUploadValidationErrorSheetAttributeId, 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorSheet_GetByDataUploadValidationErrorId, 
                     dataUploadValidationErrorId);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("DataUploadValidationErrorSheetId"))
                     .ToList();
+            }
+
+            public long DataUploadValidationErrorSheet_GetDataUploadValidationErrorSheetAttributeIdByDataUploadValidationErrorSheetId(long dataUploadValidationErrorSheetId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.DataUploadValidationErrorSheet_GetByDataUploadValidationErrorSheetId, 
+                    dataUploadValidationErrorSheetId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DataUploadValidationErrorSheetAttributeId"))
+                    .FirstOrDefault();
             }
 
             public void DataUploadValidationErrorRow_Insert(long createdByUserId, long sourceId, long dataUploadValidationErrorSheetId, long dataUploadValidationErrorRow)
@@ -333,7 +344,7 @@ namespace MethodLibrary
                     dataUploadValidationErrorEntityAttributeId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<string>("DataUploadValidationErrorEntityAttributeId"))
+                    .Select(r => r.Field<string>("DataUploadValidationErrorEntityAttributeDescription"))
                     .FirstOrDefault();
             }
 

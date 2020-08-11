@@ -41,7 +41,7 @@ BEGIN
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        DataUploadValidationErrorEntityAttributeId
+        DataUploadValidationErrorEntityAttributeDescription
     FROM 
         [Customer].[DataUploadValidationErrorEntityAttribute] 
     WHERE 
