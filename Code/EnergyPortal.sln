@@ -97,6 +97,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterData.api", "Cust
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitSubMeterData.api", "CustomerDataUpload\CommitSubMeterData.api\CommitSubMeterData.api.csproj", "{89E15527-A337-446F-9C67-E270D23D6CE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterExemptionData.api", "CustomerDataUpload\CommitMeterExemptionData.api\CommitMeterExemptionData.api.csproj", "{0E525DC3-C108-4A00-8A5C-E69CF9DF8359}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -686,8 +688,22 @@ Global
         {89E15527-A337-446F-9C67-E270D23D6CE2}.Release|x64.Build.0 = Release|Any CPU
         {89E15527-A337-446F-9C67-E270D23D6CE2}.Release|x86.ActiveCfg = Release|Any CPU
         {89E15527-A337-446F-9C67-E270D23D6CE2}.Release|x86.Build.0 = Release|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Debug|x64.Build.0 = Debug|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Debug|x86.Build.0 = Debug|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Release|Any CPU.Build.0 = Release|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Release|x64.ActiveCfg = Release|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Release|x64.Build.0 = Release|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Release|x86.ActiveCfg = Release|Any CPU
+        {0E525DC3-C108-4A00-8A5C-E69CF9DF8359}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 
