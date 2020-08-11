@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "CommitSubMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterUsageData.api/bin/Debug/netcoreapp3.1/CommitSubMeterUsageData.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterUsageData.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterUsageData.api/Views"
+            }
+        },
         {"name": "CommitMeterUsageData.api",
             "type": "coreclr",
             "request": "launch",
@@ -1063,6 +1084,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "CommitSubMeterUsageData.api",
                 "CommitMeterUsageData.api",
                 "CommitFlexTradeData.api",
                 "CommitFlexReferenceVolumeData.api",
@@ -1157,6 +1179,7 @@
         },
         {"name": "Customer Data Upload",
             "configurations": [
+                "CommitSubMeterUsageData.api",
                 "CommitMeterUsageData.api",
                 "CommitFlexTradeData.api",
                 "CommitFlexReferenceVolumeData.api",
@@ -1199,6 +1222,7 @@
         }
     ]
 }
+
 
 
 
