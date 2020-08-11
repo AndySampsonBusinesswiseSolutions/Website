@@ -91,6 +91,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessCustomerDataUploadVa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitCustomerData.api", "CustomerDataUpload\CommitCustomerData.api\CommitCustomerData.api.csproj", "{D69532B2-384D-44E0-B72E-43934276D0B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitSiteData.api", "CustomerDataUpload\CommitSiteData.api\CommitSiteData.api.csproj", "{EB061C46-A893-4C44-9EB7-E9D5CF6B0895}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -644,5 +646,17 @@ Global
         {D69532B2-384D-44E0-B72E-43934276D0B6}.Release|x64.Build.0 = Release|Any CPU
         {D69532B2-384D-44E0-B72E-43934276D0B6}.Release|x86.ActiveCfg = Release|Any CPU
         {D69532B2-384D-44E0-B72E-43934276D0B6}.Release|x86.Build.0 = Release|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Debug|x64.Build.0 = Debug|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Debug|x86.Build.0 = Debug|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Release|Any CPU.Build.0 = Release|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Release|x64.ActiveCfg = Release|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Release|x64.Build.0 = Release|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Release|x86.ActiveCfg = Release|Any CPU
+        {EB061C46-A893-4C44-9EB7-E9D5CF6B0895}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal

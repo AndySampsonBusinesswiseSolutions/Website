@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitSiteDataAPI = "EB061C46-A893-4C44-9EB7-E9D5CF6B0895";
                     public string CommitCustomerDataAPI = "D69532B2-384D-44E0-B72E-43934276D0B6";
                     public string ProcessCustomerDataUploadValidationAPI = "069FA45E-2757-4383-BB66-52470B952F7F";
                     public string ValidateCrossSheetEntityDataAPI = "E78B2351-B1E6-464F-8D90-3793FACDABF4";
@@ -68,6 +69,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitSiteDataAPI = "CommitSiteData.api";
                     public string CommitCustomerDataAPI = "CommitCustomerData.api";
                     public string ProcessCustomerDataUploadValidationAPI = "ProcessCustomerDataUploadValidation.api";
                     public string ValidateCrossSheetEntityDataAPI = "ValidateCrossSheetEntityData.api";
@@ -116,6 +118,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitSiteDataAPI = "vZ3RFaCBjSLCbFwc";
                     public string CommitCustomerDataAPI = "yuPPW9N2d346ATSM";
                     public string ProcessCustomerDataUploadValidationAPI = "VcTpcaaHYSFVa5bB";
                     public string ValidateCrossSheetEntityDataAPI = "SQTP72kBj36cntMn";
