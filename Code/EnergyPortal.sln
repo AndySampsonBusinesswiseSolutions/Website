@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitSubAreaToSubMeterData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitExemptionToMeterData.api", "CustomerDataUpload\CommitExemptionToMeterData.api\CommitExemptionToMeterData.api.csproj", "{BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitContractToMeterData.api", "CustomerDataUpload\CommitContractToMeterData.api\CommitContractToMeterData.api.csproj", "{522D6970-D5F0-4F7E-BC43-6121B9228BA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -896,8 +898,22 @@ Global
         {BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}.Release|x64.Build.0 = Release|Any CPU
         {BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}.Release|x86.ActiveCfg = Release|Any CPU
         {BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}.Release|x86.Build.0 = Release|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Debug|x64.Build.0 = Debug|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Debug|x86.Build.0 = Debug|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Release|x64.ActiveCfg = Release|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Release|x64.Build.0 = Release|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Release|x86.ActiveCfg = Release|Any CPU
+        {522D6970-D5F0-4F7E-BC43-6121B9228BA9}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 
