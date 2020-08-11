@@ -105,6 +105,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitFlexContractData.api"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitFlexReferenceVolumeData.api", "CustomerDataUpload\CommitFlexReferenceVolumeData.api\CommitFlexReferenceVolumeData.api.csproj", "{A397F2B9-4B0F-4432-8E0C-627A8B2753AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitFlexTradeData.api", "CustomerDataUpload\CommitFlexTradeData.api\CommitFlexTradeData.api.csproj", "{8C14B5FD-90D4-409D-A69C-140FC103814A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -742,8 +744,22 @@ Global
         {A397F2B9-4B0F-4432-8E0C-627A8B2753AB}.Release|x64.Build.0 = Release|Any CPU
         {A397F2B9-4B0F-4432-8E0C-627A8B2753AB}.Release|x86.ActiveCfg = Release|Any CPU
         {A397F2B9-4B0F-4432-8E0C-627A8B2753AB}.Release|x86.Build.0 = Release|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Debug|x64.Build.0 = Debug|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Debug|x86.Build.0 = Debug|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Release|Any CPU.Build.0 = Release|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Release|x64.ActiveCfg = Release|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Release|x64.Build.0 = Release|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Release|x86.ActiveCfg = Release|Any CPU
+        {8C14B5FD-90D4-409D-A69C-140FC103814A}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 
