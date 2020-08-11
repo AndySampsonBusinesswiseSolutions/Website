@@ -33,3 +33,4 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSubMeterData.api\obj\Debug\ne
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSubMeterData.api\obj\Debug\netcoreapp3.1\StoreSubMeterData.api.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSubMeterData.api\obj\Debug\netcoreapp3.1\StoreSubMeterData.api.pdb
 C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSubMeterData.api\obj\Debug\netcoreapp3.1\StoreSubMeterData.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSubMeterData.api\obj\Debug\netcoreapp3.1\StoreSubMeterData.api.csprojAssemblyReference.cache
