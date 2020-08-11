@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitFlexReferenceVolumeDataAPI = "A397F2B9-4B0F-4432-8E0C-627A8B2753AB";
                     public string CommitFlexContractDataAPI = "2A904C29-A848-40BB-9993-916A2376B571";
                     public string CommitFixedContractDataAPI = "8CF42052-7798-40FD-A786-987CB53A159E";
                     public string CommitMeterExemptionDataAPI = "0E525DC3-C108-4A00-8A5C-E69CF9DF8359";
@@ -74,6 +75,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitFlexReferenceVolumeDataAPI = "CommitFlexReferenceVolumeData.api";
                     public string CommitFlexContractDataAPI = "CommitFlexContractData.api";
                     public string CommitFixedContractDataAPI = "CommitFixedContractData.api";
                     public string CommitMeterExemptionDataAPI = "CommitMeterExemptionData.api";
@@ -128,6 +130,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitFlexReferenceVolumeDataAPI = "6TVnwAK6jeDk2kVb";
                     public string CommitFlexContractDataAPI = "MnXB6w8fSZuKuHL9";
                     public string CommitFixedContractDataAPI = "PQrhQL3PCrchDXnj";
                     public string CommitMeterExemptionDataAPI = "hzRHNnabT4hc6Mzf";
