@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CommitMeterToSiteData.api')
+    BEGIN
+       CREATE LOGIN [CommitMeterToSiteData.api] WITH PASSWORD=N'XRvxMrsZ6metMPUB', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO
