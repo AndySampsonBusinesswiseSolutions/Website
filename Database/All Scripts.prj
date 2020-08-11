@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>4b21803e-6c06-4b0e-9369-7aafa7218389</ID>
-    <DateCreated>2020-08-11T14:24:02.9204387+01:00</DateCreated>
+    <ID>2328ca83-a6cb-4296-8479-4c21d83a02f7</ID>
+    <DateCreated>2020-08-11T14:42:12.5051478+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>qiJOQkde/4g1wKbJW8aM2A==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe66FrYORQdIlSRuWIW9vDO/I=</Password>
+    <Login>myB8mhWVe7TaugD85FkHGg==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe609GcGDm5qf5M7g1rJkFaKE=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -768,6 +768,13 @@
     <ID>407e80ff-ca7c-4929-81ab-481695783bbd</ID>
     <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\044 - CommitContractToMeterData.api\*.sql</FullName>
+    <FileEncoding>0</FileEncoding>
+    <IsStaticFile>false</IsStaticFile>
+  </ScriptFile>
+  <ScriptFile>
+    <ID>689b1d1a-c76b-419c-b7cb-a409caba810a</ID>
+    <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
+    <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\045 - CommitReferenceVolumeToContractData.api\*.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>false</IsStaticFile>
   </ScriptFile>
