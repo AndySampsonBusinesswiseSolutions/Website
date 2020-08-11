@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "CommitFixedContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitFixedContractData.api/bin/Debug/netcoreapp3.1/CommitFixedContractData.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitFixedContractData.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitFixedContractData.api/Views"
+            }
+        },
         {"name": "CommitMeterExemptionData.api",
             "type": "coreclr",
             "request": "launch",
@@ -958,6 +979,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "CommitFixedContractData.api",
                 "CommitMeterExemptionData.api",
                 "CommitSubMeterData.api",
                 "CommitMeterData.api",
@@ -1047,6 +1069,7 @@
         },
         {"name": "Customer Data Upload",
             "configurations": [
+                "CommitFixedContractData.api",
                 "CommitMeterExemptionData.api",
                 "CommitSubMeterData.api",
                 "CommitMeterData.api",
@@ -1084,5 +1107,6 @@
         }
     ]
 }
+
 
 

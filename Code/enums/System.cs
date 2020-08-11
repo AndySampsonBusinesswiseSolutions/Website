@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitFixedContractDataAPI = "8CF42052-7798-40FD-A786-987CB53A159E";
                     public string CommitMeterExemptionDataAPI = "0E525DC3-C108-4A00-8A5C-E69CF9DF8359";
                     public string CommitSubMeterDataAPI = "89E15527-A337-446F-9C67-E270D23D6CE2";
                     public string CommitMeterDataAPI = "94475084-969D-431F-A8D8-EB591CCFCE26";
@@ -72,6 +73,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitFixedContractDataAPI = "CommitFixedContractData.api";
                     public string CommitMeterExemptionDataAPI = "CommitMeterExemptionData.api";
                     public string CommitSubMeterDataAPI = "CommitSubMeterData.api";
                     public string CommitMeterDataAPI = "CommitMeterData.api";
@@ -124,6 +126,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitFixedContractDataAPI = "PQrhQL3PCrchDXnj";
                     public string CommitMeterExemptionDataAPI = "hzRHNnabT4hc6Mzf";
                     public string CommitSubMeterDataAPI = "nZYGJvSe4Ej3dzFH";
                     public string CommitMeterDataAPI = "jC7jNZZnz63nNysc";
