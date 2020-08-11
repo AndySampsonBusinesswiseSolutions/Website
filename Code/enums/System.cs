@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitAssetToSubMeterDataAPI = "B0026B5C-CA13-42ED-9BA7-3CEBEC589FE9";
                     public string CommitCommodityToMeterDataAPI = "5BAA55DE-1F5B-40EF-988A-E8E85E2B594C";
                     public string CommitAreaToMeterDataAPI = "8D6FE490-F451-4F2F-B429-CBBD3C217220";
                     public string CommitMeterToSubMeterDataAPI = "BBA77F1B-F9A3-4CAA-B213-D11285994B0A";
@@ -83,6 +84,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitAssetToSubMeterDataAPI = "CommitAssetToSubMeterData.api";
                     public string CommitCommodityToMeterDataAPI = "CommitCommodityToMeterData.api";
                     public string CommitAreaToMeterDataAPI = "CommitAreaToMeterData.api";
                     public string CommitMeterToSubMeterDataAPI = "CommitMeterToSubMeterData.api";
@@ -146,6 +148,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitAssetToSubMeterDataAPI = "Upr4fm9NKd8mC5Dt";
                     public string CommitCommodityToMeterDataAPI = "dJPDrGp8DPndzw9w";
                     public string CommitAreaToMeterDataAPI = "x4dzGMHS2CCJgyqD";
                     public string CommitMeterToSubMeterDataAPI = "g89M9Px2AtzgJ3N2";
