@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "CommitTradeToBasketData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitTradeToBasketData.api/bin/Debug/netcoreapp3.1/CommitTradeToBasketData.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitTradeToBasketData.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitTradeToBasketData.api/Views"
+            }
+        },
         {"name": "CommitReferenceVolumeToContractData.api",
             "type": "coreclr",
             "request": "launch",
@@ -1294,6 +1315,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "CommitTradeToBasketData.api",
                 "CommitReferenceVolumeToContractData.api",
                 "CommitContractToMeterData.api",
                 "CommitExemptionToMeterData.api",
@@ -1399,6 +1421,7 @@
         },
         {"name": "Customer Data Upload",
             "configurations": [
+                "CommitTradeToBasketData.api",
                 "CommitReferenceVolumeToContractData.api",
                 "CommitContractToMeterData.api",
                 "CommitExemptionToMeterData.api",
@@ -1452,6 +1475,7 @@
         }
     ]
 }
+
 
 
 
