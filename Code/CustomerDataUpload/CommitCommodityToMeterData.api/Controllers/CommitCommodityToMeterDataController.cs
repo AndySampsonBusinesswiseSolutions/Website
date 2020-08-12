@@ -68,6 +68,19 @@ namespace CommitCommodityToMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+
+                //Get CommodityId from [Information].[Commodity]
+                //If CommodityId == 0
+                //Insert into [Information].[Commodity]
+
+                //Get MeterId from [Customer].[MeterDetail]
+                //If MeterId == 0
+                //Throw error as meter should have been invalidated or inserted
+
+                //If MeterId != 0
+                //Insert into [Mapping].[CommodityToMeter]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitCommodityToMeterDataAPIId, false, null);
             }

@@ -68,6 +68,12 @@ namespace CommitSiteData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
+
+                //Get SiteId from [Customer.[SiteDetail] by SiteName and SitePostCode
+                //If SiteId == 0
+                //Insert into [Customer].[Site]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSiteDataAPIId, false, null);
             }

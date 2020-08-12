@@ -68,6 +68,21 @@ namespace CommitFlexTradeData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[FlexTrade] where CanCommit = 1
+
+                //Get BasketId from [Customer].[BasketDetail] by BasketReference
+                //If BasketId == 0
+                //Insert into [Customer].[Basket]
+
+                //Get TradeId from [Customer].[TradeDetail] by TradeReference, TradeDate, TradeVolume, Trade Price
+                //If TradeId == 0
+                //Insert into [Customer].[Trade]
+
+                //Insert into [Mapping].[BasketToTrade]
+                //Insert into [Mapping].[RateUnitToTradeDetail]
+                //Insert into [Mapping].[TradeDetailToVolumeUnit]
+                //Insert into [Mapping].[TradeDetailToTradeProduct]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexTradeDataAPIId, false, null);
             }

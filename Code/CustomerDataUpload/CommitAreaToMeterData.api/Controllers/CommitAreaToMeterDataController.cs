@@ -68,6 +68,19 @@ namespace CommitAreaToMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+
+                //Get AreaId from [Information].[Area]
+                //If AreaId == 0
+                //Insert into [Information].[Area]
+
+                //Get MeterId from [Customer].[MeterDetail]
+                //If MeterId == 0
+                //Throw error as meter should have been invalidated or inserted
+
+                //If MeterId != 0
+                //Insert into [Mapping].[AreaToMeter]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitAreaToMeterDataAPIId, false, null);
             }

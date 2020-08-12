@@ -68,6 +68,19 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
+
+                //Get SubAreaId from [Information].[SubArea]
+                //If SubAreaId == 0
+                //Insert into [Information].[SubArea]
+
+                //Get SubMeterId from [Customer].[SubMeterDetail]
+                //If SubMeterId == 0
+                //Throw error as meter should have been invalidated or inserted
+
+                //If SubMeterId != 0
+                //Insert into [Mapping].[SubAreaToSubMeter]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubAreaToSubMeterDataAPIId, false, null);
             }

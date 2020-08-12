@@ -68,6 +68,19 @@ namespace CommitExemptionToMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[MeterExemption] where CanCommit = 1
+
+                //Get MeterId from [Customer].[MeterDetail]
+                //If MeterId == 0
+                //Throw error as meter should have been invalidated or inserted
+
+                //Get ExemptionId from [Customer].[ExemptionDetail]
+                //If ExemptionId == 0
+                //Insert into [Customer].[Exemption]
+
+                //If MeterId != 0
+                //Insert into [Mapping].[ExemptionToMeter]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitExemptionToMeterDataAPIId, false, null);
             }

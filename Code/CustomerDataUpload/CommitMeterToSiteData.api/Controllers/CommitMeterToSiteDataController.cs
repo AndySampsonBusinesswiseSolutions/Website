@@ -68,6 +68,19 @@ namespace CommitMeterToSiteData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+
+                //Get MeterId from [Customer].[MeterDetail] by MPXN
+                //If MeterId == 0
+                //Throw error because meter should have been invalidated or inserted
+
+                //Get data from [Temp.CustomerDataUpload].[Site]
+                //Get SiteId from [Customer.[SiteDetail] by SiteName and SitePostCode
+                //If SiteId == 0
+                //Throw error because site should have been invalidated or inserted
+
+                //Insert into [Mapping].[MeterToSite]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterToSiteDataAPIId, false, null);
             }

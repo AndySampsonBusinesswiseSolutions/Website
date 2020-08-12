@@ -68,6 +68,19 @@ namespace CommitMeterToSubMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+
+                //Get MeterId from [Customer].[MeterDetail] by MPXN
+                //If MeterId == 0
+                //Throw error because meter should have been invalidated or inserted
+
+                //Get data from [Temp.CustomerDataUpload].[SubMeter]
+                //Get SubMeterId from [Customer.[SubMeterDetail] by SubMeterIdentifier and SerialNumber
+                //If SubMeterId == 0
+                //Throw error because submeter should have been invalidated or inserted
+
+                //Insert into [Mapping].[MeterToSubMeter]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterToSubMeterDataAPIId, false, null);
             }

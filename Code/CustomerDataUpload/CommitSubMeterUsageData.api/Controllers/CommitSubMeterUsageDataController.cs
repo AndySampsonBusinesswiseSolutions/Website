@@ -68,6 +68,14 @@ namespace CommitSubMeterUsageData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] where CanCommit = 1
+
+                //Get SubMeterId from [Customer].[SubMeterDetail] by SubMeterIdentifier and Serial Number
+                //If SubMeterId == 0
+                //Throw error because Submeter should have been invalidated or inserted
+
+                //Insert into [SubMeterId].[HalfHourUsage]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
             }

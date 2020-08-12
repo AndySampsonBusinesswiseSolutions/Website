@@ -68,6 +68,14 @@ namespace CommitMeterUsageData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
+
+                //Get MeterId from [Customer].[MeterDetail] by MPXN
+                //If MeterId == 0
+                //Throw error because meter should have been invalidated or inserted
+
+                //Insert into [MeterId].[HalfHourUsage]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
             }

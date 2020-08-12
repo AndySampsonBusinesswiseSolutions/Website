@@ -68,6 +68,19 @@ namespace CommitMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+
+                //Get MeterId from [Customer.[MeterDetail] by MPXN
+                //If MeterId == 0
+                //Insert into [Customer].[Meter]
+                //Create Meter tables
+                
+                //Insert into [Mapping].[GridSupplyPointToMeter]
+                //Insert into [Mapping].[LineLossFactorClassToMeter]
+                //Insert into [Mapping].[LocalDistributionZoneToMeter]
+                //Insert into [Mapping].[MeterToProfileClass]
+                //Insert into [Mapping].[MeterToTimeswitchCode]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterDataAPIId, false, null);
             }

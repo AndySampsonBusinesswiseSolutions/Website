@@ -68,6 +68,18 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] where CanCommit = 1
+
+                //Get ContractId from [Customer].[ContractDetail] by ContractReference
+                //If ContractId == 0
+                //Throw error as contract should have been invalidated or inserted
+
+                //Get ReferenceVolumeId from [Customer].[ReferenceVolumeDetail] by DateFrom, DateTo and Reference Volume
+                //If ReferenceVolumeId == 0
+                //Insert into [Customer].[ReferenceVolume]
+
+                //Insert into [Mapping].[ContractToReferenceVolume]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
             }

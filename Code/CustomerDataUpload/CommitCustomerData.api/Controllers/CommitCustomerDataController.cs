@@ -68,6 +68,19 @@ namespace CommitCustomerData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerUploadData].[Customer] where CanCommit = 1
+
+                //For each column, get CustomerAttributeId
+                //Get CustomerId by CustomerName
+
+                //If CustomerId == 0
+                //Create new CustomerGUID
+                //Insert into [Customer].[Customer]
+                //Insert into [Customer].[CustomerDetail]
+
+                //If CustomerId != 0
+                //Update [Customer].[CustomerDetail]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerDataAPIId, false, null);
             }

@@ -68,6 +68,19 @@ namespace CommitCustomerToSiteData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
+
+                //Get CustomerId from [Customer].[CustomerDetail]
+                //If CustomerId == 0
+                //Throw error as customer should have been invalidated or inserted
+
+                //Get SiteId from [Customer].[SiteDetail]
+                //If SiteId == 0
+                //Throw error as site should have been invalidated or inserted
+
+                //If SiteId != 0 and CustomerId != 0
+                //Insert into [Mapping].[CustomerToSite]
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);
             }

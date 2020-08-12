@@ -68,6 +68,13 @@ namespace CommitSubMeterData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
+
+                //Get SubMeterId from [Customer.[SubMeterDetail] by MPXN
+                //If SubMeterId == 0
+                //Insert into [Customer].[SubMeter]
+                //Create SubMeter tables
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterDataAPIId, false, null);
             }
