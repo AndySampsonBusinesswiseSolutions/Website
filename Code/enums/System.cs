@@ -27,7 +27,7 @@ namespace enums
                     public string CommitLineLossFactorClassToMeterDataAPI = "994CB601-B7A4-4CC8-95F4-1467E03E0DAC";
                     public string CommitGridSupplyPointToMeterDataAPI = "FF487D3F-89E2-4B9A-B6AF-C5133A19C609";
                     public string CommitBasketDataAPI = "26EBBD73-45DA-4514-B663-662D9127C65B";
-                    public string CommitContractMeterToProductDataAPI = "";
+                    public string CommitContractMeterToProductDataAPI = "AE819292-ED1D-4A35-BBB2-8AAE86DA2078";
                     public string CommitContractToSupplierDataAPI = "8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D";
                     public string CommitContractDataAPI = "E6A652C5-EE89-4E2B-A6A2-A2BEE750384A";
                     public string CommitTradeToBasketDataAPI = "8EFE04B3-9F9B-406A-81E8-3187E7848F76";
