@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitContractDataAPI = "E6A652C5-EE89-4E2B-A6A2-A2BEE750384A";
                     public string CommitTradeToBasketDataAPI = "8EFE04B3-9F9B-406A-81E8-3187E7848F76";
                     public string CommitReferenceVolumeToContractDataAPI = "5035107A-66F1-4736-ACBA-AE331A5ECF62";
                     public string CommitContractToMeterDataAPI = "522D6970-D5F0-4F7E-BC43-6121B9228BA9";
@@ -89,6 +90,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitContractDataAPI = "CommitContractData.api";
                     public string CommitTradeToBasketDataAPI = "CommitTradeToBasketData.api";
                     public string CommitReferenceVolumeToContractDataAPI = "CommitReferenceVolumeToContractData.api";
                     public string CommitContractToMeterDataAPI = "CommitContractToMeterData.api";
@@ -158,6 +160,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitContractDataAPI = "wsxbn8B2jTb9bDFM";
                     public string CommitTradeToBasketDataAPI = "uPXLHnw3FFbVMCrw";
                     public string CommitReferenceVolumeToContractDataAPI = "wuMYmJm587ehRtED";
                     public string CommitContractToMeterDataAPI = "6TKhAGYAgf85Xzm4";
@@ -241,6 +244,8 @@ namespace enums
                     public string FileGUID = "FileGUID";
                     public string FileType = "FileType";
                     public string FileName = "FileName";
+                    public string ContractType = "ContractType";
+                    public string ContractData = "ContractData";
                 }
             }
 

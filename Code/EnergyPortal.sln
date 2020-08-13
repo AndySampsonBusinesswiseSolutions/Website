@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitSubAreaToSubMeterData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitExemptionToMeterData.api", "CustomerDataUpload\CommitExemptionToMeterData.api\CommitExemptionToMeterData.api.csproj", "{BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitContractData.api", "CustomerDataUpload\CommitContractData.api\CommitContractData.api.csproj", "{E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -896,5 +898,19 @@ Global
 		{BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}.Release|x64.Build.0 = Release|Any CPU
 		{BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}.Release|x86.ActiveCfg = Release|Any CPU
 		{BDBC12DE-B9F9-4BD4-B164-FFA2BCF59CE5}.Release|x86.Build.0 = Release|Any CPU
-	EndGlobalSection
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Debug|x64.Build.0 = Debug|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Debug|x86.Build.0 = Debug|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|Any CPU.Build.0 = Release|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x64.ActiveCfg = Release|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x64.Build.0 = Release|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x86.ActiveCfg = Release|Any CPU
+        {E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x86.Build.0 = Release|Any CPU
+    EndGlobalSection
 EndGlobal
+
+

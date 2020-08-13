@@ -72,37 +72,8 @@ namespace CommitFixedContractData.api.Controllers
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] where CanCommit = 1
 
-                //Get ContractId from [Customer].[ContractDetail] by ContractReference
-                //If ContractId == 0
-                //Insert into [Customer].[Contract]
-                //Insert into [Mapping].[ContractToContractType]
+                //Call CommitContractData API
 
-                //If ContractId != 0
-                //Get ContractToContractTypeId by ContractId and FixedContractType
-
-                //If ContractToContractTypeId == 0
-                //Insert into [Mapping].[ContractToContractType]
-
-                //Get ContractMeterId from [Customer].[ContractMeterDetail] by ContractStartDate, ContractEndDate and RateCount
-                //If ContractMeterId == 0
-                //Insert into [Customer].[ContractMeter]
-
-                //Insert into [Mapping].[ContractToContractMeter]
-
-                //Get MeterId from [Customer].[MeterDetail]
-                //If MeterId == 0
-                //Throw error as meter should be invalidated or inserted
-
-                //Insert into [Mapping].[ContractMeterToMeter]
-
-                //For each rate and standing and capacity charges
-                //Get RateTypeId from [Information].[RateType]
-                //Get ContractMeterRateDetailId from [Customer].[ContractMeterRateDetail] by Value
-                //If ContractMeterRateDetailId == 0
-                //Insert into [Customer].[ContractMeterRateDetail]
-
-                //Insert into [Mapping].[ContractMeterRateDetailToRateType]
-                //Insert into [Mapping].[ContractToMeterToContractMeterRateDetail]
                 //Insert into [Mapping].[ContractToSupplier]
                 //Insert into [Mapping].[ContractMeterToProduct]
 
