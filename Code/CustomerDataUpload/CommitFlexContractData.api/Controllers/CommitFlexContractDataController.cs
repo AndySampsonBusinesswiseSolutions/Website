@@ -74,6 +74,7 @@ namespace CommitFlexContractData.api.Controllers
 
                 //Call CommitContractData API
                 //Call CommitContractToSupplierData API
+                //Call CommitContractMeterToProductData API
 
                 //Get BasketId from [Customer].[Basket] by BasketReference
                 //If BasketId == 0

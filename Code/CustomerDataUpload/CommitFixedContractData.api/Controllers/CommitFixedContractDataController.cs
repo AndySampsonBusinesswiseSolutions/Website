@@ -74,8 +74,7 @@ namespace CommitFixedContractData.api.Controllers
 
                 //Call CommitContractData API
                 //Call CommitContractToSupplierData API
-
-                //Insert into [Mapping].[ContractMeterToProduct]
+                //Call CommitContractMeterToProductData API
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFixedContractDataAPIId, false, null);
