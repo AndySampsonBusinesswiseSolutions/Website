@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "CommitLineLossFactorClassToMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitLineLossFactorClassToMeterData.api/bin/Debug/netcoreapp3.1/CommitLineLossFactorClassToMeterData.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitLineLossFactorClassToMeterData.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitLineLossFactorClassToMeterData.api/Views"
+            }
+        },
         {"name": "CommitGridSupplyPointToMeterData.api",
             "type": "coreclr",
             "request": "launch",
@@ -1420,6 +1441,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "CommitLineLossFactorClassToMeterData.api",
                 "CommitGridSupplyPointToMeterData.api",
                 "CommitBasketData.api",
                 "CommitContractMeterToProductData.api",
@@ -1531,6 +1553,7 @@
         },
         {"name": "Customer Data Upload",
             "configurations": [
+                "CommitLineLossFactorClassToMeterData.api",
                 "CommitGridSupplyPointToMeterData.api",
                 "CommitBasketData.api",
                 "CommitContractMeterToProductData.api",
@@ -1590,6 +1613,7 @@
         }
     ]
 }
+
 
 
 
