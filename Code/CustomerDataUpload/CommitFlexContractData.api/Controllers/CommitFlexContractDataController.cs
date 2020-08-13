@@ -73,13 +73,13 @@ namespace CommitFlexContractData.api.Controllers
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
 
                 //Call CommitContractData API
+                //Call CommitContractToSupplierData API
 
                 //Get BasketId from [Customer].[Basket] by BasketReference
                 //If BasketId == 0
                 //Insert into [Customer].[Basket]
 
                 //Insert into [Mapping].[BasketToContractMeter]
-                //Insert into [Mapping].[ContractToSupplier]
                 //Insert into [Mapping].[ContractMeterToProduct]
 
                 //Update Process Queue

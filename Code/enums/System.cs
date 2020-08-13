@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitContractToSupplierDataAPI = "8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D";
                     public string CommitContractDataAPI = "E6A652C5-EE89-4E2B-A6A2-A2BEE750384A";
                     public string CommitTradeToBasketDataAPI = "8EFE04B3-9F9B-406A-81E8-3187E7848F76";
                     public string CommitReferenceVolumeToContractDataAPI = "5035107A-66F1-4736-ACBA-AE331A5ECF62";
@@ -90,6 +91,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitContractToSupplierDataAPI = "CommitContractToSupplierData.api";
                     public string CommitContractDataAPI = "CommitContractData.api";
                     public string CommitTradeToBasketDataAPI = "CommitTradeToBasketData.api";
                     public string CommitReferenceVolumeToContractDataAPI = "CommitReferenceVolumeToContractData.api";
@@ -160,6 +162,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitContractToSupplierDataAPI = "YVfsgbnrzGh3SCcE";
                     public string CommitContractDataAPI = "wsxbn8B2jTb9bDFM";
                     public string CommitTradeToBasketDataAPI = "uPXLHnw3FFbVMCrw";
                     public string CommitReferenceVolumeToContractDataAPI = "wuMYmJm587ehRtED";
