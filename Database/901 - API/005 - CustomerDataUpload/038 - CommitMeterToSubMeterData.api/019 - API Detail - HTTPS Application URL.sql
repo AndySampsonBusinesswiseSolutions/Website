@@ -7,4 +7,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE APIGUID = 'BBA77F1B-F9A3-4CAA-B213-D11285994B0A')
 DECLARE @APIAttributeId BIGINT = (SELECT APIAttributeId FROM [System].[APIAttribute] WHERE APIAttributeDescription = 'HTTPS Application URL')
 
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'https://localhost:50111/'
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'https://localhost:5111/'
