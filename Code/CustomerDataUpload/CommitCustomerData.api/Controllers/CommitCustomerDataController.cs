@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace CommitCustomerData.api.Controllers
 {
@@ -18,9 +20,13 @@ namespace CommitCustomerData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitCustomerDataAPIId;
 
         public CommitCustomerDataController(ILogger<CommitCustomerDataController> logger)
@@ -66,20 +72,75 @@ namespace CommitCustomerData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerUploadData].[Customer] where CanCommit = 1
+                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID)
+                    .Where(r => r.Field<string>("CanCommit") == "1");
+
+                if(!customerDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerDataAPIId, false, null);
+                    return;
+                }
 
                 //For each column, get CustomerAttributeId
-                //Get CustomerId by CustomerName
+                var attributes = new Dictionary<long, string>
+                {
+                    {_customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName), _customerDataUploadValidationEntityEnums.CustomerName},
+                    {_customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.ContactName), _customerDataUploadValidationEntityEnums.ContactName},
+                    {_customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.ContactTelephoneNumber), _customerDataUploadValidationEntityEnums.ContactTelephoneNumber},
+                    {_customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.ContactEmailAddress), _customerDataUploadValidationEntityEnums.ContactEmailAddress},
+                };
 
-                //If CustomerId == 0
-                //Create new CustomerGUID
-                //Insert into [Customer].[Customer]
-                //Insert into [Customer].[CustomerDetail]
+                var detailDictionary = new Dictionary<long, string>();
 
-                //If CustomerId != 0
-                //Update [Customer].[CustomerDetail]
+                foreach(var attribute in attributes)
+                {
+                    detailDictionary.Add(attribute.Key, string.Empty);
+                }
+
+                foreach(var dataRow in customerDataRows)
+                {
+                    foreach(var attribute in attributes)
+                    {
+                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                    }
+
+                    //Get CustomerId by CustomerName
+                    var customerId = _customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value);
+
+                    if(customerId == 0)
+                    {
+                        //Create new CustomerGUID
+                        var customerGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[Customer]
+                        _customerMethods.Customer_Insert(createdByUserId, sourceId, customerGUID);
+                        customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
+
+                        //Insert into [Customer].[CustomerDetail]
+                        foreach(var detail in detailDictionary)
+                        {
+                            _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, detail.Key, detail.Value);
+                        }
+                    }
+                    else
+                    {
+                        //Update [Customer].[CustomerDetail]
+                        foreach(var detail in detailDictionary)
+                        {
+                            var currentDetailDataRow = _customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, detail.Key);
+                            var currentDetail = currentDetailDataRow.Field<string>("CustomerDetailDescription");
+
+                            if(detail.Value != currentDetail)
+                            {
+                                var customerDetailId = currentDetailDataRow.Field<int>("CustomerDetailId");
+                                _customerMethods.CustomerDetail_DeleteByCustomerDetailId(customerDetailId);
+                                _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, detail.Key, detail.Value);
+                            }
+                        }
+                    }
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerDataAPIId, false, null);
