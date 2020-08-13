@@ -74,8 +74,6 @@ namespace CommitMeterData.api.Controllers
                 //If MeterId == 0
                 //Insert into [Customer].[Meter]
                 //Create Meter tables
-                
-                //Insert into [Mapping].[MeterToTimeswitchCode]
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterDataAPIId, false, null);
