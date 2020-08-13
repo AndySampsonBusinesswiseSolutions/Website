@@ -72,7 +72,7 @@ namespace CommitFixedContractData.api.Controllers
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] where CanCommit = 1
 
-                //Call CommitContractData API
+                //Call CommitContractData API and wait for response
                 //Call CommitContractToSupplierData API
                 //Call CommitContractMeterToProductData API
 

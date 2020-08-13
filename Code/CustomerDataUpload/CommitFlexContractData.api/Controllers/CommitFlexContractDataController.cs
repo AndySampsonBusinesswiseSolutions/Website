@@ -72,16 +72,9 @@ namespace CommitFlexContractData.api.Controllers
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
 
-                //Call CommitContractData API
+                //Call CommitContractData API and wait for response
                 //Call CommitContractToSupplierData API
                 //Call CommitContractMeterToProductData API
-
-                //Get BasketId from [Customer].[Basket] by BasketReference
-                //If BasketId == 0
-                //Insert into [Customer].[Basket]
-
-                //Insert into [Mapping].[BasketToContractMeter]
-                //Insert into [Mapping].[ContractMeterToProduct]
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, false, null);
