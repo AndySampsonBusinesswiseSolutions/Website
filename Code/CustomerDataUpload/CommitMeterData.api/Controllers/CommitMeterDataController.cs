@@ -75,7 +75,6 @@ namespace CommitMeterData.api.Controllers
                 //Insert into [Customer].[Meter]
                 //Create Meter tables
                 
-                //Insert into [Mapping].[GridSupplyPointToMeter]
                 //Insert into [Mapping].[LineLossFactorClassToMeter]
                 //Insert into [Mapping].[LocalDistributionZoneToMeter]
                 //Insert into [Mapping].[MeterToProfileClass]

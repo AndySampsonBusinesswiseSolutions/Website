@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitGridSupplyPointToMeterDataAPI = "FF487D3F-89E2-4B9A-B6AF-C5133A19C609";
                     public string CommitBasketDataAPI = "26EBBD73-45DA-4514-B663-662D9127C65B";
                     public string CommitContractMeterToProductDataAPI = "";
                     public string CommitContractToSupplierDataAPI = "8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D";
@@ -93,6 +94,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitGridSupplyPointToMeterDataAPI = "CommitGridSupplyPointToMeterData.api";
                     public string CommitBasketDataAPI = "CommitBasketData.api";
                     public string CommitContractMeterToProductDataAPI = "CommitContractMeterToProductData.api";
                     public string CommitContractToSupplierDataAPI = "CommitContractToSupplierData.api";
@@ -166,6 +168,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitGridSupplyPointToMeterDataAPI = "TLbyfyMNz2NTGMzb";
                     public string CommitBasketDataAPI = "zkNYKFH6sdsPPXqz";
                     public string CommitContractMeterToProductDataAPI = "";
                     public string CommitContractToSupplierDataAPI = "YVfsgbnrzGh3SCcE";
