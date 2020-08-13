@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitMeterToProfileClassDataAPI = "41327B22-24FE-4EED-AED1-36B801D78F5E";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "ED61F240-9A67-412E-BA74-B80DA2A85443";
                     public string CommitLineLossFactorClassToMeterDataAPI = "994CB601-B7A4-4CC8-95F4-1467E03E0DAC";
                     public string CommitGridSupplyPointToMeterDataAPI = "FF487D3F-89E2-4B9A-B6AF-C5133A19C609";
@@ -96,6 +97,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitMeterToProfileClassDataAPI = "CommitMeterToProfileClassData.api";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "CommitLocalDistributionZoneToMeterData.api";
                     public string CommitLineLossFactorClassToMeterDataAPI = "CommitLineLossFactorClassToMeterData.api";
                     public string CommitGridSupplyPointToMeterDataAPI = "CommitGridSupplyPointToMeterData.api";
@@ -172,6 +174,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitMeterToProfileClassDataAPI = "EwLC5zy5SjCuEmmj";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "JT4paBW9eH4m6F35";
                     public string CommitLineLossFactorClassToMeterDataAPI = "BUJXnVrsxzCBEX58";
                     public string CommitGridSupplyPointToMeterDataAPI = "TLbyfyMNz2NTGMzb";
