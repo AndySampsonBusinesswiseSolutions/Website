@@ -14,6 +14,11 @@ namespace MethodLibrary
         {
             public class Customer
             {
+                public IEnumerable<DataRow> GetCommitableRows(IEnumerable<DataRow> dataRows)
+                {
+                    return dataRows.Where(r => r.Field<string>("CanCommit") == "1");
+                }
+
                 public Dictionary<int, List<string>> ConvertCustomerDataUploadToDictionary(JObject jsonObject, string dataType)
                 {
                     //Get File Content JSON

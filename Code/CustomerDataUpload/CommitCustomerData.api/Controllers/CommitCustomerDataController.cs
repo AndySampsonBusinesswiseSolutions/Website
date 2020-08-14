@@ -73,10 +73,10 @@ namespace CommitCustomerData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerUploadData].[Customer] where CanCommit = 1
-                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID)
-                    .Where(r => r.Field<string>("CanCommit") == "1");
+                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(customerDataRows);
 
-                if(!customerDataRows.Any())
+                if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerDataAPIId, false, null);
@@ -99,7 +99,7 @@ namespace CommitCustomerData.api.Controllers
                     detailDictionary.Add(attribute.Key, string.Empty);
                 }
 
-                foreach(var dataRow in customerDataRows)
+                foreach(var dataRow in commitableDataRows)
                 {
                     foreach(var attribute in attributes)
                     {

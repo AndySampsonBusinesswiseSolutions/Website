@@ -6,3 +6,12 @@ DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information]
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
 EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Site Name'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Site Address'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Site Town'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Site County'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Site PostCode'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Site Description'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Contact Name'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Contact Telephone Number'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Contact Email Address'
+EXEC [Customer].[SiteAttribute_Insert] @CreatedByUserId, @SourceId, 'Contact Role'

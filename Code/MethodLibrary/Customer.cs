@@ -8,7 +8,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public class Customer
+        public partial class Customer
         {
             public List<long> Customer_GetCustomerIdList()
             {
@@ -103,28 +103,6 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureCustomerEnums.CustomerDetail_Insert, 
                     createdByUserId, sourceId, customerId, customerAttributeId, customerDetailDescription);
-            }
-
-            public long SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(string siteAttributeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.SiteAttribute_GetBySiteAttributeDescription, 
-                    siteAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SiteAttributeId"))
-                    .FirstOrDefault();
-            }
-
-            public long SiteDetail_GetSiteDetailIdBySiteAttributeIdAndSiteDetailDescription(long siteAttributeId, string siteDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.SiteDetail_GetBySiteAttributeIdAndSiteDetailDescription, 
-                    siteAttributeId, siteDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SiteDetailId"))
-                    .FirstOrDefault();
             }
 
             public long MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(long MeterAttributeId, string MeterDetailDescription)
