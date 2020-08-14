@@ -19,19 +19,21 @@ GO
 
 ALTER PROCEDURE [Supply].[ForecastUsageGranularityHistory_CreateTable]
     @MeterId BIGINT,
-    @GranularityCode VARCHAR(255)
+    @GranularityCode VARCHAR(255),
+    @MeterType VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-30 -> Andrew Sampson -> Initial development of script
+    -- 2020-08-14 -> Andrew Sampson -> Added MeterType parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SchemaName NVARCHAR(255) = 'Supply.Meter' + CONVERT(NVARCHAR, @MeterId)
+    DECLARE @SchemaName NVARCHAR(255) = 'Supply.' + @MeterType + CONVERT(NVARCHAR, @MeterId)
     DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @GranularityCode + 'History'
     DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
     DECLARE @KeyName NVARCHAR(255)

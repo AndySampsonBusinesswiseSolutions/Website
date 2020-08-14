@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace CommitMeterData.api.Controllers
 {
@@ -18,9 +20,14 @@ namespace CommitMeterData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterDataAPIId;
 
         public CommitMeterDataController(ILogger<CommitMeterDataController> logger)
@@ -66,14 +73,83 @@ namespace CommitMeterData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(meterDataRows);
 
-                //Get MeterId from [Customer.[MeterDetail] by MPXN
-                //If MeterId == 0
-                //Insert into [Customer].[Meter]
-                //Create Meter tables
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterDataAPIId, false, null);
+                    return;
+                }
+
+                //For each column, get MeterAttributeId
+                var attributes = new Dictionary<long, string>
+                {
+                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier), _customerDataUploadValidationEntityEnums.MPXN},
+                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.SupplyCapacity), _customerDataUploadValidationEntityEnums.Capacity},
+                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.StandardOfftakeQuantity), _customerDataUploadValidationEntityEnums.StandardOfftakeQuantity},
+                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.AnnualUsage), _customerDataUploadValidationEntityEnums.AnnualUsage},
+                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterSerialNumber), _customerDataUploadValidationEntityEnums.MeterSerialNumber},
+                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.ImportExport), _customerDataUploadValidationEntityEnums.ImportExport},
+                };
+
+                var detailDictionary = new Dictionary<long, string>();
+
+                foreach(var attribute in attributes)
+                {
+                    detailDictionary.Add(attribute.Key, string.Empty);
+                }
+
+                foreach(var dataRow in commitableDataRows)
+                {
+                    foreach(var attribute in attributes)
+                    {
+                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                    }
+
+                    //Get MeterId by MPXN
+                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value);
+
+                    if(meterId == 0)
+                    {
+                        //Create new MeterGUID
+                        var meterGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[Meter]
+                        _customerMethods.Meter_Insert(createdByUserId, sourceId, meterGUID);
+                        meterId = _customerMethods.Meter_GetMeterIdByMeterGUID(meterGUID);
+
+                        //Insert into [Customer].[MeterDetail]
+                        foreach(var detail in detailDictionary)
+                        {
+                            _customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
+                        }
+                    }
+                    else
+                    {
+                        //Update [Customer].[MeterDetail]
+                        foreach(var detail in detailDictionary)
+                        {
+                            var currentDetailDataRow = _customerMethods.MeterDetail_GetByMeterIdAndMeterAttributeId(meterId, detail.Key);
+                            var currentDetail = currentDetailDataRow.Field<string>("MeterDetailDescription");
+
+                            if(detail.Value != currentDetail)
+                            {
+                                var meterDetailId = currentDetailDataRow.Field<int>("MeterDetailId");
+                                _customerMethods.MeterDetail_DeleteByMeterDetailId(meterDetailId);
+                                _customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
+                            }
+                        }
+                    }
+
+                    //Create Meter tables
+                    var meterType = "Meter";
+                    var schemaName = $"Supply.Meter{meterId}";
+
+                    _supplyMethods.CreateMeterTables(schemaName, meterId, meterType);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterDataAPIId, false, null);

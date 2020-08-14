@@ -18,19 +18,21 @@ GO
 -- =============================================
 
 ALTER PROCEDURE [Supply].[Schema_Create]
-    @MeterId BIGINT
+    @MeterId BIGINT,
+    @MeterType VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-28 -> Andrew Sampson -> Initial development of script
+    -- 2020-08-14 -> Andrew Sampson -> Added MeterType parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    DECLARE @SQL NVARCHAR(MAX) = N'CREATE SCHEMA [Supply.Meter' + CONVERT(NVARCHAR, @MeterId) + ']'
+    DECLARE @SQL NVARCHAR(MAX) = N'CREATE SCHEMA [Supply.' + @MeterType + CONVERT(NVARCHAR, @MeterId) + ']'
     EXEC sp_sqlexec @SQL
 END
 GO

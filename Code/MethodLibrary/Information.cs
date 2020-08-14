@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -232,6 +233,16 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<string>("MeterExemptionDetailDescription"))
                     .FirstOrDefault();
+            }
+
+            public List<string> Granularity_GetGranularityCodeList()
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Granularity_GetList);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("GranularityCode"))
+                    .ToList();
             }
         }
     }

@@ -105,28 +105,6 @@ namespace MethodLibrary
                     createdByUserId, sourceId, customerId, customerAttributeId, customerDetailDescription);
             }
 
-            public long MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(long MeterAttributeId, string MeterDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription, 
-                    MeterAttributeId, MeterDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("MeterDetailId"))
-                    .FirstOrDefault();
-            }
-
-            public long MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(string MeterAttributeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.MeterAttribute_GetByMeterAttributeDescription, 
-                    MeterAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("MeterAttributeId"))
-                    .FirstOrDefault();
-            }
-
             public long SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(long subMeterAttributeId, string subMeterDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
