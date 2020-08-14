@@ -105,28 +105,6 @@ namespace MethodLibrary
                     createdByUserId, sourceId, customerId, customerAttributeId, customerDetailDescription);
             }
 
-            public long SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(long subMeterAttributeId, string subMeterDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription, 
-                    subMeterAttributeId, subMeterDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SubMeterDetailId"))
-                    .FirstOrDefault();
-            }
-
-            public long SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(string subMeterAttributeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.SubMeterAttribute_GetBySubMeterAttributeDescription, 
-                    subMeterAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SubMeterAttributeId"))
-                    .FirstOrDefault();
-            }
-
             public void InsertDataUploadValidationErrors(string processQueueGUID, long createdByUserId, long sourceId, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validationErrors)
             {
                  //Insert into DataUploadValidationError

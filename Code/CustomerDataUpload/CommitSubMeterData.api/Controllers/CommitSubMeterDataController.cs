@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Data;
 
 namespace CommitSubMeterData.api.Controllers
 {
@@ -18,9 +20,14 @@ namespace CommitSubMeterData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterDataAPIId;
 
         public CommitSubMeterDataController(ILogger<CommitSubMeterDataController> logger)
@@ -66,14 +73,79 @@ namespace CommitSubMeterData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
+                var subMeterDataRows = _tempCustomerMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(subMeterDataRows);
 
-                //Get SubMeterId from [Customer.[SubMeterDetail] by MPXN
-                //If SubMeterId == 0
-                //Insert into [Customer].[SubMeter]
-                //Create SubMeter tables
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterDataAPIId, false, null);
+                    return;
+                }
+
+                //For each column, get SubMeterAttributeId
+                var attributes = new Dictionary<long, string>
+                {
+                    {_customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier), _customerDataUploadValidationEntityEnums.SubMeterIdentifier},
+                    {_customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SerialNumber), _customerDataUploadValidationEntityEnums.SerialNumber},
+                };
+
+                var detailDictionary = new Dictionary<long, string>();
+
+                foreach(var attribute in attributes)
+                {
+                    detailDictionary.Add(attribute.Key, string.Empty);
+                }
+
+                foreach(var dataRow in commitableDataRows)
+                {
+                    foreach(var attribute in attributes)
+                    {
+                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                    }
+
+                    //Get SubMeterId by MPXN
+                    var subMeterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value);
+
+                    if(subMeterId == 0)
+                    {
+                        //Create new SubMeterGUID
+                        var subMeterGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[SubMeter]
+                        _customerMethods.SubMeter_Insert(createdByUserId, sourceId, subMeterGUID);
+                        subMeterId = _customerMethods.SubMeter_GetSubMeterIdBySubMeterGUID(subMeterGUID);
+
+                        //Insert into [Customer].[SubMeterDetail]
+                        foreach(var detail in detailDictionary)
+                        {
+                            _customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
+                        }
+                    }
+                    else
+                    {
+                        //Update [Customer].[SubMeterDetail]
+                        foreach(var detail in detailDictionary)
+                        {
+                            var currentDetailDataRow = _customerMethods.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(subMeterId, detail.Key);
+                            var currentDetail = currentDetailDataRow.Field<string>("SubMeterDetailDescription");
+
+                            if(detail.Value != currentDetail)
+                            {
+                                var subMeterDetailId = currentDetailDataRow.Field<int>("SubMeterDetailId");
+                                _customerMethods.SubMeterDetail_DeleteBySubMeterDetailId(subMeterDetailId);
+                                _customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
+                            }
+                        }
+                    }
+
+                    //Create SubMeter tables
+                    var meterType = "SubMeter";
+                    var schemaName = $"Supply.SubMeter{subMeterId}";
+
+                    _supplyMethods.CreateMeterTables(schemaName, subMeterId, meterType);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterDataAPIId, false, null);

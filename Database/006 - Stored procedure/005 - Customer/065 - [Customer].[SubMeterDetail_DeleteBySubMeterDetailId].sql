@@ -5,20 +5,21 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[sys].[Schema_GetBySchemaName]'))
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Customer].[SubMeterDetail_DeleteBySubMeterDetailId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [sys].[Schema_GetBySchemaName] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Customer].[SubMeterDetail_DeleteBySubMeterDetailId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-14
--- Description:	Get Schema info from [sys].[Schemas] by SchemaName
+-- Description:	Delete SubMeter detail from [Customer].[SubMeterDetail] table
 -- =============================================
 
-ALTER PROCEDURE [sys].[Schema_GetBySchemaName]
-    @SchemaName VARCHAR(255)
+ALTER PROCEDURE [Customer].[SubMeterDetail_DeleteBySubMeterDetailId]
+    @SubMeterDetailId BIGINT
 AS
 BEGIN
     -- =============================================
@@ -30,13 +31,11 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    SELECT
-        name,
-        schema_id,
-        principal_id
-    FROM
-        [sys].[schemas]
+    UPDATE
+        [Customer].[SubMeterDetail]
+    SET
+        EffectiveToDateTime = GETUTCDATE()
     WHERE
-        name = @SchemaName
+        SubMeterDetailId = @SubMeterDetailId
 END
 GO

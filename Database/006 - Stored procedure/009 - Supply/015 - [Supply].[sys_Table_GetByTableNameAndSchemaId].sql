@@ -5,9 +5,9 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[sys].[Table_GetByTableName]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[sys_Table_GetByTableNameAndSchemaId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [sys].[Table_GetByTableName] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[sys_Table_GetByTableNameAndSchemaId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -17,7 +17,7 @@ GO
 -- Description:	Get Table info from [sys].[Tables] by TableName and SchemaId
 -- =============================================
 
-ALTER PROCEDURE [sys].[Table_GetByTableNameAndSchemaId]
+ALTER PROCEDURE [Supply].[sys_Table_GetByTableNameAndSchemaId]
     @TableName VARCHAR(255),
     @SchemaId BIGINT
 AS
@@ -74,7 +74,7 @@ BEGIN
         is_node,
         is_edge
     FROM
-        [sys].[tables]
+        [Supply].[sys_tables]
     WHERE
         name = @TableName
         AND schema_id = @SchemaId
