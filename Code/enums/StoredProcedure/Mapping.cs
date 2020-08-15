@@ -29,6 +29,7 @@ namespace enums
                 public string MeterToMeterExemption_GetByMeterIdAndMeterExemptionId = "[Mapping].[MeterToMeterExemption_GetByMeterIdAndMeterExemptionId]";
                 public string MeterExemptionToMeterExemptionProduct_Insert = "[Mapping].[MeterExemptionToMeterExemptionProduct_Insert]";
                 public string MeterToMeterExemptionToMeterExemptionProduct_Insert = "[Mapping].[MeterToMeterExemptionToMeterExemptionProduct_Insert]";
+                public string AreaToMeter_Insert = "[Mapping].[AreaToMeter_Insert]";
             }
         }
     }

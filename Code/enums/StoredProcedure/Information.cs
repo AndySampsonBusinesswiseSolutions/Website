@@ -28,6 +28,8 @@ namespace enums
                 public string MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription = "[Information].[MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription]";
                 public string MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId = "[Information].[MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId]";
                 public string Granularity_GetList = "[Information].[Granularity_GetList]";
+                public string Area_GetByAreaDescription = "[Information].[Area_GetByAreaDescription]";
+                public string Area_Insert = "[Information].[Area_Insert]";
             }
         }
     }

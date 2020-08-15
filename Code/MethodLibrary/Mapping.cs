@@ -215,6 +215,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.MeterToMeterExemptionToMeterExemptionProduct_Insert, 
                     createdByUserId, sourceId, meterToMeterExemptionId, meterExemptionProductId);
             }
+
+            public void AreaToMeter_Insert(long createdByUserId, long sourceId, long areaId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.AreaToMeter_Insert, 
+                    createdByUserId, sourceId, areaId, meterId);
+            }
         }
     }
 }
