@@ -17,6 +17,9 @@ namespace enums
                 public string FileContent_GetByFileId = "[Information].[FileContent_GetByFileId]";
                 public string GridSupplyPointAttribute_GetByGridSupplyPointAttributeDescription = "[Information].[GridSupplyPointAttribute_GetByGridSupplyPointAttributeDescription]";
                 public string GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription = "[Information].[GridSupplyPointDetail_GetByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription]";
+                public string GridSupplyPoint_Insert = "[Information].[GridSupplyPoint_Insert]";
+                public string GridSupplyPoint_GetByGridSupplyPointGUID = "[Information].[GridSupplyPoint_GetByGridSupplyPointGUID]";
+                public string GridSupplyPointDetail_Insert = "[Information].[GridSupplyPointDetail_Insert]";
                 public string ProfileClassAttribute_GetByProfileClassAttributeDescription = "[Information].[ProfileClassAttribute_GetByProfileClassAttributeDescription]";
                 public string ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription = "[Information].[ProfileClassDetail_GetByProfileClassAttributeIdAndProfileClassDetailDescription]";
                 public string MeterTimeswitchCodeAttribute_GetByMeterTimeswitchCodeAttributeDescription = "[Information].[MeterTimeswitchCodeAttribute_GetByMeterTimeswitchCodeAttributeDescription]";

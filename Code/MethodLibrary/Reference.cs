@@ -454,7 +454,7 @@ namespace MethodLibrary
             }
 
             var gridSupplyPointGroupIdAttributeId = _informationMethods.GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(_informationGridSupplyPointAttributeEnums.GridSupplyPointGroupId);
-            var gridSupplyPointDetailId = _informationMethods.GridSupplyPointDetail_GetGridSupplyPointIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(gridSupplyPointGroupIdAttributeId, gridSupplyPoint);
+            var gridSupplyPointDetailId = _informationMethods.GridSupplyPointDetail_GetGridSupplyPointDetailIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(gridSupplyPointGroupIdAttributeId, gridSupplyPoint);
             
             return gridSupplyPointDetailId != 0;
         }

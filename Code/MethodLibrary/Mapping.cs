@@ -254,6 +254,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.CommodityToMeter_Insert, 
                     createdByUserId, sourceId, commodityId, meterId);
             }
+
+            public void GridSupplyPointToMeter_Insert(long createdByUserId, long sourceId, long gridSupplyPointId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.GridSupplyPointToMeter_Insert, 
+                    createdByUserId, sourceId, gridSupplyPointId, meterId);
+            }
         }
     }
 }
