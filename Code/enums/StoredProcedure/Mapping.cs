@@ -36,6 +36,7 @@ namespace enums
                 public string CommodityToMeter_Insert = "[Mapping].[CommodityToMeter_Insert]";
                 public string GridSupplyPointToMeter_Insert = "[Mapping].[GridSupplyPointToMeter_Insert]";
                 public string LocalDistributionZoneToMeter_Insert = "[Mapping].[LocalDistributionZoneToMeter_Insert]";
+                public string MeterToProfileClass_Insert = "[Mapping].[MeterToProfileClass_Insert]";
             }
         }
     }

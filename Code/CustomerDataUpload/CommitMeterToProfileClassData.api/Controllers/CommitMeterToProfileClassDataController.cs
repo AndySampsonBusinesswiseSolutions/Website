@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
 
 namespace CommitMeterToProfileClassData.api.Controllers
 {
@@ -18,9 +19,15 @@ namespace CommitMeterToProfileClassData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterToProfileClassDataAPIId;
 
         public CommitMeterToProfileClassDataController(ILogger<CommitMeterToProfileClassDataController> logger)
@@ -66,10 +73,46 @@ namespace CommitMeterToProfileClassData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                //Insert into [Mapping].[MeterToProfileClass]
+                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(meterDataRows);
+
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterToProfileClassDataAPIId, false, null);
+                    return;
+                }
+
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var profileClassCodeProfileClassAttributeId = _informationMethods.ProfileClassAttribute_GetProfileClassAttributeIdByProfileClassAttributeDescription(_informationProfileClassAttributeEnums.ProfileClassCode);
+
+                foreach(var dataRow in commitableDataRows)
+                {
+                    //Get MeterId from [Customer].[MeterDetail] by MPXN
+                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
+                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+
+                    //Get ProfileClassId from [Information].[ProfileClassDetail]
+                    var profileClass = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass);
+                    var profileClassId = _informationMethods.ProfileClassDetail_GetProfileClassIdByProfileClassAttributeIdAndProfileClassDetailDescription(profileClassCodeProfileClassAttributeId, profileClass);
+
+                    if(profileClassId == 0)
+                    {
+                        //Create new ProfileClassGUID
+                        var profileClassGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[ProfileClass]
+                        _informationMethods.ProfileClass_Insert(createdByUserId, sourceId, profileClassGUID);
+                        profileClassId = _informationMethods.ProfileClass_GetProfileClassIdByProfileClassGUID(profileClassGUID);
+
+                        //Insert into [Customer].[ProfileClassDetail]
+                        _informationMethods.ProfileClassDetail_Insert(createdByUserId, sourceId, profileClassId, profileClassCodeProfileClassAttributeId, profileClass);
+                    }
+
+                    //Insert into [Mapping].[MeterToProfileClass]
+                    _mappingMethods.MeterToProfileClass_Insert(createdByUserId, sourceId, profileClassId, meterId);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterToProfileClassDataAPIId, false, null);
@@ -84,4 +127,3 @@ namespace CommitMeterToProfileClassData.api.Controllers
         }
     }
 }
-

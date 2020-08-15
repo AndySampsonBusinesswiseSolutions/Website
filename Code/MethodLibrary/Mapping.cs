@@ -268,6 +268,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.LocalDistributionZoneToMeter_Insert, 
                     createdByUserId, sourceId, localDistributionZoneId, meterId);
             }
+
+            public void MeterToProfileClass_Insert(long createdByUserId, long sourceId, long profileClassId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterToProfileClass_Insert, 
+                    createdByUserId, sourceId, profileClassId, meterId);
+            }
         }
     }
 }
