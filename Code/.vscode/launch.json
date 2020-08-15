@@ -4,14 +4,14 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
-        {"name": "CommitMeterToTimeswitchCodeData.api",
+        {"name": "CommitMeterToMeterTimeswitchCodeData.api",
             "type": "coreclr",
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterToTimeswitchCodeData.api/bin/Debug/netcoreapp3.1/CommitMeterToTimeswitchCodeData.api.dll",
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterToMeterTimeswitchCodeData.api/bin/Debug/netcoreapp3.1/CommitMeterToMeterTimeswitchCodeData.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterToTimeswitchCodeData.api",
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterToMeterTimeswitchCodeData.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -22,7 +22,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterToTimeswitchCodeData.api/Views"
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterToMeterTimeswitchCodeData.api/Views"
             }
         },
         {"name": "CommitMeterToProfileClassData.api",
@@ -1441,7 +1441,7 @@
         },
         {"name": "All Projects",
             "configurations": [
-                "CommitMeterToTimeswitchCodeData.api",
+                "CommitMeterToMeterTimeswitchCodeData.api",
                 "CommitMeterToProfileClassData.api",
                 "CommitLocalDistributionZoneToMeterData.api",
                 "CommitLineLossFactorClassToMeterData.api",
@@ -1553,7 +1553,7 @@
         },
         {"name": "Customer Data Upload",
             "configurations": [
-                "CommitMeterToTimeswitchCodeData.api",
+                "CommitMeterToMeterTimeswitchCodeData.api",
                 "CommitMeterToProfileClassData.api",
                 "CommitLocalDistributionZoneToMeterData.api",
                 "CommitLineLossFactorClassToMeterData.api",

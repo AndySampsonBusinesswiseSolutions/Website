@@ -143,7 +143,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitLocalDistributionZone
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToProfileClassData.api", "CustomerDataUpload\CommitMeterToProfileClassData.api\CommitMeterToProfileClassData.api.csproj", "{41327B22-24FE-4EED-AED1-36B801D78F5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToTimeswitchCodeData.api", "CustomerDataUpload\CommitMeterToTimeswitchCodeData.api\CommitMeterToTimeswitchCodeData.api.csproj", "{CD2E7213-9A18-4BEA-9C4E-7193433192BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToMeterTimeswitchCodeData.api", "CustomerDataUpload\CommitMeterToMeterTimeswitchCodeData.api\CommitMeterToMeterTimeswitchCodeData.api.csproj", "{CD2E7213-9A18-4BEA-9C4E-7193433192BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

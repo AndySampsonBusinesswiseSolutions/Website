@@ -275,6 +275,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.MeterToProfileClass_Insert, 
                     createdByUserId, sourceId, profileClassId, meterId);
             }
+
+            public void MeterToMeterTimeswitchCode_Insert(long createdByUserId, long sourceId, long meterTimeswitchCodeId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterToMeterTimeswitchCode_Insert, 
+                    createdByUserId, sourceId, meterTimeswitchCodeId, meterId);
+            }
         }
     }
 }

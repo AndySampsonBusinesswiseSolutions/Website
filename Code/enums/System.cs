@@ -21,7 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
-                    public string CommitMeterToTimeswitchCodeDataAPI = "CD2E7213-9A18-4BEA-9C4E-7193433192BE";
+                    public string CommitMeterToMeterTimeswitchCodeDataAPI = "CD2E7213-9A18-4BEA-9C4E-7193433192BE";
                     public string CommitMeterToProfileClassDataAPI = "41327B22-24FE-4EED-AED1-36B801D78F5E";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "ED61F240-9A67-412E-BA74-B80DA2A85443";
                     public string CommitLineLossFactorClassToMeterDataAPI = "994CB601-B7A4-4CC8-95F4-1467E03E0DAC";
@@ -98,7 +98,7 @@ namespace enums
 
                 public class Name
                 {
-                    public string CommitMeterToTimeswitchCodeDataAPI = "CommitMeterToTimeswitchCodeData.api";
+                    public string CommitMeterToMeterTimeswitchCodeDataAPI = "CommitMeterToMeterTimeswitchCodeData.api";
                     public string CommitMeterToProfileClassDataAPI = "CommitMeterToProfileClassData.api";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "CommitLocalDistributionZoneToMeterData.api";
                     public string CommitLineLossFactorClassToMeterDataAPI = "CommitLineLossFactorClassToMeterData.api";
@@ -176,7 +176,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
-                    public string CommitMeterToTimeswitchCodeDataAPI = "7wSWYFFtFGr6qETP";
+                    public string CommitMeterToMeterTimeswitchCodeDataAPI = "7wSWYFFtFGr6qETP";
                     public string CommitMeterToProfileClassDataAPI = "EwLC5zy5SjCuEmmj";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "JT4paBW9eH4m6F35";
                     public string CommitLineLossFactorClassToMeterDataAPI = "BUJXnVrsxzCBEX58";
