@@ -261,6 +261,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.GridSupplyPointToMeter_Insert, 
                     createdByUserId, sourceId, gridSupplyPointId, meterId);
             }
+
+            public void LocalDistributionZoneToMeter_Insert(long createdByUserId, long sourceId, long localDistributionZoneId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.LocalDistributionZoneToMeter_Insert, 
+                    createdByUserId, sourceId, localDistributionZoneId, meterId);
+            }
         }
     }
 }
