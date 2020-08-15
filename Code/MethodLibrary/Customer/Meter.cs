@@ -10,22 +10,22 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
-            public long MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(long MeterAttributeId, string MeterDetailDescription)
+            public long MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(long meterAttributeId, string meterDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription, 
-                    MeterAttributeId, MeterDetailDescription);
+                    meterAttributeId, meterDetailDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("MeterDetailId"))
                     .FirstOrDefault();
             }
 
-            public long MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(string MeterAttributeDescription)
+            public long MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(string meterAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.MeterAttribute_GetByMeterAttributeDescription, 
-                    MeterAttributeDescription);
+                    meterAttributeDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("MeterAttributeId"))

@@ -25,6 +25,7 @@ namespace CommitAssetToSubMeterData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
         private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitAssetToSubMeterDataAPIId;
@@ -84,25 +85,33 @@ namespace CommitAssetToSubMeterData.api.Controllers
                 }
 
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
+                var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
 
                 foreach(var dataRow in commitableDataRows)
                 {
-                    //Get SubAreaId from [Information].[SubArea]
-                    var subArea = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubArea);
-                    var subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+                    //Get AssetId from [Customer].[AssetDetail]
+                    var asset = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Asset);
+                    var assetId = _customerMethods.Asset_GetAssetIdByAssetAttributeIdAndAssetDetailDescription(assetNameAssetAttributeId, asset);
 
-                    if(subAreaId == 0)
+                    if(assetId == 0)
                     {
-                        _informationMethods.SubArea_Insert(createdByUserId, sourceId, subArea);
-                        subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+                        //Create new AssetGUID
+                        var assetGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[Asset]
+                        _customerMethods.Asset_Insert(createdByUserId, sourceId, assetGUID);
+                        assetId = _customerMethods.Asset_GetAssetIdByAssetGUID(assetGUID);
+
+                        //Insert into [Customer].[AssetDetail]
+                        _customerMethods.AssetDetail_Insert(createdByUserId, sourceId, assetId, assetNameAssetAttributeId, asset);
                     }
 
-                    //Get SubMeterId from [Customer].[SubMeterDetail] by MPXN
-                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, mpxn);
+                    //Get SubMeterId from [Customer].[SubMeterDetail] by SubMeterIdentifier
+                    var subMeterIdentifier = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier);
+                    var subMeterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, subMeterIdentifier);
 
-                    //Insert into [Mapping].[SubAreaToSubMeter]
-                    _mappingMethods.SubAreaToSubMeter_Insert(createdByUserId, sourceId, subAreaId, meterId);
+                    //Insert into [Mapping].[AssetToSubMeter]
+                    _mappingMethods.AssetToSubMeter_Insert(createdByUserId, sourceId, assetId, subMeterId);
                 }
 
                 //Update Process Queue
@@ -118,4 +127,3 @@ namespace CommitAssetToSubMeterData.api.Controllers
         }
     }
 }
-

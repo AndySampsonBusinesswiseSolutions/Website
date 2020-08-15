@@ -77,6 +77,13 @@ namespace enums
                 public string Basket_Insert = "[Customer].[Basket_Insert]";
                 public string Basket_GetByBasketGUID = "[Customer].[Basket_GetByBasketGUID]";
                 public string BasketDetail_Insert = "[Customer].[BasketDetail_Insert]";
+                public string AssetAttribute_Insert = "[Customer].[AssetAttribute_Insert]";
+                public string AssetAttribute_GetByAssetAttributeDescription = "[Customer].[AssetAttribute_GetByAssetAttributeDescription]";
+                public string AssetDetail_GetByAssetIdAndAssetAttributeId = "[Customer].[AssetDetail_GetByAssetIdAndAssetAttributeId]";
+                public string Asset_Insert = "[Customer].[Asset_Insert]";
+                public string Asset_GetByAssetGUID = "[Customer].[Asset_GetByAssetGUID]";
+                public string AssetDetail_Insert = "[Customer].[AssetDetail_Insert]";
+                public string AssetDetail_GetByAssetAttributeIdAndAssetDetailDescription = "[Customer].[AssetDetail_GetByAssetAttributeIdAndAssetDetailDescription]";
             }
         }
     }

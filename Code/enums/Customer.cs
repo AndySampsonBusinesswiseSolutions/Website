@@ -4,6 +4,14 @@ namespace enums
     {
         public class Customer
         {
+            public class Asset
+            {
+                public class Attribute
+                {
+                    public string AssetName = "Asset Name";
+                }
+            }
+
             public class Attribute
             {
                 public string CustomerName = "Customer Name";

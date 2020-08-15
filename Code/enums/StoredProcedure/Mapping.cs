@@ -38,6 +38,7 @@ namespace enums
                 public string LocalDistributionZoneToMeter_Insert = "[Mapping].[LocalDistributionZoneToMeter_Insert]";
                 public string MeterToProfileClass_Insert = "[Mapping].[MeterToProfileClass_Insert]";
                 public string MeterToMeterTimeswitchCode_Insert = "[Mapping].[MeterToMeterTimeswitchCode_Insert]";
+                public string AssetToSubMeter_Insert = "[Mapping].[AssetToSubMeter_Insert]";
             }
         }
     }

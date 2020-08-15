@@ -282,6 +282,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.MeterToMeterTimeswitchCode_Insert, 
                     createdByUserId, sourceId, meterTimeswitchCodeId, meterId);
             }
+
+            public void AssetToSubMeter_Insert(long createdByUserId, long sourceId, long assetId, long subMeterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.AssetToSubMeter_Insert, 
+                    createdByUserId, sourceId, assetId, subMeterId);
+            }
         }
     }
 }
