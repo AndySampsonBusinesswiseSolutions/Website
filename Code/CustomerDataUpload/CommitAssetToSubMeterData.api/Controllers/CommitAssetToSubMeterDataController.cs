@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
 
 namespace CommitAssetToSubMeterData.api.Controllers
 {
@@ -18,9 +19,14 @@ namespace CommitAssetToSubMeterData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitAssetToSubMeterDataAPIId;
 
         public CommitAssetToSubMeterDataController(ILogger<CommitAssetToSubMeterDataController> logger)
@@ -66,20 +72,38 @@ namespace CommitAssetToSubMeterData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
+                var subMeterDataRows = _tempCustomerMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(subMeterDataRows);
 
-                //Get SubAreaId from [Information].[SubArea]
-                //If SubAreaId == 0
-                //Insert into [Information].[SubArea]
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitAssetToSubMeterDataAPIId, false, null);
+                    return;
+                }
 
-                //Get SubMeterId from [Customer].[SubMeterDetail]
-                //If SubMeterId == 0
-                //Throw error as submeter should have been invalidated or inserted
+                var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
 
-                //If SubMeterId != 0
-                //Insert into [Mapping].[SubAreaToSubMeter]
+                foreach(var dataRow in commitableDataRows)
+                {
+                    //Get SubAreaId from [Information].[SubArea]
+                    var subArea = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubArea);
+                    var subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+
+                    if(subAreaId == 0)
+                    {
+                        _informationMethods.SubArea_Insert(createdByUserId, sourceId, subArea);
+                        subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+                    }
+
+                    //Get SubMeterId from [Customer].[SubMeterDetail] by MPXN
+                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
+                    var meterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, mpxn);
+
+                    //Insert into [Mapping].[SubAreaToSubMeter]
+                    _mappingMethods.SubAreaToSubMeter_Insert(createdByUserId, sourceId, subAreaId, meterId);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitAssetToSubMeterDataAPIId, false, null);

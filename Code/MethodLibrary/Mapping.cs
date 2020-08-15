@@ -222,6 +222,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.AreaToMeter_Insert, 
                     createdByUserId, sourceId, areaId, meterId);
             }
+
+            public void SubAreaToSubMeter_Insert(long createdByUserId, long sourceId, long subSubAreaId, long subMeterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.SubAreaToSubMeter_Insert, 
+                    createdByUserId, sourceId, subSubAreaId, subMeterId);
+            }
         }
     }
 }

@@ -30,6 +30,8 @@ namespace enums
                 public string Granularity_GetList = "[Information].[Granularity_GetList]";
                 public string Area_GetByAreaDescription = "[Information].[Area_GetByAreaDescription]";
                 public string Area_Insert = "[Information].[Area_Insert]";
+                public string SubArea_GetBySubAreaDescription = "[Information].[SubArea_GetBySubAreaDescription]";
+                public string SubArea_Insert = "[Information].[SubArea_Insert]";
             }
         }
     }

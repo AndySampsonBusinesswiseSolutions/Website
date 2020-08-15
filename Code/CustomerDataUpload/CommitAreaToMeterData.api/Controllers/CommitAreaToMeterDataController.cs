@@ -103,7 +103,7 @@ namespace CommitAreaToMeterData.api.Controllers
 
                     //Insert into [Mapping].[AreaToMeter]
                     _mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areaId, meterId);
-                }                
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitAreaToMeterDataAPIId, false, null);
