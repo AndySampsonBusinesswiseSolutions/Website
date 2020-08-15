@@ -46,6 +46,7 @@ namespace enums
                 {
                     public string MeterExemptionProduct = "Meter Exemption Product";
                     public string MeterExemptionProportion = "Meter Exemption Proportion";
+                    public string UseDefaultValue = "Use Default Value?";
                 }
             }
 

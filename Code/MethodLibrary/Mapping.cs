@@ -183,6 +183,38 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.DataUploadValidationErrorToFile_Insert, 
                     createdByUserId, sourceId, dataUploadValidationErrorId, fileId);
             }
+
+            public void MeterToMeterExemption_Insert(long createdByUserId, long sourceId, long meterId, long meterExemptionId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterToMeterExemption_Insert, 
+                    createdByUserId, sourceId, meterId, meterExemptionId);
+            }
+
+            public long MeterToMeterExemption_GetMeterToMeterExemptionIdByMeterIdAndMeterExemptionId(long meterId, long meterExemptionId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.MeterToMeterExemption_GetByMeterIdAndMeterExemptionId, 
+                    meterId, meterExemptionId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterToMeterExemptionId"))
+                    .FirstOrDefault();
+            }
+
+            public void MeterExemptionToMeterExemptionProduct_Insert(long createdByUserId, long sourceId, long meterExemptionId, long meterExemptionProductId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterExemptionToMeterExemptionProduct_Insert, 
+                    createdByUserId, sourceId, meterExemptionId, meterExemptionProductId);
+            }
+
+            public void MeterToMeterExemptionToMeterExemptionProduct_Insert(long createdByUserId, long sourceId, long meterToMeterExemptionId, long meterExemptionProductId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterToMeterExemptionToMeterExemptionProduct_Insert, 
+                    createdByUserId, sourceId, meterToMeterExemptionId, meterExemptionProductId);
+            }
         }
     }
 }

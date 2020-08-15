@@ -25,6 +25,10 @@ namespace enums
                 public string BasketToContractMeter_GetByBasketId = "[Mapping].[BasketToContractMeter_GetByBasketId]";
                 public string FileTypeToProcess_GetByFileTypeId = "[Mapping].[FileTypeToProcess_GetByFileTypeId]";
                 public string DataUploadValidationErrorToFile_Insert = "[Mapping].[DataUploadValidationErrorToFile_Insert]";
+                public string MeterToMeterExemption_Insert = "[Mapping].[MeterToMeterExemption_Insert]";
+                public string MeterToMeterExemption_GetByMeterIdAndMeterExemptionId = "[Mapping].[MeterToMeterExemption_GetByMeterIdAndMeterExemptionId]";
+                public string MeterExemptionToMeterExemptionProduct_Insert = "[Mapping].[MeterExemptionToMeterExemptionProduct_Insert]";
+                public string MeterToMeterExemptionToMeterExemptionProduct_Insert = "[Mapping].[MeterToMeterExemptionToMeterExemptionProduct_Insert]";
             }
         }
     }

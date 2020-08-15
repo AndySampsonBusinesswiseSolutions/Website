@@ -68,6 +68,12 @@ namespace enums
                 public string DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId = "[Customer].[DataUploadValidationErrorEntity_GetByDataUploadValidationErrorEntityId]";
                 public string DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId = "[Customer].[DataUploadValidationErrorMessage_GetByDataUploadValidationErrorEntityId]";
                 public string DataUploadValidationErrorSheet_GetByDataUploadValidationErrorSheetId = "[Customer].[DataUploadValidationErrorSheet_GetByDataUploadValidationErrorSheetId]";
+                public string MeterExemptionAttribute_GetByMeterExemptionAttributeDescription = "[Customer].[MeterExemptionAttribute_GetByMeterExemptionAttributeDescription]";
+                public string MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription = "[Customer].[MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription]";
+                public string MeterExemption_Insert = "[Customer].[MeterExemption_Insert]";
+                public string MeterExemption_GetByMeterExemptionGUID = "[Customer].[MeterExemption_GetByMeterExemptionGUID]";
+                public string MeterExemptionDetail_Insert = "[Customer].[MeterExemptionDetail_Insert]";
+                public string MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId = "[Customer].[MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId]";
             }
         }
     }

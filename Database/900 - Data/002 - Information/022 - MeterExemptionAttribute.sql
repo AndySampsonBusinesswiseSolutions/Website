@@ -7,3 +7,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 
 EXEC [Information].[MeterExemptionAttribute_Insert] @CreatedByUserId, @SourceId, 'Meter Exemption Product'
 EXEC [Information].[MeterExemptionAttribute_Insert] @CreatedByUserId, @SourceId, 'Meter Exemption Proportion'
+EXEC [Information].[MeterExemptionAttribute_Insert] @CreatedByUserId, @SourceId, 'Use Default Value?'
