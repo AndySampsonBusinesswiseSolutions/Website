@@ -247,6 +247,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.BasketToMeter_Insert, 
                     createdByUserId, sourceId, basketId, meterId);
             }
+
+            public void CommodityToMeter_Insert(long createdByUserId, long sourceId, long commodityId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.CommodityToMeter_Insert, 
+                    createdByUserId, sourceId, commodityId, meterId);
+            }
         }
     }
 }

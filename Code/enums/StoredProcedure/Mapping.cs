@@ -33,6 +33,7 @@ namespace enums
                 public string SubAreaToSubMeter_Insert = "[Mapping].[SubAreaToSubMeter_Insert]";
                 public string ContractToContractType_GetByContractTypeId = "[Mapping].[ContractToContractType_GetByContractTypeId]";
                 public string BasketToMeter_Insert = "[Mapping].[BasketToMeter_Insert]";
+                public string CommodityToMeter_Insert = "[Mapping].[CommodityToMeter_Insert]";
             }
         }
     }

@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-15
--- Description:	Get Area info from [Information].[Area] table by MeterExemption Attribute Description
+-- Description:	Get Area info from [Information].[Area] table by Area Description
 -- =============================================
 
 ALTER PROCEDURE [Information].[Area_GetByAreaDescription]

@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-15
--- Description:	Get ContractType info from [Information].[ContractType] table by MeterExemption Attribute Description
+-- Description:	Get ContractType info from [Information].[ContractType] table by Contract Type Description
 -- =============================================
 
 ALTER PROCEDURE [Information].[ContractType_GetByContractTypeDescription]

@@ -6,20 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[SubArea_GetBySubAreaDescription]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[Commodity_GetByCommodityDescription]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Information].[SubArea_GetBySubAreaDescription] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Information].[Commodity_GetByCommodityDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-15
--- Description:	Get SubArea info from [Information].[SubArea] table by SubArea Description
+-- Description:	Get Commodity info from [Information].[Commodity] table by Commodity Description
 -- =============================================
 
-ALTER PROCEDURE [Information].[SubArea_GetBySubAreaDescription]
-    @SubAreaDescription VARCHAR(255),
+ALTER PROCEDURE [Information].[Commodity_GetByCommodityDescription]
+    @CommodityDescription VARCHAR(255),
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -35,17 +35,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        SubAreaId,
+        CommodityId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        SubAreaDescription
+        CommodityDescription
     FROM 
-        [Information].[SubArea] 
+        [Information].[Commodity] 
     WHERE 
-        SubAreaDescription = @SubAreaDescription
+        CommodityDescription = @CommodityDescription
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

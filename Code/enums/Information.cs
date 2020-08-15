@@ -4,6 +4,12 @@ namespace enums
     {
         public class Information
         {
+            public class Commodity
+            {
+                public string Electricity = "Electricity";
+                public string Gas = "Gas";
+            }
+
             public class ContractType
             {
                 public string Fixed = "Fixed";
