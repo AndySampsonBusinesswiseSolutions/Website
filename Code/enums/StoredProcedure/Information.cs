@@ -32,6 +32,7 @@ namespace enums
                 public string Area_Insert = "[Information].[Area_Insert]";
                 public string SubArea_GetBySubAreaDescription = "[Information].[SubArea_GetBySubAreaDescription]";
                 public string SubArea_Insert = "[Information].[SubArea_Insert]";
+                public string ContractType_GetByContractTypeDescription = "[Information].[ContractType_GetByContractTypeDescription]";
             }
         }
     }

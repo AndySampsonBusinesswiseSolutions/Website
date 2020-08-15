@@ -362,26 +362,15 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public long BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(string basketAttributeDescription)
+            public List<long> ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(long contractAttributeId, string contractDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.BasketAttribute_GetByBasketAttributeDescription, 
-                    basketAttributeDescription);
+                    _storedProcedureCustomerEnums.ContractDetail_GetByContractAttributeIdAndContractDetailDescription, 
+                    contractAttributeId, contractDetailDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("BasketAttributeId"))
-                    .FirstOrDefault();
-            }
-
-            public long BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(long basketAttributeId, string basketDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription, 
-                    basketAttributeId, basketDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("BasketDetailId"))
-                    .FirstOrDefault();
+                    .Select(r => r.Field<long>("ContractId"))
+                    .ToList();
             }
             
             private IEnumerable<long> GetContractMeterListByContractReferenceAndMPXN(string contractReference, string mpxn)

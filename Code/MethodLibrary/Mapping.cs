@@ -229,6 +229,24 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.SubAreaToSubMeter_Insert, 
                     createdByUserId, sourceId, subSubAreaId, subMeterId);
             }
+
+            public List<long> ContractToContractType_GetContractIdListByContractTypeId(long contractTypeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToContractType_GetByContractTypeId, 
+                    contractTypeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractTypeId"))
+                    .ToList();
+            }
+
+            public void BasketToMeter_Insert(long createdByUserId, long sourceId, long basketId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.BasketToMeter_Insert, 
+                    createdByUserId, sourceId, basketId, meterId);
+            }
         }
     }
 }

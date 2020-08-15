@@ -4,6 +4,12 @@ namespace enums
     {
         public class Information
         {
+            public class ContractType
+            {
+                public string Fixed = "Fixed";
+                public string Flex = "Flex";
+            }
+
             public class File
             {
                 public class Attribute

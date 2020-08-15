@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace CommitBasketData.api.Controllers
 {
@@ -18,9 +20,17 @@ namespace CommitBasketData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
+        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
+        private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitBasketDataAPIId;
 
         public CommitBasketDataController(ILogger<CommitBasketDataController> logger)
@@ -66,13 +76,68 @@ namespace CommitBasketData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(meterDataRows);
 
-                //Get BasketId from [Customer].[Basket] by BasketReference
-                //If BasketId == 0
-                //Insert into [Customer].[Basket]
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitBasketDataAPIId, false, null);
+                    return;
+                }
 
-                //Insert into [Mapping].[BasketToContractMeter]
+                var basketReferenceBasketAttributeId = _customerMethods.BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(_customerBasketAttributeEnums.BasketReference);
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
+
+                foreach(var dataRow in commitableDataRows)
+                {
+                    //Get BasketId from [Customer].[BasketDetail] by BasketReference
+                    var basketReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference);
+                    var basketId = _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(basketReferenceBasketAttributeId, basketReference);
+
+                    if(basketId == 0)
+                    {
+                        //Create new BasketGUID
+                        var basketGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[Basket]
+                        _customerMethods.Basket_Insert(createdByUserId, sourceId, basketGUID);
+                        basketId = _customerMethods.Basket_GetBasketIdByBasketGUID(basketGUID);
+
+                        _customerMethods.BasketDetail_Insert(createdByUserId, sourceId, basketId, basketReferenceBasketAttributeId, basketReference);
+                    }
+
+                    //Get MeterId from [Customer].[MeterDetail] by MPXN
+                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
+                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+
+                    //Get ContractTypeId from [Information].[ContractType] where ContractTypeDescription = 'Flex'
+                    var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(_informationContractTypeEnums.Flex);
+
+                    //Get ContractIdList from [Mapping].[ContractToContractType] by ContractTypeId
+                    var mappingContractIdList = _mappingMethods.ContractToContractType_GetContractIdListByContractTypeId(contractTypeId);
+
+                    //Get ContractIdList from [Customer].[Contract] by ContractReference
+                    var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);
+                    var customerContractIdList = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
+
+                    //Get ContractId from intersect of Customer ContractIdList and Mapping ContractIdList
+                    var contractId = customerContractIdList.Intersect(mappingContractIdList).First();
+
+                    //Get ContractMeterIdList from [Mapping].[ContractMeterToMeter] by MeterId
+                    var contractMeterToMeterContractMeterIdList = _mappingMethods.ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
+
+                    //Get ContractMeterIdList from [Mapping].[ContractToContractMeter] by ContractId
+                    var contractToContractMeterContractMeterIdList = _mappingMethods.ContractToContractMeter_GetContractMeterIdListByContractId(contractId);
+
+                    //Get ContractMeterId from intersect of ContractMeterToMeter ContractMeterIdList and ContractToContractMeter ContractMeterIdList
+                    var contractMeterId = contractMeterToMeterContractMeterIdList.Intersect(contractToContractMeterContractMeterIdList).First();
+
+                    //Insert into [Mapping].[BasketToContractMeter]
+                    _mappingMethods.BasketToMeter_Insert(createdByUserId, sourceId, basketId, contractMeterId);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitBasketDataAPIId, false, null);

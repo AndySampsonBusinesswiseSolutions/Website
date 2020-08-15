@@ -74,6 +74,9 @@ namespace enums
                 public string MeterExemption_GetByMeterExemptionGUID = "[Customer].[MeterExemption_GetByMeterExemptionGUID]";
                 public string MeterExemptionDetail_Insert = "[Customer].[MeterExemptionDetail_Insert]";
                 public string MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId = "[Customer].[MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId]";
+                public string Basket_Insert = "[Customer].[Basket_Insert]";
+                public string Basket_GetByBasketGUID = "[Customer].[Basket_GetByBasketGUID]";
+                public string BasketDetail_Insert = "[Customer].[BasketDetail_Insert]";
             }
         }
     }
