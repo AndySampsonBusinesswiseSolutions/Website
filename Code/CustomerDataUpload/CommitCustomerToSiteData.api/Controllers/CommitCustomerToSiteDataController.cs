@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
 
 namespace CommitCustomerToSiteData.api.Controllers
 {
@@ -18,9 +19,15 @@ namespace CommitCustomerToSiteData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
+        private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitCustomerToSiteDataAPIId;
 
         public CommitCustomerToSiteDataController(ILogger<CommitCustomerToSiteDataController> logger)
@@ -66,20 +73,40 @@ namespace CommitCustomerToSiteData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
+                var customerDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(customerDataRows);
 
-                //Get CustomerId from [Customer].[CustomerDetail]
-                //If CustomerId == 0
-                //Throw error as customer should have been invalidated or inserted
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);
+                    return;
+                }
 
-                //Get SiteId from [Customer].[SiteDetail]
-                //If SiteId == 0
-                //Throw error as site should have been invalidated or inserted
+                var customerNameCustomerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
+                var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
+                var sitePostCodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
 
-                //If SiteId != 0 and CustomerId != 0
-                //Insert into [Mapping].[CustomerToSite]
+                foreach(var dataRow in commitableDataRows)
+                {
+                    //Get CustomerId by CustomerName
+                    var customerName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.CustomerName);
+                    var customerId = _customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(customerNameCustomerAttributeId, customerName);
+
+                    //Get SiteId by SiteName and SitePostCode
+                    var siteName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName);
+                    var sitePostCode = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode);
+
+                    var siteNameSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, siteName);
+                    var sitePostCodeSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, sitePostCode);
+
+                    var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
+                    var siteId = matchingSiteIdList.First();
+
+                    //Insert into [Mapping].[CustomerToSite]
+                    _mappingMethods.CustomerToSite_Insert(createdByUserId, sourceId, customerId, siteId);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);

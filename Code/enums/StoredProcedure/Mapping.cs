@@ -39,6 +39,7 @@ namespace enums
                 public string MeterToProfileClass_Insert = "[Mapping].[MeterToProfileClass_Insert]";
                 public string MeterToMeterTimeswitchCode_Insert = "[Mapping].[MeterToMeterTimeswitchCode_Insert]";
                 public string AssetToSubMeter_Insert = "[Mapping].[AssetToSubMeter_Insert]";
+                public string CustomerToSite_Insert = "[Mapping].[CustomerToSite_Insert]";
             }
         }
     }
