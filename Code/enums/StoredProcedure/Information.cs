@@ -47,6 +47,7 @@ namespace enums
                 public string ContractType_GetByContractTypeDescription = "[Information].[ContractType_GetByContractTypeDescription]";
                 public string Commodity_GetByCommodityDescription = "[Information].[Commodity_GetByCommodityDescription]";
                 public string Commodity_Insert = "[Information].[Commodity_Insert]";
+                public string RateType_GetByRateTypeDescription = "[Information].[RateType_GetByRateTypeDescription]";
             }
         }
     }

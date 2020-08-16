@@ -40,6 +40,13 @@ namespace enums
                 public string MeterToMeterTimeswitchCode_Insert = "[Mapping].[MeterToMeterTimeswitchCode_Insert]";
                 public string AssetToSubMeter_Insert = "[Mapping].[AssetToSubMeter_Insert]";
                 public string CustomerToSite_Insert = "[Mapping].[CustomerToSite_Insert]";
+                public string ContractToSupplier_Insert = "[Mapping].[ContractToSupplier_Insert]";
+                public string ContractToContractType_GetByContractIdAndContractTypeId = "[Mapping].[ContractToContractType_GetByContractIdAndContractTypeId]";
+                public string ContractToContractType_Insert = "[Mapping].[ContractToContractType_Insert]";
+                public string ContractToContractMeter_GetByContractIdAndContractMeterId = "[Mapping].[ContractToContractMeter_GetByContractIdAndContractMeterId]";
+                public string ContractToContractMeter_Insert = "[Mapping].[ContractToContractMeter_Insert]";
+                public string ContractMeterToMeter_GetByContractMeterIdAndMeterId = "[Mapping].[ContractMeterToMeter_GetByContractMeterIdAndMeterId]";
+                public string ContractMeterToMeter_Insert = "[Mapping].[ContractMeterToMeter_Insert]";
             }
         }
     }

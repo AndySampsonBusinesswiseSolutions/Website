@@ -84,6 +84,13 @@ namespace enums
                 public string Asset_GetByAssetGUID = "[Customer].[Asset_GetByAssetGUID]";
                 public string AssetDetail_Insert = "[Customer].[AssetDetail_Insert]";
                 public string AssetDetail_GetByAssetAttributeIdAndAssetDetailDescription = "[Customer].[AssetDetail_GetByAssetAttributeIdAndAssetDetailDescription]";
+                public string ContractMeterAttribute_GetByContractMeterAttributeDescription = "[Customer].[ContractMeterAttribute_GetByContractMeterAttributeDescription]";
+                public string Contract_Insert = "[Customer].[Contract_Insert]";
+                public string Contract_GetByContractGUID = "[Customer].[Contract_GetByContractGUID]";
+                public string ContractDetail_Insert = "[Customer].[ContractDetail_Insert]";
+                public string ContractMeter_Insert = "[Customer].[ContractMeter_Insert]";
+                public string ContractMeter_GetByContractMeterGUID = "[Customer].[ContractMeter_GetByContractMeterGUID]";
+                public string ContractMeterDetail_Insert = "[Customer].[ContractMeterDetail_Insert]";
             }
         }
     }

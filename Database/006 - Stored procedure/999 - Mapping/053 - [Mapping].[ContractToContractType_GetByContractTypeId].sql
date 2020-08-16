@@ -6,16 +6,16 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractToContractType_GetByContractId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractToContractType_GetByContractTypeId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[ContractToContractType_GetByContractId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[ContractToContractType_GetByContractTypeId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-15
--- Description:	Get ContractToContractType info from [Mapping].[ContractToContractType] table by File Type Id
+-- Description:	Get ContractToContractType info from [Mapping].[ContractToContractType] table by Contract Type Id
 -- =============================================
 
 ALTER PROCEDURE [Mapping].[ContractToContractType_GetByContractTypeId]

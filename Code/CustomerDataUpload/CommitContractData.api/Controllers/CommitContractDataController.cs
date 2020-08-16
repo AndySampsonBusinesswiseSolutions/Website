@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace CommitContractData.api.Controllers
 {
@@ -18,9 +21,18 @@ namespace CommitContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
+        private readonly Enums.Information.RateType _informationRateTypeEnums = new Enums.Information.RateType();
+        private readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
+        private readonly Enums.Customer.ContractMeter.Attribute _customerContractMeterAttributeEnums = new Enums.Customer.ContractMeter.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitContractDataAPIId;
 
         public CommitContractDataController(ILogger<CommitContractDataController> logger)
@@ -66,35 +78,112 @@ namespace CommitContractData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                var dataRowList = (IEnumerable<DataRow>) JsonConvert.DeserializeObject(jsonObject[_systemAPIRequiredDataKeyEnums.ContractData].ToString(), typeof(List<DataRow>));
 
                 //Get ContractType from jsonObject
+                var contractType = jsonObject[_systemAPIRequiredDataKeyEnums.ContractType].ToString();
 
                 //Get ContractTypeId from [Information].[ContractType]
-                //var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(_informationContractTypeEnums.Fixed);
+                var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(contractType);
 
-                //Get ContractId from [Customer].[ContractDetail] by ContractReference
-                //If ContractId == 0
-                //Insert into [Customer].[Contract]
-                //Insert into [Mapping].[ContractToContractType]       
+                var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
+                var contractStartDateContractMeterAttributeId = _customerMethods.ContractMeterAttribute_GetContractMeterAttributeIdByContractMeterAttributeDescription(_customerContractMeterAttributeEnums.ContractStartDate);
+                var contractEndDateContractMeterAttributeId = _customerMethods.ContractMeterAttribute_GetContractMeterAttributeIdByContractMeterAttributeDescription(_customerContractMeterAttributeEnums.ContractEndDate);
+                var rateCountContractMeterAttributeId = _customerMethods.ContractMeterAttribute_GetContractMeterAttributeIdByContractMeterAttributeDescription(_customerContractMeterAttributeEnums.RateCount);
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var standingChargeRateTypeId = _informationMethods.RateType_GetRateTypeIdByRateTypeDescription(_informationRateTypeEnums.StandingCharge);
+                var capacityChargeRateTypeId = _informationMethods.RateType_GetRateTypeIdByRateTypeDescription(_informationRateTypeEnums.CapacityCharge);
 
-                //If ContractId != 0
-                //Get ContractToContractTypeId by ContractId and ContractType
+                foreach(var dataRow in dataRowList)
+                {
+                    //Get ContractId from [Customer].[ContractDetail] by ContractReference
+                    var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);
+                    var contractId = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference).First();
 
-                //If ContractToContractTypeId == 0
-                //Insert into [Mapping].[ContractToContractType]
+                    if(contractId == 0)
+                    {
+                        //Create new ContractGUID
+                        var contractGUID = Guid.NewGuid().ToString();
 
-                //Get ContractMeterId from [Customer].[ContractMeterDetail] by ContractStartDate, ContractEndDate and RateCount
-                //If ContractMeterId == 0
-                //Insert into [Customer].[ContractMeter]
+                        //Insert into [Customer].[Contract]
+                        _customerMethods.Contract_Insert(createdByUserId, sourceId, contractGUID);
+                        contractId = _customerMethods.Contract_GetContractIdByContractGUID(contractGUID);
 
-                //Insert into [Mapping].[ContractToContractMeter]
+                        //Insert into [Customer].[ContractDetail]
+                        _customerMethods.ContractDetail_Insert(createdByUserId, sourceId, contractId, contractReferenceContractAttributeId, contractReference);
+                    }
 
-                //Get MeterId from [Customer].[MeterDetail]
-                //If MeterId == 0
-                //Throw error as meter should be invalidated or inserted
+                    //Get ContractToContractTypeId by ContractId and ContractTypeId
+                    var contractToContractTypeId = _mappingMethods.ContractToContractType_GetContractToContractTypeIdByContractIdAndContractTypeId(contractId, contractTypeId);
 
-                //Insert into [Mapping].[ContractMeterToMeter]
+                    if(contractToContractTypeId == 0)
+                    {
+                        //Insert into [Mapping].[ContractToContractType]
+                        _mappingMethods.ContractToContractType_Insert(createdByUserId, sourceId, contractId, contractTypeId);
+                    }
+
+                    //Get ContractMeterId from [Customer].[ContractMeterDetail] by ContractStartDate, ContractEndDate and RateCount
+                    var contractStartDate = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractStartDate);
+                    var contractEndDate = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractEndDate);
+                    var rateCount = contractType == _informationContractTypeEnums.Fixed
+                        ? dataRow.Field<string>(_customerDataUploadValidationEntityEnums.RateCount)
+                        : "1";
+
+                    var contractMeterId = 0L;
+                    var contractStartDateMeterIdList = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(contractStartDateContractMeterAttributeId, contractStartDate);
+                    if(contractStartDateMeterIdList.Any())
+                    {
+                        var contractEndDateMeterIdList = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(contractEndDateContractMeterAttributeId, contractEndDate);
+                        if(contractEndDateMeterIdList.Any())
+                        {
+                            var rateCountMeterIdList = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(rateCountContractMeterAttributeId, rateCount);
+                            if(rateCountMeterIdList.Any())
+                            {
+                                contractMeterId = contractStartDateMeterIdList.Intersect(contractEndDateMeterIdList).Intersect(rateCountMeterIdList).First();
+                            }
+                        }
+                    }
+
+                    if(contractMeterId == 0)
+                    {
+                        //Create new ContractMeterGUID
+                        var contractMeterGUID = Guid.NewGuid().ToString();
+
+                        //Insert into [Customer].[ContractMeter]
+                        _customerMethods.ContractMeter_Insert(createdByUserId, sourceId, contractMeterGUID);
+                        contractMeterId = _customerMethods.ContractMeter_GetContractMeterIdByContractMeterGUID(contractMeterGUID);
+
+                        //Insert into [Customer].[ContractMeterDetail]
+                        _customerMethods.ContractMeterDetail_Insert(createdByUserId, sourceId, contractMeterId, contractStartDateContractMeterAttributeId, contractStartDate);
+                        _customerMethods.ContractMeterDetail_Insert(createdByUserId, sourceId, contractMeterId, contractEndDateContractMeterAttributeId, contractEndDate);
+                        _customerMethods.ContractMeterDetail_Insert(createdByUserId, sourceId, contractMeterId, rateCountContractMeterAttributeId, rateCount);
+                    }
+
+                    //Get ContractToContractMeterId by ContractId and ContractMeterId
+                    var contractToContractMeterId = _mappingMethods.ContractToContractMeter_GetContractToContractMeterIdByContractIdAndContractMeterId(contractId, contractMeterId);
+
+                    if(contractToContractMeterId == 0)
+                    {
+                        //Insert into [Mapping].[ContractToContractMeter]
+                        _mappingMethods.ContractToContractMeter_Insert(createdByUserId, sourceId, contractId, contractMeterId);
+                    }
+
+                    //Get MeterId from [Customer].[MeterDetail] by MPXN
+                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
+                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+
+                    //Get ContractMeterToMeterId by ContractMeterId and MeterId
+                    var contractMeterToMeterId = _mappingMethods.ContractMeterToMeter_GetContractMeterToMeterIdByContractMeterIdAndMeterId(contractMeterId, meterId);
+
+                    if(contractMeterToMeterId == 0)
+                    {
+                        //Insert into [Mapping].[ContractMeterToMeter]
+                        _mappingMethods.ContractMeterToMeter_Insert(createdByUserId, sourceId, contractMeterId, meterId);
+                    }
+
+                    var standingCharge = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.StandingCharge);
+                    var capacityCharge = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.CapacityCharge);
+                }
 
                 //For each rate and standing and capacity charges
                 //Get RateTypeId from [Information].[RateType]

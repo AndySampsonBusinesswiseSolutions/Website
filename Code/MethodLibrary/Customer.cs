@@ -339,39 +339,6 @@ namespace MethodLibrary
                     .Select(r => r.Field<string>("DataUploadValidationErrorMessageDescription"))
                     .ToList();
             }
-
-            public long ContractAttribute_GetContractAttributeIdByContractAttributeDescription(string contractAttributeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.ContractAttribute_GetByContractAttributeDescription, 
-                    contractAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("ContractAttributeId"))
-                    .FirstOrDefault();
-            }
-
-            public long ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(long contractAttributeId, string contractDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.ContractDetail_GetByContractAttributeIdAndContractDetailDescription, 
-                    contractAttributeId, contractDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("ContractDetailId"))
-                    .FirstOrDefault();
-            }
-
-            public List<long> ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(long contractAttributeId, string contractDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.ContractDetail_GetByContractAttributeIdAndContractDetailDescription, 
-                    contractAttributeId, contractDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("ContractId"))
-                    .ToList();
-            }
             
             private IEnumerable<long> GetContractMeterListByContractReferenceAndMPXN(string contractReference, string mpxn)
             {

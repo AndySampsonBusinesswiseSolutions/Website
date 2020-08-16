@@ -65,11 +65,11 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
             }
 
-            public List<long> MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(long MeterExemptionAttributeId, string MeterExemptionDetailDescription)
+            public List<long> MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(long meterExemptionAttributeId, string meterExemptionDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription, 
-                    MeterExemptionAttributeId, MeterExemptionDetailDescription);
+                    meterExemptionAttributeId, meterExemptionDetailDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("MeterExemptionId"))

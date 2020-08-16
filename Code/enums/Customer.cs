@@ -40,6 +40,16 @@ namespace enums
                 }
             }
 
+            public class ContractMeter
+            {
+                public class Attribute
+                {
+                    public string ContractStartDate = "Contract Start Date";
+                    public string ContractEndDate = "Contract End Date";
+                    public string RateCount = "Rate Count";
+                }
+            }
+
             public class DataUploadValidation
             {
                 public class Entity

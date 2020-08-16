@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace CommitContractToSupplierData.api.Controllers
 {
@@ -18,9 +21,16 @@ namespace CommitContractToSupplierData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Supplier _supplierMethods = new Methods.Supplier();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.Supplier.Attribute _supplierAttributeEnums = new Enums.Supplier.Attribute();
         private readonly Int64 commitContractToSupplierDataAPIId;
 
         public CommitContractToSupplierDataController(ILogger<CommitContractToSupplierDataController> logger)
@@ -66,9 +76,24 @@ namespace CommitContractToSupplierData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
+                var dataRowList = (IEnumerable<DataRow>) JsonConvert.DeserializeObject(jsonObject[_systemAPIRequiredDataKeyEnums.ContractData].ToString(), typeof(List<DataRow>));
 
-                //Insert into [Mapping].[ContractToSupplier]
+                var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
+
+                foreach(var dataRow in dataRowList)
+                {
+                    //Get ContractId from [Customer].[ContractDetail] by ContractReference
+                    var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);
+                    var contractId = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference).First();
+
+                    //Get SupplierId from [Supplier].[SupplierDetail] by Supplier
+                    var supplier = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Supplier);
+                    var supplierNameAttributeId = _supplierMethods.SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(_supplierAttributeEnums.SupplierName);
+                    var supplierId = _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(supplierNameAttributeId, supplier);
+
+                    //Insert into [Mapping].[ContractToSupplier]
+                    _mappingMethods.ContractToSupplier_Insert(createdByUserId, sourceId, contractId, supplierId);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitContractToSupplierDataAPIId, false, null);

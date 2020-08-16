@@ -72,6 +72,17 @@ namespace MethodLibrary
                     _storedProcedureCustomerEnums.MeterDetail_DeleteByMeterDetailId, 
                     meterDetailId);
             }
+
+            public List<long> MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(long meterAttributeId, string meterDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription, 
+                    meterAttributeId, meterDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterId"))
+                    .ToList();
+            }
         }
     }
 }
