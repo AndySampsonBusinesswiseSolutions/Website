@@ -68,13 +68,18 @@ namespace CommitContractData.api.Controllers
 
                 //TODO: API Logic
 
+                //Get ContractType from jsonObject
+
+                //Get ContractTypeId from [Information].[ContractType]
+                //var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(_informationContractTypeEnums.Fixed);
+
                 //Get ContractId from [Customer].[ContractDetail] by ContractReference
                 //If ContractId == 0
                 //Insert into [Customer].[Contract]
                 //Insert into [Mapping].[ContractToContractType]       
 
                 //If ContractId != 0
-                //Get ContractToContractTypeId by ContractId and FlexContractType
+                //Get ContractToContractTypeId by ContractId and ContractType
 
                 //If ContractToContractTypeId == 0
                 //Insert into [Mapping].[ContractToContractType]
