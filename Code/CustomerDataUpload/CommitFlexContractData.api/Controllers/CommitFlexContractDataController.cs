@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 
@@ -18,9 +19,12 @@ namespace CommitFlexContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 commitFlexContractDataAPIId;
 
         public CommitFlexContractDataController(ILogger<CommitFlexContractDataController> logger)
@@ -66,15 +70,35 @@ namespace CommitFlexContractData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
-                //Get Flex ContractTypeId from [Information].[ContractType]
-
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
+                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(customerDataRows);
+
+                if(!commitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, false, null);
+                    return;
+                }
+
+                //Add ContractType to jsonObject
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractType, _informationContractTypeEnums.Flex);
+
+                //Add ContractData to jsonObject
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractData, JsonConvert.SerializeObject(commitableDataRows));
 
                 //Call CommitContractData API and wait for response
+                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
+                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+
                 //Call CommitContractToSupplierData API
+                APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractToSupplierDataAPI);
+                API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, jsonObject);
+
                 //Call CommitContractMeterToProductData API
+                APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractMeterToProductDataAPI);
+                API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, false, null);
