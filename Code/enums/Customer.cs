@@ -50,6 +50,14 @@ namespace enums
                 }
             }
 
+            public class ContractMeterRate
+            {
+                public class Attribute
+                {
+                    public string RateValue = "Rate Value";
+                }
+            }
+
             public class DataUploadValidation
             {
                 public class Entity
@@ -93,9 +101,6 @@ namespace enums
                     public string ContractEndDate = "ContractEndDate";
                     public string Product = "Product";
                     public string RateCount = "RateCount";
-                    public string StandingCharge = "StandingCharge";
-                    public string CapacityCharge = "CapacityCharge";
-                    public string Rate = "Rate";
                     public string Value = "Value";
                     public string BasketReference = "BasketReference";
                     public string RateType = "RateType";

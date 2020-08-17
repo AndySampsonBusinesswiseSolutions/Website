@@ -25,8 +25,7 @@ CREATE TABLE [Temp.CustomerDataUpload].[FlexContract]
 	Supplier VARCHAR(255),
 	ContractStartDate VARCHAR(255),
 	ContractEndDate VARCHAR(255),
-	Product VARCHAR(255),
-	StandingCharge VARCHAR(255),	
+	Product VARCHAR(255),	
 	RateType VARCHAR(255),
 	Value VARCHAR(255),
 	CanCommit BIT

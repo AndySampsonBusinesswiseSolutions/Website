@@ -28,7 +28,6 @@ ALTER PROCEDURE [Temp.CustomerDataUpload].[FlexContract_Insert]
     @ContractStartDate VARCHAR(255),
     @ContractEndDate VARCHAR(255),
     @Product VARCHAR(255),
-    @StandingCharge VARCHAR(255),
     @RateType VARCHAR(255),
     @Value VARCHAR(255)
 AS
@@ -37,6 +36,7 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-07-20 -> Andrew Sampson -> Initial development of script
     -- 2020-07-26 -> Andrew Sampson -> Changed for scalability
+    -- 2020-08-17 -> Andrew Sampson -> Removed Standing Charge column
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -54,7 +54,6 @@ BEGIN
         ContractStartDate,
         ContractEndDate,
         Product,
-        StandingCharge,
         RateType,
         Value
     )
@@ -69,7 +68,6 @@ BEGIN
         @ContractStartDate,
         @ContractEndDate,
         @Product,
-        @StandingCharge,
         @RateType,
         @Value
     )

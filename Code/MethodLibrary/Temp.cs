@@ -109,18 +109,18 @@ namespace MethodLibrary
                         processQueueGUID, rowId, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
                 }
 
-                public void FixedContract_Insert(string processQueueGUID, int rowId, string contractReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateCount, string standingCharge, string capacityCharge, string rate, string value)
+                public void FixedContract_Insert(string processQueueGUID, int rowId, string contractReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateCount, string rateType, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FixedContract_Insert, 
-                        processQueueGUID, rowId, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, standingCharge, capacityCharge, rate, value);
+                        processQueueGUID, rowId, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, rateType, value);
                 }
 
-                public void FlexContract_Insert(string processQueueGUID, int rowId, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string standingCharge, string rateType, string value)
+                public void FlexContract_Insert(string processQueueGUID, int rowId, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateType, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                         _storedProcedureTempCustomerEnums.FlexContract_Insert, 
-                        processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, standingCharge, rateType, value);
+                        processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateType, value);
                 }
 
                 public void FlexReferenceVolume_Insert(string processQueueGUID, int rowId, string contractReference, string dateFrom, string dateTo, string volume)

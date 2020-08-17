@@ -28,15 +28,14 @@ ALTER PROCEDURE [Temp.CustomerDataUpload].[FixedContract_Insert]
     @ContractEndDate VARCHAR(255),
     @Product VARCHAR(255),
     @RateCount VARCHAR(255),
-    @StandingCharge VARCHAR(255),
-    @CapacityCharge VARCHAR(255),
-    @Rate VARCHAR(255),
+    @RateType VARCHAR(255),
     @Value VARCHAR(255)
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-20 -> Andrew Sampson -> Initial development of script
+    -- 2020-08-17 -> Andrew Sampson -> Removed Standing Charge and Capacity Charge columns
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -54,9 +53,7 @@ BEGIN
         ContractEndDate,
         Product,
         RateCount,
-        StandingCharge,
-        CapacityCharge,
-        Rate,
+        RateType,
         Value
     )
     VALUES
@@ -70,9 +67,7 @@ BEGIN
         @ContractEndDate,
         @Product,
         @RateCount,
-        @StandingCharge,
-        @CapacityCharge,
-        @Rate,
+        @RateType,
         @Value
     )
 END

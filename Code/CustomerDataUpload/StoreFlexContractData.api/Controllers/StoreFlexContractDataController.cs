@@ -72,7 +72,7 @@ namespace StoreFlexContractData.api.Controllers
                 var flexContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
                 var columns = new List<string>
                 {
-                    "ShapeFee", "AdminFee", "ImbalanceFee", "RiskFee", "GreenPremium", "OptimisationBenefit"                    
+                    "StandingCharge", "ShapeFee", "AdminFee", "ImbalanceFee", "RiskFee", "GreenPremium", "OptimisationBenefit"
                 };
 
                 foreach(var row in flexContractDictionary.Keys)
@@ -81,10 +81,10 @@ namespace StoreFlexContractData.api.Controllers
                     var contractStartDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[4]);
                     var contractEndDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[5]);
 
-                    for(var rateCount = 8; rateCount < values.Count(); rateCount++)
+                    for(var rateCount = 7; rateCount < values.Count(); rateCount++)
                     {
                         //Insert fixed contract data into [Temp.CustomerDataUpload].[FlexContract]
-                        _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], values[7], columns[rateCount - 8], values[rateCount]);
+                        _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], columns[rateCount - 7], values[rateCount]);
                     }
                 }
 

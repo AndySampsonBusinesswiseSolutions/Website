@@ -97,6 +97,12 @@ namespace enums
                 public string ReferenceVolume_Insert = "[Customer].[ReferenceVolume_Insert]";
                 public string ReferenceVolume_GetByReferenceVolumeGUID = "[Customer].[ReferenceVolume_GetByReferenceVolumeGUID]";
                 public string ReferenceVolumeDetail_Insert = "[Customer].[ReferenceVolumeDetail_Insert]";
+                public string ContractMeterRateAttribute_GetByContractMeterRateAttributeDescription = "[Customer].[ContractMeterRateAttribute_GetByContractMeterRateAttributeDescription]";
+                public string ContractMeterRateDetail_GetByContractMeterRateAttributeIdAndContractMeterRateDetailDescription = "[Customer].[ContractMeterRateDetail_GetByContractMeterRateAttributeIdAndContractMeterRateDetailDescription]";
+                public string ContractMeterDetail_GetByContractMeterAttributeIdAndContractMeterDetailDescription = "[Customer].[ContractMeterDetail_GetByContractMeterAttributeIdAndContractMeterDetailDescription]";
+                public string ContractMeterRate_Insert = "[Customer].[ContractMeterRate_Insert]";
+                public string ContractMeterRate_GetByContractMeterRateGUID = "[Customer].[ContractMeterRate_GetByContractMeterRateGUID]";
+                public string ContractMeterRateDetail_Insert = "[Customer].[ContractMeterRateDetail_Insert]";
             }
         }
     }

@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace StoreFixedContractData.api.Controllers
 {
@@ -69,6 +70,10 @@ namespace StoreFixedContractData.api.Controllers
 
                 //Get Fixed Contract data from Customer Data Upload
                 var fixedContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Fixed Contracts']");
+                var columns = new List<string>
+                {
+                    "StandingCharge", "CapacityCharge", "Rate1", "Rate2", "Rate3", "Rate4", "Rate5", "Rate6", "Rate7", "Rate8", "Rate9", "Rate10"
+                };
 
                 foreach(var row in fixedContractDictionary.Keys)
                 {
@@ -76,12 +81,10 @@ namespace StoreFixedContractData.api.Controllers
                     var contractStartDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[3]);
                     var contractEndDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[4]);
 
-                    for(var rateCount = 9; rateCount < values.Count(); rateCount++)
+                    for(var rateCount = 7; rateCount < values.Count(); rateCount++)
                     {
-                        var rate = (rateCount - 8).ToString();
-
                         //Insert fixed contract data into [Temp.CustomerDataUpload].[FlexContract]
-                        _tempCustomerMethods.FixedContract_Insert(processQueueGUID, row, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], values[7], values[8], rate, values[rateCount]);
+                        _tempCustomerMethods.FixedContract_Insert(processQueueGUID, row, values[0], values[1], values[2], contractStartDate, contractEndDate, values[5], values[6], columns[rateCount - 7], values[rateCount]);
                     }
                 }
 

@@ -8,6 +8,14 @@ namespace enums
             {
                 public string SupplierName = "Supplier Name";
             }
+
+            public class Product
+            {
+                public class Attribute
+                {
+                    public string ProductName = "Product Name";
+                }
+            }            
         }
     }
 }

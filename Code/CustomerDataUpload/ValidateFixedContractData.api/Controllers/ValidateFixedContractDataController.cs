@@ -91,9 +91,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"},
                         {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
                         {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"},
-                        {_customerDataUploadValidationEntityEnums.StandingCharge, "Standing Charge"},
-                        {_customerDataUploadValidationEntityEnums.CapacityCharge, "Capacity Charge"},
-                        {_customerDataUploadValidationEntityEnums.Rate, _customerDataUploadValidationEntityEnums.Rate},
+                        {_customerDataUploadValidationEntityEnums.RateType, _customerDataUploadValidationEntityEnums.RateType},
                         {_customerDataUploadValidationEntityEnums.Value, _customerDataUploadValidationEntityEnums.Value}
                     };
 
@@ -119,8 +117,6 @@ namespace ValidateFixedContractData.api.Controllers
                     {
                         {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
                         {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"},
-                        {"Standingcharge", "Standing Charge"},
-                        {_customerDataUploadValidationEntityEnums.CapacityCharge, "Capacity Charge"}
                     };
                 _tempCustomerMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
@@ -190,38 +186,41 @@ namespace ValidateFixedContractData.api.Controllers
 
                 //Validate Rates
                 var invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
+                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("Rate")
                     && !_methods.IsValidFixedContractRate(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}' for 'Rate {invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Rate]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}' for '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.RateType]}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}' for 'Rate {invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Rate]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}' for '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.RateType]}'");
                     }
                 }
 
-                invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.StandingCharge))
-                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.StandingCharge)));
+                invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
+                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("StandingCharge")
+                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.StandingCharge].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.StandingCharge]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.StandingCharge].Add($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.StandingCharge]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'");
                     }
                 }
 
-                invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.CapacityCharge))
-                    && !_methods.IsValidFixedContractCapacityCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.CapacityCharge)));
+                invalidRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
+                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("CapacityCharge")
+                    && !_methods.IsValidFixedContractCapacityCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.CapacityCharge].Contains($"Invalid Capacity Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.CapacityCharge]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Capacity Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.CapacityCharge].Add($"Invalid Capacity Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.CapacityCharge]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Capacity Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'");
                     }
                 }
 

@@ -127,10 +127,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitSubAreaToSubMeterData
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitContractData.api", "CustomerDataUpload\CommitContractData.api\CommitContractData.api.csproj", "{E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitContractToSupplierData.api", "CustomerDataUpload\CommitContractToSupplierData.api\CommitContractToSupplierData.api.csproj", "{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitContractMeterToProductData.api", "CustomerDataUpload\CommitContractMeterToProductData.api\CommitContractMeterToProductData.api.csproj", "{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitBasketData.api", "CustomerDataUpload\CommitBasketData.api\CommitBasketData.api.csproj", "{26EBBD73-45DA-4514-B663-662D9127C65B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitGridSupplyPointToMeterData.api", "CustomerDataUpload\CommitGridSupplyPointToMeterData.api\CommitGridSupplyPointToMeterData.api.csproj", "{FF487D3F-89E2-4B9A-B6AF-C5133A19C609}"
@@ -912,30 +908,6 @@ Global
 		{E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x64.Build.0 = Release|Any CPU
 		{E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6A652C5-EE89-4E2B-A6A2-A2BEE750384A}.Release|x86.Build.0 = Release|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Debug|x64.Build.0 = Debug|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Debug|x86.Build.0 = Debug|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Release|x64.ActiveCfg = Release|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Release|x64.Build.0 = Release|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Release|x86.ActiveCfg = Release|Any CPU
-		{8CD1C26A-C3F6-4CCE-8544-D58C8E49B43D}.Release|x86.Build.0 = Release|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Debug|x64.Build.0 = Debug|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Debug|x86.Build.0 = Debug|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Release|x64.ActiveCfg = Release|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Release|x64.Build.0 = Release|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Release|x86.ActiveCfg = Release|Any CPU
-		{AE819292-ED1D-4A35-BBB2-8AAE86DA2078}.Release|x86.Build.0 = Release|Any CPU
 		{26EBBD73-45DA-4514-B663-662D9127C65B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{26EBBD73-45DA-4514-B663-662D9127C65B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26EBBD73-45DA-4514-B663-662D9127C65B}.Debug|x64.ActiveCfg = Debug|Any CPU

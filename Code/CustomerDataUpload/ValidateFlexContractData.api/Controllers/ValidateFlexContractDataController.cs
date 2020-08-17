@@ -91,7 +91,6 @@ namespace ValidateFlexContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContractStartDate, "Contract Start Date"},
                         {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"},
                         {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
-                        {_customerDataUploadValidationEntityEnums.StandingCharge, "Standing Charge"},
                         {_customerDataUploadValidationEntityEnums.RateType, "Rate Type"},
                         {_customerDataUploadValidationEntityEnums.Value, _customerDataUploadValidationEntityEnums.Value},
                     };
@@ -178,6 +177,7 @@ namespace ValidateFlexContractData.api.Controllers
 
                 //Validate Rates
                 var invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
+                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("Rate")
                     && !_methods.IsValidFixedContractRate(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
@@ -189,15 +189,16 @@ namespace ValidateFlexContractData.api.Controllers
                     }
                 }
 
-                invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.StandingCharge))
-                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.StandingCharge)));
+                invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
+                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("StandingCharge")
+                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
                     var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.StandingCharge].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.StandingCharge]}'"))
+                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.StandingCharge].Add($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.StandingCharge]}'");
+                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'");
                     }
                 }
 

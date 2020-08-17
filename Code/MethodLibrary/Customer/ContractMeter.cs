@@ -45,6 +45,17 @@ namespace MethodLibrary
                     _storedProcedureCustomerEnums.ContractMeterDetail_Insert, 
                     createdByUserId, sourceId, contractMeterId, contractMeterAttributeId, contractMeterDetailDescription);
             }
+
+            public List<long> ContractMeterDetail_GetContractMeterIdListByContractMeterAttributeIdAndContractMeterDetailDescription(long contractMeterAttributeId, string contractMeterDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.ContractMeterDetail_GetByContractMeterAttributeIdAndContractMeterDetailDescription, 
+                    contractMeterAttributeId, contractMeterDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterId"))
+                    .ToList();
+            }
         }
     }
 }
