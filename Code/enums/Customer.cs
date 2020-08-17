@@ -155,6 +155,16 @@ namespace enums
                 }
             }
 
+            public class ReferenceVolume
+            {
+                public class Attribute
+                {
+                    public string DateFrom = "Date From";
+                    public string DateTo = "Date To";
+                    public string ReferenceVolume = "Reference Volume";
+                }
+            }
+
             public class Site
             {
                 public class Attribute
