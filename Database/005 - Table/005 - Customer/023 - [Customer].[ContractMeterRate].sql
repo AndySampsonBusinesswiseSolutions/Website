@@ -23,7 +23,6 @@ CREATE TABLE [Customer].[ContractMeterRate]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ContractMeterId BIGINT NOT NULL,
 	ContractMeterRateGUID UNIQUEIDENTIFIER NOT NULL,
 	)  ON [Customer]
 GO
@@ -57,21 +56,6 @@ GO
 DECLARE @v sql_variant 
 SET @v = N'Foreign Key constraint joining [Customer].[ContractMeterRate].CreatedByUserId to [Administration.User].[User].UserId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Customer', N'TABLE', N'ContractMeterRate', N'CONSTRAINT', N'FK_ContractMeterRate_CreatedByUserId'
-GO
-ALTER TABLE [Customer].[ContractMeterRate] ADD CONSTRAINT
-	FK_ContractMeterRate_ContractMeterId FOREIGN KEY
-	(
-	ContractMeterId
-	) REFERENCES [Customer].[ContractMeter]
-	(
-	ContractMeterId
-	) ON UPDATE  NO ACTION 
-	 ON DELETE  NO ACTION 
-	
-GO
-DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Customer].[ContractMeterRate].ContractMeterId to [Customer].[ContractMeter].ContractMeterId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Customer', N'TABLE', N'ContractMeterRate', N'CONSTRAINT', N'FK_ContractMeterRate_ContractMeterId'
 GO
 ALTER TABLE [Customer].[ContractMeterRate] ADD CONSTRAINT
 	FK_ContractMeterRate_SourceId FOREIGN KEY

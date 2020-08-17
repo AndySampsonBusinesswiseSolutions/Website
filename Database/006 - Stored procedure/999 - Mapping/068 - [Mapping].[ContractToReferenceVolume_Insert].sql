@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE Meter = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractToReferenceVolume_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractToReferenceVolume_Insert]'))
     BEGIN
         EXEC('CREATE PROCEDURE [Mapping].[ContractToReferenceVolume_Insert] AS BEGIN SET NOCOUNT ON; END')
     END

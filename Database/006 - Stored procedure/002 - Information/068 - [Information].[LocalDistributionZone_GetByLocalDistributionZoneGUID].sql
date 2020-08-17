@@ -6,27 +6,26 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[MeterToMeterExemption_GetByMeterIdAndMeterExemptionId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Information].[LocalDistributionZone_GetByLocalDistributionZoneGUID]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[MeterToMeterExemption_GetByMeterIdAndMeterExemptionId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Information].[LocalDistributionZone_GetByLocalDistributionZoneGUID] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-08-15
--- Description:	Get MeterToMeterExemption info from [Mapping].[MeterToMeterExemption] table by Meter Id And Meter Exemption Id
+-- Create date: 2020-08-17
+-- Description:	Get LocalDistributionZone info from [Information].[LocalDistributionZone] table by GUID
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[MeterToMeterExemption_GetByMeterIdAndMeterExemptionId]
-    @MeterId BIGINT,
-    @MeterExemptionId BIGINT,
+ALTER PROCEDURE [Information].[LocalDistributionZone_GetByLocalDistributionZoneGUID]
+    @LocalDistributionZoneGUID UNIQUEIDENTIFIER,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-08-15 -> Andrew Sampson -> Initial development of script
+    -- 2020-08-17 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -36,19 +35,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        MeterToMeterExemptionId,
+        LocalDistributionZoneId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        MeterId,
-        MeterExemptionId
+        LocalDistributionZoneGUID
     FROM 
-        [Mapping].[MeterToMeterExemption] 
+        [Information].[LocalDistributionZone] 
     WHERE 
-        MeterId = @MeterId
-        AND MeterExemptionId = @MeterExemptionId
+        LocalDistributionZoneGUID = @LocalDistributionZoneGUID
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO
