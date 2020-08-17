@@ -371,6 +371,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.MeterToSite_Insert, 
                     createdByUserId, sourceId, meterId, siteId);
             }
+
+            public void MeterToSubMeter_Insert(long createdByUserId, long sourceId, long meterId, long subMeterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterToSubMeter_Insert, 
+                    createdByUserId, sourceId, meterId, subMeterId);
+            }
         }
     }
 }

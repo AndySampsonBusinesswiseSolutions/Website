@@ -72,6 +72,17 @@ namespace MethodLibrary
                     _storedProcedureCustomerEnums.SubMeterDetail_DeleteBySubMeterDetailId, 
                     subMeterDetailId);
             }
+
+            public List<long> SubMeterDetail_GetSubMeterIdListBySubMeterAttributeIdAndSubMeterDetailDescription(long subMeterAttributeId, string subMeterDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.SubMeterDetail_GetBySubMeterAttributeIdAndSubMeterDetailDescription, 
+                    subMeterAttributeId, subMeterDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SubMeterId"))
+                    .ToList();
+            }
         }
     }
 }
