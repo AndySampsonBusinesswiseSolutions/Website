@@ -26,6 +26,7 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-07-21 -> Andrew Sampson -> Initial development of script
     -- 2020-08-13 -> Andrew Sampson -> Add CanCommit column
+    -- 2020-08-17 -> Andrew Sampson -> Added SitePostCode column
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -36,6 +37,7 @@ BEGIN
         ProcessQueueGUID,
         RowId,
         SiteName,
+        SitePostCode,
         MPXN,
         GridSupplyPoint,
         ProfileClass,

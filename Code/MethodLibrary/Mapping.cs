@@ -364,6 +364,13 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.ContractToReferenceVolume_Insert, 
                     createdByUserId, sourceId, contractId, referenceVolumeId);
             }
+
+            public void MeterToSite_Insert(long createdByUserId, long sourceId, long meterId, long siteId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.MeterToSite_Insert, 
+                    createdByUserId, sourceId, meterId, siteId);
+            }
         }
     }
 }

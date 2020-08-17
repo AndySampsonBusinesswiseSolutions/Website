@@ -86,6 +86,7 @@ namespace ValidateMeterData.api.Controllers
                 var columns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
+                        {_customerDataUploadValidationEntityEnums.SitePostCode, "Site PostCode"},
                         {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
                         {_customerDataUploadValidationEntityEnums.GridSupplyPoint, "GSP"},
                         {_customerDataUploadValidationEntityEnums.ProfileClass, "Profile Class"},

@@ -20,6 +20,7 @@ CREATE TABLE [Temp.CustomerDataUpload].[Meter]
 	ProcessQueueGUID UNIQUEIDENTIFIER,
 	RowId INT,
 	SiteName VARCHAR(255),
+	SitePostCode VARCHAR(255),
 	MPXN VARCHAR(255),
 	GridSupplyPoint VARCHAR(255),
 	ProfileClass VARCHAR(255),

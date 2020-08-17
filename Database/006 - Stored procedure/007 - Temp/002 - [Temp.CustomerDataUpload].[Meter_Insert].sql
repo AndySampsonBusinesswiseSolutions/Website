@@ -22,6 +22,7 @@ ALTER PROCEDURE [Temp.CustomerDataUpload].[Meter_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
     @RowId INT,
     @SiteName VARCHAR(255),
+    @SitePostCode VARCHAR(255),
     @MPXN VARCHAR(255),
     @GridSupplyPoint VARCHAR(255),
     @ProfileClass VARCHAR(255),
@@ -40,6 +41,7 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-07-15 -> Andrew Sampson -> Initial development of script
     -- 2020-07-20 -> Andrew Sampson -> Updates to handle new upload template
+    -- 2020-08-17 -> Andrew Sampson -> Added SitePostCode column
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -51,6 +53,7 @@ BEGIN
         ProcessQueueGUID,
         RowId,
         SiteName,
+        SitePostCode,
         MPXN,
         GridSupplyPoint,
         ProfileClass,
@@ -69,6 +72,7 @@ BEGIN
         @ProcessQueueGUID,
         @RowId,
         @SiteName,
+        @SitePostCode,
         @MPXN,
         @GridSupplyPoint,
         @ProfileClass,

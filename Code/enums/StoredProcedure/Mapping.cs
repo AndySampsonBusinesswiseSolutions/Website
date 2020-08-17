@@ -48,6 +48,7 @@ namespace enums
                 public string ContractMeterToMeter_GetByContractMeterIdAndMeterId = "[Mapping].[ContractMeterToMeter_GetByContractMeterIdAndMeterId]";
                 public string ContractMeterToMeter_Insert = "[Mapping].[ContractMeterToMeter_Insert]";
                 public string ContractToReferenceVolume_Insert = "[Mapping].[ContractToReferenceVolume_Insert]";
+                public string MeterToSite_Insert = "[Mapping].[MeterToSite_Insert]";
             }
         }
     }
