@@ -6,22 +6,22 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractMeterRateDetailToRateType_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractMeterRateToRateType_Insert]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[ContractMeterRateDetailToRateType_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[ContractMeterRateToRateType_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-27
--- Description:	Insert new mapping of a ContractMeterRateDetail to a RateType into [Mapping].[ContractMeterRateDetailToRateType] table
+-- Description:	Insert new mapping of a ContractMeterRate to a RateType into [Mapping].[ContractMeterRateToRateType] table
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[ContractMeterRateDetailToRateType_Insert]
+ALTER PROCEDURE [Mapping].[ContractMeterRateToRateType_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @ContractMeterRateDetailId BIGINT,
+    @ContractMeterRateId BIGINT,
     @RateTypeId BIGINT
 AS
 BEGIN
@@ -34,18 +34,18 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    INSERT INTO [Mapping].ContractMeterRateDetailToRateType
+    INSERT INTO [Mapping].ContractMeterRateToRateType
     (
         CreatedByUserId,
         SourceId,
-        ContractMeterRateDetailId,
+        ContractMeterRateId,
         RateTypeId
     )
     VALUES
     (
         @CreatedByUserId,
         @SourceId,
-        @ContractMeterRateDetailId,
+        @ContractMeterRateId,
         @RateTypeId
     )
 END

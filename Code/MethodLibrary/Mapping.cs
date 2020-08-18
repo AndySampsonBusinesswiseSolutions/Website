@@ -241,10 +241,10 @@ namespace MethodLibrary
                     .ToList();
             }
 
-            public void BasketToMeter_Insert(long createdByUserId, long sourceId, long basketId, long meterId)
+            public void BasketToContractMeter_Insert(long createdByUserId, long sourceId, long basketId, long meterId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureMappingEnums.BasketToMeter_Insert, 
+                    _storedProcedureMappingEnums.BasketToContractMeter_Insert, 
                     createdByUserId, sourceId, basketId, meterId);
             }
 
@@ -377,6 +377,118 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.MeterToSubMeter_Insert, 
                     createdByUserId, sourceId, meterId, subMeterId);
+            }
+
+            public void ContractToMeter_Insert(long createdByUserId, long sourceId, long contractId, long meterId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ContractToMeter_Insert, 
+                    createdByUserId, sourceId, contractId, meterId);
+            }
+
+            public long ContractToMeter_GetContractToMeterIdByContractIdAndMeterId(long contractId, long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToMeter_GetByContractIdAndMeterId, 
+                    contractId, meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractToMeterId"))
+                    .FirstOrDefault();
+            }
+
+            public long ContractToSupplier_GetContractToSupplierIdByContractIdAndSupplierId(long contractId, long supplierId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToSupplier_GetByContractIdAndSupplierId, 
+                    contractId, supplierId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractToSupplierId"))
+                    .FirstOrDefault();
+            }
+
+            public long ContractMeterToProduct_GetContractMeterToProductIdByContractMeterIdAndProductId(long contractMeterId, long productId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractMeterToProduct_GetByContractMeterIdAndProductId, 
+                    contractMeterId, productId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterToProductId"))
+                    .FirstOrDefault();
+            }
+
+            public void ContractMeterToProduct_Insert(long createdByUserId, long sourceId, long contractMeterId, long productId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ContractMeterToProduct_Insert, 
+                    createdByUserId, sourceId, contractMeterId, productId);
+            }
+
+            public long ContractMeterRateToRateType_GetContractMeterRateToRateTypeIdByContractMeterRateIdAndRateTypeId(long contractMeterRateId, long rateTypeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractMeterRateToRateType_GetByContractMeterRateIdAndRateTypeId, 
+                    contractMeterRateId, rateTypeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterRateToRateTypeId"))
+                    .FirstOrDefault();
+            }
+
+            public void ContractMeterRateToRateType_Insert(long createdByUserId, long sourceId, long contractMeterRateId, long rateTypeId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ContractMeterRateToRateType_Insert, 
+                    createdByUserId, sourceId, contractMeterRateId, rateTypeId);
+            }
+
+            public long ContractToMeterToContractMeterToProduct_GetContractToMeterToContractMeterToProductIdByContractToMeterIdAndContractMeterToProductId(long contractToMeterId, long contractMeterToProductId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToMeterToContractMeterToProduct_GetByContractToMeterIdAndContractMeterToProductId, 
+                    contractToMeterId, contractMeterToProductId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractToMeterToContractMeterToProductId"))
+                    .FirstOrDefault();
+            }
+
+            public void ContractToMeterToContractMeterToProduct_Insert(long createdByUserId, long sourceId, long contractToMeterId, long contractMeterToProductId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ContractToMeterToContractMeterToProduct_Insert, 
+                    createdByUserId, sourceId, contractToMeterId, contractMeterToProductId);
+            }
+
+            public long BasketToContractMeter_GetBasketToContractMeterIdByBasketIdAndContractMeterId(long basketId, long contractMeterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.BasketToContractMeter_GetByBasketIdAndContractMeterId, 
+                    basketId, contractMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("BasketToContractMeterId"))
+                    .FirstOrDefault();
+            }
+
+            public long ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetContractToMeterToContractMeterToProductToContractMeterRateToRateTypeIdByBasketIdAndContractMeterId(long contractToMeterToContractMeterToProductId, long contractMeterRateToRateTypeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId, 
+                    contractToMeterToContractMeterToProductId, contractMeterRateToRateTypeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractToMeterToContractMeterToProductToContractMeterRateToRateTypeId"))
+                    .FirstOrDefault();
+            }
+
+            public void ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert(long createdByUserId, long sourceId, long contractToMeterToContractMeterToProductId, long contractMeterRateToRateTypeId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert, 
+                    createdByUserId, sourceId, contractToMeterToContractMeterToProductId, contractMeterRateToRateTypeId);
             }
         }
     }

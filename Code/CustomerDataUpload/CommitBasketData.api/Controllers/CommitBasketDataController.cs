@@ -136,7 +136,7 @@ namespace CommitBasketData.api.Controllers
                     var contractMeterId = contractMeterToMeterContractMeterIdList.Intersect(contractToContractMeterContractMeterIdList).First();
 
                     //Insert into [Mapping].[BasketToContractMeter]
-                    _mappingMethods.BasketToMeter_Insert(createdByUserId, sourceId, basketId, contractMeterId);
+                    _mappingMethods.BasketToContractMeter_Insert(createdByUserId, sourceId, basketId, contractMeterId);
                 }
 
                 //Update Process Queue

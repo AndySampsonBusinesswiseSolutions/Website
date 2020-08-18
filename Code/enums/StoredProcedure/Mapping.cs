@@ -32,7 +32,7 @@ namespace enums
                 public string AreaToMeter_Insert = "[Mapping].[AreaToMeter_Insert]";
                 public string SubAreaToSubMeter_Insert = "[Mapping].[SubAreaToSubMeter_Insert]";
                 public string ContractToContractType_GetByContractTypeId = "[Mapping].[ContractToContractType_GetByContractTypeId]";
-                public string BasketToMeter_Insert = "[Mapping].[BasketToMeter_Insert]";
+                public string BasketToContractMeter_Insert = "[Mapping].[BasketToContractMeter_Insert]";
                 public string CommodityToMeter_Insert = "[Mapping].[CommodityToMeter_Insert]";
                 public string GridSupplyPointToMeter_Insert = "[Mapping].[GridSupplyPointToMeter_Insert]";
                 public string LocalDistributionZoneToMeter_Insert = "[Mapping].[LocalDistributionZoneToMeter_Insert]";
@@ -50,6 +50,18 @@ namespace enums
                 public string ContractToReferenceVolume_Insert = "[Mapping].[ContractToReferenceVolume_Insert]";
                 public string MeterToSite_Insert = "[Mapping].[MeterToSite_Insert]";
                 public string MeterToSubMeter_Insert = "[Mapping].[MeterToSubMeter_Insert]";
+                public string ContractToMeter_Insert = "[Mapping].[ContractToMeter_Insert]";
+                public string ContractToMeter_GetByContractIdAndMeterId = "[Mapping].[ContractToMeter_GetByContractIdAndMeterId]";
+                public string ContractToSupplier_GetByContractIdAndSupplierId = "[Mapping].[ContractToSupplier_GetByContractIdAndSupplierId]";
+                public string ContractMeterToProduct_Insert = "[Mapping].[ContractMeterToProduct_Insert]";
+                public string ContractMeterToProduct_GetByContractMeterIdAndProductId = "[Mapping].[ContractMeterToProduct_GetByContractMeterIdAndProductId]";
+                public string ContractMeterRateToRateType_GetByContractMeterRateIdAndRateTypeId = "[Mapping].[ContractMeterRateToRateType_GetByContractMeterRateIdAndRateTypeId]";
+                public string ContractMeterRateToRateType_Insert = "[Mapping].[ContractMeterRateToRateType_Insert]";
+                public string ContractToMeterToContractMeterToProduct_GetByContractToMeterIdAndContractMeterToProductId = "[Mapping].[ContractToMeterToContractMeterToProduct_GetByContractToMeterIdAndContractMeterToProductId]";
+                public string ContractToMeterToContractMeterToProduct_Insert = "[Mapping].[ContractToMeterToContractMeterToProduct_Insert]";
+                public string BasketToContractMeter_GetByBasketIdAndContractMeterId = "[Mapping].[BasketToContractMeter_GetByBasketIdAndContractMeterId]";
+                public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId = "[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]";
+                public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert = "[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert]";
             }
         }
     }

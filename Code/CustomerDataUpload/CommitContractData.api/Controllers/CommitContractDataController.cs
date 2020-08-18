@@ -132,7 +132,31 @@ namespace CommitContractData.api.Controllers
                     {
                         //Get BasketId from [Customer].[BasketDetail] by BasketReference
                         var basketId = GetBasketId(createdByUserId, sourceId, attributeIdDictionary, dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference));
+
+                        //Insert into [Mapping].[BasketToContractMeter]
+                        InsertBasketToContractMeter(createdByUserId, sourceId, basketId, contractMeterId);
                     }
+
+                    //Insert into [Mapping].[ContractToContractType] - 1
+                    InsertContractToContractType(createdByUserId, sourceId, contractId, contractTypeId);
+
+                    //Insert into [Mapping].[ContractToMeter] - 2
+                    var contractToMeterId = GetContractToMeterId(createdByUserId, sourceId, contractId, meterId);
+
+                    //Insert into [Mapping].[ContractToSupplier] - 3
+                    InsertContractToSupplier(createdByUserId, sourceId, contractId, supplierId);
+
+                    //Insert into [Mapping].[ContractMeterToProduct] - 4
+                    var contractMeterToProductId = GetContractMeterToProductId(createdByUserId, sourceId, contractMeterId, supplierProductId);
+
+                    //Insert into [Mapping].[ContractMeterRateToRateType] - 5
+                    var contractMeterRateToRateTypeId = GetContractMeterRateToRateTypeId(createdByUserId, sourceId, contractMeterRateId, rateTypeId);
+
+                    //Insert into [Mapping].[ContractToMeterToContractMeterToProduct] - 6 (2 to 4)
+                    var contractToMeterToContractMeterToProductId = GetContractToMeterToContractMeterToProductId(createdByUserId, sourceId, contractToMeterId, contractMeterToProductId);
+
+                    //Insert into [Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType] - 7 (6 to 5)
+                    InsertContractToMeterToContractMeterToProductToContractMeterRateToRateType(createdByUserId, sourceId, contractToMeterToContractMeterToProductId, contractMeterRateToRateTypeId);
                 }
 
                 //Update Process Queue
@@ -144,6 +168,98 @@ namespace CommitContractData.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitContractDataAPIId, true, $"System Error Id {errorId}");
+            }
+        }
+
+        private void InsertContractToMeterToContractMeterToProductToContractMeterRateToRateType(long createdByUserId, long sourceId, long contractToMeterToContractMeterToProductId, long contractMeterRateToRateTypeId)
+        {
+            var contractToMeterToContractMeterToProductToContractMeterRateToRateTypeId = _mappingMethods.ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetContractToMeterToContractMeterToProductToContractMeterRateToRateTypeIdByBasketIdAndContractMeterId(contractToMeterToContractMeterToProductId, contractMeterRateToRateTypeId);
+
+            if(contractToMeterToContractMeterToProductToContractMeterRateToRateTypeId == 0)
+            {
+                _mappingMethods.ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert(createdByUserId, sourceId, contractToMeterToContractMeterToProductId, contractMeterRateToRateTypeId);
+            }
+        }
+
+        private void InsertBasketToContractMeter(long createdByUserId, long sourceId, long basketId, long contractMeterId)
+        {
+            var basketToContractMeterId = _mappingMethods.BasketToContractMeter_GetBasketToContractMeterIdByBasketIdAndContractMeterId(basketId, contractMeterId);
+
+            if(basketToContractMeterId == 0)
+            {
+                _mappingMethods.BasketToContractMeter_Insert(createdByUserId, sourceId, basketId, contractMeterId);
+            }
+        }
+
+        private long GetContractToMeterToContractMeterToProductId(long createdByUserId, long sourceId, long contractToMeterId, long contractMeterToProductId)
+        {
+            var contractToMeterToContractMeterToProductId = _mappingMethods.ContractToMeterToContractMeterToProduct_GetContractToMeterToContractMeterToProductIdByContractToMeterIdAndContractMeterToProductId(contractToMeterId, contractMeterToProductId);
+
+            if(contractToMeterToContractMeterToProductId == 0)
+            {
+                _mappingMethods.ContractToMeterToContractMeterToProduct_Insert(createdByUserId, sourceId, contractToMeterId, contractMeterToProductId);
+                contractToMeterToContractMeterToProductId = _mappingMethods.ContractToMeterToContractMeterToProduct_GetContractToMeterToContractMeterToProductIdByContractToMeterIdAndContractMeterToProductId(contractToMeterId, contractMeterToProductId);
+            }
+
+            return contractToMeterToContractMeterToProductId;
+        }
+
+        private long GetContractMeterRateToRateTypeId(long createdByUserId, long sourceId, long contractMeterRateId, long rateTypeId)
+        {
+            var contractMeterRateToRateTypeId = _mappingMethods.ContractMeterRateToRateType_GetContractMeterRateToRateTypeIdByContractMeterRateIdAndRateTypeId(contractMeterRateId, rateTypeId);
+
+            if(contractMeterRateToRateTypeId == 0)
+            {
+                _mappingMethods.ContractMeterRateToRateType_Insert(createdByUserId, sourceId, contractMeterRateId, rateTypeId);
+                contractMeterRateToRateTypeId = _mappingMethods.ContractMeterRateToRateType_GetContractMeterRateToRateTypeIdByContractMeterRateIdAndRateTypeId(contractMeterRateId, rateTypeId);
+            }
+
+            return contractMeterRateToRateTypeId;
+        }
+
+        private long GetContractMeterToProductId(long createdByUserId, long sourceId, long contractMeterId, long productId)
+        {
+            var contractMeterToProductId = _mappingMethods.ContractMeterToProduct_GetContractMeterToProductIdByContractMeterIdAndProductId(contractMeterId, productId);
+
+            if(contractMeterToProductId == 0)
+            {
+                _mappingMethods.ContractMeterToProduct_Insert(createdByUserId, sourceId, contractMeterId, productId);
+                contractMeterToProductId = _mappingMethods.ContractMeterToProduct_GetContractMeterToProductIdByContractMeterIdAndProductId(contractMeterId, productId);
+            }
+
+            return contractMeterToProductId;
+        }
+
+        private void InsertContractToSupplier(long createdByUserId, long sourceId, long contractId, long supplierId)
+        {
+            var contractToSupplierId = _mappingMethods.ContractToSupplier_GetContractToSupplierIdByContractIdAndSupplierId(contractId, supplierId);
+
+            if(contractToSupplierId == 0)
+            {
+                _mappingMethods.ContractToSupplier_Insert(createdByUserId, sourceId, contractId, supplierId);
+            }
+        }
+
+        private long GetContractToMeterId(long createdByUserId, long sourceId, long contractId, long meterId)
+        {
+            var contractToMeterId = _mappingMethods.ContractToMeter_GetContractToMeterIdByContractIdAndMeterId(contractId, meterId);
+
+            if(contractToMeterId == 0)
+            {
+                _mappingMethods.ContractToMeter_Insert(createdByUserId, sourceId, contractId, meterId);
+                contractToMeterId = _mappingMethods.ContractToMeter_GetContractToMeterIdByContractIdAndMeterId(contractId, meterId);
+            }
+
+            return contractToMeterId;
+        }
+
+        private void InsertContractToContractType(long createdByUserId, long sourceId, long contractId, long contractTypeId)
+        {
+            var contractToContractTypeId = _mappingMethods.ContractToContractType_GetContractToContractTypeIdByContractIdAndContractTypeId(contractId, contractTypeId);
+
+            if(contractToContractTypeId == 0)
+            {
+                _mappingMethods.ContractToContractType_Insert(createdByUserId, sourceId, contractId, contractTypeId);
             }
         }
 
