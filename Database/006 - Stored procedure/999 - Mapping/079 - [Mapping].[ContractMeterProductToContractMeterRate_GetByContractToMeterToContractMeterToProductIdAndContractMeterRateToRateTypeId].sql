@@ -6,9 +6,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[ContractMeterProductToContractMeterRate_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[ContractMeterProductToContractMeterRate_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -18,7 +18,7 @@ GO
 -- Description:	Get ContractToMeterToContractMeterToProductToContractMeterRateToRateType info from [Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType] table by ContractToMeterToContractMeterToProduct Id And ContractMeterRateToRateType Id
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]
+ALTER PROCEDURE [Mapping].[ContractMeterProductToContractMeterRate_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]
     @ContractToMeterToContractMeterToProductId BIGINT,
     @ContractMeterRateToRateTypeId BIGINT,
     @EffectiveDateTime DATETIME = NULL

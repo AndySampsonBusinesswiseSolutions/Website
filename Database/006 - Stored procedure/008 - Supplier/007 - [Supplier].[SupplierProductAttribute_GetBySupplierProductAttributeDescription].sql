@@ -6,20 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supplier].[SupplierProductAttribute_GetBySupplierProductAttributeDescription]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supplier].[ProductAttribute_GetByProductAttributeDescription]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supplier].[SupplierProductAttribute_GetBySupplierProductAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supplier].[ProductAttribute_GetByProductAttributeDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-17
--- Description:	Get SupplierProductAttribute info from [Supplier].[SupplierProductAttribute] table by SupplierProductAttributeDescription
+-- Description:	Get ProductAttribute info from [Supplier].[ProductAttribute] table by ProductAttributeDescription
 -- =============================================
 
-ALTER PROCEDURE [Supplier].[SupplierProductAttribute_GetBySupplierProductAttributeDescription]
-    @SupplierProductAttributeDescription VARCHAR(255),
+ALTER PROCEDURE [Supplier].[ProductAttribute_GetByProductAttributeDescription]
+    @ProductAttributeDescription VARCHAR(255),
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -35,17 +35,17 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        SupplierProductAttributeId,
+        ProductAttributeId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        SupplierProductAttributeDescription
+        ProductAttributeDescription
     FROM 
-        [Supplier].[SupplierProductAttribute] 
+        [Supplier].[ProductAttribute] 
     WHERE 
-        SupplierProductAttributeDescription = @SupplierProductAttributeDescription
+        ProductAttributeDescription = @ProductAttributeDescription
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

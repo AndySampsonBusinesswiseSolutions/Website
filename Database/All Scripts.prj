@@ -1,7 +1,7 @@
 ﻿<ProjectDataSet xmlns="http://tempuri.org/ProjectDataSet.xsd">
   <Project>
-    <ID>26a9f1a1-f6a2-48e4-b7d3-84d24ecc05b0</ID>
-    <DateCreated>2020-08-15T20:16:45.7426356+01:00</DateCreated>
+    <ID>a1d47e64-1c0a-4953-adf4-9e502f43162d</ID>
+    <DateCreated>2020-08-18T15:04:48.3532723+01:00</DateCreated>
     <Name>All Scripts</Name>
     <FileName>C:\wamp64\www\Website\Database\All Scripts.prj</FileName>
     <Version>4.0.0.0</Version>
@@ -15,8 +15,8 @@
     <ID>b87407ef-2a49-4333-8be9-88e94a5a3f55</ID>
     <Server>BWS-W10-L24</Server>
     <Trusted>false</Trusted>
-    <Login>ItoXZ3xBLunL3GqTrRCEYQ==</Login>
-    <Password>HJPvc0hDuoZ/lLmhCZTe6/SrTB+4cES1Ot/pKLC+xj4=</Password>
+    <Login>fbX7Hln/xg9WDuRbqdmQ0g==</Login>
+    <Password>HJPvc0hDuoZ/lLmhCZTe68WTseurzdWrboQrckgaBrg=</Password>
     <ConnectionTimeout>15</ConnectionTimeout>
     <CommandTimeout>3600</CommandTimeout>
     <Pooled>false</Pooled>
@@ -761,20 +761,6 @@
     <ID>ef36c1a7-37e9-4ee8-b100-1eefb4457cde</ID>
     <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
     <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\044 - CommitContractData.api\*.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>false</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>6ab67ade-b5ac-4dac-8144-17a1368e228c</ID>
-    <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\045 - CommitContractToSupplierData.api\*.sql</FullName>
-    <FileEncoding>0</FileEncoding>
-    <IsStaticFile>false</IsStaticFile>
-  </ScriptFile>
-  <ScriptFile>
-    <ID>5c7bf6ad-185b-45c2-9c50-33c7a15a6716</ID>
-    <ParentFolder_ID>187e825f-eac5-4f46-953b-571ba23b9ef3</ParentFolder_ID>
-    <FullName>C:\wamp64\www\Website\Database\901 - API\005 - CustomerDataUpload\046 - CommitContractMeterToProductData.api\*.sql</FullName>
     <FileEncoding>0</FileEncoding>
     <IsStaticFile>false</IsStaticFile>
   </ScriptFile>

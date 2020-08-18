@@ -6,9 +6,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supplier].[SupplierProductDetail_GetBySupplierProductAttributeIdAndSupplierProductDetailDescription]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supplier].[SupplierProductDetail_GetByProductAttributeIdAndSupplierProductDetailDescription]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supplier].[SupplierProductDetail_GetBySupplierProductAttributeIdAndSupplierProductDetailDescription] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supplier].[SupplierProductDetail_GetByProductAttributeIdAndSupplierProductDetailDescription] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -18,8 +18,8 @@ GO
 -- Description:	Get SupplierProductDetail info from [Supplier].[SupplierProductDetail] table by Supplier Attribute Id and Supplier Detail Description
 -- =============================================
 
-ALTER PROCEDURE [Supplier].[SupplierProductDetail_GetBySupplierProductAttributeIdAndSupplierProductDetailDescription]
-    @SupplierProductAttributeId BIGINT,
+ALTER PROCEDURE [Supplier].[SupplierProductDetail_GetByProductAttributeIdAndSupplierProductDetailDescription]
+    @ProductAttributeId BIGINT,
     @SupplierProductDetailDescription VARCHAR(255)
 AS
 BEGIN
@@ -40,12 +40,12 @@ BEGIN
         CreatedByUserId,
         SourceId,
         SupplierProductId,
-        SupplierProductAttributeId,
+        ProductAttributeId,
         SupplierProductDetailDescription
     FROM 
         [Supplier].[SupplierProductDetail] 
     WHERE 
-        SupplierProductAttributeId = @SupplierProductAttributeId
+        ProductAttributeId = @ProductAttributeId
         AND SupplierProductDetailDescription = @SupplierProductDetailDescription
 END
 GO

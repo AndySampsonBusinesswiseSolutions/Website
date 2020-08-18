@@ -1,5 +1,5 @@
 USE [EMaaS]
 GO
 
-GRANT EXECUTE ON OBJECT::[Supplier].[SupplierProductAttribute_GetBySupplierProductAttributeDescription] TO [CommitContractData.api];
+GRANT EXECUTE ON OBJECT::[Supplier].[ProductAttribute_GetByProductAttributeDescription] TO [CommitContractData.api];
 GO
