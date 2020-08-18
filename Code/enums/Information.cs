@@ -101,12 +101,33 @@ namespace enums
                 public string OptimisationBenefit = "Optimisation Benefit";
             }
 
+            public class RateUnit
+            {
+                public string PencePerKiloWattHour = "p/kWh";
+                public string PencePerDay = "p/day";
+                public string PencePerKiloVoltAmperePerDay = "p/kVa/day";
+                public string PoundPerMegaWattHour = "£/MWh";
+            }
+
             public class Source
             {
                 public class Attribute
                 {
                     public string UserGenerated = "User Generated";
                 }
+            }
+
+            public class TradeDirection
+            {
+                public string Buy = "Buy";
+                public string Sell = "Sell";
+            }
+
+            public class VolumeUnit
+            {
+                public string KiloWattHour = "kWh";
+                public string MegaWatt = "MW";
+                public string KiloVoltAmpere = "kVa";
             }
         }
     }

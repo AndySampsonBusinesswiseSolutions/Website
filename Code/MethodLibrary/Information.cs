@@ -475,6 +475,50 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("RateTypeId"))
                     .FirstOrDefault();
             }
+
+            public long RateUnit_GetRateUnitIdByRateUnitDescription(string rateUnitDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.RateUnit_GetByRateUnitDescription, 
+                    rateUnitDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("RateUnitId"))
+                    .FirstOrDefault();
+            }
+
+            public long VolumeUnit_GetVolumeUnitIdByVolumeUnitDescription(string volumeUnitDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.VolumeUnit_GetByVolumeUnitDescription, 
+                    volumeUnitDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("VolumeUnitId"))
+                    .FirstOrDefault();
+            }
+
+            public long TradeProduct_GetTradeProductIdByTradeProductDescription(string tradeProductDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.TradeProduct_GetByTradeProductDescription, 
+                    tradeProductDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("TradeProductId"))
+                    .FirstOrDefault();
+            }
+
+            public long TradeDirection_GetTradeDirectionIdByTradeDirectionDescription(string tradeDirectionDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.TradeDirection_GetByTradeDirectionDescription, 
+                    tradeDirectionDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("TradeDirectionId"))
+                    .FirstOrDefault();
+            }
         }
     }
 }

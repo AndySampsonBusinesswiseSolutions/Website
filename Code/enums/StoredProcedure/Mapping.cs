@@ -62,6 +62,16 @@ namespace enums
                 public string BasketToContractMeter_GetByBasketIdAndContractMeterId = "[Mapping].[BasketToContractMeter_GetByBasketIdAndContractMeterId]";
                 public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId = "[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]";
                 public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert = "[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert]";
+                public string BasketToTrade_GetByBasketIdAndTradeId = "[Mapping].[BasketToTrade_GetByBasketIdAndTradeId]";
+                public string BasketToTrade_Insert = "[Mapping].[BasketToTrade_Insert]";
+                public string TradeDetailToVolumeUnit_GetByTradeDetailIdAndVolumeUnitId = "[Mapping].[TradeDetailToVolumeUnit_GetByTradeDetailIdAndVolumeUnitId]";
+                public string TradeDetailToVolumeUnit_Insert = "[Mapping].[TradeDetailToVolumeUnit_Insert]";
+                public string RateUnitToTradeDetail_GetByRateUnitIdAndTradeDetailId = "[Mapping].[RateUnitToTradeDetail_GetByRateUnitIdAndTradeDetailId]";
+                public string RateUnitToTradeDetail_Insert = "[Mapping].[RateUnitToTradeDetail_Insert]";
+                public string TradeToTradeProduct_GetByTradeIdAndTradeProductId = "[Mapping].[TradeToTradeProduct_GetByTradeIdAndTradeProductId]";
+                public string TradeToTradeProduct_Insert = "[Mapping].[TradeToTradeProduct_Insert]";
+                public string TradeToTradeDirection_Insert = "[Mapping].[TradeToTradeDirection_Insert]";
+                public string TradeToTradeDirection_GetByTradeIdAndTradeDirectionId = "[Mapping].[TradeToTradeDirection_GetByTradeIdAndTradeDirectionId]";
             }
         }
     }

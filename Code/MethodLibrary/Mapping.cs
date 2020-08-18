@@ -241,11 +241,11 @@ namespace MethodLibrary
                     .ToList();
             }
 
-            public void BasketToContractMeter_Insert(long createdByUserId, long sourceId, long basketId, long meterId)
+            public void BasketToContractMeter_Insert(long createdByUserId, long sourceId, long basketId, long contractMeterId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.BasketToContractMeter_Insert, 
-                    createdByUserId, sourceId, basketId, meterId);
+                    createdByUserId, sourceId, basketId, contractMeterId);
             }
 
             public void CommodityToMeter_Insert(long createdByUserId, long sourceId, long commodityId, long meterId)
@@ -489,6 +489,96 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert, 
                     createdByUserId, sourceId, contractToMeterToContractMeterToProductId, contractMeterRateToRateTypeId);
+            }
+
+            public long BasketToTrade_GetBasketToTradeIdByBasketIdAndTradeId(long basketId, long tradeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.BasketToTrade_GetByBasketIdAndTradeId, 
+                    basketId, tradeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("BasketToTradeId"))
+                    .FirstOrDefault();
+            }
+
+            public void BasketToTrade_Insert(long createdByUserId, long sourceId, long basketId, long tradeId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.BasketToTrade_Insert, 
+                    createdByUserId, sourceId, basketId, tradeId);
+            }
+
+            public long TradeDetailToVolumeUnit_GetTradeDetailToVolumeUnitIdByTradeDetailIdAndVolumeUnitId(long tradeDetailId, long volumeUnitId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.TradeDetailToVolumeUnit_GetByTradeDetailIdAndVolumeUnitId, 
+                    tradeDetailId, volumeUnitId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("TradeDetailToVolumeUnitId"))
+                    .FirstOrDefault();
+            }
+
+            public void TradeDetailToVolumeUnit_Insert(long createdByUserId, long sourceId, long tradeDetailId, long volumeUnitId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.TradeDetailToVolumeUnit_Insert, 
+                    createdByUserId, sourceId, tradeDetailId, volumeUnitId);
+            }
+
+            public long RateUnitToTradeDetail_GetRateUnitToTradeDetailIdByRateUnitIdAndTradeDetailId(long rateUnitId, long tradeDetailId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.RateUnitToTradeDetail_GetByRateUnitIdAndTradeDetailId, 
+                    rateUnitId, tradeDetailId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("RateUnitToTradeDetailId"))
+                    .FirstOrDefault();
+            }
+
+            public void RateUnitToTradeDetail_Insert(long createdByUserId, long sourceId, long rateUnitId, long tradeDetailId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.RateUnitToTradeDetail_Insert, 
+                    createdByUserId, sourceId, rateUnitId, tradeDetailId);
+            }
+
+            public long TradeToTradeProduct_GetTradeToTradeProductIdByTradeIdAndTradeProductId(long tradeId, long tradeProductId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.TradeToTradeProduct_GetByTradeIdAndTradeProductId, 
+                    tradeId, tradeProductId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("TradeToTradeProductId"))
+                    .FirstOrDefault();
+            }
+
+            public void TradeToTradeProduct_Insert(long createdByUserId, long sourceId, long tradeId, long tradeProductId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.TradeToTradeProduct_Insert, 
+                    createdByUserId, sourceId, tradeId, tradeProductId);
+            }
+
+            public long TradeToTradeDirection_GetTradeToTradeDirectionIdByTradeIdAndTradeDirectionId(long tradeId, long tradeDirectionId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.TradeToTradeDirection_GetByTradeIdAndTradeDirectionId, 
+                    tradeId, tradeDirectionId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("TradeToTradeDirectionId"))
+                    .FirstOrDefault();
+            }
+
+            public void TradeToTradeDirection_Insert(long createdByUserId, long sourceId, long tradeId, long tradeDirectionId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.TradeToTradeDirection_Insert, 
+                    createdByUserId, sourceId, tradeId, tradeDirectionId);
             }
         }
     }

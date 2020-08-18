@@ -8,3 +8,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/kWh'
 EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/day'
 EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, 'p/kVa/day'
+EXEC [Information].[RateUnit_Insert] @CreatedByUserId, @SourceId, '£/MWh'
