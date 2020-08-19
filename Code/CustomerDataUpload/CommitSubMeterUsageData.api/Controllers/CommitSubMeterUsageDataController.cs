@@ -25,6 +25,7 @@ namespace CommitSubMeterUsageData.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterUsageDataAPIId;
 
@@ -98,8 +99,18 @@ namespace CommitSubMeterUsageData.api.Controllers
                     return;
                 }
 
+                //Get Routing.API URL
+                var routingAPIId = _systemMethods.GetRoutingAPIId();
+
                 foreach(var subMeterIdentifier in subMeterIdentifierList)
                 {
+                    //Create new ProcessQueueGUID
+                    var newProcessQueueGUID = Guid.NewGuid().ToString();
+
+                    //Map current ProcessQueueGUID to new ProcessQueueGUID
+                    _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                    _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+
                     //Add subMeter type to jsonObject
                     jsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
 
@@ -108,24 +119,29 @@ namespace CommitSubMeterUsageData.api.Controllers
 
                     if(subMeterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier))
                     {
+                        //Update Process GUID to CommitPeriodicUsage Process GUID
+                        _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
+
                         //Get periodic usage
                         var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier);
 
                         //Add periodic usage to jsonObject
                         jsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDataRows));
-
-                        //Launch CommitPeriodicUsageData API
                     }
                     else 
                     {
+                        //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
+                        _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
+
                         //Get EstimatedAnnualUsage
                         var estimatedAnnualUsage = subMeterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
 
                         //Add EstimatedAnnualUsage to jsonObject
                         jsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
-
-                        //Launch CommitEstimatedAnnualUsageData API
                     }
+
+                    //Connect to Routing API and POST data
+                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, jsonObject);
                 }
 
                 //Update Process Queue

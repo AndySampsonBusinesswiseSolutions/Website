@@ -323,6 +323,8 @@ namespace enums
                     public string CustomerDataUpload = "63D6E7CA-591F-4BF3-BECA-57A9E350879A";
                     public string CommitCustomerDataUpload = "BF0B7C03-5201-4600-9123-8CC88D13CEBD";
                     public string SendEmail = "B68550D3-0283-4DC8-A048-9A1AD0899A7D";
+                    public string CommitEstimatedAnnualUsage = "9A15F6EB-42B8-4283-A232-D0312575654D";
+                    public string CommitPeriodicUsage = "9786708D-89E6-42EE-BAEE-7D47CF711BF6";
                 }
 
                 public class Name
@@ -333,6 +335,8 @@ namespace enums
                     public string CustomerDataUpload = "Customer Data Upload";
                     public string CommitCustomerDataUpload = "Commit Customer Data Upload";
                     public string SendEmail = "Send Email";
+                    public string CommitEstimatedAnnualUsage = "Commit Estimated Annual Usage";
+                    public string CommitPeriodicUsage = "Commit Periodic Usage";
                 }
             }
         }
