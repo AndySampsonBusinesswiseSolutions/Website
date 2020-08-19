@@ -21,6 +21,7 @@ namespace enums
                 
                 public class GUID
                 {
+                    public string CommitPeriodicUsageDataAPI = "B4B14374-BAFE-4CAC-9E14-299024164D5F";
                     public string CommitMeterToMeterTimeswitchCodeDataAPI = "CD2E7213-9A18-4BEA-9C4E-7193433192BE";
                     public string CommitMeterToProfileClassDataAPI = "41327B22-24FE-4EED-AED1-36B801D78F5E";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "ED61F240-9A67-412E-BA74-B80DA2A85443";
@@ -98,6 +99,7 @@ namespace enums
 
                 public class Name
                 {
+                    public string CommitPeriodicUsageDataAPI = "CommitPeriodicUsageData.api";
                     public string CommitMeterToMeterTimeswitchCodeDataAPI = "CommitMeterToMeterTimeswitchCodeData.api";
                     public string CommitMeterToProfileClassDataAPI = "CommitMeterToProfileClassData.api";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "CommitLocalDistributionZoneToMeterData.api";
@@ -176,6 +178,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitPeriodicUsageDataAPI = "8pSATRRftgLbJ5Zm";
                     public string CommitMeterToMeterTimeswitchCodeDataAPI = "7wSWYFFtFGr6qETP";
                     public string CommitMeterToProfileClassDataAPI = "EwLC5zy5SjCuEmmj";
                     public string CommitLocalDistributionZoneToMeterDataAPI = "JT4paBW9eH4m6F35";

@@ -139,6 +139,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToProfileClassDa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitMeterToMeterTimeswitchCodeData.api", "CustomerDataUpload\CommitMeterToMeterTimeswitchCodeData.api\CommitMeterToMeterTimeswitchCodeData.api.csproj", "{CD2E7213-9A18-4BEA-9C4E-7193433192BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitPeriodicUsageData.api", "CustomerDataUpload\CommitPeriodicUsageData.api\CommitPeriodicUsageData.api.csproj", "{B4B14374-BAFE-4CAC-9E14-299024164D5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -980,5 +982,19 @@ Global
 		{CD2E7213-9A18-4BEA-9C4E-7193433192BE}.Release|x64.Build.0 = Release|Any CPU
 		{CD2E7213-9A18-4BEA-9C4E-7193433192BE}.Release|x86.ActiveCfg = Release|Any CPU
 		{CD2E7213-9A18-4BEA-9C4E-7193433192BE}.Release|x86.Build.0 = Release|Any CPU
-	EndGlobalSection
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Debug|x64.Build.0 = Debug|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Debug|x86.Build.0 = Debug|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Release|x64.ActiveCfg = Release|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Release|x64.Build.0 = Release|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Release|x86.ActiveCfg = Release|Any CPU
+        {B4B14374-BAFE-4CAC-9E14-299024164D5F}.Release|x86.Build.0 = Release|Any CPU
+    EndGlobalSection
 EndGlobal
+
+
