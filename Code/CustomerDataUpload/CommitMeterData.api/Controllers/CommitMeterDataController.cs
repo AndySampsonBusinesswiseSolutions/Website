@@ -110,7 +110,7 @@ namespace CommitMeterData.api.Controllers
                     }
 
                     //Get MeterId by MPXN
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value).First();
 
                     if(meterId == 0)
                     {
