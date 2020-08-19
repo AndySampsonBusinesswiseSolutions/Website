@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace CommitSubMeterUsageData.api.Controllers
 {
@@ -18,9 +20,12 @@ namespace CommitSubMeterUsageData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterUsageDataAPIId;
 
         public CommitSubMeterUsageDataController(ILogger<CommitSubMeterUsageDataController> logger)
@@ -66,15 +71,62 @@ namespace CommitSubMeterUsageData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] where CanCommit = 1
+                var subMeterDataRows = _tempCustomerMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterCommitableDataRows = _tempCustomerMethods.GetCommitableRows(subMeterDataRows);
 
-                //Get SubMeterId from [Customer].[SubMeterDetail] by SubMeterIdentifier and Serial Number
-                //If SubMeterId == 0
-                //Throw error because Submeter should have been invalidated or inserted
+                //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
+                var subMeterUsageDataRows = _tempCustomerMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterUsageCommitableDataRows = _tempCustomerMethods.GetCommitableRows(subMeterUsageDataRows);
 
-                //Insert into [SubMeterId].[HalfHourUsage]
+                if(!subMeterCommitableDataRows.Any() && !subMeterUsageCommitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
+                    return;
+                }
+
+                //Get list of subMeterIdentifiers from datasets
+                var subMeterIdentifierList = subMeterCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier))
+                    .Union(subMeterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)))
+                    .Distinct();
+
+                if(!subMeterIdentifierList.Any())
+                {
+                    //Nothing to work so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
+                    return;
+                }
+
+                foreach(var subMeterIdentifier in subMeterIdentifierList)
+                {
+                    //Add subMeter type to jsonObject
+                    jsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
+
+                    //Add subMeterIdentifier to jsonObject
+                    jsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, subMeterIdentifier);
+
+                    if(subMeterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier))
+                    {
+                        //Get periodic usage
+                        var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier);
+
+                        //Add periodic usage to jsonObject
+                        jsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDataRows));
+
+                        //Launch CommitPeriodicUsageData API
+                    }
+                    else 
+                    {
+                        //Get EstimatedAnnualUsage
+                        var estimatedAnnualUsage = subMeterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
+
+                        //Add EstimatedAnnualUsage to jsonObject
+                        jsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
+
+                        //Launch CommitEstimatedAnnualUsageData API
+                    }
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);

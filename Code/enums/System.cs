@@ -270,6 +270,10 @@ namespace enums
                     public string FileName = "FileName";
                     public string ContractType = "ContractType";
                     public string ContractData = "ContractData";
+                    public string MeterType = "MeterType";
+                    public string PeriodicUsage = "PeriodicUsage";
+                    public string EstimatedAnnualUsage = "EstimatedAnnualUsage";
+                    public string MPXN = "MPXN";
                 }
             }
 

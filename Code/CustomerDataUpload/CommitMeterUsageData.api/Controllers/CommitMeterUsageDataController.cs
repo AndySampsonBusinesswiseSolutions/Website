@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace CommitMeterUsageData.api.Controllers
 {
@@ -18,9 +20,13 @@ namespace CommitMeterUsageData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterUsageDataAPIId;
 
         public CommitMeterUsageDataController(ILogger<CommitMeterUsageDataController> logger)
@@ -66,16 +72,63 @@ namespace CommitMeterUsageData.api.Controllers
                     return;
                 }
 
-                //TODO: API Logic
-
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
+                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterCommitableDataRows = _tempCustomerMethods.GetCommitableRows(meterDataRows);
 
-                //Get MeterId from [Customer].[MeterDetail] by MPXN
-                //If MeterId == 0
-                //Throw error because meter should have been invalidated or inserted
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+                var meterUsageDataRows = _tempCustomerMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var meterUsageCommitableDataRows = _tempCustomerMethods.GetCommitableRows(meterUsageDataRows);
 
-                //Insert into [MeterId].[HalfHourUsage]
+                if(!meterCommitableDataRows.Any() && !meterUsageCommitableDataRows.Any())
+                {
+                    //Nothing to commit so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
+                    return;
+                }
 
+                //Get list of mpxns from datasets
+                var mpxnList = meterCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                    .Union(meterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)))
+                    .Distinct();
+
+                if(!mpxnList.Any())
+                {
+                    //Nothing to work so update Process Queue and exit
+                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
+                    return;
+                }
+
+                foreach(var mpxn in mpxnList)
+                {
+                    //Add meter type to jsonObject
+                    jsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "Meter");
+
+                    //Add mpxn to jsonObject
+                    jsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, mpxn);
+
+                    if(meterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn))
+                    {
+                        //Get periodic usage
+                        var periodicUsageDataRows = meterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn);
+
+                        //Add periodic usage to jsonObject
+                        jsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDataRows));
+
+                        //Launch CommitPeriodicUsageData API
+                    }
+                    else 
+                    {
+                        //Get EstimatedAnnualUsage
+                        var estimatedAnnualUsage = meterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
+
+                        //Add EstimatedAnnualUsage to jsonObject
+                        jsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
+
+                        //Launch CommitEstimatedAnnualUsageData API
+                    }
+                }
+                
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
             }
