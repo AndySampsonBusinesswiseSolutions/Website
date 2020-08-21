@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Data;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -168,6 +169,46 @@ namespace MethodLibrary
                 LoadedUsage_CreateTable(meterId, meterType);
                 LoadedUsage_CreateDeleteStoredProcedure(meterId, meterType);
                 LoadedUsage_CreateInsertStoredProcedure(meterId, meterType);
+            }
+
+            public void EstimatedAnnualUsage_Delete(string meterType, long meterId)
+            {
+                var estimatedAnnualUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.EstimatedAnnualUsage_Delete, meterType, meterId);
+
+                ExecuteNonQuery(new List<ParameterInfo>().ToArray(), estimatedAnnualUsageDeleteStoredProcedure);
+            }
+
+            public void EstimatedAnnualUsage_Insert(long createdByUserId, long sourceId, string meterType, long meterId, decimal estimatedAnnualUsage)
+            {
+                var estimatedAnnualUsageInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.EstimatedAnnualUsage_Insert, meterType, meterId);
+                var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
+                    .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
+
+                ExecuteNonQuery(parameterInfoList, 
+                    estimatedAnnualUsageInsertStoredProcedure,
+                    createdByUserId, sourceId, estimatedAnnualUsage);
+            }
+
+            public void LoadedUsage_Delete(string meterType, long meterId, long dateId, long timePeriodId)
+            {
+                var loadedUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Delete, meterType, meterId);
+                var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
+                    .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
+
+                ExecuteNonQuery(parameterInfoList, 
+                    loadedUsageDeleteStoredProcedure,
+                    dateId, timePeriodId);
+            }
+
+            public void LoadedUsage_Insert(long createdByUserId, long sourceId, string meterType, long meterId, long dateId, long timePeriodId, long usageTypeId, decimal usage)
+            {
+                var loadedUsageInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Insert, meterType, meterId);
+                var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
+                    .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
+
+                ExecuteNonQuery(parameterInfoList, 
+                    loadedUsageInsertStoredProcedure,
+                    createdByUserId, sourceId, dateId, timePeriodId, usageTypeId, usage);
             }
         }
     }

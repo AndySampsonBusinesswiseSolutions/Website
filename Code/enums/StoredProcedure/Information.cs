@@ -52,6 +52,10 @@ namespace enums
                 public string RateUnit_GetByRateUnitDescription = "[Information].[RateUnit_GetByRateUnitDescription]";
                 public string TradeProduct_GetByTradeProductDescription = "[Information].[TradeProduct_GetByTradeProductDescription]";
                 public string TradeDirection_GetByTradeDirectionDescription = "[Information].[TradeDirection_GetByTradeDirectionDescription]";
+                public string Commodity_GetByCommodityId = "[Information].[Commodity_GetByCommodityId]";
+                public string UsageType_GetByUsageTypeDescription = "[Information].[UsageType_GetByUsageTypeDescription]";
+                public string Date_GetByDateDescription = "[Information].[Date_GetByDateDescription]";
+                public string Granularity_GetByGranularityDescription = "[Information].[Granularity_GetByGranularityDescription]";
             }
         }
     }

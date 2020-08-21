@@ -72,6 +72,7 @@ namespace enums
                 public string TradeToTradeProduct_Insert = "[Mapping].[TradeToTradeProduct_Insert]";
                 public string TradeToTradeDirection_Insert = "[Mapping].[TradeToTradeDirection_Insert]";
                 public string TradeToTradeDirection_GetByTradeIdAndTradeDirectionId = "[Mapping].[TradeToTradeDirection_GetByTradeIdAndTradeDirectionId]";
+                public string CommodityToMeter_GetByMeterId = "[Mapping].[CommodityToMeter_GetByMeterId]";
             }
         }
     }

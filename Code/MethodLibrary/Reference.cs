@@ -58,7 +58,6 @@ namespace MethodLibrary
         {
             //Set up stored procedure parameters
             var sqlParameters = new List<SqlParameter>();
-            object[] namevalues = new object[2 * parameters.Length];
 
             for (int i = 0; i < parameters.Length; i++)
             {

@@ -519,6 +519,50 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("TradeDirectionId"))
                     .FirstOrDefault();
             }
+
+            public string Commodity_GetCommodityDescriptionByCommodityId(long commodityId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Commodity_GetByCommodityId, 
+                    commodityId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("CommodityDescription"))
+                    .FirstOrDefault();
+            }
+
+            public long UsageType_GetUsageTypeIdByUsageTypeDescription(string usageTypeDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.UsageType_GetByUsageTypeDescription, 
+                    usageTypeDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("UsageTypeId"))
+                    .FirstOrDefault();
+            }
+
+            public long Date_GetDateIdByDateDescription(string dateDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Date_GetByDateDescription, 
+                    dateDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("DateId"))
+                    .FirstOrDefault();
+            }
+
+            public long Granularity_GetGranularityIdByGranularityDescription(string granularityDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Granularity_GetByGranularityDescription, 
+                    granularityDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GranularityId"))
+                    .FirstOrDefault();
+            }
         }
     }
 }

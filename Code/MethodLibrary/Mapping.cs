@@ -580,6 +580,17 @@ namespace MethodLibrary
                     _storedProcedureMappingEnums.TradeToTradeDirection_Insert, 
                     createdByUserId, sourceId, tradeId, tradeDirectionId);
             }
+
+            public long CommodityToMeter_GetCommodityIdByMeterId(long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.CommodityToMeter_GetByMeterId, 
+                    meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("CommodityId"))
+                    .FirstOrDefault();
+            }
         }
     }
 }

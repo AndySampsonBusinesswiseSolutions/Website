@@ -125,6 +125,14 @@ namespace CommitFlexTradeData.api.Controllers
                         var tradeGUID = Guid.NewGuid().ToString();
                         tradeReference = Guid.NewGuid().ToString();
 
+                        //Check if trade reference doesn't already exist
+                        tradeId = _customerMethods.TradeDetail_GetTradeIdByTradeAttributeIdAndTradeDetailDescription(attributeIdDictionary[_customerTradeAttributeEnums.TradeReference], tradeReference);
+                        while (tradeId != 0)
+                        {
+                            tradeReference = Guid.NewGuid().ToString();
+                            tradeId = _customerMethods.TradeDetail_GetTradeIdByTradeAttributeIdAndTradeDetailDescription(attributeIdDictionary[_customerTradeAttributeEnums.TradeReference], tradeReference);
+                        }
+
                         //Insert into [Customer].[Trade]
                         _customerMethods.Trade_Insert(createdByUserId, sourceId, tradeGUID);
                         tradeId = _customerMethods.Trade_GetTradeIdByTradeGUID(tradeGUID);

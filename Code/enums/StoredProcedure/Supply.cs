@@ -21,6 +21,10 @@ namespace enums
                 public string LoadedUsage_CreateInsertStoredProcedure = "[Supply].[LoadedUsage_CreateInsertStoredProcedure]";
                 public string Schema_GetBySchemaName = "[Supply].[sys_Schema_GetBySchemaName]";
                 public string Table_GetByTableNameAndSchemaId = "[Supply].[sys_Table_GetByTableNameAndSchemaId]";
+                public string EstimatedAnnualUsage_Delete = "[Supply.{0}{1}].[EstimatedAnnualUsage_Delete]";
+                public string EstimatedAnnualUsage_Insert = "[Supply.{0}{1}].[EstimatedAnnualUsage_Insert]";
+                public string LoadedUsage_Delete = "[Supply.{0}{1}].[LoadedUsage_Delete]";
+                public string LoadedUsage_Insert = "[Supply.{0}{1}].[LoadedUsage_Insert]";
             }
         }
     }
