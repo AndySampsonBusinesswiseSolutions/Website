@@ -56,6 +56,7 @@ namespace enums
                 public string UsageType_GetByUsageTypeDescription = "[Information].[UsageType_GetByUsageTypeDescription]";
                 public string Date_GetByDateDescription = "[Information].[Date_GetByDateDescription]";
                 public string Granularity_GetByGranularityDescription = "[Information].[Granularity_GetByGranularityDescription]";
+                public string TimePeriod_GetByEndTime = "[Information].[TimePeriod_GetByEndTime]";
             }
         }
     }

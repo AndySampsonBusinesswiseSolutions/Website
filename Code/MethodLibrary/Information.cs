@@ -563,6 +563,17 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("GranularityId"))
                     .FirstOrDefault();
             }
+
+            public List<long> TimePeriod_GetTimePeriodIdListByEndTime(string endTime)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.TimePeriod_GetByEndTime,
+                    endTime);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("TimePeriodId"))
+                    .ToList();
+            }
         }
     }
 }

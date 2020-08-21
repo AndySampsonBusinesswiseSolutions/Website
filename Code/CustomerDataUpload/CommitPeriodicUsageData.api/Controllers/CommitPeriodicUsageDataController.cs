@@ -96,6 +96,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Get GranularityId
                 var granularity = "Half Hour";
                 var granularityId = _informationMethods.Granularity_GetGranularityIdByGranularityDescription(granularity);
+                var granularityTimePeriods = _mappingMethods.GranularityToTimePeriod_GetTimePeriodIdListByGranularityId(granularityId);
 
                 //Get Periodic Usage
                 var periodicUsage = (IEnumerable<DataRow>) JsonConvert.DeserializeObject(jsonObject[_systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString(), typeof(List<DataRow>));
@@ -104,7 +105,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                     .ToDictionary(d => d, d => _informationMethods.Date_GetDateIdByDateDescription(d));
                 var timePeriods = periodicUsage.Select(r => r.Field<string>("TimePeriod"))
                     .Distinct()
-                    .ToDictionary(d => d, d => 1L);
+                    .ToDictionary(t => t, t => _informationMethods.TimePeriod_GetTimePeriodIdListByEndTime(t).Intersect(granularityTimePeriods).First());
 
                 foreach(var dataRow in periodicUsage)
                 {
