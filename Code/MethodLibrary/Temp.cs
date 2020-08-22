@@ -84,84 +84,84 @@ namespace MethodLibrary
                 public void Site_Insert(string processQueueGUID, int rowId, string customerName, string siteName, string siteAddress, string siteTown, string siteCounty, string sitePostCode, string siteDescription, string contactName, string contactRole, string contactTelephoneNumber, string contactEmailAddress)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.Site_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.Site_Insert, 
                         processQueueGUID, rowId, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactRole, contactTelephoneNumber, contactEmailAddress);
                 }
 
                 public void Meter_Insert(string processQueueGUID, int rowId, string siteName, string MPXN, string gridSupplyPoint, string profileClass, string meterTimeswitchCode, string lineLossFactorClass, string capacity, string localDistributionZone, string standardOfftakeQuantity, string annualUsage, string meterSerialNumber, string area, string importExport)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.Meter_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.Meter_Insert, 
                         processQueueGUID, rowId, siteName, MPXN, gridSupplyPoint, profileClass, meterTimeswitchCode, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
                 }
 
                 public void SubMeter_Insert(string processQueueGUID, int rowId, string MPXN, string subMeterIdentifier, string serialNumber, string subArea, string asset)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.SubMeter_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.SubMeter_Insert, 
                         processQueueGUID, rowId, MPXN, subMeterIdentifier, serialNumber, subArea, asset);
                 }
 
                 public void Customer_Insert(string processQueueGUID, int rowId, string customerName, string contactName, string contactTelephoneNumber, string contactEmailAddress)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.Customer_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.Customer_Insert, 
                         processQueueGUID, rowId, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
                 }
 
                 public void FixedContract_Insert(string processQueueGUID, int rowId, string contractReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateCount, string rateType, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.FixedContract_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.FixedContract_Insert, 
                         processQueueGUID, rowId, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, rateType, value);
                 }
 
                 public void FlexContract_Insert(string processQueueGUID, int rowId, string contractReference, string basketReference, string MPXN, string supplier, string contractStartDate, string contractEndDate, string product, string rateType, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.FlexContract_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.FlexContract_Insert, 
                         processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateType, value);
                 }
 
                 public void FlexReferenceVolume_Insert(string processQueueGUID, int rowId, string contractReference, string dateFrom, string dateTo, string volume)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.FlexReferenceVolume_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.FlexReferenceVolume_Insert, 
                         processQueueGUID, rowId, contractReference, dateFrom, dateTo, volume);
                 }
 
                 public void FlexTrade_Insert(string processQueueGUID, int rowId, string basketReference, string tradeReference, string tradeDate, string tradeProduct, string volume, string price, string direction)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.FlexTrade_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.FlexTrade_Insert, 
                         processQueueGUID, rowId, basketReference, tradeReference, tradeDate, tradeProduct, volume, price, direction);
                 }
 
                 public void MeterExemption_Insert(string processQueueGUID, int rowId, string MPXN, string dateFrom, string dateTo, string exemptionProduct, string exemptionProportion)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.MeterExemption_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.MeterExemption_Insert, 
                         processQueueGUID, rowId, MPXN, dateFrom, dateTo, exemptionProduct, exemptionProportion);
                 }
 
                 public void MeterUsage_Insert(string processQueueGUID, int rowId, string MPXN, string date, string timePeriod, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.MeterUsage_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.MeterUsage_Insert, 
                         processQueueGUID, rowId, MPXN, date, timePeriod, value);
                 }
 
                 public void SubMeterUsage_Insert(string processQueueGUID, int rowId, string subMeterIdentifier, string date, string timePeriod, string value)
                 {
                     ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerEnums.SubMeterUsage_Insert, 
+                        _storedProcedureTempCustomerDataUploadEnums.SubMeterUsage_Insert, 
                         processQueueGUID, rowId, subMeterIdentifier, date, timePeriod, value);
                 }
 
                 public IEnumerable<DataRow> Site_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.Site_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.Site_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -170,7 +170,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> Meter_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.Meter_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.Meter_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -179,7 +179,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> SubMeter_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.SubMeter_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.SubMeter_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -188,7 +188,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> Customer_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.Customer_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.Customer_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -197,7 +197,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> FixedContract_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.FixedContract_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.FixedContract_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -206,7 +206,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> FlexContract_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.FlexContract_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.FlexContract_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -215,7 +215,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> FlexReferenceVolume_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.FlexReferenceVolume_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.FlexReferenceVolume_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -224,7 +224,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> FlexTrade_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.FlexTrade_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.FlexTrade_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -233,7 +233,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.MeterExemption_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.MeterExemption_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -242,7 +242,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.MeterUsage_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.MeterUsage_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -251,7 +251,7 @@ namespace MethodLibrary
                 public IEnumerable<DataRow> SubMeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerEnums.SubMeterUsage_GetByProcessQueueGUID, 
+                        _storedProcedureTempCustomerDataUploadEnums.SubMeterUsage_GetByProcessQueueGUID, 
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
@@ -399,57 +399,57 @@ namespace MethodLibrary
                 {
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.Customer)
                     {
-                        return _storedProcedureTempCustomerEnums.Customer_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.Customer_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.Site)
                     {
-                        return _storedProcedureTempCustomerEnums.Site_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.Site_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.Meter)
                     {
-                        return _storedProcedureTempCustomerEnums.Meter_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.Meter_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeter)
                     {
-                        return _storedProcedureTempCustomerEnums.SubMeter_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.SubMeter_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.MeterUsage)
                     {
-                        return _storedProcedureTempCustomerEnums.MeterUsage_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.MeterUsage_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.MeterExemption)
                     {
-                        return _storedProcedureTempCustomerEnums.MeterExemption_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.MeterExemption_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeterUsage)
                     {
-                        return _storedProcedureTempCustomerEnums.SubMeterUsage_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.SubMeterUsage_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.FixedContract)
                     {
-                        return _storedProcedureTempCustomerEnums.FixedContract_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.FixedContract_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexContract)
                     {
-                        return _storedProcedureTempCustomerEnums.FlexContract_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.FlexContract_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume)
                     {
-                        return _storedProcedureTempCustomerEnums.FlexReferenceVolume_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.FlexReferenceVolume_UpdateCanCommit;
                     }
 
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
                     {
-                        return _storedProcedureTempCustomerEnums.FlexTrade_UpdateCanCommit;
+                        return _storedProcedureTempCustomerDataUploadEnums.FlexTrade_UpdateCanCommit;
                     }                    
 
                     return string.Empty;

@@ -22,7 +22,7 @@ namespace MethodLibrary
         private static readonly Enums.StoredProcedure.Information _storedProcedureInformationEnums = new Enums.StoredProcedure.Information();
         private static readonly Enums.StoredProcedure.Supplier _storedProcedureSupplierEnums = new Enums.StoredProcedure.Supplier();
         private static readonly Enums.StoredProcedure.Supply _storedProcedureSupplyEnums = new Enums.StoredProcedure.Supply();
-        private static readonly Enums.StoredProcedure.Temp.Customer _storedProcedureTempCustomerEnums = new Enums.StoredProcedure.Temp.Customer();
+        private static readonly Enums.StoredProcedure.Temp.CustomerDataUpload _storedProcedureTempCustomerDataUploadEnums = new Enums.StoredProcedure.Temp.CustomerDataUpload();
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
         private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
