@@ -14,6 +14,7 @@ namespace enums
                 public string TradeDetail_GetByTradeId = "[Customer].[TradeDetail_GetByTradeId]";
                 public string TradeDetail_DeleteByTradeDetailId = "[Customer].[TradeDetail_DeleteByTradeDetailId]";
                 public string TradeDetail_GetByTradeIdAndTradeAttributeId = "[Customer].[TradeDetail_GetByTradeIdAndTradeAttributeId]";
+                public string Trade_GetByTradeId = "[Customer].[Trade_GetByTradeId]";
             }
         }
     }

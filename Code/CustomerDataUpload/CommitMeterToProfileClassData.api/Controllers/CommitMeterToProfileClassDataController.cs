@@ -99,12 +99,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
 
                     if(profileClassId == 0)
                     {
-                        //Create new ProfileClassGUID
-                        var profileClassGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[ProfileClass]
-                        _informationMethods.ProfileClass_Insert(createdByUserId, sourceId, profileClassGUID);
-                        profileClassId = _informationMethods.ProfileClass_GetProfileClassIdByProfileClassGUID(profileClassGUID);
+                        profileClassId = _informationMethods.InsertNewProfileClass(createdByUserId, sourceId);
 
                         //Insert into [Customer].[ProfileClassDetail]
                         _informationMethods.ProfileClassDetail_Insert(createdByUserId, sourceId, profileClassId, profileClassCodeProfileClassAttributeId, profileClass);

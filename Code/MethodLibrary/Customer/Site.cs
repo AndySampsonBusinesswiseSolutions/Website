@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -9,6 +10,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewSite(long createdByUserId, long sourceId)
+            {
+                //Create new SiteGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (Site_GetSiteIdBySiteGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[Site]
+                Site_Insert(createdByUserId, sourceId, GUID);
+                return Site_GetSiteIdBySiteGUID(GUID);
+            }
+
             public void Site_Insert(long createdByUserId, long sourceId, string siteGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

@@ -111,12 +111,7 @@ namespace CommitCustomerData.api.Controllers
 
                     if(customerId == 0)
                     {
-                        //Create new CustomerGUID
-                        var customerGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[Customer]
-                        _customerMethods.Customer_Insert(createdByUserId, sourceId, customerGUID);
-                        customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
+                        customerId = _customerMethods.InsertNewCustomer(createdByUserId, sourceId);
 
                         //Insert into [Customer].[CustomerDetail]
                         foreach(var detail in detailDictionary)

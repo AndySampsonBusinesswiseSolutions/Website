@@ -126,12 +126,7 @@ namespace CommitSiteData.api.Controllers
 
                     if(siteId == 0)
                     {
-                        //Create new SiteGUID
-                        var siteGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Site].[Site]
-                        _customerMethods.Site_Insert(createdByUserId, sourceId, siteGUID);
-                        siteId = _customerMethods.Site_GetSiteIdBySiteGUID(siteGUID);
+                        siteId = _customerMethods.InsertNewSite(createdByUserId, sourceId);
 
                         //Insert into [Site].[SiteDetail]
                         foreach(var detail in detailDictionary)

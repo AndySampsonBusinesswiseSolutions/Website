@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,21 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public long InsertNewGridSupplyPoint(long createdByUserId, long sourceId)
+            {
+                //Create new GridSupplyPointGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (GridSupplyPoint_GetGridSupplyPointIdByGridSupplyPointGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[GridSupplyPoint]
+                GridSupplyPoint_Insert(createdByUserId, sourceId, GUID);
+                return GridSupplyPoint_GetGridSupplyPointIdByGridSupplyPointGUID(GUID);
+            }
+
             public long GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(string gridSupplyPointAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

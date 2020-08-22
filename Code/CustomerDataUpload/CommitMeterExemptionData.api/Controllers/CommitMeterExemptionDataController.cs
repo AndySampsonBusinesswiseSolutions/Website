@@ -127,12 +127,7 @@ namespace CommitMeterExemptionData.api.Controllers
 
                     if(customerMeterExemptionId == 0)
                     {
-                        //Create new MeterGUID
-                        var meterExemptionGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[MeterExemption]
-                        _customerMethods.MeterExemption_Insert(createdByUserId, sourceId, meterExemptionGUID);
-                        customerMeterExemptionId = _customerMethods.MeterExemption_GetMeterExemptionIdByMeterExemptionGUID(meterExemptionGUID);
+                        customerMeterExemptionId = _customerMethods.InsertNewMeterExemption(createdByUserId, sourceId);
 
                         //Insert into [Customer].[MeterExemptionDetail]
                         _customerMethods.MeterExemptionDetail_Insert(createdByUserId, sourceId, customerMeterExemptionId, dateFromMeterExemptionAttributeId, dateFrom);

@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewBasket(long createdByUserId, long sourceId)
+            {
+                //Create new BasketGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (Basket_GetBasketIdByBasketGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[Basket]
+                Basket_Insert(createdByUserId, sourceId, GUID);
+                return Basket_GetBasketIdByBasketGUID(GUID);
+            }
+
             public long BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(long BasketAttributeId, string BasketDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

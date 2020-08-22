@@ -21,6 +21,12 @@ namespace MethodLibrary
             public long InsertSystemError(long createdByUserId, long sourceId, string errorMessage, string errorType, string errorSource)
             {
                 var errorGUID = Guid.NewGuid().ToString();
+                
+                while (Error_GetErrorIdByErrorGUID(errorGUID) > 0)
+                {
+                    errorGUID = Guid.NewGuid().ToString();
+                }
+
                 Error_Insert(createdByUserId,
                     sourceId,
                     errorGUID,

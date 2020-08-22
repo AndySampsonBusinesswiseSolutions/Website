@@ -95,12 +95,7 @@ namespace CommitAssetToSubMeterData.api.Controllers
 
                     if(assetId == 0)
                     {
-                        //Create new AssetGUID
-                        var assetGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[Asset]
-                        _customerMethods.Asset_Insert(createdByUserId, sourceId, assetGUID);
-                        assetId = _customerMethods.Asset_GetAssetIdByAssetGUID(assetGUID);
+                        assetId =_customerMethods.InsertNewAsset(createdByUserId, sourceId);
 
                         //Insert into [Customer].[AssetDetail]
                         _customerMethods.AssetDetail_Insert(createdByUserId, sourceId, assetId, assetNameAssetAttributeId, asset);

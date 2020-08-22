@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,21 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public long InsertNewProfileClass(long createdByUserId, long sourceId)
+            {
+                //Create new ProfileClassGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (ProfileClass_GetProfileClassIdByProfileClassGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[ProfileClass]
+                ProfileClass_Insert(createdByUserId, sourceId, GUID);
+                return ProfileClass_GetProfileClassIdByProfileClassGUID(GUID);
+            }
+
             public long ProfileClassAttribute_GetProfileClassAttributeIdByProfileClassAttributeDescription(string profileClassAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

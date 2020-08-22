@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewAsset(long createdByUserId, long sourceId)
+            {
+                //Create new AssetGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (Asset_GetAssetIdByAssetGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[Asset]
+                Asset_Insert(createdByUserId, sourceId, GUID);
+                return Asset_GetAssetIdByAssetGUID(GUID);
+            }
+
             public long Asset_GetAssetIdByAssetAttributeIdAndAssetDetailDescription(long assetAttributeId, string assetDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

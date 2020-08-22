@@ -270,12 +270,7 @@ namespace CommitContractData.api.Controllers
 
             if (basketId == 0)
             {
-                //Create new BasketGUID
-                var basketGUID = Guid.NewGuid().ToString();
-
-                //Insert into [Customer].[Basket]
-                _customerMethods.Basket_Insert(createdByUserId, sourceId, basketGUID);
-                basketId = _customerMethods.Basket_GetBasketIdByBasketGUID(basketGUID);
+                basketId = _customerMethods.InsertNewBasket(createdByUserId, sourceId);
 
                 //Insert into [Customer].[BasketDetail]
                 _customerMethods.BasketDetail_Insert(createdByUserId, sourceId, basketId, basketReferenceBasketAttributeId, basketReference);
@@ -291,12 +286,7 @@ namespace CommitContractData.api.Controllers
 
             if (contractMeterRateId == 0)
             {
-                //Create new ContractMeterRateGUID
-                var contractMeterRateGUID = Guid.NewGuid().ToString();
-
-                //Insert into [Customer].[ContractMeterRate]
-                _customerMethods.ContractMeterRate_Insert(createdByUserId, sourceId, contractMeterRateGUID);
-                contractMeterRateId = _customerMethods.ContractMeterRate_GetContractMeterRateIdByContractMeterRateGUID(contractMeterRateGUID);
+                contractMeterRateId = _customerMethods.InsertNewContractMeterRate(createdByUserId, sourceId);
 
                 //Insert into [Customer].[ContractMeterRateDetail]
                 _customerMethods.ContractMeterRateDetail_Insert(createdByUserId, sourceId, contractMeterRateId, contractMeterRateValueContractMeterRateAttributeId, contractMeterRateValue);
@@ -349,12 +339,7 @@ namespace CommitContractData.api.Controllers
 
             if (contractMeterId == 0)
             {
-                //Create new ContractMeterGUID
-                var contractMeterGUID = Guid.NewGuid().ToString();
-
-                //Insert into [Customer].[ContractMeter]
-                _customerMethods.ContractMeter_Insert(createdByUserId, sourceId, contractMeterGUID);
-                contractMeterId = _customerMethods.ContractMeter_GetContractMeterIdByContractMeterGUID(contractMeterGUID);
+                contractMeterId = _customerMethods.InsertNewContractMeter(createdByUserId, sourceId);
 
                 //Insert into [Customer].[ContractMeterDetail]
                 _customerMethods.ContractMeterDetail_Insert(createdByUserId, sourceId, contractMeterId, contractStartDateContractMeterAttributeId, contractStartDate);
@@ -372,12 +357,7 @@ namespace CommitContractData.api.Controllers
 
             if (contractId == 0)
             {
-                //Create new ContractGUID
-                var contractGUID = Guid.NewGuid().ToString();
-
-                //Insert into [Customer].[Contract]
-                _customerMethods.Contract_Insert(createdByUserId, sourceId, contractGUID);
-                contractId = _customerMethods.Contract_GetContractIdByContractGUID(contractGUID);
+                contractId = _customerMethods.InsertNewContract(createdByUserId, sourceId);
 
                 //Insert into [Customer].[ContractDetail]
                 _customerMethods.ContractDetail_Insert(createdByUserId, sourceId, contractId, contractReferenceContractAttributeId, contractReference);

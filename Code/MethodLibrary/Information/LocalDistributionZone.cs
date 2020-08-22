@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,21 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public long InsertNewLocalDistributionZone(long createdByUserId, long sourceId)
+            {
+                //Create new LocalDistributionZoneGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (LocalDistributionZone_GetLocalDistributionZoneIdByLocalDistributionZoneGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[LocalDistributionZone]
+                LocalDistributionZone_Insert(createdByUserId, sourceId, GUID);
+                return LocalDistributionZone_GetLocalDistributionZoneIdByLocalDistributionZoneGUID(GUID);
+            }
+
             public long LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(string localDistributionZoneAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -9,6 +10,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewContract(long createdByUserId, long sourceId)
+            {
+                //Create new ContractGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (Contract_GetContractIdByContractGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[Contract]
+                Contract_Insert(createdByUserId, sourceId, GUID);
+                return Contract_GetContractIdByContractGUID(GUID);
+            }
+
             public long ContractAttribute_GetContractAttributeIdByContractAttributeDescription(string contractAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

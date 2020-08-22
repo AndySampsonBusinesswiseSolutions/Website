@@ -114,12 +114,7 @@ namespace CommitMeterData.api.Controllers
 
                     if(meterId == 0)
                     {
-                        //Create new MeterGUID
-                        var meterGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[Meter]
-                        _customerMethods.Meter_Insert(createdByUserId, sourceId, meterGUID);
-                        meterId = _customerMethods.Meter_GetMeterIdByMeterGUID(meterGUID);
+                        meterId = _customerMethods.InsertNewMeter(createdByUserId, sourceId);
 
                         //Insert into [Customer].[MeterDetail]
                         foreach(var detail in detailDictionary)

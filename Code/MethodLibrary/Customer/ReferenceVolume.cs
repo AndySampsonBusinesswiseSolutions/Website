@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -9,6 +10,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewReferenceVolume(long createdByUserId, long sourceId)
+            {
+                //Create new ReferenceVolumeGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (ReferenceVolume_GetReferenceVolumeIdByReferenceVolumeGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[ReferenceVolume]
+                ReferenceVolume_Insert(createdByUserId, sourceId, GUID);
+                return ReferenceVolume_GetReferenceVolumeIdByReferenceVolumeGUID(GUID);
+            }
+
             public void ReferenceVolume_Insert(long createdByUserId, long sourceId, string referenceVolumeGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

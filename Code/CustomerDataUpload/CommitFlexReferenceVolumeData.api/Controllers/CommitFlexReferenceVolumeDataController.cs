@@ -109,12 +109,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
 
                     if(referenceVolumeId == 0)
                     {
-                        //Create new ReferenceVolumeGUID
-                        var ReferenceVolumeGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[ReferenceVolume]
-                        _customerMethods.ReferenceVolume_Insert(createdByUserId, sourceId, ReferenceVolumeGUID);
-                        referenceVolumeId = _customerMethods.ReferenceVolume_GetReferenceVolumeIdByReferenceVolumeGUID(ReferenceVolumeGUID);
+                        referenceVolumeId = _customerMethods.InsertNewReferenceVolume(createdByUserId, sourceId);
 
                         //Insert into [Customer].[ReferenceVolumeDetail]
                         _customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, dateFromReferenceVolumeAttributeId, dateFrom);

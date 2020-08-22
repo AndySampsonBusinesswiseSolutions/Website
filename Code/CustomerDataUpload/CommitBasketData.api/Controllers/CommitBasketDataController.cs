@@ -99,13 +99,8 @@ namespace CommitBasketData.api.Controllers
 
                     if(basketId == 0)
                     {
-                        //Create new BasketGUID
-                        var basketGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[Basket]
-                        _customerMethods.Basket_Insert(createdByUserId, sourceId, basketGUID);
-                        basketId = _customerMethods.Basket_GetBasketIdByBasketGUID(basketGUID);
-
+                        basketId =_customerMethods.InsertNewBasket(createdByUserId, sourceId);
+                        
                         _customerMethods.BasketDetail_Insert(createdByUserId, sourceId, basketId, basketReferenceBasketAttributeId, basketReference);
                     }
 

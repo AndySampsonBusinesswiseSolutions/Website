@@ -110,12 +110,7 @@ namespace CommitSubMeterData.api.Controllers
 
                     if(subMeterId == 0)
                     {
-                        //Create new SubMeterGUID
-                        var subMeterGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[SubMeter]
-                        _customerMethods.SubMeter_Insert(createdByUserId, sourceId, subMeterGUID);
-                        subMeterId = _customerMethods.SubMeter_GetSubMeterIdBySubMeterGUID(subMeterGUID);
+                        subMeterId = _customerMethods.InsertNewSubMeter(createdByUserId, sourceId);
 
                         //Insert into [Customer].[SubMeterDetail]
                         foreach(var detail in detailDictionary)

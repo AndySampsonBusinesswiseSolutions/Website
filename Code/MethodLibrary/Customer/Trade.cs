@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -9,6 +10,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewTrade(long createdByUserId, long sourceId)
+            {
+                //Create new TradeGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (Trade_GetTradeIdByTradeGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[Trade]
+                Trade_Insert(createdByUserId, sourceId, GUID);
+                return Trade_GetTradeIdByTradeGUID(GUID);
+            }
+
             public void Trade_Insert(long createdByUserId, long sourceId, string tradeGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
@@ -24,6 +40,17 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("TradeId"))
+                    .FirstOrDefault();
+            }
+
+            public string Trade_GetTradeGUIDByTradeId(long tradeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Trade_GetByTradeId, 
+                    tradeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("TradeGUID"))
                     .FirstOrDefault();
             }
 

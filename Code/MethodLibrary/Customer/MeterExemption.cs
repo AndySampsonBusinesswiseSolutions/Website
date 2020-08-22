@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -9,6 +10,21 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public long InsertNewMeterExemption(long createdByUserId, long sourceId)
+            {
+                //Create new MeterExemptionGUID
+                var GUID = Guid.NewGuid().ToString();
+
+                while (MeterExemption_GetMeterExemptionIdByMeterExemptionGUID(GUID) > 0)
+                {
+                    GUID = Guid.NewGuid().ToString();
+                }
+
+                //Insert into [Customer].[MeterExemption]
+                MeterExemption_Insert(createdByUserId, sourceId, GUID);
+                return MeterExemption_GetMeterExemptionIdByMeterExemptionGUID(GUID);
+            }
+
             public long MeterExemptionDetail_GetMeterExemptionDetailIdByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(long MeterExemptionAttributeId, string MeterExemptionDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

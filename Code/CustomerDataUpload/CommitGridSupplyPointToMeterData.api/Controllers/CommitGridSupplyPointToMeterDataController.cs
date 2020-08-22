@@ -99,12 +99,7 @@ namespace CommitGridSupplyPointToMeterData.api.Controllers
 
                     if(gridSupplyPointId == 0)
                     {
-                        //Create new GridSupplyPointGUID
-                        var gridSupplyPointGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[GridSupplyPoint]
-                        _informationMethods.GridSupplyPoint_Insert(createdByUserId, sourceId, gridSupplyPointGUID);
-                        gridSupplyPointId = _informationMethods.GridSupplyPoint_GetGridSupplyPointIdByGridSupplyPointGUID(gridSupplyPointGUID);
+                        gridSupplyPointId = _informationMethods.InsertNewGridSupplyPoint(createdByUserId, sourceId);
 
                         //Insert into [Customer].[GridSupplyPointDetail]
                         _informationMethods.GridSupplyPointDetail_Insert(createdByUserId, sourceId, gridSupplyPointId, gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);

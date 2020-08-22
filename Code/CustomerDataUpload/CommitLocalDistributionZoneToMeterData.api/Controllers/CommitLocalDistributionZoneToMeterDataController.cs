@@ -99,12 +99,7 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
 
                     if(localDistributionZoneId == 0)
                     {
-                        //Create new LocalDistributionZoneGUID
-                        var localDistributionZoneGUID = Guid.NewGuid().ToString();
-
-                        //Insert into [Customer].[LocalDistributionZone]
-                        _informationMethods.LocalDistributionZone_Insert(createdByUserId, sourceId, localDistributionZoneGUID);
-                        localDistributionZoneId = _informationMethods.LocalDistributionZone_GetLocalDistributionZoneIdByLocalDistributionZoneGUID(localDistributionZoneGUID);
+                        localDistributionZoneId = _informationMethods.InsertNewLocalDistributionZone(createdByUserId, sourceId);
 
                         //Insert into [Customer].[LocalDistributionZoneDetail]
                         _informationMethods.LocalDistributionZoneDetail_Insert(createdByUserId, sourceId, localDistributionZoneId, localDistributionZoneCodeLocalDistributionZoneAttributeId, localDistributionZone);
