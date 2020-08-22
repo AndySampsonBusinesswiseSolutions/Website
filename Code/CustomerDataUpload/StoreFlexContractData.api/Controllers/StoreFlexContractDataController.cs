@@ -19,7 +19,7 @@ namespace StoreFlexContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -69,7 +69,7 @@ namespace StoreFlexContractData.api.Controllers
                 }
 
                 //Get Flex Contract data from Customer Data Upload
-                var flexContractDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
+                var flexContractDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
                 var columns = new List<string>
                 {
                     "StandingCharge", "ShapeFee", "AdminFee", "ImbalanceFee", "RiskFee", "GreenPremium", "OptimisationBenefit"
@@ -84,7 +84,7 @@ namespace StoreFlexContractData.api.Controllers
                     for(var rateCount = 7; rateCount < values.Count(); rateCount++)
                     {
                         //Insert fixed contract data into [Temp.CustomerDataUpload].[FlexContract]
-                        _tempCustomerMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], columns[rateCount - 7], values[rateCount]);
+                        _tempCustomerDataUploadMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], columns[rateCount - 7], values[rateCount]);
                     }
                 }
 

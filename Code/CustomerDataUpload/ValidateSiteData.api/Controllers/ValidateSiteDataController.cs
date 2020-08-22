@@ -20,7 +20,7 @@ namespace ValidateSiteData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -72,7 +72,7 @@ namespace ValidateSiteData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Site] table
-                var siteDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);
+                var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!siteDataRows.Any())
                 {
@@ -96,14 +96,14 @@ namespace ValidateSiteData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContactEmailAddress, "Contact Email Address"}
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(siteDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteDataRows, columns);
                 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, siteDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, siteDataRows, requiredColumns);
 
                 //Validate post code
                 var invalidPostCodeDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode)) 
@@ -145,7 +145,7 @@ namespace ValidateSiteData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Site);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Site);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

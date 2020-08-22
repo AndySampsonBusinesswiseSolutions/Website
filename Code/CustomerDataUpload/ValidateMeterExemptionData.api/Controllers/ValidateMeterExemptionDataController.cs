@@ -20,7 +20,7 @@ namespace ValidateMeterExemptionData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -72,7 +72,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] table
-                var meterExemptionDataRows = _tempCustomerMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
+                var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterExemptionDataRows.Any())
                 {
@@ -90,7 +90,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ExemptionProportion, "Exemption Proportion"}
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(meterExemptionDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -99,7 +99,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.DateFrom, "Date From"},
                         {_customerDataUploadValidationEntityEnums.DateTo, "Date To"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, meterExemptionDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterExemptionDataRows, requiredColumns);
 
                 //Validate Exemption Product
                 var invalidExemptionProductDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct))
@@ -130,7 +130,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.MeterExemption);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.MeterExemption);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, ValidateMeterExemptionDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

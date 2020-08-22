@@ -20,7 +20,7 @@ namespace CommitMeterUsageData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -74,12 +74,12 @@ namespace CommitMeterUsageData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
-                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
-                var meterCommitableDataRows = _tempCustomerMethods.GetCommitableRows(meterDataRows);
+                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterUsageDataRows = _tempCustomerMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
-                var meterUsageCommitableDataRows = _tempCustomerMethods.GetCommitableRows(meterUsageDataRows);
+                var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var meterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterUsageDataRows);
 
                 if(!meterCommitableDataRows.Any() && !meterUsageCommitableDataRows.Any())
                 {

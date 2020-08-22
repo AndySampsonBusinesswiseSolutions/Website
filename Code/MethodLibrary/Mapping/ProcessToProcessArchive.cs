@@ -1,0 +1,20 @@
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Reflection;
+
+namespace MethodLibrary
+{
+    public partial class Methods
+    {
+        public partial class Mapping
+        {
+            public void ProcessToProcessArchive_Insert(long createdByUserId, long sourceId, long processId, long processArchiveId)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureMappingEnums.ProcessToProcessArchive_Insert, 
+                    createdByUserId, sourceId, processId, processArchiveId);
+            }
+        }
+    }
+}

@@ -21,7 +21,7 @@ namespace ValidateSubMeterData.api.Controllers
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -74,7 +74,7 @@ namespace ValidateSubMeterData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] table
-                var subMeterDataRows = _tempCustomerMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!subMeterDataRows.Any())
                 {
@@ -92,14 +92,14 @@ namespace ValidateSubMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Asset, _customerDataUploadValidationEntityEnums.Asset}
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(subMeterDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.SubMeterIdentifier, "SubMeter Name"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, subMeterDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, subMeterDataRows, requiredColumns);
 
                 //Get submeters not stored in database
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
@@ -114,10 +114,10 @@ namespace ValidateSubMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.SubArea, _customerDataUploadValidationEntityEnums.SubArea},
                         {_customerDataUploadValidationEntityEnums.Asset, _customerDataUploadValidationEntityEnums.Asset}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, newSubMeterDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newSubMeterDataRecords, requiredColumns);
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.SubMeter);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.SubMeter);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

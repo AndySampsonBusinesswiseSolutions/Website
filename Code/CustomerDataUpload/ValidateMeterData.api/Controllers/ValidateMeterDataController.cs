@@ -21,7 +21,7 @@ namespace ValidateMeterData.api.Controllers
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -74,7 +74,7 @@ namespace ValidateMeterData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] table
-                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterDataRows.Any())
                 {
@@ -101,7 +101,7 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ImportExport, "Import/Export"}
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(meterDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -109,7 +109,7 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
                         {_customerDataUploadValidationEntityEnums.AnnualUsage, "Annual Usage"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, meterDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterDataRows, requiredColumns);
 
                 //Get MPANs
                 var mpanDataRecords = meterDataRows.Where(r => _methods.IsValidMPAN(r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)));
@@ -146,7 +146,7 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.LineLossFactorClass, "LLFC"},
                         {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, newMPANDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPANDataRecords, requiredColumns);
 
                 //Validate GSP
                 var invalidGridSupplyPointDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.GridSupplyPoint))
@@ -224,7 +224,7 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.LocalDistributionZone, "LDZ"},
                         {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, newMPRNDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPRNDataRecords, requiredColumns);
 
                 //Validate LDZ
                 var invalidLocalDistributionZoneDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.LocalDistributionZone))
@@ -253,7 +253,7 @@ namespace ValidateMeterData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Meter);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Meter);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

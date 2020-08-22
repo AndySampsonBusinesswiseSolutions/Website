@@ -21,7 +21,7 @@ namespace ValidateFlexContractData.api.Controllers
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -73,7 +73,7 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] table
-                var flexContractDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
+                var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!flexContractDataRows.Any())
                 {
@@ -95,7 +95,7 @@ namespace ValidateFlexContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Value, _customerDataUploadValidationEntityEnums.Value},
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexContractDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexContractDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -108,7 +108,7 @@ namespace ValidateFlexContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"}
                     };
 
-                _tempCustomerMethods.GetMissingRecords(records, flexContractDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, flexContractDataRows, requiredColumns);
 
                 //If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
@@ -120,7 +120,7 @@ namespace ValidateFlexContractData.api.Controllers
                     {
                         {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
                 //Validate Supplier
                 var invalidSupplierDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Supplier))
@@ -203,7 +203,7 @@ namespace ValidateFlexContractData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FlexContract);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FlexContract);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

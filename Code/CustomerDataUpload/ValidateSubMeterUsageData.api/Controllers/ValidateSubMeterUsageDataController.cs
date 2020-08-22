@@ -20,7 +20,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -72,7 +72,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] table
-                var subMeterUsageDataRows = _tempCustomerMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!subMeterUsageDataRows.Any())
                 {
@@ -89,7 +89,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Value, "Volume"},
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(subMeterUsageDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -99,7 +99,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                     };
                 
                 //If any are empty records, store error
-                _tempCustomerMethods.GetMissingRecords(records, subMeterUsageDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, subMeterUsageDataRows, requiredColumns);
 
                 //Check dates are valid
                 var invalidDateDataRows = subMeterUsageDataRows.Where(r => !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.Date)));
@@ -153,7 +153,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.SubMeterUsage);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.SubMeterUsage);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateSubMeterUsageDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

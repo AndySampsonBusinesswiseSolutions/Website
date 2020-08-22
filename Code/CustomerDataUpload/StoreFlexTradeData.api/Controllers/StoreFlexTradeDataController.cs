@@ -17,7 +17,7 @@ namespace StoreFlexTradeData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -67,7 +67,7 @@ namespace StoreFlexTradeData.api.Controllers
                 }
 
                 //Get Flex Trade data from Customer Data Upload
-                var flexTradeDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Trades']");
+                var flexTradeDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Trades']");
 
                 foreach(var row in flexTradeDictionary.Keys)
                 {
@@ -75,7 +75,7 @@ namespace StoreFlexTradeData.api.Controllers
                     var tradeDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert flex trade data into [Temp.CustomerDataUpload].[FlexTrade]
-                    _tempCustomerMethods.FlexTrade_Insert(processQueueGUID, row, values[0], values[1], tradeDate, values[3], values[4], values[5], values[6]);
+                    _tempCustomerDataUploadMethods.FlexTrade_Insert(processQueueGUID, row, values[0], values[1], tradeDate, values[3], values[4], values[5], values[6]);
                 }
 
                 //Update Process Queue

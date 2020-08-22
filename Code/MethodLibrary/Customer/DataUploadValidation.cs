@@ -2,7 +2,6 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
-using System;
 
 namespace MethodLibrary
 {
@@ -10,101 +9,6 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
-            public List<long> Customer_GetCustomerIdList()
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.Customer_GetList);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("CustomerId"))
-                    .ToList();
-            }
-
-            public long Customer_GetCustomerIdByCustomerGUID(string customerGUID)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.Customer_GetByCustomerGUID, 
-                    customerGUID);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("CustomerId"))
-                    .FirstOrDefault();
-            }
-
-            public long CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(string customerAttributeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.CustomerAttribute_GetByCustomerAttributeDescription, 
-                    customerAttributeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("CustomerAttributeId"))
-                    .FirstOrDefault();
-            }
-
-            public long CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(long customerAttributeId, string customerDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerAttributeIdAndCustomerDetailDescription, 
-                    customerAttributeId, customerDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("CustomerDetailId"))
-                    .FirstOrDefault();
-            }
-
-            public long CustomerDetail_GetCustomerIdByCustomerAttributeIdAndCustomerDetailDescription(long customerAttributeId, string customerDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerAttributeIdAndCustomerDetailDescription, 
-                    customerAttributeId, customerDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("CustomerId"))
-                    .FirstOrDefault();
-            }
-
-            public DataRow CustomerDetail_GetByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerIdAndCustomerAttributeId, 
-                    customerId, customerAttributeId);
-
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
-            }
-
-            public string CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerIdAndCustomerAttributeId, 
-                    customerId, customerAttributeId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<string>("CustomerDetailDescription"))
-                    .FirstOrDefault();
-            }
-
-            public void CustomerDetail_DeleteByCustomerDetailId(long customerDetailId)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureCustomerEnums.CustomerDetail_DeleteByCustomerDetailId, 
-                    customerDetailId);
-            }
-
-            public void Customer_Insert(long createdByUserId, long sourceId, string customerGUID)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureCustomerEnums.Customer_Insert, 
-                    createdByUserId, sourceId, customerGUID);
-            }
-
-            public void CustomerDetail_Insert(long createdByUserId, long sourceId, long customerId, long customerAttributeId, string customerDetailDescription)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureCustomerEnums.CustomerDetail_Insert, 
-                    createdByUserId, sourceId, customerId, customerAttributeId, customerDetailDescription);
-            }
-
             public void InsertDataUploadValidationErrors(string processQueueGUID, long createdByUserId, long sourceId, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validationErrors)
             {
                  //Insert into DataUploadValidationError
@@ -338,95 +242,6 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<string>("DataUploadValidationErrorMessageDescription"))
                     .ToList();
-            }
-            
-            private IEnumerable<long> GetContractMeterListByContractReferenceAndMPXN(string contractReference, string mpxn)
-            {
-                //Get ContractId from ContractReference
-                var contractReferenceContractAttributeId = ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
-                var contractId = ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
-
-                //If ContractId == 0 then not valid
-                if(contractId == 0)
-                {
-                    return new List<long>();
-                }
-
-                //Get MeterId from MPXN
-                var meterIdentifierMeterAttributeId = MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-                var meterId = MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
-
-                //If MeterId == 0 then not valid
-                if(meterId == 0)
-                {
-                    return new List<long>();
-                }
-
-                //Get ContractMeterIds from ContractId
-                var contractMeterIdFromContractId = new Mapping().ContractToContractMeter_GetContractMeterIdListByContractId(contractId);
-
-                //If no ContractMeterIds then not valid
-                if(!contractMeterIdFromContractId.Any())
-                {
-                    return new List<long>();
-                }
-
-                //Get ContractMeterIds from MeterId
-                var contractMeterIdFromMeterId = new Mapping().ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
-
-                //If no ContractMeterIds then not valid
-                if(!contractMeterIdFromMeterId.Any())
-                {
-                    return new List<long>();
-                }
-
-                //Get ContractMeterIds that exist in both lists
-                var matchingContractMeterIds = contractMeterIdFromContractId.Intersect(contractMeterIdFromMeterId);
-
-                return matchingContractMeterIds;
-            }
-
-            public bool ContractMeterExists(string contractReference, string mpxn)
-            {
-                //Get ContractMeterIds that exist in both lists
-                var matchingContractMeterIds = GetContractMeterListByContractReferenceAndMPXN(contractReference, mpxn);
-
-                return matchingContractMeterIds.Any();
-            }
-
-            public bool ContractBasketMeterExists(string contractReference, string basketReference, string mpxn)
-            {
-                //Get BasketId from BasketReference
-                var basketReferenceBasketAttributeId = BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(_customerBasketAttributeEnums.BasketReference);
-                var basketId = BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(basketReferenceBasketAttributeId, basketReference);
-
-                //If BasketId == 0 then not valid
-                if(basketId == 0)
-                {
-                    return false;
-                }
-
-                //Get ContractMeters from BasketId
-                var contractMeterIdFromBasketId = new Mapping().BasketToContractMeter_GetContractMeterIdListByBasketId(basketId);
-
-                //If no ContractMeterIds then not valid
-                if(!contractMeterIdFromBasketId.Any())
-                {
-                    return false;
-                }
-
-                //Get ContractMeterIds that exist in both lists
-                var matchingContractMeterIds = GetContractMeterListByContractReferenceAndMPXN(contractReference, mpxn);
-
-                if(!matchingContractMeterIds.Any())
-                {
-                    return false;
-                }
-                
-                //Get ContractMeterIds that exist in both lists
-                var matchingContractBasketMeterIds = matchingContractMeterIds.Intersect(contractMeterIdFromBasketId);
-
-                return matchingContractBasketMeterIds.Any();
             }
         }
     }

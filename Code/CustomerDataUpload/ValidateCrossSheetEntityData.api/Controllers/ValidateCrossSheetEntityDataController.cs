@@ -21,7 +21,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -82,17 +82,17 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 var errorsFound = false;
 
                 //Get data from required tables
-                var customerDataRows = _tempCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
-                var siteDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);
-                var meterDataRows = _tempCustomerMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
-                var meterExemptionDataRows = _tempCustomerMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
-                var meterUsageDataRows = _tempCustomerMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
-                var subMeterDataRows = _tempCustomerMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
-                var subMeterUsageDataRows = _tempCustomerMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
-                var fixedContractDataRows = _tempCustomerMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);
-                var flexContractDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
-                var flexReferenceVolumeDataRows = _tempCustomerMethods.FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
-                var flexTradeDataRows = _tempCustomerMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
+                var customerDataRows = _tempCustomerDataUploadMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
+                var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(processQueueGUID);
+                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
+                var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var fixedContractDataRows = _tempCustomerDataUploadMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);
+                var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
+                var flexReferenceVolumeDataRows = _tempCustomerDataUploadMethods.FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
+                var flexTradeDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
 
                 //Sites - If Customer Name is populated, check it exists and if not, check it is in the Customers table
                 var customerNameCustomerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
@@ -159,7 +159,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                     {columnName, columnDisplayName}
                 };
             var mainCrossEntityDataRowsDataRows = mainDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(columnName)));
-            var records = _tempCustomerMethods.InitialiseRecordsDictionary(mainCrossEntityDataRowsDataRows, entities);
+            var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(mainCrossEntityDataRowsDataRows, entities);
             var newMainCrossEntityDataRows = mainCrossEntityDataRowsDataRows.Where(r => GetDetailId(attributeId, r.Field<string>(columnName), sheetName) == 0);
             var invalidMainCrossEntityDataRows = newMainCrossEntityDataRows.Where(r => !crossEntityDataRows.Any(cr => cr.Field<string>(columnName) == r.Field<string>(columnName)));
 
@@ -169,7 +169,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 records[rowId][columnName].Add($"New {columnDisplayName} entered'{invalidMainCrossEntityDataRow[columnName]}' but not entered in {otherSheetName} sheet");
             }
 
-            return _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, sheetName, false);
+            return _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, sheetName, false);
         }
 
         private long GetDetailId(long attributeId, string detailDescription, string sheetName)

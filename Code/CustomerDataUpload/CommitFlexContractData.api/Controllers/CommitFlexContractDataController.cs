@@ -19,7 +19,7 @@ namespace CommitFlexContractData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -71,8 +71,8 @@ namespace CommitFlexContractData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
-                var customerDataRows = _tempCustomerMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
-                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(customerDataRows);
+                var customerDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(customerDataRows);
 
                 if(!commitableDataRows.Any())
                 {

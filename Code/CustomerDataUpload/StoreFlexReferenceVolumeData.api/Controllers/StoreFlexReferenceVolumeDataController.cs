@@ -17,7 +17,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -67,7 +67,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                 }
 
                 //Get Flex Reference Volume data from Customer Data Upload
-                var flexReferenceVolumeDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
+                var flexReferenceVolumeDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
 
                 foreach(var row in flexReferenceVolumeDictionary.Keys)
                 {
@@ -76,7 +76,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                     var dateTo = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert flex reference volume data into [Temp.CustomerDataUpload].[FlexReferenceVolume]
-                    _tempCustomerMethods.FlexReferenceVolume_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3]);
+                    _tempCustomerDataUploadMethods.FlexReferenceVolume_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3]);
                 }
 
                 //Update Process Queue

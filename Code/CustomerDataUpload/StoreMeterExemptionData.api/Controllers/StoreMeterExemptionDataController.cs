@@ -17,7 +17,7 @@ namespace StoreMeterExemptionData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -67,7 +67,7 @@ namespace StoreMeterExemptionData.api.Controllers
                 }
 
                 //Get Meter Exemption data from Customer Data Upload
-                var meterExemptionDictionary = _tempCustomerMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter Exemptions']");
+                var meterExemptionDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter Exemptions']");
 
                 foreach(var row in meterExemptionDictionary.Keys)
                 {
@@ -76,7 +76,7 @@ namespace StoreMeterExemptionData.api.Controllers
                     var dateTo = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert meter exemption data into [Temp.CustomerDataUpload].[MeterExemption]
-                    _tempCustomerMethods.MeterExemption_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3], values[4]);
+                    _tempCustomerDataUploadMethods.MeterExemption_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3], values[4]);
                 }
 
                 //Update Process Queue

@@ -21,7 +21,7 @@ namespace CommitSiteData.api.Controllers
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -73,8 +73,8 @@ namespace CommitSiteData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
-                var siteDataRows = _tempCustomerMethods.Site_GetByProcessQueueGUID(processQueueGUID);
-                var commitableDataRows = _tempCustomerMethods.GetCommitableRows(siteDataRows);
+                var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(processQueueGUID);
+                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(siteDataRows);
 
                 if(!commitableDataRows.Any())
                 {

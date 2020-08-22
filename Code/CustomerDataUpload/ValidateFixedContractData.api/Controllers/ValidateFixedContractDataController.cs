@@ -21,7 +21,7 @@ namespace ValidateFixedContractData.api.Controllers
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -73,7 +73,7 @@ namespace ValidateFixedContractData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] table
-                var fixedContractDataRows = _tempCustomerMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);
+                var fixedContractDataRows = _tempCustomerDataUploadMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!fixedContractDataRows.Any())
                 {
@@ -95,7 +95,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Value, _customerDataUploadValidationEntityEnums.Value}
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(fixedContractDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -107,7 +107,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"}
                     };
 
-                _tempCustomerMethods.GetMissingRecords(records, fixedContractDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, fixedContractDataRows, requiredColumns);
 
                 //If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
                 var newContractMeterDataRecords = fixedContractDataRows.Where(r => 
@@ -118,7 +118,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
                         {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"},
                     };
-                _tempCustomerMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
                 //Get new contracts
                 var newContractDataRecords = fixedContractDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference)));
@@ -129,7 +129,7 @@ namespace ValidateFixedContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
                         {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, newContractDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractDataRecords, requiredColumns);
 
                 //Validate Supplier
                 var invalidSupplierDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Supplier))
@@ -275,7 +275,7 @@ namespace ValidateFixedContractData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FixedContract);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FixedContract);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateFixedContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)

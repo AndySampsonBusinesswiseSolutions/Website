@@ -7,24 +7,13 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public class Administration
+        public partial class Administration
         {
             public long GetSystemUserId()
             {
                 return User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
             }
 
-            public long Password_GetPasswordIdByPassword(string password)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureAdministrationEnums.Password_GetByPassword, 
-                    password);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("PasswordId"))
-                    .FirstOrDefault();
-            }
-            
             public void UserDetail_Insert(long createdByUserId, long sourceId, long userId, long userAttributeId, string userDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
@@ -84,35 +73,6 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("UserDetailId"))
-                    .FirstOrDefault();
-            }
-
-            public void Login_Insert(long createdByUserId, long sourceId, bool loginSuccessful, string processArchiveGUID)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureAdministrationEnums.Login_Insert, 
-                    createdByUserId, sourceId, loginSuccessful, processArchiveGUID);
-            }
-
-            public long Login_GetLoginIdByProcessArchiveGUID(string processArchiveGUID)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureAdministrationEnums.Login_GetByProcessArchiveGUID, 
-                    processArchiveGUID);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("LoginId"))
-                    .FirstOrDefault();
-            }
-
-            public bool Login_GetLoginSuccessfulByLoginId(long loginId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureAdministrationEnums.Login_GetByLoginId, 
-                    loginId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<bool>("LoginSuccessful"))
                     .FirstOrDefault();
             }
 

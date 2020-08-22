@@ -20,7 +20,7 @@ namespace ValidateFlexTradeData.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.Customer _tempCustomerMethods = new Methods.Temp.Customer();
+        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -72,7 +72,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] table
-                var flexTradeDataRows = _tempCustomerMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
+                var flexTradeDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!flexTradeDataRows.Any())
                 {
@@ -92,14 +92,14 @@ namespace ValidateFlexTradeData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Direction, "Trade Direction"}
                     };
 
-                var records = _tempCustomerMethods.InitialiseRecordsDictionary(flexTradeDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexTradeDataRows, columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.BasketReference, "Basket Reference"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, flexTradeDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, flexTradeDataRows, requiredColumns);
 
                 //If Trade Reference is not populated, all other fields are required
                 //Get Trade References not populated
@@ -114,7 +114,7 @@ namespace ValidateFlexTradeData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.Price, _customerDataUploadValidationEntityEnums.Price},
                         {_customerDataUploadValidationEntityEnums.Direction, "Trade Direction"}
                     };
-                _tempCustomerMethods.GetMissingRecords(records, emptyTradeReferenceDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, emptyTradeReferenceDataRecords, requiredColumns);
 
                 //Validate Trade Reference
                 var invalidTradeReferenceDataRecords = flexTradeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference))
@@ -195,7 +195,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FlexTrade);
+                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FlexTrade);
                 _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
