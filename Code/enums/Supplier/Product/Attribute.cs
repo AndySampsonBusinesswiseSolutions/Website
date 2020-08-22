@@ -2,13 +2,8 @@ namespace enums
 {
     public partial class Enums
     {
-        public class Supplier
+        public partial class Supplier
         {
-            public class Attribute
-            {
-                public string SupplierName = "Supplier Name";
-            }
-
             public class Product
             {
                 public class Attribute
