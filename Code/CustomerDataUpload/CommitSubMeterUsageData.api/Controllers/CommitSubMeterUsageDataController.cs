@@ -57,6 +57,7 @@ namespace CommitSubMeterUsageData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -73,11 +74,11 @@ namespace CommitSubMeterUsageData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] where CanCommit = 1
-                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var subMeterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterDataRows);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var subMeterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterUsageDataRows);
 
                 if(!subMeterCommitableDataRows.Any() && !subMeterUsageCommitableDataRows.Any())

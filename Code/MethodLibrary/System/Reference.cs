@@ -99,6 +99,11 @@ namespace MethodLibrary
             {
                 return jsonObject[_systemAPIRequiredDataKeyEnums.ChildCustomerData].ToString();
             }
+            
+            public string GetCustomerDataUploadProcessQueueGUIDFromJObject(JObject jsonObject)
+            {
+                return jsonObject[_systemAPIRequiredDataKeyEnums.CustomerDataUploadProcessQueueGUID].ToString();
+            }
         }
     }
 }

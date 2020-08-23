@@ -55,6 +55,7 @@ namespace CommitFixedContractData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -71,8 +72,8 @@ namespace CommitFixedContractData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] where CanCommit = 1
-                var customerDataRows = _tempCustomerDataUploadMethods.FixedContract_GetByProcessQueueGUID(processQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(customerDataRows);
+                var fixedContractDataRows = _tempCustomerDataUploadMethods.FixedContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(fixedContractDataRows);
 
                 if(!commitableDataRows.Any())
                 {

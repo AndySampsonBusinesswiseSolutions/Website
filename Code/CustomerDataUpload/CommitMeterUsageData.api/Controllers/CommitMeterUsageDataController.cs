@@ -58,6 +58,7 @@ namespace CommitMeterUsageData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -74,11 +75,11 @@ namespace CommitMeterUsageData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var meterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
-                var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var meterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterUsageDataRows);
 
                 if(!meterCommitableDataRows.Any() && !meterUsageCommitableDataRows.Any())

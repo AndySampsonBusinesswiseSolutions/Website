@@ -238,6 +238,7 @@ namespace ValidateFixedContractData.api.Controllers
                 }
 
                 var validRateDataRecords = fixedContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
+                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("Rate")
                     && _methods.IsValidFixedContractRate(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
                     && _methods.IsValidFixedContractRateCount(r.Field<string>(_customerDataUploadValidationEntityEnums.RateCount)));
 

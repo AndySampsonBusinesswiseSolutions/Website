@@ -62,6 +62,7 @@ namespace CommitFlexTradeData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -78,8 +79,8 @@ namespace CommitFlexTradeData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] where CanCommit = 1
-                var customerDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(customerDataRows);
+                var flexTradeDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexTradeDataRows);
 
                 if(!commitableDataRows.Any())
                 {

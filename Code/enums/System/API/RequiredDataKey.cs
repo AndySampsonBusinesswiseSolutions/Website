@@ -29,6 +29,7 @@ namespace enums
                     public string PeriodicUsage = "PeriodicUsage";
                     public string EstimatedAnnualUsage = "EstimatedAnnualUsage";
                     public string MPXN = "MPXN";
+                    public string CustomerDataUploadProcessQueueGUID = "CustomerDataUploadProcessQueueGUID";
                 }
             }
         }

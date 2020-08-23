@@ -59,6 +59,7 @@ namespace CommitMeterExemptionData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -75,7 +76,7 @@ namespace CommitMeterExemptionData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] where CanCommit = 1
-                var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
+                var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterExemptionDataRows);
 
                 if(!commitableDataRows.Any())

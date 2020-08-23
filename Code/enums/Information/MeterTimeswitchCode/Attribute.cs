@@ -8,8 +8,9 @@ namespace enums
             {
                 public class Attribute
                 {
-                    public string MeterTimeswitchRangeStart = "Meter Timeswitch Class Range Start";
-                    public string MeterTimeswitchRangeEnd = "Meter Timeswitch Class Range End";
+                    public string MeterTimeswitchCodeRangeStart = "Meter Timeswitch Code Range Start";
+                    public string MeterTimeswitchCodeRangeEnd = "Meter Timeswitch Code Range End";
+                    public string MeterTimeswitchCodeRangeDescription = "Meter Timeswitch Code Range Description";
                 }
             }
         }

@@ -23,7 +23,8 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
+        private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 processCustomerDataUploadValidationAPIId;
 
         public ProcessCustomerDataUploadValidationController(ILogger<ProcessCustomerDataUploadValidationController> logger)
@@ -86,6 +87,9 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 //Map current ProcessQueueGUID to new ProcessQueueGUID
                 _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
                 _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+
+                //Add original ProcessQueueGUID as CustomerDataUploadprocessQueueGUID
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.CustomerDataUploadProcessQueueGUID, processQueueGUID);
 
                 //Connect to Routing API and POST data
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);

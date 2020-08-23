@@ -57,6 +57,7 @@ namespace CommitCustomerData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -73,7 +74,7 @@ namespace CommitCustomerData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerUploadData].[Customer] where CanCommit = 1
-                var customerDataRows = _tempCustomerDataUploadMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
+                var customerDataRows = _tempCustomerDataUploadMethods.Customer_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(customerDataRows);
 
                 if(!commitableDataRows.Any())
