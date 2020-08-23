@@ -211,11 +211,19 @@ namespace MethodLibrary
 
                 public void UpdateCanCommit(string processQueueGUID, string sheetName, Dictionary<int, Dictionary<string, List<string>>> validRecords, bool canCommit)
                 {
-                    var newProcessQueueGUID = $"{DetermineUpdateCanCommitStoredProcedureFromSheetName(sheetName)}|{processQueueGUID}";
+                    var storedProcedure = DetermineUpdateCanCommitStoredProcedureFromSheetName(sheetName);
+                    var requiresSheetNameParameter = DetermineRequiresSheetNameParameter(sheetName);
 
                     foreach(var rowId in validRecords.Keys)
                     {
-                        CanCommit_Update(newProcessQueueGUID, rowId, canCommit);
+                        if(requiresSheetNameParameter)
+                        {
+                            CanCommit_Update(storedProcedure, processQueueGUID, sheetName, rowId, canCommit);
+                        }
+                        else
+                        {
+                            CanCommit_Update(storedProcedure, processQueueGUID, rowId, canCommit);
+                        }
                     }
                 }
 
@@ -241,7 +249,8 @@ namespace MethodLibrary
                         return _storedProcedureTempCustomerDataUploadEnums.SubMeter_UpdateCanCommit;
                     }
 
-                    if(sheetName == _customerDataUploadValidationSheetNameEnums.MeterUsage)
+                    if(sheetName == _customerDataUploadValidationSheetNameEnums.MeterUsage
+                        || sheetName == _customerDataUploadValidationSheetNameEnums.DailyMeterUsage)
                     {
                         return _storedProcedureTempCustomerDataUploadEnums.MeterUsage_UpdateCanCommit;
                     }
@@ -279,12 +288,30 @@ namespace MethodLibrary
                     return string.Empty;
                 }
 
-                private void CanCommit_Update(string processQueueGUID, int rowId, bool canCommit)
+                private bool DetermineRequiresSheetNameParameter(string sheetName)
                 {
-                    var processQueueGUIDArray = processQueueGUID.Split('|');
-                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        processQueueGUIDArray[0], 
-                        processQueueGUIDArray[1], rowId, canCommit);
+                    return sheetName == _customerDataUploadValidationSheetNameEnums.MeterUsage
+                        || sheetName == _customerDataUploadValidationSheetNameEnums.DailyMeterUsage;
+                }
+
+                private void CanCommit_Update(string storedProcedure, string processQueueGUID, int rowId, bool canCommit)
+                {
+                    var parameterArray = MethodBase.GetCurrentMethod().GetParameters()
+                        .Where(p => p.Name != "storedProcedure");
+
+                    ExecuteNonQuery(parameterArray.ToArray(),
+                        storedProcedure, 
+                        processQueueGUID, rowId, canCommit);
+                }
+
+                private void CanCommit_Update(string storedProcedure, string processQueueGUID, string sheetName, int rowId, bool canCommit)
+                {
+                    var parameterArray = MethodBase.GetCurrentMethod().GetParameters()
+                        .Where(p => p.Name != "storedProcedure");
+
+                    ExecuteNonQuery(parameterArray.ToArray(),
+                        storedProcedure, 
+                        processQueueGUID, sheetName, rowId, canCommit);
                 }
             }
         }

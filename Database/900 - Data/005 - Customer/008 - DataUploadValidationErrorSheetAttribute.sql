@@ -16,3 +16,4 @@ EXEC [Customer].[DataUploadValidationErrorSheetAttribute_Insert] @CreatedByUserI
 EXEC [Customer].[DataUploadValidationErrorSheetAttribute_Insert] @CreatedByUserId, @SourceId, 'Flex Contracts'
 EXEC [Customer].[DataUploadValidationErrorSheetAttribute_Insert] @CreatedByUserId, @SourceId, 'Flex Reference Volumes'
 EXEC [Customer].[DataUploadValidationErrorSheetAttribute_Insert] @CreatedByUserId, @SourceId, 'Flex Trades'
+EXEC [Customer].[DataUploadValidationErrorSheetAttribute_Insert] @CreatedByUserId, @SourceId, 'MPRN Daily Data'

@@ -81,7 +81,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     return;
                 }
 
-                var errorMessage = string.Empty;
+                string errorMessage = null;
                 var sourceSheetList = new List<string>
                 {
                     _customerDataUploadValidationSheetNameEnums.MeterUsage,

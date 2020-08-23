@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.CustomerDataUpload].[MeterUsage_UpdateCanCommit]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @SheetName VARCHAR(255),
     @RowId INT,
     @CanCommit BIT
 AS
@@ -27,6 +28,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-08-03 -> Andrew Sampson -> Initial development of script
+    -- 2020-08-23 -> Andrew Sampson -> Added SheetName parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -39,6 +41,7 @@ BEGIN
         CanCommit = @CanCommit
     WHERE
         ProcessQueueGUID = @ProcessQueueGUID
+        AND SheetName = @SheetName
         AND RowId = @RowId
 END
 GO

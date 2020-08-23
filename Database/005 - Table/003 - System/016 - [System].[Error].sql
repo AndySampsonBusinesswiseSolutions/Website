@@ -24,7 +24,7 @@ CREATE TABLE [System].[Error]
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
 	ErrorGUID UNIQUEIDENTIFIER NOT NULL,
-	ErrorMessage VARCHAR(255) NULL,
+	ErrorMessage VARCHAR(MAX) NULL,
 	ErrorType VARCHAR(255) NULL,
 	ErrorSource VARCHAR(MAX) NULL
 	)  ON [System]

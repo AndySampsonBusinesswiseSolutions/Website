@@ -172,48 +172,6 @@
                 "/Views": "${workspaceFolder}/CustomerDataUpload/CommitBasketData.api/Views"
             }
         },
-        {"name": "CommitContractMeterToProductData.api",
-            "type": "coreclr",
-            "request": "launch",
-            // "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/CommitContractMeterToProductData.api/bin/Debug/netcoreapp3.1/CommitContractMeterToProductData.api.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitContractMeterToProductData.api",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitContractMeterToProductData.api/Views"
-            }
-        },
-        {"name": "CommitContractToSupplierData.api",
-            "type": "coreclr",
-            "request": "launch",
-            // "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/CommitContractToSupplierData.api/bin/Debug/netcoreapp3.1/CommitContractToSupplierData.api.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitContractToSupplierData.api",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitContractToSupplierData.api/Views"
-            }
-        },
         {"name": "CommitContractData.api",
             "type": "coreclr",
             "request": "launch",
@@ -233,27 +191,6 @@
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/CustomerDataUpload/CommitContractData.api/Views"
-            }
-        },
-        {"name": "CommitExemptionToMeterData.api",
-            "type": "coreclr",
-            "request": "launch",
-            // "preLaunchTask": "build",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CustomerDataUpload/CommitExemptionToMeterData.api/bin/Debug/netcoreapp3.1/CommitExemptionToMeterData.api.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitExemptionToMeterData.api",
-            "stopAtEntry": false,
-            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
-            "serverReadyAction": {
-                "action": "openExternally",
-                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-            },
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitExemptionToMeterData.api/Views"
             }
         },
         {"name": "CommitSubAreaToSubMeterData.api",
@@ -1491,10 +1428,7 @@
                 "CommitLineLossFactorClassToMeterData.api",
                 "CommitGridSupplyPointToMeterData.api",
                 "CommitBasketData.api",
-                "CommitContractMeterToProductData.api",
-                "CommitContractToSupplierData.api",
                 "CommitContractData.api",
-                "CommitExemptionToMeterData.api",
                 "CommitSubAreaToSubMeterData.api",
                 "CommitAssetToSubMeterData.api",
                 "CommitCommodityToMeterData.api",
@@ -1605,10 +1539,7 @@
                 "CommitLineLossFactorClassToMeterData.api",
                 "CommitGridSupplyPointToMeterData.api",
                 "CommitBasketData.api",
-                "CommitContractMeterToProductData.api",
-                "CommitContractToSupplierData.api",
                 "CommitContractData.api",
-                "CommitExemptionToMeterData.api",
                 "CommitSubAreaToSubMeterData.api",
                 "CommitAssetToSubMeterData.api",
                 "CommitCommodityToMeterData.api",
