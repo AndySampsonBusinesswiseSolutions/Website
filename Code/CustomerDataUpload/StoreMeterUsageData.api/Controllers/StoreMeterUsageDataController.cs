@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using System.Collections.Generic;
 
 namespace StoreMeterUsageData.api.Controllers
 {
@@ -23,6 +24,7 @@ namespace StoreMeterUsageData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
         private readonly Int64 storeMeterUsageDataAPIId;
 
         public StoreMeterUsageDataController(ILogger<StoreMeterUsageDataController> logger)
@@ -68,12 +70,10 @@ namespace StoreMeterUsageData.api.Controllers
                     return;
                 }
 
-                //Get Meter Usage data from Customer Data Upload
-                var meterUsageDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter HH Data']");
-
                 //Create data table
                 var meterUsageDataTable = new DataTable();
                 meterUsageDataTable.Columns.Add("ProcessQueueGUID", typeof(Guid));
+                meterUsageDataTable.Columns.Add("SheetName", typeof(string));
                 meterUsageDataTable.Columns.Add("RowId", typeof(int));
                 meterUsageDataTable.Columns.Add("MPXN", typeof(string));
                 meterUsageDataTable.Columns.Add("Date", typeof(string));
@@ -81,27 +81,43 @@ namespace StoreMeterUsageData.api.Controllers
                 meterUsageDataTable.Columns.Add("Value", typeof(string));
                 meterUsageDataTable.Columns.Add("CanCommit", typeof(bool));
 
-                foreach(var row in meterUsageDictionary.Keys)
+                var sourceSheetList = new List<string>
                 {
-                    var values = meterUsageDictionary[row];
-                    var mpxn = values[0];
-                    var date = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
+                    _customerDataUploadValidationSheetNameEnums.MeterUsage,
+                    _customerDataUploadValidationSheetNameEnums.DailyMeterUsage
+                };
 
-                    for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
-                    {                       
-                        var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
+                foreach(var sourceSheet in sourceSheetList)
+                {
+                    var jsonSheet = $"Sheets['{sourceSheet}']";
+                    var dailyTimePeriod = sourceSheet == _customerDataUploadValidationSheetNameEnums.DailyMeterUsage ? 1 : 0;
 
-                        //Insert data into meterUsageDataTable
-                        var meterUsageDataRow = meterUsageDataTable.NewRow();
-                        meterUsageDataRow["ProcessQueueGUID"] = processQueueGUID;
-                        meterUsageDataRow["RowId"] = row;
-                        meterUsageDataRow["MPXN"] = mpxn;
-                        meterUsageDataRow["Date"] = date;
-                        meterUsageDataRow["TimePeriod"] = timePeriodString;
-                        meterUsageDataRow["Value"] = values[timePeriod];
-                        meterUsageDataRow["CanCommit"] = false;
+                    //Get Meter Usage data from Customer Data Upload
+                    var meterUsageDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, jsonSheet);
 
-                        meterUsageDataTable.Rows.Add(meterUsageDataRow);
+                    foreach(var row in meterUsageDictionary.Keys)
+                    {
+                        var values = meterUsageDictionary[row];
+                        var mpxn = values[0];
+                        var date = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
+
+                        for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
+                        {                       
+                            var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod - dailyTimePeriod);
+
+                            //Insert data into meterUsageDataTable
+                            var meterUsageDataRow = meterUsageDataTable.NewRow();
+                            meterUsageDataRow["ProcessQueueGUID"] = processQueueGUID;
+                            meterUsageDataRow["SheetName"] = sourceSheet;
+                            meterUsageDataRow["RowId"] = row;
+                            meterUsageDataRow["MPXN"] = mpxn;
+                            meterUsageDataRow["Date"] = date;
+                            meterUsageDataRow["TimePeriod"] = timePeriodString;
+                            meterUsageDataRow["Value"] = values[timePeriod];
+                            meterUsageDataRow["CanCommit"] = false;
+
+                            meterUsageDataTable.Rows.Add(meterUsageDataRow);
+                        }
                     }
                 }
 
@@ -121,4 +137,3 @@ namespace StoreMeterUsageData.api.Controllers
         }
     }
 }
-

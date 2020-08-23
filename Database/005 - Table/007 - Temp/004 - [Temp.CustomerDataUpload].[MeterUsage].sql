@@ -18,6 +18,7 @@ GO
 CREATE TABLE [Temp.CustomerDataUpload].[MeterUsage]
 	(
 	ProcessQueueGUID UNIQUEIDENTIFIER,
+	SheetName VARCHAR(255),
 	RowId INT,
 	MPXN VARCHAR(255),
 	Date VARCHAR(255),

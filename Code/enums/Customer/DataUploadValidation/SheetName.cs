@@ -13,6 +13,7 @@ namespace enums
                     public string Meter = "Meters";
                     public string SubMeter = "SubMeters";
                     public string MeterUsage = "Meter HH Data";
+                    public string DailyMeterUsage = "MPRN Daily Data";
                     public string MeterExemption = "Meter Exemptions";
                     public string SubMeterUsage = "SubMeter HH Data";
                     public string FixedContract = "Fixed Contracts";

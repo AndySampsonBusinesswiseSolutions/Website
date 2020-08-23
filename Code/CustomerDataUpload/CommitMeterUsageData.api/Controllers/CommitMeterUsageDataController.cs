@@ -73,11 +73,11 @@ namespace CommitMeterUsageData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
+                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
                 var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
                 var meterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
 
-                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
+                //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
                 var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
                 var meterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterUsageDataRows);
 
