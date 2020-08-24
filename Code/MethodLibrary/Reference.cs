@@ -87,6 +87,12 @@ namespace MethodLibrary
             _databaseInteraction.ExecuteNonQuery(storedProcedureName, sqlParameters);
         }
 
+        private static void ExecuteSQL(string SQL)
+        {
+            //Run SQL
+            _databaseInteraction.ExecuteSQL(SQL);
+        }
+
         private static string ConvertParameterName(string parameterName)
         {
             return char.ToUpper(parameterName[0]) + parameterName.Substring(1);
