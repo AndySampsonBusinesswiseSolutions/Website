@@ -9,11 +9,11 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public void SubAreaToSubMeter_Insert(long createdByUserId, long sourceId, long subSubAreaId, long subMeterId)
+            public void SubAreaToSubMeter_Insert(long createdByUserId, long sourceId, long subAreaId, long subMeterId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.SubAreaToSubMeter_Insert, 
-                    createdByUserId, sourceId, subSubAreaId, subMeterId);
+                    createdByUserId, sourceId, subAreaId, subMeterId);
             }
         }
     }

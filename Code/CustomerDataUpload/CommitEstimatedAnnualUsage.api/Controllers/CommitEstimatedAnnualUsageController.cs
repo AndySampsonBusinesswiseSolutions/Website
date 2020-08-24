@@ -75,8 +75,11 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 //Get mpxn
                 var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
 
+                //Get MeterIdentifierMeterAttributeId
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+
                 //Get MeterId
-                var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier), mpxn).First();
+                var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                 //Get CommodityId by MeterId
                 var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);

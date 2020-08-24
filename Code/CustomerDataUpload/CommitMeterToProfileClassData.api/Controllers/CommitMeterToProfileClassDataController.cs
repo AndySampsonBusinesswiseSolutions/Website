@@ -92,7 +92,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                     //Get ProfileClassId from [Information].[ProfileClassDetail]
                     var profileClass = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass);

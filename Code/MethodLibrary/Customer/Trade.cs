@@ -50,8 +50,8 @@ namespace MethodLibrary
                     tradeId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<string>("TradeGUID"))
-                    .FirstOrDefault();
+                    .Select(r => r.Field<Guid>("TradeGUID"))
+                    .FirstOrDefault().ToString();
             }
 
             public void TradeDetail_Insert(long createdByUserId, long sourceId, long tradeId, long tradeAttributeId, string tradeDetailDescription)

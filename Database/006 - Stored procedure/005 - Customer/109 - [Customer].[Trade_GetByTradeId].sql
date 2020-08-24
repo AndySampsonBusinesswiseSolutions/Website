@@ -41,7 +41,7 @@ BEGIN
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        TradeId
+        TradeGUID
     FROM 
         [Customer].[Trade] 
     WHERE 

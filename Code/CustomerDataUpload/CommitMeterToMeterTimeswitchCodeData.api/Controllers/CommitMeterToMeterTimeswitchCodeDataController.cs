@@ -91,21 +91,31 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
 
                 foreach(var dataRow in commitableDataRows)
                 {
+                    //Get MeterTimeswitchCodeId from [Information].[MeterTimeswitchCodeDetail]
+                    var meterTimeswitchCode = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MeterTimeswitchCode);
+
+                    if(string.IsNullOrWhiteSpace(meterTimeswitchCode))
+                    {
+                        continue;
+                    }
+
+                    var meterTimeswitchCodeValue = Convert.ToInt64(meterTimeswitchCode);
+
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
                     var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
 
-                    //Get MeterTimeswitchCodeId from [Information].[MeterTimeswitchCodeDetail]
-                    var meterTimeswitchCode = Convert.ToInt64(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MeterTimeswitchCode));
-
                     var meterTimeswitchCodeRangeStartDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeStartMeterTimeswitchCodeAttributeId);
                     var meterTimeswitchCodeRangeEndDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeEndMeterTimeswitchCodeAttributeId);
 
-                    var validRangeStartDataRecords = meterTimeswitchCodeRangeStartDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") <= meterTimeswitchCode);
-                    var validRangeEndDataRecords = meterTimeswitchCodeRangeEndDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") >= meterTimeswitchCode);
+                    var validRangeStartDataRecords = meterTimeswitchCodeRangeStartDataTable.Rows.Cast<DataRow>().Where(r => Convert.ToInt64(r.Field<string>("MeterTimeswitchCodeDetailDescription")) <= meterTimeswitchCodeValue);
+                    var validRangeEndDataRecords = meterTimeswitchCodeRangeEndDataTable.Rows.Cast<DataRow>().Where(r => Convert.ToInt64(r.Field<string>("MeterTimeswitchCodeDetailDescription")) >= meterTimeswitchCodeValue);
 
-                    var meterTimeswitchCodeDataRows = validRangeStartDataRecords.Intersect(validRangeEndDataRecords).FirstOrDefault();
-                    var meterTimeswitchCodeId = meterTimeswitchCodeDataRows.Field<long>("MeterTimeswitchId");
+                    //Get MeterTimeswitchIds
+                    var validRangeStartMeterTimeswitchIdList = validRangeStartDataRecords.Select(r => r.Field<long>("MeterTimeswitchCodeId"));
+                    var validRangeEndMeterTimeswitchIdList = validRangeEndDataRecords.Select(r => r.Field<long>("MeterTimeswitchCodeId"));
+
+                    var meterTimeswitchCodeId = validRangeStartMeterTimeswitchIdList.Intersect(validRangeEndMeterTimeswitchIdList).FirstOrDefault();
 
                     //Insert into [Mapping].[MeterToMeterTimeswitchCode]
                     _mappingMethods.MeterToMeterTimeswitchCode_Insert(createdByUserId, sourceId, meterTimeswitchCodeId, meterId);

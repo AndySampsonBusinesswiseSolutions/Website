@@ -118,13 +118,13 @@ namespace CommitSubMeterUsageData.api.Controllers
                     //Add subMeterIdentifier to jsonObject
                     jsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, subMeterIdentifier);
 
-                    if(subMeterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier))
+                    if(subMeterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier))
                     {
                         //Update Process GUID to CommitPeriodicUsage Process GUID
                         _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
 
                         //Get periodic usage
-                        var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier);
+                        var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier);
 
                         //Add periodic usage to jsonObject
                         jsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDataRows));
@@ -135,7 +135,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                         _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
 
                         //Get EstimatedAnnualUsage
-                        var estimatedAnnualUsage = subMeterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == subMeterIdentifier)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
+                        var estimatedAnnualUsage = subMeterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
 
                         //Add EstimatedAnnualUsage to jsonObject
                         jsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);

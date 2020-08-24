@@ -9,6 +9,21 @@ namespace MethodLibrary
     {
         public partial class Supply
         {
+            private void CreateEstimatedAnnualUsageEntities(long schemaId, long meterId, string meterType)
+            {
+                var tableName = $"EstimatedAnnualUsage";
+                var tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
+
+                if(tableId == 0)
+                {
+                    EstimatedAnnualUsage_CreateTable(meterId, meterType);
+                }
+
+                EstimatedAnnualUsage_CreateDeleteStoredProcedure(meterId, meterType);
+                EstimatedAnnualUsage_CreateInsertStoredProcedure(meterId, meterType);
+                EstimatedAnnualUsage_GrantExecuteToStoredProcedures(meterId, meterType);
+            }
+
             public void EstimatedAnnualUsage_CreateTable(long meterId, string meterType)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
@@ -46,6 +61,20 @@ namespace MethodLibrary
                 ExecuteNonQuery(parameterInfoList, 
                     estimatedAnnualUsageInsertStoredProcedure,
                     createdByUserId, sourceId, estimatedAnnualUsage);
+            }
+
+            private void EstimatedAnnualUsage_GrantExecuteToStoredProcedures(long meterId, string meterType)
+            {
+                foreach(var estimatedAnnualUsageStoredProcedure in _storedProcedureSupplyEnums.EstimatedAnnualUsageStoredProcedureList)
+                {
+                    var storedProcedure = string.Format(estimatedAnnualUsageStoredProcedure, meterType, meterId);
+
+                    foreach(var api in _systemAPIRequireAccessToUsageEntitiesEnums.APIList)
+                    {
+                        var SQL = $"GRANT EXECUTE ON OBJECT::{storedProcedure} TO [{api}];";
+                        ExecuteSQL(SQL);
+                    }
+                }
             }
         }
     }

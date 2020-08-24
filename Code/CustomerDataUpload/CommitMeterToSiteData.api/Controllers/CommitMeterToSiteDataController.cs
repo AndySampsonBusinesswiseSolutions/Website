@@ -93,7 +93,7 @@ namespace CommitMeterToSiteData.api.Controllers
                 {
                     //Get MeterId by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterNameMeterAttributeId, mpxn);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterNameMeterAttributeId, mpxn).FirstOrDefault();
 
                     //Get SiteId by SiteName and SitePostCode
                     var siteName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName);

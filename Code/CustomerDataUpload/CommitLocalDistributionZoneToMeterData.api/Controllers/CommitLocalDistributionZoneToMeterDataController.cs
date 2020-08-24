@@ -86,24 +86,24 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
                 }
 
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-                var localDistributionZoneCodeLocalDistributionZoneAttributeId = _informationMethods.LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(_informationLocalDistributionZoneAttributeEnums.LocalDistributionZoneCode);
+                var localDistributionZoneLocalDistributionZoneAttributeId = _informationMethods.LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(_informationLocalDistributionZoneAttributeEnums.LocalDistributionZone);
 
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                     //Get LocalDistributionZoneId from [Information].[LocalDistributionZoneDetail]
                     var localDistributionZone = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.LocalDistributionZone);
-                    var localDistributionZoneId = _informationMethods.LocalDistributionZoneDetail_GetLocalDistributionZoneIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(localDistributionZoneCodeLocalDistributionZoneAttributeId, localDistributionZone);
+                    var localDistributionZoneId = _informationMethods.LocalDistributionZoneDetail_GetLocalDistributionZoneIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(localDistributionZoneLocalDistributionZoneAttributeId, localDistributionZone);
 
                     if(localDistributionZoneId == 0)
                     {
                         localDistributionZoneId = _informationMethods.InsertNewLocalDistributionZone(createdByUserId, sourceId);
 
                         //Insert into [Customer].[LocalDistributionZoneDetail]
-                        _informationMethods.LocalDistributionZoneDetail_Insert(createdByUserId, sourceId, localDistributionZoneId, localDistributionZoneCodeLocalDistributionZoneAttributeId, localDistributionZone);
+                        _informationMethods.LocalDistributionZoneDetail_Insert(createdByUserId, sourceId, localDistributionZoneId, localDistributionZoneLocalDistributionZoneAttributeId, localDistributionZone);
                     }
 
                     //Insert into [Mapping].[LocalDistributionZoneToMeter]

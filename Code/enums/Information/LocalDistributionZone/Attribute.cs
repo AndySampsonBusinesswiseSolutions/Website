@@ -8,7 +8,7 @@ namespace enums
             {
                 public class Attribute
                 {
-                    public string LocalDistributionZoneCode = "Local Distribution Zone Code";
+                    public string LocalDistributionZone = "Local Distribution Zone";
                 }
             }
         }

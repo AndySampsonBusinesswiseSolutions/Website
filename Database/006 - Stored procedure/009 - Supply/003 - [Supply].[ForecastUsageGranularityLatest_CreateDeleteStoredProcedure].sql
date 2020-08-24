@@ -61,12 +61,12 @@ BEGIN
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[' + @StoredProcedureName + ']
-        @TimePeriodId BIGINT,'
+        @TimePeriodId BIGINT'
         
     IF @RequiresDateParameter = 1
         BEGIN
-            SET @SQL = @SQL + '
-            @DateId BIGINT,'
+            SET @SQL = @SQL + ',
+            @DateId BIGINT'
         END
 
     SET @SQL = @SQL + '

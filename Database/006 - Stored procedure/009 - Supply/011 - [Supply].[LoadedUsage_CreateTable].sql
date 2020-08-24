@@ -14,7 +14,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-30
--- Description:	Create new ForecastUsageHistory table for a granularity for MeterId
+-- Description:	Create new LoadedUsage table for MeterId
 -- =============================================
 
 ALTER PROCEDURE [Supply].[LoadedUsage_CreateTable]

@@ -15,7 +15,7 @@ namespace MethodLibrary
                     tableName, schemaId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("object_id"))
+                    .Select(r => r.Field<int>("object_id"))
                     .FirstOrDefault();
             }
         }

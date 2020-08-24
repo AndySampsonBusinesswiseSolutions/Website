@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace enums
 {
     public partial class Enums
@@ -11,6 +13,12 @@ namespace enums
                 public string LoadedUsage_CreateInsertStoredProcedure = "[Supply].[LoadedUsage_CreateInsertStoredProcedure]";
                 public string LoadedUsage_Delete = "[Supply.{0}{1}].[LoadedUsage_Delete]";
                 public string LoadedUsage_Insert = "[Supply.{0}{1}].[LoadedUsage_Insert]";
+
+                public List<string> LoadedUsageStoredProcedureList = new List<string>
+                {
+                    "[Supply.{0}{1}].[LoadedUsage_Delete]",
+                    "[Supply.{0}{1}].[LoadedUsage_Insert]"
+                };
             }
         }
     }

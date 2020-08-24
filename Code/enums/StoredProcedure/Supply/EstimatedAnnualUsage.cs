@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace enums
 {
     public partial class Enums
@@ -11,6 +13,12 @@ namespace enums
                 public string EstimatedAnnualUsage_CreateInsertStoredProcedure = "[Supply].[EstimatedAnnualUsage_CreateInsertStoredProcedure]";
                 public string EstimatedAnnualUsage_Delete = "[Supply.{0}{1}].[EstimatedAnnualUsage_Delete]";
                 public string EstimatedAnnualUsage_Insert = "[Supply.{0}{1}].[EstimatedAnnualUsage_Insert]";
+
+                public List<string> EstimatedAnnualUsageStoredProcedureList = new List<string>
+                {
+                    "[Supply.{0}{1}].[EstimatedAnnualUsage_Delete]",
+                    "[Supply.{0}{1}].[EstimatedAnnualUsage_Insert]"
+                };
             }
         }
     }
