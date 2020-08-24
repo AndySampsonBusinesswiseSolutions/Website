@@ -97,5 +97,21 @@ namespace databaseInteraction
                 }
             }
         }
+
+        public void ExecuteSQL(string SQL)
+        {
+            using (var sqlConnection = new SqlConnection(ConnectionString))
+            {
+                using (var sqlCommand = new SqlCommand(SQL, sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.Text;
+                    sqlCommand.CommandTimeout = 0;
+
+                    OpenConnection(sqlConnection);
+                    sqlCommand.ExecuteNonQuery();
+                    CloseConnection(sqlConnection);
+                }
+            }
+        }
     }
 }
