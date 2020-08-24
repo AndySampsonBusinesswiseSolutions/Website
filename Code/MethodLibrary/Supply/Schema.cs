@@ -10,9 +10,8 @@ namespace MethodLibrary
         {
             private void Schema_Create(long meterId, string meterType)
             {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.Schema_Create, 
-                    meterId, meterType);
+                var SQL = $"CREATE SCHEMA [Supply.{meterType}{meterId}]";
+                ExecuteSQL(SQL);
             }
 
             private long Schema_GetSchemaIdBySchemaName(string schemaName)
