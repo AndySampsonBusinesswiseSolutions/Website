@@ -119,7 +119,7 @@ namespace CommitBasketData.api.Controllers
                     var customerContractIdList = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
 
                     //Get ContractId from intersect of Customer ContractIdList and Mapping ContractIdList
-                    var contractId = customerContractIdList.Intersect(mappingContractIdList).First();
+                    var contractId = customerContractIdList.Intersect(mappingContractIdList).FirstOrDefault();
 
                     //Get ContractMeterIdList from [Mapping].[ContractMeterToMeter] by MeterId
                     var contractMeterToMeterContractMeterIdList = _mappingMethods.ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
@@ -128,7 +128,7 @@ namespace CommitBasketData.api.Controllers
                     var contractToContractMeterContractMeterIdList = _mappingMethods.ContractToContractMeter_GetContractMeterIdListByContractId(contractId);
 
                     //Get ContractMeterId from intersect of ContractMeterToMeter ContractMeterIdList and ContractToContractMeter ContractMeterIdList
-                    var contractMeterId = contractMeterToMeterContractMeterIdList.Intersect(contractToContractMeterContractMeterIdList).First();
+                    var contractMeterId = contractMeterToMeterContractMeterIdList.Intersect(contractToContractMeterContractMeterIdList).FirstOrDefault();
 
                     //Insert into [Mapping].[BasketToContractMeter]
                     _mappingMethods.BasketToContractMeter_Insert(createdByUserId, sourceId, basketId, contractMeterId);

@@ -121,7 +121,7 @@ namespace CommitSiteData.api.Controllers
                     var sitePostCodeSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, detailDictionary[sitePostCodeSiteAttributeId]);
 
                     var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
-                    var siteId = matchingSiteIdList.First();
+                    var siteId = matchingSiteIdList.FirstOrDefault();
 
                     //TODO: What to do if the update would make another matching entry?
 

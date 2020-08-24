@@ -105,7 +105,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                     .ToDictionary(d => d, d => _informationMethods.Date_GetDateIdByDateDescription(d));
                 var timePeriods = periodicUsage.Select(r => r.Field<string>("TimePeriod"))
                     .Distinct()
-                    .ToDictionary(t => t, t => _informationMethods.TimePeriod_GetTimePeriodIdListByEndTime(t).Intersect(granularityTimePeriods).First());
+                    .ToDictionary(t => t, t => _informationMethods.TimePeriod_GetTimePeriodIdListByEndTime(t).Intersect(granularityTimePeriods).FirstOrDefault());
 
                 foreach(var dataRow in periodicUsage)
                 {

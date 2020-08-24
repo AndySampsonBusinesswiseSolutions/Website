@@ -61,7 +61,7 @@ BEGIN
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[' + @StoredProcedureName + ']
-        @' + @GranularityCode + 'Id BIGINT'
+        @TimePeriodId BIGINT'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -86,7 +86,7 @@ BEGIN
         SET
             EffectiveToDateTime = GETUTCDATE()
         WHERE
-            ' + @GranularityCode + 'Id = @' + @GranularityCode + 'Id'
+            TimePeriodId = @TimePeriodId'
         
     IF @RequiresDateParameter = 1
         BEGIN

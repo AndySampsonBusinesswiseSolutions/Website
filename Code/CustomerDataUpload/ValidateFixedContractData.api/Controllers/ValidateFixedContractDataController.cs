@@ -262,7 +262,7 @@ namespace ValidateFixedContractData.api.Controllers
                     {
                         var fixedContractDataRecords = validRateDataRecords.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference) == contract.Key
                             && r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn);
-                        var rateCount = fixedContractDataRecords.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.RateCount)).First();
+                        var rateCount = fixedContractDataRecords.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.RateCount)).FirstOrDefault();
 
                         if(rateCount != fixedContractDataRecords.Count().ToString())
                         {

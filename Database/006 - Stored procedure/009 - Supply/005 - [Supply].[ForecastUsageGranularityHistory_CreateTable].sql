@@ -51,7 +51,7 @@ BEGIN
         CreatedDateTime DATETIME NOT NULL,
         CreatedByUserId BIGINT NOT NULL,
         SourceId BIGINT NOT NULL,
-        ' + @GranularityCode + 'Id BIGINT NOT NULL,'
+        TimePeriodId BIGINT NOT NULL,'
 
     IF @RequiresDateColumn = 1
         BEGIN
@@ -139,15 +139,15 @@ BEGIN
     ALTER TABLE [' + @SchemaName + '].[' + @TableName + '] ADD CONSTRAINT
 	' + @KeyName + ' FOREIGN KEY
 	(
-	' + @GranularityCode + 'Id
-	) REFERENCES [Information].[' + @GranularityCode + ']
+	TimePeriodId
+	) REFERENCES [Information].[TimePeriod]
 	(
-	' + @GranularityCode + 'Id
+	TimePeriodId
 	) ON UPDATE NO ACTION 
 	 ON DELETE NO ACTION'
     EXEC sp_sqlexec @SQL
 
-    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @GranularityCode + 'Id to [Information].[' + @GranularityCode + '].' + @GranularityCode + 'Id'
+    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @GranularityCode + 'Id to [Information].[TimePeriod].TimePeriodId'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', @TableName, N'CONSTRAINT', @KeyName
 
     IF @RequiresDateColumn = 1

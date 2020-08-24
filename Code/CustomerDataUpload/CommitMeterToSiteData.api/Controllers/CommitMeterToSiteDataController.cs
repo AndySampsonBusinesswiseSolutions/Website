@@ -103,7 +103,7 @@ namespace CommitMeterToSiteData.api.Controllers
                     var sitePostCodeSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, sitePostCode);
 
                     var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
-                    var siteId = matchingSiteIdList.First();
+                    var siteId = matchingSiteIdList.FirstOrDefault();
 
                     //Insert into [Mapping].[MeterToSite]
                     _mappingMethods.MeterToSite_Insert(createdByUserId, sourceId, meterId, siteId);

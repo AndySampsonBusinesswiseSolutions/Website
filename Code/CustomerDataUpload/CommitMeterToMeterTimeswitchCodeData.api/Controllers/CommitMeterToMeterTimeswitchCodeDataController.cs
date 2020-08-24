@@ -104,7 +104,7 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
                     var validRangeStartDataRecords = meterTimeswitchCodeRangeStartDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") <= meterTimeswitchCode);
                     var validRangeEndDataRecords = meterTimeswitchCodeRangeEndDataTable.Rows.Cast<DataRow>().Where(r => r.Field<int>("MeterTimeswitchCodeDetailDescription") >= meterTimeswitchCode);
 
-                    var meterTimeswitchCodeDataRows = validRangeStartDataRecords.Intersect(validRangeEndDataRecords).First();
+                    var meterTimeswitchCodeDataRows = validRangeStartDataRecords.Intersect(validRangeEndDataRecords).FirstOrDefault();
                     var meterTimeswitchCodeId = meterTimeswitchCodeDataRows.Field<long>("MeterTimeswitchId");
 
                     //Insert into [Mapping].[MeterToMeterTimeswitchCode]

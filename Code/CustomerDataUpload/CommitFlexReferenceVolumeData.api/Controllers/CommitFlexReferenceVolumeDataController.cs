@@ -106,7 +106,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                     var referenceVolumeReferenceVolumeIdList = _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(referenceVolumeReferenceVolumeAttributeId, referenceVolume);
 
                     var matchingReferenceVolumeIdList = dateFromReferenceVolumeIdList.Intersect(dateToCodeReferenceVolumeIdList).Intersect(referenceVolumeReferenceVolumeIdList);
-                    var referenceVolumeId = matchingReferenceVolumeIdList.First();
+                    var referenceVolumeId = matchingReferenceVolumeIdList.FirstOrDefault();
 
                     if(referenceVolumeId == 0)
                     {

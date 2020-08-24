@@ -45,7 +45,7 @@ BEGIN
 
     CREATE TABLE [' + @SchemaName + '].[' + @TableName + ']
 	(
-        ' + @GranularityCode + 'Id BIGINT NOT NULL,'
+        TimePeriodId BIGINT NOT NULL,'
 
     IF @RequiresDateColumn = 1
         BEGIN
@@ -57,22 +57,22 @@ BEGIN
     EXEC sp_sqlexec @SQL
 
     --Add Granularity Foreign Key
-    SET @ForeignKeyName = 'FK_' + @TableName + '_' + @GranularityCode + 'Id'
+    SET @ForeignKeyName = 'FK_' + @TableName + '_TimePeriodIdId'
     SET @SQL = N'
     USE [EMaaS]
     
     ALTER TABLE [' + @SchemaName + '].[' + @TableName + '] ADD CONSTRAINT
 	' + @ForeignKeyName + ' FOREIGN KEY
 	(
-	' + @GranularityCode + 'Id
-	) REFERENCES [Information].[' + @GranularityCode + ']
+	TimePeriodId
+	) REFERENCES [Information].[TimePeriod]
 	(
-	' + @GranularityCode + 'Id
+	TimePeriodId
 	) ON UPDATE NO ACTION 
 	 ON DELETE NO ACTION'
     EXEC sp_sqlexec @SQL
 
-    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].' + @GranularityCode + 'Id to [Information].[' + @GranularityCode + '].' + @GranularityCode + 'Id'
+    SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[' + @TableName + '].TimePeriodId to [Information].[TimePeriod].TimePeriodId'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', @TableName, N'CONSTRAINT', @ForeignKeyName
 
     --Add Date Foreign Key if required

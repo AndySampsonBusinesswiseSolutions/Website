@@ -35,7 +35,7 @@ BEGIN
         schema_id,
         principal_id
     FROM
-        [Supply].[sys_schemas]
+        [sys].[Schemas]
     WHERE
         name = @SchemaName
 END

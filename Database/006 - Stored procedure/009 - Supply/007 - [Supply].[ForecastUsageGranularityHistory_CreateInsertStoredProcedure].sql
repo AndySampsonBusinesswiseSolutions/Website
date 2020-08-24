@@ -63,7 +63,7 @@ BEGIN
     ALTER PROCEDURE [' + @SchemaName +'].[' + @StoredProcedureName + ']
         @CreatedByUserId BIGINT,
         @SourceId BIGINT,
-        @' + @GranularityCode + 'Id BIGINT,'
+        @TimePeriodId BIGINT,'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -98,7 +98,7 @@ BEGIN
             (
                 CreatedByUserId,
                 SourceId,
-                ' + @GranularityCode + 'Id,'
+                TimePeriodId,'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -113,7 +113,7 @@ BEGIN
             (
                 @CreatedByUserId,
                 @SourceId,
-                @' + @GranularityCode + 'Id,'
+                @TimePeriodId,'
         
     IF @RequiresDateParameter = 1
         BEGIN

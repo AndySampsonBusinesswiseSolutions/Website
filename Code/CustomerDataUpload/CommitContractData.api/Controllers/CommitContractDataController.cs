@@ -332,7 +332,7 @@ namespace CommitContractData.api.Controllers
                     var rateCountContractMeterIdList = _customerMethods.ContractMeterDetail_GetContractMeterIdListByContractMeterAttributeIdAndContractMeterDetailDescription(rateCountContractMeterAttributeId, rateCount);
                     if (rateCountContractMeterIdList.Any())
                     {
-                        contractMeterId = contractStartDateContractMeterIdList.Intersect(contractEndDateContractMeterIdList).Intersect(rateCountContractMeterIdList).First();
+                        contractMeterId = contractStartDateContractMeterIdList.Intersect(contractEndDateContractMeterIdList).Intersect(rateCountContractMeterIdList).FirstOrDefault();
                     }
                 }
             }
@@ -353,7 +353,7 @@ namespace CommitContractData.api.Controllers
         private long GetContractId(long createdByUserId, long sourceId, Dictionary<string, long> attributeIdDictionary, string contractReference)
         {
             var contractReferenceContractAttributeId = attributeIdDictionary[_customerContractAttributeEnums.ContractReference];
-            var contractId = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference).First();
+            var contractId = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference).FirstOrDefault();
 
             if (contractId == 0)
             {

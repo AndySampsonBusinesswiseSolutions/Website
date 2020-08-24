@@ -103,7 +103,7 @@ namespace CommitMeterToSubMeterData.api.Controllers
                     var subMeterSerialNumberSubMeterIdList = _customerMethods.SubMeterDetail_GetSubMeterIdListBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterSerialNumberSubMeterAttributeId, subMeterSerialNumber);
 
                     var matchingSubMeterIdList = subMeterIdentifierSubMeterIdList.Intersect(subMeterSerialNumberSubMeterIdList);
-                    var subMeterId = matchingSubMeterIdList.First();
+                    var subMeterId = matchingSubMeterIdList.FirstOrDefault();
 
                     //Insert into [Mapping].[MeterToSubMeter]
                     _mappingMethods.MeterToSubMeter_Insert(createdByUserId, sourceId, meterId, subMeterId);

@@ -141,7 +141,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);                
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateCrossSheetEntityDataAPIId, errorsFound, "Validation errors found");
+                _systemMethods.ProcessQueue_Update(processQueueGUID, validateCrossSheetEntityDataAPIId, errorsFound, errorsFound ? "Validation errors found" : null);
             }
             catch (Exception error)
             {

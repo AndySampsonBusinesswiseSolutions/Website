@@ -61,7 +61,7 @@ BEGIN
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[' + @StoredProcedureName + ']
-        @' + @GranularityCode + 'Id BIGINT,'
+        @TimePeriodId BIGINT,'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -82,7 +82,7 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
-        IF NOT EXISTS(SELECT TOP 1 1 FROM [' + @SchemaName +'].[' + @StoredProcedureName + '] WHERE ' + @GranularityCode + 'Id = @' + @GranularityCode + 'Id'
+        IF NOT EXISTS(SELECT TOP 1 1 FROM [' + @SchemaName +'].[' + @StoredProcedureName + '] WHERE TimePeriodId = @TimePeriodId'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -94,7 +94,7 @@ BEGIN
         BEGIN
             INSERT INTO [' + @SchemaName +'].[' + @StoredProcedureName + ']
             (
-                ' + @GranularityCode + 'Id,'
+                TimePeriodId,'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -107,7 +107,7 @@ BEGIN
             )
             VALUES
             (
-                @' + @GranularityCode + 'Id,'
+                @TimePeriodId,'
         
     IF @RequiresDateParameter = 1
         BEGIN

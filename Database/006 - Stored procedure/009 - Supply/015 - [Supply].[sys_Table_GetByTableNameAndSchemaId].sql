@@ -74,7 +74,7 @@ BEGIN
         is_node,
         is_edge
     FROM
-        [Supply].[sys_tables]
+        [sys].[Tables]
     WHERE
         name = @TableName
         AND schema_id = @SchemaId

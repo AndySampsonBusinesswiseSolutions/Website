@@ -121,7 +121,7 @@ namespace CommitMeterExemptionData.api.Controllers
                             var exemptionProportionMeterExemptionIdList = _customerMethods.MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(exemptionProportionMeterExemptionAttributeId, exemptionProportion);
                             if(exemptionProportionMeterExemptionIdList.Any())
                             {
-                                customerMeterExemptionId = dateFromMeterExemptionIdList.Intersect(dateToMeterExemptionIdList).Intersect(exemptionProportionMeterExemptionIdList).First();
+                                customerMeterExemptionId = dateFromMeterExemptionIdList.Intersect(dateToMeterExemptionIdList).Intersect(exemptionProportionMeterExemptionIdList).FirstOrDefault();
                             }
                         }
                     }

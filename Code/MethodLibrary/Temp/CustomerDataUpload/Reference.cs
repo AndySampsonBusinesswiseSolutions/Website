@@ -16,7 +16,7 @@ namespace MethodLibrary
             {
                 public IEnumerable<DataRow> GetCommitableRows(IEnumerable<DataRow> dataRows)
                 {
-                    return dataRows.Where(r => r.Field<string>("CanCommit") == "1");
+                    return dataRows.Where(r => r.Field<bool>("CanCommit"));
                 }
 
                 public Dictionary<int, List<string>> ConvertCustomerDataUploadToDictionary(JObject jsonObject, string dataType)

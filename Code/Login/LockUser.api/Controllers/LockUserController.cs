@@ -101,7 +101,7 @@ namespace LockUser.api.Controllers
                             var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
                             var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
                                 .Select(a => Convert.ToInt64(a))
-                                .First();
+                                .FirstOrDefault();
 
                             //If invalid attempt count >= maximum allowed invalid attempts, lock the user
                             if (invalidAttempts >= maximumInvalidAttempts)
