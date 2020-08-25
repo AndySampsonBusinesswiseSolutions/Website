@@ -5,5 +5,4 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [Supplier].[SupplierAttribute_Insert] @CreatedByUserId, @SourceId, 'Supplier Name'
-EXEC [Supplier].[SupplierAttribute_Insert] @CreatedByUserId, @SourceId, 'Supplier Also Known As'
+EXEC [Supplier].[Supplier_Insert] @CreatedByUserId, @SourceId, 'DD9D46E3-6B25-431D-BABB-7BF06BC7A42A'

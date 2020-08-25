@@ -7,6 +7,7 @@ namespace enums
             public class Attribute
             {
                 public string SupplierName = "Supplier Name";
+                public string SupplierAlsoKnownAs = "Supplier Also Known As";
             }          
         }
     }

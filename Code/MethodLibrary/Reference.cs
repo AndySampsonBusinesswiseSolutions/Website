@@ -535,8 +535,19 @@ namespace MethodLibrary
                 return false;
             }
 
+            var textInfo = CultureInfo.CurrentCulture.TextInfo;
+            supplier = textInfo.ToTitleCase(supplier);
+
+            //Check by legal name first
             var supplierNameAttributeId = _supplierMethods.SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(_supplierAttributeEnums.SupplierName);
             var supplierId = _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(supplierNameAttributeId, supplier);
+
+            if(supplierId == 0)
+            {
+                //name not found as legal name so check the 'Also Known As' list
+                var supplierAlsoKnownAsAttributeId = _supplierMethods.SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(_supplierAttributeEnums.SupplierAlsoKnownAs);
+                supplierId = _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(supplierAlsoKnownAsAttributeId, supplier);
+            }
 
             return supplierId != 0;
         }
