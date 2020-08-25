@@ -27,6 +27,7 @@ namespace CommitSubMeterUsageData.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
+        private readonly Enums.Information.Granularity.Description _informationGranularityDescriptionEnums = new Enums.Information.Granularity.Description();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterUsageDataAPIId;
 
@@ -147,6 +148,9 @@ namespace CommitSubMeterUsageData.api.Controllers
                             }
                         }
 
+                        //Add granularity to newJsonObject
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, _informationGranularityDescriptionEnums.HalfHour);
+
                         //Add periodic usage to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
                     }
@@ -163,7 +167,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                     }
 
                     //Connect to Routing API and POST data
-                    // _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, newJsonObject);
+                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, newJsonObject);
                 }
 
                 //Update Process Queue

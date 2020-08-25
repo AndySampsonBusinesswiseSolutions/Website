@@ -28,6 +28,7 @@ namespace CommitMeterUsageData.api.Controllers
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
+        private readonly Enums.Information.Granularity.Description _informationGranularityDescriptionEnums = new Enums.Information.Granularity.Description();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterUsageDataAPIId;
 
@@ -147,6 +148,13 @@ namespace CommitMeterUsageData.api.Controllers
                                 date.Add(periodicUsageDate.Field<string>("TimePeriod"), periodicUsageDate.Field<string>("Value"));
                             }
                         }
+
+                        //Add granularity to newJsonObject
+                        var granularityDescription = _methods.IsValidMPAN(mpxn)
+                            ? _informationGranularityDescriptionEnums.HalfHour
+                            : _informationGranularityDescriptionEnums.Date;
+
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDescription);
 
                         //Add periodic usage to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));

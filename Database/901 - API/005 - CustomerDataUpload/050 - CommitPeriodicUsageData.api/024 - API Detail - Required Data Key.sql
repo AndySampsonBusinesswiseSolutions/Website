@@ -11,4 +11,4 @@ EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttrib
 EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'MeterType'
 EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'MPXN'
 EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'PeriodicUsage'
-
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'Granularity'
