@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CommitMeterUsageData.api.Controllers
 {
@@ -130,8 +131,25 @@ namespace CommitMeterUsageData.api.Controllers
                         //Get periodic usage
                         var periodicUsageDataRows = meterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn);
 
+                        //Convert to dictionary
+                        var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
+                        foreach(var periodicUsageDate in periodicUsageDataRows)
+                        {
+                            if(!periodicUsageDictionary.ContainsKey(periodicUsageDate.Field<string>("Date")))
+                            {
+                                periodicUsageDictionary.Add(periodicUsageDate.Field<string>("Date"), new Dictionary<string, string>());
+                            }
+                            
+                            var date = periodicUsageDictionary[periodicUsageDate.Field<string>("Date")];
+
+                            if(!date.ContainsKey(periodicUsageDate.Field<string>("TimePeriod")))
+                            {
+                                date.Add(periodicUsageDate.Field<string>("TimePeriod"), periodicUsageDate.Field<string>("Value"));
+                            }
+                        }
+
                         //Add periodic usage to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDataRows));
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
                     }
                     else 
                     {

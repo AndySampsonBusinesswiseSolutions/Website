@@ -72,7 +72,7 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
-        INSERT INTO [' + @SchemaName +'].[EstimatedAnnualUsage_Insert]
+        INSERT INTO [' + @SchemaName +'].[EstimatedAnnualUsage]
             (
                 CreatedByUserId,
                 SourceId,

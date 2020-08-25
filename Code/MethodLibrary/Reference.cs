@@ -122,15 +122,19 @@ namespace MethodLibrary
                 return string.Empty;
             }
 
-            try
+            DateTime date;
+            if(DateTime.TryParse(dateValue, out date))
             {
-                var dateInteger = Convert.ToInt64(dateValue);
+                return ConvertDateTimeToSqlParameter(date);
+            }
+
+            long dateInteger;
+            if(long.TryParse(dateValue, out dateInteger))
+            {
                 return ConvertDateTimeToSqlParameter(DateTime.FromOADate(dateInteger));
             }
-            catch
-            {
-                return dateValue;
-            }            
+
+            return dateValue;
         }
 
         public string ConvertDateTimeToSqlParameter(DateTime dateTime)

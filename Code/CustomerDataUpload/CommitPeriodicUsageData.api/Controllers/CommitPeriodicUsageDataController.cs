@@ -74,6 +74,9 @@ namespace CommitPeriodicUsageData.api.Controllers
                     return;
                 }
 
+                //Get MeterType
+                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+
                 //Get mpxn
                 var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
 
@@ -89,9 +92,6 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Get Commodity
                 var commodity = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
 
-                //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
-
                 //Get UsageTypeId
                 var usageType = "Customer Estimated";
                 var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
@@ -102,35 +102,50 @@ namespace CommitPeriodicUsageData.api.Controllers
                 var granularityTimePeriods = _mappingMethods.GranularityToTimePeriod_GetTimePeriodIdListByGranularityId(granularityId);
 
                 //Get Periodic Usage
-                var periodicUsage = (IEnumerable<DataRow>) JsonConvert.DeserializeObject(jsonObject[_systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString(), typeof(List<DataRow>));
-                var dates = periodicUsage.Select(r => r.Field<string>("Date"))
+                var periodicUsageJson = jsonObject[_systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString();
+                var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(periodicUsageJson.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
+                var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => x.Key.Substring(0, 10), x => JsonConvert.DeserializeObject<Dictionary<string, string>>(x.Value));
+
+                // var periodicUsageDictionary = (Dictionary<string, Dictionary<string, string>>) JsonConvert.DeserializeObject(jsonObject[_systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString());
+                var dates = periodicUsageDictionary.Select(u => u.Key)
                     .Distinct()
+                    .Select(d => _methods.GetDateTimeSqlParameterFromDateTimeString(d).Substring(0, 10))
                     .ToDictionary(d => d, d => _informationMethods.Date_GetDateIdByDateDescription(d));
-                var timePeriods = periodicUsage.Select(r => r.Field<string>("TimePeriod"))
+
+                var timePeriods = periodicUsageDictionary.SelectMany(u => u.Value)
+                    .Select(d => d.Key)
                     .Distinct()
                     .ToDictionary(t => t, t => _informationMethods.TimePeriod_GetTimePeriodIdListByEndTime(t).Intersect(granularityTimePeriods).FirstOrDefault());
 
-                foreach(var dataRow in periodicUsage)
+                foreach(var periodicUsage in periodicUsageDictionary)
                 {
-                    var date = dataRow["Date"].ToString();
-                    var timePeriod = dataRow["TimePeriod"].ToString();
+                    var date = periodicUsage.Key;
                     var dateId = dates[date];
-                    var timePeriodId = timePeriods[timePeriod];
-                    var usage = Convert.ToDecimal(dataRow["Value"]);
 
-                    //End date existing Periodic Usage
-                    _supplyMethods.LoadedUsage_Delete(meterType, meterId, dateId, timePeriodId);
+                    foreach(var timePeriod in periodicUsage.Value)
+                    {
+                        if(string.IsNullOrWhiteSpace(timePeriod.Value))
+                        {
+                            continue;
+                        }
 
-                    //Insert new Periodic Usage
-                    _supplyMethods.LoadedUsage_Insert(createdByUserId, sourceId, meterType, meterId, dateId, timePeriodId, usageTypeId, usage);
+                        var timePeriodId = timePeriods[timePeriod.Key];
+                        var usage = Convert.ToDecimal(timePeriod.Value);
+
+                        //End date existing Periodic Usage
+                        _supplyMethods.LoadedUsage_Delete(meterType, meterId, dateId, timePeriodId);
+
+                        //Insert new Periodic Usage
+                        _supplyMethods.LoadedUsage_Insert(createdByUserId, sourceId, meterType, meterId, dateId, timePeriodId, usageTypeId, usage);
+                    }
                 }
 
                 //Get last 365days of periodic usage
                 var latestPeriodicUsage = new List<DataRow>();
 
                 //Create Estimated Annual Usage
-                var estimatedAnnualUsage = latestPeriodicUsage.Where(r => r.Field<DateTime>("Date") >= DateTime.Today.AddDays(-365))
-                    .Sum(r => r.Field<decimal>("Usage"));
+                var estimatedAnnualUsage = 0; //latestPeriodicUsage.Where(r => r.Field<DateTime>("Date") >= DateTime.Today.AddDays(-365))
+                    //.Sum(r => r.Field<decimal>("Usage"));
 
                 //End date existing Estimated Annual Usage
                 _supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);

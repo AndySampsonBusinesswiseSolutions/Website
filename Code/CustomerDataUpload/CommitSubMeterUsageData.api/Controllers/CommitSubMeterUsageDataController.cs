@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace CommitSubMeterUsageData.api.Controllers
 {
@@ -105,44 +106,64 @@ namespace CommitSubMeterUsageData.api.Controllers
 
                 foreach(var subMeterIdentifier in subMeterIdentifierList)
                 {
+                    //Clone jsonObject
+                    var newJsonObject = (JObject)jsonObject.DeepClone();
+
                     //Create new ProcessQueueGUID
                     var newProcessQueueGUID = Guid.NewGuid().ToString();
 
                     //Map current ProcessQueueGUID to new ProcessQueueGUID
                     _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
-                    _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+                    _systemMethods.SetProcessQueueGUIDInJObject(newJsonObject, newProcessQueueGUID);
 
-                    //Add subMeter type to jsonObject
-                    jsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
+                    //Add subMeter type to newJsonObject
+                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
 
-                    //Add subMeterIdentifier to jsonObject
-                    jsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, subMeterIdentifier);
+                    //Add subMeterIdentifier to newJsonObject
+                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, subMeterIdentifier);
 
                     if(subMeterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier))
                     {
                         //Update Process GUID to CommitPeriodicUsage Process GUID
-                        _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
+                        _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
 
                         //Get periodic usage
                         var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier);
 
-                        //Add periodic usage to jsonObject
-                        jsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDataRows));
+                        //Convert to dictionary
+                        var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
+                        foreach(var periodicUsageDate in periodicUsageDataRows)
+                        {
+                            if(!periodicUsageDictionary.ContainsKey(periodicUsageDate.Field<string>("Date")))
+                            {
+                                periodicUsageDictionary.Add(periodicUsageDate.Field<string>("Date"), new Dictionary<string, string>());
+                            }
+                            
+                            var date = periodicUsageDictionary[periodicUsageDate.Field<string>("Date")];
+
+                            if(!date.ContainsKey(periodicUsageDate.Field<string>("TimePeriod")))
+                            {
+                                date.Add(periodicUsageDate.Field<string>("TimePeriod"), periodicUsageDate.Field<string>("Value"));
+                            }
+                        }
+
+                        //Add periodic usage to newJsonObject
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
                     }
                     else 
                     {
                         //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
-                        _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
+                        _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
 
                         //Get EstimatedAnnualUsage
                         var estimatedAnnualUsage = subMeterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
 
-                        //Add EstimatedAnnualUsage to jsonObject
-                        jsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
+                        //Add EstimatedAnnualUsage to newJsonObject
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
                     }
 
                     //Connect to Routing API and POST data
-                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, jsonObject);
+                    // _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, newJsonObject);
                 }
 
                 //Update Process Queue

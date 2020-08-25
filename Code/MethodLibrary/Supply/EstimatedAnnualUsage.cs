@@ -52,7 +52,7 @@ namespace MethodLibrary
                 ExecuteNonQuery(new List<ParameterInfo>().ToArray(), estimatedAnnualUsageDeleteStoredProcedure);
             }
 
-            public void EstimatedAnnualUsage_Insert(long createdByUserId, long sourceId, string meterType, long meterId, decimal estimatedAnnualUsage)
+            public void EstimatedAnnualUsage_Insert(long createdByUserId, long sourceId, string meterType, long meterId, decimal usage)
             {
                 var estimatedAnnualUsageInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.EstimatedAnnualUsage_Insert, meterType, meterId);
                 var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
@@ -60,7 +60,7 @@ namespace MethodLibrary
 
                 ExecuteNonQuery(parameterInfoList, 
                     estimatedAnnualUsageInsertStoredProcedure,
-                    createdByUserId, sourceId, estimatedAnnualUsage);
+                    createdByUserId, sourceId, usage);
             }
 
             private void EstimatedAnnualUsage_GrantExecuteToStoredProcedures(long meterId, string meterType)

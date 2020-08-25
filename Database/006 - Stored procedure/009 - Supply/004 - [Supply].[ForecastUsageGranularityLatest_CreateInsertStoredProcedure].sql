@@ -82,7 +82,7 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
-        IF NOT EXISTS(SELECT TOP 1 1 FROM [' + @SchemaName +'].[' + @StoredProcedureName + '] WHERE TimePeriodId = @TimePeriodId'
+        IF NOT EXISTS(SELECT TOP 1 1 FROM [' + @SchemaName +'].[ForecastUsage' + @GranularityCode + 'Latest] WHERE TimePeriodId = @TimePeriodId'
         
     IF @RequiresDateParameter = 1
         BEGIN
@@ -92,7 +92,7 @@ BEGIN
 
     SET @SQL = @SQL + ')
         BEGIN
-            INSERT INTO [' + @SchemaName +'].[' + @StoredProcedureName + ']
+            INSERT INTO [' + @SchemaName +'].[ForecastUsage' + @GranularityCode + 'Latest]
             (
                 TimePeriodId,'
         

@@ -41,7 +41,7 @@ BEGIN
 
     CREATE TABLE [' + @SchemaName + '].[EstimatedAnnualUsage]
 	(
-        EstimatedAnnualUsageId BIGINT NOT NULL,
+        EstimatedAnnualUsageId BIGINT IDENTITY(1,1) NOT NULL,
         EffectiveFromDateTime DATETIME NOT NULL,
         EffectiveToDateTime DATETIME NOT NULL,
         CreatedDateTime DATETIME NOT NULL,

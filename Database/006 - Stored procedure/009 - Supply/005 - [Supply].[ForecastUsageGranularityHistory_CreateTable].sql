@@ -45,7 +45,7 @@ BEGIN
 
     CREATE TABLE [' + @SchemaName + '].[' + @TableName + ']
 	(
-        ForecastUsage' + @GranularityCode + 'HistoryId BIGINT NOT NULL,
+        ForecastUsage' + @GranularityCode + 'HistoryId BIGINT IDENTITY(1,1) NOT NULL,
         EffectiveFromDateTime DATETIME NOT NULL,
         EffectiveToDateTime DATETIME NOT NULL,
         CreatedDateTime DATETIME NOT NULL,
