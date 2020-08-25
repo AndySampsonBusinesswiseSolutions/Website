@@ -61,6 +61,7 @@ namespace CommitBasketData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -76,9 +77,9 @@ namespace CommitBasketData.api.Controllers
                     return;
                 }
 
-                //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
+                //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
+                var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexContractDataRows);
 
                 if(!commitableDataRows.Any())
                 {

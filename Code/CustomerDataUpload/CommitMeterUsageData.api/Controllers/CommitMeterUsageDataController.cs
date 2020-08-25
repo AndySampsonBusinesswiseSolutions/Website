@@ -165,7 +165,7 @@ namespace CommitMeterUsageData.api.Controllers
                         _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
 
                         //Get EstimatedAnnualUsage
-                        var estimatedAnnualUsage = meterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
+                        var estimatedAnnualUsage = meterCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
 
                         //Add EstimatedAnnualUsage to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);

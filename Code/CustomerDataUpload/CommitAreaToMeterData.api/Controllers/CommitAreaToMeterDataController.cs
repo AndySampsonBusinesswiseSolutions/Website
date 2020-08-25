@@ -57,6 +57,7 @@ namespace CommitAreaToMeterData.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -73,7 +74,7 @@ namespace CommitAreaToMeterData.api.Controllers
                 }
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
 
                 if(!commitableDataRows.Any())

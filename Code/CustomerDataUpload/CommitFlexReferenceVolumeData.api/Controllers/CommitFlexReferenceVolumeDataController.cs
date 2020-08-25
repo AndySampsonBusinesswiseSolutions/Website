@@ -96,6 +96,11 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                     var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);
                     var contractId = _customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
 
+                    if(contractId == 0)
+                    {
+                        continue;
+                    }
+
                     //Get ReferenceVolumeId from [Customer].[ReferenceVolumeDetail] by DateFrom, DateTo and Reference Volume
                     var dateFrom = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom);
                     var dateTo = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateTo);

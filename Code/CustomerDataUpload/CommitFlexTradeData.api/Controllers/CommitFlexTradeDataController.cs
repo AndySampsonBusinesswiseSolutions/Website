@@ -107,6 +107,11 @@ namespace CommitFlexTradeData.api.Controllers
                     var basketReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference);
                     var basketId = _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(attributeIdDictionary[_customerBasketAttributeEnums.BasketReference], basketReference);
 
+                    if(basketId == 0)
+                    {
+                        continue;
+                    }
+
                     //If TradeReference is empty, create new trade
                     //Else update existing trade
                     var tradeDetails = new Dictionary<long, string>
