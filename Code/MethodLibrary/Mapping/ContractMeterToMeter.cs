@@ -9,10 +9,21 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public List<long> ContractMeterToMeter_GetContractMeterIdListByMeterId(long meterId)
+            public List<long> ContractMeterToMeter_GetContractMeterIdListByContractMeterId(long contractMeterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.ContractMeterToMeter_GetByContractMeterId, 
+                    contractMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractMeterId"))
+                    .ToList();
+            }
+
+            public List<long> ContractMeterToMeter_GetContractMeterIdListByMeterId(long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractMeterToMeter_GetByMeterId, 
                     meterId);
 
                 return dataTable.AsEnumerable()
