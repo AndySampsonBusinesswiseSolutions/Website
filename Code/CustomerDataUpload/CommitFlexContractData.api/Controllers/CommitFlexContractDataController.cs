@@ -101,14 +101,6 @@ namespace CommitFlexContractData.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
-                //Call CommitContractToSupplierData API
-                APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractToSupplierDataAPI);
-                API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, jsonObject);
-
-                //Call CommitContractMeterToProductData API
-                APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractMeterToProductDataAPI);
-                API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, jsonObject);
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, false, null);
             }

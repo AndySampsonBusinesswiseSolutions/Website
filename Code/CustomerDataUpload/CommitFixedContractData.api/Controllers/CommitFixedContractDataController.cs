@@ -101,14 +101,6 @@ namespace CommitFixedContractData.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFixedContractDataAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
-                //Call CommitContractToSupplierData API
-                APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractToSupplierDataAPI);
-                API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFixedContractDataAPI, jsonObject);
-
-                //Call CommitContractMeterToProductData API
-                APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractMeterToProductDataAPI);
-                API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFixedContractDataAPI, jsonObject);
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFixedContractDataAPIId, false, null);
             }

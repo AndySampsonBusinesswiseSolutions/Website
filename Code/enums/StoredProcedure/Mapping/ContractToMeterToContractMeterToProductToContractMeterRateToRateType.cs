@@ -6,7 +6,7 @@ namespace enums
         {
             public partial class Mapping
             {
-                public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId = "[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]";
+                public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId = "[Mapping].[ContractMeterProductToContractMeterRate_GetByContractToMeterToContractMeterToProductIdAndContractMeterRateToRateTypeId]";
                 public string ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert = "[Mapping].[ContractToMeterToContractMeterToProductToContractMeterRateToRateType_Insert]";
             }
         }
