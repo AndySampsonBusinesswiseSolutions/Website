@@ -31,22 +31,22 @@ namespace MethodLibrary
                     .ToList();
             }
 
-            public long ContractMeterToMeter_GetContractMeterToMeterIdByContractMeterIdAndMeterId(long contractId, long contractMeterId)
+            public long ContractMeterToMeter_GetContractMeterToMeterIdByContractMeterIdAndMeterId(long contractMeterId, long meterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.ContractMeterToMeter_GetByContractMeterIdAndMeterId, 
-                    contractId, contractMeterId);
+                    contractMeterId, meterId);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ContractMeterToMeterId"))
                     .FirstOrDefault();
             }
 
-            public void ContractMeterToMeter_Insert(long createdByUserId, long sourceId, long contractId, long contractMeterId)
+            public void ContractMeterToMeter_Insert(long createdByUserId, long sourceId, long contractMeterId, long meterId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.ContractMeterToMeter_Insert, 
-                    createdByUserId, sourceId, contractId, contractMeterId);
+                    createdByUserId, sourceId, contractMeterId, meterId);
             }
         }
     }

@@ -78,6 +78,7 @@ BEGIN
         WHERE
             DateId = @DateId
             AND TimePeriodId = @TimePeriodId
+            AND EffectiveToDateTime = ''9999-12-31''
     END'
 
     SET @MetaSQL = '

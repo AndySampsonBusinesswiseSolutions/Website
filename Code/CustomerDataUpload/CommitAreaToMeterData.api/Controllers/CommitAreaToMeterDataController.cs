@@ -100,7 +100,7 @@ namespace CommitAreaToMeterData.api.Controllers
 
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                     //Insert into [Mapping].[AreaToMeter]
                     _mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areaId, meterId);

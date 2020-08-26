@@ -16,7 +16,7 @@ namespace MethodLibrary
                     contractTypeId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("ContractTypeId"))
+                    .Select(r => r.Field<long>("ContractId"))
                     .ToList();
             }
 

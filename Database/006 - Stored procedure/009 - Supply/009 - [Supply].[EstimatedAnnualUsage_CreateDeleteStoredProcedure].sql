@@ -73,6 +73,8 @@ BEGIN
             [' + @SchemaName +'].[EstimatedAnnualUsage]
         SET
             EffectiveToDateTime = GETUTCDATE()
+        WHERE
+            EffectiveToDateTime = ''9999-12-31''
         
         END'
 

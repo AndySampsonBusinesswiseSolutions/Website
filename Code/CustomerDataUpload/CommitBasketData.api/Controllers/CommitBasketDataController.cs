@@ -88,9 +88,17 @@ namespace CommitBasketData.api.Controllers
                     return;
                 }
 
+                //TODO: Remove duplicate rows
+
                 var basketReferenceBasketAttributeId = _customerMethods.BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(_customerBasketAttributeEnums.BasketReference);
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
+
+                //Get ContractTypeId from [Information].[ContractType] where ContractTypeDescription = 'Flex'
+                var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(_informationContractTypeEnums.Flex);
+
+                //Get ContractIdList from [Mapping].[ContractToContractType] by ContractTypeId
+                var mappingContractIdList = _mappingMethods.ContractToContractType_GetContractIdListByContractTypeId(contractTypeId);
 
                 foreach(var dataRow in commitableDataRows)
                 {
@@ -98,22 +106,9 @@ namespace CommitBasketData.api.Controllers
                     var basketReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference);
                     var basketId = _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(basketReferenceBasketAttributeId, basketReference);
 
-                    if(basketId == 0)
-                    {
-                        basketId =_customerMethods.InsertNewBasket(createdByUserId, sourceId);
-                        
-                        _customerMethods.BasketDetail_Insert(createdByUserId, sourceId, basketId, basketReferenceBasketAttributeId, basketReference);
-                    }
-
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
-
-                    //Get ContractTypeId from [Information].[ContractType] where ContractTypeDescription = 'Flex'
-                    var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(_informationContractTypeEnums.Flex);
-
-                    //Get ContractIdList from [Mapping].[ContractToContractType] by ContractTypeId
-                    var mappingContractIdList = _mappingMethods.ContractToContractType_GetContractIdListByContractTypeId(contractTypeId);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                     //Get ContractIdList from [Customer].[Contract] by ContractReference
                     var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);

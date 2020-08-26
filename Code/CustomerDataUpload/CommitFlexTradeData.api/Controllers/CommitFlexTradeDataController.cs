@@ -128,7 +128,7 @@ namespace CommitFlexTradeData.api.Controllers
                     if(string.IsNullOrWhiteSpace(tradeReference))
                     {
                         tradeId = _customerMethods.InsertNewTrade(createdByUserId, sourceId);
-                        tradeReference = _customerMethods.Trade_GetTradeGUIDByTradeId(tradeId);
+                        tradeDetails[attributeIdDictionary[_customerTradeAttributeEnums.TradeReference]] = _customerMethods.Trade_GetTradeGUIDByTradeId(tradeId);
 
                         //Insert into [Customer].[TradeDetail]
                         foreach(var tradeDetail in tradeDetails)
@@ -170,7 +170,7 @@ namespace CommitFlexTradeData.api.Controllers
                     var tradeDetailToVolumeUnitId = _mappingMethods.TradeDetailToVolumeUnit_GetTradeDetailToVolumeUnitIdByTradeDetailIdAndVolumeUnitId(tradeDetailId, attributeIdDictionary[_informationVolumeUnitEnums.MegaWatt]);
                     if(tradeDetailToVolumeUnitId == 0)
                     {
-                        _mappingMethods.TradeDetailToVolumeUnit_Insert(createdByUserId, sourceId, attributeIdDictionary[_informationVolumeUnitEnums.MegaWatt], tradeDetailId);
+                        _mappingMethods.TradeDetailToVolumeUnit_Insert(createdByUserId, sourceId, tradeDetailId, attributeIdDictionary[_informationVolumeUnitEnums.MegaWatt]);
                     }
 
                     //Get TradeDetailId by TradeId and TradePriceTradeAttributeId
@@ -184,7 +184,7 @@ namespace CommitFlexTradeData.api.Controllers
                     }
 
                     //Get TradeProductId from [Information].[TradeProduct] by TradeProductDescription
-                    var tradeProductId = _informationMethods.TradeProduct_GetTradeProductIdByTradeProductDescription(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Product));
+                    var tradeProductId = _informationMethods.TradeProduct_GetTradeProductIdByTradeProductDescription(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct));
 
                     //Insert into [Mapping].[TradeToTradeProduct]
                     var tradeToTradeProductId = _mappingMethods.TradeToTradeProduct_GetTradeToTradeProductIdByTradeIdAndTradeProductId(tradeId, tradeProductId);

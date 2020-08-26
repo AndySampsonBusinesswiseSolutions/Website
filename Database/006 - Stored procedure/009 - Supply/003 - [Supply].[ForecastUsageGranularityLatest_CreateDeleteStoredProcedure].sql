@@ -85,7 +85,8 @@ BEGIN
         FROM
             [' + @SchemaName +'].[ForecastUsage' + @GranularityCode + 'Latest]
         WHERE
-            TimePeriodId = @TimePeriodId'
+            TimePeriodId = @TimePeriodId
+            AND EffectiveToDateTime = ''9999-12-31'''
         
     IF @RequiresDateParameter = 1
         BEGIN

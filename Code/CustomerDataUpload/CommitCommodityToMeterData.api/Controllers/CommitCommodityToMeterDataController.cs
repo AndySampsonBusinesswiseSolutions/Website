@@ -91,7 +91,7 @@ namespace CommitCommodityToMeterData.api.Controllers
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn);
+                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                     //Get CommodityId from [Information].[Commodity]
                     var commodity = _methods.IsValidMPAN(mpxn) ? _informationCommodityEnums.Electricity : _informationCommodityEnums.Gas;

@@ -333,16 +333,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var mprnValue = Convert.ToInt64(mprn);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            long mprnValue;
+            return long.TryParse(mprn, out mprnValue);
         }
 
         public bool IsValidUsage(string usage)
@@ -352,16 +344,8 @@ namespace MethodLibrary
                 return true;
             }
 
-            try
-            {
-                var usageValue = Convert.ToInt64(usage);
-
-                return usageValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal usageValue;
+            return decimal.TryParse(usage, out usageValue);
         }
 
         public bool IsValidDate(string date)
@@ -371,16 +355,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var dateValue = Convert.ToDateTime(date);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            DateTime dateValue;
+            return DateTime.TryParse(date, out dateValue);
         }
 
         public bool IsOctoberClockChange(string date)
@@ -425,16 +401,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var capacityValue = Convert.ToInt64(capacity);
-
-                return capacityValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            long capacityValue;
+            return long.TryParse(capacity, out capacityValue);
         }
 
         public bool IsValidStandardOfftakeQuantity(string standardOfftakeQuantity)
@@ -444,16 +412,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var standardOfftakeQuantityValue = Convert.ToInt64(standardOfftakeQuantity);
-
-                return standardOfftakeQuantityValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            long standardOfftakeQuantityValue;
+            return long.TryParse(standardOfftakeQuantity, out standardOfftakeQuantityValue);
         }
 
         public bool IsValidGridSupplyPoint(string gridSupplyPoint)
@@ -486,13 +446,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            var meterTimeswitchCodeValue = 0L;
-
-            try
-            {
-                meterTimeswitchCodeValue = Convert.ToInt64(meterTimeswitchCode);
-            }
-            catch (Exception)
+            long meterTimeswitchCodeValue;
+            if(!long.TryParse(meterTimeswitchCode, out meterTimeswitchCodeValue))
             {
                 return false;
             }
@@ -602,16 +557,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var rateCountValue = Convert.ToInt64(rateCount);
-
-                return rateCountValue > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            long rateCountValue;
+            return long.TryParse(rateCount, out rateCountValue);
         }
 
         public bool IsValidFixedContractRate(string rate)
@@ -621,16 +568,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var rateValue = Convert.ToDecimal(rate);
-
-                return rateValue > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal rateValue;
+            return decimal.TryParse(rate, out rateValue);
         }
 
         public bool IsValidFlexContractRate(string rate)
@@ -640,16 +579,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var rateValue = Convert.ToDecimal(rate);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal rateValue;
+            return decimal.TryParse(rate, out rateValue);
         }
 
         public bool IsValidFixedContractStandingCharge(string standingCharge)
@@ -659,16 +590,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var standingChargeValue = Convert.ToDecimal(standingCharge);
-
-                return standingChargeValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal standingChargeValue;
+            return decimal.TryParse(standingCharge, out standingChargeValue);
         }
 
         public bool IsValidFixedContractCapacityCharge(string capacityCharge)
@@ -678,16 +601,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var capacityChargeValue = Convert.ToDecimal(capacityCharge);
-
-                return capacityChargeValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal capacityChargeValue;
+            return decimal.TryParse(capacityCharge, out capacityChargeValue);
         }
 
         public bool IsValidFlexReferenceVolume(string volume)
@@ -697,16 +612,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var volumeValue = Convert.ToDecimal(volume);
-
-                return volumeValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal volumeValue;
+            return decimal.TryParse(volume, out volumeValue);
         }
 
         public bool IsValidFlexTradeReference(string tradeReference)
@@ -736,16 +643,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var volumeValue = Convert.ToDecimal(volume);
-
-                return volumeValue > 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal volumeValue;
+            return decimal.TryParse(volume, out volumeValue);
         }
 
         public bool IsValidFlexTradePrice(string price)
@@ -755,16 +654,8 @@ namespace MethodLibrary
                 return false;
             }
 
-            try
-            {
-                var priceValue = Convert.ToDecimal(price);
-
-                return priceValue >= 0;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            decimal priceValue;
+            return decimal.TryParse(price, out priceValue);
         }
 
         public bool IsValidFlexTradeDirection(string direction)
