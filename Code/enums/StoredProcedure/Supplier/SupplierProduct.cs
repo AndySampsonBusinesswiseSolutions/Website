@@ -6,8 +6,8 @@ namespace enums
         {
             public partial class Supplier
             {
-                public string SupplierProductAttribute_GetBySupplierProductAttributeDescription = "[Supplier].[SupplierProductAttribute_GetBySupplierProductAttributeDescription]";
-                public string SupplierProductDetail_GetBySupplierProductAttributeIdAndSupplierProductDetailDescription = "[Supplier].[SupplierProductDetail_GetBySupplierProductAttributeIdAndSupplierProductDetailDescription]";
+                public string ProductAttribute_GetByProductAttributeDescription = "[Supplier].[ProductAttribute_GetByProductAttributeDescription]";
+                public string ProductDetail_GetByProductAttributeIdAndProductDetailDescription = "[Supplier].[ProductDetail_GetByProductAttributeIdAndProductDetailDescription]";
             }
         }
     }

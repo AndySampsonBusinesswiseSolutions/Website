@@ -26,6 +26,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-08-16 -> Andrew Sampson -> Initial development of script
+    -- 2020-08-26 -> Andrew Sampson -> Added RateTypeCode column
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -41,6 +42,7 @@ BEGIN
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
+        RateTypeCode
         RateTypeDescription
     FROM 
         [Information].[RateType] 

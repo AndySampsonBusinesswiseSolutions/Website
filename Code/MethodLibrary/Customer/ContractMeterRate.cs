@@ -24,40 +24,40 @@ namespace MethodLibrary
                 return ContractMeterRate_GetContractMeterRateIdByContractMeterRateGUID(GUID);
             }
 
-            public long ContractMeterRateAttribute_GetContractMeterRateAttributeIdByContractMeterRateAttributeDescription(string contractMeterAttributeDescription)
+            public long ContractMeterRateAttribute_GetContractMeterRateAttributeIdByContractMeterRateAttributeDescription(string contractMeterRateAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.ContractMeterRateAttribute_GetByContractMeterRateAttributeDescription, 
-                    contractMeterAttributeDescription);
+                    contractMeterRateAttributeDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ContractMeterRateAttributeId"))
                     .FirstOrDefault();
             }
 
-            public void ContractMeterRate_Insert(long createdByUserId, long sourceId, string contractMeterGUID)
+            public void ContractMeterRate_Insert(long createdByUserId, long sourceId, string contractMeterRateGUID)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureCustomerEnums.ContractMeterRate_Insert, 
-                    createdByUserId, sourceId, contractMeterGUID);
+                    createdByUserId, sourceId, contractMeterRateGUID);
             }
 
-            public long ContractMeterRate_GetContractMeterRateIdByContractMeterRateGUID(string contractMeterGUID)
+            public long ContractMeterRate_GetContractMeterRateIdByContractMeterRateGUID(string contractMeterRateGUID)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.ContractMeterRate_GetByContractMeterRateGUID, 
-                    contractMeterGUID);
+                    contractMeterRateGUID);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ContractMeterRateId"))
                     .FirstOrDefault();
             }
 
-            public void ContractMeterRateDetail_Insert(long createdByUserId, long sourceId, long contractMeterId, long contractMeterAttributeId, string contractMeterDetailDescription)
+            public void ContractMeterRateDetail_Insert(long createdByUserId, long sourceId, long contractMeterRateId, long contractMeterRateAttributeId, string contractMeterRateDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureCustomerEnums.ContractMeterRateDetail_Insert, 
-                    createdByUserId, sourceId, contractMeterId, contractMeterAttributeId, contractMeterDetailDescription);
+                    createdByUserId, sourceId, contractMeterRateId, contractMeterRateAttributeId, contractMeterRateDetailDescription);
             }
 
             public long ContractMeterRateDetail_GetContractMeterRateIdByContractMeterRateAttributeIdAndContractMeterRateDetailDescription(long contractMeterRateAttributeId, string contractMeterRateDetailDescription)

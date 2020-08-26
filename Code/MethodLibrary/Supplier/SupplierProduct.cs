@@ -8,25 +8,25 @@ namespace MethodLibrary
     {
         public partial class Supplier
         {
-            public long SupplierProductAttribute_GetSupplierProductAttributeIdBySupplierProductAttributeDescription(string supplierProductAttributeDescription)
+            public long ProductAttribute_GetProductAttributeIdByProductAttributeDescription(string productAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSupplierEnums.SupplierProductAttribute_GetBySupplierProductAttributeDescription, 
-                    supplierProductAttributeDescription);
+                    _storedProcedureSupplierEnums.ProductAttribute_GetByProductAttributeDescription, 
+                    productAttributeDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SupplierProductAttributeId"))
+                    .Select(r => r.Field<long>("ProductAttributeId"))
                     .FirstOrDefault();
             }
 
-            public long SupplierProductDetail_GetSupplierProductIdBySupplierProductAttributeIdAndSupplierProductDetailDescription(long supplierProductAttributeId, string supplierProductDetailDescription)
+            public long ProductDetail_GetProductIdByProductAttributeIdAndProductDetailDescription(long productAttributeId, string productDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureSupplierEnums.SupplierProductDetail_GetBySupplierProductAttributeIdAndSupplierProductDetailDescription, 
-                    supplierProductAttributeId, supplierProductDetailDescription);
+                    _storedProcedureSupplierEnums.ProductDetail_GetByProductAttributeIdAndProductDetailDescription, 
+                    productAttributeId, productDetailDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SupplierProductId"))
+                    .Select(r => r.Field<long>("ProductId"))
                     .FirstOrDefault();
             }
         }

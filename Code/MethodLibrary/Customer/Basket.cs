@@ -24,33 +24,33 @@ namespace MethodLibrary
                 return Basket_GetBasketIdByBasketGUID(GUID);
             }
 
-            public long BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(long BasketAttributeId, string BasketDetailDescription)
+            public long BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(long basketAttributeId, string basketDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription, 
-                    BasketAttributeId, BasketDetailDescription);
+                    basketAttributeId, basketDetailDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("BasketDetailId"))
                     .FirstOrDefault();
             }
 
-            public long BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(long BasketAttributeId, string BasketDetailDescription)
+            public long BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(long basketAttributeId, string basketDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.BasketDetail_GetByBasketAttributeIdAndBasketDetailDescription, 
-                    BasketAttributeId, BasketDetailDescription);
+                    basketAttributeId, basketDetailDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("BasketId"))
                     .FirstOrDefault();
             }
 
-            public long BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(string BasketAttributeDescription)
+            public long BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(string basketAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.BasketAttribute_GetByBasketAttributeDescription, 
-                    BasketAttributeDescription);
+                    basketAttributeDescription);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("BasketAttributeId"))

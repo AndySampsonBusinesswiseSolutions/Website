@@ -73,20 +73,39 @@ namespace CommitContractData.api.Controllers
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
+                    processQueueGUID,
                     createdByUserId,
                     sourceId,
                     commitContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitContractDataAPI, commitContractDataAPIId, jsonObject))
+                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitContractDataAPI, commitContractDataAPIId, jsonObject))
                 {
                     return;
                 }
 
-                var dataRowList = (IEnumerable<DataRow>) JsonConvert.DeserializeObject(jsonObject[_systemAPIRequiredDataKeyEnums.ContractData].ToString(), typeof(List<DataRow>));
-
                 //Get ContractType from jsonObject
                 var contractType = jsonObject[_systemAPIRequiredDataKeyEnums.ContractType].ToString();
+
+                //Get Contract Data
+                var contractDataJSON = jsonObject[_systemAPIRequiredDataKeyEnums.ContractData].ToString();
+                var contractDataArray = contractDataJSON.Split(";;", StringSplitOptions.RemoveEmptyEntries);
+
+                //Create DataTable
+                var dataTable = CreateDataTable(contractType);
+
+                //Populate DataTable
+                foreach(var contractDataRow in contractDataArray)
+                {
+                    var dataRow = dataTable.NewRow();
+                    var contractDataRowArray = contractDataRow.Split("|");
+
+                    for(var itemCount = 0; itemCount < contractDataRowArray.Count(); itemCount++)
+                    {
+                        dataRow[itemCount] = contractDataRowArray[itemCount];
+                    }
+
+                    dataTable.Rows.Add(dataRow);
+                }
 
                 //Get ContractTypeId from [Information].[ContractType]
                 var contractTypeId = _informationMethods.ContractType_GetContractTypeIdByContractTypeDescription(contractType);
@@ -97,15 +116,16 @@ namespace CommitContractData.api.Controllers
                     {_customerContractAttributeEnums.ContractReference, _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference)},
                     {_customerMeterAttributeEnums.MeterIdentifier, _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier)},
                     {_supplierAttributeEnums.SupplierName, _supplierMethods.SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(_supplierAttributeEnums.SupplierName)},
+                    {_supplierAttributeEnums.SupplierAlsoKnownAs, _supplierMethods.SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(_supplierAttributeEnums.SupplierAlsoKnownAs)},
                     {_customerContractMeterAttributeEnums.ContractStartDate, _customerMethods.ContractMeterAttribute_GetContractMeterAttributeIdByContractMeterAttributeDescription(_customerContractMeterAttributeEnums.ContractStartDate)},
                     {_customerContractMeterAttributeEnums.ContractEndDate, _customerMethods.ContractMeterAttribute_GetContractMeterAttributeIdByContractMeterAttributeDescription(_customerContractMeterAttributeEnums.ContractEndDate)},
                     {_customerContractMeterAttributeEnums.RateCount, _customerMethods.ContractMeterAttribute_GetContractMeterAttributeIdByContractMeterAttributeDescription(_customerContractMeterAttributeEnums.RateCount)},
-                    {_supplierProductAttributeEnums.ProductName, _supplierMethods.SupplierProductAttribute_GetSupplierProductAttributeIdBySupplierProductAttributeDescription(_supplierProductAttributeEnums.ProductName)},
+                    {_supplierProductAttributeEnums.ProductName, _supplierMethods.ProductAttribute_GetProductAttributeIdByProductAttributeDescription(_supplierProductAttributeEnums.ProductName)},
                     {_customerContractMeterRateAttributeEnums.RateValue, _customerMethods.ContractMeterRateAttribute_GetContractMeterRateAttributeIdByContractMeterRateAttributeDescription(_customerContractMeterRateAttributeEnums.RateValue)},
                     {_customerBasketAttributeEnums.BasketReference, _customerMethods.BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(_customerBasketAttributeEnums.BasketReference)},
                 };
 
-                foreach(var dataRow in dataRowList)
+                foreach (var dataRow in dataTable.Rows.Cast<DataRow>())
                 {
                     //Get ContractId from [Customer].[ContractDetail] by ContractReference
                     var contractId = GetContractId(createdByUserId, sourceId, attributeIdDictionary, dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference));
@@ -119,16 +139,16 @@ namespace CommitContractData.api.Controllers
                     //Get ContractMeterId from [Customer].[ContractMeterDetail] by ContractStartDate, ContractEndDate and RateCount
                     var contractMeterId = GetContractMeterId(createdByUserId, sourceId, contractType, dataRow, attributeIdDictionary);
 
-                    //Get SupplierProductId from [SupplierProduct].[SupplierProductDetail] by SupplierProductName
-                    var supplierProductId = GetSupplierProductId(attributeIdDictionary, dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Product));
+                    //Get ProductId from [Product].[ProductDetail] by ProductName
+                    var supplierProductId = GetProductId(attributeIdDictionary, dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Product));
 
                     //Get ContractMeterRateId from [Customer].[ContractMeterRateDetail] by Value
                     var contractMeterRateId = GetContractMeterRateId(createdByUserId, sourceId, attributeIdDictionary, dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Value));
 
                     //Get RateTypeId from [Information].[RateType] by RateType
-                    var rateTypeId = _informationMethods.RateType_GetRateTypeIdByRateTypeDescription(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.RateType));
+                    var rateTypeId = _informationMethods.RateType_GetRateTypeIdByRateTypeCode(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.RateType));
 
-                    if(contractType == _informationContractTypeEnums.Flex)
+                    if (contractType == _informationContractTypeEnums.Flex)
                     {
                         //Get BasketId from [Customer].[BasketDetail] by BasketReference
                         var basketId = GetBasketId(createdByUserId, sourceId, attributeIdDictionary, dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference));
@@ -162,13 +182,43 @@ namespace CommitContractData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitContractDataAPIId, false, null);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitContractDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private DataTable CreateDataTable(string contractType)
+        {
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+            dataTable.Columns.Add("RowId", typeof(string));
+            dataTable.Columns.Add("ContractReference", typeof(string));
+
+            if (contractType == _informationContractTypeEnums.Flex)
+            {
+                dataTable.Columns.Add("BasketReference", typeof(string));
+            }
+
+            dataTable.Columns.Add("MPXN", typeof(string));
+            dataTable.Columns.Add("Supplier", typeof(string));
+            dataTable.Columns.Add("ContractStartDate", typeof(string));
+            dataTable.Columns.Add("ContractEndDate", typeof(string));
+            dataTable.Columns.Add("Product", typeof(string));
+
+            if (contractType == _informationContractTypeEnums.Fixed)
+            {
+                dataTable.Columns.Add("RateCount", typeof(string));
+            }
+
+            dataTable.Columns.Add("RateType", typeof(string));
+            dataTable.Columns.Add("Value", typeof(string));
+            dataTable.Columns.Add("CanCommit", typeof(string));
+
+            return dataTable;
         }
 
         private void InsertContractToMeterToContractMeterToProductToContractMeterRateToRateType(long createdByUserId, long sourceId, long contractToMeterToContractMeterToProductId, long contractMeterRateToRateTypeId)
@@ -295,14 +345,21 @@ namespace CommitContractData.api.Controllers
             return contractMeterRateId;
         }
 
-        private long GetSupplierProductId(Dictionary<string, long> attributeIdDictionary, string product)
+        private long GetProductId(Dictionary<string, long> attributeIdDictionary, string product)
         {
-            return _supplierMethods.SupplierProductDetail_GetSupplierProductIdBySupplierProductAttributeIdAndSupplierProductDetailDescription(attributeIdDictionary[_supplierProductAttributeEnums.ProductName], product);
+            return _supplierMethods.ProductDetail_GetProductIdByProductAttributeIdAndProductDetailDescription(attributeIdDictionary[_supplierProductAttributeEnums.ProductName], product);
         }
 
         private long GetSupplierId(Dictionary<string, long> attributeIdDictionary, string supplier)
         {
-            return _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(attributeIdDictionary[_supplierAttributeEnums.SupplierName], supplier);
+            var supplierId = _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(attributeIdDictionary[_supplierAttributeEnums.SupplierName], supplier);
+
+            if(supplierId == 0)
+            {
+                supplierId = _supplierMethods.SupplierDetail_GetSupplierIdBySupplierAttributeIdAndSupplierDetailDescription(attributeIdDictionary[_supplierAttributeEnums.SupplierAlsoKnownAs], supplier);
+            }
+
+            return supplierId;
         }
 
         private long GetMeterId(Dictionary<string, long> attributeIdDictionary, string mpxn)

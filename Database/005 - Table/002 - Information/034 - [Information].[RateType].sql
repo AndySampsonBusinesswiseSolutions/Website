@@ -23,6 +23,7 @@ CREATE TABLE [Information].[RateType]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
+	RateTypeCode VARCHAR(255) NOT NULL,
 	RateTypeDescription VARCHAR(255) NOT NULL,
 	)  ON [Information]
 GO

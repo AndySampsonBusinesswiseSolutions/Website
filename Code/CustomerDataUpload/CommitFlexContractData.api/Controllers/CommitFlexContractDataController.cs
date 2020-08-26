@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+using System.Data;
 using System;
 using System.Linq;
 
@@ -25,6 +25,7 @@ namespace CommitFlexContractData.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitFlexContractDataAPIId;
 
         public CommitFlexContractDataController(ILogger<CommitFlexContractDataController> logger)
@@ -85,8 +86,15 @@ namespace CommitFlexContractData.api.Controllers
                 //Add ContractType to jsonObject
                 jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractType, _informationContractTypeEnums.Flex);
 
+                //Convert dataRows to a string
+                var commitableDataRowJSON = string.Empty;
+                foreach(var dataRow in commitableDataRows.Where(d => !string.IsNullOrWhiteSpace(d.Field<string>(_customerDataUploadValidationEntityEnums.Value))))
+                {
+                    commitableDataRowJSON += $"{string.Join('|' , dataRow.ItemArray)};;";
+                }
+
                 //Add ContractData to jsonObject
-                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractData, JsonConvert.SerializeObject(commitableDataRows));
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractData, commitableDataRowJSON);
 
                 //Call CommitContractData API and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
