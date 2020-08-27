@@ -105,10 +105,11 @@ namespace CommitPeriodicUsageData.api.Controllers
                 var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(periodicUsageJson.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
                 var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => x.Key.Substring(0, 10), x => JsonConvert.DeserializeObject<Dictionary<string, string>>(x.Value));
 
+                var dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
                 var dates = periodicUsageDictionary.Select(u => u.Key)
                     .Distinct()
                     .Select(d => _methods.GetDateTimeSqlParameterFromDateTimeString(d).Substring(0, 10))
-                    .ToDictionary(d => d, d => _informationMethods.Date_GetDateIdByDateDescription(d));
+                    .ToDictionary(d => d, d => dateDictionary[d]);
 
                 var timePeriods = periodicUsageDictionary.SelectMany(u => u.Value)
                     .Select(d => d.Key)
@@ -125,31 +126,18 @@ namespace CommitPeriodicUsageData.api.Controllers
                 dataTable.Columns.Add("UsageTypeId", typeof(long));
                 dataTable.Columns.Add("Usage", typeof(decimal));
 
-                foreach (var periodicUsage in periodicUsageDictionary)
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
+                dataTable.Columns["UsageTypeId"].DefaultValue = usageTypeId;
+
+                //Create datarows
+                var dataRows = AddDataRows(periodicUsageDictionary, dates, timePeriods, dataTable);
+
+                foreach (var dataRow in dataRows)
                 {
-                    var date = periodicUsage.Key;
-                    var dateId = dates[date];
-
-                    foreach (var timePeriod in periodicUsage.Value)
-                    {
-                        if (string.IsNullOrWhiteSpace(timePeriod.Value))
-                        {
-                            continue;
-                        }
-
-                        var timePeriodId = timePeriods[timePeriod.Key];
-                        var usage = Convert.ToDecimal(timePeriod.Value);
-
-                        var dataRow = dataTable.NewRow();
-                        dataRow["ProcessQueueGUID"] = processQueueGUID;
-                        dataRow["CreatedByUserId"] = createdByUserId;
-                        dataRow["SourceId"] = sourceId;
-                        dataRow["DateId"] = dateId;
-                        dataRow["TimePeriodId"] = timePeriodId;
-                        dataRow["UsageTypeId"] = usageTypeId;
-                        dataRow["Usage"] = usage;
-                        dataTable.Rows.Add(dataRow);
-                    }
+                    dataTable.Rows.Add(dataRow);
                 }
 
                 //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
@@ -163,6 +151,8 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                 //Get last 365days of periodic usage
                 var latestPeriodicUsage = new List<DataRow>();
+
+                //TODO: If not 365 days, get generic profile
 
                 //Create Estimated Annual Usage
                 var estimatedAnnualUsage = 0; //latestPeriodicUsage.Where(r => r.Field<DateTime>("Date") >= DateTime.Today.AddDays(-365))
@@ -184,6 +174,30 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitPeriodicUsageDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private List<DataRow> AddDataRows(Dictionary<string, Dictionary<string, string>> periodicUsageDictionary, Dictionary<string, long> dates, Dictionary<string, long> timePeriods, DataTable dataTable)
+        {
+            var dataRows = new List<DataRow>();
+
+            foreach(var periodicUsage in periodicUsageDictionary)
+            {
+                var dateId = dates[periodicUsage.Key];
+                var timePeriodUsage = periodicUsage.Value
+                    .Where(v => !string.IsNullOrWhiteSpace(v.Value))
+                    .ToDictionary(x => timePeriods[x.Key], x => Convert.ToDecimal(x.Value));
+
+                foreach (var timePeriod in timePeriodUsage)
+                {
+                    var dataRow = dataTable.NewRow();
+                    dataRow["DateId"] = dateId;
+                    dataRow["TimePeriodId"] = timePeriod.Key;
+                    dataRow["Usage"] = timePeriod.Value;
+                    dataRows.Add(dataRow);
+                }
+            }
+
+            return dataRows;         
         }
 
         private long GetMeterId(string mpxn)

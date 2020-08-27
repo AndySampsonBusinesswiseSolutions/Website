@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -17,6 +18,15 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("DateId"))
                     .FirstOrDefault();
+            }
+
+            public Dictionary<string, long> Date_GetDateDescriptionIdDictionary()
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Date_GetList);
+
+                return dataTable.Rows.Cast<DataRow>()
+                    .ToDictionary(x => x.Field<string>("DateDescription"), x => x.Field<long>("DateId"));
             }
         }
     }
