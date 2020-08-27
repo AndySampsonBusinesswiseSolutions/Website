@@ -26,6 +26,7 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-07-30 -> Andrew Sampson -> Initial development of script
     -- 2020-08-14 -> Andrew Sampson -> Added MeterType parameter
+    -- 2020-08-26 -> Andrew Sampson -> Updated to use LoadedUsage_Temp table
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -58,12 +59,7 @@ BEGIN
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[LoadedUsage_Insert]
-        @CreatedByUserId BIGINT,
-        @SourceId BIGINT,
-        @DateId BIGINT,
-        @TimePeriodId BIGINT,
-        @UsageTypeId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
@@ -84,15 +80,23 @@ BEGIN
             UsageTypeId,
             Usage
         )
-        VALUES
-        (
-            @CreatedByUserId,
-            @SourceId,
-            @DateId,
-            @TimePeriodId,
-            @UsageTypeId,
-            @Usage
-        )
+        SELECT
+            CreatedByUserId,
+            SourceId,
+            DateId,
+            TimePeriodId,
+            UsageTypeId,
+            Usage
+        FROM
+            [' + @SchemaName +'].[LoadedUsage_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [' + @SchemaName +'].[LoadedUsage_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
     END'
 
     SET @MetaSQL = '

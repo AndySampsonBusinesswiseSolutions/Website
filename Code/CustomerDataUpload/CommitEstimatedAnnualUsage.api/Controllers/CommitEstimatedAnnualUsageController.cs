@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 
 namespace CommitEstimatedAnnualUsage.api.Controllers
 {
@@ -118,17 +119,40 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                     }
                 }
 
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("DateId", typeof(long));
+                dataTable.Columns.Add("TimePeriodId", typeof(long));
+                dataTable.Columns.Add("UsageTypeId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
                 foreach(var date in profileUsage)
                 {
                     foreach(var timePeriod in date.Value)
                     {
-                        //End date existing Periodic Usage
-                        _supplyMethods.LoadedUsage_Delete(meterType, meterId, date.Key, timePeriod.Key);
-
-                        //Insert new Periodic Usage
-                        _supplyMethods.LoadedUsage_Insert(createdByUserId, sourceId, meterType, meterId, date.Key, timePeriod.Key, usageTypeId, timePeriod.Value);
+                        var dataRow = dataTable.NewRow();
+                        dataRow["ProcessQueueGUID"] = processQueueGUID;
+                        dataRow["CreatedByUserId"] = createdByUserId;
+                        dataRow["SourceId"] = sourceId;
+                        dataRow["DateId"] = date.Key;
+                        dataRow["TimePeriodId"] = timePeriod.Key;
+                        dataRow["UsageTypeId"] = usageTypeId;
+                        dataRow["Usage"] = timePeriod.Value;
+                        dataTable.Rows.Add(dataRow);
                     }
-                }                
+                }   
+
+                //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
+                _supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
+
+                //End date existing Periodic Usage
+                _supplyMethods.LoadedUsage_Delete(meterType, meterId);
+
+                //Insert new Periodic Usage into LoadedUsage table
+                _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
@@ -143,4 +167,3 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         }
     }
 }
-

@@ -172,5 +172,14 @@ BEGIN
 
     SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[LoadedUsage].DateId to [Information].[UsageType].UsageTypeId'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'CONSTRAINT', 'FK_LoadedUsage_UsageTypeId'
+
+    --Add Indexes
+    SET @SQL = N'
+    USE [EMaaS]
+    
+    CREATE NONCLUSTERED INDEX [IX_Supply' + @MeterType + CONVERT(NVARCHAR, @MeterId) + '_LoadedUsage_EffectiveToDateTime_DateIdTimePeriodId]
+    ON [' + @SchemaName + '].[LoadedUsage] ([EffectiveToDateTime])
+    INCLUDE ([DateId],[TimePeriodId])'
+    EXEC sp_sqlexec @SQL
 END
 GO

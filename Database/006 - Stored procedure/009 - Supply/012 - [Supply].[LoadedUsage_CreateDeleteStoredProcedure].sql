@@ -26,6 +26,7 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-07-30 -> Andrew Sampson -> Initial development of script
     -- 2020-08-14 -> Andrew Sampson -> Added MeterType parameter
+    -- 2020-08-26 -> Andrew Sampson -> Updated to use LoadedUsage_Temp table
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -58,8 +59,6 @@ BEGIN
     -- =============================================
 
     ALTER PROCEDURE [' + @SchemaName +'].[LoadedUsage_Delete]
-        @DateId BIGINT,
-        @TimePeriodId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -74,11 +73,15 @@ BEGIN
         UPDATE
             [' + @SchemaName +'].[LoadedUsage]
         SET
-            EffectiveToDateTime = GETUTCDATE()
+            LoadedUsage.EffectiveToDateTime = GETUTCDATE()
+        FROM
+            [' + @SchemaName +'].[LoadedUsage]
+        INNER JOIN
+            [' + @SchemaName +'].[LoadedUsage_Temp]
+            ON LoadedUsage_Temp.DateId = LoadedUsage.DateId
+            AND LoadedUsage_Temp.TimePeriodId = LoadedUsage.TimePeriodId
         WHERE
-            DateId = @DateId
-            AND TimePeriodId = @TimePeriodId
-            AND EffectiveToDateTime = ''9999-12-31''
+            LoadedUsage.EffectiveToDateTime = ''9999-12-31''
     END'
 
     SET @MetaSQL = '

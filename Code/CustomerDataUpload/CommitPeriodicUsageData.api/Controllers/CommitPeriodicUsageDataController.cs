@@ -115,6 +115,16 @@ namespace CommitPeriodicUsageData.api.Controllers
                     .Distinct()
                     .ToDictionary(t => t, t => _informationMethods.TimePeriod_GetTimePeriodIdListByEndTime(t).Intersect(granularityTimePeriods).FirstOrDefault());
 
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("DateId", typeof(long));
+                dataTable.Columns.Add("TimePeriodId", typeof(long));
+                dataTable.Columns.Add("UsageTypeId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
                 foreach (var periodicUsage in periodicUsageDictionary)
                 {
                     var date = periodicUsage.Key;
@@ -130,13 +140,26 @@ namespace CommitPeriodicUsageData.api.Controllers
                         var timePeriodId = timePeriods[timePeriod.Key];
                         var usage = Convert.ToDecimal(timePeriod.Value);
 
-                        //End date existing Periodic Usage
-                        _supplyMethods.LoadedUsage_Delete(meterType, meterId, dateId, timePeriodId);
-
-                        //Insert new Periodic Usage
-                        _supplyMethods.LoadedUsage_Insert(createdByUserId, sourceId, meterType, meterId, dateId, timePeriodId, usageTypeId, usage);
+                        var dataRow = dataTable.NewRow();
+                        dataRow["ProcessQueueGUID"] = processQueueGUID;
+                        dataRow["CreatedByUserId"] = createdByUserId;
+                        dataRow["SourceId"] = sourceId;
+                        dataRow["DateId"] = dateId;
+                        dataRow["TimePeriodId"] = timePeriodId;
+                        dataRow["UsageTypeId"] = usageTypeId;
+                        dataRow["Usage"] = usage;
+                        dataTable.Rows.Add(dataRow);
                     }
                 }
+
+                //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
+                _supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
+
+                //End date existing Periodic Usage
+                _supplyMethods.LoadedUsage_Delete(meterType, meterId);
+
+                //Insert new Periodic Usage into LoadedUsage table
+                _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
                 //Get last 365days of periodic usage
                 var latestPeriodicUsage = new List<DataRow>();

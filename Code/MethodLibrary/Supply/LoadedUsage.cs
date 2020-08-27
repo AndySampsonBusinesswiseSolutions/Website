@@ -16,6 +16,7 @@ namespace MethodLibrary
                 if(tableId == 0)
                 {
                     LoadedUsage_CreateTable(meterId, meterType);
+                    LoadedUsage_CreateTempTable(meterId, meterType);
                 }
 
                 LoadedUsage_CreateDeleteStoredProcedure(meterId, meterType);
@@ -27,6 +28,13 @@ namespace MethodLibrary
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSupplyEnums.LoadedUsage_CreateTable, 
+                    meterId, meterType);
+            }
+
+            private void LoadedUsage_CreateTempTable(long meterId, string meterType)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSupplyEnums.LoadedUsage_CreateTempTable, 
                     meterId, meterType);
             }
 
@@ -44,18 +52,16 @@ namespace MethodLibrary
                     meterId, meterType);
             }
 
-            public void LoadedUsage_Delete(string meterType, long meterId, long dateId, long timePeriodId)
+            public void LoadedUsage_Delete(string meterType, long meterId)
             {
                 var loadedUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Delete, meterType, meterId);
                 var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
                     .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
 
-                ExecuteNonQuery(parameterInfoList, 
-                    loadedUsageDeleteStoredProcedure,
-                    dateId, timePeriodId);
+                ExecuteNonQuery(parameterInfoList, loadedUsageDeleteStoredProcedure);
             }
 
-            public void LoadedUsage_Insert(long createdByUserId, long sourceId, string meterType, long meterId, long dateId, long timePeriodId, long usageTypeId, decimal usage)
+            public void LoadedUsage_Insert(string meterType, long meterId, string processQueueGUID)
             {
                 var loadedUsageInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Insert, meterType, meterId);
                 var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
@@ -63,7 +69,12 @@ namespace MethodLibrary
 
                 ExecuteNonQuery(parameterInfoList, 
                     loadedUsageInsertStoredProcedure,
-                    createdByUserId, sourceId, dateId, timePeriodId, usageTypeId, usage);
+                    processQueueGUID);
+            }
+
+            public void LoadedUsageTemp_Insert(string meterType, long meterId, DataTable loadedUsageDataTable)
+            {
+                new Methods().BulkInsert(loadedUsageDataTable, $"[Supply.{meterType}{meterId}].[LoadedUsage_Temp]");
             }
 
             private void LoadedUsage_GrantExecuteToStoredProcedures(long meterId, string meterType)
