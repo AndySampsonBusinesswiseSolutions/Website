@@ -88,8 +88,6 @@ namespace CommitBasketData.api.Controllers
                     return;
                 }
 
-                //TODO: Remove duplicate rows
-
                 var basketReferenceBasketAttributeId = _customerMethods.BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(_customerBasketAttributeEnums.BasketReference);
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
@@ -100,25 +98,38 @@ namespace CommitBasketData.api.Controllers
                 //Get ContractIdList from [Mapping].[ContractToContractType] by ContractTypeId
                 var mappingContractIdList = _mappingMethods.ContractToContractType_GetContractIdListByContractTypeId(contractTypeId);
 
+                var baskets = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference))
+                    .Distinct()
+                    .ToDictionary(b => b, b => _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(basketReferenceBasketAttributeId, b));
+
+                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                    .Distinct()
+                    .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
+
+                var contractReferences = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference))
+                    .Distinct()
+                    .ToDictionary(c => c, c => _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, c));
+
+                var contractMeterToMeterContractMeterIdLists = meters.Select(m => m.Value)
+                    .Distinct()
+                    .ToDictionary(m => m, m => _mappingMethods.ContractMeterToMeter_GetContractMeterIdListByMeterId(m));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get BasketId from [Customer].[BasketDetail] by BasketReference
-                    var basketReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference);
-                    var basketId = _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(basketReferenceBasketAttributeId, basketReference);
+                    var basketId = baskets[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference)];
 
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
 
                     //Get ContractIdList from [Customer].[Contract] by ContractReference
-                    var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);
-                    var customerContractIdList = _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
+                    var customerContractIdList = contractReferences[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference)];
 
                     //Get ContractId from intersect of Customer ContractIdList and Mapping ContractIdList
                     var contractId = customerContractIdList.Intersect(mappingContractIdList).FirstOrDefault();
 
                     //Get ContractMeterIdList from [Mapping].[ContractMeterToMeter] by MeterId
-                    var contractMeterToMeterContractMeterIdList = _mappingMethods.ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
+                    var contractMeterToMeterContractMeterIdList = contractMeterToMeterContractMeterIdLists[meterId];
 
                     //Get ContractMeterIdList from [Mapping].[ContractToContractMeter] by ContractId
                     var contractToContractMeterContractMeterIdList = _mappingMethods.ContractToContractMeter_GetContractMeterIdListByContractId(contractId);

@@ -88,23 +88,21 @@ namespace CommitAssetToSubMeterData.api.Controllers
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
                 var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
 
+                var assets = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.Asset))
+                    .Distinct()
+                    .ToDictionary(a => a, a => GetAssetId(a, createdByUserId, sourceId, assetNameAssetAttributeId));
+                
+                var subMeters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier))
+                    .Distinct()
+                    .ToDictionary(s => s, s => _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, s));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get AssetId from [Customer].[AssetDetail]
-                    var asset = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Asset);
-                    var assetId = _customerMethods.Asset_GetAssetIdByAssetAttributeIdAndAssetDetailDescription(assetNameAssetAttributeId, asset);
-
-                    if(assetId == 0)
-                    {
-                        assetId =_customerMethods.InsertNewAsset(createdByUserId, sourceId);
-
-                        //Insert into [Customer].[AssetDetail]
-                        _customerMethods.AssetDetail_Insert(createdByUserId, sourceId, assetId, assetNameAssetAttributeId, asset);
-                    }
+                    var assetId = assets[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Asset)];
 
                     //Get SubMeterId from [Customer].[SubMeterDetail] by SubMeterIdentifier
-                    var subMeterIdentifier = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier);
-                    var subMeterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, subMeterIdentifier);
+                    var subMeterId = subMeters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)];
 
                     //Insert into [Mapping].[AssetToSubMeter]
                     _mappingMethods.AssetToSubMeter_Insert(createdByUserId, sourceId, assetId, subMeterId);
@@ -120,6 +118,21 @@ namespace CommitAssetToSubMeterData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitAssetToSubMeterDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private long GetAssetId(string asset, long createdByUserId, long sourceId, long assetNameAssetAttributeId)
+        {
+            var assetId = _customerMethods.Asset_GetAssetIdByAssetAttributeIdAndAssetDetailDescription(assetNameAssetAttributeId, asset);
+
+            if(assetId == 0)
+            {
+                assetId =_customerMethods.InsertNewAsset(createdByUserId, sourceId);
+
+                //Insert into [Customer].[AssetDetail]
+                _customerMethods.AssetDetail_Insert(createdByUserId, sourceId, assetId, assetNameAssetAttributeId, asset);
+            }
+
+            return assetId;
         }
     }
 }

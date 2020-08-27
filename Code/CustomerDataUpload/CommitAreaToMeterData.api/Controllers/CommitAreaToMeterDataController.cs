@@ -85,22 +85,22 @@ namespace CommitAreaToMeterData.api.Controllers
                 }
 
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                
+                var areas = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.Area))
+                    .Distinct()
+                    .ToDictionary(a => a, a => GetAreaId(a, createdByUserId, sourceId));
+                
+                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                    .Distinct()
+                    .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get AreaId from [Information].[Area]
-                    var area = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Area);
-                    var areaId = _informationMethods.Area_GetAreaIdByAreaDescription(area);
-
-                    if(areaId == 0)
-                    {
-                        _informationMethods.Area_Insert(createdByUserId, sourceId, area);
-                        areaId = _informationMethods.Area_GetAreaIdByAreaDescription(area);
-                    }
+                    var areaId = areas[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Area)];
 
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
 
                     //Insert into [Mapping].[AreaToMeter]
                     _mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areaId, meterId);
@@ -116,6 +116,19 @@ namespace CommitAreaToMeterData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitAreaToMeterDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private long GetAreaId(string area, long createdByUserId, long sourceId)
+        {
+            var areaId = _informationMethods.Area_GetAreaIdByAreaDescription(area);
+
+            if(areaId == 0)
+            {
+                _informationMethods.Area_Insert(createdByUserId, sourceId, area);
+                areaId = _informationMethods.Area_GetAreaIdByAreaDescription(area);
+            }
+
+            return areaId;
         }
     }
 }

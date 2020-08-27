@@ -85,22 +85,33 @@ namespace CommitMeterToSiteData.api.Controllers
                     return;
                 }
 
-                var meterNameMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
                 var sitePostCodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
+
+                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                    .Distinct()
+                    .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
+
+                var siteNames = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SiteName))
+                    .Distinct()
+                    .ToDictionary(sn => sn, sn => _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, sn));
+
+                var sitePostCodes = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode))
+                    .Distinct()
+                    .ToDictionary(spc => spc, spc => _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, spc));
 
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get MeterId by MPXN
-                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterNameMeterAttributeId, mpxn).FirstOrDefault();
+                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
 
                     //Get SiteId by SiteName and SitePostCode
                     var siteName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName);
                     var sitePostCode = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode);
 
-                    var siteNameSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, siteName);
-                    var sitePostCodeSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, sitePostCode);
+                    var siteNameSiteIdList = siteNames[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName)];
+                    var sitePostCodeSiteIdList = sitePostCodes[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode)];
 
                     var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
                     var siteId = matchingSiteIdList.FirstOrDefault();

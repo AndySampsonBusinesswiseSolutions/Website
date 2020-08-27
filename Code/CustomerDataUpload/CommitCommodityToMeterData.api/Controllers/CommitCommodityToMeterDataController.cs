@@ -87,21 +87,24 @@ namespace CommitCommodityToMeterData.api.Controllers
 
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
 
+                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                    .Distinct()
+                    .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
+
+                var commodities = meters.Select(m => _methods.IsValidMPAN(m.Key) ? _informationCommodityEnums.Electricity : _informationCommodityEnums.Gas)
+                    .Distinct()
+                    .ToDictionary(c => c, c => _informationMethods.Commodity_GetCommodityIdByCommodityDescription(c));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
 
                     //Get CommodityId from [Information].[Commodity]
-                    var commodity = _methods.IsValidMPAN(mpxn) ? _informationCommodityEnums.Electricity : _informationCommodityEnums.Gas;
-                    var commodityId = _informationMethods.Commodity_GetCommodityIdByCommodityDescription(commodity);
-
-                    if(commodityId == 0)
-                    {
-                        _informationMethods.Commodity_Insert(createdByUserId, sourceId, commodity);
-                        commodityId = _informationMethods.Commodity_GetCommodityIdByCommodityDescription(commodity);
-                    }
+                    var commodity = _methods.IsValidMPAN(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) 
+                        ? _informationCommodityEnums.Electricity 
+                        : _informationCommodityEnums.Gas;
+                    var commodityId = commodities[commodity];
 
                     //Insert into [Mapping].[CommodityToMeter]
                     _mappingMethods.CommodityToMeter_Insert(createdByUserId, sourceId, commodityId, meterId);

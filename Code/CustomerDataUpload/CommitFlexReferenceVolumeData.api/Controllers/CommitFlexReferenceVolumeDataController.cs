@@ -90,11 +90,27 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                 var dateToReferenceVolumeAttributeId = _customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(_customerReferenceVolumeAttributeEnums.DateTo);
                 var referenceVolumeReferenceVolumeAttributeId = _customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(_customerReferenceVolumeAttributeEnums.ReferenceVolume);
 
+                var contracts = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference))
+                    .Distinct()
+                    .ToDictionary(c => c, c => _customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, c));
+
+                var fromDates = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom))
+                    .Distinct()
+                    .ToDictionary(d => d, d => _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateFromReferenceVolumeAttributeId, d));
+
+                var toDates = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.DateTo))
+                    .Distinct()
+                    .ToDictionary(d => d, d => _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateToReferenceVolumeAttributeId, d));
+
+                var referenceVolumes = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.Volume))
+                    .Distinct()
+                    .ToDictionary(rv => rv, rv => _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(referenceVolumeReferenceVolumeAttributeId, rv));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get ContractId by ContractReference
                     var contractReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference);
-                    var contractId = _customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, contractReference);
+                    var contractId = contracts[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference)];
 
                     if(contractId == 0)
                     {
@@ -106,9 +122,9 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                     var dateTo = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateTo);
                     var referenceVolume = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Volume);
 
-                    var dateFromReferenceVolumeIdList = _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateFromReferenceVolumeAttributeId, dateFrom);
-                    var dateToCodeReferenceVolumeIdList = _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateToReferenceVolumeAttributeId, dateTo);
-                    var referenceVolumeReferenceVolumeIdList = _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(referenceVolumeReferenceVolumeAttributeId, referenceVolume);
+                    var dateFromReferenceVolumeIdList = fromDates[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom)];
+                    var dateToCodeReferenceVolumeIdList = toDates[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateTo)];
+                    var referenceVolumeReferenceVolumeIdList = referenceVolumes[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Volume)];
 
                     var matchingReferenceVolumeIdList = dateFromReferenceVolumeIdList.Intersect(dateToCodeReferenceVolumeIdList).Intersect(referenceVolumeReferenceVolumeIdList);
                     var referenceVolumeId = matchingReferenceVolumeIdList.FirstOrDefault();

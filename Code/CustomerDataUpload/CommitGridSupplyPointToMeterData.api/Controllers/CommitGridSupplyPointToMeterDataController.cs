@@ -88,23 +88,21 @@ namespace CommitGridSupplyPointToMeterData.api.Controllers
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var gridSupplyPointGroupIdGridSupplyPointAttributeId = _informationMethods.GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(_informationGridSupplyPointAttributeEnums.GridSupplyPointGroupId);
 
+                var gridSupplyPoints = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.GridSupplyPoint))
+                    .Distinct()
+                    .ToDictionary(gsp => gsp, gsp => GetGridSupplyPointId(gsp, createdByUserId, sourceId, gridSupplyPointGroupIdGridSupplyPointAttributeId));
+                
+                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                    .Distinct()
+                    .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var mpxn = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN);
-                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
 
                     //Get GridSupplyPointId from [Information].[GridSupplyPointDetail]
-                    var gridSupplyPoint = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.GridSupplyPoint);
-                    var gridSupplyPointId = _informationMethods.GridSupplyPointDetail_GetGridSupplyPointIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);
-
-                    if(gridSupplyPointId == 0)
-                    {
-                        gridSupplyPointId = _informationMethods.InsertNewGridSupplyPoint(createdByUserId, sourceId);
-
-                        //Insert into [Customer].[GridSupplyPointDetail]
-                        _informationMethods.GridSupplyPointDetail_Insert(createdByUserId, sourceId, gridSupplyPointId, gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);
-                    }
+                    var gridSupplyPointId = gridSupplyPoints[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.GridSupplyPoint)];
 
                     //Insert into [Mapping].[GridSupplyPointToMeter]
                     _mappingMethods.GridSupplyPointToMeter_Insert(createdByUserId, sourceId, gridSupplyPointId, meterId);
@@ -120,6 +118,21 @@ namespace CommitGridSupplyPointToMeterData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitGridSupplyPointToMeterDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private long GetGridSupplyPointId(string gridSupplyPoint, long createdByUserId, long sourceId, long gridSupplyPointGroupIdGridSupplyPointAttributeId)
+        {
+            var gridSupplyPointId = _informationMethods.GridSupplyPointDetail_GetGridSupplyPointIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);
+
+            if(gridSupplyPointId == 0)
+            {
+                gridSupplyPointId = _informationMethods.InsertNewGridSupplyPoint(createdByUserId, sourceId);
+
+                //Insert into [Customer].[GridSupplyPointDetail]
+                _informationMethods.GridSupplyPointDetail_Insert(createdByUserId, sourceId, gridSupplyPointId, gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);
+            }
+
+            return gridSupplyPointId;
         }
     }
 }

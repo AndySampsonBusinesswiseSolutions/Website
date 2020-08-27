@@ -101,11 +101,22 @@ namespace CommitFlexTradeData.api.Controllers
                     {_informationRateUnitEnums.PoundPerMegaWattHour, _informationMethods.RateUnit_GetRateUnitIdByRateUnitDescription(_informationRateUnitEnums.PoundPerMegaWattHour)},
                 };
 
+                var baskets = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference))
+                    .Distinct()
+                    .ToDictionary(b => b, b => _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(attributeIdDictionary[_customerBasketAttributeEnums.BasketReference], b));
+
+                var tradeProducts = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct))
+                    .Distinct()
+                    .ToDictionary(tp => tp, tp => _informationMethods.TradeProduct_GetTradeProductIdByTradeProductDescription(tp));
+
+                var tradeDirections = commitableDataRows.Select(r => GetTradeDirection(r.Field<string>(_customerDataUploadValidationEntityEnums.Direction)))
+                    .Distinct()
+                    .ToDictionary(td => td, td => _informationMethods.TradeDirection_GetTradeDirectionIdByTradeDirectionDescription(td));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get BasketId from [Customer].[BasketDetail] by BasketReference
-                    var basketReference = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference);
-                    var basketId = _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(attributeIdDictionary[_customerBasketAttributeEnums.BasketReference], basketReference);
+                    var basketId = baskets[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference)];
 
                     if(basketId == 0)
                     {
@@ -184,7 +195,7 @@ namespace CommitFlexTradeData.api.Controllers
                     }
 
                     //Get TradeProductId from [Information].[TradeProduct] by TradeProductDescription
-                    var tradeProductId = _informationMethods.TradeProduct_GetTradeProductIdByTradeProductDescription(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct));
+                    var tradeProductId = tradeProducts[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct)];
 
                     //Insert into [Mapping].[TradeToTradeProduct]
                     var tradeToTradeProductId = _mappingMethods.TradeToTradeProduct_GetTradeToTradeProductIdByTradeIdAndTradeProductId(tradeId, tradeProductId);
@@ -194,10 +205,8 @@ namespace CommitFlexTradeData.api.Controllers
                     }
 
                     //Get TradeDirectionId from [Information].[TradeDirection] by TradeDirectionDescription
-                    var tradeDirection = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Direction).StartsWith("B")
-                        ? _informationTradeDirectionEnums.Buy
-                        : _informationTradeDirectionEnums.Sell;
-                    var tradeDirectionId = _informationMethods.TradeDirection_GetTradeDirectionIdByTradeDirectionDescription(tradeDirection);
+                    var tradeDirection = GetTradeDirection(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Direction));
+                    var tradeDirectionId = tradeDirections[tradeDirection];
 
                     //Insert into [Mapping].[TradeToTradeDirection]
                     var tradeToTradeDirectionId = _mappingMethods.TradeToTradeDirection_GetTradeToTradeDirectionIdByTradeIdAndTradeDirectionId(tradeId, tradeDirectionId);
@@ -217,6 +226,13 @@ namespace CommitFlexTradeData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexTradeDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private string GetTradeDirection(string direction)
+        {
+            return direction.StartsWith("B")
+                ? _informationTradeDirectionEnums.Buy
+                : _informationTradeDirectionEnums.Sell;
         }
     }
 }

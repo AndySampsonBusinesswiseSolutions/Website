@@ -89,18 +89,26 @@ namespace CommitCustomerToSiteData.api.Controllers
                 var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
                 var sitePostCodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
 
+                var customers = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.CustomerName))
+                    .Distinct()
+                    .ToDictionary(c => c, c => _customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(customerNameCustomerAttributeId, c));
+
+                var siteNames = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SiteName))
+                    .Distinct()
+                    .ToDictionary(sn => sn, sn => _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, sn));
+
+                var sitePostCodes = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode))
+                    .Distinct()
+                    .ToDictionary(spc => spc, spc => _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, spc));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get CustomerId by CustomerName
-                    var customerName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.CustomerName);
-                    var customerId = _customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(customerNameCustomerAttributeId, customerName);
+                    var customerId = customers[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.CustomerName)];
 
                     //Get SiteId by SiteName and SitePostCode
-                    var siteName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName);
-                    var sitePostCode = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode);
-
-                    var siteNameSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, siteName);
-                    var sitePostCodeSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, sitePostCode);
+                    var siteNameSiteIdList = siteNames[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName)];
+                    var sitePostCodeSiteIdList = sitePostCodes[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode)];
 
                     var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
                     var siteId = matchingSiteIdList.FirstOrDefault();

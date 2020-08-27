@@ -81,6 +81,10 @@ namespace StoreSubMeterUsageData.api.Controllers
                 subMeterUsageDataTable.Columns.Add("Value", typeof(string));
                 subMeterUsageDataTable.Columns.Add("CanCommit", typeof(bool));
 
+                //Set default values
+                subMeterUsageDataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                subMeterUsageDataTable.Columns["CanCommit"].DefaultValue = false;
+
                 foreach(var row in subMeterUsageDictionary.Keys)
                 {
                     var values = subMeterUsageDictionary[row];
@@ -93,13 +97,11 @@ namespace StoreSubMeterUsageData.api.Controllers
 
                         //Insert data into subMeterUsageDataTable
                         var subMeterUsageDataRow = subMeterUsageDataTable.NewRow();
-                        subMeterUsageDataRow["ProcessQueueGUID"] = processQueueGUID;
                         subMeterUsageDataRow["RowId"] = row;
                         subMeterUsageDataRow["SubMeterIdentifier"] = subMeterIdentifier;
                         subMeterUsageDataRow["Date"] = date;
                         subMeterUsageDataRow["TimePeriod"] = timePeriodString;
                         subMeterUsageDataRow["Value"] = values[timePeriod];
-                        subMeterUsageDataRow["CanCommit"] = false;
 
                         subMeterUsageDataTable.Rows.Add(subMeterUsageDataRow);
                     }

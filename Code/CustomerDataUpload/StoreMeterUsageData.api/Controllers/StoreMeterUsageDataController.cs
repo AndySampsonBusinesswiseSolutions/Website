@@ -81,6 +81,10 @@ namespace StoreMeterUsageData.api.Controllers
                 meterUsageDataTable.Columns.Add("Value", typeof(string));
                 meterUsageDataTable.Columns.Add("CanCommit", typeof(bool));
 
+                //Set default values
+                meterUsageDataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                meterUsageDataTable.Columns["CanCommit"].DefaultValue = false;
+
                 var sourceSheetList = new List<string>
                 {
                     _customerDataUploadValidationSheetNameEnums.MeterUsage,
@@ -107,14 +111,12 @@ namespace StoreMeterUsageData.api.Controllers
 
                             //Insert data into meterUsageDataTable
                             var meterUsageDataRow = meterUsageDataTable.NewRow();
-                            meterUsageDataRow["ProcessQueueGUID"] = processQueueGUID;
                             meterUsageDataRow["SheetName"] = sourceSheet;
                             meterUsageDataRow["RowId"] = row;
                             meterUsageDataRow["MPXN"] = mpxn;
                             meterUsageDataRow["Date"] = date;
                             meterUsageDataRow["TimePeriod"] = timePeriodString;
                             meterUsageDataRow["Value"] = values[timePeriod];
-                            meterUsageDataRow["CanCommit"] = false;
 
                             meterUsageDataTable.Rows.Add(meterUsageDataRow);
                         }

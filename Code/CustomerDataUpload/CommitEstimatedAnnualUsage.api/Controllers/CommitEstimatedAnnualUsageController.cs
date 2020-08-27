@@ -129,17 +129,19 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 dataTable.Columns.Add("UsageTypeId", typeof(long));
                 dataTable.Columns.Add("Usage", typeof(decimal));
 
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
+                dataTable.Columns["UsageTypeId"].DefaultValue = usageTypeId;
+
                 foreach(var date in profileUsage)
                 {
                     foreach(var timePeriod in date.Value)
                     {
                         var dataRow = dataTable.NewRow();
-                        dataRow["ProcessQueueGUID"] = processQueueGUID;
-                        dataRow["CreatedByUserId"] = createdByUserId;
-                        dataRow["SourceId"] = sourceId;
                         dataRow["DateId"] = date.Key;
                         dataRow["TimePeriodId"] = timePeriod.Key;
-                        dataRow["UsageTypeId"] = usageTypeId;
                         dataRow["Usage"] = timePeriod.Value;
                         dataTable.Rows.Add(dataRow);
                     }

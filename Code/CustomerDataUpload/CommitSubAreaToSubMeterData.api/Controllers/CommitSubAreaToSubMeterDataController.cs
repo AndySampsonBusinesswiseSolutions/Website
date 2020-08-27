@@ -86,21 +86,21 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
 
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
 
+                var subAreas = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubArea))
+                    .Distinct()
+                    .ToDictionary(sa => sa, sa => GetSubAreaId(sa, createdByUserId, sourceId));
+                
+                var subMeters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier))
+                    .Distinct()
+                    .ToDictionary(sm => sm, sm => _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, sm));
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get SubAreaId from [Information].[SubArea]
-                    var subArea = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubArea);
-                    var subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
-
-                    if(subAreaId == 0)
-                    {
-                        _informationMethods.SubArea_Insert(createdByUserId, sourceId, subArea);
-                        subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
-                    }
+                    var subAreaId = subAreas[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubArea)];
 
                     //Get SubMeterId from [Customer].[SubMeterDetail] by SubMeterIdentifier
-                    var subMeterIdentifier = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier);
-                    var subMeterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, subMeterIdentifier);
+                    var subMeterId = subMeters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)];
 
                     //Insert into [Mapping].[SubAreaToSubMeter]
                     _mappingMethods.SubAreaToSubMeter_Insert(createdByUserId, sourceId, subAreaId, subMeterId);
@@ -116,6 +116,19 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubAreaToSubMeterDataAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private long GetSubAreaId(string subArea, long createdByUserId, long sourceId)
+        {
+            var subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+
+            if(subAreaId == 0)
+            {
+                _informationMethods.SubArea_Insert(createdByUserId, sourceId, subArea);
+                subAreaId = _informationMethods.SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+            }
+
+            return subAreaId;
         }
     }
 }
