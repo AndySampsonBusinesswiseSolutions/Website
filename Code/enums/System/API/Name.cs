@@ -8,6 +8,7 @@ namespace enums
             {
                 public class Name
                 {
+                    public string CleanUpCustomerDataUploadTempDataAPI = "CleanUpCustomerDataUploadTempData.api";
                     public string CommitEstimatedAnnualUsageAPI = "CommitEstimatedAnnualUsage.api";
                     public string CommitPeriodicUsageDataAPI = "CommitPeriodicUsageData.api";
                     public string CommitMeterToMeterTimeswitchCodeDataAPI = "CommitMeterToMeterTimeswitchCodeData.api";

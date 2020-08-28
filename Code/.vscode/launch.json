@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "CleanUpCustomerDataUploadTempData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CleanUpCustomerDataUploadTempData.api/bin/Debug/netcoreapp3.1/CleanUpCustomerDataUploadTempData.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CleanUpCustomerDataUploadTempData.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CleanUpCustomerDataUploadTempData.api/Views"
+            }
+        },
         {"name": "CommitEstimatedAnnualUsage.api",
             "type": "coreclr",
             "request": "launch",
@@ -1420,6 +1441,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "CleanUpCustomerDataUploadTempData.api",
                 "CommitEstimatedAnnualUsage.api",
                 "CommitPeriodicUsageData.api",
                 "CommitMeterToMeterTimeswitchCodeData.api",
@@ -1531,6 +1553,7 @@
         },
         {"name": "Customer Data Upload",
             "configurations": [
+                "CleanUpCustomerDataUploadTempData.api",
                 "CommitEstimatedAnnualUsage.api",
                 "CommitPeriodicUsageData.api",
                 "CommitMeterToMeterTimeswitchCodeData.api",

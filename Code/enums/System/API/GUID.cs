@@ -8,6 +8,7 @@ namespace enums
             {
                 public class GUID
                 {
+                    public string CleanUpCustomerDataUploadTempDataAPI = "51655869-D1B1-4C1E-9F21-6377EF4189D6";
                     public string CommitEstimatedAnnualUsageAPI = "0ECACB10-AAD6-4238-AAD7-8CE8A589B5C6";
                     public string CommitPeriodicUsageDataAPI = "B4B14374-BAFE-4CAC-9E14-299024164D5F";
                     public string CommitMeterToMeterTimeswitchCodeDataAPI = "CD2E7213-9A18-4BEA-9C4E-7193433192BE";
