@@ -77,6 +77,9 @@ namespace CommitBasketData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitBasketDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
                 var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexContractDataRows);
@@ -84,7 +87,7 @@ namespace CommitBasketData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitBasketDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitBasketDataAPIId, false, null);
                     return;
                 }
 
@@ -142,14 +145,14 @@ namespace CommitBasketData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitBasketDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitBasketDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitBasketDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitBasketDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

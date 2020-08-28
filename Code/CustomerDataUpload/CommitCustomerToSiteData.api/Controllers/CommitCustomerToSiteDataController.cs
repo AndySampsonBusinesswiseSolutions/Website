@@ -74,6 +74,9 @@ namespace CommitCustomerToSiteData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitCustomerToSiteDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
                 var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(siteDataRows);
@@ -81,7 +84,7 @@ namespace CommitCustomerToSiteData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);
                     return;
                 }
 
@@ -118,14 +121,14 @@ namespace CommitCustomerToSiteData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCustomerToSiteDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitCustomerToSiteDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCustomerToSiteDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

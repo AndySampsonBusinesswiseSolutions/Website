@@ -68,6 +68,9 @@ namespace DetermineFileType.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, determineFileTypeAPIId);
+
                 //Get FileId by FileGUID
                 var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
                 var fileId = _informationMethods.File_GetFileIdByFileGUID(fileGUID);
@@ -84,7 +87,7 @@ namespace DetermineFileType.api.Controllers
                     if(fileTypeId == 0)
                     {
                         //An invalid FileType was passed through so error
-                        _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, true, $"Invalid FileType {fileType} provided for FileId {fileId}");
+                        _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"Invalid FileType {fileType} provided for FileId {fileId}");
                         return;
                     }
                 }
@@ -94,7 +97,7 @@ namespace DetermineFileType.api.Controllers
                     if(fileTypeId == 0)
                     {
                         //A FileType could not be determined so error
-                        _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, true, $"Unable to determine FileType for FileId {fileId}");
+                        _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"Unable to determine FileType for FileId {fileId}");
                         return;
                     }
                 }
@@ -125,14 +128,14 @@ namespace DetermineFileType.api.Controllers
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, determineFileTypeAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

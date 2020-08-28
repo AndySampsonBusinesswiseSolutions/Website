@@ -66,6 +66,9 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId);
+
                 //Get Flex Reference Volume data from Customer Data Upload
                 var flexReferenceVolumeDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
 
@@ -80,14 +83,14 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeFlexReferenceVolumeDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

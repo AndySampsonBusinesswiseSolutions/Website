@@ -74,6 +74,9 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] where CanCommit = 1
                 var flexReferenceVolumeDataRows = _tempCustomerDataUploadMethods.FlexReferenceVolume_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexReferenceVolumeDataRows);
@@ -81,7 +84,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
                     return;
                 }
 
@@ -144,14 +147,14 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

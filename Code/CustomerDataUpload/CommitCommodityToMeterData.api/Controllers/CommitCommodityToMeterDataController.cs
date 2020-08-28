@@ -74,6 +74,9 @@ namespace CommitCommodityToMeterData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitCommodityToMeterDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
                 var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
@@ -81,7 +84,7 @@ namespace CommitCommodityToMeterData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitCommodityToMeterDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCommodityToMeterDataAPIId, false, null);
                     return;
                 }
 
@@ -111,14 +114,14 @@ namespace CommitCommodityToMeterData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitCommodityToMeterDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCommodityToMeterDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitCommodityToMeterDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCommodityToMeterDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

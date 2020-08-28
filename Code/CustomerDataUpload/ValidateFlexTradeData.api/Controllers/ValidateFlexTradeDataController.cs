@@ -71,13 +71,16 @@ namespace ValidateFlexTradeData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFlexTradeDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] table
                 var flexTradeDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!flexTradeDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexTradeDataAPIId, false, null);
                     return;
                 }
 
@@ -196,14 +199,14 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 //Update Process Queue
                 var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FlexTrade);
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexTradeDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexTradeDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexTradeDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

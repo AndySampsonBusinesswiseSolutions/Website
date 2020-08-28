@@ -71,13 +71,16 @@ namespace ValidateMeterUsageData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterUsageDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] table
                 var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterUsageDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterUsageDataAPIId, false, null);
                     return;
                 }
 
@@ -168,14 +171,14 @@ namespace ValidateMeterUsageData.api.Controllers
                     }
                 }
                 
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterUsageDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateMeterUsageDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterUsageDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

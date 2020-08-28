@@ -76,6 +76,9 @@ namespace CommitMeterUsageData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterUsageDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
                 var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var meterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
@@ -87,7 +90,7 @@ namespace CommitMeterUsageData.api.Controllers
                 if(!meterCommitableDataRows.Any() && !meterUsageCommitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterUsageDataAPIId, false, null);
                     return;
                 }
 
@@ -99,7 +102,7 @@ namespace CommitMeterUsageData.api.Controllers
                 if(!mpxnList.Any())
                 {
                     //Nothing to work so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterUsageDataAPIId, false, null);
                     return;
                 }
 
@@ -176,14 +179,14 @@ namespace CommitMeterUsageData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterUsageDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitMeterUsageDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterUsageDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

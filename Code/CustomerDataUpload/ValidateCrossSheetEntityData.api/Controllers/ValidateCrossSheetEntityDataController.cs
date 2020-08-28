@@ -79,6 +79,9 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateCrossSheetEntityDataAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId);
+
                 var errorsFound = false;
 
                 //Get data from required tables
@@ -141,14 +144,14 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);                
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateCrossSheetEntityDataAPIId, errorsFound, errorsFound ? "Validation errors found" : null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId, errorsFound, errorsFound ? "Validation errors found" : null);
             }
             catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateCrossSheetEntityDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId, true, $"System Error Id {errorId}");
             }
         }
 

@@ -16,7 +16,7 @@ namespace MethodLibrary
     {
         public partial class System
         {
-            public bool PrerequisiteAPIsAreSuccessful(string APIGUID, long APIID, JObject jsonObject)
+            public bool PrerequisiteAPIsAreSuccessful(string APIGUID, long APIId, JObject jsonObject)
             {
                 var processQueueGUID = GetProcessQueueGUIDFromJObject(jsonObject);
 
@@ -31,7 +31,8 @@ namespace MethodLibrary
                 if(erroredPrerequisiteAPIs.Any())
                 {
                     //Update Process Queue
-                    ProcessQueue_Update(processQueueGUID, APIID, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
+                    ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, APIId);
+                    ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, APIId, true, $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored");
                 }
 
                 return !erroredPrerequisiteAPIs.Any();

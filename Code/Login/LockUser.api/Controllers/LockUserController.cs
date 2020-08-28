@@ -75,6 +75,9 @@ namespace LockUser.api.Controllers
                 var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
                 var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, lockUserAPIId);
+
                 //Get User Id
                 var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
                 
@@ -127,14 +130,14 @@ namespace LockUser.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, lockUserAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, lockUserAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, lockUserAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, lockUserAPIId, true, $"System Error Id {errorId}");
             }
         }
 

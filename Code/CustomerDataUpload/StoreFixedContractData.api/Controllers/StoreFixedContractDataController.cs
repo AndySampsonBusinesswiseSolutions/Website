@@ -68,6 +68,9 @@ namespace StoreFixedContractData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFixedContractDataAPIId);
+
                 //Get Fixed Contract data from Customer Data Upload
                 var fixedContractDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Fixed Contracts']");
                 var columns = new List<string>
@@ -89,14 +92,14 @@ namespace StoreFixedContractData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeFixedContractDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeFixedContractDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeFixedContractDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeFixedContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

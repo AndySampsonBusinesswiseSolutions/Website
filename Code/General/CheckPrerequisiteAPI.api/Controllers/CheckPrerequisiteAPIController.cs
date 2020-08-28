@@ -125,7 +125,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
                                         Environment.StackTrace);
 
                                     //Update Process Queue
-                                    _systemMethods.ProcessQueue_Update(processQueueGUID, prerequisiteAPIId, true, $"System Error Id {errorId}");
+                                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, prerequisiteAPIId, true, $"System Error Id {errorId}");
                                 }
                             }
                         }                    

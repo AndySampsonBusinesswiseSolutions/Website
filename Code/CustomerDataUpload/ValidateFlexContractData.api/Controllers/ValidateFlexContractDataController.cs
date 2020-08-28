@@ -72,13 +72,16 @@ namespace ValidateFlexContractData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFlexContractDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] table
                 var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!flexContractDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexContractDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexContractDataAPIId, false, null);
                     return;
                 }
 
@@ -204,14 +207,14 @@ namespace ValidateFlexContractData.api.Controllers
 
                 //Update Process Queue
                 var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FlexContract);
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateFlexContractDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

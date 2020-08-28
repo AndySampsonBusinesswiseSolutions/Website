@@ -71,13 +71,16 @@ namespace ValidateSiteData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateSiteDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[Site] table
                 var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!siteDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateSiteDataAPIId, false, null);
                     return;
                 }
 
@@ -146,14 +149,14 @@ namespace ValidateSiteData.api.Controllers
 
                 //Update Process Queue
                 var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Site);
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateSiteDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateSiteDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateSiteDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

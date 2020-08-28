@@ -68,6 +68,9 @@ namespace AddNewCustomer.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, addNewCustomerAPIId);
+
                 //Get Customer Name attribute Id
                 var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
 
@@ -99,12 +102,12 @@ namespace AddNewCustomer.api.Controllers
                     _customerMethods.Customer_Insert(createdByUserId, sourceId, customerGUID);
 
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, addNewCustomerAPIId, false, null);
                 }
                 else 
                 {
                     //Customer name exists as an active customer so fail
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, true, $"Customer Name {customerName} already exists as an active record");
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, addNewCustomerAPIId, true, $"Customer Name {customerName} already exists as an active record");
                 }                
             }
             catch(Exception error)
@@ -112,7 +115,7 @@ namespace AddNewCustomer.api.Controllers
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, addNewCustomerAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, addNewCustomerAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

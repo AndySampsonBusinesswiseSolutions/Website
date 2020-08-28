@@ -71,13 +71,16 @@ namespace ValidateCustomerData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCustomerDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[Customer] table
                 var customerDataRows = _tempCustomerDataUploadMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!customerDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, validateCustomerDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCustomerDataAPIId, false, null);
                     return;
                 }
 
@@ -130,14 +133,14 @@ namespace ValidateCustomerData.api.Controllers
 
                 //Update Process Queue
                 var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Customer);
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateCustomerDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCustomerDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateCustomerDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCustomerDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

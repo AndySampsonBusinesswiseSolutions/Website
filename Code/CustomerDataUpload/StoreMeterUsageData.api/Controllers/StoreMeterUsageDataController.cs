@@ -70,6 +70,9 @@ namespace StoreMeterUsageData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeMeterUsageDataAPIId);
+
                 //Create data table
                 var meterUsageDataTable = new DataTable();
                 meterUsageDataTable.Columns.Add("ProcessQueueGUID", typeof(Guid));
@@ -127,14 +130,14 @@ namespace StoreMeterUsageData.api.Controllers
                 _methods.BulkInsert(meterUsageDataTable, "[Temp.CustomerDataUpload].[MeterUsage]");
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeMeterUsageDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeMeterUsageDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeMeterUsageDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeMeterUsageDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

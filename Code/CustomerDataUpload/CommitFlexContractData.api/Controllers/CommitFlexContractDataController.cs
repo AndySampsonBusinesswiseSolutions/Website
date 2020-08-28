@@ -72,6 +72,9 @@ namespace CommitFlexContractData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexContractDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
                 var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexContractDataRows);
@@ -79,7 +82,7 @@ namespace CommitFlexContractData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);
                     return;
                 }
 
@@ -102,14 +105,14 @@ namespace CommitFlexContractData.api.Controllers
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexContractDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

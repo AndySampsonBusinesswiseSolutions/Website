@@ -78,6 +78,9 @@ namespace CommitFlexTradeData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexTradeDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] where CanCommit = 1
                 var flexTradeDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexTradeDataRows);
@@ -85,7 +88,7 @@ namespace CommitFlexTradeData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexTradeDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexTradeDataAPIId, false, null);
                     return;
                 }
 
@@ -217,14 +220,14 @@ namespace CommitFlexTradeData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexTradeDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexTradeDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFlexTradeDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexTradeDataAPIId, true, $"System Error Id {errorId}");
             }
         }
 

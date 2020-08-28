@@ -73,6 +73,9 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId);
+
                 //Get mpxn
                 var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
 
@@ -157,14 +160,14 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitEstimatedAnnualUsageAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

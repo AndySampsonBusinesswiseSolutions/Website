@@ -71,13 +71,16 @@ namespace ValidateMeterExemptionData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] table
                 var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterExemptionDataRows.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, ValidateMeterExemptionDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId, false, null);
                     return;
                 }
 
@@ -131,14 +134,14 @@ namespace ValidateMeterExemptionData.api.Controllers
 
                 //Update Process Queue
                 var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.MeterExemption);
-                _systemMethods.ProcessQueue_Update(processQueueGUID, ValidateMeterExemptionDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, ValidateMeterExemptionDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

@@ -71,8 +71,10 @@ namespace StoreLoginAttempt.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreLoginAttemptAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                 var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
-
                 string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeLoginAttemptAPIId);
 
                 //Get User Id
                 var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
@@ -94,14 +96,14 @@ namespace StoreLoginAttempt.api.Controllers
                 }
                 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeLoginAttemptAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeLoginAttemptAPIId, erroredPrerequisiteAPIs.Any(), errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeLoginAttemptAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeLoginAttemptAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

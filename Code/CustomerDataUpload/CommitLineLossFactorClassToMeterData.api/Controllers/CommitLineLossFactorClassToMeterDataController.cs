@@ -74,6 +74,9 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId);
+
                 //TODO: Build once LLF process is built
 
                 // //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
@@ -83,7 +86,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
                 // if(!commitableDataRows.Any())
                 // {
                 //     //Nothing to commit so update Process Queue and exit
-                //     _systemMethods.ProcessQueue_Update(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, false, null);
+                //     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, false, null);
                 //     return;
                 // }
 
@@ -118,14 +121,14 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
                 // }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

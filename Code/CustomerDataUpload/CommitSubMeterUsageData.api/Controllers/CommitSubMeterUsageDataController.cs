@@ -75,6 +75,9 @@ namespace CommitSubMeterUsageData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterUsageDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] where CanCommit = 1
                 var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var subMeterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterDataRows);
@@ -86,7 +89,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                 if(!subMeterCommitableDataRows.Any() && !subMeterUsageCommitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
                     return;
                 }
 
@@ -98,7 +101,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                 if(!subMeterIdentifierList.Any())
                 {
                     //Nothing to work so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
                     return;
                 }
 
@@ -171,14 +174,14 @@ namespace CommitSubMeterUsageData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitSubMeterUsageDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

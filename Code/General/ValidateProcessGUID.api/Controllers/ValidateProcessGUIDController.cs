@@ -59,6 +59,9 @@ namespace ValidateProcessGUID.api.Controllers
                     sourceId,
                     validateProcessGUIDAPIId);
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateProcessGUIDAPIId);
+
                 //Get Process GUID
                 var processGUID = _systemMethods.GetProcessGUIDFromJObject(jsonObject);
 
@@ -69,7 +72,7 @@ namespace ValidateProcessGUID.api.Controllers
                 string errorMessage = processId == 0 ? $"Process GUID {processGUID} does not exist in [System].[Process] table" : null;
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateProcessGUIDAPIId, processId == 0, errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateProcessGUIDAPIId, processId == 0, errorMessage);
 
                 return processId;
             }
@@ -78,7 +81,7 @@ namespace ValidateProcessGUID.api.Controllers
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateProcessGUIDAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateProcessGUIDAPIId, true, $"System Error Id {errorId}");
 
                 return 0;
             }    

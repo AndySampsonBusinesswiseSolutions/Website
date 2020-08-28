@@ -23,7 +23,7 @@ namespace MethodLibrary
                         sourceId,
                         APIId);
 
-                ProcessQueue_Update(processQueueGUID, APIId, true, $"System Error Id {errorId}");
+                ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, APIId, true, $"System Error Id {errorId}");
             }
 
             public void ProcessQueue_Insert(string processQueueGUID, long createdByUserId, long sourceId, long APIId, bool hasError = false, string errorMessage = null)
@@ -33,10 +33,17 @@ namespace MethodLibrary
                     processQueueGUID, createdByUserId, sourceId, APIId, hasError, errorMessage);
             }
 
-            public void ProcessQueue_Update(string processQueueGUID, long APIId, bool hasError = false, string errorMessage = null)
+            public void ProcessQueue_UpdateEffectiveFromDateTime(string processQueueGUID, long APIId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSystemEnums.ProcessQueue_Update, 
+                    _storedProcedureSystemEnums.ProcessQueue_UpdateEffectiveFromDateTime, 
+                    processQueueGUID, APIId);
+            }
+
+            public void ProcessQueue_UpdateEffectiveToDateTime(string processQueueGUID, long APIId, bool hasError = false, string errorMessage = null)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSystemEnums.ProcessQueue_UpdateEffectiveToDateTime, 
                     processQueueGUID, APIId, hasError, errorMessage);
             }
 

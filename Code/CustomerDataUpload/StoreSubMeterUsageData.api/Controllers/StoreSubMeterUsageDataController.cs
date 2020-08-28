@@ -68,6 +68,9 @@ namespace StoreSubMeterUsageData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSubMeterUsageDataAPIId);
+
                 //Get SubMeter Usage data from Customer Data Upload
                 var subMeterUsageDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['SubMeter HH Data']");
 
@@ -111,14 +114,14 @@ namespace StoreSubMeterUsageData.api.Controllers
                 _methods.BulkInsert(subMeterUsageDataTable, "[Temp.CustomerDataUpload].[SubMeterUsage]");
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeSubMeterUsageDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSubMeterUsageDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, storeSubMeterUsageDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSubMeterUsageDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

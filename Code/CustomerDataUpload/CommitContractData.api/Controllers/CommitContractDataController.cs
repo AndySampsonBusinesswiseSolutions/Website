@@ -83,6 +83,9 @@ namespace CommitContractData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitContractDataAPIId);
+
                 //Get ContractType from jsonObject
                 var contractType = jsonObject[_systemAPIRequiredDataKeyEnums.ContractType].ToString();
 
@@ -204,14 +207,14 @@ namespace CommitContractData.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitContractDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitContractDataAPIId, false, null);
             }
             catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitContractDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
 

@@ -56,6 +56,9 @@ namespace Website.api.Controllers
                     sourceId,
                     websiteAPIId);
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, websiteAPIId);
+
                 //Get Routing.API URL
                 var routingAPIId = _systemMethods.GetRoutingAPIId();
 
@@ -63,7 +66,7 @@ namespace Website.api.Controllers
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, websiteAPIId);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, websiteAPIId);
             }
             catch(Exception error)
             {

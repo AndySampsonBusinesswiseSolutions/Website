@@ -66,6 +66,9 @@ namespace ValidateEmailAddress.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateEmailAddressAPIId);
+
                 string errorMessage = null;
                 long emailAddressId = 0;
 
@@ -82,14 +85,14 @@ namespace ValidateEmailAddress.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateEmailAddressAPIId, emailAddressId == 0, errorMessage);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressAPIId, emailAddressId == 0, errorMessage);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, validateEmailAddressAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

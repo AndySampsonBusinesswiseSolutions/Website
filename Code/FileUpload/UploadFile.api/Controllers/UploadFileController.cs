@@ -66,6 +66,9 @@ namespace UploadFile.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, uploadFileAPIId);
+
                 //Insert FileGUID into Information.File
                 var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
                 _informationMethods.File_Insert(createdByUserId, sourceId, fileGUID);
@@ -91,14 +94,14 @@ namespace UploadFile.api.Controllers
                 _informationMethods.FileContent_Insert(createdByUserId,sourceId, fileId, fileContent);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, uploadFileAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, uploadFileAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, uploadFileAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, uploadFileAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

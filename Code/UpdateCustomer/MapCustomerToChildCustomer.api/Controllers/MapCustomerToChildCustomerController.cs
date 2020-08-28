@@ -69,6 +69,9 @@ namespace MapCustomerToChildCustomer.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, mapCustomerToChildCustomerAPIId);
+
                 //Get Customer GUID
                 var customerGUID = _systemMethods.GetCustomerGUIDFromJObject(jsonObject);
 
@@ -116,14 +119,14 @@ namespace MapCustomerToChildCustomer.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, mapCustomerToChildCustomerAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, mapCustomerToChildCustomerAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, mapCustomerToChildCustomerAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, mapCustomerToChildCustomerAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

@@ -28,7 +28,7 @@ CREATE TABLE [System].[ProcessQueue]
 	)  ON [System]
 GO
 ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
-	DF_ProcessQueue_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime
+	DF_ProcessQueue_EffectiveFromDateTime DEFAULT '9999-12-31' FOR EffectiveFromDateTime
 GO
 ALTER TABLE [System].[ProcessQueue] ADD CONSTRAINT
 	DF_ProcessQueue_EffectiveToDateTime DEFAULT '9999-12-31' FOR EffectiveToDateTime

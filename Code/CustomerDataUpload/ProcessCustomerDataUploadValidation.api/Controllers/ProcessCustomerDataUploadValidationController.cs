@@ -72,6 +72,9 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId);
+
                 //Get DataUploadValidationErrorId
                 var dataUploadValidationErrorId = _customerMethods.DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(processQueueGUID);
 
@@ -163,14 +166,14 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, processCustomerDataUploadValidationAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, processCustomerDataUploadValidationAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

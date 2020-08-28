@@ -72,6 +72,9 @@ namespace CommitFixedContractData.api.Controllers
                     return;
                 }
 
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFixedContractDataAPIId);
+
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] where CanCommit = 1
                 var fixedContractDataRows = _tempCustomerDataUploadMethods.FixedContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(fixedContractDataRows);
@@ -79,7 +82,7 @@ namespace CommitFixedContractData.api.Controllers
                 if(!commitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_Update(processQueueGUID, commitFixedContractDataAPIId, false, null);
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFixedContractDataAPIId, false, null);
                     return;
                 }
 
@@ -102,14 +105,14 @@ namespace CommitFixedContractData.api.Controllers
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFixedContractDataAPIId, false, null);
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFixedContractDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_Update(processQueueGUID, commitFixedContractDataAPIId, true, $"System Error Id {errorId}");
+                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFixedContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }
