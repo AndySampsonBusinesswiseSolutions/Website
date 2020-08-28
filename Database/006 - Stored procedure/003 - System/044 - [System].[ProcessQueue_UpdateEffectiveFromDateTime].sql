@@ -15,14 +15,12 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-28
--- Description:	End-date queue entry in [System].[ProcessQueue] table
+-- Description:	Start-date queue entry in [System].[ProcessQueue] table
 -- =============================================
 
 ALTER PROCEDURE [System].[ProcessQueue_UpdateEffectiveFromDateTime]
 	@ProcessQueueGUID UNIQUEIDENTIFIER,
-    @APIId BIGINT,
-    @HasError BIT,
-    @ErrorMessage VARCHAR(MAX) = NULL
+    @APIId BIGINT
 AS
 BEGIN
     -- =============================================
