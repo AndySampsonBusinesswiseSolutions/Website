@@ -11,6 +11,7 @@ namespace enums
                     public string Meter_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[Meter_GetByProcessQueueGUID]";
                     public string Meter_Insert = "[Temp.CustomerDataUpload].[Meter_Insert]";
                     public string Meter_UpdateCanCommit = "[Temp.CustomerDataUpload].[Meter_UpdateCanCommit]";
+                    public string Meter_DeleteByProcessQueueGUID = "[Temp.CustomerDataUpload].[Meter_DeleteByProcessQueueGUID]";
                 }
             }
         }

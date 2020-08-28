@@ -25,6 +25,13 @@ namespace MethodLibrary
 
                     return CleanedUpDataTable(dataTable);
                 }
+
+                public void FlexContract_DeleteByProcessQueueGUID(string processQueueGUID)
+                {
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        _storedProcedureTempCustomerDataUploadEnums.FlexContract_DeleteByProcessQueueGUID, 
+                        processQueueGUID);
+                }
             }
         }
     }

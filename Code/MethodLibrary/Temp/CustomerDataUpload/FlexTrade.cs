@@ -25,6 +25,13 @@ namespace MethodLibrary
 
                     return CleanedUpDataTable(dataTable);
                 }
+
+                public void FlexTrade_DeleteByProcessQueueGUID(string processQueueGUID)
+                {
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        _storedProcedureTempCustomerDataUploadEnums.FlexTrade_DeleteByProcessQueueGUID, 
+                        processQueueGUID);
+                }
             }
         }
     }

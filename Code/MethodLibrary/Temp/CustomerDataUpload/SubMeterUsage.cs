@@ -25,6 +25,13 @@ namespace MethodLibrary
 
                     return CleanedUpDataTable(dataTable);
                 }
+
+                public void SubMeterUsage_DeleteByProcessQueueGUID(string processQueueGUID)
+                {
+                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                        _storedProcedureTempCustomerDataUploadEnums.SubMeterUsage_DeleteByProcessQueueGUID, 
+                        processQueueGUID);
+                }
             }
         }
     }

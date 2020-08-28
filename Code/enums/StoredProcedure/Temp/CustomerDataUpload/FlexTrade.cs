@@ -11,6 +11,7 @@ namespace enums
                     public string FlexTrade_GetByProcessQueueGUID = "[Temp.CustomerDataUpload].[FlexTrade_GetByProcessQueueGUID]";
                     public string FlexTrade_Insert = "[Temp.CustomerDataUpload].[FlexTrade_Insert]";
                     public string FlexTrade_UpdateCanCommit = "[Temp.CustomerDataUpload].[FlexTrade_UpdateCanCommit]";
+                    public string FlexTrade_DeleteByProcessQueueGUID = "[Temp.CustomerDataUpload].[FlexTrade_DeleteByProcessQueueGUID]";
                 }
             }
         }
