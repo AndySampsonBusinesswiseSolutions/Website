@@ -33,6 +33,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     DECLARE @SchemaName NVARCHAR(255) = 'Supply.' + @MeterType + CONVERT(NVARCHAR, @MeterId)
+    DECLARE @IndexNameBase NVARCHAR(255) = 'IX_Supply' + @MeterType + CONVERT(NVARCHAR, @MeterId) + '_LoadedUsage_'
+    DECLARE @IndexName NVARCHAR(255)
     DECLARE @v sql_variant 
 
     --Create base table
@@ -174,12 +176,28 @@ BEGIN
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'CONSTRAINT', 'FK_LoadedUsage_UsageTypeId'
 
     --Add Indexes
+    SET @IndexName = @IndexNameBase + '1'
     SET @SQL = N'
     USE [EMaaS]
     
-    CREATE NONCLUSTERED INDEX [IX_Supply' + @MeterType + CONVERT(NVARCHAR, @MeterId) + '_LoadedUsage_EffectiveToDateTime_DateIdTimePeriodId]
+    CREATE NONCLUSTERED INDEX [' + @IndexName + ']
     ON [' + @SchemaName + '].[LoadedUsage] ([EffectiveToDateTime])
     INCLUDE ([DateId],[TimePeriodId])'
     EXEC sp_sqlexec @SQL
+
+    SET @v = N'Index on [' + @SchemaName + '].[LoadedUsage] INCLUDE ([DateId],[TimePeriodId])'
+    EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'INDEX', @IndexName
+
+    SET @IndexName = @IndexNameBase + '2'
+    SET @SQL = N'
+    USE [EMaaS]
+    
+    CREATE NONCLUSTERED INDEX [' + @IndexName + ']
+    ON [' + @SchemaName + '].[LoadedUsage] ([EffectiveToDateTime])
+    INCLUDE ([EffectiveFromDateTime],[CreatedDateTime],[CreatedByUserId],[SourceId],[DateId],[TimePeriodId],[UsageTypeId],[Usage])'
+    EXEC sp_sqlexec @SQL
+
+    SET @v = N'Index on [' + @SchemaName + '].[LoadedUsage] INCLUDE ([EffectiveFromDateTime],[CreatedDateTime],[CreatedByUserId],[SourceId],[DateId],[TimePeriodId],[UsageTypeId],[Usage])'
+    EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'INDEX', @IndexName
 END
 GO

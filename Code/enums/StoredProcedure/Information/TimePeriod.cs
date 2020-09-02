@@ -7,6 +7,7 @@ namespace enums
             public partial class Information
             {
                 public string TimePeriod_GetByEndTime = "[Information].[TimePeriod_GetByEndTime]";
+                public string TimePeriod_GetList = "[Information].[TimePeriod_GetList]";
             }
         }
     }

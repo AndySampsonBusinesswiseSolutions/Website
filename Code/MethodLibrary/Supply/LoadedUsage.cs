@@ -1,6 +1,8 @@
 using System.Reflection;
 using System.Data;
 using System.Linq;
+using System.Collections.Generic;
+using enums;
 
 namespace MethodLibrary
 {
@@ -8,6 +10,8 @@ namespace MethodLibrary
     {
         public partial class Supply
         {
+            private static readonly Enums.StoredProcedure.Supply _storedProcedureSupplyEnums = new Enums.StoredProcedure.Supply();
+
             private void CreateLoadedUsageEntities(long schemaId, long meterId, string meterType)
             {
                 var tableName = $"LoadedUsage";
@@ -21,6 +25,7 @@ namespace MethodLibrary
 
                 LoadedUsage_CreateDeleteStoredProcedure(meterId, meterType);
                 LoadedUsage_CreateInsertStoredProcedure(meterId, meterType);
+                LoadedUsage_CreateGetLatestStoredProcedure(meterId, meterType);
                 LoadedUsage_GrantExecuteToStoredProcedures(meterId, meterType);
             }
 
@@ -52,6 +57,13 @@ namespace MethodLibrary
                     meterId, meterType);
             }
 
+            private void LoadedUsage_CreateGetLatestStoredProcedure(long meterId, string meterType)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSupplyEnums.LoadedUsage_CreateGetLatestStoredProcedure, 
+                    meterId, meterType);
+            }
+
             public void LoadedUsage_Delete(string meterType, long meterId)
             {
                 var loadedUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Delete, meterType, meterId);
@@ -75,6 +87,15 @@ namespace MethodLibrary
             public void LoadedUsageTemp_Insert(string meterType, long meterId, DataTable loadedUsageDataTable)
             {
                 new Methods().BulkInsert(loadedUsageDataTable, $"[Supply.{meterType}{meterId}].[LoadedUsage_Temp]");
+            }
+
+            public IEnumerable<DataRow> LoadedUsage_GetLatest(string meterType, long meterId)
+            {
+                var loadedUsageGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_GetLatest, meterType, meterId);
+
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), loadedUsageGetLatestStoredProcedure);
+
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
             private void LoadedUsage_GrantExecuteToStoredProcedures(long meterId, string meterType)

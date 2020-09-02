@@ -78,11 +78,6 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitPeriodicUsageDataAPIId);
 
-                /*
-                    TODO:
-                        Upgrade to extract last 365 days to calculate EAU
-                */
-
                 //Get MeterType
                 var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
 
@@ -95,7 +90,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                     : GetSubMeterId(mpxn);
 
                 //Get UsageTypeId
-                var usageType = "Customer Estimated";
+                var usageType = jsonObject[_systemAPIRequiredDataKeyEnums.UsageType].ToString();
                 var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
 
                 //Get GranularityId
@@ -152,14 +147,69 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Insert new Periodic Usage into LoadedUsage table
                 _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
-                //Get last 365days of periodic usage
-                var latestPeriodicUsage = new List<DataRow>();
+                //Get latest periodic usage
+                var latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+
+                //Get DateToGranularityToTimePeriod list
+                var dateGranularityTimePeriodList = _mappingMethods.DateToGranularityToTimePeriod_GetList();
+                var granularityTimePeriodList = _mappingMethods.GranularityToTimePeriod_GetList().Where(d => d.Field<long>("GranularityId") == granularityId);
+                var granularityToTimePeriodIdList = granularityTimePeriodList.ToDictionary(d => d.Field<long>("GranularityToTimePeriodId"), d => d.Field<long>("TimePeriodId"));
+
+                //Check to see if full 365days are available
+                var latestPeriodicUsageDate = DateTime.MinValue;
+                var latestPeriodicUsageDictionary = new Dictionary<long, List<long>>();
+
+                foreach(var latestPeriodicUsage in latestPeriodicUsageList)
+                {
+                    var dateId = latestPeriodicUsage.Field<long>("DateId");
+                    if(!latestPeriodicUsageDictionary.ContainsKey(dateId))
+                    {
+                        latestPeriodicUsageDictionary.Add(dateId, new List<long>());
+                    }
+
+                    latestPeriodicUsageDictionary[dateId].Add(latestPeriodicUsage.Field<long>("TimePeriodId"));
+
+                    var date = Convert.ToDateTime(dateDictionary.First(d => d.Value == dateId).Key);
+                    latestPeriodicUsageDate = date > latestPeriodicUsageDate ? date : latestPeriodicUsageDate;
+                }
+
+                //for each date, does latestPeriodicUsageDictionary have enough time periods in list
+                var latestPeriodicUsageRequiresProfiling = false;
+                var earliestPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1);
+                for(var periodicUsageDate = earliestPeriodicUsageDate; periodicUsageDate <= latestPeriodicUsageDate; periodicUsageDate = periodicUsageDate.AddDays(1))
+                {
+                    var dateId = dateDictionary[_methods.ConvertDateTimeToSqlParameter(periodicUsageDate).Substring(0, 10)];
+                    var dateGranularityToTimePeriodIdList = dateGranularityTimePeriodList.Where(d => d.Field<long>("DateId") == dateId)
+                        .Select(d => d.Field<long>("GranularityToTimePeriodId")).ToList();
+                    
+                    var requiredTimePeriodIds = granularityToTimePeriodIdList.Where(g => dateGranularityToTimePeriodIdList.Contains(g.Key))
+                        .Select(g => g.Value)
+                        .Distinct();
+
+                    if(requiredTimePeriodIds.Any(r => !latestPeriodicUsageDictionary[dateId].Contains(r)))
+                    {
+                        latestPeriodicUsageRequiresProfiling = true;
+                        break;
+                    }
+                }
 
                 //TODO: If not 365 days, get generic profile
+                if(latestPeriodicUsageRequiresProfiling)
+                {
+                    //Get profile from Profiling API
+                    //Get latest annual usage from meter detail
+                    //profile annual usage into granularity
+                    //insert into loaded usage
+                    dataTable.Rows.Clear();
+                    
+                    //Get latest periodic usage
+                    latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+                }
 
                 //Create Estimated Annual Usage
-                var estimatedAnnualUsage = 0; //latestPeriodicUsage.Where(r => r.Field<DateTime>("Date") >= DateTime.Today.AddDays(-365))
-                                              //.Sum(r => r.Field<decimal>("Usage"));
+                var estimatedAnnualUsage = latestPeriodicUsageList
+                    .Where(r => Convert.ToDateTime(dateDictionary.First(d => d.Value == r.Field<long>("DateId")).Key) >= latestPeriodicUsageDate.AddYears(-1))
+                    .Sum(r => r.Field<decimal>("Usage"));
 
                 //End date existing Estimated Annual Usage
                 _supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);

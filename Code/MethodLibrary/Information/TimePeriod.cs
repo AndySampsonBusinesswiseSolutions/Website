@@ -19,6 +19,14 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("TimePeriodId"))
                     .ToList();
             }
+
+            public IEnumerable<DataRow> TimePeriod_GetTimePeriodList()
+            {
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
+                    _storedProcedureInformationEnums.TimePeriod_GetList);
+
+                return dataTable.Rows.Cast<DataRow>();
+            }
         }
     }
 }

@@ -19,6 +19,14 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("TimePeriodId"))
                     .ToList();
             }
+
+            public IEnumerable<DataRow> GranularityToTimePeriod_GetList()
+            {
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
+                    _storedProcedureMappingEnums.GranularityToTimePeriod_GetList);
+
+                return dataTable.Rows.Cast<DataRow>();
+            }
         }
     }
 }

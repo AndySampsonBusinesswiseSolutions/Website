@@ -31,6 +31,7 @@ namespace enums
                     public string MPXN = "MPXN";
                     public string CustomerDataUploadProcessQueueGUID = "CustomerDataUploadProcessQueueGUID";
                     public string Granularity = "Granularity";
+                    public string UsageType = "UsageType";
                 }
             }
         }
