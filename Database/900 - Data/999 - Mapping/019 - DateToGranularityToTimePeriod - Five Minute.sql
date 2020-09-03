@@ -30,7 +30,6 @@ WHERE
 
 SELECT DISTINCT
 	[GranularityToTimePeriod].GranularityToTimePeriodId,
-	[GranularityToTimePeriod].GranularityId,
 	[TimePeriodDetail].TimePeriodDetailDescription
 INTO
 	#GranularityToTimePeriodTemp
@@ -52,83 +51,68 @@ LEFT OUTER JOIN
 WHERE
 	[GranularityToTimePeriod].EffectiveToDateTime = '9999-12-31'
 
-DECLARE GranularityToTimePeriodCursor CURSOR FOR
-SELECT GranularityToTimePeriodId
-FROM #GranularityToTimePeriodTemp
-WHERE TimePeriodDetailDescription IS NULL
+SELECT
+	@CreatedByUserId CreatedByUserId,
+	@SourceId SourceId,
+	d.DateId,
+	g.GranularityToTimePeriodId
+INTO 
+	#FiveMinuteTemp1
+FROM
+	#DateTemp d
+CROSS APPLY
+	#GranularityToTimePeriodTemp g
+WHERE
+	d.DateDetailDescription IS NULL
+	AND g.TimePeriodDetailDescription IS NULL
 
-OPEN GranularityToTimePeriodCursor
+INSERT INTO
+	[Mapping].[DateToGranularityToTimePeriod]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		GranularityToTimePeriodId
+	)
+SELECT
+	CreatedByUserId,
+	SourceId,
+	DateId,
+	GranularityToTimePeriodId
+FROM
+	#FiveMinuteTemp1
 
-FETCH NEXT FROM GranularityToTimePeriodCursor
-INTO @GranularityToTimePeriodId
+SELECT
+	@CreatedByUserId CreatedByUserId,
+	@SourceId SourceId,
+	d.DateId,
+	g.GranularityToTimePeriodId
+INTO 
+	#FiveMinuteTemp2
+FROM
+	#DateTemp d
+CROSS APPLY
+	#GranularityToTimePeriodTemp g
+WHERE
+	d.DateDetailDescription IS NOT NULL
 
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		DECLARE DateCursor CURSOR FOR
-		SELECT DateId
-		FROM #DateTemp
-		WHERE DateDetailDescription IS NULL
+INSERT INTO
+	[Mapping].[DateToGranularityToTimePeriod]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		GranularityToTimePeriodId
+	)
+SELECT
+	CreatedByUserId,
+	SourceId,
+	DateId,
+	GranularityToTimePeriodId
+FROM
+	#FiveMinuteTemp2
 
-		OPEN DateCursor
-
-		FETCH NEXT FROM DateCursor
-		INTO @DateId
-
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			EXEC [Mapping].[DateToGranularityToTimePeriod_Insert] @CreatedByUserId, @SourceId, @DateId, @GranularityToTimePeriodId
-
-			FETCH NEXT FROM DateCursor
-			INTO @DateId
-		END
-
-		CLOSE DateCursor;
-		DEALLOCATE DateCursor;
-
-		FETCH NEXT FROM GranularityToTimePeriodCursor
-		INTO @GranularityToTimePeriodId
-	END
-CLOSE GranularityToTimePeriodCursor;
-DEALLOCATE GranularityToTimePeriodCursor;
-
-DECLARE GranularityToTimePeriodCursor CURSOR FOR
-SELECT GranularityToTimePeriodId
-FROM #GranularityToTimePeriodTemp
-
-OPEN GranularityToTimePeriodCursor
-
-FETCH NEXT FROM GranularityToTimePeriodCursor
-INTO @GranularityToTimePeriodId
-
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		DECLARE DateCursor CURSOR FOR
-		SELECT DateId
-		FROM #DateTemp
-		WHERE DateDetailDescription IS NOT NULL
-
-		OPEN DateCursor
-
-		FETCH NEXT FROM DateCursor
-		INTO @DateId
-
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			EXEC [Mapping].[DateToGranularityToTimePeriod_Insert] @CreatedByUserId, @SourceId, @DateId, @GranularityToTimePeriodId
-
-			FETCH NEXT FROM DateCursor
-			INTO @DateId
-		END
-
-		CLOSE DateCursor;
-		DEALLOCATE DateCursor;
-
-		FETCH NEXT FROM GranularityToTimePeriodCursor
-		INTO @GranularityToTimePeriodId
-	END
-CLOSE GranularityToTimePeriodCursor;
-DEALLOCATE GranularityToTimePeriodCursor;
-
+DROP TABLE #FiveMinuteTemp1
+DROP TABLE #FiveMinuteTemp2
 DROP TABLE #GranularityToTimePeriodTemp
-
 DROP TABLE #DateTemp

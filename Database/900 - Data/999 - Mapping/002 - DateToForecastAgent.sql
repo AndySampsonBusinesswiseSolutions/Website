@@ -5863,16 +5863,18 @@ INSERT INTO @Mapping (DateDescription, ForecastAgent, Priority) VALUES('2030-01-
 ,('2030-12-30','ByForecastGroupByYear',1),('2030-12-30','Date',2)
 ,('2030-12-31','ByForecastGroupByYear',1),('2030-12-31','Date',2)
 
-CREATE TABLE #DateToForecastAgentTempTable
-(
-	DateId BIGINT,
-	ForecastAgentId BIGINT,
-	Priority INT
-)
-
 INSERT INTO
-	#DateToForecastAgentTempTable
+	[Mapping].[DateToForecastAgent]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		ForecastAgentId,
+		Priority
+	)
 SELECT
+	@CreatedByUserId,
+	@SourceId,
 	[Date].DateId,
 	[ForecastAgent].ForecastAgentId,
 	[Mapping].Priority
@@ -5891,31 +5893,3 @@ LEFT OUTER JOIN
 	AND [DateToForecastAgent].Priority = [Mapping].Priority
 WHERE
 	[DateToForecastAgent].DateToForecastAgentId IS NULL
-
-DECLARE @DateId BIGINT,
-@ForecastAgentId BIGINT,
-@Priority INT
-
-DECLARE DateToForecastAgentCursor CURSOR FOR
-SELECT DateId,
-	ForecastAgentId,
-	Priority
-FROM #DateToForecastAgentTempTable
-
-OPEN DateToForecastAgentCursor
-
-FETCH NEXT FROM DateToForecastAgentCursor
-INTO @DateId, @ForecastAgentId, @Priority
-
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		EXEC [Mapping].[DateToForecastAgent_Insert] @CreatedByUserId, @SourceId, @DateId, @ForecastAgentId, @Priority
-
-		FETCH NEXT FROM DateToForecastAgentCursor
-		INTO @DateId, @ForecastAgentId, @Priority
-	END
-CLOSE DateToForecastAgentCursor;
-DEALLOCATE DateToForecastAgentCursor;
-
-DROP TABLE #DateToForecastAgentTempTable
-GO

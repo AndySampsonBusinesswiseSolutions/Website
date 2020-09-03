@@ -9,13 +9,19 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 
 DECLARE @StartDate DATE = '2015-01-01'
 DECLARE @EndDate DATE = '2030-12-31'
-DECLARE @DateDescription DATE
 
-SET @DateDescription = @StartDate
-
-WHILE @DateDescription <= @EndDate
-	BEGIN
-		EXEC [Information].[Date_Insert] @CreatedByUserId, @SourceId, @DateDescription
-
-		SET @DateDescription = DATEADD(DAY, 1, @DateDescription)
-	END
+INSERT INTO
+	[Information].[Date]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateDescription
+	)
+SELECT  TOP (DATEDIFF(DAY, @StartDate, @EndDate) + 1)
+	@CreatedByUserId,
+	@SourceId,
+    DATEADD(DAY, ROW_NUMBER() OVER(ORDER BY a.object_id) - 1, @StartDate)
+FROM
+	sys.all_objects a
+CROSS JOIN 
+	sys.all_objects b;

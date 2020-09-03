@@ -80,7 +80,7 @@ BEGIN
             UsageTypeId,
             Usage
         FROM
-            [' + @SchemaName +'].[LoadedUsage_Temp]
+            [' + @SchemaName +'].[LoadedUsage]
         WHERE
             EffectiveToDateTime = ''9999-12-31''
     END'
