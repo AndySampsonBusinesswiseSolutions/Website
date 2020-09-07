@@ -173,25 +173,46 @@ namespace CommitPeriodicUsageData.api.Controllers
                     latestPeriodicUsageDate = date > latestPeriodicUsageDate ? date : latestPeriodicUsageDate;
                 }
 
-                //for each date, does latestPeriodicUsageDictionary have enough time periods in list
-                var latestPeriodicUsageRequiresProfiling = false;
-                var earliestPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1);
-                for(var periodicUsageDate = earliestPeriodicUsageDate; periodicUsageDate <= latestPeriodicUsageDate; periodicUsageDate = periodicUsageDate.AddDays(1))
-                {
-                    var dateId = dateDictionary[_methods.ConvertDateTimeToSqlParameter(periodicUsageDate).Substring(0, 10)];
-                    var dateGranularityToTimePeriodIdList = dateGranularityTimePeriodList.Where(d => d.Field<long>("DateId") == dateId)
-                        .Select(d => d.Field<long>("GranularityToTimePeriodId")).ToList();
-                    
-                    var requiredTimePeriodIds = granularityToTimePeriodIdList.Where(g => dateGranularityToTimePeriodIdList.Contains(g.Key))
-                        .Select(g => g.Value)
-                        .Distinct();
+                var earliestPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
 
-                    if(requiredTimePeriodIds.Any(r => !latestPeriodicUsageDictionary[dateId].Contains(r)))
+                //is the earliest date in the usage earlier than 1 year ago
+                var latestPeriodicUsageRequiresProfiling = latestPeriodicUsageDictionary
+                    .Min(l => Convert.ToDateTime(dateDictionary.First(d => d.Value == l.Key).Key))
+                    > earliestPeriodicUsageDate;
+
+                if(!latestPeriodicUsageRequiresProfiling)
+                {
+                    var periodicUsageDates = Enumerable.Range(0, 1 + earliestPeriodicUsageDate.Subtract(latestPeriodicUsageDate).Days)
+                        .Select(offset => latestPeriodicUsageDate.AddDays(offset))
+                        .ToArray(); 
+
+                    if(periodicUsageDates.Any(u => !latestPeriodicUsageDictionary.ContainsKey(dateDictionary[_methods.ConvertDateTimeToSqlParameter(u).Substring(0, 10)])))
                     {
                         latestPeriodicUsageRequiresProfiling = true;
-                        break;
                     }
-                }
+
+                    if(!latestPeriodicUsageRequiresProfiling)
+                    {
+                        //for each date, does latestPeriodicUsageDictionary have enough time periods in list
+                        foreach(var periodicUsageDate in periodicUsageDates)
+                        {
+                            var dateId = dateDictionary[_methods.ConvertDateTimeToSqlParameter(periodicUsageDate).Substring(0, 10)];
+
+                            var dateGranularityToTimePeriodIdList = dateGranularityTimePeriodList.Where(d => d.Field<long>("DateId") == dateId)
+                                .Select(d => d.Field<long>("GranularityToTimePeriodId")).ToList();
+                            
+                            var requiredTimePeriodIds = granularityToTimePeriodIdList.Where(g => dateGranularityToTimePeriodIdList.Contains(g.Key))
+                                .Select(g => g.Value)
+                                .Distinct();
+
+                            if(requiredTimePeriodIds.Any(r => !latestPeriodicUsageDictionary[dateId].Contains(r)))
+                            {
+                                latestPeriodicUsageRequiresProfiling = true;
+                                break;
+                            }
+                        }
+                    }
+                }                
 
                 //TODO: If not 365 days, get generic profile
                 if(latestPeriodicUsageRequiresProfiling)

@@ -12,7 +12,7 @@ namespace MethodLibrary
             public IEnumerable<DataRow> DateToGranularityToTimePeriod_GetList()
             {
                 var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
-                    _storedProcedureMappingEnums.APIToProcess_GetByProcessId);
+                    _storedProcedureMappingEnums.DateToGranularityToTimePeriod_GetList);
 
                 return dataTable.Rows.Cast<DataRow>();
             }

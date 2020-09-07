@@ -103,6 +103,14 @@ DECLARE @v sql_variant
 SET @v = N'Foreign Key constraint joining [Mapping].[DateToGranularityToTimePeriod].SourceId to [Information].[Source].SourceId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'DateToGranularityToTimePeriod', N'CONSTRAINT', N'FK_DateToGranularityToTimePeriod_SourceId'
 GO
+CREATE NONCLUSTERED INDEX [IX_Mapping_DateToGranularityToTimePeriod_1]
+ON [Mapping].[DateToGranularityToTimePeriod] ([EffectiveFromDateTime],[EffectiveToDateTime])
+INCLUDE ([CreatedDateTime],[CreatedByUserId],[SourceId],[DateId],[GranularityToTimePeriodId])
+GO
+DECLARE @v sql_variant 
+SET @v = N'Index on [Mapping].[DateToGranularityToTimePeriod] INCLUDE ([CreatedDateTime],[CreatedByUserId],[SourceId],[DateId],[GranularityToTimePeriodId])'
+EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'DateToGranularityToTimePeriod', N'INDEX', N'IX_Mapping_DateToGranularityToTimePeriod_1'
+GO
 ALTER TABLE [Mapping].[DateToGranularityToTimePeriod] SET (LOCK_ESCALATION = TABLE)
 GO
 COMMIT
