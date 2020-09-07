@@ -6,19 +6,19 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[GranularityToTimePeriod_GetByGranularityId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[GranularityToTimePeriod_Base_GetByGranularityId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[GranularityToTimePeriod_GetByGranularityId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[GranularityToTimePeriod_Base_GetByGranularityId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-21
--- Description:	Get GranularityToTimePeriod info from [Mapping].[GranularityToTimePeriod] table by GranularityId Id
+-- Description:	Get GranularityToTimePeriod_Base info from [Mapping].[GranularityToTimePeriod_Base] table by GranularityId Id
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[GranularityToTimePeriod_GetByGranularityId]
+ALTER PROCEDURE [Mapping].[GranularityToTimePeriod_Base_GetByGranularityId]
     @GranularityId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS
@@ -35,7 +35,7 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        GranularityToTimePeriodId,
+        GranularityToTimePeriod_BaseId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
@@ -44,7 +44,7 @@ BEGIN
         GranularityId,
         TimePeriodId
     FROM 
-        [Mapping].[GranularityToTimePeriod]
+        [Mapping].[GranularityToTimePeriod_Base]
     WHERE 
         GranularityId = @GranularityId
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
