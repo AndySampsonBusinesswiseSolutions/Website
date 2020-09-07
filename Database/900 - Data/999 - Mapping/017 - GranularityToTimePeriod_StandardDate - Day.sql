@@ -4,9 +4,9 @@ GO
 DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE UserGUID = '743E21EE-2185-45D4-9003-E35060B751E2')
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
-DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityDescription = 'Five Minute')
+DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityDescription = 'Day')
 
-INSERT INTO [Mapping].GranularityToTimePeriod_Base
+INSERT INTO [Mapping].GranularityToTimePeriod_StandardDate
     (
         CreatedByUserId,
         SourceId,
@@ -30,7 +30,6 @@ LEFT OUTER JOIN
 	AND TimePeriodAttribute.TimePeriodAttributeDescription = 'Is Additional Time Period'
 	AND TimePeriodAttribute.EffectiveToDateTime = '9999-12-31'
 WHERE 
-	(DATEDIFF(minute, TimePeriod.StartTime, TimePeriod.EndTime) = 5
-		OR DATEDIFF(minute, TimePeriod.StartTime, TimePeriod.EndTime) = -1435)
+	DATEDIFF(minute, TimePeriod.StartTime, TimePeriod.EndTime) = 0
 	AND TimePeriod.EffectiveToDateTime = '9999-12-31'
 	AND TimePeriodDetail.TimePeriodDetailId IS NULL

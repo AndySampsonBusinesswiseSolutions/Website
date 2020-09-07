@@ -9,21 +9,26 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public List<long> GranularityToTimePeriod_GetTimePeriodIdListByGranularityId(long granularityId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.GranularityToTimePeriod_GetByGranularityId, 
-                    granularityId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("TimePeriodId"))
-                    .ToList();
-            }
-
             public IEnumerable<DataRow> GranularityToTimePeriod_GetList()
             {
                 var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
                     _storedProcedureMappingEnums.GranularityToTimePeriod_GetList);
+
+                return dataTable.Rows.Cast<DataRow>();
+            }
+
+            public IEnumerable<DataRow> GranularityToTimePeriod_StandardDate_GetList()
+            {
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
+                    _storedProcedureMappingEnums.GranularityToTimePeriod_StandardDate_GetList);
+
+                return dataTable.Rows.Cast<DataRow>();
+            }
+
+            public IEnumerable<DataRow> GranularityToTimePeriod_NonStandardDate_GetList()
+            {
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
+                    _storedProcedureMappingEnums.GranularityToTimePeriod_NonStandardDate_GetList);
 
                 return dataTable.Rows.Cast<DataRow>();
             }

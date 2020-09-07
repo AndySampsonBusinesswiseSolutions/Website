@@ -24,7 +24,7 @@ INNER JOIN
 WHERE
 	[Date].EffectiveToDateTime = '9999-12-31'
 
-INSERT INTO [Mapping].GranularityToTimePeriod_DateOverride
+INSERT INTO [Mapping].GranularityToTimePeriod_NonStandardDate
     (
         CreatedByUserId,
         SourceId,
@@ -40,21 +40,11 @@ SELECT
 	DateTemp.DateId
 FROM 
 	[Information].[TimePeriod]
-LEFT OUTER JOIN
-	[Information].[TimePeriodDetail]
-	ON TimePeriodDetail.TimePeriodId = TimePeriod.TimePeriodId
-	AND TimePeriodDetail.EffectiveToDateTime = '9999-12-31'
-LEFT OUTER JOIN
-	[Information].[TimePeriodAttribute]
-	ON TimePeriodAttribute.TimePeriodAttributeId = TimePeriodDetail.TimePeriodAttributeId
-	AND TimePeriodAttribute.TimePeriodAttributeDescription = 'Is Additional Time Period'
-	AND TimePeriodAttribute.EffectiveToDateTime = '9999-12-31'
 CROSS APPLY
 	#DateTemp DateTemp
 WHERE 
 	(DATEDIFF(minute, TimePeriod.StartTime, TimePeriod.EndTime) = 5
 		OR DATEDIFF(minute, TimePeriod.StartTime, TimePeriod.EndTime) = -1435)
 	AND TimePeriod.EffectiveToDateTime = '9999-12-31'
-	AND TimePeriodDetail.TimePeriodDetailId IS NULL
 
 DROP TABLE #DateTemp

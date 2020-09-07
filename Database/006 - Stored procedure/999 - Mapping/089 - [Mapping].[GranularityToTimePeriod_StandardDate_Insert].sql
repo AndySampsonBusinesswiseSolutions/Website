@@ -6,19 +6,19 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[GranularityToTimePeriod_Base_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[GranularityToTimePeriod_StandardDate_Insert]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[GranularityToTimePeriod_Base_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[GranularityToTimePeriod_StandardDate_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-21
--- Description:	Insert new mapping of a Granularity to a TimePeriod into [Mapping].[GranularityToTimePeriod_Base] table
+-- Description:	Insert new mapping of a Granularity to a TimePeriod into [Mapping].[GranularityToTimePeriod_StandardDate] table
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[GranularityToTimePeriod_Base_Insert]
+ALTER PROCEDURE [Mapping].[GranularityToTimePeriod_StandardDate_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
     @GranularityId BIGINT,
@@ -34,7 +34,7 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    INSERT INTO [Mapping].GranularityToTimePeriod_Base
+    INSERT INTO [Mapping].GranularityToTimePeriod_StandardDate
     (
         CreatedByUserId,
         SourceId,
