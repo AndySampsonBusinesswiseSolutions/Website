@@ -19,7 +19,6 @@ CREATE TABLE [DemandForecast].[ProfileValue]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ProfileId BIGINT NOT NULL,
 	ProfileValue decimal(18,5) NOT NULL
 	)  ON [DemandForecast]
 GO
@@ -37,20 +36,6 @@ ALTER TABLE [DemandForecast].[ProfileValue] ADD CONSTRAINT
 	(
 	ProfileValueId
 	) WITH( STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [DemandForecast]
-GO
-ALTER TABLE [DemandForecast].[ProfileValue] ADD CONSTRAINT
-	FK_ProfileValue_ProfileId FOREIGN KEY
-	(
-	ProfileId
-	) REFERENCES [DemandForecast].[Profile]
-	(
-	ProfileId
-	) ON UPDATE  NO ACTION 
-	 ON DELETE  NO ACTION
-GO
-DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [DemandForecast].[ProfileValue].ProfileId to [DemandForecast].[Profile].ProfileId'
-EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'DemandForecast', N'TABLE', N'ProfileValue', N'CONSTRAINT', N'FK_ProfileValue_ProfileId'
 GO
 ALTER TABLE [DemandForecast].[ProfileValue] ADD CONSTRAINT
 	FK_ProfileValue_CreatedByUserId FOREIGN KEY
