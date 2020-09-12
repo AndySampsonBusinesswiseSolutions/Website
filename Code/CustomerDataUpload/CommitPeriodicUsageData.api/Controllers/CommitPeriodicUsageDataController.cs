@@ -125,10 +125,10 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                 var latestPeriodicUsageRequiresProfiling = DoesLatestPeriodicUsageRequiresProfiling(latestPeriodicUsageDictionary, latestPeriodicUsageDate, earliestRequiredPeriodicUsageDate);
 
-                //TODO: If not 365 days, get generic profile
+                //If not 365 days, get generic profile
                 if (latestPeriodicUsageRequiresProfiling)
                 {
-                    //Get profile from Profiling API
+                    //TODO: Get profile from Profiling API
                     //Get latest annual usage from meter detail
                     //profile annual usage into periodicUsageDictionary<date, <timeperiod, usage>>
                     periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
@@ -187,9 +187,6 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                 if (!latestPeriodicUsageRequiresProfiling)
                 {
-                    //TODO: Remove this!
-                    periodicUsageDateIds = latestPeriodicUsageDictionary.Select(l => l.Key);
-
                     //for each date, does latestPeriodicUsageDictionary have enough time periods in list
                     foreach (var periodicUsageDateId in periodicUsageDateIds)
                     {

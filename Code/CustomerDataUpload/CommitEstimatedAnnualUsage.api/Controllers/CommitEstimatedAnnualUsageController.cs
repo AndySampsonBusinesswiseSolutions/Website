@@ -107,7 +107,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 var usageType = "Customer Estimated";
                 var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
 
-                //TODO: Get profile -> DateId, TimePeriodId, Usage
+                //Get profile from Profiling API
                 var profile = new Dictionary<long, Dictionary<long, decimal>>();
                 var profileUsage = new Dictionary<long, Dictionary<long, decimal>>();
 

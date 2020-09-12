@@ -1551,6 +1551,14 @@
                 "MapCustomerToChildCustomer.api",
             ]
         },
+        {"name": "Demand Forecast",
+            "configurations": [
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidateProcessGUID.api",
+            ]
+        },
         {"name": "Customer Data Upload",
             "configurations": [
                 "CleanUpCustomerDataUploadTempData.api",
