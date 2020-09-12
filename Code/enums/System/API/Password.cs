@@ -9,6 +9,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CommitProfiledUsageAPI = "vebvSwek7m7KUrWW";
                     public string CleanUpCustomerDataUploadTempDataAPI = "NEvn8kdQ3JThhjkd";
                     public string CommitEstimatedAnnualUsageAPI = "ejkzx66NuQxkF2uh";
                     public string CommitPeriodicUsageDataAPI = "8pSATRRftgLbJ5Zm";
