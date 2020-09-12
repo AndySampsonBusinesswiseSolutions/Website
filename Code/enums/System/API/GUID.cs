@@ -8,6 +8,7 @@ namespace enums
             {
                 public class GUID
                 {
+                    public string GetProfileIdAPI = "4FA66282-023B-43CE-80CA-D495720CD756";
                     public string GetProfileAPI = "89DFE6FB-B011-41DB-8334-1CB3CA7EA599";
                     public string CommitProfiledUsageAPI = "8B3B894B-74B8-47DD-9FB5-0D0B802CC8DA";
                     public string CleanUpCustomerDataUploadTempDataAPI = "51655869-D1B1-4C1E-9F21-6377EF4189D6";

@@ -9,6 +9,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string GetProfileIdAPI = "cJRxAJC7xnsP5PBF";
                     public string GetProfileAPI = "fZMnsF6B5kUkPV3J";
                     public string CommitProfiledUsageAPI = "vebvSwek7m7KUrWW";
                     public string CleanUpCustomerDataUploadTempDataAPI = "NEvn8kdQ3JThhjkd";
