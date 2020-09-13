@@ -70,6 +70,8 @@ namespace CommitProfiledUsage.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitProfiledUsageAPIId);
 
                 //TODO: API Logic
+                //Launch GetProfile process
+                //Commit profiled usage
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitProfiledUsageAPIId, false, null);

@@ -70,6 +70,10 @@ namespace GetProfileId.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileIdAPIId);
 
                 //TODO: API Logic
+                //Get Profile Agent list
+                //Loop through each agent
+                //	-> Call associated API
+                //	-> If API returns value, break
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileIdAPIId, false, null);

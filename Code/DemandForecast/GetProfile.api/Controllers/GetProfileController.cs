@@ -70,6 +70,10 @@ namespace GetProfile.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileAPIId);
 
                 //TODO: API Logic
+                //Launch GetProfileId process
+                //If no profile id returned, create system error
+                //-> return empty <date, <timeperiod, value>> dictionary
+                //Create profiled usage
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, false, null);
