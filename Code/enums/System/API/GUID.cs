@@ -8,6 +8,7 @@ namespace enums
             {
                 public class GUID
                 {
+                    public string GetFlexSpecificProfileAPI = "75B4535D-1019-4AE0-BEAF-FF6A19DF6FA3";
                     public string GetMeterSpecificProfileAPI = "9B59A99A-F7F1-49E3-B109-A3499CA3EDA0";
                     public string GetProfileIdAPI = "4FA66282-023B-43CE-80CA-D495720CD756";
                     public string GetProfileAPI = "89DFE6FB-B011-41DB-8334-1CB3CA7EA599";
