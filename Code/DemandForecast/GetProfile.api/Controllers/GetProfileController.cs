@@ -5,7 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace GetProfile.api.Controllers
 {
@@ -42,7 +42,7 @@ namespace GetProfile.api.Controllers
 
         [HttpPost]
         [Route("GetProfile/Get")]
-        public void Get([FromBody] object data)
+        public Dictionary<long, Dictionary<long, decimal>> Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -61,22 +61,39 @@ namespace GetProfile.api.Controllers
                     sourceId,
                     getProfileAPIId);
 
+                var profile = new Dictionary<long, Dictionary<long, decimal>>();
+
                 if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetProfileAPI, getProfileAPIId, jsonObject))
                 {
-                    return;
+                    return profile;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileAPIId);
 
-                //TODO: API Logic
-                //Launch GetProfileId process
+                //Launch GetProfileId process and wait for response
+                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
+                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var profileId = Convert.ToInt64(result);
+
                 //If no profile id returned, create system error
-                //-> return empty <date, <timeperiod, value>> dictionary
-                //Create profiled usage
+                if(profileId == 0)
+                {
+                    var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, "No ProfileId Found", "No ProfileId Found", Environment.StackTrace);
+
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, true, $"System Error Id {errorId}");
+
+                    return profile;
+                }
+                
+                //TODO: Create profiled usage
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, false, null);
+
+                return profile;
             }
             catch(Exception error)
             {
@@ -84,6 +101,8 @@ namespace GetProfile.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, true, $"System Error Id {errorId}");
+
+                return new Dictionary<long, Dictionary<long, decimal>>();
             }
         }
     }
