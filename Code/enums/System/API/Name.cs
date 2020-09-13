@@ -8,6 +8,7 @@ namespace enums
             {
                 public class Name
                 {
+                    public string GetGenericProfileAPI = "GetGenericProfile.api";
                     public string GetFlexSpecificProfileAPI = "GetFlexSpecificProfile.api";
                     public string GetMeterSpecificProfileAPI = "GetMeterSpecificProfile.api";
                     public string GetProfileIdAPI = "GetProfileId.api";
