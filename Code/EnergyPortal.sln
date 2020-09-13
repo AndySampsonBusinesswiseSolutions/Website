@@ -151,6 +151,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProfile.api", "DemandFor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetProfileId.api", "DemandForecast\GetProfileId.api\GetProfileId.api.csproj", "{4FA66282-023B-43CE-80CA-D495720CD756}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetMeterSpecificProfile.api", "DemandForecast\GetMeterSpecificProfile.api\GetMeterSpecificProfile.api.csproj", "{9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1064,5 +1066,18 @@ Global
         {4FA66282-023B-43CE-80CA-D495720CD756}.Release|x64.Build.0 = Release|Any CPU
         {4FA66282-023B-43CE-80CA-D495720CD756}.Release|x86.ActiveCfg = Release|Any CPU
         {4FA66282-023B-43CE-80CA-D495720CD756}.Release|x86.Build.0 = Release|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Debug|x64.Build.0 = Debug|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Debug|x86.Build.0 = Debug|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Release|Any CPU.Build.0 = Release|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Release|x64.ActiveCfg = Release|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Release|x64.Build.0 = Release|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Release|x86.ActiveCfg = Release|Any CPU
+        {9B59A99A-F7F1-49E3-B109-A3499CA3EDA0}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+

@@ -8,6 +8,7 @@ namespace enums
             {
                 public class Name
                 {
+                    public string GetMeterSpecificProfileAPI = "GetMeterSpecificProfile.api";
                     public string GetProfileIdAPI = "GetProfileId.api";
                     public string GetProfileAPI = "GetProfile.api";
                     public string CommitProfiledUsageAPI = "CommitProfiledUsage.api";
