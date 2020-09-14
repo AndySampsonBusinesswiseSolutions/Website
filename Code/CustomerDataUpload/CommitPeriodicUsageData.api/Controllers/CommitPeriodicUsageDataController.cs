@@ -27,8 +27,6 @@ namespace CommitPeriodicUsageData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 commitPeriodicUsageDataAPIId;
         private long createdByUserId;
@@ -128,13 +126,12 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //If not 365 days, get generic profile
                 if (latestPeriodicUsageRequiresProfiling)
                 {
-                    //TODO: Get profile from Profiling API
-                    //Get latest annual usage from meter detail
-                    //profile annual usage into periodicUsageDictionary<date, <timeperiod, usage>>
-                    periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
+                    //TODO: Call CommitProfiledUsage API and wait for response
+                    var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
+                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
-                    //Insert periodic usage
-                    latestPeriodicUsageList = InsertPeriodicUsage(periodicUsageDictionary);
+                    latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
                 }
 
                 //Create Estimated Annual Usage
@@ -322,6 +319,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         private long GetMeterId(string mpxn)
         {
             //Get MeterIdentifierMeterAttributeId
+            var _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
             var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
 
             //Get MeterId
@@ -331,6 +329,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         private long GetSubMeterId(string mpxn)
         {
             //Get SubMeterIdentifierSubMeterAttributeId
+            var _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
             var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
 
             //Get SubMeterId

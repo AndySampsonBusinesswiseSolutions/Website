@@ -8,3 +8,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 EXEC [Information].[UsageType_Insert] @CreatedByUserId, @SourceId, 'Customer Estimated'
 EXEC [Information].[UsageType_Insert] @CreatedByUserId, @SourceId, 'Customer Actual'
 EXEC [Information].[UsageType_Insert] @CreatedByUserId, @SourceId, 'Industry Actual'
+EXEC [Information].[UsageType_Insert] @CreatedByUserId, @SourceId, 'Profile'

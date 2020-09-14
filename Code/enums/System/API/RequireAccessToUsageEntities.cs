@@ -10,10 +10,12 @@ namespace enums
             {
                 public class RequireAccessToUsageEntities
                 {
+                    //TODO: Move to database
                     public List<string> APIList = new List<string>
                     {
                         "CommitEstimatedAnnualUsage.api",
-                        "CommitPeriodicUsageData.api"
+                        "CommitPeriodicUsageData.api",
+                        "CommitProfiledUsage.api"
                     };
                 }
             }

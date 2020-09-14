@@ -63,6 +63,17 @@ namespace MethodLibrary
                     createdByUserId, sourceId, usage);
             }
 
+            public decimal EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(string meterType, long meterId)
+            {
+                var loadedUsageGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.EstimatedAnnualUsage_GetLatest, meterType, meterId);
+
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), loadedUsageGetLatestStoredProcedure);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<decimal>("Usage"))
+                    .First();
+            }
+
             private void EstimatedAnnualUsage_GrantExecuteToStoredProcedures(long meterId, string meterType)
             {
                 foreach(var estimatedAnnualUsageStoredProcedure in _storedProcedureSupplyEnums.EstimatedAnnualUsageStoredProcedureList)

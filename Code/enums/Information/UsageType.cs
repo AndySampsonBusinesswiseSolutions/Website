@@ -6,9 +6,10 @@ namespace enums
         {
             public class UsageType
             {
-                public string CustomerEstimated ="Customer Estimated";
-                public string CustomerActual ="Customer Actual";
-                public string IndustryActual ="Industry Actual";
+                public string CustomerEstimated = "Customer Estimated";
+                public string CustomerActual = "Customer Actual";
+                public string IndustryActual = "Industry Actual";
+                public string Profile = "Profile";
             }
         }
     }
