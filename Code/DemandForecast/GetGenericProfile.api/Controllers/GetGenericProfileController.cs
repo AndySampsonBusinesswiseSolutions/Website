@@ -6,6 +6,8 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace GetGenericProfile.api.Controllers
 {
@@ -18,9 +20,15 @@ namespace GetGenericProfile.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
+        private static readonly Enums.DemandForecast.Profile.EntityToMatch _demandForecastProfileEntityToMatchEnums = new Enums.DemandForecast.Profile.EntityToMatch();
         private readonly Int64 getGenericProfileAPIId;
 
         public GetGenericProfileController(ILogger<GetGenericProfileController> logger)
@@ -42,7 +50,7 @@ namespace GetGenericProfile.api.Controllers
 
         [HttpPost]
         [Route("GetGenericProfile/Get")]
-        public void Get([FromBody] object data)
+        public long Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -61,18 +69,42 @@ namespace GetGenericProfile.api.Controllers
                     sourceId,
                     getGenericProfileAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetGenericProfileAPI, getGenericProfileAPIId, jsonObject))
-                {
-                    return;
-                }
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getGenericProfileAPIId);
 
-                //TODO: API Logic
+                //Get meterId/subMeterId
+                var meterId = GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
+
+                //Get Is Generic Profile Attribute Id
+                var isGenericProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.IsGeneric);
+
+                //Get Entity To Match Profile Attribute Id
+                var entityToMatchProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.EntityToMatch);
+
+                //Get all generic profiles
+                var genericProfileIds = _demandForecastMethods.ProfileDetail_GetProfileIdListByProfileAttributeIdAndProfileDetailDescription(isGenericProfileAttributeId, "True");
+
+                //Store matched profileIds
+                var matchedProfileIds = new ConcurrentBag<long>();
+                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
+
+                //For each generic profile, find all the entities to match against
+                Parallel.ForEach(genericProfileIds, parallelOptions, genericProfileId => {
+                    var entitiesToMatchDictionary = _demandForecastMethods.ProfileDetail_GetProfileDetailDescriptionListByProfileIdAndProfileAttributeId(genericProfileId, entityToMatchProfileAttributeId)
+                        .ToDictionary(e => e, e => EntityMatches(e, genericProfileId, meterId));
+
+                    if(entitiesToMatchDictionary.Values.All(v => v))
+                    {
+                        matchedProfileIds.Add(genericProfileId);
+                    }
+                });
+
+                var profileId = matchedProfileIds.Distinct().Count() > 1 ? 0 : matchedProfileIds.First();
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, false, null);
+
+                return profileId;
             }
             catch(Exception error)
             {
@@ -80,7 +112,56 @@ namespace GetGenericProfile.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, true, $"System Error Id {errorId}");
+
+                return 0;
             }
+        }
+
+        private long GetMeterId(string mpxn)
+        {
+            //Get MeterIdentifierMeterAttributeId
+            var _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+
+            //Get MeterId
+            return _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+        }
+
+        private bool EntityMatches(string entity, long profileId, long meterId)
+        {
+            if(entity == _demandForecastProfileEntityToMatchEnums.Commodity)
+            {
+                return CommodityMatches(profileId, meterId);
+            }
+
+            if(entity == _demandForecastProfileEntityToMatchEnums.ProfileClass)
+            {
+                return ProfileClassMatches(profileId, meterId);
+            }
+
+            return false;
+        }
+
+        private bool CommodityMatches(long profileId, long meterId)
+        {
+            //Get CommodityId for Profile Id
+            var profileCommodityId = _mappingMethods.CommodityToProfile_GetCommodityIdByProfileId(profileId);
+
+            //Get CommodityId for Meter Id
+            var meterCommodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+
+            return profileCommodityId == meterCommodityId;
+        }
+
+        private bool ProfileClassMatches(long profileId, long meterId)
+        {
+            //Get ProfileClassId for Profile Id
+            var profileProfileClassId = _mappingMethods.ProfileToProfileClass_GetProfileClassIdByProfileId(profileId);
+
+            //Get ProfileClassId for Meter Id
+            var meterProfileClassId = _mappingMethods.MeterToProfileClass_GetProfileClassIdByMeterId(meterId);
+
+            return profileProfileClassId == meterProfileClassId;
         }
     }
 }

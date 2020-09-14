@@ -6,3 +6,5 @@ DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information]
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
 EXEC [DemandForecast].[ProfileAttribute_Insert] @CreatedByUserId, @SourceId, 'Name'
+EXEC [DemandForecast].[ProfileAttribute_Insert] @CreatedByUserId, @SourceId, 'Is Generic?'
+EXEC [DemandForecast].[ProfileAttribute_Insert] @CreatedByUserId, @SourceId, 'Entity To Match'

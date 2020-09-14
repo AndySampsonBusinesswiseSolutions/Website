@@ -7,6 +7,7 @@ namespace enums
             public partial class Mapping
             {
                 public string MeterToProfileClass_Insert = "[Mapping].[MeterToProfileClass_Insert]";
+                public string MeterToProfileClass_GetByMeterId = "[Mapping].[MeterToProfileClass_GetByMeterId]";
             }
         }
     }

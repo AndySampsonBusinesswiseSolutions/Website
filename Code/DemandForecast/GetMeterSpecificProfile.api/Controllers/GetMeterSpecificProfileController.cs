@@ -18,9 +18,12 @@ namespace GetMeterSpecificProfile.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
         private readonly Int64 getMeterSpecificProfileAPIId;
 
         public GetMeterSpecificProfileController(ILogger<GetMeterSpecificProfileController> logger)
@@ -42,7 +45,7 @@ namespace GetMeterSpecificProfile.api.Controllers
 
         [HttpPost]
         [Route("GetMeterSpecificProfile/Get")]
-        public void Get([FromBody] object data)
+        public long Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -61,18 +64,22 @@ namespace GetMeterSpecificProfile.api.Controllers
                     sourceId,
                     getMeterSpecificProfileAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetMeterSpecificProfileAPI, getMeterSpecificProfileAPIId, jsonObject))
-                {
-                    return;
-                }
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getMeterSpecificProfileAPIId);
 
-                //TODO: API Logic
+                //Get MPXN
+                var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
+
+                //Get Name Profile Attribute Id
+                var nameProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.Name);
+
+                //Get ProfileId from ProfileDetail by MPXN and Name Profile Attribute Id
+                var profileId = _demandForecastMethods.ProfileDetail_GetProfileIdByProfileAttributeIdAndProfileDetailDescription(nameProfileAttributeId, $"{mpxn} Specific Profile");
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMeterSpecificProfileAPIId, false, null);
+
+                return profileId;
             }
             catch(Exception error)
             {
@@ -80,6 +87,8 @@ namespace GetMeterSpecificProfile.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMeterSpecificProfileAPIId, true, $"System Error Id {errorId}");
+
+                return 0;
             }
         }
     }

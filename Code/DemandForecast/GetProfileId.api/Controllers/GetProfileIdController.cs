@@ -63,11 +63,6 @@ namespace GetProfileId.api.Controllers
                     sourceId,
                     getProfileIdAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetProfileIdAPI, getProfileIdAPIId, jsonObject))
-                {
-                    return 0;
-                }
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileIdAPIId);
 

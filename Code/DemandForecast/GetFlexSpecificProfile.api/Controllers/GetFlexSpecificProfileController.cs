@@ -5,7 +5,6 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 
 namespace GetFlexSpecificProfile.api.Controllers
 {
@@ -18,9 +17,12 @@ namespace GetFlexSpecificProfile.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
         private readonly Int64 getFlexSpecificProfileAPIId;
 
         public GetFlexSpecificProfileController(ILogger<GetFlexSpecificProfileController> logger)
@@ -42,7 +44,7 @@ namespace GetFlexSpecificProfile.api.Controllers
 
         [HttpPost]
         [Route("GetFlexSpecificProfile/Get")]
-        public void Get([FromBody] object data)
+        public long Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -61,18 +63,22 @@ namespace GetFlexSpecificProfile.api.Controllers
                     sourceId,
                     getFlexSpecificProfileAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetFlexSpecificProfileAPI, getFlexSpecificProfileAPIId, jsonObject))
-                {
-                    return;
-                }
-
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getFlexSpecificProfileAPIId);
 
-                //TODO: API Logic
+                //Get MPXN
+                var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
+
+                //Get Name Profile Attribute Id
+                var nameProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.Name);
+
+                //Get ProfileId from ProfileDetail by MPXN and Name Profile Attribute Id
+                var profileId = _demandForecastMethods.ProfileDetail_GetProfileIdByProfileAttributeIdAndProfileDetailDescription(nameProfileAttributeId, $"{mpxn} Flex Profile");
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getFlexSpecificProfileAPIId, false, null);
+
+                return profileId;
             }
             catch(Exception error)
             {
@@ -80,6 +86,8 @@ namespace GetFlexSpecificProfile.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getFlexSpecificProfileAPIId, true, $"System Error Id {errorId}");
+
+                return 0;
             }
         }
     }
