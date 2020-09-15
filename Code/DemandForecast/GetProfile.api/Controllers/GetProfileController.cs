@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -49,7 +50,7 @@ namespace GetProfile.api.Controllers
 
         [HttpPost]
         [Route("GetProfile/Get")]
-        public Dictionary<long, Dictionary<long, decimal>> Get([FromBody] object data)
+        public string Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -72,7 +73,7 @@ namespace GetProfile.api.Controllers
 
                 if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetProfileAPI, getProfileAPIId, jsonObject))
                 {
-                    return profile;
+                    return JsonConvert.SerializeObject(profile);
                 }
 
                 //Update Process Queue
@@ -82,7 +83,7 @@ namespace GetProfile.api.Controllers
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var profileId = Convert.ToInt64(result);
+                var profileId = Convert.ToInt64(result.Result.ToString());
 
                 //If no profile id returned, create system error
                 if(profileId == 0)
@@ -92,7 +93,7 @@ namespace GetProfile.api.Controllers
                     //Update Process Queue
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, true, $"System Error Id {errorId}");
 
-                    return profile;
+                    return JsonConvert.SerializeObject(profile);
                 }
 
                 //Get MeterType
@@ -160,7 +161,7 @@ namespace GetProfile.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, false, null);
 
-                return profile;
+                return JsonConvert.SerializeObject(profile);
             }
             catch(Exception error)
             {
@@ -169,7 +170,7 @@ namespace GetProfile.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, true, $"System Error Id {errorId}");
 
-                return new Dictionary<long, Dictionary<long, decimal>>();
+                return string.Empty;
             }
         }
 

@@ -13,4 +13,5 @@ EXEC [DemandForecast].[Profile_Insert] @CreatedByUserId, @SourceId, '3342CC78-58
 EXEC [DemandForecast].[Profile_Insert] @CreatedByUserId, @SourceId, '3D45D041-22B8-4A53-B5E1-B6C7F932285C' --Electricity Profile Class 6
 EXEC [DemandForecast].[Profile_Insert] @CreatedByUserId, @SourceId, '01BD095A-4F09-4B98-8978-21BFB70C179E' --Electricity Profile Class 7
 EXEC [DemandForecast].[Profile_Insert] @CreatedByUserId, @SourceId, '2E3E5721-2849-47CE-ABC9-27C7D2A42310' --Electricity Profile Class 8
+EXEC [DemandForecast].[Profile_Insert] @CreatedByUserId, @SourceId, 'BF75CC1F-65C7-4571-9B1E-83BDD834F50D' --Electricity Profile Class 0
 EXEC [DemandForecast].[Profile_Insert] @CreatedByUserId, @SourceId, '632CED37-64BB-4DA0-8B34-C0B9C1C98E0D' --Gas

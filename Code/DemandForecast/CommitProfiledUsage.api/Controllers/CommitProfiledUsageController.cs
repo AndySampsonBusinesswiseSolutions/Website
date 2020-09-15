@@ -83,7 +83,15 @@ namespace CommitProfiledUsage.api.Controllers
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var profileDictionary = JsonConvert.DeserializeObject<Dictionary<long, Dictionary<long, decimal>>>(result.ToString());
+                var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
+
+                //No profile found so empty dictionary returned
+                if(profileString == "{}")
+                {
+                    return;
+                }
+
+                var profileDictionary = new Dictionary<long, Dictionary<long, decimal>>();
 
                 if(!profileDictionary.Any())
                 {

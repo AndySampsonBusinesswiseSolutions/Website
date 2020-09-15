@@ -15,7 +15,7 @@ namespace enums
                     {
                         "CommitEstimatedAnnualUsage.api",
                         "CommitPeriodicUsageData.api",
-                        "CommitProfiledUsage.api"
+                        "GetProfile.api"
                     };
                 }
             }

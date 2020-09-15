@@ -30,6 +30,9 @@ EXEC [Mapping].[CommodityToProfile_Insert] @CreatedByUserId, @SourceId, @Commodi
 SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = '2E3E5721-2849-47CE-ABC9-27C7D2A42310')
 EXEC [Mapping].[CommodityToProfile_Insert] @CreatedByUserId, @SourceId, @CommodityId, @ProfileId
 
+SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = 'BF75CC1F-65C7-4571-9B1E-83BDD834F50D')
+EXEC [Mapping].[CommodityToProfile_Insert] @CreatedByUserId, @SourceId, @CommodityId, @ProfileId
+
 SET @CommodityId = (SELECT CommodityId FROM [Information].[Commodity] WHERE CommodityDescription = 'Gas')
 SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = '632CED37-64BB-4DA0-8B34-C0B9C1C98E0D')
 EXEC [Mapping].[CommodityToProfile_Insert] @CreatedByUserId, @SourceId, @CommodityId, @ProfileId

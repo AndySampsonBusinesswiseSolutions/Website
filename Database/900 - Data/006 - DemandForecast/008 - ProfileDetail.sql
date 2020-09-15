@@ -56,6 +56,12 @@ EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @Profi
 EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @EntityToMatchProfileAttributeId, 'Commodity'
 EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @EntityToMatchProfileAttributeId, 'Profile Class'
 
+SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = 'BF75CC1F-65C7-4571-9B1E-83BDD834F50D')
+EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @NameProfileAttributeId, 'Electricity Profile Class 0 Generic Profile'
+EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @IsGenericProfileAttributeId, 'True'
+EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @EntityToMatchProfileAttributeId, 'Commodity'
+EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @EntityToMatchProfileAttributeId, 'Profile Class'
+
 SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = '632CED37-64BB-4DA0-8B34-C0B9C1C98E0D')
 EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @NameProfileAttributeId, 'Gas Generic Profile'
 EXEC [DemandForecast].[ProfileDetail_Insert] @CreatedByUserId, @SourceId, @ProfileId, @IsGenericProfileAttributeId, 'True'

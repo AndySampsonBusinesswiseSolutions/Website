@@ -114,6 +114,14 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Insert periodic usage
                 var latestPeriodicUsageList = InsertPeriodicUsage(periodicUsageDictionary);
 
+                if(meterType == "SubMeter")
+                {
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
+
+                    return;
+                }
+
                 //Check to see if full 365days are available
                 var dateIdList = latestPeriodicUsageList.Select(r => r.Field<long>("DateId")).Distinct();
                 var latestPeriodicUsageDictionary = CreateDictionary(latestPeriodicUsageList, dateIdList, "DateId", "TimePeriodId");

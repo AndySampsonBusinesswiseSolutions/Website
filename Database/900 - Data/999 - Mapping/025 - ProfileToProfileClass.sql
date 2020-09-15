@@ -36,3 +36,7 @@ EXEC [Mapping].[ProfileToProfileClass_Insert] @CreatedByUserId, @SourceId, @Prof
 SET @ProfileClassId = (SELECT ProfileClassId FROM [Information].[ProfileClass] WHERE ProfileClassGUID = 'F2C35766-5FC3-4E09-A330-4FA465492493')
 SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = '2E3E5721-2849-47CE-ABC9-27C7D2A42310')
 EXEC [Mapping].[ProfileToProfileClass_Insert] @CreatedByUserId, @SourceId, @ProfileId, @ProfileClassId
+
+SET @ProfileClassId = (SELECT ProfileClassId FROM [Information].[ProfileClass] WHERE ProfileClassGUID = 'A9A7B9CD-F00B-4C61-B940-85657ACACF22')
+SET @ProfileId = (SELECT ProfileId FROM [DemandForecast].[Profile] WHERE ProfileGUID = 'BF75CC1F-65C7-4571-9B1E-83BDD834F50D')
+EXEC [Mapping].[ProfileToProfileClass_Insert] @CreatedByUserId, @SourceId, @ProfileId, @ProfileClassId

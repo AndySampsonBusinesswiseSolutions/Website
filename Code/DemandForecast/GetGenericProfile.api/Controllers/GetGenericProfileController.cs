@@ -99,7 +99,7 @@ namespace GetGenericProfile.api.Controllers
                     }
                 });
 
-                var profileId = matchedProfileIds.Distinct().Count() > 1 ? 0 : matchedProfileIds.First();
+                var profileId = (!matchedProfileIds.Any() || matchedProfileIds.Distinct().Count() > 1) ? 0 : matchedProfileIds.First();
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, false, null);

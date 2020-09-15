@@ -21,6 +21,7 @@ namespace MethodLibrary
 
                 EstimatedAnnualUsage_CreateDeleteStoredProcedure(meterId, meterType);
                 EstimatedAnnualUsage_CreateInsertStoredProcedure(meterId, meterType);
+                EstimatedAnnualUsage_CreateGetLatestStoredProcedure(meterId, meterType);
                 EstimatedAnnualUsage_GrantExecuteToStoredProcedures(meterId, meterType);
             }
 
@@ -42,6 +43,13 @@ namespace MethodLibrary
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSupplyEnums.EstimatedAnnualUsage_CreateInsertStoredProcedure, 
+                    meterId, meterType);
+            }
+
+            private void EstimatedAnnualUsage_CreateGetLatestStoredProcedure(long meterId, string meterType)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSupplyEnums.EstimatedAnnualUsage_CreateGetLatestStoredProcedure, 
                     meterId, meterType);
             }
 

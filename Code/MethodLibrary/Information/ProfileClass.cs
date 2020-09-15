@@ -54,7 +54,7 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ProfileClassId"))
-                    .FirstOrDefault();
+                    .First();
             }
 
             public void ProfileClass_Insert(long createdByUserId, long sourceId, string profileClassGUID)

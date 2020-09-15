@@ -28,7 +28,7 @@ namespace MethodLibrary
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("ProfileId"))
-                    .First();
+                    .FirstOrDefault();
             }
 
             public List<long> ProfileDetail_GetProfileIdListByProfileAttributeIdAndProfileDetailDescription(long profileAttributeId, string profileDetailDescription)

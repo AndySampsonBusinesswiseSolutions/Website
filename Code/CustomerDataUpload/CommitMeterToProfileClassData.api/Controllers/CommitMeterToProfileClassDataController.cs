@@ -91,9 +91,9 @@ namespace CommitMeterToProfileClassData.api.Controllers
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var profileClassCodeProfileClassAttributeId = _informationMethods.ProfileClassAttribute_GetProfileClassAttributeIdByProfileClassAttributeDescription(_informationProfileClassAttributeEnums.ProfileClassCode);
 
-                var profileClasses = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass))
+                var profileClasses = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass).PadLeft(2, '0'))
                     .Distinct()
-                    .ToDictionary(pc => pc, pc => GetProfileClassId(pc, createdByUserId, sourceId, profileClassCodeProfileClassAttributeId));
+                    .ToDictionary(pc => pc, pc => GetProfileClassId(pc, profileClassCodeProfileClassAttributeId));
                 
                 var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
                     .Distinct()
@@ -105,10 +105,16 @@ namespace CommitMeterToProfileClassData.api.Controllers
                     var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
                     
                     //Get ProfileClassId from [Information].[ProfileClassDetail]
-                    var profileClassId = profileClasses[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass)];
+                    var profileClassId = profileClasses[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass).PadLeft(2, '0')];
 
-                    //Insert into [Mapping].[MeterToProfileClass]
-                    _mappingMethods.MeterToProfileClass_Insert(createdByUserId, sourceId, profileClassId, meterId);
+                    //Does mapping exist between meter and profile class
+                    var existingMeterProfileClassId = _mappingMethods.MeterToProfileClass_GetProfileClassIdByMeterId(meterId);
+
+                    if(existingMeterProfileClassId != profileClassId)
+                    {
+                        //Insert into [Mapping].[MeterToProfileClass]
+                        _mappingMethods.MeterToProfileClass_Insert(createdByUserId, sourceId, profileClassId, meterId);
+                    }
                 }
 
                 //Update Process Queue
@@ -123,19 +129,9 @@ namespace CommitMeterToProfileClassData.api.Controllers
             }
         }
 
-        private long GetProfileClassId(string profileClass, long createdByUserId, long sourceId, long profileClassGroupIdProfileClassAttributeId)
+        private long GetProfileClassId(string profileClass, long profileClassGroupIdProfileClassAttributeId)
         {
-            var profileClassId = _informationMethods.ProfileClassDetail_GetProfileClassIdByProfileClassAttributeIdAndProfileClassDetailDescription(profileClassGroupIdProfileClassAttributeId, profileClass);
-
-            if(profileClassId == 0)
-            {
-                profileClassId = _informationMethods.InsertNewProfileClass(createdByUserId, sourceId);
-
-                //Insert into [Customer].[ProfileClassDetail]
-                _informationMethods.ProfileClassDetail_Insert(createdByUserId, sourceId, profileClassId, profileClassGroupIdProfileClassAttributeId, profileClass);
-            }
-
-            return profileClassId;
+            return _informationMethods.ProfileClassDetail_GetProfileClassIdByProfileClassAttributeIdAndProfileClassDetailDescription(profileClassGroupIdProfileClassAttributeId, profileClass);
         }
     }
 }
