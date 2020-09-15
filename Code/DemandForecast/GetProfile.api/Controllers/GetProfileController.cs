@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetProfile.api.Controllers
 {
@@ -29,7 +30,16 @@ namespace GetProfile.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Information.Granularity.Description _informationGranularityDescriptionEnums = new Enums.Information.Granularity.Description();
         private readonly Int64 getProfileAPIId;
+        private decimal estimatedAnnualUsage;
+        private IEnumerable<long> timePeriodIdList;
+        private IEnumerable<long> periodicUsageDateIds;
+        private Dictionary<long, long> dateForecastGroupDictionary;
+        private IEnumerable<DataRow> forecastGroupToTimePeriodDataRowList;
+        private IEnumerable<DataRow> forecastGroupToTimePeriodToProfileDataRowList;
+        private Dictionary<long, long> profileValueIdDictionary;
+        private Dictionary<long, decimal> profileValueDictionary;
 
         public GetProfileController(ILogger<GetProfileController> logger)
         {
@@ -96,41 +106,27 @@ namespace GetProfile.api.Controllers
                     return JsonConvert.SerializeObject(profile);
                 }
 
-                //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
+                var processList = new List<long>{1, 2, 3, 4, 5};
 
-                //Get meterId/subMeterId
-                var meterId = meterType == "Meter"
-                    ? GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString())
-                    : GetSubMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
-                
-                //TODO: Create profiled usage
-                var forecastGroupToTimePeriodDataRowList = _mappingMethods.ForecastGroupToTimePeriod_GetList();
-                var forecastGroupToTimePeriodToProfileDataRowList = _mappingMethods.ForecastGroupToTimePeriodToProfile_GetByProfileId(profileId);
-                var forecastGroupToTimePeriodToProfileIdList = forecastGroupToTimePeriodToProfileDataRowList.Select(d => d.Field<long>("ForecastGroupToTimePeriodToProfileId")).Distinct();
-                var profileValueIdDictionary = forecastGroupToTimePeriodToProfileIdList
-                    .ToDictionary(f => f, f => _mappingMethods.ForecastGroupToTimePeriodToProfileToProfileValue_GetProfileValueIdByForecastGroupToTimePeriodToProfileId(f));
-                var profileValueDictionary = profileValueIdDictionary
-                    .Select(p => p.Value)
-                    .Distinct()
-                    .ToDictionary(p => p, p => _demandForecastMethods.ProfileValue_GetProfileValueByProfileValueId(p));
-
-                //Get Date dictionary
-                var dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
-
-                //Get latest Estimated Annual Usage
-                var estimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);
-
-                var latestPeriodicUsageDate = DateTime.Today;
-                var earliestRequiredPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
-                var periodicUsageDateIds = Enumerable.Range(0, latestPeriodicUsageDate.Subtract(earliestRequiredPeriodicUsageDate).Days + 1)
-                    .Select(offset => earliestRequiredPeriodicUsageDate.AddDays(offset))
-                    .Select(d => dateDictionary[_methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)]);
-
-                //Get Date to ForecastGroup with priority 1
-                var dateForecastGroupDictionary = _mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionaryByPriority(1)
-                    .Where(d => periodicUsageDateIds.Contains(d.Key))
-                    .ToDictionary(d => d.Key, d=> d.Value);
+                Parallel.ForEach(processList, parallelOptions, process => {
+                    if(process == 1)
+                    {
+                        GetLatestEstimatedAnnualUsage(jsonObject);
+                    }
+                    else if(process == 2)
+                    {
+                        GetTimePeriodIdList();
+                    }
+                    else if(process == 3)
+                    {
+                        GetProfileValues(profileId);
+                    }
+                    else if(process == 4)
+                    {
+                        GetDates();
+                    }
+                });
 
                 foreach(var dateId in periodicUsageDateIds)
                 {
@@ -139,15 +135,21 @@ namespace GetProfile.api.Controllers
                     //Get ForecastGroupId
                     var forecastGroupId = dateForecastGroupDictionary[dateId];
 
-                    //Get ForecastGroupToTimePeriodIds
-                    var forecastGroupToTimePeriodIds = forecastGroupToTimePeriodDataRowList.Where(d => d.Field<long>("ForecastGroupId") == forecastGroupId)
+                    //TODO: Get ForecastGroupToTimePeriodIds - restrict according to date
+                    var forecastGroupToTimePeriodIds = forecastGroupToTimePeriodDataRowList
+                        .Where(d => d.Field<long>("ForecastGroupId") == forecastGroupId)
+                        .Where(d => timePeriodIdList.Contains(d.Field<long>("TimePeriodId")))
                         .ToDictionary(d => d.Field<long>("ForecastGroupToTimePeriodId"), d => d.Field<long>("TimePeriodId"));
 
                     //Loop through each ForecastGroupToTimePeriodId
                     foreach(var forecastGroupToTimePeriodId in forecastGroupToTimePeriodIds)
                     {
+                        var forecastGroupToTimePeriodToProfileId = forecastGroupToTimePeriodToProfileDataRowList
+                            .First(f => f.Field<long>("ForecastGroupToTimePeriodId") == forecastGroupToTimePeriodId.Key)
+                            .Field<long>("ForecastGroupToTimePeriodToProfileId");
+
                         //Get ProfileValue
-                        var profileValueId = profileValueIdDictionary[forecastGroupToTimePeriodId.Key];
+                        var profileValueId = profileValueIdDictionary[forecastGroupToTimePeriodToProfileId];
                         var profileValue = profileValueDictionary[profileValueId];
 
                         //Calculate usage
@@ -174,24 +176,61 @@ namespace GetProfile.api.Controllers
             }
         }
 
-        private long GetMeterId(string mpxn)
+        private void GetLatestEstimatedAnnualUsage(JObject jsonObject)
         {
             //Get MeterIdentifierMeterAttributeId
             var _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
             var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
 
             //Get MeterId
-            return _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+            var meterId =  _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString()).FirstOrDefault();
+
+            //Get latest Estimated Annual Usage
+            estimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage("Meter", meterId);
         }
 
-        private long GetSubMeterId(string mpxn)
+        private void GetTimePeriodIdList()
         {
-            //Get SubMeterIdentifierSubMeterAttributeId
-            var _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
-            var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
+            //Get GranularityId
+            var granularityId = _informationMethods.Granularity_GetGranularityIdByGranularityDescription(_informationGranularityDescriptionEnums.HalfHour);
 
-            //Get SubMeterId
-            return _customerMethods.SubMeterDetail_GetSubMeterIdListBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, mpxn).FirstOrDefault();
+            //Get TimePeriods for granularity
+            timePeriodIdList = _mappingMethods.GranularityToTimePeriod_GetList().Where(g => g.Field<long>("GranularityId") == granularityId)
+                                .Select(g => g.Field<long>("TimePeriodId")).Distinct();
+        }
+
+        private void GetProfileValues(long profileId)
+        {
+            var forecastGroupToTimePeriodToProfileToProfileValueDataRowList = _mappingMethods.ForecastGroupToTimePeriodToProfileToProfileValue_GetList()
+                .ToDictionary(d => d.Field<long>("ForecastGroupToTimePeriodToProfileId"), d => d.Field<long>("ProfileValueId"));
+            forecastGroupToTimePeriodDataRowList = _mappingMethods.ForecastGroupToTimePeriod_GetList();
+            var profileValueDataRowList = _demandForecastMethods.ProfileValue_GetList();
+
+            forecastGroupToTimePeriodToProfileDataRowList = _mappingMethods.ForecastGroupToTimePeriodToProfile_GetByProfileId(profileId);
+            var forecastGroupToTimePeriodToProfileIdList = forecastGroupToTimePeriodToProfileDataRowList.Select(d => d.Field<long>("ForecastGroupToTimePeriodToProfileId")).Distinct();
+            profileValueIdDictionary = forecastGroupToTimePeriodToProfileIdList
+                .ToDictionary(f => f, f => forecastGroupToTimePeriodToProfileToProfileValueDataRowList.First(v => v.Key == f).Value);
+            profileValueDictionary = profileValueIdDictionary
+                .Select(p => p.Value)
+                .Distinct()
+                .ToDictionary(p => p, p => profileValueDataRowList.First(v => v.Field<long>("ProfileValueId") == p).Field<decimal>("ProfileValue"));
+        }
+
+        private void GetDates()
+        {
+            //Get Date dictionary
+            var dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
+
+            var latestPeriodicUsageDate = DateTime.Today;
+            var earliestRequiredPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
+            periodicUsageDateIds = Enumerable.Range(0, latestPeriodicUsageDate.Subtract(earliestRequiredPeriodicUsageDate).Days + 1)
+                .Select(offset => earliestRequiredPeriodicUsageDate.AddDays(offset))
+                .Select(d => dateDictionary[_methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)]);
+
+            //Get Date to ForecastGroup with priority 1
+            dateForecastGroupDictionary = _mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionaryByPriority(1)
+                .Where(d => periodicUsageDateIds.Contains(d.Key))
+                .ToDictionary(d => d.Key, d=> d.Value);
         }
     }
 }

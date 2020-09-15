@@ -34,16 +34,16 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        ForecastGroupToTimePeriodToProfileId,
+        ForecastGroupToTimePeriodId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        ForecastGroupToTimePeriodId,
-        ProfileId
+        ForecastGroupId,
+        TimePeriodId
     FROM 
-        [Mapping].[ForecastGroupToTimePeriodToProfile]
+        [Mapping].[ForecastGroupToTimePeriod]
     WHERE
         @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END

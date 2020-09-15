@@ -19,7 +19,7 @@ CREATE TABLE [DemandForecast].[ProfileValue]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ProfileValue decimal(18,15) NOT NULL
+	ProfileValue decimal(19,19) NOT NULL
 	)  ON [DemandForecast]
 GO
 ALTER TABLE [DemandForecast].[ProfileValue] ADD CONSTRAINT

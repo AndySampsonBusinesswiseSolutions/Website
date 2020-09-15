@@ -21,7 +21,7 @@ GO
 ALTER PROCEDURE [DemandForecast].[ProfileValue_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @ProfileValue DECIMAL(18,15)
+    @ProfileValue DECIMAL(19, 19)
 AS
 BEGIN
     -- =============================================

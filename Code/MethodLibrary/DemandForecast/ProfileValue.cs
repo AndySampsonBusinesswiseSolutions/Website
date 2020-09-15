@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -8,15 +9,12 @@ namespace MethodLibrary
     {
         public partial class DemandForecast
         {
-            public decimal ProfileValue_GetProfileValueByProfileValueId(long profileValueId)
+            public IEnumerable<DataRow> ProfileValue_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureDemandForecastEnums.ProfileValue_GetByProfileValueId, 
-                    profileValueId);
+                    _storedProcedureDemandForecastEnums.ProfileValue_GetList);
 
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<decimal>("ProfileValue"))
-                    .First();
+                return dataTable.Rows.Cast<DataRow>();
             }
         }
     }

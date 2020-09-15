@@ -128,6 +128,20 @@ namespace CommitMeterUsageData.api.Controllers
                     //Add mpxn to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, mpxn);
 
+                    //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
+                    _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
+
+                    //Get EstimatedAnnualUsage
+                    var estimatedAnnualUsage = meterCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
+
+                    //Add EstimatedAnnualUsage to newJsonObject
+                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
+
+                    //Launch CommitEstimatedAnnualUsage process and wait for response
+                    var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+
                     if(meterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn))
                     {
                         //Update Process GUID to CommitPeriodicUsage Process GUID
@@ -165,21 +179,10 @@ namespace CommitMeterUsageData.api.Controllers
 
                         //Add periodic usage to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
-                    }
-                    else 
-                    {
-                        //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
-                        _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
 
-                        //Get EstimatedAnnualUsage
-                        var estimatedAnnualUsage = meterCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
-
-                        //Add EstimatedAnnualUsage to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
-                    }
-
-                    //Connect to Routing API and POST data
-                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                        //Connect to Routing API and POST data
+                        _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                    }                    
                 }
 
                 //Update Process Queue

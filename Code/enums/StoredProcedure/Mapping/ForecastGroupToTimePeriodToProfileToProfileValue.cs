@@ -6,7 +6,7 @@ namespace enums
         {
             public partial class Mapping
             {
-                public string ForecastGroupToTimePeriodToProfileToProfileValue_GetByForecastGroupToTimePeriodToProfileId = "[Mapping].[ForecastGroupToTimePeriodToProfileToProfileValue_GetByForecastGroupToTimePeriodToProfileId]";
+                public string ForecastGroupToTimePeriodToProfileToProfileValue_GetList = "[Mapping].[ForecastGroupToTimePeriodToProfileToProfileValue_GetList]";
             }
         }
     }

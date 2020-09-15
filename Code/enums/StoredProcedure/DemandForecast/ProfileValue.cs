@@ -6,7 +6,7 @@ namespace enums
         {
             public partial class DemandForecast
             {
-                public string ProfileValue_GetByProfileValueId = "[DemandForecast].[ProfileValue_GetByProfileValueId]";
+                public string ProfileValue_GetList = "[DemandForecast].[ProfileValue_GetList]";
             }
         }
     }
