@@ -21,8 +21,6 @@ namespace CommitProfiledUsage.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -71,14 +69,6 @@ namespace CommitProfiledUsage.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitProfiledUsageAPIId);
 
-                //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
-
-                //Get meterId/subMeterId
-                var meterId = meterType == "Meter"
-                    ? GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString())
-                    : GetSubMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
-
                 //Launch GetProfile process and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, jsonObject);
@@ -91,9 +81,11 @@ namespace CommitProfiledUsage.api.Controllers
                     return;
                 }
 
+                var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(profileString.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
+                var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => Convert.ToInt64(x.Key), x => JsonConvert.DeserializeObject<Dictionary<long, decimal>>(x.Value));
                 var profileDictionary = new Dictionary<long, Dictionary<long, decimal>>();
 
-                if(!profileDictionary.Any())
+                if(!periodicUsageDictionary.Any())
                 {
                     return;
                 }
@@ -114,7 +106,7 @@ namespace CommitProfiledUsage.api.Controllers
                 dataTable.Columns["SourceId"].DefaultValue = sourceId;
                 dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(_informationUsageTypeEnums.Profile);
 
-                foreach(var periodicUsage in profileDictionary)
+                foreach(var periodicUsage in periodicUsageDictionary)
                 {
                     var timePeriodUsage = periodicUsage.Value;
 
@@ -128,14 +120,21 @@ namespace CommitProfiledUsage.api.Controllers
                     }
                 }
 
+                //Get MeterType
+                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+
+                //Get meterId
+                var meterId = GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
+
                 //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
-                _supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
+                var supplyMethods = new Methods.Supply();
+                supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
 
                 //End date existing Periodic Usage
-                _supplyMethods.LoadedUsage_Delete(meterType, meterId);
+                supplyMethods.LoadedUsage_Delete(meterType, meterId);
 
                 //Insert new Periodic Usage into LoadedUsage table
-                _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
+                supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitProfiledUsageAPIId, false, null);
@@ -152,21 +151,12 @@ namespace CommitProfiledUsage.api.Controllers
         private long GetMeterId(string mpxn)
         {
             //Get MeterIdentifierMeterAttributeId
-            var _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+            var customerMethods = new Methods.Customer();
+            var customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+            var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier);
 
             //Get MeterId
-            return _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
-        }
-
-        private long GetSubMeterId(string mpxn)
-        {
-            //Get SubMeterIdentifierSubMeterAttributeId
-            var _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
-            var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-
-            //Get SubMeterId
-            return _customerMethods.SubMeterDetail_GetSubMeterIdListBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, mpxn).FirstOrDefault();
+            return customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
         }
     }
 }

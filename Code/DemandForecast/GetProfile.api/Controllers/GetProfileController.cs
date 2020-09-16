@@ -128,14 +128,14 @@ namespace GetProfile.api.Controllers
                     }
                 });
 
-                foreach(var dateId in periodicUsageDateIds)
+                foreach(var periodicUsageDateId in periodicUsageDateIds)
                 {
-                    profile.Add(dateId, new Dictionary<long, decimal>());
+                    profile.Add(periodicUsageDateId, new Dictionary<long, decimal>());
 
                     //Get ForecastGroupId
-                    var forecastGroupId = dateForecastGroupDictionary[dateId];
+                    var forecastGroupId = dateForecastGroupDictionary[periodicUsageDateId];
 
-                    //TODO: Get ForecastGroupToTimePeriodIds - restrict according to date
+                    //Get ForecastGroupToTimePeriodIds
                     var forecastGroupToTimePeriodIds = forecastGroupToTimePeriodDataRowList
                         .Where(d => d.Field<long>("ForecastGroupId") == forecastGroupId)
                         .Where(d => timePeriodIdList.Contains(d.Field<long>("TimePeriodId")))
@@ -156,7 +156,7 @@ namespace GetProfile.api.Controllers
                         var usage = profileValue * estimatedAnnualUsage;
 
                         //Add to dictionary
-                        profile[dateId].Add(forecastGroupToTimePeriodId.Value, usage);
+                        profile[periodicUsageDateId].Add(forecastGroupToTimePeriodId.Value, usage);
                     }
                 }
 
