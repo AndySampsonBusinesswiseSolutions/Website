@@ -27,8 +27,8 @@ namespace CommitSubMeterUsageData.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
-        private readonly Enums.Information.Granularity.Description _informationGranularityDescriptionEnums = new Enums.Information.Granularity.Description();
         private readonly Enums.Information.UsageType _informationUsageTypeEnums = new Enums.Information.UsageType();
+        private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterUsageDataAPIId;
 
@@ -153,7 +153,11 @@ namespace CommitSubMeterUsageData.api.Controllers
                         }
 
                         //Add granularity to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, _informationGranularityDescriptionEnums.HalfHour);
+                        var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.IsElectricityDefault);
+                        var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
+                        var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
+                        var granularityDescription = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityDescriptionGranularityAttributeId);
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDescription);
 
                         //Add usage type to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.UsageType, _informationUsageTypeEnums.CustomerEstimated);

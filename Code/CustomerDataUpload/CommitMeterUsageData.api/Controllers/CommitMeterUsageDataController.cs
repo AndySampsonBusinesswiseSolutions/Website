@@ -25,10 +25,10 @@ namespace CommitMeterUsageData.api.Controllers
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
-        private readonly Enums.Information.Granularity.Description _informationGranularityDescriptionEnums = new Enums.Information.Granularity.Description();
         private readonly Enums.Information.UsageType _informationUsageTypeEnums = new Enums.Information.UsageType();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterUsageDataAPIId;
@@ -167,13 +167,17 @@ namespace CommitMeterUsageData.api.Controllers
                             }
                         }
 
-                        //Add granularity to newJsonObject
-                        var granularityDescription = _methods.IsValidMPAN(mpxn)
-                            ? _informationGranularityDescriptionEnums.HalfHour
-                            : _informationGranularityDescriptionEnums.Date;
-
                         //Add usage type to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.UsageType, _informationUsageTypeEnums.CustomerEstimated);
+                        
+                        //Add granularity to newJsonObject
+                        var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(
+                            _methods.IsValidMPAN(mpxn)
+                            ? _informationGranularityAttributeEnums.IsElectricityDefault
+                            : _informationGranularityAttributeEnums.IsGasDefault);
+                        var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
+                        var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
+                        var granularityDescription = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityDescriptionGranularityAttributeId);
 
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDescription);
 

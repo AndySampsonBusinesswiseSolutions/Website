@@ -25,10 +25,10 @@ INNER JOIN
 	[Mapping].[GranularityToTimePeriod]
 	ON GranularityToTimePeriod.TimePeriodId = ForecastGroupToTimePeriod.TimePeriodId
 INNER JOIN
-	[Information].[Granularity]
-	ON Granularity.GranularityId = GranularityToTimePeriod.GranularityId
-	AND Granularity.GranularityCode = 'Date'
-	AND Granularity.EffectiveToDateTime = '9999-12-31'
+	[Information].[GranularityDetail]
+	ON GranularityDetail.GranularityId = GranularityToTimePeriod.GranularityId
+	AND GranularityDetail.GranularityDetailDescription = 'Date'
+	AND GranularityDetail.EffectiveToDateTime = '9999-12-31'
 CROSS APPLY
 	[DemandForecast].[Profile]
 WHERE 
@@ -54,10 +54,10 @@ INNER JOIN
 	[Mapping].[GranularityToTimePeriod]
 	ON GranularityToTimePeriod.TimePeriodId = ForecastGroupToTimePeriod.TimePeriodId
 INNER JOIN
-	[Information].[Granularity]
-	ON Granularity.GranularityId = GranularityToTimePeriod.GranularityId
-	AND Granularity.GranularityCode = 'HalfHour'
-	AND Granularity.EffectiveToDateTime = '9999-12-31'
+	[Information].[GranularityDetail]
+	ON GranularityDetail.GranularityId = GranularityToTimePeriod.GranularityId
+	AND GranularityDetail.GranularityDetailDescription = 'HalfHour'
+	AND GranularityDetail.EffectiveToDateTime = '9999-12-31'
 CROSS APPLY
 	[DemandForecast].[Profile]
 WHERE 

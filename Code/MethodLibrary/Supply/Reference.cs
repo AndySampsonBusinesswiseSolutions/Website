@@ -7,7 +7,8 @@ namespace MethodLibrary
             public void CreateMeterTables(string schemaName, long meterId, string meterType)
             {
                 //Get Granularities
-                var granularityCodeList = _informationMethods.Granularity_GetGranularityCodeList();
+                var granularityCodeGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityCode);
+                var granularityCodeList = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(granularityCodeGranularityAttributeId);
 
                 //Create Schema
                 var schemaId = Schema_GetSchemaIdBySchemaName(schemaName);

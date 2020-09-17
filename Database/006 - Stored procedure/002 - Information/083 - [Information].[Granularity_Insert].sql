@@ -14,49 +14,39 @@ GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-07-29
--- Description:	Insert new Granularity into [Information].[Granularity] table
+-- Create date: 2020-09-17
+-- Description:	Insert new granularity into [Information].[Granularity] table
 -- =============================================
 
 ALTER PROCEDURE [Information].[Granularity_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @GranularityCode VARCHAR(255),
-    @GranularityDescription VARCHAR(255),
-    @GranularityDisplayDescription VARCHAR(255),
-    @IsTimePeriod BIT
+    @GranularityGUID UNIQUEIDENTIFIER
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-07-29 -> Andrew Sampson -> Initial development of script
-    -- 2020-07-30 -> Andrew Sampson -> Added IsTimePeriod
+    -- 2020-09-17 -> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Granularity] WHERE GranularityDescription = @GranularityDescription
+    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Granularity] WHERE GranularityGUID = @GranularityGUID
         AND EffectiveToDateTime = '9999-12-31')
         BEGIN
             INSERT INTO [Information].[Granularity]
             (
                 CreatedByUserId,
                 SourceId,
-                GranularityCode,
-                GranularityDescription,
-                GranularityDisplayDescription,
-                IsTimePeriod
+                GranularityGUID
             )
             VALUES
             (
                 @CreatedByUserId,
                 @SourceId,
-                @GranularityCode,
-                @GranularityDescription,
-                @GranularityDisplayDescription,
-                @IsTimePeriod
+                @GranularityGUID
             )
         END
 END

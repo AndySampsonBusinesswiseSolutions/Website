@@ -9,25 +9,83 @@ namespace MethodLibrary
     {
         public partial class Information
         {
-            public List<string> Granularity_GetGranularityCodeList()
+            public long GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(string granularityAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.Granularity_GetList);
+                    _storedProcedureInformationEnums.GranularityAttribute_GetByGranularityAttributeDescription, 
+                    granularityAttributeDescription);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<string>("GranularityCode"))
-                    .ToList();
+                    .Select(r => r.Field<long>("GranularityAttributeId"))
+                    .FirstOrDefault();
             }
 
-            public long Granularity_GetGranularityIdByGranularityDescription(string granularityDescription)
+            public long GranularityDetail_GetGranularityIdByGranularityAttributeId(long granularityAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.Granularity_GetByGranularityDescription, 
-                    granularityDescription);
+                    _storedProcedureInformationEnums.GranularityDetail_GetByGranularityAttributeId, 
+                    granularityAttributeId);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("GranularityId"))
                     .FirstOrDefault();
+            }
+
+            public string GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(long granularityId, long granularityAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.GranularityDetail_GetByGranularityIdAndGranularityAttributeId, 
+                    granularityId, granularityAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("GranularityDetailDescription"))
+                    .FirstOrDefault();
+            }
+
+            public IEnumerable<string> GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(long granularityAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.GranularityDetail_GetByGranularityAttributeIdAndGranularityDetailDescription, 
+                    granularityAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("GranularityDetailDescription"));
+            }
+
+            public long GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(long granularityAttributeId, string granularityDetailDescription)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.GranularityDetail_GetByGranularityAttributeIdAndGranularityDetailDescription, 
+                    granularityAttributeId, granularityDetailDescription);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GranularityId"))
+                    .FirstOrDefault();
+            }
+
+            public void Granularity_Insert(long createdByUserId, long sourceId, string granularityGUID)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureInformationEnums.Granularity_Insert, 
+                    createdByUserId, sourceId, granularityGUID);
+            }
+
+            public long Granularity_GetGranularityIdByGranularityGUID(string granularityGUID)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Granularity_GetByGranularityGUID, 
+                    granularityGUID);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GranularityId"))
+                    .FirstOrDefault();
+            }
+
+            public void GranularityDetail_Insert(long createdByUserId, long sourceId, long granularityId, long granularityAttributeId, string granularityDetailDescription)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureInformationEnums.GranularityDetail_Insert, 
+                    createdByUserId, sourceId, granularityId, granularityAttributeId, granularityDetailDescription);
             }
         }
     }

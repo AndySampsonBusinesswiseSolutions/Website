@@ -23,10 +23,7 @@ CREATE TABLE [Information].[Granularity]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	GranularityCode VARCHAR(255) NOT NULL,
-	GranularityDescription VARCHAR(255) NOT NULL,
-	GranularityDisplayDescription VARCHAR(255) NOT NULL,
-	IsTimePeriod BIT NOT NULL
+	GranularityGUID UNIQUEIDENTIFIER NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[Granularity] ADD CONSTRAINT
@@ -44,9 +41,6 @@ ALTER TABLE [Information].[Granularity] ADD CONSTRAINT
 GO
 ALTER TABLE [Information].[Granularity] ADD CONSTRAINT
 	DF_Granularity_CreatedDateTime DEFAULT GETUTCDATE() FOR CreatedDateTime
-GO
-ALTER TABLE [Information].[Granularity] ADD CONSTRAINT
-	DF_Granularity_IsTimePeriod DEFAULT 0 FOR IsTimePeriod
 GO
 ALTER TABLE [Information].[Granularity] ADD CONSTRAINT
 	FK_Granularity_CreatedByUserId FOREIGN KEY

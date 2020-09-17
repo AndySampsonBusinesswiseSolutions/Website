@@ -35,7 +35,7 @@ BEGIN
 
     DECLARE @SchemaName NVARCHAR(255) = 'Supply.' + @MeterType + CONVERT(NVARCHAR, @MeterId)
     DECLARE @TableName NVARCHAR(255) = 'ForecastUsage' + @GranularityCode + 'Latest'
-    DECLARE @RequiresDateColumn BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
+    DECLARE @RequiresDateColumn BIT = 0 --(SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
     DECLARE @ForeignKeyName NVARCHAR(255)
     DECLARE @v sql_variant 
 

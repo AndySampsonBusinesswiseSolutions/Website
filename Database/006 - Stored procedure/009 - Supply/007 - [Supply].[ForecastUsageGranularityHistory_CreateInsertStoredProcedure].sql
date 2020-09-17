@@ -36,7 +36,7 @@ BEGIN
     DECLARE @SchemaName NVARCHAR(255) = 'Supply.' + @MeterType + CONVERT(NVARCHAR, @MeterId)
     DECLARE @StoredProcedureName NVARCHAR(255) = 'ForecastUsage' + @GranularityCode + 'History_Insert'
     DECLARE @TodaysDate NVARCHAR(10) = (SELECT FORMAT(GetDate(), 'yyyy-MM-dd'))
-    DECLARE @RequiresDateParameter BIT = (SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
+    DECLARE @RequiresDateParameter BIT = 0 --(SELECT IsTimePeriod FROM [Information].[Granularity] WHERE GranularityCode = @GranularityCode)
 
     DECLARE @SQL NVARCHAR(MAX) = N'
     SET ANSI_NULLS ON

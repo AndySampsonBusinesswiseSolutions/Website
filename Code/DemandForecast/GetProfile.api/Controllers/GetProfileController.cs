@@ -30,7 +30,6 @@ namespace GetProfile.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.Information.Granularity.Description _informationGranularityDescriptionEnums = new Enums.Information.Granularity.Description();
         private readonly Int64 getProfileAPIId;
         private decimal estimatedAnnualUsage;
         private IEnumerable<long> timePeriodIdList;
@@ -191,8 +190,11 @@ namespace GetProfile.api.Controllers
 
         private void GetTimePeriodIdList()
         {
+            var informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+
             //Get GranularityId
-            var granularityId = _informationMethods.Granularity_GetGranularityIdByGranularityDescription(_informationGranularityDescriptionEnums.HalfHour);
+            var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(informationGranularityAttributeEnums.IsElectricityDefault);
+            var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
 
             //Get TimePeriods for granularity
             timePeriodIdList = _mappingMethods.GranularityToTimePeriod_GetList().Where(g => g.Field<long>("GranularityId") == granularityId)

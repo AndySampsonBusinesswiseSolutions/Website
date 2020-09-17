@@ -28,6 +28,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Int64 commitPeriodicUsageDataAPIId;
         private long createdByUserId;
         private long sourceId;
@@ -98,7 +99,8 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                 //Get GranularityId
                 var granularity = jsonObject[_systemAPIRequiredDataKeyEnums.Granularity].ToString();
-                granularityId = _informationMethods.Granularity_GetGranularityIdByGranularityDescription(granularity);
+                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
+                granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
 
                 //Get GranularityToTimePeriod List
                 var granularityToTimePeriodList = _mappingMethods.GranularityToTimePeriod_GetList();
