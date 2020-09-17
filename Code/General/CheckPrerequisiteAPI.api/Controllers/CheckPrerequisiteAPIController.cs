@@ -73,31 +73,31 @@ namespace CheckPrerequisiteAPI.api.Controllers
                     prerequisiteAPIGUIDs = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);
                 }
 
-                //Wait until prerequisite APIs have completed
-                while((completedPrerequisiteAPIGUIDs.Count() + erroredPrerequisiteAPIGUIDs.Count()) < prerequisiteAPIGUIDs.Count())
-                {
-                    foreach(var prerequisiteAPIGUID in prerequisiteAPIGUIDs)
-                    {
-                        if(completedPrerequisiteAPIGUIDs.Contains(prerequisiteAPIGUID) || erroredPrerequisiteAPIGUIDs.Contains(prerequisiteAPIGUID))
-                        {
-                            continue;
-                        }
+                var prerequisiteAPIDictionary = prerequisiteAPIGUIDs
+                    .ToDictionary(api => api, api => _systemMethods.API_GetAPIIdByAPIGUID(api));
+                var prerequisiteAPITimeoutDictionary = prerequisiteAPIGUIDs
+                    .ToDictionary(api => api, api => Convert.ToDouble(_systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIDictionary[api], timeoutSecondsAttributeId).First()));
 
+                //Wait until prerequisite APIs have completed
+                while(prerequisiteAPIDictionary.Any())
+                {
+                    var remainingPrerequisiteAPIGUIDs = prerequisiteAPIGUIDs.Where(api=> prerequisiteAPIDictionary.ContainsKey(api)).ToList();
+                    foreach(var prerequisiteAPIGUID in remainingPrerequisiteAPIGUIDs)
+                    {
                         //Get prerequisite API EffectiveToDate from System.ProcessQueue
-                        var prerequisiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(prerequisiteAPIGUID);
+                        var prerequisiteAPIId = prerequisiteAPIDictionary[prerequisiteAPIGUID];
                         var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, prerequisiteAPIId);
 
                         if(processQueueDataRow != null)
                         {
-                            processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, prerequisiteAPIId);
-                            
                             //If EffectiveToDate is '9999-12-31' then it is still processing
                             //otherwise, it has finished so add to completed if successful or errored if not
                             var effectiveToDate = Convert.ToDateTime(processQueueDataRow["EffectiveToDateTime"]);
                             if(effectiveToDate.Year != 9999)
                             {
-                                var hasError = Convert.ToBoolean(processQueueDataRow["HasError"]);
-                                if(hasError)
+                                prerequisiteAPIDictionary.Remove(prerequisiteAPIGUID);
+
+                                if(Convert.ToBoolean(processQueueDataRow["HasError"]))
                                 {
                                     erroredPrerequisiteAPIGUIDs.Add(prerequisiteAPIGUID);
                                 }
@@ -110,12 +110,11 @@ namespace CheckPrerequisiteAPI.api.Controllers
                             {
                                 //Check if process has been running for longer than it's anticipated run time
                                 var effectiveFromDate = Convert.ToDateTime(processQueueDataRow["EffectiveFromDateTime"]);
-                                var timeoutSeconds = Convert.ToDouble(_systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, timeoutSecondsAttributeId).First());
-                                var latestRunDate = effectiveFromDate.AddMinutes(timeoutSeconds/60);
-                                var currentDate = DateTime.UtcNow;
+                                var latestRunDate = effectiveFromDate.AddSeconds(prerequisiteAPITimeoutDictionary[prerequisiteAPIGUID]);
 
-                                if(currentDate > latestRunDate)
+                                if(DateTime.UtcNow > latestRunDate)
                                 {
+                                    prerequisiteAPIDictionary.Remove(prerequisiteAPIGUID);
                                     erroredPrerequisiteAPIGUIDs.Add(prerequisiteAPIGUID);
 
                                     var errorId = _systemMethods.InsertSystemError(createdByUserId, 
@@ -128,7 +127,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
                                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, prerequisiteAPIId, true, $"System Error Id {errorId}");
                                 }
                             }
-                        }                    
+                        }    
                     }
                 }
             }

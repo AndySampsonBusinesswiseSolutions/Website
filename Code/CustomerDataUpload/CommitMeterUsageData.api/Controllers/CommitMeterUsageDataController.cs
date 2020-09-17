@@ -182,7 +182,7 @@ namespace CommitMeterUsageData.api.Controllers
 
                         //Connect to Routing API and POST data
                         _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
-                    }                    
+                    }    
                 }
 
                 //Update Process Queue

@@ -169,7 +169,7 @@ namespace MethodLibrary
                         var validRows = GetReturnRows(records, false).Where(r => !errorRows.ContainsKey(r.Key)).ToDictionary(x => x.Key, x => x.Value);
 
                         UpdateCanCommit(processQueueGUID, sheetName, validRows, true);
-                    }                    
+                    }    
 
                     //Insert error records
                     var customerMethods = new Methods.Customer();
@@ -283,7 +283,7 @@ namespace MethodLibrary
                     if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
                     {
                         return _storedProcedureTempCustomerDataUploadEnums.FlexTrade_UpdateCanCommit;
-                    }                    
+                    }    
 
                     return string.Empty;
                 }

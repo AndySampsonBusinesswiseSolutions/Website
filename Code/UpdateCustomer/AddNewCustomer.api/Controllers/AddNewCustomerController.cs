@@ -108,7 +108,7 @@ namespace AddNewCustomer.api.Controllers
                 {
                     //Customer name exists as an active customer so fail
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, addNewCustomerAPIId, true, $"Customer Name {customerName} already exists as an active record");
-                }                
+                }
             }
             catch(Exception error)
             {

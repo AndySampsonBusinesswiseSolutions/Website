@@ -42,7 +42,8 @@ BEGIN
         CreatedByUserId,
         SourceId,
         DateId,
-        ForecastGroupId
+        ForecastGroupId,
+        Priority
     FROM 
         [Mapping].[DateToForecastGroup]
     WHERE

@@ -32,6 +32,7 @@ namespace enums
                     public string CustomerDataUploadProcessQueueGUID = "CustomerDataUploadProcessQueueGUID";
                     public string Granularity = "Granularity";
                     public string UsageType = "UsageType";
+                    public string SubMeterIdentifier = "SubMeterIdentifier";
                 }
             }
         }

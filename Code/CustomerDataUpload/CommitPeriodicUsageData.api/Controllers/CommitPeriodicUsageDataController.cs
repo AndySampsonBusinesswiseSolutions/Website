@@ -90,7 +90,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Get meterId/subMeterId
                 meterId = meterType == "Meter"
                     ? GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString())
-                    : GetSubMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
+                    : GetSubMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.SubMeterIdentifier].ToString());
 
                 //Get UsageTypeId
                 var usageType = jsonObject[_systemAPIRequiredDataKeyEnums.UsageType].ToString();
