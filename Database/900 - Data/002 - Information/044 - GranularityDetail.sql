@@ -9,6 +9,9 @@ DECLARE @GranularityCodeGranularityAttributeId BIGINT = (SELECT GranularityAttri
 DECLARE @GranularityDescriptionGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Granularity Description')
 DECLARE @GranularityDisplayDescriptionGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Granularity Display Description')
 DECLARE @IsTimePeriodGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Is Time Period')
+DECLARE @IsElectricityDefaultGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Is Electricity Default')
+DECLARE @IsGasDefaultGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Is Gas Default')
+
 DECLARE @ForecastUsageFiveMinuteHistoryTableSQLGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Forecast Usage Five Minute History Table SQL')
 DECLARE @ForecastUsageHalfHourHistoryTableSQLGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Forecast Usage Half Hour History Table SQL')
 DECLARE @ForecastUsageDateHistoryTableSQLGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Forecast Usage Date History Table SQL')
@@ -37,12 +40,14 @@ EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @Gran
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDescriptionGranularityAttributeId, 'Half Hour'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDisplayDescriptionGranularityAttributeId, 'Half Hourly'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @IsTimePeriodGranularityAttributeId, 'True'
+EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @IsElectricityDefaultGranularityAttributeId, 'True'
 
 --Date
 SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '71C54EC0-6415-42D4-9C8C-6D8B8513F2FE')
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityCodeGranularityAttributeId, 'Date'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDescriptionGranularityAttributeId, 'Day'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDisplayDescriptionGranularityAttributeId, 'Daily'
+EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @IsGasDefaultGranularityAttributeId, 'True'
 
 --Week
 SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '8FD4C63A-84D5-4A03-B488-1A99C2331726')

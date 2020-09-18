@@ -45,7 +45,7 @@ namespace MethodLibrary
             public IEnumerable<string> GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(long granularityAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.GranularityDetail_GetByGranularityAttributeIdAndGranularityDetailDescription, 
+                    _storedProcedureInformationEnums.GranularityDetail_GetByGranularityAttributeId, 
                     granularityAttributeId);
 
                 return dataTable.AsEnumerable()
