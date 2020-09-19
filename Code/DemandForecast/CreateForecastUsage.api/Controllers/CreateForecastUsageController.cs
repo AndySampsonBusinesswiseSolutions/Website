@@ -6,6 +6,9 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Data;
+using System.Collections.Concurrent;
 
 namespace CreateForecastUsage.api.Controllers
 {
@@ -20,10 +23,12 @@ namespace CreateForecastUsage.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
+        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Int64 createForecastUsageAPIId;
 
         public CreateForecastUsageController(ILogger<CreateForecastUsageController> logger)
@@ -85,6 +90,65 @@ namespace CreateForecastUsage.api.Controllers
                 var dateToForecastGroupDictionary = _mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionary();
                 var futureDateToForecastGroupDictionary = dateToForecastGroupDictionary.Where(d => futureDateIds.Contains(d.Key))
                     .ToDictionary(d => d.Key, d => d.Value);
+
+                //Get DateToForecastAgent
+                var dateToForecastAgentDictionary = _mappingMethods.DateToForecastAgent_GetDateForecastAgentDictionary();
+
+                //Get ForecastAgents
+                var forecastAgentDataRows = _demandForecastMethods.ForecastAgent_GetList();
+                var forecastAgentDictionary = forecastAgentDataRows.ToDictionary(d => d.Field<long>("ForecastAgentId"), d => d.Field<string>("ForecastAgent"));
+
+                //Get Future Date mappings
+                var futureDateToUsageDateDictionary = new ConcurrentDictionary<long, long>();
+                foreach(var futureDateToForecastGroup in futureDateToForecastGroupDictionary)
+                {
+                    var forecastAgentList = dateToForecastAgentDictionary[futureDateToForecastGroup.Key]
+                        .OrderBy(a => a.Value)
+                        .Select(a => forecastAgentDictionary[a.Key]);
+
+                    var usageDateId = 0L;
+                    foreach(var forecastAgent in forecastAgentList)
+                    {
+                        usageDateId = 0;
+
+                        if(usageDateId > 0)
+                        {
+                            break;
+                        }
+                    }
+
+                    futureDateToUsageDateDictionary.TryAdd(futureDateToForecastGroup.Key, usageDateId);
+                }
+
+                //Get GranularityId
+                var granularity = "Five Minute";
+                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
+                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
+
+                //Get required time periods
+                var nonStandardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
+                var standardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_StandardDate_GetListByGranularityId(granularityId);
+                var standardGranularityToTimePeriods = standardGranularityToTimePeriodDataRows.Select(d => d.Field<long>("TimePeriodId")).ToList();
+
+                //Set up forecast dictionary
+                var forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>();
+
+                //Loop through future date ids
+                foreach(var futureDateId in futureDateToForecastGroupDictionary.Keys)
+                {
+                    //Add date id to forecast dictionary
+                    forecastDictionary.TryAdd(futureDateId, new Dictionary<long, decimal>());
+
+                    //Get time periods required for date
+                    var timePeriods = nonStandardGranularityToTimePeriodDataRows.Any(d => d.Field<long>("DateId") == futureDateId)
+                        ? nonStandardGranularityToTimePeriodDataRows.Where(d => d.Field<long>("DateId") == futureDateId)
+                            .Select(d => d.Field<long>("TimePeriodId"))
+                        : standardGranularityToTimePeriods;
+
+                    //Get usage date id
+                    var usageDateId = futureDateToUsageDateDictionary[futureDateId];
+                    
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, false, null);

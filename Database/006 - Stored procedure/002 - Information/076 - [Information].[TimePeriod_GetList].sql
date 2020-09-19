@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-09-01
--- Description:	Get TimePeriod info from [Information].[TimePeriod] table by EndTime
+-- Description:	Get TimePeriod info from [Information].[TimePeriod] table
 -- =============================================
 
 ALTER PROCEDURE [Information].[TimePeriod_GetList]

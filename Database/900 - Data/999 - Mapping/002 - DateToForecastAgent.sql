@@ -1,12 +1,6 @@
 USE [EMaaS]
 GO
 
-IF OBJECT_ID('tempdb..#DateToForecastAgentTempTable') IS NOT NULL
-	BEGIN
-		DROP TABLE #DateToForecastAgentTempTable
-	END
-GO
-
 DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE UserGUID = '743E21EE-2185-45D4-9003-E35060B751E2')
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
@@ -1997,7 +1991,7 @@ INSERT INTO @Mapping (DateDescription, ForecastAgent, Priority) VALUES('2019-01-
 ,('2020-05-30','ByForecastGroupByYear',1),('2020-05-30','Date',2)
 ,('2020-05-31','ByForecastGroupByYear',1),('2020-05-31','Date',2)
 ,('2020-06-01','ByForecastGroupByYear',1),('2020-06-01','Date',2)
-,('2020-06-05','ByForecastGroupByYear',1),('2020-06-05','Date',2)
+,('2020-06-02','ByForecastGroupByYear',1),('2020-06-02','Date',2)
 ,('2020-06-03','ByForecastGroupByYear',1),('2020-06-03','Date',2)
 ,('2020-06-04','ByForecastGroupByYear',1),('2020-06-04','Date',2)
 ,('2020-06-05','ByForecastGroupByYear',1),('2020-06-05','Date',2)

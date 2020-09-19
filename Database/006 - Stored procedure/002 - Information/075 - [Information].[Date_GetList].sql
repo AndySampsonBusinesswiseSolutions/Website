@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-27
--- Description:	Get Date info from [Information].[Date] table by Date Description
+-- Description:	Get Date info from [Information].[Date] table
 -- =============================================
 
 ALTER PROCEDURE [Information].[Date_GetList]
