@@ -7,4 +7,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 
 EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'Date', 'Maps directly against date from previous years'
 EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'ByForecastGroupByYear', 'Tries to map against any ForecastGroup on a historical year before moving to next historical year'
-EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'ByYearByForecastGroup', 'Tries to map against any historical year a ForecastGroup on before moving to next ForecastGroup'
+EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'ByYearByForecastGroup', 'Tries to map against any historical year on a ForecastGroup before moving to next ForecastGroup'
