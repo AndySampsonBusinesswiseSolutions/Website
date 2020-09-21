@@ -156,16 +156,15 @@ namespace CreateForecastUsage.api.Controllers
                 var standardGranularityToTimePeriods = standardGranularityToTimePeriodDataRows.Select(d => d.Field<long>("TimePeriodId")).ToList();
 
                 //Set up forecast dictionary
-                var forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>();
+                var forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>(futureDateToForecastGroupDictionary.ToDictionary(f => f.Key, f => new Dictionary<long, decimal>()));
+                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}};
+                var timePeriodToTimePeriodIds = _mappingMethods.TimePeriodToTimePeriod_GetList();
 
                 //Loop through future date ids
                 foreach(var futureDateId in futureDateToForecastGroupDictionary.Keys)
                 {
-                    //Add date id to forecast dictionary
-                    forecastDictionary.TryAdd(futureDateId, new Dictionary<long, decimal>());
-
                     //Get time periods required for date
-                    var timePeriods = nonStandardGranularityToTimePeriodDataRows.Any(d => d.Field<long>("DateId") == futureDateId)
+                    var timePeriodIds = nonStandardGranularityToTimePeriodDataRows.Any(d => d.Field<long>("DateId") == futureDateId)
                         ? nonStandardGranularityToTimePeriodDataRows.Where(d => d.Field<long>("DateId") == futureDateId)
                             .Select(d => d.Field<long>("TimePeriodId"))
                         : standardGranularityToTimePeriods;
@@ -173,6 +172,79 @@ namespace CreateForecastUsage.api.Controllers
                     //Get usage date id
                     var usageDateId = futureDateToUsageDateDictionary[futureDateId];
 
+                    //Get usage for date
+                    var usageForDateList = latestLoadedUsage.Where(u => u.Field<long>("DateId") == usageDateId);
+
+                    foreach(var timePeriodId in timePeriodIds)
+                    {
+                        if(forecastDictionary[futureDateId].ContainsKey(timePeriodId))
+                        {
+                            continue;
+                        }
+
+                        //Get usage for time period
+                        var usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == timePeriodId);
+
+                        if(usageForTimePeriodList.Any())
+                        {
+                            //Get usage based on usage type priority
+                            var usage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
+                                .OrderBy(u => u.Key).First().Value;
+
+                            //Add usage to forecast
+                            forecastDictionary[futureDateId].TryAdd(timePeriodId, usage);
+                        }
+                        else
+                        {
+                            var mappedTimePeriodIds = timePeriodToTimePeriodIds.Where(t => t.Field<long>("TimePeriodId") == timePeriodId);
+                            var mappedtimePeriodDictionary = mappedTimePeriodIds.ToDictionary(
+                                    m => m.Field<long>("MappedTimePeriodId"),
+                                    m => timePeriodToTimePeriodIds.Where(t => t.Field<long>("MappedTimePeriodId") == m.Field<long>("MappedTimePeriodId"))
+                                        .Select(t => t.Field<long>("TimePeriodId")))
+                                .OrderBy(m => m.Value.Count()).First();
+
+                            usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodDictionary.Key);
+
+                            //Get usage based on usage type priority
+                            var mappedUsage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
+                                .OrderBy(u => u.Key).First().Value;
+
+                            var missingTimePeriodIds = new List<long>();
+
+                            foreach(var mappedtimePeriodId in mappedtimePeriodDictionary.Value)
+                            {
+                                //Get usage for time period
+                                usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodId);
+
+                                if(usageForTimePeriodList.Any())
+                                {
+                                    //Get usage based on usage type priority
+                                    var usage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
+                                        .OrderBy(u => u.Key).First().Value;
+
+                                    //Add usage to forecast
+                                    forecastDictionary[futureDateId].TryAdd(mappedtimePeriodId, usage);
+                                }
+                                else
+                                {
+                                    missingTimePeriodIds.Add(mappedtimePeriodId);
+                                }
+                            }
+
+                            if(missingTimePeriodIds.Any())
+                            {
+                                var timePeriodUsage = mappedtimePeriodDictionary.Value
+                                    .Sum(t => forecastDictionary[futureDateId][t]);
+                                var missingTimePeriodUsage = (mappedUsage - timePeriodUsage)/missingTimePeriodIds.Count();
+
+                                foreach(var missingTimePeriodId in missingTimePeriodIds)
+                                {
+                                    //Add usage to forecast
+                                    forecastDictionary[futureDateId].TryAdd(missingTimePeriodId, missingTimePeriodUsage);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 //Update Process Queue
