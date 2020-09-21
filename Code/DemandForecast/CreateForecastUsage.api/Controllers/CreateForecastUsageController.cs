@@ -113,7 +113,7 @@ namespace CreateForecastUsage.api.Controllers
 
                 //Get Future Date mappings
                 var futureDateToUsageDateDictionary = new ConcurrentDictionary<long, long>(futureDateToForecastGroupDictionary.ToDictionary(f => f.Key, f => new long()));
-                foreach(var futureDateToForecastGroup in futureDateToForecastGroupDictionary.Take(40))
+                foreach(var futureDateToForecastGroup in futureDateToForecastGroupDictionary)
                 {
                     var forecastAgentList = dateToForecastAgentDictionary[futureDateToForecastGroup.Key]
                         .OrderBy(a => a.Value)
@@ -234,6 +234,7 @@ namespace CreateForecastUsage.api.Controllers
                             if(missingTimePeriodIds.Any())
                             {
                                 var timePeriodUsage = mappedtimePeriodDictionary.Value
+                                    .Where(t => forecastDictionary[futureDateId].ContainsKey(t))
                                     .Sum(t => forecastDictionary[futureDateId][t]);
                                 var missingTimePeriodUsage = (mappedUsage - timePeriodUsage)/missingTimePeriodIds.Count();
 
