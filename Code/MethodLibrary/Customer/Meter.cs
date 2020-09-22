@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System;
+using Newtonsoft.Json.Linq;
+using enums;
 
 namespace MethodLibrary
 {
@@ -97,6 +99,36 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("MeterId"))
                     .ToList();
+            }
+
+            public long GetMeterIdByMeterType(string meterType, JObject jsonObject)
+            {
+                if(meterType == "Meter")
+                {
+                    //Get mpxn
+                    var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
+
+                    //Get MeterId
+                    return GetMeterId(mpxn);
+                }
+                else 
+                {
+                    //Get mpxn
+                    var subMeterIdentifier = jsonObject[_systemAPIRequiredDataKeyEnums.SubMeterIdentifier].ToString();
+
+                    //Get MeterId
+                    return GetSubMeterId(subMeterIdentifier);
+                }
+            }
+
+            public long GetMeterId(string mpxn)
+            {
+                //Get MeterIdentifierMeterAttributeId
+                var customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+                var meterIdentifierMeterAttributeId = MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier);
+
+                //Get MeterId
+                return MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
             }
         }
     }

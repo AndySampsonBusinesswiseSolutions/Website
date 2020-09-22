@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using System;
+using enums;
 
 namespace MethodLibrary
 {
@@ -97,6 +98,16 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("SubMeterId"))
                     .ToList();
+            }
+
+            public long GetSubMeterId(string subMeterIdentifier)
+            {
+                //Get SubMeterIdentifierSubMeterAttributeId
+                var customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+                var subMeterIdentifierSubMeterAttributeId = SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(customerSubMeterAttributeEnums.SubMeterIdentifier);
+
+                //Get SubMeterId
+                return SubMeterDetail_GetSubMeterIdListBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, subMeterIdentifier).FirstOrDefault();
             }
         }
     }
