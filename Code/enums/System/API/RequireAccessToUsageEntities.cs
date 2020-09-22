@@ -17,7 +17,8 @@ namespace enums
                         "CommitPeriodicUsageData.api",
                         "GetProfile.api",
                         "CommitProfiledUsage.api",
-                        "CreateForecastUsage.api"
+                        "CreateForecastUsage.api",
+                        "GetMappedUsageDateId.api"
                     };
                 }
             }

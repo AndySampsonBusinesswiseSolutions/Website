@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Concurrent;
@@ -55,7 +56,7 @@ namespace GetMappedUsageDateId.api.Controllers
 
         [HttpPost]
         [Route("GetMappedUsageDateId/Get")]
-        public ConcurrentDictionary<long, long> Get([FromBody] object data)
+        public string Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -86,6 +87,11 @@ namespace GetMappedUsageDateId.api.Controllers
                 //Get latest loaded usage
                 var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
 
+                //Get Date dictionary
+                dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
+                var futureDateIds = dateDictionary.Where(d => Convert.ToDateTime(d.Key) > DateTime.Today)
+                    .Select(d => d.Value).ToList();
+
                 //Get Loaded Usage Date Ids
                 var latestLoadedUsageDateIds = latestLoadedUsage.Select(d => d.Field<long>("DateId")).ToList();
 
@@ -93,11 +99,6 @@ namespace GetMappedUsageDateId.api.Controllers
                     .ToDictionary(d => d.Key, d => d.Value);
                 earliestUsageDate = loadedUsageDateDictionary.Min(d => Convert.ToDateTime(d.Key));
                 latestUsageDate = loadedUsageDateDictionary.Max(d => Convert.ToDateTime(d.Key));
-
-                //Get Date dictionary
-                dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
-                var futureDateIds = dateDictionary.Where(d => Convert.ToDateTime(d.Key) > DateTime.Today)
-                    .Select(d => d.Value).ToList();
 
                 //Get DateToForecastAgent
                 var dateToForecastAgentDictionary = _mappingMethods.DateToForecastAgent_GetDateForecastAgentDictionary();
@@ -108,12 +109,11 @@ namespace GetMappedUsageDateId.api.Controllers
                     .ToDictionary(d => d.Key, d => d.Value);
 
                 //Get ForecastAgents
-                var forecastAgentDataRows = _demandForecastMethods.ForecastAgent_GetList();
-                var forecastAgentDictionary = forecastAgentDataRows.ToDictionary(d => d.Field<long>("ForecastAgentId"), d => d.Field<string>("ForecastAgent"));
+                var forecastAgentDictionary = _demandForecastMethods.GetForecastAgentDictionary();
 
                 //Get Future Date mappings
                 var futureDateToUsageDateDictionary = new ConcurrentDictionary<long, long>(futureDateToForecastGroupDictionary.ToDictionary(f => f.Key, f => new long()));
-                foreach(var futureDateToForecastGroup in futureDateToForecastGroupDictionary)
+                foreach(var futureDateToForecastGroup in futureDateToForecastGroupDictionary.Take(1))
                 {
                     var forecastAgentList = dateToForecastAgentDictionary[futureDateToForecastGroup.Key]
                         .OrderBy(a => a.Value)
@@ -136,7 +136,7 @@ namespace GetMappedUsageDateId.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, false, null);
 
-                return futureDateToUsageDateDictionary;
+                return JsonConvert.SerializeObject(futureDateToUsageDateDictionary);
             }
             catch(Exception error)
             {
@@ -145,7 +145,7 @@ namespace GetMappedUsageDateId.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, true, $"System Error Id {errorId}");
 
-                return new ConcurrentDictionary<long, long>();
+                return string.Empty;
             }
         }
 

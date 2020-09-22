@@ -6,7 +6,7 @@ DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information]
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 DECLARE @NameForecastAgentAttributeId BIGINT = (SELECT ForecastAgentAttributeId FROM [DemandForecast].[ForecastAgentAttribute] WHERE ForecastAgentAttributeDescription = 'Name')
 DECLARE @DescriptionForecastAgentAttributeId BIGINT = (SELECT ForecastAgentAttributeId FROM [DemandForecast].[ForecastAgentAttribute] WHERE ForecastAgentAttributeDescription = 'Description')
-DECLARE @APIGUIDForecastAgentAttributeId BIGINT = (SELECT ForecastAgentAttributeId FROM [DemandForecast].[ForecastAgentAttribute] WHERE ForecastAgentAttributeDescription = 'API GUID')
+DECLARE @APIGUIDForecastAgentAttributeId BIGINT = (SELECT ForecastAgentAttributeId FROM [DemandForecast].[ForecastAgentAttribute] WHERE ForecastAgentAttributeDescription = 'Forecast Agent API GUID')
 
 DECLARE @ForecastAgentId BIGINT = (SELECT ForecastAgentId FROM [DemandForecast].[ForecastAgent] WHERE ForecastAgentGUID = 'E04283B4-2EAB-4F6A-A4BC-5255115F1120')
 EXEC [DemandForecast].[ForecastAgentDetail_Insert] @CreatedByUserId, @SourceId, @ForecastAgentId, @NameForecastAgentAttributeId, 'Date'

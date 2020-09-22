@@ -101,18 +101,26 @@ namespace CreateForecastUsage.api.Controllers
                 //Call GetMappedUsageDateId API and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result;
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
+
+                if(string.IsNullOrWhiteSpace(result))
+                {
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $" Prerequisite APIs {_systemAPIGUIDEnums.GetMappedUsageDateIdAPI} errored");
+                    return;
+                }
+
                 var futureDateToUsageDateDictionary = JsonConvert.DeserializeObject<Dictionary<long, long>>(result);
 
-                if(futureDateToUsageDateDictionary.Any(f => f.Value == 0))
+                if(!futureDateToUsageDateDictionary.Any() || futureDateToUsageDateDictionary.Any(f => f.Value == 0))
                 {
                     //throw error as mapping has failed
-                    var errorMessage = $"Forecast date ids without mapped usage date id: {string.Join(',', futureDateToUsageDateDictionary.Where(f => f.Value == 0))}";
+                    var errorMessage = futureDateToUsageDateDictionary.Any() 
+                        ? $"Forecast date ids without mapped usage date id: {string.Join(',', futureDateToUsageDateDictionary.Where(f => f.Value == 0))}"
+                        : $"No forecast date ids mapped to usage date ids";
                     var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, errorMessage, "Forecast Date Mapping", Environment.StackTrace);
 
                     //Update Process Queue
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $"System Error Id {errorId}");
-
                     return;
                 }
 

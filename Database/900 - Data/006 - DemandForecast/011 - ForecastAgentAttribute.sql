@@ -7,4 +7,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 
 EXEC [DemandForecast].[ForecastAgentAttribute_Insert] @CreatedByUserId, @SourceId, 'Name'
 EXEC [DemandForecast].[ForecastAgentAttribute_Insert] @CreatedByUserId, @SourceId, 'Description'
-EXEC [DemandForecast].[ForecastAgentAttribute_Insert] @CreatedByUserId, @SourceId, 'API GUID'
+EXEC [DemandForecast].[ForecastAgentAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Agent API GUID'
