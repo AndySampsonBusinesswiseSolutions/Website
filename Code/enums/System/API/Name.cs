@@ -8,6 +8,7 @@ namespace enums
             {
                 public class Name
                 {
+                    public string GetMappedUsageDateIdAPI = "GetMappedUsageDateId.api";
                     public string CreateForecastUsageAPI = "CreateForecastUsage.api";
                     public string GetGenericProfileAPI = "GetGenericProfile.api";
                     public string GetFlexSpecificProfileAPI = "GetFlexSpecificProfile.api";

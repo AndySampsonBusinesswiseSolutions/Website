@@ -5,6 +5,6 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'Date', 'Maps directly against date from previous years'
-EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'ByForecastGroupByYear', 'Tries to map against any ForecastGroup on a historical year before moving to next historical year'
-EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'ByYearByForecastGroup', 'Tries to map against any historical year on a ForecastGroup before moving to next ForecastGroup'
+EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, 'E04283B4-2EAB-4F6A-A4BC-5255115F1120'
+EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, '2A0FB263-7521-4480-9F5F-63E1BBD72EF8'
+EXEC [DemandForecast].[ForecastAgent_Insert] @CreatedByUserId, @SourceId, '9692BE1F-3FE3-40E9-833D-ED4A76DC0D4E'

@@ -25,6 +25,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-09-19 -> Andrew Sampson -> Initial development of script
+    -- 2020-09-22 -> Andrew Sampson -> Updated to use Entity\Attribute\Detail structure
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -40,8 +41,7 @@ BEGIN
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        ForecastAgent,
-        ForecastAgentDescription
+        ForecastAgentGUID
     FROM 
         [DemandForecast].[ForecastAgent] 
     WHERE 

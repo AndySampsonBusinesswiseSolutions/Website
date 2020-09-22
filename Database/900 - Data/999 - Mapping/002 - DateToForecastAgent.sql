@@ -5870,7 +5870,7 @@ SELECT
 	@CreatedByUserId,
 	@SourceId,
 	[Date].DateId,
-	[ForecastAgent].ForecastAgentId,
+	[ForecastAgentDetail].ForecastAgentId,
 	[Mapping].Priority
 FROM
 	@Mapping Mapping
@@ -5878,12 +5878,12 @@ LEFT OUTER JOIN
 	[Information].[Date]
 	ON [Date].DateDescription = [Mapping].DateDescription
 LEFT OUTER JOIN
-	[DemandForecast].[ForecastAgent]
-	ON [ForecastAgent].ForecastAgent = [Mapping].ForecastAgent
+	[DemandForecast].[ForecastAgentDetail]
+	ON [ForecastAgentDetail].ForecastAgentDetailDescription = [Mapping].ForecastAgent
 LEFT OUTER JOIN
 	[Mapping].[DateToForecastAgent]
 	ON [DateToForecastAgent].DateId = [Date].DateId
-	AND [DateToForecastAgent].ForecastAgentId = [ForecastAgent].ForecastAgentId
+	AND [DateToForecastAgent].ForecastAgentId = [ForecastAgentDetail].ForecastAgentId
 	AND [DateToForecastAgent].Priority = [Mapping].Priority
 WHERE
 	[DateToForecastAgent].DateToForecastAgentId IS NULL

@@ -21,37 +21,30 @@ GO
 ALTER PROCEDURE [DemandForecast].[ForecastAgent_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @ForecastAgent VARCHAR(255),
-    @ForecastAgentDescription VARCHAR(255)
+    @ForecastAgentGUID UNIQUEIDENTIFIER
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-06-25 -> Andrew Sampson -> Initial development of script
+    -- 2020-09-22 -> Andrew Sampson -> Updated to use Entity\Attribute\Detail structure
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [DemandForecast].[ForecastAgent] WHERE ForecastAgent = @ForecastAgent
-        AND ForecastAgentDescription = @ForecastAgentDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [DemandForecast].[ForecastAgent]
-            (
-                CreatedByUserId,
-                SourceId,
-                ForecastAgent,
-                ForecastAgentDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ForecastAgent,
-                @ForecastAgentDescription
-            )
-        END
+    INSERT INTO [DemandForecast].[ForecastAgent]
+    (
+        CreatedByUserId,
+        SourceId,
+        ForecastAgentGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ForecastAgentGUID
+    )
 END
 GO

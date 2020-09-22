@@ -159,6 +159,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetGenericProfile.api", "De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateForecastUsage.api", "DemandForecast\CreateForecastUsage.api\CreateForecastUsage.api.csproj", "{F0664F98-0EE6-413B-9FD1-0D05226EC3DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetMappedUsageDateId.api", "DemandForecast\GetMappedUsageDateId.api\GetMappedUsageDateId.api.csproj", "{63E8743A-5189-40EC-83CB-38D50EDB4C6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1120,8 +1122,22 @@ Global
         {F0664F98-0EE6-413B-9FD1-0D05226EC3DB}.Release|x64.Build.0 = Release|Any CPU
         {F0664F98-0EE6-413B-9FD1-0D05226EC3DB}.Release|x86.ActiveCfg = Release|Any CPU
         {F0664F98-0EE6-413B-9FD1-0D05226EC3DB}.Release|x86.Build.0 = Release|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Debug|x64.Build.0 = Debug|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Debug|x86.Build.0 = Debug|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Release|Any CPU.Build.0 = Release|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Release|x64.ActiveCfg = Release|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Release|x64.Build.0 = Release|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Release|x86.ActiveCfg = Release|Any CPU
+        {63E8743A-5189-40EC-83CB-38D50EDB4C6D}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 

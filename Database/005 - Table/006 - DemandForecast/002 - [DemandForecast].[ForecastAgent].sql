@@ -19,8 +19,7 @@ CREATE TABLE [DemandForecast].[ForecastAgent]
 	CreatedDateTime DATETIME NOT NULL,
 	CreatedByUserId BIGINT NOT NULL,
 	SourceId BIGINT NOT NULL,
-	ForecastAgent VARCHAR(250) NOT NULL,
-	ForecastAgentDescription VARCHAR(250) NOT NULL
+	ForecastAgentGUID UNIQUEIDENTIFIER NOT NULL
 	)  ON [DemandForecast]
 GO
 ALTER TABLE [DemandForecast].[ForecastAgent] ADD CONSTRAINT

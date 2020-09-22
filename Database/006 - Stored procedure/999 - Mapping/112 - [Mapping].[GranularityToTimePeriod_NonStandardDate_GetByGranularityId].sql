@@ -6,9 +6,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[GranularityToTimePeriod_NonStandardDate_GetByGranularity]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[GranularityToTimePeriod_NonStandardDate_GetByGranularityId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[GranularityToTimePeriod_NonStandardDate_GetByGranularity] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[GranularityToTimePeriod_NonStandardDate_GetByGranularityId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
@@ -18,7 +18,7 @@ GO
 -- Description:	Get GranularityToTimePeriod_NonStandardDate info from [Mapping].[GranularityToTimePeriod_NonStandardDate] table by GranularityId Id
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[GranularityToTimePeriod_NonStandardDate_GetByGranularity]
+ALTER PROCEDURE [Mapping].[GranularityToTimePeriod_NonStandardDate_GetByGranularityId]
     @GranularityId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS
