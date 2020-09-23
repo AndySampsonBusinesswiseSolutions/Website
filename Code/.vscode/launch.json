@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/MapFutureDateIdToUsageDateIdByYearByForecastGroup.api/bin/Debug/netcoreapp3.1/MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DemandForecast/MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/MapFutureDateIdToUsageDateIdByYearByForecastGroup.api/Views"
+            }
+        },
         {"name": "MapFutureDateIdToUsageDateIdByForecastGroupByYear.api",
             "type": "coreclr",
             "request": "launch",
@@ -1672,6 +1693,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
                 "MapFutureDateIdToUsageDateIdByForecastGroupByYear.api",
                 "MapFutureDateIdToUsageDateIdByDate.api",
                 "MapFutureDateIdToUsageDateId.api",
@@ -1795,6 +1817,7 @@
         },
         {"name": "Demand Forecast",
             "configurations": [
+                "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
                 "MapFutureDateIdToUsageDateIdByForecastGroupByYear.api",
                 "MapFutureDateIdToUsageDateIdByDate.api",
                 "MapFutureDateIdToUsageDateId.api",
@@ -1874,6 +1897,7 @@
         }
     ]
 }
+
 
 
 

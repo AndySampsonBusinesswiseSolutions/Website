@@ -167,6 +167,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFutureDateIdToUsageDateI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFutureDateIdToUsageDateIdByForecastGroupByYear.api", "DemandForecast\MapFutureDateIdToUsageDateIdByForecastGroupByYear.api\MapFutureDateIdToUsageDateIdByForecastGroupByYear.api.csproj", "{1668161B-7E7F-41D5-9251-F04E25004FD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api", "DemandForecast\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj", "{5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1176,8 +1178,22 @@ Global
         {1668161B-7E7F-41D5-9251-F04E25004FD7}.Release|x64.Build.0 = Release|Any CPU
         {1668161B-7E7F-41D5-9251-F04E25004FD7}.Release|x86.ActiveCfg = Release|Any CPU
         {1668161B-7E7F-41D5-9251-F04E25004FD7}.Release|x86.Build.0 = Release|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Debug|x64.Build.0 = Debug|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Debug|x86.Build.0 = Debug|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Release|Any CPU.Build.0 = Release|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Release|x64.ActiveCfg = Release|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Release|x64.Build.0 = Release|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Release|x86.ActiveCfg = Release|Any CPU
+        {5DF6C2B8-AE10-4879-9ECD-D83F7EE92604}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 
