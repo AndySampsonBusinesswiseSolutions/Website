@@ -8,6 +8,7 @@ namespace enums
             {
                 public class GUID
                 {
+                    public string MapFutureDateIdToUsageDateIdByForecastGroupByYearAPI = "1668161B-7E7F-41D5-9251-F04E25004FD7";
                     public string MapFutureDateIdToUsageDateIdByDateAPI = "58097D6B-1751-4FEC-9630-0308792958AB";
                     public string MapFutureDateIdToUsageDateIdAPI = "D8077A01-3F88-499C-AB65-1019213EA59B";
                     public string GetMappedUsageDateIdAPI = "63E8743A-5189-40EC-83CB-38D50EDB4C6D";
