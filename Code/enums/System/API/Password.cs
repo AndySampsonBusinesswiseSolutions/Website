@@ -9,6 +9,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string MapFutureDateIdToUsageDateIdByDateAPI = "jNDWrGha9gGs4Z5B";
                     public string MapFutureDateIdToUsageDateIdAPI = "x3pnwJjw9YfgEtFr";
                     public string GetMappedUsageDateIdAPI = "exW3hgGLhw8P3Gka";
                     public string CreateForecastUsageAPI = "uN9pHEnxyfsKxSVJ";

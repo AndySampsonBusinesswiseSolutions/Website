@@ -163,6 +163,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetMappedUsageDateId.api", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFutureDateIdToUsageDateId.api", "DemandForecast\MapFutureDateIdToUsageDateId.api\MapFutureDateIdToUsageDateId.api.csproj", "{D8077A01-3F88-499C-AB65-1019213EA59B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapFutureDateIdToUsageDateIdByDate.api", "DemandForecast\MapFutureDateIdToUsageDateIdByDate.api\MapFutureDateIdToUsageDateIdByDate.api.csproj", "{58097D6B-1751-4FEC-9630-0308792958AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1148,8 +1150,22 @@ Global
         {D8077A01-3F88-499C-AB65-1019213EA59B}.Release|x64.Build.0 = Release|Any CPU
         {D8077A01-3F88-499C-AB65-1019213EA59B}.Release|x86.ActiveCfg = Release|Any CPU
         {D8077A01-3F88-499C-AB65-1019213EA59B}.Release|x86.Build.0 = Release|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Debug|x64.Build.0 = Debug|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Debug|x86.Build.0 = Debug|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Release|Any CPU.Build.0 = Release|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Release|x64.ActiveCfg = Release|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Release|x64.Build.0 = Release|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Release|x86.ActiveCfg = Release|Any CPU
+        {58097D6B-1751-4FEC-9630-0308792958AB}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 

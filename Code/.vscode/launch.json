@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "MapFutureDateIdToUsageDateIdByDate.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/MapFutureDateIdToUsageDateIdByDate.api/bin/Debug/netcoreapp3.1/MapFutureDateIdToUsageDateIdByDate.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/DemandForecast/MapFutureDateIdToUsageDateIdByDate.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/MapFutureDateIdToUsageDateIdByDate.api/Views"
+            }
+        },
         {"name": "MapFutureDateIdToUsageDateId.api",
             "type": "coreclr",
             "request": "launch",
@@ -1630,6 +1651,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "MapFutureDateIdToUsageDateIdByDate.api",
                 "MapFutureDateIdToUsageDateId.api",
                 "GetMappedUsageDateId.api",
                 "CreateForecastUsage.api",
@@ -1751,6 +1773,7 @@
         },
         {"name": "Demand Forecast",
             "configurations": [
+                "MapFutureDateIdToUsageDateIdByDate.api",
                 "MapFutureDateIdToUsageDateId.api",
                 "GetMappedUsageDateId.api",
                 "CreateForecastUsage.api",
@@ -1828,6 +1851,7 @@
         }
     ]
 }
+
 
 
 
