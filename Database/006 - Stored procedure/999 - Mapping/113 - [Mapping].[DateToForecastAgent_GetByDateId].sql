@@ -6,19 +6,20 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[DateToForecastAgent_GetList]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[DateToForecastAgent_GetByDateId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[DateToForecastAgent_GetList] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[DateToForecastAgent_GetByDateId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-09-19
--- Description:	Get DateToForecastAgent info from [Mapping].[DateToForecastAgent] table by Priority
+-- Description:	Get DateToForecastAgent info from [Mapping].[DateToForecastAgent] table by Date Id
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[DateToForecastAgent_GetList]
+ALTER PROCEDURE [Mapping].[DateToForecastAgent_GetByDateId]
+    @DateId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
@@ -46,6 +47,7 @@ BEGIN
     FROM 
         [Mapping].[DateToForecastAgent]
     WHERE
-        @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
+        DateId = @DateId
+        AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

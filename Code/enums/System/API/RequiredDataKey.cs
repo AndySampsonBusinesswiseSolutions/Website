@@ -33,6 +33,9 @@ namespace enums
                     public string Granularity = "Granularity";
                     public string UsageType = "UsageType";
                     public string SubMeterIdentifier = "SubMeterIdentifier";
+                    public string FutureDateId = "FutureDateId";
+                    public string EarliestUsageDate = "EarliestUsageDate";
+                    public string LatestUsageDate = "LatestUsageDate";
                 }
             }
         }

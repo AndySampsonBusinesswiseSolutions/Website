@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "C:\\wamp64\\www\\Website\\Code\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj": {}
+    "C:\\wamp64\\www\\Website\\Code\\DemandForecast\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj": {}
   },
   "projects": {
     "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\databaseInteraction.csproj": {
@@ -17,14 +17,12 @@
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -78,6 +76,75 @@
         }
       }
     },
+    "C:\\wamp64\\www\\Website\\Code\\DemandForecast\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\DemandForecast\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj",
+        "projectName": "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
+        "projectPath": "C:\\wamp64\\www\\Website\\Code\\DemandForecast\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj",
+        "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
+        "outputPath": "C:\\wamp64\\www\\Website\\Code\\DemandForecast\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "projectReferences": {
+              "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj": {
+                "projectPath": "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj"
+              },
+              "C:\\wamp64\\www\\Website\\Code\\MethodLibrary\\MethodLibrary.csproj": {
+                "projectPath": "C:\\wamp64\\www\\Website\\Code\\MethodLibrary\\MethodLibrary.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -91,14 +158,12 @@
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -165,14 +230,12 @@
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -220,77 +283,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\wamp64\\www\\Website\\Code\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\wamp64\\www\\Website\\Code\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj",
-        "projectName": "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
-        "projectPath": "C:\\wamp64\\www\\Website\\Code\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api.csproj",
-        "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
-        "outputPath": "C:\\wamp64\\www\\Website\\Code\\MapFutureDateIdToUsageDateIdByYearByForecastGroup.api\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netcoreapp3.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netcoreapp3.1": {
-            "projectReferences": {
-              "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj": {
-                "projectPath": "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj"
-              },
-              "C:\\wamp64\\www\\Website\\Code\\MethodLibrary\\MethodLibrary.csproj": {
-                "projectPath": "C:\\wamp64\\www\\Website\\Code\\MethodLibrary\\MethodLibrary.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netcoreapp3.1": {
-          "dependencies": {
-            "Newtonsoft.Json": {
-              "target": "Package",
-              "version": "[12.0.3, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }

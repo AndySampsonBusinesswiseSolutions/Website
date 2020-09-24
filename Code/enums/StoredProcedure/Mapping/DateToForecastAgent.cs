@@ -6,7 +6,7 @@ namespace enums
         {
             public partial class Mapping
             {
-                public string DateToForecastAgent_GetList = "[Mapping].[DateToForecastAgent_GetList]";
+                public string DateToForecastAgent_GetByDateId = "[Mapping].[DateToForecastAgent_GetByDateId]";
             }
         }
     }

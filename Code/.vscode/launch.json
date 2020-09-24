@@ -1894,7 +1894,17 @@
                 "ValidateFlexTradeData.api",
                 "ValidateCrossSheetEntityData.api",
             ]
-        }
+        },
+        {"name": "Demand Forecast Date Mapping",
+            "configurations": [
+                "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api",
+                "MapFutureDateIdToUsageDateIdByForecastGroupByYear.api",
+                "MapFutureDateIdToUsageDateIdByDate.api",
+                "MapFutureDateIdToUsageDateId.api",
+                "GetMappedUsageDateId.api",
+                "CreateForecastUsage.api",
+            ]
+        },
     ]
 }
 

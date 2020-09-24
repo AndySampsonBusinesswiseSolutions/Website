@@ -10,6 +10,8 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace GetMappedUsageDateId.api.Controllers
 {
@@ -100,38 +102,47 @@ namespace GetMappedUsageDateId.api.Controllers
                 earliestUsageDate = loadedUsageDateDictionary.Min(d => Convert.ToDateTime(d.Key));
                 latestUsageDate = loadedUsageDateDictionary.Max(d => Convert.ToDateTime(d.Key));
 
-                //Get DateToForecastAgent
-                var dateToForecastAgentDictionary = _mappingMethods.DateToForecastAgent_GetDateForecastAgentDictionary();
-
                 //Get DateToForecastGroup
                 dateToForecastGroupDictionary = _mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionary();
                 var futureDateToForecastGroupDictionary = dateToForecastGroupDictionary.Where(d => futureDateIds.Contains(d.Key))
                     .ToDictionary(d => d.Key, d => d.Value);
 
-                //Get ForecastAgents
-                var forecastAgentDictionary = _demandForecastMethods.GetForecastAgentDictionary();
-
                 //Get Future Date mappings
                 var futureDateToUsageDateDictionary = new ConcurrentDictionary<long, long>(futureDateToForecastGroupDictionary.ToDictionary(f => f.Key, f => new long()));
-                foreach(var futureDateToForecastGroup in futureDateToForecastGroupDictionary.Take(1))
-                {
-                    var forecastAgentList = dateToForecastAgentDictionary[futureDateToForecastGroup.Key]
-                        .OrderBy(a => a.Value)
-                        .Select(a => forecastAgentDictionary[a.Key]);
 
-                    var usageDateId = 0L;
-                    foreach(var forecastAgent in forecastAgentList)
+                //Clone jsonObject
+                var newJsonObject = (JObject)jsonObject.DeepClone();
+
+                //Add Future Date Id to newJsonObject
+                newJsonObject.Add(_systemAPIRequiredDataKeyEnums.FutureDateId, 0);
+
+                //Add Earliest and Latest Usage Date to newJsonObject
+                newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EarliestUsageDate, earliestUsageDate);
+                newJsonObject.Add(_systemAPIRequiredDataKeyEnums.LatestUsageDate, latestUsageDate);
+
+                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.MapFutureDateIdToUsageDateIdAPI);
+                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
+
+                Parallel.ForEach(futureDateToForecastGroupDictionary, parallelOptions, futureDateToForecastGroup => {
+                    //Clone jsonObject
+                    var APIJsonObject = (JObject)newJsonObject.DeepClone();
+
+                    APIJsonObject[_systemAPIRequiredDataKeyEnums.FutureDateId] = futureDateToForecastGroup.Key;
+
+                    //Call MapFutureDateIdToUsageDateId.api
+                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetMappedUsageDateIdAPI, APIJsonObject);
+                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.ToString().Replace("\"", string.Empty);
+
+                    if(!string.IsNullOrWhiteSpace(result))
                     {
-                        usageDateId = GetMappedUsageDateId(forecastAgent, futureDateToForecastGroup);
+                        var futureDateId = Convert.ToInt64(result.Split(',')[0]);
+                        var usageDateId = Convert.ToInt64(result.Split(',')[1]);
 
-                        if(usageDateId > 0)
-                        {
-                            break;
-                        }
+                        futureDateToUsageDateDictionary[futureDateId] = usageDateId;
                     }
+                });
 
-                    futureDateToUsageDateDictionary[futureDateToForecastGroup.Key] = usageDateId;
-                }
+                
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, false, null);
@@ -148,110 +159,5 @@ namespace GetMappedUsageDateId.api.Controllers
                 return string.Empty;
             }
         }
-
-        private long GetMappedUsageDateId(string forecastAgent, KeyValuePair<long, Dictionary<long, int>> futureDateToForecastGroup)
-        {
-            var futureDate = Convert.ToDateTime(dateDictionary.First(d => d.Value == futureDateToForecastGroup.Key).Key);
-
-            switch(forecastAgent)
-            {
-                case "Date":
-                    return GetMappedUsageDateIdByDate(futureDate);
-                case "ByForecastGroupByYear":
-                    return GetMappedUsageDateIdByForecastGroupByYear(futureDateToForecastGroup.Value);
-                case "ByYearByForecastGroup":
-                    return GetMappedUsageDateIdByYearByForecastGroup(futureDateToForecastGroup.Value);
-                default:
-                    return 0L;
-            }
-        }
-
-        private long GetMappedUsageDateIdByDate(DateTime futureDate)
-        {
-            //Maps directly against date from previous years
-            var usageDateToFind = futureDate.AddYears(-1);
-
-            while(usageDateToFind >= earliestUsageDate)
-            {
-                var usageDateId = loadedUsageDateDictionary.FirstOrDefault(d => Convert.ToDateTime(d.Key) == usageDateToFind).Value;
-
-                if(usageDateId > 0)
-                {
-                    return usageDateId;
-                }
-
-                usageDateToFind = usageDateToFind.AddYears(-1);
-            }
-
-            return 0;
-        }
-
-        private long GetMappedUsageDateIdByForecastGroupByYear(Dictionary<long, int> forecastGroups)
-        {
-            //Tries to map against any ForecastGroup on a historical year before moving to next historical year
-            var latestHistoricalDate = new DateTime(latestUsageDate.Year, latestUsageDate.Month, latestUsageDate.Day);
-            
-            while(latestHistoricalDate >= earliestUsageDate)
-            {
-                var earliestHistoricalDate = latestHistoricalDate.AddYears(-1).AddDays(1);
-                var historicalUsageDateIds = loadedUsageDateDictionary
-                    .Where(d => Convert.ToDateTime(d.Key) >= earliestHistoricalDate && Convert.ToDateTime(d.Key) <= latestHistoricalDate)
-                    .Select(d => d.Value);
-                var historicalDateToForecastGroupDictionary = dateToForecastGroupDictionary.Where(d => historicalUsageDateIds.Contains(d.Key))
-                    .ToDictionary(d => d.Key, d => d.Value);
-
-                foreach(var forecastGroupId in forecastGroups.OrderBy(fg => fg.Value).Select(fg => fg.Key))
-                {
-                    var mappedDateIds = historicalDateToForecastGroupDictionary
-                        .Where(d => d.Value.ContainsKey(forecastGroupId))
-                        .Select(d => d.Key).ToList();
-
-                    if(mappedDateIds.Any())
-                    {
-                        var latestMappedDate = loadedUsageDateDictionary.Where(d => mappedDateIds.Contains(d.Value))
-                            .Max(d => Convert.ToDateTime(d.Key));
-                        return loadedUsageDateDictionary.First(d => Convert.ToDateTime(d.Key) == latestMappedDate).Value;
-                    }
-                }
-
-                latestHistoricalDate = earliestHistoricalDate.AddDays(-1);
-            }
-
-            return 0L;
-        }
-
-        private long GetMappedUsageDateIdByYearByForecastGroup(Dictionary<long, int> forecastGroups)
-        {
-            //Tries to map against any historical year on a ForecastGroup before moving to next ForecastGroup
-            foreach(var forecastGroupId in forecastGroups.OrderBy(fg => fg.Value).Select(fg => fg.Key))
-            {
-                var latestHistoricalDate = new DateTime(latestUsageDate.Year, latestUsageDate.Month, latestUsageDate.Day);
-            
-                while(latestHistoricalDate >= earliestUsageDate)
-                {
-                    var earliestHistoricalDate = latestHistoricalDate.AddYears(-1).AddDays(1);
-                    var historicalUsageDateIds = loadedUsageDateDictionary
-                        .Where(d => Convert.ToDateTime(d.Key) >= earliestHistoricalDate && Convert.ToDateTime(d.Key) <= latestHistoricalDate)
-                        .Select(d => d.Value);
-                    
-                    var mappedDateIds = dateToForecastGroupDictionary.Where(d => historicalUsageDateIds.Contains(d.Key))
-                        .Where(d => d.Value.ContainsKey(forecastGroupId))
-                        .Select(d => d.Key);
-
-                    if(mappedDateIds.Any())
-                    {
-                        var latestMappedDate = dateDictionary.Where(d => mappedDateIds.Contains(d.Value))
-                            .Max(d => Convert.ToDateTime(d.Key));
-                        return dateDictionary.First(d => Convert.ToDateTime(d.Key) == latestMappedDate).Value;
-                    }
-
-                    latestHistoricalDate = earliestHistoricalDate.AddDays(-1);
-                }
-            }
-
-            return 0L;
-        }
-
     }
 }
-
