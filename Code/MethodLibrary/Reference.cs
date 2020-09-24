@@ -96,6 +96,12 @@ namespace MethodLibrary
             _databaseInteraction.ExecuteSQL(SQL);
         }
 
+        private static void ExecuteScript(string script)
+        {
+            //Run SQL
+            _databaseInteraction.ExecuteScript(script);
+        }
+
         private static string ConvertParameterName(string parameterName)
         {
             return char.ToUpper(parameterName[0]) + parameterName.Substring(1);

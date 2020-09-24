@@ -12,12 +12,15 @@ DECLARE @ForecastUsageLatestInsertStoredProcedureSQLGranularityAttributeId BIGIN
 DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '8FD4C63A-84D5-4A03-B488-1A99C2331726')
 
 DECLARE @SQL NVARCHAR(MAX) = N'
+    USE [EMaaS]
+
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
     IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageWeekHistory_Insert]''))
     BEGIN
         EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageWeekHistory_Insert] AS BEGIN SET NOCOUNT ON; END'')
     END
+    GO
 
 	-- =============================================
     -- Author:		System Generated
@@ -25,7 +28,7 @@ DECLARE @SQL NVARCHAR(MAX) = N'
     -- Description:	Insert usage into [Supply.X].[ForecastUsageWeekHistory] table
     -- =============================================
 
-    CREATE PROCEDURE [Supply.X].[ForecastUsageWeekHistory_Insert]
+    ALTER PROCEDURE [Supply.X].[ForecastUsageWeekHistory_Insert]
         @CreatedByUserId BIGINT,
         @SourceId BIGINT,
 		@WeekId BIGINT,
@@ -63,12 +66,15 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryInsertStoredProcedureSQLGranularityAttributeId, @SQL
 
 SET @SQL = N'
+    USE [EMaaS]
+
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
     IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageWeekLatest_Insert]''))
     BEGIN
         EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageWeekLatest_Insert] AS BEGIN SET NOCOUNT ON; END'')
     END
+    GO
 
 	-- =============================================
     -- Author:		System Generated
@@ -76,7 +82,7 @@ SET @SQL = N'
     -- Description:	Insert usage into [Supply.X].[ForecastUsageWeekLatest] table
     -- =============================================
 
-    CREATE PROCEDURE [Supply.X].[ForecastUsageWeekLatest_Insert]
+    ALTER PROCEDURE [Supply.X].[ForecastUsageWeekLatest_Insert]
 		@WeekId BIGINT,
         @YearId BIGINT,
         @Usage DECIMAL(18,10)

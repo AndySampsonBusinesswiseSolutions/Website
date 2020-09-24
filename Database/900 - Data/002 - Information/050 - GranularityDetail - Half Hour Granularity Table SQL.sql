@@ -1,5 +1,4 @@
 USE [EMaaS]
-GO
 
 DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[User] WHERE UserGUID = '743E21EE-2185-45D4-9003-E35060B751E2')
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
@@ -12,6 +11,8 @@ DECLARE @ForecastUsageLatestTableSQLGranularityAttributeId BIGINT = (SELECT Gran
 DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = 'CEA433FB-5327-4747-95CB-0FEFD1D2AD6B')
 
 DECLARE @SQL NVARCHAR(MAX) = N'
+USE [EMaaS]
+
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 
@@ -31,11 +32,11 @@ CREATE TABLE [Supply.X].[ForecastUsageHalfHourHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [Supply]
 ) ON [Supply]
 
-ALTER TABLE [Supply.X].[ForecastUsageHalfHourHistory] ADD  CONSTRAINT [DF_ForecastUsageHalfHourHistory_EffectiveFromDateTime]  DEFAULT (getutcdate()) FOR [EffectiveFromDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageHalfHourHistory] ADD  CONSTRAINT [DF_ForecastUsageHalfHourHistory_EffectiveFromDateTime]  DEFAULT (GETUTCDATE()) FOR [EffectiveFromDateTime]
 
 ALTER TABLE [Supply.X].[ForecastUsageHalfHourHistory] ADD  CONSTRAINT [DF_ForecastUsageHalfHourHistory_EffectiveToDateTime]  DEFAULT (''9999-12-31'') FOR [EffectiveToDateTime]
 
-ALTER TABLE [Supply.X].[ForecastUsageHalfHourHistory] ADD  CONSTRAINT [DF_ForecastUsageHalfHourHistory_CreatedDateTime]  DEFAULT (getutcdate()) FOR [CreatedDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageHalfHourHistory] ADD  CONSTRAINT [DF_ForecastUsageHalfHourHistory_CreatedDateTime]  DEFAULT (GETUTCDATE()) FOR [CreatedDateTime]
 
 ALTER TABLE [Supply.X].[ForecastUsageHalfHourHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageHalfHourHistory_CreatedByUserId] FOREIGN KEY([CreatedByUserId])
 REFERENCES [Administration.User].[User] ([UserId])
@@ -66,6 +67,8 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryTableSQLGranularityAttributeId, @SQL
 
 SET @SQL = N'
+USE [EMaaS]
+
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 

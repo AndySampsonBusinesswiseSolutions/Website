@@ -11,6 +11,8 @@ DECLARE @ForecastUsageLatestTableSQLGranularityAttributeId BIGINT = (SELECT Gran
 DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '4D55BB09-9F8F-4AB6-917E-23B1D09E71AD')
 
 DECLARE @SQL NVARCHAR(MAX) = N'
+USE [EMaaS]
+
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 
@@ -30,11 +32,11 @@ CREATE TABLE [Supply.X].[ForecastUsageFiveMinuteHistory](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [Supply]
 ) ON [Supply]
 
-ALTER TABLE [Supply.X].[ForecastUsageFiveMinuteHistory] ADD  CONSTRAINT [DF_ForecastUsageFiveMinuteHistory_EffectiveFromDateTime]  DEFAULT (getutcdate()) FOR [EffectiveFromDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageFiveMinuteHistory] ADD  CONSTRAINT [DF_ForecastUsageFiveMinuteHistory_EffectiveFromDateTime]  DEFAULT (GETUTCDATE()) FOR [EffectiveFromDateTime]
 
 ALTER TABLE [Supply.X].[ForecastUsageFiveMinuteHistory] ADD  CONSTRAINT [DF_ForecastUsageFiveMinuteHistory_EffectiveToDateTime]  DEFAULT (''9999-12-31'') FOR [EffectiveToDateTime]
 
-ALTER TABLE [Supply.X].[ForecastUsageFiveMinuteHistory] ADD  CONSTRAINT [DF_ForecastUsageFiveMinuteHistory_CreatedDateTime]  DEFAULT (getutcdate()) FOR [CreatedDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageFiveMinuteHistory] ADD  CONSTRAINT [DF_ForecastUsageFiveMinuteHistory_CreatedDateTime]  DEFAULT (GETUTCDATE()) FOR [CreatedDateTime]
 
 ALTER TABLE [Supply.X].[ForecastUsageFiveMinuteHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageFiveMinuteHistory_CreatedByUserId] FOREIGN KEY([CreatedByUserId])
 REFERENCES [Administration.User].[User] ([UserId])
@@ -65,6 +67,8 @@ EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryTableSQLGranularityAttributeId, @SQL
 
 SET @SQL = N'
+USE [EMaaS]
+
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 

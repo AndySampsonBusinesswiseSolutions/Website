@@ -12,12 +12,15 @@ DECLARE @ForecastUsageLatestDeleteStoredProcedureSQLGranularityAttributeId BIGIN
 DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '3799717D-303B-458F-8A38-5DFA934ED431')
 
 DECLARE @SQL NVARCHAR(MAX) = N'
+    USE [EMaaS]
+
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
     IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageYearHistory_Delete]''))
     BEGIN
         EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageYearHistory_Delete] AS BEGIN SET NOCOUNT ON; END'')
     END
+    GO
 
 	-- =============================================
     -- Author:		System Generated
@@ -50,12 +53,15 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryDeleteStoredProcedureSQLGranularityAttributeId, @SQL
 
 SET @SQL = N'
+    USE [EMaaS]
+
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
     IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageYearLatest_Delete]''))
     BEGIN
         EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageYearLatest_Delete] AS BEGIN SET NOCOUNT ON; END'')
     END
+    GO
 
 	-- =============================================
     -- Author:		System Generated

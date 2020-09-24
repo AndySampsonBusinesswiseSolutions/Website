@@ -44,7 +44,7 @@ namespace MethodLibrary
                 var SQL = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityAttributeId);
                 SQL = SQL.Replace("Supply.X", $"Supply.{meterType}{meterId}");
 
-                ExecuteSQL(SQL);
+                ExecuteScript(SQL);
             }
 
             public void GrantExecuteToStoredProcedures(List<string> storedProcedureList, long granularityId, string meterType, long meterId)

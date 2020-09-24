@@ -2,6 +2,8 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
 
 namespace databaseInteraction
 {
@@ -112,6 +114,14 @@ namespace databaseInteraction
                     CloseConnection(sqlConnection);
                 }
             }
+        }
+
+        public void ExecuteScript(string script)
+        {
+            var serverConnection = new ServerConnection("BWS-W10-L24", userName, password);
+            serverConnection.ConnectTimeout = 0;
+            var server = new Server(serverConnection);
+            server.ConnectionContext.ExecuteNonQuery(script);
         }
     }
 }

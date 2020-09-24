@@ -27,22 +27,22 @@ namespace MethodLibrary
 
             private void ForecastUsageGranularityLatest_CreateTable(long meterId, long granularityId, string meterType)
             {
-                _supplyMethods.CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestTableSQL, meterType, meterId);
+                CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestTableSQL, meterType, meterId);
             }
 
             private void ForecastUsageGranularityLatest_CreateDeleteStoredProcedure(long meterId, long granularityId, string meterType)
             {
-                _supplyMethods.CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestDeleteStoredProcedureSQL, meterType, meterId);
+                CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestDeleteStoredProcedureSQL, meterType, meterId);
             }
 
             private void ForecastUsageGranularityLatest_CreateInsertStoredProcedure(long meterId, long granularityId, string meterType)
             {
-                _supplyMethods.CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestInsertStoredProcedureSQL, meterType, meterId);
+                CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestInsertStoredProcedureSQL, meterType, meterId);
             }
 
             private void ForecastUsageGranularityLatest_GrantExecuteToStoredProcedures(long meterId, long granularityId, string meterType)
             {
-                _supplyMethods.GrantExecuteToStoredProcedures(_storedProcedureSupplyEnums.ForecastUsageGranularityLatestStoredProcedureList, granularityId, meterType, meterId);
+                GrantExecuteToStoredProcedures(_storedProcedureSupplyEnums.ForecastUsageGranularityLatestStoredProcedureList, granularityId, meterType, meterId);
             }
         }
     }
