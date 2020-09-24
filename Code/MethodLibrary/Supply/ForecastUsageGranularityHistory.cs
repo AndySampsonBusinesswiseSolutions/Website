@@ -1,5 +1,5 @@
-using System.Reflection;
 using System.Collections.Generic;
+using enums;
 
 namespace MethodLibrary
 {
@@ -7,57 +7,45 @@ namespace MethodLibrary
     {
         public partial class Supply
         {
-            private void CreateForecastUsageGranularityHistoryEntities(IEnumerable<string> granularityCodeList, long schemaId, long meterId, string meterType)
+            private readonly Methods.Supply _supplyMethods = new Methods.Supply();
+            private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+
+            private void CreateForecastUsageGranularityHistoryEntities(IEnumerable<long> granularityIdList, long schemaId, long meterId, string meterType)
             {
-                foreach(var granularityCode in granularityCodeList)
+                foreach(var granularityId in granularityIdList)
                 {
-                    var tableName = $"ForecastUsage{granularityCode}History";
+                    var tableName = SupplyForecastUsageTableName(granularityId, "History");
                     var tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
 
                     if(tableId == 0)
                     {
-                        ForecastUsageGranularityHistory_CreateTable(meterId, granularityCode, meterType);
+                        ForecastUsageGranularityHistory_CreateTable(meterId, granularityId, meterType);
                     }
 
-                    ForecastUsageGranularityHistory_CreateDeleteStoredProcedure(meterId, granularityCode, meterType);
-                    ForecastUsageGranularityHistory_CreateInsertStoredProcedure(meterId, granularityCode, meterType);
-                    ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(meterId, granularityCode, meterType);
+                    ForecastUsageGranularityHistory_CreateDeleteStoredProcedure(meterId, granularityId, meterType);
+                    ForecastUsageGranularityHistory_CreateInsertStoredProcedure(meterId, granularityId, meterType);
+                    ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(meterId, granularityId, meterType);
                 }
             }
 
-            private void ForecastUsageGranularityHistory_CreateTable(long meterId, string granularityCode, string meterType)
+            private void ForecastUsageGranularityHistory_CreateTable(long meterId, long granularityId, string meterType)
             {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.ForecastUsageGranularityHistory_CreateTable, 
-                    meterId, granularityCode, meterType);
+                _supplyMethods.CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageHistoryTableSQL, meterType, meterId);
             }
 
-            private void ForecastUsageGranularityHistory_CreateDeleteStoredProcedure(long meterId, string granularityCode, string meterType)
+            private void ForecastUsageGranularityHistory_CreateDeleteStoredProcedure(long meterId, long granularityId, string meterType)
             {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.ForecastUsageGranularityHistory_CreateDeleteStoredProcedure, 
-                    meterId, granularityCode, meterType);
+                _supplyMethods.CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageHistoryDeleteStoredProcedureSQL, meterType, meterId);
             }
 
-            private void ForecastUsageGranularityHistory_CreateInsertStoredProcedure(long meterId, string granularityCode, string meterType)
+            private void ForecastUsageGranularityHistory_CreateInsertStoredProcedure(long meterId, long granularityId, string meterType)
             {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.ForecastUsageGranularityHistory_CreateInsertStoredProcedure, 
-                    meterId, granularityCode, meterType);
+                _supplyMethods.CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageHistoryInsertStoredProcedureSQL, meterType, meterId);
             }
 
-            private void ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(long meterId, string granularityCode, string meterType)
+            private void ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(long meterId, long granularityId, string meterType)
             {
-                foreach(var forecastUsageGranularityHistoryStoredProcedure in _storedProcedureSupplyEnums.ForecastUsageGranularityHistoryStoredProcedureList)
-                {
-                    var storedProcedure = string.Format(forecastUsageGranularityHistoryStoredProcedure, meterType, meterId, granularityCode);
-
-                    foreach(var api in _systemAPIRequireAccessToUsageEntitiesEnums.APIList)
-                    {
-                        var SQL = $"GRANT EXECUTE ON OBJECT::{storedProcedure} TO [{api}];";
-                        ExecuteSQL(SQL);
-                    }
-                }
+                _supplyMethods.GrantExecuteToStoredProcedures(_storedProcedureSupplyEnums.ForecastUsageGranularityHistoryStoredProcedureList, granularityId, meterType, meterId);
             }
         }
     }

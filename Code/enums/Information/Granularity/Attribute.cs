@@ -15,21 +15,13 @@ namespace enums
                     public string IsElectricityDefault = "Is Electricity Default";
                     public string IsGasDefault = "Is Gas Default";
 
-                    public string ForecastUsageFiveMinuteHistoryTableSQL = "Forecast Usage Five Minute History Table SQL";
-                    public string ForecastUsageHalfHourHistoryTableSQL = "Forecast Usage Half Hour History Table SQL";
-                    public string ForecastUsageDateHistoryTableSQL = "Forecast Usage Date History Table SQL";
-                    public string ForecastUsageWeekHistoryTableSQL = "Forecast Usage Week History Table SQL";
-                    public string ForecastUsageMonthHistoryTableSQL = "Forecast Usage Month History Table SQL";
-                    public string ForecastUsageQuarterHistoryTableSQL = "Forecast Usage Quarter History Table SQL";
-                    public string ForecastUsageYearHistoryTableSQL = "Forecast Usage Year History Table SQL";
-
-                    public string ForecastUsageFiveMinuteLatestTableSQL = "Forecast Usage Five Minute Latest Table SQL";
-                    public string ForecastUsageHalfHourLatestTableSQL = "Forecast Usage Half Hour Latest Table SQL";
-                    public string ForecastUsageDateLatestTableSQL = "Forecast Usage Date Latest Table SQL";
-                    public string ForecastUsageWeekLatestTableSQL = "Forecast Usage Week Latest Table SQL";
-                    public string ForecastUsageMonthLatestTableSQL = "Forecast Usage Month Latest Table SQL";
-                    public string ForecastUsageQuarterLatestTableSQL = "Forecast Usage Quarter Latest Table SQL";
-                    public string ForecastUsageYearLatestTableSQL = "Forecast Usage Year Latest Table SQL";
+                    public string ForecastUsageHistoryTableSQL = "Forecast Usage History Table SQL";
+                    public string ForecastUsageHistoryDeleteStoredProcedureSQL = "Forecast Usage History Delete Stored Procedure SQL";
+                    public string ForecastUsageHistoryInsertStoredProcedureSQL = "Forecast Usage History Insert Stored Procedure SQL";
+                    
+                    public string ForecastUsageLatestTableSQL = "Forecast Usage Latest Table SQL";
+                    public string ForecastUsageLatestDeleteStoredProcedureSQL = "Forecast Usage Latest Delete Stored Procedure SQL";
+                    public string ForecastUsageLatestInsertStoredProcedureSQL = "Forecast Usage Latest Insert Stored Procedure SQL";
                 }
             }
         }

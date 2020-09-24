@@ -13,6 +13,7 @@ namespace enums
                 public string GranularityDetail_Insert = "[Information].[GranularityDetail_Insert]";
                 public string GranularityDetail_GetByGranularityIdAndGranularityAttributeId = "[Information].[GranularityDetail_GetByGranularityIdAndGranularityAttributeId]";
                 public string GranularityDetail_GetByGranularityAttributeId = "[Information].[GranularityDetail_GetByGranularityAttributeId]";
+                public string Granularity_GetByList = "[Information].[Granularity_GetList]";
             }
         }
     }

@@ -87,6 +87,15 @@ namespace MethodLibrary
                     _storedProcedureInformationEnums.GranularityDetail_Insert, 
                     createdByUserId, sourceId, granularityId, granularityAttributeId, granularityDetailDescription);
             }
+
+            public IEnumerable<long> Granularity_GetGranularityIdList()
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.Granularity_GetByList);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GranularityId"));
+            }
         }
     }
 }
