@@ -16,8 +16,8 @@ USE [EMaaS]
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 
-CREATE TABLE [Supply.X].[ForecastUsageDateHistory](
-	[ForecastUsageDateHistoryId] [bigint] IDENTITY(1,1) NOT NULL,
+CREATE TABLE [Supply.X].[ForecastUsageYearHistory](
+	[ForecastUsageYearHistoryId] [bigint] IDENTITY(1,1) NOT NULL,
 	[EffectiveFromDateTime] [datetime] NOT NULL,
 	[EffectiveToDateTime] [datetime] NOT NULL,
 	[CreatedDateTime] [datetime] NOT NULL,
@@ -25,36 +25,36 @@ CREATE TABLE [Supply.X].[ForecastUsageDateHistory](
 	[SourceId] [bigint] NOT NULL,
     [YearId] [bigint] NOT NULL,
 	[Usage] [decimal](18, 10) NOT NULL
- CONSTRAINT [PK_ForecastUsageDateHistory] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_ForecastUsageYearHistory] PRIMARY KEY CLUSTERED 
 (
-	[ForecastUsageDateHistoryId] ASC
+	[ForecastUsageYearHistoryId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [Supply]
 ) ON [Supply]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory] ADD  CONSTRAINT [DF_ForecastUsageDateHistory_EffectiveFromDateTime]  DEFAULT (GETUTCDATE()) FOR [EffectiveFromDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory] ADD  CONSTRAINT [DF_ForecastUsageYearHistory_EffectiveFromDateTime]  DEFAULT (GETUTCDATE()) FOR [EffectiveFromDateTime]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory] ADD  CONSTRAINT [DF_ForecastUsageDateHistory_EffectiveToDateTime]  DEFAULT (''9999-12-31'') FOR [EffectiveToDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory] ADD  CONSTRAINT [DF_ForecastUsageYearHistory_EffectiveToDateTime]  DEFAULT (''9999-12-31'') FOR [EffectiveToDateTime]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory] ADD  CONSTRAINT [DF_ForecastUsageDateHistory_CreatedDateTime]  DEFAULT (GETUTCDATE()) FOR [CreatedDateTime]
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory] ADD  CONSTRAINT [DF_ForecastUsageYearHistory_CreatedDateTime]  DEFAULT (GETUTCDATE()) FOR [CreatedDateTime]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageDateHistory_CreatedByUserId] FOREIGN KEY([CreatedByUserId])
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageYearHistory_CreatedByUserId] FOREIGN KEY([CreatedByUserId])
 REFERENCES [Administration.User].[User] ([UserId])
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory] CHECK CONSTRAINT [FK_ForecastUsageDateHistory_CreatedByUserId]
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory] CHECK CONSTRAINT [FK_ForecastUsageYearHistory_CreatedByUserId]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageDateHistory_SourceId] FOREIGN KEY([SourceId])
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageYearHistory_SourceId] FOREIGN KEY([SourceId])
 REFERENCES [Information].[Source] ([SourceId])
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory] CHECK CONSTRAINT [FK_ForecastUsageDateHistory_SourceId]
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory] CHECK CONSTRAINT [FK_ForecastUsageYearHistory_SourceId]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageDateHistory_YearId] FOREIGN KEY([YearId])
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageYearHistory_YearId] FOREIGN KEY([YearId])
 REFERENCES [Information].[Year] ([YearId])
 
-ALTER TABLE [Supply.X].[ForecastUsageDateHistory] CHECK CONSTRAINT [FK_ForecastUsageDateHistory_YearId]
+ALTER TABLE [Supply.X].[ForecastUsageYearHistory] CHECK CONSTRAINT [FK_ForecastUsageYearHistory_YearId]
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageDateHistory].CreatedByUserId to [Administration.User].[User].UserId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageDateHistory'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageDateHistory_CreatedByUserId''
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageDateHistory].SourceId to [Information].[Source].SourceId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageDateHistory'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageDateHistory_SourceId''
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageDateHistory].YearId to [Information].[Year].YearId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageDateHistory'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageDateHistory_YearId''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageYearHistory].CreatedByUserId to [Administration.User].[User].UserId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageYearHistory'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageYearHistory_CreatedByUserId''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageYearHistory].SourceId to [Information].[Source].SourceId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageYearHistory'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageYearHistory_SourceId''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageYearHistory].YearId to [Information].[Year].YearId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageYearHistory'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageYearHistory_YearId''
 '
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryTableSQLGranularityAttributeId, @SQL
@@ -65,17 +65,17 @@ USE [EMaaS]
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 
-CREATE TABLE [Supply.X].[ForecastUsageDateLatest](
+CREATE TABLE [Supply.X].[ForecastUsageYearLatest](
     [YearId] [bigint] NOT NULL,
 	[Usage] [decimal](18, 10) NOT NULL
 ) ON [Supply]
 
-ALTER TABLE [Supply.X].[ForecastUsageDateLatest]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageDateLatest_YearId] FOREIGN KEY([YearId])
+ALTER TABLE [Supply.X].[ForecastUsageYearLatest]  WITH CHECK ADD  CONSTRAINT [FK_ForecastUsageYearLatest_YearId] FOREIGN KEY([YearId])
 REFERENCES [Information].[Year] ([YearId])
 
-ALTER TABLE [Supply.X].[ForecastUsageDateLatest] CHECK CONSTRAINT [FK_ForecastUsageDateLatest_YearId]
+ALTER TABLE [Supply.X].[ForecastUsageYearLatest] CHECK CONSTRAINT [FK_ForecastUsageYearLatest_YearId]
 
-EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageDateLatest].YearId to [Information].[Year].YearId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageDateLatest'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageDateLatest_YearId''
+EXEC sys.sp_addextendedproperty @name=N''MS_Description'', @value=N''Foreign Key constraint joining [Supply.X].[ForecastUsageYearLatest].YearId to [Information].[Year].YearId'' , @level0type=N''SCHEMA'',@level0name=N''Supply.X'', @level1type=N''TABLE'',@level1name=N''ForecastUsageYearLatest'', @level2type=N''CONSTRAINT'',@level2name=N''FK_ForecastUsageYearLatest_YearId''
 '
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestTableSQLGranularityAttributeId, @SQL
