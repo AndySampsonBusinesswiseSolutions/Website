@@ -23,7 +23,7 @@ ALTER PROCEDURE [Information].[GranularityDetail_Insert]
     @SourceId BIGINT,
     @GranularityId BIGINT,
     @GranularityAttributeId BIGINT,
-    @GranularityDetailDescription VARCHAR(255)
+    @GranularityDetailDescription VARCHAR(MAX)
 AS
 BEGIN
     -- =============================================

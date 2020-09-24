@@ -25,7 +25,7 @@ CREATE TABLE [Information].[GranularityDetail]
 	SourceId BIGINT NOT NULL,
 	GranularityId BIGINT NOT NULL,
 	GranularityAttributeId BIGINT NOT NULL,
-	GranularityDetailDescription VARCHAR(255) NOT NULL
+	GranularityDetailDescription VARCHAR(MAX) NOT NULL
 	)  ON [Information]
 GO
 ALTER TABLE [Information].[GranularityDetail] ADD CONSTRAINT
