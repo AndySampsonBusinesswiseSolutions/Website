@@ -8,10 +8,6 @@ namespace enums
             {
                 public class Name
                 {
-                    public string MapFutureDateIdToUsageDateIdByYearByForecastGroupAPI = "MapFutureDateIdToUsageDateIdByYearByForecastGroup.api";
-                    public string MapFutureDateIdToUsageDateIdByForecastGroupByYearAPI = "MapFutureDateIdToUsageDateIdByForecastGroupByYear.api";
-                    public string MapFutureDateIdToUsageDateIdByDateAPI = "MapFutureDateIdToUsageDateIdByDate.api";
-                    public string MapFutureDateIdToUsageDateIdAPI = "MapFutureDateIdToUsageDateId.api";
                     public string GetMappedUsageDateIdAPI = "GetMappedUsageDateId.api";
                     public string CreateForecastUsageAPI = "CreateForecastUsage.api";
                     public string GetGenericProfileAPI = "GetGenericProfile.api";

@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-09-17
--- Description:	Get DateToForecastGroup info from [Mapping].[DateToForecastGroup] table by Priority
+-- Description:	Get DateToForecastGroup info from [Mapping].[DateToForecastGroup] table
 -- =============================================
 
 ALTER PROCEDURE [Mapping].[DateToForecastGroup_GetList]

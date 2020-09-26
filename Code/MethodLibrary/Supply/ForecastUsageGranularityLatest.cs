@@ -27,17 +27,17 @@ namespace MethodLibrary
 
             private void ForecastUsageGranularityLatest_CreateTable(long meterId, long granularityId, string meterType)
             {
-                CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestTableSQL, meterType, meterId);
+                CreateGranularSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestTableSQL, meterType, meterId);
             }
 
             private void ForecastUsageGranularityLatest_CreateDeleteStoredProcedure(long meterId, long granularityId, string meterType)
             {
-                CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestDeleteStoredProcedureSQL, meterType, meterId);
+                CreateGranularSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestDeleteStoredProcedureSQL, meterType, meterId);
             }
 
             private void ForecastUsageGranularityLatest_CreateInsertStoredProcedure(long meterId, long granularityId, string meterType)
             {
-                CreateSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestInsertStoredProcedureSQL, meterType, meterId);
+                CreateGranularSupplyObject(granularityId, _informationGranularityAttributeEnums.ForecastUsageLatestInsertStoredProcedureSQL, meterType, meterId);
             }
 
             private void ForecastUsageGranularityLatest_GrantExecuteToStoredProcedures(long meterId, long granularityId, string meterType)

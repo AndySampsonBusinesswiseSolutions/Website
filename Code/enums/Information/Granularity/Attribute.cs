@@ -22,6 +22,8 @@ namespace enums
                     public string ForecastUsageLatestTableSQL = "Forecast Usage Latest Table SQL";
                     public string ForecastUsageLatestDeleteStoredProcedureSQL = "Forecast Usage Latest Delete Stored Procedure SQL";
                     public string ForecastUsageLatestInsertStoredProcedureSQL = "Forecast Usage Latest Insert Stored Procedure SQL";
+
+                    public string DateMappingTableSQL = "Date Mapping Table SQL";
                 }
             }
         }

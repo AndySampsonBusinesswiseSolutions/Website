@@ -91,7 +91,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
                 _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
 
-                //Add original ProcessQueueGUID as CustomerDataUploadprocessQueueGUID
+                //Add original ProcessQueueGUID as CustomerDataUploadProcessQueueGUID
                 jsonObject.Add(_systemAPIRequiredDataKeyEnums.CustomerDataUploadProcessQueueGUID, processQueueGUID);
 
                 //Connect to Routing API and POST data

@@ -38,7 +38,7 @@ namespace MethodLibrary
                 return $"ForecastUsage{granularityCode}{historyLatest}";
             }
 
-            public void CreateSupplyObject(long granularityId, string granularityAttributeDescription, string meterType, long meterId)
+            public void CreateGranularSupplyObject(long granularityId, string granularityAttributeDescription, string meterType, long meterId)
             {
                 var granularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(granularityAttributeDescription);
                 var SQL = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityAttributeId);

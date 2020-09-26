@@ -136,7 +136,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //If not 365 days, get generic profile
                 if (latestPeriodicUsageRequiresProfiling)
                 {
-                    //TODO: Call CommitProfiledUsage API and wait for response
+                    //Call CommitProfiledUsage API and wait for response
                     var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
                     var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
                     var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
@@ -144,16 +144,24 @@ namespace CommitPeriodicUsageData.api.Controllers
                     latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
                 }
 
+                //TODO: Call CreateForecastUsage API
+
+                //Get Existing Estimated Annual Usage
+                var existingEstimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);
+
                 //Create Estimated Annual Usage
                 var estimatedAnnualUsage = latestPeriodicUsageList
                     .Where(r => Convert.ToDateTime(dateDictionary.First(d => d.Value == r.Field<long>("DateId")).Key) >= earliestRequiredPeriodicUsageDate)
                     .Sum(r => r.Field<decimal>("Usage"));
 
-                //End date existing Estimated Annual Usage
-                _supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);
+                if(estimatedAnnualUsage != existingEstimatedAnnualUsage)
+                {
+                    //End date existing Estimated Annual Usage
+                    _supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);
 
-                //Insert new Estimated Annual Usage
-                _supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
+                    //Insert new Estimated Annual Usage
+                    _supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
