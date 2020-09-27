@@ -173,6 +173,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateMonthForecast.api", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateQuarterForecast.api", "DemandForecast\CreateQuarterForecast.api\CreateQuarterForecast.api.csproj", "{F9E29252-F769-4FE8-BB10-5F3C406C98F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateYearForecast.api", "DemandForecast\CreateYearForecast.api\CreateYearForecast.api.csproj", "{8580262F-59AC-4283-9347-105D294F521A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1218,8 +1220,22 @@ Global
         {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x64.Build.0 = Release|Any CPU
         {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x86.ActiveCfg = Release|Any CPU
         {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x86.Build.0 = Release|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Debug|x64.Build.0 = Debug|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Debug|x86.Build.0 = Debug|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Release|Any CPU.Build.0 = Release|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Release|x64.ActiveCfg = Release|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Release|x64.Build.0 = Release|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Release|x86.ActiveCfg = Release|Any CPU
+        {8580262F-59AC-4283-9347-105D294F521A}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 
