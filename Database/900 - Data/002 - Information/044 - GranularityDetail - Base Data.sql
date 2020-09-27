@@ -50,7 +50,7 @@ SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHER
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityCodeGranularityAttributeId, 'Month'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDescriptionGranularityAttributeId, 'Month'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDisplayDescriptionGranularityAttributeId, 'Monthly'
-EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, ''
+EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, 'B8344648-FD3C-4F4E-91CA-F27B397BBBDC'
 
 --Quarter
 SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '8029270C-1ECB-43B0-B313-9082890CDC8B')
