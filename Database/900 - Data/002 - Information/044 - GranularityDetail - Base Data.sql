@@ -28,7 +28,7 @@ EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @Gran
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDisplayDescriptionGranularityAttributeId, 'Half Hourly'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @IsTimePeriodGranularityAttributeId, 'True'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @IsElectricityDefaultGranularityAttributeId, 'True'
-EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, ''
+EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, '6C138EB1-6B8D-42D5-8B81-FCE8F536D09F'
 
 --Date
 SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '71C54EC0-6415-42D4-9C8C-6D8B8513F2FE')
