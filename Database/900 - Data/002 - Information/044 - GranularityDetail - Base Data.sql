@@ -36,7 +36,7 @@ EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @Gran
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDescriptionGranularityAttributeId, 'Day'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDisplayDescriptionGranularityAttributeId, 'Daily'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @IsGasDefaultGranularityAttributeId, 'True'
-EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, ''
+EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, 'DAD4DACC-FAC2-4B3D-8EFB-5823352ADF5D'
 
 --Week
 SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '8FD4C63A-84D5-4A03-B488-1A99C2331726')
