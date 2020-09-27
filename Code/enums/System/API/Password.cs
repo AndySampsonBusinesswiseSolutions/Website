@@ -9,6 +9,7 @@ namespace enums
                 //TODO: Move to config file in each API
                 public class Password
                 {
+                    public string CreateWeekForecastAPI = "95hU29J4PpaeQmFV";
                     public string CreateDateForecastAPI = "YLtRVcMGf7UUALXU";
                     public string CreateHalfHourForecastAPI = "EqQVsbWULSyW85bU";
                     public string CreateFiveMinuteForecastAPI = "zTqVewH8Zrgye4Vd";

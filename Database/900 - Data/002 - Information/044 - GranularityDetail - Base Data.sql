@@ -43,7 +43,7 @@ SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHER
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityCodeGranularityAttributeId, 'Week'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDescriptionGranularityAttributeId, 'Week'
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @GranularityDisplayDescriptionGranularityAttributeId, 'Weekly'
-EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, ''
+EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastAPIGUIDGranularityAttributeId, '3C15305A-4D4E-4288-8D90-E2382782FB4E'
 
 --Month
 SET @GranularityId = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '2AB4DC83-C0D0-4C5F-AC95-6A948802E430')

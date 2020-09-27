@@ -8,6 +8,7 @@ namespace enums
             {
                 public class Name
                 {
+                    public string CreateWeekForecastAPI = "CreateWeekForecast.api";
                     public string CreateDateForecastAPI = "CreateDateForecast.api";
                     public string CreateHalfHourForecastAPI = "CreateHalfHourForecast.api";
                     public string CreateFiveMinuteForecastAPI = "CreateFiveMinuteForecast.api";

@@ -8,6 +8,7 @@ namespace enums
             {
                 public class GUID
                 {
+                    public string CreateWeekForecastAPI = "3C15305A-4D4E-4288-8D90-E2382782FB4E";
                     public string CreateDateForecastAPI = "DAD4DACC-FAC2-4B3D-8EFB-5823352ADF5D";
                     public string CreateHalfHourForecastAPI = "6C138EB1-6B8D-42D5-8B81-FCE8F536D09F";
                     public string CreateFiveMinuteForecastAPI = "828CCEB3-8156-44E1-8DAB-5F987484795E";
