@@ -29,8 +29,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageWeekHistory_Delete]
-        @WeekId BIGINT,
-        @YearId BIGINT
+        @YearId BIGINT,
+        @WeekId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -47,8 +47,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         SET
             EffectiveToDateTime = GETUTCDATE()
         WHERE
-            WeekId = @WeekId
-            AND YearId = @YearId
+            YearId = @YearId
+            AND WeekId = @WeekId
             AND EffectiveToDateTime = ''9999-12-31''
     END'
 
@@ -72,8 +72,8 @@ SET @SQL = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageWeekLatest_Delete]
-        @WeekId BIGINT,
-        @YearId BIGINT
+        @YearId BIGINT,
+        @WeekId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -89,8 +89,8 @@ SET @SQL = N'
         FROM
             [Supply.X].[ForecastUsageWeekLatest]
         WHERE
-            WeekId = @WeekId
-            AND YearId = @YearId
+            YearId = @YearId
+            AND WeekId = @WeekId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestDeleteStoredProcedureSQLGranularityAttributeId, @SQL

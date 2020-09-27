@@ -8,11 +8,21 @@ namespace enums
         {
             public partial class Supply
             {
-                public List<string> ForecastUsageGranularityHistoryStoredProcedureList = new List<string>
+                public string ForecastUsageGranularityHistory_Delete = "[Supply.{0}{1}].[ForecastUsage{2}History_Delete]";
+                public string ForecastUsageGranularityHistory_Insert = "[Supply.{0}{1}].[ForecastUsage{2}History_Insert]";
+                public string ForecastUsageGranularityHistory_GetLatest = "[Supply.{0}{1}].[ForecastUsage{2}History_GetLatest]";
+
+                public List<string> ForecastUsageGranularityHistoryStoredProcedureList => AddForecastUsageGranularityHistoryStoredProcedures();
+
+                private List<string> AddForecastUsageGranularityHistoryStoredProcedures()
                 {
-                    "[Supply.{0}{1}].[ForecastUsage{2}History_Delete]",
-                    "[Supply.{0}{1}].[ForecastUsage{2}History_Insert]"
-                };
+                    return new List<string>
+                    {
+                        ForecastUsageGranularityHistory_Delete,
+                        ForecastUsageGranularityHistory_Insert,
+                        ForecastUsageGranularityHistory_GetLatest,
+                    };
+                }
             }
         }
     }

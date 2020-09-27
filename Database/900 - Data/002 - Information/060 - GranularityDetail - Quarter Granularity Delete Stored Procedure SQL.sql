@@ -29,8 +29,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageQuarterHistory_Delete]
-        @QuarterId BIGINT,
-        @YearId BIGINT
+        @YearId BIGINT,
+        @QuarterId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -47,8 +47,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         SET
             EffectiveToDateTime = GETUTCDATE()
         WHERE
-            QuarterId = @QuarterId
-            AND YearId = @YearId
+            YearId = @YearId
+            AND QuarterId = @QuarterId
             AND EffectiveToDateTime = ''9999-12-31''
     END'
 
@@ -72,8 +72,8 @@ SET @SQL = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageQuarterLatest_Delete]
-        @QuarterId BIGINT,
-        @YearId BIGINT
+        @YearId BIGINT,
+        @QuarterId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -89,8 +89,8 @@ SET @SQL = N'
         FROM
             [Supply.X].[ForecastUsageQuarterLatest]
         WHERE
-            QuarterId = @QuarterId
-            AND YearId = @YearId
+            YearId = @YearId
+            AND QuarterId = @QuarterId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestDeleteStoredProcedureSQLGranularityAttributeId, @SQL

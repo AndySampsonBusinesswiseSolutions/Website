@@ -6,6 +6,9 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using System.Data;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace CreateDateForecast.api.Controllers
 {
@@ -18,9 +21,12 @@ namespace CreateDateForecast.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.Customer _customerMethods = new Methods.Customer();
+        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createDateForecastAPIId;
 
         public CreateDateForecastController(ILogger<CreateDateForecastController> logger)
@@ -69,7 +75,47 @@ namespace CreateDateForecast.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDateForecastAPIId);
 
-                //TODO: API Logic
+                //Get MeterType
+                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+
+                //Get MeterId
+                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
+
+                //Get latest loaded usage
+                var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+
+                //Set up forecast dictionary
+                var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
+                var futureDateToUsageDateDictionary = dateMappings.ToDictionary(
+                    d => d.Field<long>("DateId"),
+                    d => d.Field<long>("MappedDateId")
+                );
+                var forecastDictionary = new ConcurrentDictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
+                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
+
+                //Loop through future date ids
+                foreach(var futureDateId in forecastDictionary.Keys)
+                {
+                    forecastDictionary[futureDateId] = latestLoadedUsage
+                        .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
+                        .Sum(u => u.Field<long>("Usage"));
+                }
+
+                var granularityCode = "Date";
+
+                foreach(var forecastDate in forecastDictionary)
+                {
+                    var forecastDateKeyValuePair = new KeyValuePair<long, long>(forecastDate.Key, new long());
+                    var forecast = forecastDate.Value;
+
+                    //End date existing date forecast
+                    _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+                    _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+
+                    //Insert new date forecast
+                    _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastDateKeyValuePair, forecast);
+                    _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastDateKeyValuePair, forecast);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, false, null);

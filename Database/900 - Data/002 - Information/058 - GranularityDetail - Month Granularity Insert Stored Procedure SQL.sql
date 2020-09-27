@@ -31,8 +31,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
     ALTER PROCEDURE [Supply.X].[ForecastUsageMonthHistory_Insert]
         @CreatedByUserId BIGINT,
         @SourceId BIGINT,
-		@MonthId BIGINT,
         @YearId BIGINT,
+		@MonthId BIGINT,
         @Usage DECIMAL(18,10)
     AS
     BEGIN
@@ -49,16 +49,16 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         (
             CreatedByUserId,
             SourceId,
-			MonthId,
             YearId,
+			MonthId,
             Usage
         )
         VALUES
         (
             @CreatedByUserId,
             @SourceId,
-			@MonthId,
             @YearId,
+			@MonthId,
             @Usage
         )
 	END'
@@ -83,8 +83,8 @@ SET @SQL = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageMonthLatest_Insert]
-		@MonthId BIGINT,
-        @YearId BIGINT,
+		@YearId BIGINT,
+        @MonthId BIGINT,
         @Usage DECIMAL(18,10)
     AS
     BEGIN
@@ -99,14 +99,14 @@ SET @SQL = N'
 
         INSERT INTO [Supply.X].[ForecastUsageMonthLatest]
         (
-			MonthId,
-            YearId,
+			YearId,
+            MonthId,
             Usage
         )
         VALUES
         (
-			@MonthId,
-            @YearId,
+			@YearId,
+            @MonthId,            
             @Usage
         )
 	END'

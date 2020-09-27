@@ -29,8 +29,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageHalfHourHistory_Delete]
-        @TimePeriodId BIGINT,
-        @DateId BIGINT
+        @DateId BIGINT,
+        @TimePeriodId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -47,8 +47,8 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         SET
             EffectiveToDateTime = GETUTCDATE()
         WHERE
-            TimePeriodId = @TimePeriodId
-            AND DateId = @DateId
+            DateId = @DateId
+            AND TimePeriodId = @TimePeriodId
             AND EffectiveToDateTime = ''9999-12-31''
     END'
 
@@ -72,8 +72,8 @@ SET @SQL = N'
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageHalfHourLatest_Delete]
-        @TimePeriodId BIGINT,
-        @DateId BIGINT
+        @DateId BIGINT,
+        @TimePeriodId BIGINT
     AS
     BEGIN
         -- =============================================
@@ -89,8 +89,8 @@ SET @SQL = N'
         FROM
             [Supply.X].[ForecastUsageHalfHourLatest]
         WHERE
-            TimePeriodId = @TimePeriodId
-            AND DateId = @DateId
+            DateId = @DateId
+            AND TimePeriodId = @TimePeriodId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestDeleteStoredProcedureSQLGranularityAttributeId, @SQL
