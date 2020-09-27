@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Data;
-using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace CreateForecastUsage.api.Controllers
 {
@@ -32,10 +30,6 @@ namespace CreateForecastUsage.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Int64 createForecastUsageAPIId;
-        private Dictionary<string, long> dateDictionary;
-        private Dictionary<string, long> loadedUsageDateDictionary;
-        private DateTime earliestUsageDate;
-        private DateTime latestUsageDate;
 
         public CreateForecastUsageController(ILogger<CreateForecastUsageController> logger)
         {
@@ -82,34 +76,18 @@ namespace CreateForecastUsage.api.Controllers
                 var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
 
                 //Get MeterId
-                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);                
-
-                //Get latest loaded usage
-                var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
-
-                //Get Loaded Usage Date Ids
-                var latestLoadedUsageDateIds = latestLoadedUsage.Select(d => d.Field<long>("DateId")).ToList();
-
-                //Get Date dictionary
-                dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
-
-                loadedUsageDateDictionary = dateDictionary.Where(d => latestLoadedUsageDateIds.Contains(d.Value))
-                    .ToDictionary(d => d.Key, d => d.Value);
-                earliestUsageDate = loadedUsageDateDictionary.Min(d => Convert.ToDateTime(d.Key));
-                latestUsageDate = loadedUsageDateDictionary.Max(d => Convert.ToDateTime(d.Key));
+                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
 
                 //Call GetMappedUsageDateId API and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
 
-                if(string.IsNullOrWhiteSpace(result))
-                {
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $" Prerequisite APIs {_systemAPIGUIDEnums.GetMappedUsageDateIdAPI} errored");
-                    return;
-                }
-
-                var futureDateToUsageDateDictionary = JsonConvert.DeserializeObject<Dictionary<long, long>>(result);
+                var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
+                var futureDateToUsageDateDictionary = dateMappings.ToDictionary(
+                    d => d.Field<long>("DateId"),
+                    d => d.Field<long>("MappedDateId")
+                );
 
                 if(!futureDateToUsageDateDictionary.Any() || futureDateToUsageDateDictionary.Any(f => f.Value == 0))
                 {
@@ -124,108 +102,19 @@ namespace CreateForecastUsage.api.Controllers
                     return;
                 }
 
-                //Get GranularityId
-                var granularity = "Five Minute";
-                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
-                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
+                //Launch Forecast API for each granularity
+                var forecastAPIGUIDGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.ForecastAPIGUID);
+                var forecastAPIGUIDList = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(forecastAPIGUIDGranularityAttributeId);
 
-                //Get required time periods
-                var nonStandardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
-                var standardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_StandardDate_GetListByGranularityId(granularityId);
-                var standardGranularityToTimePeriods = standardGranularityToTimePeriodDataRows.Select(d => d.Field<long>("TimePeriodId")).ToList();
+                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 1};
+                Parallel.ForEach(forecastAPIGUIDList, parallelOptions, forecastAPIGUID => {
+                    var APIId = _systemMethods.API_GetAPIIdByAPIGUID(forecastAPIGUID);
+                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CreateForecastUsageAPI, jsonObject);
+                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result;
+                });
 
-                //Set up forecast dictionary
-                var forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new Dictionary<long, decimal>()));
-                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}};
-                var timePeriodToTimePeriodIds = _mappingMethods.TimePeriodToTimePeriod_GetList();
-
-                //Loop through future date ids
-                foreach(var futureDateId in forecastDictionary.Keys)
-                {
-                    //Get time periods required for date
-                    var timePeriodIds = nonStandardGranularityToTimePeriodDataRows.Any(d => d.Field<long>("DateId") == futureDateId)
-                        ? nonStandardGranularityToTimePeriodDataRows.Where(d => d.Field<long>("DateId") == futureDateId)
-                            .Select(d => d.Field<long>("TimePeriodId"))
-                        : standardGranularityToTimePeriods;
-
-                    //Get usage date id
-                    var usageDateId = futureDateToUsageDateDictionary[futureDateId];
-
-                    //Get usage for date
-                    var usageForDateList = latestLoadedUsage.Where(u => u.Field<long>("DateId") == usageDateId);
-
-                    foreach(var timePeriodId in timePeriodIds)
-                    {
-                        if(forecastDictionary[futureDateId].ContainsKey(timePeriodId))
-                        {
-                            continue;
-                        }
-
-                        //Get usage for time period
-                        var usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == timePeriodId);
-
-                        if(usageForTimePeriodList.Any())
-                        {
-                            //Get usage based on usage type priority
-                            var usage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
-                                .OrderBy(u => u.Key).First().Value;
-
-                            //Add usage to forecast
-                            forecastDictionary[futureDateId].TryAdd(timePeriodId, usage);
-                        }
-                        else
-                        {
-                            var mappedTimePeriodIds = timePeriodToTimePeriodIds.Where(t => t.Field<long>("TimePeriodId") == timePeriodId);
-                            var mappedtimePeriodDictionary = mappedTimePeriodIds.ToDictionary(
-                                    m => m.Field<long>("MappedTimePeriodId"),
-                                    m => timePeriodToTimePeriodIds.Where(t => t.Field<long>("MappedTimePeriodId") == m.Field<long>("MappedTimePeriodId"))
-                                        .Select(t => t.Field<long>("TimePeriodId")))
-                                .OrderBy(m => m.Value.Count()).First();
-
-                            usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodDictionary.Key);
-
-                            //Get usage based on usage type priority
-                            var mappedUsage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
-                                .OrderBy(u => u.Key).First().Value;
-
-                            var missingTimePeriodIds = new List<long>();
-
-                            foreach(var mappedtimePeriodId in mappedtimePeriodDictionary.Value)
-                            {
-                                //Get usage for time period
-                                usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodId);
-
-                                if(usageForTimePeriodList.Any())
-                                {
-                                    //Get usage based on usage type priority
-                                    var usage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
-                                        .OrderBy(u => u.Key).First().Value;
-
-                                    //Add usage to forecast
-                                    forecastDictionary[futureDateId].TryAdd(mappedtimePeriodId, usage);
-                                }
-                                else
-                                {
-                                    missingTimePeriodIds.Add(mappedtimePeriodId);
-                                }
-                            }
-
-                            if(missingTimePeriodIds.Any())
-                            {
-                                var timePeriodUsage = mappedtimePeriodDictionary.Value
-                                    .Where(t => forecastDictionary[futureDateId].ContainsKey(t))
-                                    .Sum(t => forecastDictionary[futureDateId][t]);
-                                var missingTimePeriodUsage = (mappedUsage - timePeriodUsage)/missingTimePeriodIds.Count();
-
-                                foreach(var missingTimePeriodId in missingTimePeriodIds)
-                                {
-                                    //Add usage to forecast
-                                    forecastDictionary[futureDateId].TryAdd(missingTimePeriodId, missingTimePeriodUsage);
-                                }
-                            }
-                        }
-                    }
-                }
+                //TODO: check if forecasts have worked
+                //TODO: if all ok, email customer
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, false, null);

@@ -19,6 +19,14 @@ namespace MethodLibrary
                     DateMapping_CreateTable(meterId, meterType);
                 }
 
+                tableName = $"DateMapping_Temp";
+                tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
+
+                if(tableId == 0)
+                {
+                    DateMapping_CreateTempTable(meterId, meterType);
+                }
+
                 DateMapping_CreateDeleteStoredProcedure(meterId, meterType);
                 DateMapping_CreateInsertStoredProcedure(meterId, meterType);
                 DateMapping_CreateGetLatestStoredProcedure(meterId, meterType);
@@ -29,6 +37,13 @@ namespace MethodLibrary
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSupplyEnums.DateMapping_CreateTable, 
+                    meterId, meterType);
+            }
+
+            private void DateMapping_CreateTempTable(long meterId, string meterType)
+            {
+                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                    _storedProcedureSupplyEnums.DateMapping_CreateTempTable, 
                     meterId, meterType);
             }
 
@@ -55,38 +70,43 @@ namespace MethodLibrary
 
             public void DateMapping_Delete(string meterType, long meterId)
             {
-                var loadedUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_Delete, meterType, meterId);
+                var dateMappingDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_Delete, meterType, meterId);
                 var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
                     .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
 
-                ExecuteNonQuery(parameterInfoList, loadedUsageDeleteStoredProcedure);
+                ExecuteNonQuery(parameterInfoList, dateMappingDeleteStoredProcedure);
             }
 
             public void DateMapping_Insert(string meterType, long meterId, string processQueueGUID)
             {
-                var loadedUsageInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_Insert, meterType, meterId);
+                var dateMappingInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_Insert, meterType, meterId);
                 var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
                     .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
 
                 ExecuteNonQuery(parameterInfoList, 
-                    loadedUsageInsertStoredProcedure,
+                    dateMappingInsertStoredProcedure,
                     processQueueGUID);
+            }
+
+            public void DateMappingTemp_Insert(string meterType, long meterId, DataTable dateMappingDataTable)
+            {
+                new Methods().BulkInsert(dateMappingDataTable, $"[Supply.{meterType}{meterId}].[DateMapping_Temp]");
             }
 
             public IEnumerable<DataRow> DateMapping_GetLatest(string meterType, long meterId)
             {
-                var loadedUsageGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_GetLatest, meterType, meterId);
+                var dateMappingGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_GetLatest, meterType, meterId);
 
-                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), loadedUsageGetLatestStoredProcedure);
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), dateMappingGetLatestStoredProcedure);
 
                 return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
             private void DateMapping_GrantExecuteToStoredProcedures(long meterId, string meterType)
             {
-                foreach(var loadedUsageStoredProcedure in _storedProcedureSupplyEnums.DateMappingStoredProcedureList)
+                foreach(var dateMappingStoredProcedure in _storedProcedureSupplyEnums.DateMappingStoredProcedureList)
                 {
-                    var storedProcedure = string.Format(loadedUsageStoredProcedure, meterType, meterId);
+                    var storedProcedure = string.Format(dateMappingStoredProcedure, meterType, meterId);
 
                     foreach(var api in _systemAPIRequireAccessToUsageEntitiesEnums.APIList)
                     {

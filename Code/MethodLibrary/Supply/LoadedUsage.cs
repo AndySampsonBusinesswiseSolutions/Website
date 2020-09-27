@@ -20,6 +20,13 @@ namespace MethodLibrary
                 if(tableId == 0)
                 {
                     LoadedUsage_CreateTable(meterId, meterType);
+                }
+
+                tableName = $"LoadedUsage_Temp";
+                tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
+
+                if(tableId == 0)
+                {
                     LoadedUsage_CreateTempTable(meterId, meterType);
                 }
 

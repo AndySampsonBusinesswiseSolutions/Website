@@ -11,6 +11,7 @@ EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'G
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Is Time Period'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Is Electricity Default'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Is Gas Default'
+EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast API GUID'
 
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Table SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Delete Stored Procedure SQL'

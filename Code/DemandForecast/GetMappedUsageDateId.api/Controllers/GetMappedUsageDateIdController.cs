@@ -57,7 +57,7 @@ namespace GetMappedUsageDateId.api.Controllers
 
         [HttpPost]
         [Route("GetMappedUsageDateId/Get")]
-        public string Get([FromBody] object data)
+        public void Get([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -86,15 +86,15 @@ namespace GetMappedUsageDateId.api.Controllers
                 var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject); 
 
                 //Get latest loaded usage
-                var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+                var latestDateMapping = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
 
                 //Get Date dictionary
                 dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
 
                 //Get Loaded Usage Date Ids
-                var latestLoadedUsageDateIds = latestLoadedUsage.Select(d => d.Field<long>("DateId")).ToList();
+                var latestDateMappingDateIds = latestDateMapping.Select(d => d.Field<long>("DateId")).ToList();
 
-                loadedUsageDateDictionary = dateDictionary.Where(d => latestLoadedUsageDateIds.Contains(d.Value))
+                loadedUsageDateDictionary = dateDictionary.Where(d => latestDateMappingDateIds.Contains(d.Value))
                     .ToDictionary(d => Convert.ToDateTime(d.Key), d => d.Value);
                 earliestUsageDate = loadedUsageDateDictionary.Min(d => d.Key);
                 latestUsageDate = loadedUsageDateDictionary.Max(d => d.Key);
@@ -139,13 +139,39 @@ namespace GetMappedUsageDateId.api.Controllers
                     futureDateToUsageDateDictionary[futureDateToForecastGroup.Key] = usageDateId;
                 });
 
-                //Get latest date mappings
-                var latestDateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("DateId", typeof(long));
+                dataTable.Columns.Add("MappedDateId", typeof(long));
+
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
+
+                foreach(var futureDateToUsageDate in futureDateToUsageDateDictionary)
+                {
+                    var dataRow = dataTable.NewRow();
+                    dataRow["DateId"] = futureDateToUsageDate.Key;
+                    dataRow["MappedDateId"] = futureDateToUsageDate.Value;
+                    dataTable.Rows.Add(dataRow);
+                }
+
+                //Bulk Insert new Date Mapping into DateMapping_Temp table
+                var supplyMethods = new Methods.Supply();
+                supplyMethods.DateMappingTemp_Insert(meterType, meterId, dataTable);
+
+                //End date existing Date Mapping
+                supplyMethods.DateMapping_Delete(meterType, meterId);
+
+                //Insert new Date Mapping into DateMapping table
+                supplyMethods.DateMapping_Insert(meterType, meterId, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, false, null);
-
-                return JsonConvert.SerializeObject(futureDateToUsageDateDictionary);
             }
             catch(Exception error)
             {
@@ -153,8 +179,6 @@ namespace GetMappedUsageDateId.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, true, $"System Error Id {errorId}");
-
-                return string.Empty;
             }
         }
 

@@ -9,6 +9,7 @@ namespace enums
             public partial class Supply
             {
                 public string DateMapping_CreateTable = "[Supply].[DateMapping_CreateTable]";
+                public string DateMapping_CreateTempTable = "[Supply].[DateMapping_CreateTempTable]";
                 public string DateMapping_CreateDeleteStoredProcedure = "[Supply].[DateMapping_CreateDeleteStoredProcedure]";
                 public string DateMapping_CreateInsertStoredProcedure = "[Supply].[DateMapping_CreateInsertStoredProcedure]";
                 public string DateMapping_CreateGetLatestStoredProcedure = "[Supply].[DateMapping_CreateGetLatestStoredProcedure]";

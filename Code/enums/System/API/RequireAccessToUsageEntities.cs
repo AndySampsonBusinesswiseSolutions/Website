@@ -18,7 +18,8 @@ namespace enums
                         "GetProfile.api",
                         "CommitProfiledUsage.api",
                         "CreateForecastUsage.api",
-                        "GetMappedUsageDateId.api"
+                        "GetMappedUsageDateId.api",
+                        "CreateFiveMinuteForecast.api"
                     };
                 }
             }

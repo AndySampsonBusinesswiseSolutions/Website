@@ -29,6 +29,9 @@ namespace MethodLibrary
 
                 //Create LoadedUsage tables and stored procedures
                 CreateLoadedUsageEntities(schemaId, meterId, meterType);
+
+                //Create DateMapping tables and stored procedures
+                CreateDateMappingEntities(schemaId, meterId, meterType);
             }
 
             public string SupplyForecastUsageTableName(long granularityId, string historyLatest)

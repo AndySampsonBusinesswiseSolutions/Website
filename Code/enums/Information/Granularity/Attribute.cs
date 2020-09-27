@@ -14,6 +14,7 @@ namespace enums
                     public string IsTimePeriod = "Is Time Period";
                     public string IsElectricityDefault = "Is Electricity Default";
                     public string IsGasDefault = "Is Gas Default";
+                    public string ForecastAPIGUID = "Forecast API GUID";
 
                     public string ForecastUsageHistoryTableSQL = "Forecast Usage History Table SQL";
                     public string ForecastUsageHistoryDeleteStoredProcedureSQL = "Forecast Usage History Delete Stored Procedure SQL";
