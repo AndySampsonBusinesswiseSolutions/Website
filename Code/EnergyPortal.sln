@@ -171,6 +171,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateWeekForecast.api", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateMonthForecast.api", "DemandForecast\CreateMonthForecast.api\CreateMonthForecast.api.csproj", "{B8344648-FD3C-4F4E-91CA-F27B397BBBDC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateQuarterForecast.api", "DemandForecast\CreateQuarterForecast.api\CreateQuarterForecast.api.csproj", "{F9E29252-F769-4FE8-BB10-5F3C406C98F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1204,8 +1206,22 @@ Global
         {B8344648-FD3C-4F4E-91CA-F27B397BBBDC}.Release|x64.Build.0 = Release|Any CPU
         {B8344648-FD3C-4F4E-91CA-F27B397BBBDC}.Release|x86.ActiveCfg = Release|Any CPU
         {B8344648-FD3C-4F4E-91CA-F27B397BBBDC}.Release|x86.Build.0 = Release|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Debug|x64.Build.0 = Debug|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Debug|x86.Build.0 = Debug|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|Any CPU.Build.0 = Release|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x64.ActiveCfg = Release|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x64.Build.0 = Release|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x86.ActiveCfg = Release|Any CPU
+        {F9E29252-F769-4FE8-BB10-5F3C406C98F7}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 

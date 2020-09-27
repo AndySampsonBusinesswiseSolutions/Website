@@ -8,6 +8,7 @@ namespace enums
             {
                 public class GUID
                 {
+                    public string CreateQuarterForecastAPI = "F9E29252-F769-4FE8-BB10-5F3C406C98F7";
                     public string CreateMonthForecastAPI = "B8344648-FD3C-4F4E-91CA-F27B397BBBDC";
                     public string CreateWeekForecastAPI = "3C15305A-4D4E-4288-8D90-E2382782FB4E";
                     public string CreateDateForecastAPI = "DAD4DACC-FAC2-4B3D-8EFB-5823352ADF5D";
