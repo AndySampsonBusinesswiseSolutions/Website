@@ -110,6 +110,9 @@ namespace CreateMonthForecast.api.Controllers
 
                 var granularityCode = "Month";
 
+                //Get existing month forecast
+                var existingMonthForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+
                 foreach(var forecastYearId in forecastYearIds)
                 {
                     var dateIdsForYearId = dateToYearMappings.Where(d => d.Field<long>("YearId") == forecastYearId)
@@ -125,18 +128,26 @@ namespace CreateMonthForecast.api.Controllers
                         var dateIdsForYearIdMonthId = dateToMonthMappings.Where(d => d.Field<long>("MonthId") == forecastMonthId)
                             .Select(d => d.Field<long>("DateId")).Intersect(dateIdsForYearId);
 
-                        var forecastYearMonthKeyValuePair = new KeyValuePair<long, long>(forecastYearId, forecastMonthId);
-
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdMonthId.Contains(f.Key))
                             .Sum(f => f.Value);
 
-                        //End date existing month forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair);
-                        _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair);
+                        var existingMonthForecastsDataRow = existingMonthForecasts.FirstOrDefault(
+                            d => d.Field<long>("YearId") == forecastYearId
+                            && d.Field<long>("MonthId") == forecastMonthId
+                        );
 
-                        //Insert new month forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearMonthKeyValuePair, forecast);
-                        _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair, forecast);
+                        if(existingMonthForecastsDataRow == null || existingMonthForecastsDataRow.Field<decimal>("Usage") != forecast)
+                        {
+                            var forecastYearMonthKeyValuePair = new KeyValuePair<long, long>(forecastYearId, forecastMonthId);
+
+                            //End date existing month forecast
+                            _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair);
+                            _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair);
+
+                            //Insert new month forecast
+                            _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearMonthKeyValuePair, forecast);
+                            _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair, forecast);
+                        }
                     }
                 }
 

@@ -19,10 +19,12 @@ namespace enums
                     public string ForecastUsageHistoryTableSQL = "Forecast Usage History Table SQL";
                     public string ForecastUsageHistoryDeleteStoredProcedureSQL = "Forecast Usage History Delete Stored Procedure SQL";
                     public string ForecastUsageHistoryInsertStoredProcedureSQL = "Forecast Usage History Insert Stored Procedure SQL";
+                    public string ForecastUsageHistoryGetLatestStoredProcedureSQL = "Forecast Usage History Get Latest Stored Procedure SQL";
                     
                     public string ForecastUsageLatestTableSQL = "Forecast Usage Latest Table SQL";
                     public string ForecastUsageLatestDeleteStoredProcedureSQL = "Forecast Usage Latest Delete Stored Procedure SQL";
                     public string ForecastUsageLatestInsertStoredProcedureSQL = "Forecast Usage Latest Insert Stored Procedure SQL";
+                    public string ForecastUsageLatestGetLatestStoredProcedureSQL = "Forecast Usage Latest Get Latest Stored Procedure SQL";
 
                     public string DateMappingTableSQL = "Date Mapping Table SQL";
                 }

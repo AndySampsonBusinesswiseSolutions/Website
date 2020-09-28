@@ -107,23 +107,31 @@ namespace CreateYearForecast.api.Controllers
 
                 var granularityCode = "Year";
 
+                //Get existing year forecast
+                var existingYearForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+
                 foreach(var forecastYearId in forecastYearIds)
                 {
-                    var forecastYearKeyValuePair = new KeyValuePair<long, long>(forecastYearId, new long());
-
                     var dateIdsForYearId = dateToYearMappings.Where(d => d.Field<long>("YearId") == forecastYearId)
                         .Select(d => d.Field<long>("DateId"));
 
                     var forecast = forecastDictionary.Where(f => dateIdsForYearId.Contains(f.Key))
                         .Sum(f => f.Value);
 
-                    //End date existing year forecast
-                    _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearKeyValuePair);
-                    _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearKeyValuePair);
+                    var existingYearForecastDataRow = existingYearForecasts.FirstOrDefault(d => d.Field<long>("YearId") == forecastYearId);
 
-                    //Insert new year forecast
-                    _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearKeyValuePair, forecast);
-                    _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearKeyValuePair, forecast);
+                    if(existingYearForecastDataRow == null || existingYearForecastDataRow.Field<decimal>("Usage") != forecast)
+                    {
+                        var forecastYearKeyValuePair = new KeyValuePair<long, long>(forecastYearId, new long());
+
+                        //End date existing year forecast
+                        _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearKeyValuePair);
+                        _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearKeyValuePair);
+
+                        //Insert new year forecast
+                        _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearKeyValuePair, forecast);
+                        _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearKeyValuePair, forecast);
+                    }
                 }
 
                 //Update Process Queue

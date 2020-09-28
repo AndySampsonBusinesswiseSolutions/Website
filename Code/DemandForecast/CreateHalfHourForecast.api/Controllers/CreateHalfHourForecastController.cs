@@ -82,9 +82,9 @@ namespace CreateHalfHourForecast.api.Controllers
                 var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
 
                 //Get GranularityId
-                var granularity = "Half Hour";
+                var granularityCode = "Half Hour";
                 var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
-                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
+                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularityCode);
 
                 //Get required time periods
                 var nonStandardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
@@ -189,6 +189,32 @@ namespace CreateHalfHourForecast.api.Controllers
                     }
                 }
 
+                //Get existing half hour forecast
+                var existingHalfHourForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+
+                foreach(var forecastDate in forecastDictionary)
+                {
+                    foreach(var forecastTimePeriod in forecastDate.Value)
+                    {
+                        var existingHalfHourForecastDataRow = existingHalfHourForecasts.FirstOrDefault(
+                            d => d.Field<long>("DateId") == forecastDate.Key
+                            && d.Field<long>("TimePeriodId") == forecastTimePeriod.Key);
+
+                        if(existingHalfHourForecastDataRow == null || existingHalfHourForecastDataRow.Field<decimal>("Usage") != forecastTimePeriod.Value)
+                        {
+                            var forecastDateKeyValuePair = new KeyValuePair<long, long>(forecastDate.Key, forecastTimePeriod.Key);
+
+                            //End date existing date forecast
+                            _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+                            _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+
+                            //Insert new date forecast
+                            _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastDateKeyValuePair, forecastTimePeriod.Value);
+                            _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastDateKeyValuePair, forecastTimePeriod.Value);
+                        }
+                    }                 
+                }
+                
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, false, null);
             }

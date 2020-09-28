@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using enums;
 using System.Reflection;
 using System.Linq;
+using System.Data;
 
 namespace MethodLibrary
 {
@@ -219,6 +220,15 @@ namespace MethodLibrary
                     .Where(p => p.Name != "storedProcedure").ToArray();
 
                 ExecuteNonQuery(parameterInfoList, storedProcedure, createdByUserId, sourceId, yearId, usage);
+            }
+
+            public IEnumerable<DataRow> ForecastUsageGranularityHistory_GetLatest(string meterType, long meterId, string granularityCode)
+            {
+                var forecastUsageGranularityHistoryGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.ForecastUsageGranularityHistory_GetLatest, meterType, meterId, granularityCode);
+
+                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), forecastUsageGranularityHistoryGetLatestStoredProcedure);
+
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
         }
     }

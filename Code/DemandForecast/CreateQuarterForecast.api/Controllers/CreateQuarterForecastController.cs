@@ -110,6 +110,9 @@ namespace CreateQuarterForecast.api.Controllers
 
                 var granularityCode = "Quarter";
 
+                //Get existing quarter forecast
+                var existingQuarterForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+
                 foreach(var forecastYearId in forecastYearIds)
                 {
                     var dateIdsForYearId = dateToYearMappings.Where(d => d.Field<long>("YearId") == forecastYearId)
@@ -125,18 +128,26 @@ namespace CreateQuarterForecast.api.Controllers
                         var dateIdsForYearIdQuarterId = dateToQuarterMappings.Where(d => d.Field<long>("QuarterId") == forecastQuarterId)
                             .Select(d => d.Field<long>("DateId")).Intersect(dateIdsForYearId);
 
-                        var forecastYearQuarterKeyValuePair = new KeyValuePair<long, long>(forecastYearId, forecastQuarterId);
-
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdQuarterId.Contains(f.Key))
                             .Sum(f => f.Value);
 
-                        //End date existing quarter forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair);
-                        _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair);
+                        var existingQuarterForecastsDataRow = existingQuarterForecasts.FirstOrDefault(
+                            d => d.Field<long>("YearId") == forecastYearId
+                            && d.Field<long>("QuarterId") == forecastQuarterId
+                        );
 
-                        //Insert new quarter forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearQuarterKeyValuePair, forecast);
-                        _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair, forecast);
+                        if(existingQuarterForecastsDataRow == null || existingQuarterForecastsDataRow.Field<decimal>("Usage") != forecast)
+                        {
+                            var forecastYearQuarterKeyValuePair = new KeyValuePair<long, long>(forecastYearId, forecastQuarterId);
+
+                            //End date existing quarter forecast
+                            _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair);
+                            _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair);
+
+                            //Insert new quarter forecast
+                            _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearQuarterKeyValuePair, forecast);
+                            _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair, forecast);
+                        }
                     }
                 }
 

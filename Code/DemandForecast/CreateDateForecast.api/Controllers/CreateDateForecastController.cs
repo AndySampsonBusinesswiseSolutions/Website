@@ -103,18 +103,25 @@ namespace CreateDateForecast.api.Controllers
 
                 var granularityCode = "Date";
 
+                //Get existing date forecast
+                var existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+
                 foreach(var forecastDate in forecastDictionary)
                 {
-                    var forecastDateKeyValuePair = new KeyValuePair<long, long>(forecastDate.Key, new long());
-                    var forecast = forecastDate.Value;
+                    var existingDateForecastDataRow = existingDateForecasts.FirstOrDefault(d => d.Field<long>("DateId") == forecastDate.Key);
 
-                    //End date existing date forecast
-                    _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
-                    _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+                    if(existingDateForecastDataRow == null || existingDateForecastDataRow.Field<decimal>("Usage") != forecastDate.Value)
+                    {
+                        var forecastDateKeyValuePair = new KeyValuePair<long, long>(forecastDate.Key, new long());
 
-                    //Insert new date forecast
-                    _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastDateKeyValuePair, forecast);
-                    _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastDateKeyValuePair, forecast);
+                        //End date existing date forecast
+                        _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+                        _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
+
+                        //Insert new date forecast
+                        _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastDateKeyValuePair, forecastDate.Value);
+                        _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastDateKeyValuePair, forecastDate.Value);
+                    }
                 }
 
                 //Update Process Queue
