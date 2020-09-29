@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, MPXN, date, timePeriod, value);
                 }
 
-                public IEnumerable<DataRow> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.MeterUsage_GetByProcessQueueGUID, 

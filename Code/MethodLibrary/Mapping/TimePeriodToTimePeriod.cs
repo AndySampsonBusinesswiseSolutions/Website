@@ -9,12 +9,12 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public IEnumerable<DataRow> TimePeriodToTimePeriod_GetList()
+            public List<DataRow> TimePeriodToTimePeriod_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.TimePeriodToTimePeriod_GetList);
 
-                return dataTable.Rows.Cast<DataRow>();
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
             public Dictionary<long, List<long>> TimePeriodToTimePeriod_GetDictionary()

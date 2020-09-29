@@ -20,7 +20,7 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public IEnumerable<string> ProfileAgentDetail_GetProfileAgentDetailDescriptionByProfileAgentAttributeId(long profileAgentAttributeId)
+            public List<string> ProfileAgentDetail_GetProfileAgentDetailDescriptionByProfileAgentAttributeId(long profileAgentAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureDemandForecastEnums.ProfileAgentDetail_GetByProfileAgentAttributeId, 

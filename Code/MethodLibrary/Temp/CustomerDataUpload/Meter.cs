@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, siteName, sitePostCode, MPXN, gridSupplyPoint, profileClass, meterTimeswitchCode, lineLossFactorClass, capacity, localDistributionZone, standardOfftakeQuantity, annualUsage, meterSerialNumber, area, importExport);
                 }
 
-                public IEnumerable<DataRow> Meter_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> Meter_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.Meter_GetByProcessQueueGUID, 

@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, basketReference, tradeReference, tradeDate, tradeProduct, volume, price, direction);
                 }
 
-                public IEnumerable<DataRow> FlexTrade_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> FlexTrade_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.FlexTrade_GetByProcessQueueGUID, 

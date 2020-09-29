@@ -110,13 +110,13 @@ namespace MethodLibrary
                     .First();
             }
 
-            public IEnumerable<DataRow> TradeDetail_GetListByTradeId(long tradeId)
+            public List<DataRow> TradeDetail_GetListByTradeId(long tradeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.TradeDetail_GetByTradeId, 
                     tradeId);
 
-                return dataTable.Rows.Cast<DataRow>();
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
         }
     }

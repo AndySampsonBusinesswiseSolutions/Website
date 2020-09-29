@@ -106,7 +106,8 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 //If Trade Reference is not populated, all other fields are required
                 //Get Trade References not populated
-                var emptyTradeReferenceDataRecords = flexTradeDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference)));
+                var emptyTradeReferenceDataRecords = flexTradeDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference)))
+                    .ToList();
 
                 //Trade Date, Trade Product, Volume, Price and Direction must be populated
                 requiredColumns = new Dictionary<string, string>

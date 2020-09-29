@@ -20,12 +20,12 @@ namespace MethodLibrary
                     .ToList();
             }
 
-            public IEnumerable<DataRow> TimePeriod_GetList()
+            public List<DataRow> TimePeriod_GetList()
             {
                 var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), 
                     _storedProcedureInformationEnums.TimePeriod_GetList);
 
-                return dataTable.Rows.Cast<DataRow>();
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
         }
     }

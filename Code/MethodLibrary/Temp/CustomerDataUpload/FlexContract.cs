@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, contractReference, basketReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateType, value);
                 }
 
-                public IEnumerable<DataRow> FlexContract_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> FlexContract_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.FlexContract_GetByProcessQueueGUID, 

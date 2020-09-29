@@ -159,6 +159,10 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 //Insert new Periodic Usage into LoadedUsage table
                 _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
+                //Call CreateForecastUsage API
+                var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
+                var createForecastUsageAPI = _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, _systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI, jsonObject);
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
             }

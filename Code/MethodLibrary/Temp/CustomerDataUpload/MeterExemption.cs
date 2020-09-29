@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, MPXN, dateFrom, dateTo, exemptionProduct, exemptionProportion);
                 }
 
-                public IEnumerable<DataRow> MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.MeterExemption_GetByProcessQueueGUID, 

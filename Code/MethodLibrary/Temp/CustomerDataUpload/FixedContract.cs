@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, contractReference, MPXN, supplier, contractStartDate, contractEndDate, product, rateCount, rateType, value);
                 }
 
-                public IEnumerable<DataRow> FixedContract_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> FixedContract_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.FixedContract_GetByProcessQueueGUID, 

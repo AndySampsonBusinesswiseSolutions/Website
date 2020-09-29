@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, contractReference, dateFrom, dateTo, volume);
                 }
 
-                public IEnumerable<DataRow> FlexReferenceVolume_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> FlexReferenceVolume_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.FlexReferenceVolume_GetByProcessQueueGUID, 

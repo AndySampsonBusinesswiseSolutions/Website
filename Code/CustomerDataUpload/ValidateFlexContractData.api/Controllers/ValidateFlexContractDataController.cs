@@ -116,7 +116,8 @@ namespace ValidateFlexContractData.api.Controllers
                 //If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
                 var newContractMeterDataRecords = flexContractDataRows.Where(r => 
-                    !_customerMethods.ContractBasketMeterExists(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference), r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference), r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)));
+                    !_customerMethods.ContractBasketMeterExists(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference), r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference), r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)))
+                    .ToList();
 
                 //Product must be populated
                 requiredColumns = new Dictionary<string, string>

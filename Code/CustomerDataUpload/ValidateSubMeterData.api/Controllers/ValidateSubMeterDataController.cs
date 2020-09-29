@@ -107,7 +107,8 @@ namespace ValidateSubMeterData.api.Controllers
                 //Get submeters not stored in database
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
                 var newSubMeterDataRecords = subMeterDataRows.Where(r => 
-                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)) == 0);
+                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)) == 0)
+                    .ToList();
 
                 //MPXN, SerialNumber, SubArea and Asset must be populated
                 requiredColumns = new Dictionary<string, string>

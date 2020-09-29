@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, customerName, siteName, siteAddress, siteTown, siteCounty, sitePostCode, siteDescription, contactName, contactRole, contactTelephoneNumber, contactEmailAddress);
                 }
 
-                public IEnumerable<DataRow> Site_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> Site_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.Site_GetByProcessQueueGUID, 

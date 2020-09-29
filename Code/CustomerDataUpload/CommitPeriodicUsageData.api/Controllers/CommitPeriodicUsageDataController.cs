@@ -102,9 +102,6 @@ namespace CommitPeriodicUsageData.api.Controllers
                 var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
                 granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
 
-                //Get GranularityToTimePeriod List
-                var granularityToTimePeriodList = _mappingMethods.GranularityToTimePeriod_GetList();
-
                 //Get Date dictionary
                 dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
 
@@ -125,7 +122,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                 }
 
                 //Check to see if full 365days are available
-                var dateIdList = latestPeriodicUsageList.Select(r => r.Field<long>("DateId")).Distinct();
+                var dateIdList = latestPeriodicUsageList.Select(r => r.Field<long>("DateId")).Distinct().ToList();
                 var latestPeriodicUsageDictionary = CreateDictionary(latestPeriodicUsageList, dateIdList, "DateId", "TimePeriodId");
 
                 var latestPeriodicUsageDate = dateIdList.Max(dateId => Convert.ToDateTime(dateDictionary.First(d => d.Value == dateId).Key));
@@ -137,14 +134,16 @@ namespace CommitPeriodicUsageData.api.Controllers
                 if (latestPeriodicUsageRequiresProfiling)
                 {
                     //Call CommitProfiledUsage API and wait for response
-                    var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
-                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
-                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                    var commitProfiledUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
+                    var commitProfiledUsageAPI = _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+                    var commitProfiledUsageResult = commitProfiledUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
                 }
 
-                //TODO: Call CreateForecastUsage API
+                //Call CreateForecastUsage API
+                var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
+                var createForecastUsageAPI = _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
 
                 //Get Existing Estimated Annual Usage
                 var existingEstimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);
@@ -182,7 +181,7 @@ namespace CommitPeriodicUsageData.api.Controllers
 
             //Get dates that have additional number of time periods for granularity
             var granularityToTimePeriodNonStandardDateList = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetList()
-                .Where(r => r.Field<long>("GranularityId") == granularityId);
+                .Where(r => r.Field<long>("GranularityId") == granularityId).ToList();
             var dateIdList = GetIdListFromDataRowsByGranularityId(granularityToTimePeriodNonStandardDateList, granularityId, "DateId");
             var granularityToTimePeriodNonStandardDateDictionaryByGranularityId = CreateDictionary(granularityToTimePeriodNonStandardDateList, dateIdList, "DateId", "TimePeriodId");
 
@@ -237,7 +236,7 @@ namespace CommitPeriodicUsageData.api.Controllers
             return timePeriodIdListByEndTime;
         }
 
-        private static Dictionary<long, List<long>> CreateDictionary(IEnumerable<DataRow> dataRows, IEnumerable<long> idList, string keyColumnName, string valueColumnName)
+        private static Dictionary<long, List<long>> CreateDictionary(List<DataRow> dataRows, List<long> idList, string keyColumnName, string valueColumnName)
         {
             var dictionary = idList.ToDictionary(r => r, r => new List<long>());
 
@@ -249,14 +248,14 @@ namespace CommitPeriodicUsageData.api.Controllers
             return dictionary;
         }
 
-        private IEnumerable<long> GetIdListFromDataRowsByGranularityId(IEnumerable<DataRow> dataRows, long granularityId, string idColumnName)
+        private List<long> GetIdListFromDataRowsByGranularityId(List<DataRow> dataRows, long granularityId, string idColumnName)
         {
             return dataRows.Where(r => r.Field<long>("GranularityId") == granularityId)
                 .Select(r => r.Field<long>(idColumnName))
-                .Distinct();
+                .Distinct().ToList();
         }
 
-        private IEnumerable<DataRow> InsertPeriodicUsage(Dictionary<string, Dictionary<string, string>> periodicUsageDictionary)
+        private List<DataRow> InsertPeriodicUsage(Dictionary<string, Dictionary<string, string>> periodicUsageDictionary)
         {
             var dates = periodicUsageDictionary.Select(u => u.Key)
                 .Distinct()

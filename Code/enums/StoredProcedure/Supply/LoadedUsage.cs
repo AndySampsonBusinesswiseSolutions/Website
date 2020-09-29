@@ -17,9 +17,9 @@ namespace enums
                 public string LoadedUsage_Insert = "[Supply.{0}{1}].[LoadedUsage_Insert]";
                 public string LoadedUsage_GetLatest = "[Supply.{0}{1}].[LoadedUsage_GetLatest]";
 
-                public IEnumerable<string> LoadedUsageStoredProcedureList => AddLoadedUsageStoredProcedures();
+                public List<string> LoadedUsageStoredProcedureList => AddLoadedUsageStoredProcedures();
 
-                private IEnumerable<string> AddLoadedUsageStoredProcedures()
+                private List<string> AddLoadedUsageStoredProcedures()
                 {
                     return new List<string>
                     {

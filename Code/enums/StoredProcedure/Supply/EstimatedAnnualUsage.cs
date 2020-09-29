@@ -16,9 +16,9 @@ namespace enums
                 public string EstimatedAnnualUsage_Insert = "[Supply.{0}{1}].[EstimatedAnnualUsage_Insert]";
                 public string EstimatedAnnualUsage_GetLatest = "[Supply.{0}{1}].[EstimatedAnnualUsage_GetLatest]";
 
-                public IEnumerable<string> EstimatedAnnualUsageStoredProcedureList => AddEstimatedAnnualUsageStoredProcedures();
+                public List<string> EstimatedAnnualUsageStoredProcedureList => AddEstimatedAnnualUsageStoredProcedures();
 
-                private IEnumerable<string> AddEstimatedAnnualUsageStoredProcedures()
+                private List<string> AddEstimatedAnnualUsageStoredProcedures()
                 {
                     return new List<string>
                     {

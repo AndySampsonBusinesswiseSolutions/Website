@@ -93,7 +93,7 @@ namespace MethodLibrary
                 new Methods().BulkInsert(dateMappingDataTable, $"[Supply.{meterType}{meterId}].[DateMapping_Temp]");
             }
 
-            public IEnumerable<DataRow> DateMapping_GetLatest(string meterType, long meterId)
+            public List<DataRow> DateMapping_GetLatest(string meterType, long meterId)
             {
                 var dateMappingGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_GetLatest, meterType, meterId);
 

@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, MPXN, subMeterIdentifier, serialNumber, subArea, asset);
                 }
 
-                public IEnumerable<DataRow> SubMeter_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> SubMeter_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.SubMeter_GetByProcessQueueGUID, 

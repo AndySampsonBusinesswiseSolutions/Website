@@ -14,9 +14,9 @@ namespace MethodLibrary
         {
             public partial class CustomerDataUpload
             {
-                public IEnumerable<DataRow> GetCommitableRows(IEnumerable<DataRow> dataRows)
+                public List<DataRow> GetCommitableRows(List<DataRow> dataRows)
                 {
-                    return dataRows.Where(r => r.Field<bool>("CanCommit"));
+                    return dataRows.Where(r => r.Field<bool>("CanCommit")).ToList();
                 }
 
                 public Dictionary<int, List<string>> ConvertCustomerDataUploadToDictionary(JObject jsonObject, string dataType)
@@ -81,18 +81,19 @@ namespace MethodLibrary
                     return Convert.ToInt16(String.Join("", cell.Where(char.IsDigit)));
                 }
 
-                public IEnumerable<DataRow> CleanedUpDataTable(DataTable dataTable)
+                public List<DataRow> CleanedUpDataTable(DataTable dataTable)
                 {
                     var trimmedDataTable = TrimDataTable(dataTable);
                     var columns = trimmedDataTable.Columns
                         .Cast<DataColumn>()
                         .Where(c => c.ColumnName != _systemAPIRequiredDataKeyEnums.ProcessQueueGUID && c.ColumnName != "RowId")
-                        .Select(c => c.ColumnName);
+                        .Select(c => c.ColumnName)
+                        .ToList();
                         
-                    return GetPopulatedDataRows(trimmedDataTable.Rows.Cast<DataRow>(), columns);
+                    return GetPopulatedDataRows(trimmedDataTable.Rows.Cast<DataRow>().ToList(), columns);
                 }
 
-                private IEnumerable<DataRow> GetPopulatedDataRows(IEnumerable<DataRow> dataRows, IEnumerable<string> columns)
+                private List<DataRow> GetPopulatedDataRows(List<DataRow> dataRows, List<string> columns)
                 {
                     var emptyDataRows = new List<DataRow>();
 
@@ -118,7 +119,7 @@ namespace MethodLibrary
                     return dataRows;
                 }
 
-                public Dictionary<int, Dictionary<string, List<string>>> InitialiseRecordsDictionary(IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                public Dictionary<int, Dictionary<string, List<string>>> InitialiseRecordsDictionary(List<DataRow> dataRows, Dictionary<string, string> columns)
                 {
                     var records = new Dictionary<int, Dictionary<string, List<string>>>();
                     var rowIds = dataRows.Select(d => d.Field<int>("RowId")).Distinct();
@@ -136,7 +137,7 @@ namespace MethodLibrary
                     return records;
                 }
 
-                public void GetMissingRecords(Dictionary<int, Dictionary<string, List<string>>> records, IEnumerable<DataRow> dataRows, Dictionary<string, string> columns)
+                public void GetMissingRecords(Dictionary<int, Dictionary<string, List<string>>> records, List<DataRow> dataRows, Dictionary<string, string> columns)
                 {
                     foreach(var column in columns)
                     {

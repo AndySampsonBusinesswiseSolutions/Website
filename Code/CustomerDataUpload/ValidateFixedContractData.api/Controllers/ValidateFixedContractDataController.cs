@@ -114,7 +114,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 //If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
                 var newContractMeterDataRecords = fixedContractDataRows.Where(r => 
-                    !_customerMethods.ContractMeterExists(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference), r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)));
+                    !_customerMethods.ContractMeterExists(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference), r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)))
+                    .ToList();
 
                 requiredColumns = new Dictionary<string, string>
                     {
@@ -124,7 +125,8 @@ namespace ValidateFixedContractData.api.Controllers
                 _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
                 //Get new contracts
-                var newContractDataRecords = fixedContractDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference)));
+                var newContractDataRecords = fixedContractDataRows.Where(r => string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference)))
+                    .ToList();
 
                 //Product must be populated
                 requiredColumns = new Dictionary<string, string>

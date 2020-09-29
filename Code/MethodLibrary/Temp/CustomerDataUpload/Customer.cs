@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
                 }
 
-                public IEnumerable<DataRow> Customer_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> Customer_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.Customer_GetByProcessQueueGUID, 

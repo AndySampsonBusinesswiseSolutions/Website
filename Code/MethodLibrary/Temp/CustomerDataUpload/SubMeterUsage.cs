@@ -17,7 +17,7 @@ namespace MethodLibrary
                         processQueueGUID, rowId, subMeterIdentifier, date, timePeriod, value);
                 }
 
-                public IEnumerable<DataRow> SubMeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                public List<DataRow> SubMeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                         _storedProcedureTempCustomerDataUploadEnums.SubMeterUsage_GetByProcessQueueGUID, 

@@ -12,7 +12,7 @@ namespace MethodLibrary
         {
             private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
 
-            private void CreateForecastUsageGranularityHistoryEntities(IEnumerable<long> granularityIdList, long schemaId, long meterId, string meterType)
+            private void CreateForecastUsageGranularityHistoryEntities(List<long> granularityIdList, long schemaId, long meterId, string meterType)
             {
                 foreach(var granularityId in granularityIdList)
                 {
@@ -86,7 +86,7 @@ namespace MethodLibrary
                 ExecuteNonQuery(parameterInfoList, forecastUsageGranularityHistoryInsertStoredProcedure, processQueueGUID);
             }
 
-            public IEnumerable<DataRow> ForecastUsageGranularityHistory_GetHistory(string meterType, long meterId, string granularityCode)
+            public List<DataRow> ForecastUsageGranularityHistory_GetHistory(string meterType, long meterId, string granularityCode)
             {
                 var forecastUsageGranularityHistoryGetHistoryStoredProcedure = string.Format(_storedProcedureSupplyEnums.ForecastUsageGranularityHistory_GetLatest, meterType, meterId, granularityCode);
 

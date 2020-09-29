@@ -94,7 +94,7 @@ namespace MethodLibrary
                 new Methods().BulkInsert(loadedUsageDataTable, $"[Supply.{meterType}{meterId}].[LoadedUsage_Temp]");
             }
 
-            public IEnumerable<DataRow> LoadedUsage_GetLatest(string meterType, long meterId)
+            public List<DataRow> LoadedUsage_GetLatest(string meterType, long meterId)
             {
                 var loadedUsageGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_GetLatest, meterType, meterId);
 

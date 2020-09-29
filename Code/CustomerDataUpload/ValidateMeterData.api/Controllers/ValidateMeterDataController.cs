@@ -137,7 +137,8 @@ namespace ValidateMeterData.api.Controllers
                 //Get MPANs not stored in database
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var newMPANDataRecords = mpanDataRecords.Where(r => 
-                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) == 0);
+                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) == 0)
+                    .ToList();
 
                 //Site, GSP, PC, MTC, LLFC and Area must be populated
                 requiredColumns = new Dictionary<string, string>
@@ -218,7 +219,8 @@ namespace ValidateMeterData.api.Controllers
 
                 //Get MPRNs not stored in database
                 var newMPRNDataRecords = mprnDataRecords.Where(r => 
-                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) == 0);
+                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) == 0)
+                    .ToList();
 
                 //Site, LDZ and Area must be populated
                 requiredColumns = new Dictionary<string, string>

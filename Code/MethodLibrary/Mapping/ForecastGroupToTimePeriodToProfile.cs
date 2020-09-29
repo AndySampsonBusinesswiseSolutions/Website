@@ -9,13 +9,13 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public IEnumerable<DataRow> ForecastGroupToTimePeriodToProfile_GetByProfileId(long profileId)
+            public List<DataRow> ForecastGroupToTimePeriodToProfile_GetByProfileId(long profileId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.ForecastGroupToTimePeriodToProfile_GetByProfileId, 
                     profileId);
 
-                return dataTable.Rows.Cast<DataRow>();
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
         }
     }

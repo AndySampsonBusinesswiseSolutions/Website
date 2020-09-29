@@ -32,13 +32,13 @@ namespace GetProfile.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 getProfileAPIId;
         private decimal estimatedAnnualUsage;
-        private IEnumerable<long> timePeriodIdList;
-        private IEnumerable<long> periodicUsageDateIds;
+        private List<long> timePeriodIdList;
+        private List<long> periodicUsageDateIds;
         private Dictionary<long, long> dateForecastGroupDictionary;
-        private IEnumerable<DataRow> forecastGroupToTimePeriodDataRowList;
         private Dictionary<long, long> profileValueIdDictionary;
         private Dictionary<long, decimal> profileValueDictionary;
         private Dictionary<long, long> forecastGroupToTimePeriodToProfileDictionary;
+        private List<Tuple<long, long, long>> forecastGroupToTimePeriodTuple;
 
         public GetProfileController(ILogger<GetProfileController> logger)
         {
@@ -103,8 +103,8 @@ namespace GetProfile.api.Controllers
                     return JsonConvert.SerializeObject(new Dictionary<long, Dictionary<long, decimal>>());
                 }
 
-                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
-                var processList = new List<long>{1, 2, 3, 4, 5};
+                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 4};
+                var processList = new List<long>{1, 2, 3, 4};
 
                 Parallel.ForEach(processList, parallelOptions, process => {
                     if(process == 1)
@@ -130,13 +130,13 @@ namespace GetProfile.api.Controllers
                     p => new Dictionary<long, decimal>()
                 ));
 
-                var forecastGroupToValidTimePeriodDataRowList = forecastGroupToTimePeriodDataRowList.Where(d => timePeriodIdList.Contains(d.Field<long>("TimePeriodId"))).ToList();
-                var forecastGroupIds = forecastGroupToValidTimePeriodDataRowList.Select(d => d.Field<long>("ForecastGroupId")).Distinct().ToList();
+                var forecastGroupToValidTimePeriodTuple = forecastGroupToTimePeriodTuple.Where(d => timePeriodIdList.Contains(d.Item3)).ToList();
+                var forecastGroupIds = forecastGroupToValidTimePeriodTuple.Select(d => d.Item1).Distinct().ToList();
                 var forecastGroupToTimePeriodIdDictionary = forecastGroupIds.ToDictionary(
                     f => f,
-                    f => forecastGroupToValidTimePeriodDataRowList.Where(f1 => f1.Field<long>("ForecastGroupId") == f).ToDictionary(
-                        f1 => f1.Field<long>("ForecastGroupToTimePeriodId"),
-                        f1 => f1.Field<long>("TimePeriodId")
+                    f => forecastGroupToValidTimePeriodTuple.Where(f1 => f1.Item1 == f).ToDictionary(
+                        f1 => f1.Item2,
+                        f1 => f1.Item3
                     )
                 );
 
@@ -206,7 +206,7 @@ namespace GetProfile.api.Controllers
 
             //Get TimePeriods for granularity
             timePeriodIdList = _mappingMethods.GranularityToTimePeriod_GetList().Where(g => g.Field<long>("GranularityId") == granularityId)
-                                .Select(g => g.Field<long>("TimePeriodId")).Distinct();
+                                .Select(g => g.Field<long>("TimePeriodId")).Distinct().ToList();
         }
 
         private void GetProfileValues(long profileId)
@@ -216,7 +216,14 @@ namespace GetProfile.api.Controllers
                     d => d.Field<long>("ForecastGroupToTimePeriodToProfileId"), 
                     d => d.Field<long>("ProfileValueId")
                 );
-            forecastGroupToTimePeriodDataRowList = _mappingMethods.ForecastGroupToTimePeriod_GetList();
+
+            forecastGroupToTimePeriodTuple = new List<Tuple<long, long, long>>();
+            var forecastGroupToTimePeriodDataRowList = _mappingMethods.ForecastGroupToTimePeriod_GetList();
+            foreach (DataRow r in forecastGroupToTimePeriodDataRowList)
+            {
+                var tup = Tuple.Create((long)r["ForecastGroupId"], (long)r["ForecastGroupToTimePeriodId"], (long)r["TimePeriodId"]);
+                forecastGroupToTimePeriodTuple.Add(tup);
+            }
 
             var profileValueIdToProfileValueDictionary = _demandForecastMethods.ProfileValue_GetList().ToDictionary(
                 p => p.Field<long>("ProfileValueId"),
@@ -247,7 +254,8 @@ namespace GetProfile.api.Controllers
             var earliestRequiredPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
             periodicUsageDateIds = Enumerable.Range(0, latestPeriodicUsageDate.Subtract(earliestRequiredPeriodicUsageDate).Days + 1)
                 .Select(offset => earliestRequiredPeriodicUsageDate.AddDays(offset))
-                .Select(d => dateDictionary[_methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)]);
+                .Select(d => dateDictionary[_methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)])
+                .ToList();
 
             //Get Date to ForecastGroup with priority 1
             dateForecastGroupDictionary = _mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionaryByPriority(1)

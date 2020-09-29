@@ -31,7 +31,7 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public IEnumerable<string> ForecastAgentDetail_GetForecastAgentDetailDescriptionByForecastAgentAttributeId(long forecastAgentAttributeId)
+            public List<string> ForecastAgentDetail_GetForecastAgentDetailDescriptionByForecastAgentAttributeId(long forecastAgentAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureDemandForecastEnums.ForecastAgentDetail_GetByForecastAgentAttributeId, 

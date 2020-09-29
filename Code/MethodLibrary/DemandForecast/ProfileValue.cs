@@ -9,12 +9,12 @@ namespace MethodLibrary
     {
         public partial class DemandForecast
         {
-            public IEnumerable<DataRow> ProfileValue_GetList()
+            public List<DataRow> ProfileValue_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureDemandForecastEnums.ProfileValue_GetList);
 
-                return dataTable.Rows.Cast<DataRow>();
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
         }
     }

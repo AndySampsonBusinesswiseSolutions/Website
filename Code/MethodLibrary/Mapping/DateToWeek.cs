@@ -9,12 +9,12 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public IEnumerable<DataRow> DateToWeek_GetList()
+            public List<DataRow> DateToWeek_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.DateToWeek_GetList);
 
-                return dataTable.Rows.Cast<DataRow>();
+                return dataTable.Rows.Cast<DataRow>().ToList();
             }
         }
     }

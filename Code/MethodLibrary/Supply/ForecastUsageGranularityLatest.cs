@@ -10,7 +10,7 @@ namespace MethodLibrary
     {
         public partial class Supply
         {
-            private void CreateForecastUsageGranularityLatestEntities(IEnumerable<long> granularityIdList, long schemaId, long meterId, string meterType)
+            private void CreateForecastUsageGranularityLatestEntities(List<long> granularityIdList, long schemaId, long meterId, string meterType)
             {
                 foreach(var granularityId in granularityIdList)
                 {
@@ -84,7 +84,7 @@ namespace MethodLibrary
                 ExecuteNonQuery(parameterInfoList, forecastUsageGranularityLatestInsertStoredProcedure, processQueueGUID);
             }
 
-            public IEnumerable<DataRow> ForecastUsageGranularityLatest_GetLatest(string meterType, long meterId, string granularityCode)
+            public List<DataRow> ForecastUsageGranularityLatest_GetLatest(string meterType, long meterId, string granularityCode)
             {
                 var forecastUsageGranularityLatestGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.ForecastUsageGranularityLatest_GetLatest, meterType, meterId, granularityCode);
 

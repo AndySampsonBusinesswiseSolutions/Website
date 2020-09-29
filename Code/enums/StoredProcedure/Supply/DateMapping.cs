@@ -17,9 +17,9 @@ namespace enums
                 public string DateMapping_Insert = "[Supply.{0}{1}].[DateMapping_Insert]";
                 public string DateMapping_GetLatest = "[Supply.{0}{1}].[DateMapping_GetLatest]";
 
-                public IEnumerable<string> DateMappingStoredProcedureList => AddDateMappingStoredProcedures();
+                public List<string> DateMappingStoredProcedureList => AddDateMappingStoredProcedures();
 
-                private IEnumerable<string> AddDateMappingStoredProcedures()
+                private List<string> AddDateMappingStoredProcedures()
                 {
                     return new List<string>
                     {

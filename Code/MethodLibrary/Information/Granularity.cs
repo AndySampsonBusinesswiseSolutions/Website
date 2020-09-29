@@ -42,14 +42,15 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public IEnumerable<string> GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(long granularityAttributeId)
+            public List<string> GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(long granularityAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.GranularityDetail_GetByGranularityAttributeId, 
                     granularityAttributeId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<string>("GranularityDetailDescription"));
+                    .Select(r => r.Field<string>("GranularityDetailDescription"))
+                    .ToList();
             }
 
             public long GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(long granularityAttributeId, string granularityDetailDescription)
@@ -88,13 +89,14 @@ namespace MethodLibrary
                     createdByUserId, sourceId, granularityId, granularityAttributeId, granularityDetailDescription);
             }
 
-            public IEnumerable<long> Granularity_GetGranularityIdList()
+            public List<long> Granularity_GetGranularityIdList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.Granularity_GetByList);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("GranularityId"));
+                    .Select(r => r.Field<long>("GranularityId"))
+                    .ToList();
             }
         }
     }

@@ -72,7 +72,7 @@ namespace MethodLibrary
                     .ToList();
             }
             
-            private IEnumerable<long> GetContractMeterListByContractReferenceAndMPXN(string contractReference, string mpxn)
+            private List<long> GetContractMeterListByContractReferenceAndMPXN(string contractReference, string mpxn)
             {
                 //Get ContractId from ContractReference
                 var contractReferenceContractAttributeId = ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
@@ -113,7 +113,7 @@ namespace MethodLibrary
                 }
 
                 //Get ContractMeterIds that exist in both lists
-                var matchingContractMeterIds = contractMeterIdFromContractId.Intersect(contractMeterIdFromMeterId);
+                var matchingContractMeterIds = contractMeterIdFromContractId.Intersect(contractMeterIdFromMeterId).ToList();
 
                 return matchingContractMeterIds;
             }
