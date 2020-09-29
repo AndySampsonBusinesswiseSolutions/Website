@@ -74,10 +74,8 @@ namespace MethodLibrary
             public void LoadedUsage_Delete(string meterType, long meterId)
             {
                 var loadedUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Delete, meterType, meterId);
-                var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
-                    .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
 
-                ExecuteNonQuery(parameterInfoList, loadedUsageDeleteStoredProcedure);
+                ExecuteNonQuery(new List<ParameterInfo>().ToArray(), loadedUsageDeleteStoredProcedure);
             }
 
             public void LoadedUsage_Insert(string meterType, long meterId, string processQueueGUID)

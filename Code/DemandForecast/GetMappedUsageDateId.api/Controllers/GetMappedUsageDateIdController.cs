@@ -86,7 +86,7 @@ namespace GetMappedUsageDateId.api.Controllers
                 var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject); 
 
                 //Get latest loaded usage
-                var latestDateMapping = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
+                var latestDateMapping = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
 
                 //Get Date dictionary
                 dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
@@ -119,10 +119,11 @@ namespace GetMappedUsageDateId.api.Controllers
 
                 Parallel.ForEach(futureDateToForecastGroupDictionary, parallelOptions, futureDateToForecastGroup => {
                     //Order by priority
-                    var forecastAgentList = dateToForecastAgentDictionary
-                        .Where(d => d.Key == futureDateToForecastGroup.Key)
+                    var forecastAgents = dateToForecastAgentDictionary[futureDateToForecastGroup.Key];
+                    var forecastAgentList = forecastAgents
                         .OrderBy(a => a.Value)
-                        .Select(a => forecastAgentDictionary[a.Key]);
+                        .Select(a => forecastAgentDictionary[a.Key])
+                        .ToList();
 
                     //Get mapped usage date
                     var usageDateId = 0L;

@@ -24,21 +24,17 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Insert usage into [Supply.X].[ForecastUsageWeekHistory] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageWeekHistory_Insert]
-        @CreatedByUserId BIGINT,
-        @SourceId BIGINT,
-        @YearId BIGINT,
-		@WeekId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
         --              CHANGE HISTORY
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -49,18 +45,26 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         (
             CreatedByUserId,
             SourceId,
-            YearId,
-			WeekId,
+			YearId,
+            WeekId,
             Usage
         )
-        VALUES
-        (
-            @CreatedByUserId,
-            @SourceId,
-            @YearId,
-			@WeekId,
-            @Usage
-        )
+        SELECT
+            CreatedByUserId,
+            SourceId,
+			YearId,
+            WeekId,
+            Usage
+        FROM
+            [Supply.X].[ForecastUsageWeekHistory_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [Supply.X].[ForecastUsageWeekHistory_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
 	END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryInsertStoredProcedureSQLGranularityAttributeId, @SQL
@@ -78,19 +82,17 @@ SET @SQL = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Insert usage into [Supply.X].[ForecastUsageWeekLatest] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageWeekLatest_Insert]
-        @YearId BIGINT,
-		@WeekId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
         --              CHANGE Latest
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -103,12 +105,20 @@ SET @SQL = N'
             WeekId,
             Usage
         )
-        VALUES
-        (
-			@YearId,
-            @WeekId,            
-            @Usage
-        )
+        SELECT
+			YearId,
+            WeekId,
+            Usage
+        FROM
+            [Supply.X].[ForecastUsageWeekLatest_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [Supply.X].[ForecastUsageWeekLatest_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
 	END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestInsertStoredProcedureSQLGranularityAttributeId, @SQL

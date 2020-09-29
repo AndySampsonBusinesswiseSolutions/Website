@@ -24,21 +24,17 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Insert usage into [Supply.X].[ForecastUsageQuarterHistory] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageQuarterHistory_Insert]
-        @CreatedByUserId BIGINT,
-        @SourceId BIGINT,
-        @YearId BIGINT,
-		@QuarterId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
         --              CHANGE HISTORY
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -49,18 +45,26 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         (
             CreatedByUserId,
             SourceId,
-            YearId,
-			QuarterId,
+			YearId,
+            QuarterId,
             Usage
         )
-        VALUES
-        (
-            @CreatedByUserId,
-            @SourceId,
-            @YearId,
-			@QuarterId,
-            @Usage
-        )
+        SELECT
+            CreatedByUserId,
+            SourceId,
+			YearId,
+            QuarterId,
+            Usage
+        FROM
+            [Supply.X].[ForecastUsageQuarterHistory_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [Supply.X].[ForecastUsageQuarterHistory_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
 	END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryInsertStoredProcedureSQLGranularityAttributeId, @SQL
@@ -78,19 +82,17 @@ SET @SQL = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Insert usage into [Supply.X].[ForecastUsageQuarterLatest] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageQuarterLatest_Insert]
-		@YearId BIGINT,
-        @QuarterId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
         --              CHANGE Latest
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -103,12 +105,20 @@ SET @SQL = N'
             QuarterId,
             Usage
         )
-        VALUES
-        (
-			@YearId,
-            @QuarterId,
-            @Usage
-        )
+        SELECT
+			YearId,
+            QuarterId,
+            Usage
+        FROM
+            [Supply.X].[ForecastUsageQuarterLatest_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [Supply.X].[ForecastUsageQuarterLatest_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
 	END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestInsertStoredProcedureSQLGranularityAttributeId, @SQL

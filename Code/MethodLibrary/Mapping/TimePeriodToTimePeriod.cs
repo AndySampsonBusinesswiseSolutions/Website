@@ -16,6 +16,27 @@ namespace MethodLibrary
 
                 return dataTable.Rows.Cast<DataRow>();
             }
+
+            public Dictionary<long, List<long>> TimePeriodToTimePeriod_GetDictionary()
+            {
+                var timePeriodToTimePeriodList = TimePeriodToTimePeriod_GetList();
+                var timePeriodIdList = timePeriodToTimePeriodList
+                    .Select(r => r.Field<long>("TimePeriodId"))
+                    .Distinct();
+
+                var dictionary = new Dictionary<long, List<long>>();
+
+                foreach(var timePeriodId in timePeriodIdList)
+                {
+                    var mappedTimePeriodList = timePeriodToTimePeriodList
+                        .Where(r => r.Field<long>("TimePeriodId") == timePeriodId)
+                        .Select(t => t.Field<long>("MappedTimePeriodId")).ToList();
+                    
+                    dictionary.Add(timePeriodId, mappedTimePeriodList);
+                }
+
+                return dictionary;
+            }
         }
     }
 }

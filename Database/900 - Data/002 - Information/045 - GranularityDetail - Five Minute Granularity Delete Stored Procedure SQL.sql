@@ -23,18 +23,16 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Delete usage from [Supply.X].[ForecastUsageFiveMinuteHistory] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageFiveMinuteHistory_Delete]
-        @DateId BIGINT,
-        @TimePeriodId BIGINT
     AS
     BEGIN
         -- =============================================
         --              CHANGE HISTORY
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -44,11 +42,15 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         UPDATE
             [Supply.X].[ForecastUsageFiveMinuteHistory]
         SET
-            EffectiveToDateTime = GETUTCDATE()
+            ForecastUsageFiveMinuteHistory.EffectiveToDateTime = GETUTCDATE()
+        FROM
+            [Supply.X].[ForecastUsageFiveMinuteHistory]
+        INNER JOIN
+            [Supply.X].[ForecastUsageFiveMinuteHistory_Temp]
+            ON ForecastUsageFiveMinuteHistory_Temp.DateId = ForecastUsageFiveMinuteHistory.DateId
+            AND ForecastUsageFiveMinuteHistory_Temp.TimePeriodId = ForecastUsageFiveMinuteHistory.TimePeriodId
         WHERE
-            DateId = @DateId
-            AND TimePeriodId = @TimePeriodId
-            AND EffectiveToDateTime = ''9999-12-31''
+            ForecastUsageFiveMinuteHistory.EffectiveToDateTime = ''9999-12-31''
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryDeleteStoredProcedureSQLGranularityAttributeId, @SQL
@@ -66,18 +68,16 @@ SET @SQL = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Delete usage from [Supply.X].[ForecastUsageFiveMinuteLatest] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageFiveMinuteLatest_Delete]
-        @DateId BIGINT,
-        @TimePeriodId BIGINT
     AS
     BEGIN
         -- =============================================
         --              CHANGE Latest
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -85,11 +85,13 @@ SET @SQL = N'
         SET NOCOUNT ON;
 
         DELETE
+            [Supply.X].[ForecastUsageFiveMinuteLatest]
         FROM
             [Supply.X].[ForecastUsageFiveMinuteLatest]
-        WHERE
-            DateId = @DateId
-            AND TimePeriodId = @TimePeriodId
+        INNER JOIN
+            [Supply.X].[ForecastUsageFiveMinuteLatest_Temp]
+            ON ForecastUsageFiveMinuteLatest_Temp.DateId = ForecastUsageFiveMinuteLatest.DateId
+            AND ForecastUsageFiveMinuteLatest_Temp.TimePeriodId = ForecastUsageFiveMinuteLatest.TimePeriodId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestDeleteStoredProcedureSQLGranularityAttributeId, @SQL

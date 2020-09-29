@@ -24,17 +24,16 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Delete usage from [Supply.X].[ForecastUsageDateHistory] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageDateHistory_Delete]
-        @DateId BIGINT
     AS
     BEGIN
         -- =============================================
         --              CHANGE HISTORY
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -44,10 +43,14 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         UPDATE
             [Supply.X].[ForecastUsageDateHistory]
         SET
-            EffectiveToDateTime = GETUTCDATE()
+            ForecastUsageDateHistory.EffectiveToDateTime = GETUTCDATE()
+        FROM
+            [Supply.X].[ForecastUsageDateHistory]
+        INNER JOIN
+            [Supply.X].[ForecastUsageDateHistory_Temp]
+            ON ForecastUsageDateHistory_Temp.DateId = ForecastUsageDateHistory.DateId
         WHERE
-            DateId = @DateId
-            AND EffectiveToDateTime = ''9999-12-31''
+            ForecastUsageDateHistory.EffectiveToDateTime = ''9999-12-31''
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryDeleteStoredProcedureSQLGranularityAttributeId, @SQL
@@ -65,17 +68,16 @@ SET @SQL = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Delete usage from [Supply.X].[ForecastUsageDateLatest] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageDateLatest_Delete]
-        @DateId BIGINT
     AS
     BEGIN
         -- =============================================
         --              CHANGE Latest
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -83,10 +85,12 @@ SET @SQL = N'
         SET NOCOUNT ON;
 
         DELETE
+            [Supply.X].[ForecastUsageDateLatest]
         FROM
             [Supply.X].[ForecastUsageDateLatest]
-        WHERE
-            DateId = @DateId
+        INNER JOIN
+            [Supply.X].[ForecastUsageDateLatest_Temp]
+            ON ForecastUsageDateLatest_Temp.DateId = ForecastUsageDateLatest.DateId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestDeleteStoredProcedureSQLGranularityAttributeId, @SQL

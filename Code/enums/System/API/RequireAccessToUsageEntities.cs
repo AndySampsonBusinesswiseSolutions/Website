@@ -19,7 +19,13 @@ namespace enums
                         "CommitProfiledUsage.api",
                         "CreateForecastUsage.api",
                         "GetMappedUsageDateId.api",
-                        "CreateFiveMinuteForecast.api"
+                        "CreateFiveMinuteForecast.api",
+                        "CreateHalfHourForecast.api",
+                        "CreateDateForecast.api",
+                        "CreateWeekForecast.api",
+                        "CreateMonthForecast.api",
+                        "CreateQuarterForecast.api",
+                        "CreateYearForecast.api",
                     };
                 }
             }

@@ -82,9 +82,9 @@ namespace CreateHalfHourForecast.api.Controllers
                 var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
 
                 //Get GranularityId
-                var granularityCode = "Half Hour";
-                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
-                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularityCode);
+                var granularityCode = "HalfHour";
+                var granularityCodeGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityCode);
+                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityCodeGranularityAttributeId, granularityCode);
 
                 //Get required time periods
                 var nonStandardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
@@ -97,92 +97,98 @@ namespace CreateHalfHourForecast.api.Controllers
                     d => d.Field<long>("DateId"),
                     d => d.Field<long>("MappedDateId")
                 );
-                var forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new Dictionary<long, decimal>()));
-                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
-                var timePeriodToTimePeriodIds = _mappingMethods.TimePeriodToTimePeriod_GetList();
+
+                var usageTypePriorityDictionary = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve                
+                var timePeriodToTimePeriodDictionary = _mappingMethods.TimePeriodToTimePeriod_GetDictionary();
+                var nonStandardGranularityDates = nonStandardGranularityToTimePeriodDataRows.Select(d => d.Field<long>("DateId")).Distinct()
+                    .ToDictionary(
+                        d => d, 
+                        d => nonStandardGranularityToTimePeriodDataRows.Where(n => n.Field<long>("DateId") == d).Select(d => d.Field<long>("TimePeriodId")).ToList()
+                    );
+
+                var forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>(
+                    futureDateToUsageDateDictionary.ToDictionary(
+                        f => f.Key, 
+                        f => (nonStandardGranularityDates.ContainsKey(f.Key)
+                                ? nonStandardGranularityDates[f.Key]
+                                : standardGranularityToTimePeriods).ToDictionary(t => t, t => new decimal())
+                    )
+                );
+
+                var forecastFoundDictionary = new ConcurrentDictionary<long, Dictionary<long, bool>>(
+                    futureDateToUsageDateDictionary.ToDictionary(
+                        f => f.Key, 
+                        f => (nonStandardGranularityDates.ContainsKey(f.Key)
+                                ? nonStandardGranularityDates[f.Key]
+                                : standardGranularityToTimePeriods).ToDictionary(t => t, t => new bool())
+                    )
+                );
+
+                var timePeriodToMappedTimePeriodDictionary = new ConcurrentDictionary<long, KeyValuePair<long, List<long>>>(
+                    timePeriodToTimePeriodDictionary.ToDictionary(
+                        t => t.Key,
+                        t => t.Value.Select(m => m).Distinct()
+                            .ToDictionary(m => m, m => timePeriodToTimePeriodDictionary.Where(t => t.Value.Contains(m)).Select(t => t.Key).ToList())
+                            .OrderBy(m => m.Value.Count()).First()
+                    )
+                );
 
                 //Loop through future date ids
-                foreach(var futureDateId in forecastDictionary.Keys)
+                foreach(var forecast in forecastDictionary)
                 {
-                    //Get time periods required for date
-                    var timePeriodIds = nonStandardGranularityToTimePeriodDataRows.Any(d => d.Field<long>("DateId") == futureDateId)
-                        ? nonStandardGranularityToTimePeriodDataRows.Where(d => d.Field<long>("DateId") == futureDateId)
-                            .Select(d => d.Field<long>("TimePeriodId"))
-                        : standardGranularityToTimePeriods;
-
                     //Get usage date id
-                    var usageDateId = futureDateToUsageDateDictionary[futureDateId];
+                    var usageDateId = futureDateToUsageDateDictionary[forecast.Key];
 
                     //Get usage for date
-                    var usageForDateList = latestLoadedUsage.Where(u => u.Field<long>("DateId") == usageDateId);
+                    var usageForDateList = latestLoadedUsage.Where(u => u.Field<long>("DateId") == usageDateId).ToList();
+                    var timePeriodIds = forecast.Value.Keys.ToList();
+                    var forecastFound = forecastFoundDictionary[forecast.Key];
 
                     foreach(var timePeriodId in timePeriodIds)
                     {
-                        if(forecastDictionary[futureDateId].ContainsKey(timePeriodId))
+                        if(forecastFound[timePeriodId])
                         {
                             continue;
                         }
 
                         //Get usage for time period
-                        var usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == timePeriodId);
+                        var usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == timePeriodId).ToList();
 
                         if(usageForTimePeriodList.Any())
                         {
-                            //Get usage based on usage type priority
-                            var usage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
-                                .OrderBy(u => u.Key).First().Value;
-
-                            //Add usage to forecast
-                            forecastDictionary[futureDateId].TryAdd(timePeriodId, usage);
+                            SetForecastValue(forecast.Value, forecastFound, timePeriodId, GetUsageByUsageType(usageForTimePeriodList, usageTypePriorityDictionary));
                         }
                         else
                         {
-                            var mappedTimePeriodIds = timePeriodToTimePeriodIds.Where(t => t.Field<long>("TimePeriodId") == timePeriodId);
-                            var mappedtimePeriodDictionary = mappedTimePeriodIds.ToDictionary(
-                                    m => m.Field<long>("MappedTimePeriodId"),
-                                    m => timePeriodToTimePeriodIds.Where(t => t.Field<long>("MappedTimePeriodId") == m.Field<long>("MappedTimePeriodId"))
-                                        .Select(t => t.Field<long>("TimePeriodId")))
-                                .OrderBy(m => m.Value.Count()).First();
+                            var mappedTimePeriodDictionary = timePeriodToMappedTimePeriodDictionary[timePeriodId];
 
-                            usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodDictionary.Key);
+                            usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedTimePeriodDictionary.Key).ToList();
 
                             //Get usage based on usage type priority
-                            var mappedUsage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
+                            var mappedUsage = usageForTimePeriodList.ToDictionary(u => usageTypePriorityDictionary.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
                                 .OrderBy(u => u.Key).First().Value;
 
-                            var missingTimePeriodIds = new List<long>();
+                            var mappedTimePeriodIdsWithUsageList = mappedTimePeriodDictionary.Value.Where(v => usageForDateList.Any(u => u.Field<long>("TimePeriodId") == v)).ToList();
+                            var missingTimePeriodIds = mappedTimePeriodDictionary.Value.Except(mappedTimePeriodIdsWithUsageList);
 
-                            foreach(var mappedtimePeriodId in mappedtimePeriodDictionary.Value)
+                            foreach(var mappedtimePeriodId in mappedTimePeriodIdsWithUsageList)
                             {
                                 //Get usage for time period
-                                usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodId);
+                                usageForTimePeriodList = usageForDateList.Where(u => u.Field<long>("TimePeriodId") == mappedtimePeriodId).ToList();
 
-                                if(usageForTimePeriodList.Any())
-                                {
-                                    //Get usage based on usage type priority
-                                    var usage = usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
-                                        .OrderBy(u => u.Key).First().Value;
-
-                                    //Add usage to forecast
-                                    forecastDictionary[futureDateId].TryAdd(mappedtimePeriodId, usage);
-                                }
-                                else
-                                {
-                                    missingTimePeriodIds.Add(mappedtimePeriodId);
-                                }
+                                SetForecastValue(forecast.Value, forecastFound, timePeriodId, GetUsageByUsageType(usageForTimePeriodList, usageTypePriorityDictionary));
                             }
 
                             if(missingTimePeriodIds.Any())
                             {
-                                var timePeriodUsage = mappedtimePeriodDictionary.Value
-                                    .Where(t => forecastDictionary[futureDateId].ContainsKey(t))
-                                    .Sum(t => forecastDictionary[futureDateId][t]);
+                                var timePeriodUsage = mappedTimePeriodDictionary.Value
+                                    .Where(t => forecastDictionary[forecast.Key].ContainsKey(t))
+                                    .Sum(t => forecastDictionary[forecast.Key][t]);
                                 var missingTimePeriodUsage = (mappedUsage - timePeriodUsage)/missingTimePeriodIds.Count();
 
                                 foreach(var missingTimePeriodId in missingTimePeriodIds)
                                 {
-                                    //Add usage to forecast
-                                    forecastDictionary[futureDateId].TryAdd(missingTimePeriodId, missingTimePeriodUsage);
+                                    SetForecastValue(forecast.Value, forecastFound, missingTimePeriodId, missingTimePeriodUsage);
                                 }
                             }
                         }
@@ -190,30 +196,60 @@ namespace CreateHalfHourForecast.api.Controllers
                 }
 
                 //Get existing half hour forecast
-                var existingHalfHourForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+                var existingHalfHourForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode);
+                var existingHalfHourForecastDictionary = existingHalfHourForecasts.Select(f => f.Item1).Distinct()
+                    .ToDictionary(
+                        d => d,
+                        d => existingHalfHourForecasts.Where(f => f.Item1 == d).ToDictionary(
+                            t => t.Item2,
+                            t => t.Item3
+                        )
+                );
+
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("DateId", typeof(long));
+                dataTable.Columns.Add("TimePeriodId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
 
                 foreach(var forecastDate in forecastDictionary)
                 {
                     foreach(var forecastTimePeriod in forecastDate.Value)
                     {
-                        var existingHalfHourForecastDataRow = existingHalfHourForecasts.FirstOrDefault(
-                            d => d.Field<long>("DateId") == forecastDate.Key
-                            && d.Field<long>("TimePeriodId") == forecastTimePeriod.Key);
+                        var addUsageToDataTable = !existingHalfHourForecastDictionary.ContainsKey(forecastDate.Key)
+                            || !existingHalfHourForecastDictionary[forecastDate.Key].ContainsKey(forecastTimePeriod.Key)
+                            || existingHalfHourForecastDictionary[forecastDate.Key][forecastTimePeriod.Key] != forecastTimePeriod.Value;
 
-                        if(existingHalfHourForecastDataRow == null || existingHalfHourForecastDataRow.Field<decimal>("Usage") != forecastTimePeriod.Value)
+                        if(addUsageToDataTable)
                         {
-                            var forecastDateKeyValuePair = new KeyValuePair<long, long>(forecastDate.Key, forecastTimePeriod.Key);
-
-                            //End date existing date forecast
-                            _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
-                            _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
-
-                            //Insert new date forecast
-                            _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastDateKeyValuePair, forecastTimePeriod.Value);
-                            _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastDateKeyValuePair, forecastTimePeriod.Value);
+                            AddToDataTable(dataTable, forecastDate.Key, forecastTimePeriod.Key, forecastTimePeriod.Value);
                         }
-                    }                 
+                    }
                 }
+
+                var latestDataTable = dataTable.Copy();
+                latestDataTable.Columns.Remove("CreatedByUserId");
+                latestDataTable.Columns.Remove("SourceId");
+
+                //Bulk insert into temp tables
+                _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
+                _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+
+                //End date existing date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+                _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+
+                //Insert new date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
                 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, false, null);
@@ -225,6 +261,28 @@ namespace CreateHalfHourForecast.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private void AddToDataTable(DataTable dataTable, long forecastDateId, long forecastTimePeriodId, decimal usage)
+        {
+            var dataRow = dataTable.NewRow();
+            dataRow["DateId"] = forecastDateId;
+            dataRow["TimePeriodId"] = forecastTimePeriodId;
+            dataRow["Usage"] = usage;
+            dataTable.Rows.Add(dataRow);
+        }
+
+        private decimal GetUsageByUsageType(List<DataRow> usageForTimePeriodList, Dictionary<long, long> usageTypePriorityDictionary)
+        {
+            return usageForTimePeriodList.ToDictionary(u => usageTypePriorityDictionary.First(ut => ut.Value == u.Field<long>("UsageTypeId")).Key, u => u.Field<decimal>("Usage"))
+                .OrderBy(u => u.Key).First().Value;
+        }
+
+        private void SetForecastValue(Dictionary<long, decimal> forecast, Dictionary<long, bool> forecastFound, long timePeriodId, decimal usage)
+        {
+            //Add usage to forecast
+            forecast[timePeriodId] = Math.Round(usage, 10);
+            forecastFound[timePeriodId] = true;
         }
     }
 }

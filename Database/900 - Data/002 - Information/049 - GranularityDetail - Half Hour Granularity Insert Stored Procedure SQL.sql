@@ -24,21 +24,17 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Insert usage into [Supply.X].[ForecastUsageHalfHourHistory] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageHalfHourHistory_Insert]
-        @CreatedByUserId BIGINT,
-        @SourceId BIGINT,
-		@DateId BIGINT,
-        @TimePeriodId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
         --              CHANGE HISTORY
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -53,14 +49,22 @@ DECLARE @SQL NVARCHAR(MAX) = N'
             TimePeriodId,
             Usage
         )
-        VALUES
-        (
-            @CreatedByUserId,
-            @SourceId,
-			@DateId,
-            @TimePeriodId,
-            @Usage
-        )
+        SELECT
+            CreatedByUserId,
+            SourceId,
+			DateId,
+            TimePeriodId,
+            Usage
+        FROM
+            [Supply.X].[ForecastUsageHalfHourHistory_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [Supply.X].[ForecastUsageHalfHourHistory_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
 	END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryInsertStoredProcedureSQLGranularityAttributeId, @SQL
@@ -78,19 +82,17 @@ SET @SQL = N'
 
 	-- =============================================
     -- Author:		System Generated
-    -- Create date: 2020-09-24
+    -- Create date: 2020-09-28
     -- Description:	Insert usage into [Supply.X].[ForecastUsageHalfHourLatest] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageHalfHourLatest_Insert]
-		@DateId BIGINT,
-        @TimePeriodId BIGINT,
-        @Usage DECIMAL(18,10)
+        @ProcessQueueGUID VARCHAR(255)
     AS
     BEGIN
         -- =============================================
         --              CHANGE Latest
-        -- 2020-09-24 -> System Generated -> Initial development of script
+        -- 2020-09-28 -> System Generated -> Initial development of script
         -- =============================================
 
         -- SET NOCOUNT ON added to prevent extra result sets from
@@ -103,12 +105,20 @@ SET @SQL = N'
             TimePeriodId,
             Usage
         )
-        VALUES
-        (
-			@DateId,
-            @TimePeriodId,
-            @Usage
-        )
+        SELECT
+			DateId,
+            TimePeriodId,
+            Usage
+        FROM
+            [Supply.X].[ForecastUsageHalfHourLatest_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
+
+        DELETE
+        FROM
+            [Supply.X].[ForecastUsageHalfHourLatest_Temp]
+        WHERE
+            ProcessQueueGUID = @ProcessQueueGUID
 	END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestInsertStoredProcedureSQLGranularityAttributeId, @SQL

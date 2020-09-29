@@ -36,9 +36,9 @@ namespace GetProfile.api.Controllers
         private IEnumerable<long> periodicUsageDateIds;
         private Dictionary<long, long> dateForecastGroupDictionary;
         private IEnumerable<DataRow> forecastGroupToTimePeriodDataRowList;
-        private IEnumerable<DataRow> forecastGroupToTimePeriodToProfileDataRowList;
         private Dictionary<long, long> profileValueIdDictionary;
         private Dictionary<long, decimal> profileValueDictionary;
+        private Dictionary<long, long> forecastGroupToTimePeriodToProfileDictionary;
 
         public GetProfileController(ILogger<GetProfileController> logger)
         {
@@ -78,11 +78,9 @@ namespace GetProfile.api.Controllers
                     sourceId,
                     getProfileAPIId);
 
-                var profile = new Dictionary<long, Dictionary<long, decimal>>();
-
                 if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetProfileAPI, getProfileAPIId, jsonObject))
                 {
-                    return JsonConvert.SerializeObject(profile);
+                    return JsonConvert.SerializeObject(new Dictionary<long, Dictionary<long, decimal>>());
                 }
 
                 //Update Process Queue
@@ -102,7 +100,7 @@ namespace GetProfile.api.Controllers
                     //Update Process Queue
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getProfileAPIId, true, $"System Error Id {errorId}");
 
-                    return JsonConvert.SerializeObject(profile);
+                    return JsonConvert.SerializeObject(new Dictionary<long, Dictionary<long, decimal>>());
                 }
 
                 var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
@@ -127,25 +125,35 @@ namespace GetProfile.api.Controllers
                     }
                 });
 
+                var profile = new Dictionary<long, Dictionary<long, decimal>>(periodicUsageDateIds.ToDictionary(
+                    p => p,
+                    p => new Dictionary<long, decimal>()
+                ));
+
+                var forecastGroupToValidTimePeriodDataRowList = forecastGroupToTimePeriodDataRowList.Where(d => timePeriodIdList.Contains(d.Field<long>("TimePeriodId"))).ToList();
+                var forecastGroupIds = forecastGroupToValidTimePeriodDataRowList.Select(d => d.Field<long>("ForecastGroupId")).Distinct().ToList();
+                var forecastGroupToTimePeriodIdDictionary = forecastGroupIds.ToDictionary(
+                    f => f,
+                    f => forecastGroupToValidTimePeriodDataRowList.Where(f1 => f1.Field<long>("ForecastGroupId") == f).ToDictionary(
+                        f1 => f1.Field<long>("ForecastGroupToTimePeriodId"),
+                        f1 => f1.Field<long>("TimePeriodId")
+                    )
+                );
+
                 foreach(var periodicUsageDateId in periodicUsageDateIds)
                 {
-                    profile.Add(periodicUsageDateId, new Dictionary<long, decimal>());
-
                     //Get ForecastGroupId
                     var forecastGroupId = dateForecastGroupDictionary[periodicUsageDateId];
 
                     //Get ForecastGroupToTimePeriodIds
-                    var forecastGroupToTimePeriodIds = forecastGroupToTimePeriodDataRowList
-                        .Where(d => d.Field<long>("ForecastGroupId") == forecastGroupId)
-                        .Where(d => timePeriodIdList.Contains(d.Field<long>("TimePeriodId")))
-                        .ToDictionary(d => d.Field<long>("ForecastGroupToTimePeriodId"), d => d.Field<long>("TimePeriodId"));
+                    var forecastGroupToTimePeriodIds = forecastGroupToTimePeriodIdDictionary[forecastGroupId];
+
+                    var profileDictionary = profile[periodicUsageDateId];
 
                     //Loop through each ForecastGroupToTimePeriodId
                     foreach(var forecastGroupToTimePeriodId in forecastGroupToTimePeriodIds)
                     {
-                        var forecastGroupToTimePeriodToProfileId = forecastGroupToTimePeriodToProfileDataRowList
-                            .First(f => f.Field<long>("ForecastGroupToTimePeriodId") == forecastGroupToTimePeriodId.Key)
-                            .Field<long>("ForecastGroupToTimePeriodToProfileId");
+                        var forecastGroupToTimePeriodToProfileId = forecastGroupToTimePeriodToProfileDictionary[forecastGroupToTimePeriodId.Key];
 
                         //Get ProfileValue
                         var profileValueId = profileValueIdDictionary[forecastGroupToTimePeriodToProfileId];
@@ -155,7 +163,7 @@ namespace GetProfile.api.Controllers
                         var usage = profileValue * estimatedAnnualUsage;
 
                         //Add to dictionary
-                        profile[periodicUsageDateId].Add(forecastGroupToTimePeriodId.Value, usage);
+                        profileDictionary.Add(forecastGroupToTimePeriodId.Value, usage);
                     }
                 }
 
@@ -203,19 +211,31 @@ namespace GetProfile.api.Controllers
 
         private void GetProfileValues(long profileId)
         {
-            var forecastGroupToTimePeriodToProfileToProfileValueDataRowList = _mappingMethods.ForecastGroupToTimePeriodToProfileToProfileValue_GetList()
-                .ToDictionary(d => d.Field<long>("ForecastGroupToTimePeriodToProfileId"), d => d.Field<long>("ProfileValueId"));
+            var forecastGroupToTimePeriodToProfileToProfileValueDictionary = _mappingMethods.ForecastGroupToTimePeriodToProfileToProfileValue_GetList()
+                .ToDictionary(
+                    d => d.Field<long>("ForecastGroupToTimePeriodToProfileId"), 
+                    d => d.Field<long>("ProfileValueId")
+                );
             forecastGroupToTimePeriodDataRowList = _mappingMethods.ForecastGroupToTimePeriod_GetList();
-            var profileValueDataRowList = _demandForecastMethods.ProfileValue_GetList();
 
-            forecastGroupToTimePeriodToProfileDataRowList = _mappingMethods.ForecastGroupToTimePeriodToProfile_GetByProfileId(profileId);
-            var forecastGroupToTimePeriodToProfileIdList = forecastGroupToTimePeriodToProfileDataRowList.Select(d => d.Field<long>("ForecastGroupToTimePeriodToProfileId")).Distinct();
-            profileValueIdDictionary = forecastGroupToTimePeriodToProfileIdList
-                .ToDictionary(f => f, f => forecastGroupToTimePeriodToProfileToProfileValueDataRowList.First(v => v.Key == f).Value);
+            var profileValueIdToProfileValueDictionary = _demandForecastMethods.ProfileValue_GetList().ToDictionary(
+                p => p.Field<long>("ProfileValueId"),
+                p => p.Field<decimal>("ProfileValue")
+            );
+
+            var forecastGroupToTimePeriodToProfileDataRowList = _mappingMethods.ForecastGroupToTimePeriodToProfile_GetByProfileId(profileId);
+            forecastGroupToTimePeriodToProfileDictionary = forecastGroupToTimePeriodToProfileDataRowList.ToDictionary(
+                    f => f.Field<long>("ForecastGroupToTimePeriodId"),
+                    f => f.Field<long>("ForecastGroupToTimePeriodToProfileId")
+                );
+
+            profileValueIdDictionary = forecastGroupToTimePeriodToProfileDictionary.Values.Distinct().ToList()
+                .ToDictionary(f => f, f => forecastGroupToTimePeriodToProfileToProfileValueDictionary[f]);
+
             profileValueDictionary = profileValueIdDictionary
                 .Select(p => p.Value)
                 .Distinct()
-                .ToDictionary(p => p, p => profileValueDataRowList.First(v => v.Field<long>("ProfileValueId") == p).Field<decimal>("ProfileValue"));
+                .ToDictionary(p => p, p => profileValueIdToProfileValueDictionary[p]);
         }
 
         private void GetDates()

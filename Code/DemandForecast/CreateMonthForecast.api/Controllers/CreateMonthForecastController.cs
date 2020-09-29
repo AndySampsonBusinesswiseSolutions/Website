@@ -82,9 +82,19 @@ namespace CreateMonthForecast.api.Controllers
 
                 //Get Date to Month mappings
                 var dateToMonthMappings = _mappingMethods.DateToMonth_GetList();
+                var monthToDateDictionary = dateToMonthMappings.Select(d => d.Field<long>("MonthId")).Distinct()
+                    .ToDictionary(
+                        w => w,
+                        w => dateToMonthMappings.Where(d => d.Field<long>("MonthId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                    );
                 
                 //Get Date to Year mappings
                 var dateToYearMappings = _mappingMethods.DateToYear_GetList();
+                var yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
+                    .ToDictionary(
+                        w => w,
+                        w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                    );
 
                 //Set up forecast dictionary
                 var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
@@ -100,56 +110,81 @@ namespace CreateMonthForecast.api.Controllers
                 {
                     forecastDictionary[futureDateId] = latestLoadedUsage
                         .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<long>("Usage"));
+                        .Sum(u => u.Field<decimal>("Usage"));
                 }
 
                 //Get Forecast by Year
-                var forecastYearIds = dateToYearMappings.Where(d => futureDateToUsageDateDictionary.ContainsKey(d.Field<long>("DateId")))
-                    .Select(d => d.Field<long>("YearId"))
-                    .Distinct();
+                var forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
+                    .Select(y => y.Key).Distinct().ToList();
 
                 var granularityCode = "Month";
 
                 //Get existing month forecast
                 var existingMonthForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+                var existingMonthForecastDictionary = existingMonthForecasts.Select(d => d.Field<long>("YearId")).Distinct()
+                    .ToDictionary(
+                        d => d,
+                        d => existingMonthForecasts.Where(e => e.Field<long>("YearId") == d).ToDictionary(
+                            t => t.Field<long>("MonthId"),
+                            t => t.Field<decimal>("Usage")
+                        )
+                );
+
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("YearId", typeof(long));
+                dataTable.Columns.Add("MonthId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
 
                 foreach(var forecastYearId in forecastYearIds)
                 {
-                    var dateIdsForYearId = dateToYearMappings.Where(d => d.Field<long>("YearId") == forecastYearId)
-                        .Select(d => d.Field<long>("DateId"));
+                    var dateIdsForYearId = yearToDateDictionary[forecastYearId];
 
                     //Get Forecast by Month
-                    var forecastMonthIds = dateToMonthMappings.Where(d => dateIdsForYearId.Contains(d.Field<long>("DateId")))
-                        .Select(d => d.Field<long>("MonthId"))
-                        .Distinct();
+                    var forecastMonthIds = monthToDateDictionary.Where(w => w.Value.Any(wv => dateIdsForYearId.Contains(wv)))
+                        .Select(w => w.Key).Distinct().ToList();
 
                     foreach(var forecastMonthId in forecastMonthIds)
                     {
-                        var dateIdsForYearIdMonthId = dateToMonthMappings.Where(d => d.Field<long>("MonthId") == forecastMonthId)
-                            .Select(d => d.Field<long>("DateId")).Intersect(dateIdsForYearId);
+                        var dateIdsForYearIdMonthId = monthToDateDictionary[forecastMonthId].Intersect(dateIdsForYearId);
 
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdMonthId.Contains(f.Key))
                             .Sum(f => f.Value);
 
-                        var existingMonthForecastsDataRow = existingMonthForecasts.FirstOrDefault(
-                            d => d.Field<long>("YearId") == forecastYearId
-                            && d.Field<long>("MonthId") == forecastMonthId
-                        );
+                        var addUsageToDataTable = !existingMonthForecastDictionary.ContainsKey(forecastYearId)
+                            || !existingMonthForecastDictionary[forecastYearId].ContainsKey(forecastMonthId)
+                            || existingMonthForecastDictionary[forecastYearId][forecastMonthId] != Math.Round(forecast, 10);
 
-                        if(existingMonthForecastsDataRow == null || existingMonthForecastsDataRow.Field<decimal>("Usage") != forecast)
+                        if(addUsageToDataTable)
                         {
-                            var forecastYearMonthKeyValuePair = new KeyValuePair<long, long>(forecastYearId, forecastMonthId);
-
-                            //End date existing month forecast
-                            _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair);
-                            _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair);
-
-                            //Insert new month forecast
-                            _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearMonthKeyValuePair, forecast);
-                            _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearMonthKeyValuePair, forecast);
+                            AddToDataTable(dataTable, forecastYearId, forecastMonthId, forecast);
                         }
                     }
                 }
+
+                var latestDataTable = dataTable.Copy();
+                latestDataTable.Columns.Remove("CreatedByUserId");
+                latestDataTable.Columns.Remove("SourceId");
+
+                //Bulk insert into temp tables
+                _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
+                _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+
+                //End date existing date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+                _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+
+                //Insert new date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createMonthForecastAPIId, false, null);
@@ -161,6 +196,15 @@ namespace CreateMonthForecast.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createMonthForecastAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private void AddToDataTable(DataTable dataTable, long forecastYearId, long forecastMonthId, decimal usage)
+        {
+            var dataRow = dataTable.NewRow();
+            dataRow["YearId"] = forecastYearId;
+            dataRow["MonthId"] = forecastMonthId;
+            dataRow["Usage"] = usage;
+            dataTable.Rows.Add(dataRow);
         }
     }
 }

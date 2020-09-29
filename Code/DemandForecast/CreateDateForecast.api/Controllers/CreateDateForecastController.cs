@@ -90,39 +90,67 @@ namespace CreateDateForecast.api.Controllers
                     d => d.Field<long>("DateId"),
                     d => d.Field<long>("MappedDateId")
                 );
-                var forecastDictionary = new ConcurrentDictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
+                
                 var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
+
+                var forecastDictionary = new ConcurrentDictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
 
                 //Loop through future date ids
                 foreach(var futureDateId in forecastDictionary.Keys)
                 {
                     forecastDictionary[futureDateId] = latestLoadedUsage
                         .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<long>("Usage"));
+                        .Sum(u => u.Field<decimal>("Usage"));
                 }
 
                 var granularityCode = "Date";
 
                 //Get existing date forecast
                 var existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+                var existingDateForecastDictionary = existingDateForecasts.ToDictionary(
+                        d => d.Field<long>("DateId"),
+                        d => d.Field<decimal>("Usage")
+                );
+
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("DateId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
 
                 foreach(var forecastDate in forecastDictionary)
                 {
-                    var existingDateForecastDataRow = existingDateForecasts.FirstOrDefault(d => d.Field<long>("DateId") == forecastDate.Key);
+                    var addUsageToDataTable = !existingDateForecastDictionary.ContainsKey(forecastDate.Key)
+                        || existingDateForecastDictionary[forecastDate.Key] != forecastDate.Value;
 
-                    if(existingDateForecastDataRow == null || existingDateForecastDataRow.Field<decimal>("Usage") != forecastDate.Value)
+                    if(addUsageToDataTable)
                     {
-                        var forecastDateKeyValuePair = new KeyValuePair<long, long>(forecastDate.Key, new long());
-
-                        //End date existing date forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
-                        _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastDateKeyValuePair);
-
-                        //Insert new date forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastDateKeyValuePair, forecastDate.Value);
-                        _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastDateKeyValuePair, forecastDate.Value);
+                        AddToDataTable(dataTable, forecastDate.Key, forecastDate.Value);
                     }
                 }
+
+                var latestDataTable = dataTable.Copy();
+                latestDataTable.Columns.Remove("CreatedByUserId");
+                latestDataTable.Columns.Remove("SourceId");
+
+                //Bulk insert into temp tables
+                _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
+                _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+
+                //End date existing date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+                _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+
+                //Insert new date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, false, null);
@@ -134,6 +162,14 @@ namespace CreateDateForecast.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private void AddToDataTable(DataTable dataTable, long forecastDateId, decimal usage)
+        {
+            var dataRow = dataTable.NewRow();
+            dataRow["DateId"] = forecastDateId;
+            dataRow["Usage"] = usage;
+            dataTable.Rows.Add(dataRow);
         }
     }
 }

@@ -82,9 +82,19 @@ namespace CreateQuarterForecast.api.Controllers
 
                 //Get Date to Quarter mappings
                 var dateToQuarterMappings = _mappingMethods.DateToQuarter_GetList();
+                var quarterToDateDictionary = dateToQuarterMappings.Select(d => d.Field<long>("QuarterId")).Distinct()
+                    .ToDictionary(
+                        w => w,
+                        w => dateToQuarterMappings.Where(d => d.Field<long>("QuarterId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                    );
                 
                 //Get Date to Year mappings
                 var dateToYearMappings = _mappingMethods.DateToYear_GetList();
+                var yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
+                    .ToDictionary(
+                        w => w,
+                        w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                    );
 
                 //Set up forecast dictionary
                 var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
@@ -100,56 +110,81 @@ namespace CreateQuarterForecast.api.Controllers
                 {
                     forecastDictionary[futureDateId] = latestLoadedUsage
                         .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<long>("Usage"));
+                        .Sum(u => u.Field<decimal>("Usage"));
                 }
 
                 //Get Forecast by Year
-                var forecastYearIds = dateToYearMappings.Where(d => futureDateToUsageDateDictionary.ContainsKey(d.Field<long>("DateId")))
-                    .Select(d => d.Field<long>("YearId"))
-                    .Distinct();
+                var forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
+                    .Select(y => y.Key).Distinct().ToList();
 
                 var granularityCode = "Quarter";
 
                 //Get existing quarter forecast
                 var existingQuarterForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+                var existingQuarterForecastDictionary = existingQuarterForecasts.Select(d => d.Field<long>("YearId")).Distinct()
+                    .ToDictionary(
+                        d => d,
+                        d => existingQuarterForecasts.Where(e => e.Field<long>("YearId") == d).ToDictionary(
+                            t => t.Field<long>("QuarterId"),
+                            t => t.Field<decimal>("Usage")
+                        )
+                );
+
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("YearId", typeof(long));
+                dataTable.Columns.Add("QuarterId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
 
                 foreach(var forecastYearId in forecastYearIds)
                 {
-                    var dateIdsForYearId = dateToYearMappings.Where(d => d.Field<long>("YearId") == forecastYearId)
-                        .Select(d => d.Field<long>("DateId"));
+                    var dateIdsForYearId = yearToDateDictionary[forecastYearId];
 
                     //Get Forecast by Quarter
-                    var forecastQuarterIds = dateToQuarterMappings.Where(d => dateIdsForYearId.Contains(d.Field<long>("DateId")))
-                        .Select(d => d.Field<long>("QuarterId"))
-                        .Distinct();
+                    var forecastQuarterIds = quarterToDateDictionary.Where(w => w.Value.Any(wv => dateIdsForYearId.Contains(wv)))
+                        .Select(w => w.Key).Distinct().ToList();
 
                     foreach(var forecastQuarterId in forecastQuarterIds)
                     {
-                        var dateIdsForYearIdQuarterId = dateToQuarterMappings.Where(d => d.Field<long>("QuarterId") == forecastQuarterId)
-                            .Select(d => d.Field<long>("DateId")).Intersect(dateIdsForYearId);
+                        var dateIdsForYearIdQuarterId = quarterToDateDictionary[forecastQuarterId].Intersect(dateIdsForYearId);
 
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdQuarterId.Contains(f.Key))
                             .Sum(f => f.Value);
 
-                        var existingQuarterForecastsDataRow = existingQuarterForecasts.FirstOrDefault(
-                            d => d.Field<long>("YearId") == forecastYearId
-                            && d.Field<long>("QuarterId") == forecastQuarterId
-                        );
+                        var addUsageToDataTable = !existingQuarterForecastDictionary.ContainsKey(forecastYearId)
+                            || !existingQuarterForecastDictionary[forecastYearId].ContainsKey(forecastQuarterId)
+                            || existingQuarterForecastDictionary[forecastYearId][forecastQuarterId] != Math.Round(forecast, 10);
 
-                        if(existingQuarterForecastsDataRow == null || existingQuarterForecastsDataRow.Field<decimal>("Usage") != forecast)
+                        if(addUsageToDataTable)
                         {
-                            var forecastYearQuarterKeyValuePair = new KeyValuePair<long, long>(forecastYearId, forecastQuarterId);
-
-                            //End date existing quarter forecast
-                            _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair);
-                            _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair);
-
-                            //Insert new quarter forecast
-                            _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearQuarterKeyValuePair, forecast);
-                            _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearQuarterKeyValuePair, forecast);
+                            AddToDataTable(dataTable, forecastYearId, forecastQuarterId, forecast);
                         }
                     }
                 }
+
+                var latestDataTable = dataTable.Copy();
+                latestDataTable.Columns.Remove("CreatedByUserId");
+                latestDataTable.Columns.Remove("SourceId");
+
+                //Bulk insert into temp tables
+                _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
+                _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+
+                //End date existing date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+                _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+
+                //Insert new date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createQuarterForecastAPIId, false, null);
@@ -161,6 +196,15 @@ namespace CreateQuarterForecast.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createQuarterForecastAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private void AddToDataTable(DataTable dataTable, long forecastYearId, long forecastQuarterId, decimal usage)
+        {
+            var dataRow = dataTable.NewRow();
+            dataRow["YearId"] = forecastYearId;
+            dataRow["QuarterId"] = forecastQuarterId;
+            dataRow["Usage"] = usage;
+            dataTable.Rows.Add(dataRow);
         }
     }
 }

@@ -52,7 +52,7 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         FROM
             [Supply.X].[ForecastUsageHalfHourHistory]
         WHERE
-            AND EffectiveToDateTime = ''9999-12-31''
+            EffectiveToDateTime = ''9999-12-31''
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryGetLatestStoredProcedureSQLGranularityAttributeId, @SQL

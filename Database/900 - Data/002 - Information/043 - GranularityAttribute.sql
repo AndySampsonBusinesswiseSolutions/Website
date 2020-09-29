@@ -14,11 +14,13 @@ EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'I
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast API GUID'
 
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Table SQL'
+EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Temp Table SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Delete Stored Procedure SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Insert Stored Procedure SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage History Get Latest Stored Procedure SQL'
 
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage Latest Table SQL'
+EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage Latest Temp Table SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage Latest Delete Stored Procedure SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage Latest Insert Stored Procedure SQL'
 EXEC [Information].[GranularityAttribute_Insert] @CreatedByUserId, @SourceId, 'Forecast Usage Latest Get Latest Stored Procedure SQL'

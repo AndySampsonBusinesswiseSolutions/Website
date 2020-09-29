@@ -106,7 +106,7 @@ namespace CreateForecastUsage.api.Controllers
                 var forecastAPIGUIDGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.ForecastAPIGUID);
                 var forecastAPIGUIDList = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(forecastAPIGUIDGranularityAttributeId);
 
-                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 1};
+                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
                 Parallel.ForEach(forecastAPIGUIDList, parallelOptions, forecastAPIGUID => {
                     var APIId = _systemMethods.API_GetAPIIdByAPIGUID(forecastAPIGUID);
                     var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CreateForecastUsageAPI, jsonObject);

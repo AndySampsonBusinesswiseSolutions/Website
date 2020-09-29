@@ -6,22 +6,22 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[MonthToQuarter_Insert]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[DateToQuarter_Insert]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[MonthToQuarter_Insert] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[DateToQuarter_Insert] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-07-29
--- Description:	Insert new mapping of a Month to a Quarter into [Mapping].[MonthToQuarter] table
+-- Description:	Insert new mapping of a Date to a Quarter into [Mapping].[DateToQuarter] table
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[MonthToQuarter_Insert]
+ALTER PROCEDURE [Mapping].[DateToQuarter_Insert]
     @CreatedByUserId BIGINT,
     @SourceId BIGINT,
-    @MonthId BIGINT,
+    @DateId BIGINT,
     @QuarterId BIGINT
 AS
 BEGIN
@@ -34,18 +34,18 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    INSERT INTO [Mapping].MonthToQuarter
+    INSERT INTO [Mapping].DateToQuarter
     (
         CreatedByUserId,
         SourceId,
-        MonthId,
+        DateId,
         QuarterId
     )
     VALUES
     (
         @CreatedByUserId,
         @SourceId,
-        @MonthId,
+        @DateId,
         @QuarterId
     )
 END

@@ -66,13 +66,14 @@ namespace CommitProfiledUsage.api.Controllers
                     sourceId,
                     commitProfiledUsageAPIId);
 
-                //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitProfiledUsageAPIId);
-
                 //Launch GetProfile process and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitProfiledUsageAPIId);
+
                 var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
 
                 //No profile found so empty dictionary returned
@@ -83,7 +84,6 @@ namespace CommitProfiledUsage.api.Controllers
 
                 var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(profileString.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
                 var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => Convert.ToInt64(x.Key), x => JsonConvert.DeserializeObject<Dictionary<long, decimal>>(x.Value));
-                var profileDictionary = new Dictionary<long, Dictionary<long, decimal>>();
 
                 if(!periodicUsageDictionary.Any())
                 {

@@ -82,6 +82,11 @@ namespace CreateYearForecast.api.Controllers
                 
                 //Get Date to Year mappings
                 var dateToYearMappings = _mappingMethods.DateToYear_GetList();
+                var yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
+                    .ToDictionary(
+                        w => w,
+                        w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                    );
 
                 //Set up forecast dictionary
                 var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
@@ -97,42 +102,66 @@ namespace CreateYearForecast.api.Controllers
                 {
                     forecastDictionary[futureDateId] = latestLoadedUsage
                         .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<long>("Usage"));
+                        .Sum(u => u.Field<decimal>("Usage"));
                 }
 
                 //Get Forecast by Year
-                var forecastYearIds = dateToYearMappings.Where(d => futureDateToUsageDateDictionary.ContainsKey(d.Field<long>("DateId")))
-                    .Select(d => d.Field<long>("YearId"))
-                    .Distinct();
+                var forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
+                    .Select(y => y.Key).Distinct().ToList();
 
                 var granularityCode = "Year";
 
                 //Get existing year forecast
                 var existingYearForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+                var existingYearForecastDictionary = existingYearForecasts.ToDictionary(
+                        d => d.Field<long>("YearId"),
+                        d => d.Field<decimal>("Usage")
+                );
+
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
+                dataTable.Columns.Add("YearId", typeof(long));
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
+                //Set default values
+                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
 
                 foreach(var forecastYearId in forecastYearIds)
                 {
-                    var dateIdsForYearId = dateToYearMappings.Where(d => d.Field<long>("YearId") == forecastYearId)
-                        .Select(d => d.Field<long>("DateId"));
+                    var dateIdsForYearId = yearToDateDictionary[forecastYearId];
 
                     var forecast = forecastDictionary.Where(f => dateIdsForYearId.Contains(f.Key))
                         .Sum(f => f.Value);
 
-                    var existingYearForecastDataRow = existingYearForecasts.FirstOrDefault(d => d.Field<long>("YearId") == forecastYearId);
+                    var addUsageToDataTable = !existingYearForecastDictionary.ContainsKey(forecastYearId)
+                        || existingYearForecastDictionary[forecastYearId] != Math.Round(forecast, 10);
 
-                    if(existingYearForecastDataRow == null || existingYearForecastDataRow.Field<decimal>("Usage") != forecast)
+                    if(addUsageToDataTable)
                     {
-                        var forecastYearKeyValuePair = new KeyValuePair<long, long>(forecastYearId, new long());
-
-                        //End date existing year forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode, forecastYearKeyValuePair);
-                        _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode, forecastYearKeyValuePair);
-
-                        //Insert new year forecast
-                        _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, createdByUserId, sourceId, forecastYearKeyValuePair, forecast);
-                        _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, forecastYearKeyValuePair, forecast);
+                        AddToDataTable(dataTable, forecastYearId, forecast);
                     }
                 }
+
+                var latestDataTable = dataTable.Copy();
+                latestDataTable.Columns.Remove("CreatedByUserId");
+                latestDataTable.Columns.Remove("SourceId");
+
+                //Bulk insert into temp tables
+                _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
+                _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+
+                //End date existing date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+                _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+
+                //Insert new date forecast
+                _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, false, null);
@@ -144,6 +173,14 @@ namespace CreateYearForecast.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, true, $"System Error Id {errorId}");
             }
+        }
+
+        private void AddToDataTable(DataTable dataTable, long forecastYearId, decimal usage)
+        {
+            var dataRow = dataTable.NewRow();
+            dataRow["YearId"] = forecastYearId;
+            dataRow["Usage"] = usage;
+            dataTable.Rows.Add(dataRow);
         }
     }
 }

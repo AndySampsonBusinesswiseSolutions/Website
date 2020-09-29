@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public Dictionary<long, Dictionary<long, int>> DateToForecastAgent_GetDateForecastAgentDictionary()
+            public ConcurrentDictionary<long, Dictionary<long, int>> DateToForecastAgent_GetDateForecastAgentDictionary()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.DateToForecastAgent_GetList);
@@ -18,7 +19,7 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("DateId"))
                     .Distinct();
 
-                var dictionary = new Dictionary<long, Dictionary<long, int>>();
+                var dictionary = new ConcurrentDictionary<long, Dictionary<long, int>>();
 
                 foreach(var dateId in dateIdList)
                 {
@@ -26,7 +27,7 @@ namespace MethodLibrary
                         .Where(r => r.Field<long>("DateId") == dateId)
                         .ToDictionary(r => r.Field<long>("ForecastAgentId"), r => r.Field<int>("Priority"));
                     
-                    dictionary.Add(dateId, forecastAgentDictionary);
+                    dictionary.TryAdd(dateId, forecastAgentDictionary);
                 }
 
                 return dictionary;
