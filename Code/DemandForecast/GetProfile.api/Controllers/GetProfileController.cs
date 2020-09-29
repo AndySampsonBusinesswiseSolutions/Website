@@ -83,13 +83,14 @@ namespace GetProfile.api.Controllers
                     return JsonConvert.SerializeObject(new Dictionary<long, Dictionary<long, decimal>>());
                 }
 
-                //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileAPIId);
-
                 //Launch GetProfileId process and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileAPIId);
+
                 var profileId = Convert.ToInt64(result.Result.ToString());
 
                 //If no profile id returned, create system error

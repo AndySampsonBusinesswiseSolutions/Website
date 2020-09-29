@@ -125,6 +125,8 @@ namespace CreateDateForecast.api.Controllers
                 dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
                 dataTable.Columns["SourceId"].DefaultValue = sourceId;
 
+                var dataRowAdded = false;
+
                 foreach(var forecastDate in forecastDictionary)
                 {
                     var addUsageToDataTable = !existingDateForecastDictionary.ContainsKey(forecastDate.Key)
@@ -133,24 +135,28 @@ namespace CreateDateForecast.api.Controllers
                     if(addUsageToDataTable)
                     {
                         AddToDataTable(dataTable, forecastDate.Key, forecastDate.Value);
+                        dataRowAdded = true;
                     }
                 }
 
-                var latestDataTable = dataTable.Copy();
-                latestDataTable.Columns.Remove("CreatedByUserId");
-                latestDataTable.Columns.Remove("SourceId");
+                if(dataRowAdded)
+                {
+                    var latestDataTable = dataTable.Copy();
+                    latestDataTable.Columns.Remove("CreatedByUserId");
+                    latestDataTable.Columns.Remove("SourceId");
 
-                //Bulk insert into temp tables
-                _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
-                _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+                    //Bulk insert into temp tables
+                    _supplyMethods.ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, dataTable);
+                    _supplyMethods.ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
 
-                //End date existing date forecast
-                _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
-                _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+                    //End date existing date forecast
+                    _supplyMethods.ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+                    _supplyMethods.ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
 
-                //Insert new date forecast
-                _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
-                _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                    //Insert new date forecast
+                    _supplyMethods.ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                    _supplyMethods.ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
+                }                
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, false, null);

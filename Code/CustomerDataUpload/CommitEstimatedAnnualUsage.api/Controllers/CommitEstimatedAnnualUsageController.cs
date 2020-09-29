@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -107,20 +108,15 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 var usageType = "Customer Estimated";
                 var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
 
+                //Launch GetProfile process and wait for response
+                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
+                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+
                 //Get profile from Profiling API
-                var profile = new Dictionary<long, Dictionary<long, decimal>>();
-                var profileUsage = new Dictionary<long, Dictionary<long, decimal>>();
-
-                //Create Periodic Usage
-                foreach(var date in profile)
-                {
-                    profileUsage.Add(date.Key, new Dictionary<long, decimal>());
-
-                    foreach(var timePeriod in date.Value)
-                    {
-                        profileUsage[date.Key].Add(timePeriod.Key, timePeriod.Value * estimatedAnnualUsage);
-                    }
-                }
+                var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
+                var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(profileString.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
+                var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => Convert.ToInt64(x.Key), x => JsonConvert.DeserializeObject<Dictionary<long, decimal>>(x.Value));
 
                 //Create DataTable
                 var dataTable = new DataTable();
@@ -138,7 +134,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 dataTable.Columns["SourceId"].DefaultValue = sourceId;
                 dataTable.Columns["UsageTypeId"].DefaultValue = usageTypeId;
 
-                foreach(var date in profileUsage)
+                foreach(var date in periodicUsageDictionary)
                 {
                     foreach(var timePeriod in date.Value)
                     {
