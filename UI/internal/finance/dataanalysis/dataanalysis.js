@@ -34,7 +34,7 @@ function resetSlider() {
   updateChart(false);
 }
 
-function createTrees(isPageLoad) {
+async function createTrees(isPageLoad) {
   createEnergyUnitListItem();
   createEnergyUnitInstanceListItem();
   createCommodityListItem();
@@ -46,7 +46,7 @@ function createTrees(isPageLoad) {
     createTimePeriodTree();
   }
   
-  createSiteTree(usageSites, "updatePage()", isPageLoad);
+  await createSiteTree(isPageLoad);
 
   if(!isPageLoad) {
     updateChart(false);
@@ -272,7 +272,7 @@ function createBudgetTree() {
   return budgetListItem;
 }
 
-function createSiteTree(usageSites, functions, isPageLoad) {
+async function createSiteTree(isPageLoad) {
   var div = document.getElementById('siteTree');
   var inputs = div.getElementsByTagName('input');
   var checkboxes = !isPageLoad ? [] : getCheckedElements(inputs);
@@ -318,7 +318,7 @@ function createSiteTree(usageSites, functions, isPageLoad) {
   recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
   recurseSelectionListItem.appendChild(recurseSelectionSpan);
 
-  buildSiteBranch(usageSites, getCommodityOption(), ul, functions);  
+  await buildSiteBranch(ul);  
 
   div.appendChild(headerDiv);
   ul.appendChild(breakDisplayListItem);
@@ -438,246 +438,32 @@ function createTimePeriodTree() {
   div.appendChild(ul);
 }
 
+async function getTree(data) {
+	try {
+	const response = await fetch('http://localhost:5000/EagleEyeBuildLocationTree/BuildLocationTree', {
+		method: 'POST',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(data)
+	  });
+  
+	  return response.json();
+	}
+	catch{
+	  return null;
+	}
+  }
+
 //build site
-function buildSiteBranch(usageSites, commodityOption, elementToAppendTo, functions) {
-  var siteLength = usageSites.length;
-
-  if(siteLocationcheckbox.checked) {
-    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
-      var site = usageSites[siteCount];
-
-      if(!commodityMatch(site, commodityOption)) {
-        continue;
-      }
-
-      var listItem = appendListItemChildren(getAttribute(site.Attributes, "GUID"), site.hasOwnProperty('Areas'), functions, site.Attributes, 'Site');
-      elementToAppendTo.appendChild(listItem);
-
-      if(site.hasOwnProperty('Areas')) {
-        var ul = listItem.getElementsByTagName('ul')[0];
-        buildAreaBranch(site.Areas, commodityOption, ul, functions);
-      }
-    }
-  }
-  else {
-    var areas = [];
-    for(var siteCount = 0; siteCount < siteLength; siteCount++) {
-      var site = usageSites[siteCount];
-
-      if(!commodityMatch(site, commodityOption)) {
-        continue;
-      }
-
-      areas.push(...site.Areas);
-    }
-
-    buildAreaBranch(areas, commodityOption, elementToAppendTo, functions);
-  }
-}
-
-//build area
-function buildAreaBranch(areas, commodityOption, elementToAppendTo, functions) {
-  var areaLength = areas.length;
-
-  if(areaLocationcheckbox.checked) {
-    for(var areaCount = 0; areaCount < areaLength; areaCount++) {
-      var area = areas[areaCount];
-
-      if(!commodityMatch(area, commodityOption)) {
-        continue;
-      }
-
-      var listItem = appendListItemChildren(getAttribute(area.Attributes, "GUID"), area.hasOwnProperty('Commodities'), functions, area.Attributes, 'Area')
-      elementToAppendTo.appendChild(listItem);
-
-      if(area.hasOwnProperty('Commodities')) {
-        var ul = listItem.getElementsByTagName('ul')[0];
-        buildCommodityBranch(area.Commodities, commodityOption, ul, functions);
-      }
-    }
-  }
-  else {
-    var commodities = [];
-    var commodityNames = [];
-
-    for(var areaCount = 0; areaCount < areaLength; areaCount++) {
-      var area = areas[areaCount];
-
-      if(!commodityMatch(area, commodityOption)) {
-        continue;
-      }
-
-      var commodityLength = area.Commodities.length;
-
-      for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
-        var commodity = area.Commodities[commodityCount];
-
-        if(!commodityMatch(commodity, commodityOption)) {
-          continue;
-        }
-
-        var commodityName = getAttribute(commodity.Attributes, "Name");
-        var commodityIndex = commodityNames.indexOf(commodityName);
-        if(!commodityNames.includes(commodityName)) {
-          commodityNames.push(commodityName);
-          commodities.push(JSON.parse(JSON.stringify(commodity)));
-        }
-        else {
-          commodities[commodityIndex].Meters.push(...commodity.Meters);
-        }
-      }
-    }
-
-    buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions);
-  }
-}
-
-//build commodity
-function buildCommodityBranch(commodities, commodityOption, elementToAppendTo, functions) {
-  var commodityLength = commodities.length;
-
-  for(var commodityCount = 0; commodityCount < commodityLength; commodityCount++) {
-    var commodity = commodities[commodityCount];
-
-    if(!commodityMatch(commodity, commodityOption)) {
-      continue;
-    }
-
-    if(commodityLocationcheckbox.checked) {
-      var listItem = appendListItemChildren(getAttribute(commodity.Attributes, "GUID"), commodity.hasOwnProperty('Meters'), null, commodity.Attributes, 'Commodity')
-      elementToAppendTo.appendChild(listItem);
-    }
-
-    if(commodity.hasOwnProperty('Meters')) {
-      var ul = commodityLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
-      buildMeterBranch(commodity.Meters, commodityOption, ul, functions);
-    }
-  }
-}
-
-//build meter
-function buildMeterBranch(meters, commodityOption, elementToAppendTo, functions) {
-  var meterLength = meters.length;
-
-  if(meterLocationcheckbox.checked) {
-    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-      var meter = meters[meterCount];
-
-      if(!commodityMatch(meter, commodityOption)) {
-        continue;
-      }
-
-      var listItem = appendListItemChildren(getAttribute(meter.Attributes, "GUID"), meter.hasOwnProperty('SubAreas'), functions, meter.Attributes, 'Meter')
-      elementToAppendTo.appendChild(listItem);
-
-      if(meter.hasOwnProperty('SubAreas')) {
-        var ul = listItem.getElementsByTagName('ul')[0];
-        buildSubAreaBranch(meter.SubAreas, commodityOption, ul, functions);
-      }
-    }
-  }
-  else {
-    var subAreas = [];
-    var subAreaNames = [];
-
-    for(var meterCount = 0; meterCount < meterLength; meterCount++) {
-      var meter = meters[meterCount];
-
-      if(!commodityMatch(meter, commodityOption)) {
-        continue;
-      }
-
-      if(meter.SubAreas) {
-        var subAreaLength = meter.SubAreas.length;
-
-        for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
-          var subArea = meter.SubAreas[subAreaCount];
-
-          if(!commodityMatch(subArea, commodityOption)) {
-            continue;
-          }
-
-          var subAreaName = getAttribute(subArea.Attributes, "Name");
-          var subAreaIndex = subAreaNames.indexOf(subAreaName);
-          if(!subAreaNames.includes(subAreaName)) {
-            subAreaNames.push(subAreaName);
-            subAreas.push(JSON.parse(JSON.stringify(subArea)));
-          }
-          else {
-            subAreas[subAreaIndex].Assets.push(...subArea.Assets);
-          }
-        }
-      }
-    }
-
-    buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions);
-  }
-}
-
-//build sub area
-function buildSubAreaBranch(subAreas, commodityOption, elementToAppendTo, functions) {
-  var subAreaLength = subAreas.length;
-
-  for(var subAreaCount = 0; subAreaCount < subAreaLength; subAreaCount++) {
-    var subArea = subAreas[subAreaCount];
-
-    if(!commodityMatch(subArea, commodityOption)) {
-      continue;
-    }
-
-    if(subareaLocationcheckbox.checked) {
-      var listItem = appendListItemChildren(getAttribute(subArea.Attributes, "GUID"), subArea.hasOwnProperty('Assets'), functions, subArea.Attributes, 'SubArea')
-      elementToAppendTo.appendChild(listItem);
-    }
-
-    if(subArea.hasOwnProperty('Assets')) {
-      var ul = subareaLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
-      buildAssetBranch(subArea.Assets, commodityOption, ul, functions);
-    }
-  }
-}
-
-//build asset
-function buildAssetBranch(assets, commodityOption, elementToAppendTo, functions) {
-  var assetLength = assets.length;
-
-  for(var assetCount = 0; assetCount < assetLength; assetCount++) {
-    var asset = assets[assetCount];
-
-    if(!commodityMatch(asset, commodityOption)) {
-      continue;
-    }
-
-    if(assetLocationcheckbox.checked) {
-      var listItem = appendListItemChildren(getAttribute(asset.Attributes, "GUID"), asset.hasOwnProperty('SubMeters'), functions, asset.Attributes, 'Asset')
-      elementToAppendTo.appendChild(listItem);
-    }
-
-    if(asset.hasOwnProperty('SubMeters')) {
-      var ul = assetLocationcheckbox.checked ? listItem.getElementsByTagName('ul')[0] : elementToAppendTo;
-      buildSubMeterBranch(asset.SubMeters, commodityOption, ul, functions);
-    }
-  }
-}
-
-//build sub meter
-function buildSubMeterBranch(subMeters, commodityOption, elementToAppendTo, functions) {
-  if(!submeterLocationcheckbox.checked) {
-    return;
-  }
-
-  var subMeterLength = subMeters.length;
-
-  for(var subMeterCount = 0; subMeterCount < subMeterLength; subMeterCount++) {
-    var subMeter = subMeters[subMeterCount];
-
-    if(!commodityMatch(subMeter, commodityOption)) {
-      continue;
-    }
-
-    var listItem = appendListItemChildren(getAttribute(subMeter.Attributes, "GUID"), false, functions, subMeter.Attributes, 'SubMeter');
-    elementToAppendTo.appendChild(listItem);
-  }
+async function buildSiteBranch(elementToAppendTo) {
+  var treeResponse = await getTree({});
+  elementToAppendTo.innerHTML = treeResponse.message;
 }
 
 function updatePage(callingElement) {
@@ -694,7 +480,7 @@ function updatePage(callingElement) {
       break;
     case 'commoditySelector':
     case 'locationSelector':
-      createSiteTree(usageSites, "updatePage()"); 
+      createSiteTree(); 
       addExpanderOnClickEvents();
       break;
     case 'groupingOptionSelector':

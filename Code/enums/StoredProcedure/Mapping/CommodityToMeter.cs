@@ -8,6 +8,7 @@ namespace enums
             {
                 public string CommodityToMeter_GetByMeterId = "[Mapping].[CommodityToMeter_GetByMeterId]";
                 public string CommodityToMeter_Insert = "[Mapping].[CommodityToMeter_Insert]";
+                public string CommodityToMeter_GetList = "[Mapping].[CommodityToMeter_GetList]";
             }
         }
     }

@@ -130,6 +130,16 @@ namespace MethodLibrary
                 //Get MeterId
                 return MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
             }
+
+            public Dictionary<long, string> MeterDetail_GetMeterDetailDescriptionDictionaryByMeterAttributeId(long meterAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.MeterDetail_GetByMeterAttributeId, 
+                    meterAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .ToDictionary(d => d.Field<long>("MeterId"), d => d.Field<string>("MeterDetailDescription"));
+            }
         }
     }
 }

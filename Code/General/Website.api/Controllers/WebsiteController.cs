@@ -18,9 +18,9 @@ namespace Website.api.Controllers
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Administration _administrationMethods = new Methods.Administration();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        public readonly Methods.Customer _customerMethods = new Methods.Customer();
+        public readonly Methods.Information _informationMethods = new Methods.Information();
+        public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
