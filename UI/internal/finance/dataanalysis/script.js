@@ -34,8 +34,8 @@
     }
     
     // Date Range Slider
-    var floorDate = new Date(2019, 10, 1).getTime();
-    var ceilDate = new Date(2020, 0, 4).getTime();
+    var floorDate = new Date(2021, 0, 1).getTime();
+    var ceilDate = new Date(2021, 11, 31).getTime();
     var minDate = new Date(floorDate).getTime();
     var maxDate = new Date(ceilDate).getTime();
     var millisInDay = 24*60*60*1000;
