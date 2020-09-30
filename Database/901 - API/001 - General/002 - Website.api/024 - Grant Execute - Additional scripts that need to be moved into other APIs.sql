@@ -49,3 +49,9 @@ GO
 
 -- GRANT EXECUTE ON OBJECT::[Customer].[MeterAttribute_GetByMeterAttributeDescription] TO [Website.api];
 -- GO
+
+-- GRANT EXECUTE ON OBJECT::[Information].[Date_GetList] TO [Website.api];
+-- GO
+
+-- GRANT EXECUTE ON OBJECT::[Customer].[Meter_GetList] TO [Website.api];
+-- GO

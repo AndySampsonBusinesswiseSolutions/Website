@@ -1,14 +1,11 @@
 var categories;
 var chartSeries;
 
-function pageLoad() {
-  createTrees(true);  
+async function pageLoad() {
+  await createTrees(true);  
 
-  window.onload = function() {
-    updateChart(true);
-    mySidenav.style.display = "none";
-    overlay.style.display = "none";
-  }
+  mySidenav.style.display = "none";
+  overlay.style.display = "none";
 }
 
 function getCommodityOption() {
@@ -48,9 +45,7 @@ async function createTrees(isPageLoad) {
   
   await createSiteTree(isPageLoad);
 
-  if(!isPageLoad) {
-    updateChart(false);
-  }
+  await updateChart(isPageLoad);
   
   addExpanderOnClickEvents();
   setOpenExpanders();
@@ -440,7 +435,7 @@ function createTimePeriodTree() {
 
 async function getTree(data) {
 	try {
-	const response = await fetch('http://localhost:5000/EagleEyeBuildLocationTree/BuildLocationTree', {
+	const response = await fetch('http://localhost:5000/EagleEye/BuildLocationTree', {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',
@@ -458,7 +453,7 @@ async function getTree(data) {
 	catch{
 	  return null;
 	}
-  }
+}
 
 //build site
 async function buildSiteBranch(elementToAppendTo) {
@@ -569,7 +564,7 @@ function makeTimePeriodOptionsTimeSpanMonthly() {
   });
 }
 
-function updateChart(isPageLoading) {
+async function updateChart(isPageLoading) {
   checkTimePeriodOptionsTimeSpan();
 
   var commodityOption = getCommodityOption();
@@ -589,7 +584,7 @@ function updateChart(isPageLoading) {
   }
 
   var meters = getMeters(showByArray, checkboxes, commodityOption);
-  chartSeries = getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate);
+  chartSeries = await getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate);
   var chartOptions = getChartOptions(categories, displayType, getXAxisTypeFromTimeSpan(), dateFormat);
 
   clearElement(chart);
@@ -1379,7 +1374,32 @@ function convertMonthIdToQuarter(monthId) {
 	}
 }
 
-function getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate) {
+async function getDailyForecast(data) {
+	try {
+	const response = await fetch('http://localhost:5000/EagleEye/GetDailyForecast', {
+		method: 'POST',
+		mode: 'cors',
+		cache: 'no-cache',
+		credentials: 'same-origin',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		redirect: 'follow',
+		referrerPolicy: 'no-referrer',
+		body: JSON.stringify(data)
+	  });
+  
+	  return response.json();
+	}
+	catch{
+	  return null;
+	}
+}
+
+async function getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate) {
+  var dailyForecast = await getDailyForecast({});
+  meters = JSON.parse(dailyForecast.message);
+
   var newSeries = [];
   var showByLength = showByArray.length;
   var costDataUsed = false;
@@ -1395,8 +1415,8 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
     }
 
     for(var j = 0; j < meters.length; j++) {
-      if(meters[j].ShowBy == showByArray[i]) {
-        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 1);
+      // if(meters[j].ShowBy == showByArray[i]) {
+        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].Meters[0].SeriesName, showByLength > 1);
 
         if(series.length) {
           newSeries.push(...series);
@@ -1404,7 +1424,7 @@ function getChartSeries(showByArray, meters, categories, dateFormat, startDate, 
         else {
           newSeries.push(series);
         }
-      }
+      // }
     }    
   }
 

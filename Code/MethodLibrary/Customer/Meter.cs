@@ -67,6 +67,16 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public List<long> Meter_GetMeterIdList()
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Meter_GetList);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterId"))
+                    .ToList();
+            }
+
             public void MeterDetail_Insert(long createdByUserId, long sourceId, long meterId, long meterAttributeId, string meterDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

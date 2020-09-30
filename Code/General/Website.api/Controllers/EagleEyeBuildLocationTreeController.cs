@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Cors;
 using enums;
 using System.Linq;
 using System.Collections.Generic;
+using MethodLibrary;
+using System;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace Website.api.Controllers
 {
@@ -13,13 +17,14 @@ namespace Website.api.Controllers
     {
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
 
         public EagleEyeBuildLocationTreeController(ILogger<WebsiteController> logger) : base(logger)
         {
         }
 
         [HttpPost]
-        [Route("EagleEyeBuildLocationTree/BuildLocationTree")]
+        [Route("EagleEye/BuildLocationTree")]
         public IActionResult BuildLocationTree([FromBody] object data) //TODO: Build into new API
         {
             //Get SiteNameSiteAttributeId
@@ -85,6 +90,56 @@ namespace Website.api.Controllers
 
             var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{html}<ul>";
             return new OkObjectResult(new { message = baseUl });
+        }
+
+        [HttpPost]
+        [Route("EagleEye/GetDailyForecast")]
+        public IActionResult GetDailyForecast([FromBody] object data) //TODO: Build into new API
+        {
+            //Get Date dictionary
+            var dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
+
+            //Get MeterIds
+            var meterIdList = _customerMethods.Meter_GetMeterIdList();
+
+            //Get MeterIdentifierMeterAttributeId
+            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+
+            //Get Meter identifiers
+            var meterIdentifierDictionary = _customerMethods.MeterDetail_GetMeterDetailDescriptionDictionaryByMeterAttributeId(meterIdentifierMeterAttributeId);
+
+            var forecastJSON = "[|'Meters' : [";
+
+            //|'SeriesName':'{meterIdentifierDictionary[meterId]}'¬,
+
+            foreach(var meterId in meterIdList)
+            {
+                var meterForecastJSON = $"|'SeriesName':'{meterIdentifierDictionary[meterId]}'¬,|'Usage' : [";
+                //Get latest daily forecast
+                var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest("Meter", meterId, "Date");
+                var forecastTuple = new List<Tuple<long, decimal>>();
+
+                foreach (DataRow r in forecastDataRows)
+                {
+                    var tup = Tuple.Create((long)r["DateId"], (decimal)r["Usage"]);
+                    forecastTuple.Add(tup);
+                }
+
+                var meterForecastList = forecastTuple.ToDictionary(
+                    f => dateDictionary.First(d => d.Value == f.Item1).Key,
+                    f => f.Item2
+                )
+                .OrderBy(f => Convert.ToDateTime(f.Key))
+                .Select(f => $"|'Date':'{f.Key}','Value':'{f.Value}'¬")
+                .ToList();
+
+                meterForecastJSON += $"{string.Join(',', meterForecastList)}]¬";
+                forecastJSON += meterForecastJSON;
+            }
+
+            forecastJSON += "]¬]";
+
+            return new OkObjectResult(new { message = forecastJSON.Replace('\'', '"').Replace('|', '{').Replace('¬', '}') });
         }
 
         private string GetLiHtml(string type, KeyValuePair<long, string> dictionary, string ulHTML)
