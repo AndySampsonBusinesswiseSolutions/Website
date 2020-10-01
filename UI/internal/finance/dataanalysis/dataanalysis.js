@@ -583,7 +583,7 @@ async function updateChart(isPageLoading) {
     checkboxes = getBranchCheckboxes(inputs, 'Site');
   }
 
-  var meters = getMeters(showByArray, checkboxes, commodityOption);
+  var meters = [];// getMeters(showByArray, checkboxes, commodityOption);
   chartSeries = await getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate);
   var chartOptions = getChartOptions(categories, displayType, getXAxisTypeFromTimeSpan(), dateFormat);
 
@@ -1398,7 +1398,18 @@ async function getDailyForecast(data) {
 
 async function getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate) {
   var dailyForecast = await getDailyForecast({});
-  meters = JSON.parse(dailyForecast.message);
+  var tempMeters = JSON.parse(dailyForecast.message);
+
+  for(var i = 0; i < tempMeters.Meters.length; i++) {
+    var tempMeter = {
+      SeriesName: tempMeters.Meters[i].SeriesName,
+      Meters: []
+    };
+
+    tempMeter.Meters.push(tempMeters.Meters[i]);
+
+    meters.push(tempMeter);
+  }
 
   var newSeries = [];
   var showByLength = showByArray.length;
@@ -1416,7 +1427,7 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
 
     for(var j = 0; j < meters.length; j++) {
       // if(meters[j].ShowBy == showByArray[i]) {
-        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].Meters[0].SeriesName, showByLength > 1);
+        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 1);
 
         if(series.length) {
           newSeries.push(...series);

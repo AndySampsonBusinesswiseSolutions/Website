@@ -19,6 +19,23 @@ namespace Website.api.Controllers
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
 
+        private class Usage
+        {
+            public string Date;
+            public string Value;
+        }
+
+        private class Meter
+        {
+            public string SeriesName;
+            public List<Usage> Usage;
+        }
+
+        private class Forecast
+        {
+            public List<Meter> Meters;
+        }
+
         public EagleEyeBuildLocationTreeController(ILogger<WebsiteController> logger) : base(logger)
         {
         }
@@ -108,13 +125,15 @@ namespace Website.api.Controllers
             //Get Meter identifiers
             var meterIdentifierDictionary = _customerMethods.MeterDetail_GetMeterDetailDescriptionDictionaryByMeterAttributeId(meterIdentifierMeterAttributeId);
 
-            var forecastJSON = "[|'Meters' : [";
-
-            //|'SeriesName':'{meterIdentifierDictionary[meterId]}'¬,
+            var forecast = new Forecast();
+            var meterList = new List<Meter>();
 
             foreach(var meterId in meterIdList)
             {
-                var meterForecastJSON = $"|'SeriesName':'{meterIdentifierDictionary[meterId]}'¬,|'Usage' : [";
+                var meter = new Meter();
+                meter.SeriesName = meterIdentifierDictionary[meterId];
+                meter.Usage = new List<Usage>();
+
                 //Get latest daily forecast
                 var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest("Meter", meterId, "Date");
                 var forecastTuple = new List<Tuple<long, decimal>>();
@@ -127,19 +146,20 @@ namespace Website.api.Controllers
 
                 var meterForecastList = forecastTuple.ToDictionary(
                     f => dateDictionary.First(d => d.Value == f.Item1).Key,
-                    f => f.Item2
+                    f => f.Item2.ToString()
                 )
                 .OrderBy(f => Convert.ToDateTime(f.Key))
-                .Select(f => $"|'Date':'{f.Key}','Value':'{f.Value}'¬")
+                .ToDictionary(f => f.Key, f => f.Value)
+                .Select(f => new Usage{Date = f.Key, Value = f.Value})
                 .ToList();
 
-                meterForecastJSON += $"{string.Join(',', meterForecastList)}]¬";
-                forecastJSON += meterForecastJSON;
+                meter.Usage.AddRange(meterForecastList);
+                meterList.Add(meter);
             }
 
-            forecastJSON += "]¬]";
+            forecast.Meters = meterList;
 
-            return new OkObjectResult(new { message = forecastJSON.Replace('\'', '"').Replace('|', '{').Replace('¬', '}') });
+            return new OkObjectResult(new { message = JsonConvert.SerializeObject(forecast) });
         }
 
         private string GetLiHtml(string type, KeyValuePair<long, string> dictionary, string ulHTML)
