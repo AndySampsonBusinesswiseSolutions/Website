@@ -104,6 +104,18 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 //Insert new Estimated Annual Usage
                 _supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
 
+                //Get HasPeriodicUsage
+                var hasPeriodicUsage = Convert.ToBoolean(jsonObject[_systemAPIRequiredDataKeyEnums.HasPeriodicUsage]);
+
+                //Since the entity has periodic usage, don't bother creating a profiled version of the estimated annual usage
+                if(hasPeriodicUsage)
+                {
+                    //Update Process Queue
+                   _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
+
+                    return;
+                }
+
                 //Get UsageTypeId
                 var usageType = "Customer Estimated";
                 var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);

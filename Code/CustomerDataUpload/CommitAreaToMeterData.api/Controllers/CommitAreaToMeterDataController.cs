@@ -97,6 +97,8 @@ namespace CommitAreaToMeterData.api.Controllers
                     .Distinct()
                     .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
+                var existingAreaToMeterMappings = _mappingMethods.AreaToMeter_GetLatestTuple();
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get AreaId from [Information].[Area]
@@ -105,8 +107,11 @@ namespace CommitAreaToMeterData.api.Controllers
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
 
-                    //Insert into [Mapping].[AreaToMeter]
-                    _mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areaId, meterId);
+                    if(!existingAreaToMeterMappings.Any(e => e.Item1 == areaId && e.Item2 == meterId))
+                    {
+                        //Insert into [Mapping].[AreaToMeter]
+                        _mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areaId, meterId);
+                    }                    
                 }
 
                 //Update Process Queue

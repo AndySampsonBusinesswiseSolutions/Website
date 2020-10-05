@@ -174,30 +174,5 @@ BEGIN
 
     SET @v = N'Foreign Key constraint joining [' + @SchemaName + '].[LoadedUsage].DateId to [Information].[UsageType].UsageTypeId'
     EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'CONSTRAINT', 'FK_LoadedUsage_UsageTypeId'
-
-    --Add Indexes
-    SET @IndexName = @IndexNameBase + '1'
-    SET @SQL = N'
-    USE [EMaaS]
-    
-    CREATE NONCLUSTERED INDEX [' + @IndexName + ']
-    ON [' + @SchemaName + '].[LoadedUsage] ([EffectiveToDateTime])
-    INCLUDE ([DateId],[TimePeriodId])'
-    EXEC sp_sqlexec @SQL
-
-    SET @v = N'Index on [' + @SchemaName + '].[LoadedUsage] INCLUDE ([DateId],[TimePeriodId])'
-    EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'INDEX', @IndexName
-
-    SET @IndexName = @IndexNameBase + '2'
-    SET @SQL = N'
-    USE [EMaaS]
-    
-    CREATE NONCLUSTERED INDEX [' + @IndexName + ']
-    ON [' + @SchemaName + '].[LoadedUsage] ([EffectiveToDateTime])
-    INCLUDE ([EffectiveFromDateTime],[CreatedDateTime],[CreatedByUserId],[SourceId],[DateId],[TimePeriodId],[UsageTypeId],[Usage])'
-    EXEC sp_sqlexec @SQL
-
-    SET @v = N'Index on [' + @SchemaName + '].[LoadedUsage] INCLUDE ([EffectiveFromDateTime],[CreatedDateTime],[CreatedByUserId],[SourceId],[DateId],[TimePeriodId],[UsageTypeId],[Usage])'
-    EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', @SchemaName, N'TABLE', N'LoadedUsage', N'INDEX', @IndexName
 END
 GO

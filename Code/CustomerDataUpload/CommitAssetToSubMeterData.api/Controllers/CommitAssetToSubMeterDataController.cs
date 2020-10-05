@@ -99,6 +99,8 @@ namespace CommitAssetToSubMeterData.api.Controllers
                     .Distinct()
                     .ToDictionary(s => s, s => _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, s));
 
+                var existingAssetToSubMeterMappings = _mappingMethods.AssetToSubMeter_GetLatestTuple();
+
                 foreach(var dataRow in commitableDataRows)
                 {
                     //Get AssetId from [Customer].[AssetDetail]
@@ -107,8 +109,11 @@ namespace CommitAssetToSubMeterData.api.Controllers
                     //Get SubMeterId from [Customer].[SubMeterDetail] by SubMeterIdentifier
                     var subMeterId = subMeters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)];
 
-                    //Insert into [Mapping].[AssetToSubMeter]
-                    _mappingMethods.AssetToSubMeter_Insert(createdByUserId, sourceId, assetId, subMeterId);
+                    if(!existingAssetToSubMeterMappings.Any(e => e.Item1 == assetId && e.Item2 == subMeterId))
+                    {
+                        //Insert into [Mapping].[AssetToSubMeter]
+                        _mappingMethods.AssetToSubMeter_Insert(createdByUserId, sourceId, assetId, subMeterId);
+                    }
                 }
 
                 //Update Process Queue

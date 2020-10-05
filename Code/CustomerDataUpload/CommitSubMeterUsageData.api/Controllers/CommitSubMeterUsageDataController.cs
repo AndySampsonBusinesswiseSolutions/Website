@@ -79,15 +79,11 @@ namespace CommitSubMeterUsageData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterUsageDataAPIId);
 
-                //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] where CanCommit = 1
-                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var subMeterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterDataRows);
-
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
                 var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var subMeterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterUsageDataRows);
 
-                if(!subMeterCommitableDataRows.Any() && !subMeterUsageCommitableDataRows.Any())
+                if(!subMeterUsageCommitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
@@ -95,19 +91,27 @@ namespace CommitSubMeterUsageData.api.Controllers
                 }
 
                 //Get list of subMeterIdentifiers from datasets
-                var subMeterIdentifierList = subMeterCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier))
-                    .Union(subMeterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)))
+                var subMeterIdentifierList = subMeterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier))
                     .Distinct();
-
-                if(!subMeterIdentifierList.Any())
-                {
-                    //Nothing to work so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
-                    return;
-                }
 
                 //Get Routing.API URL
                 var routingAPIId = _systemMethods.GetRoutingAPIId();
+
+                //Add subMeter type to jsonObject
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
+
+                //Update Process GUID to CommitPeriodicUsage Process GUID
+                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
+
+                //Add granularity to newJsonObject
+                var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.IsElectricityDefault);
+                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
+                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
+                var granularityDescription = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityDescriptionGranularityAttributeId);
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDescription);
+
+                //Add usage type to newJsonObject
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.UsageType, _informationUsageTypeEnums.CustomerEstimated);
 
                 foreach(var subMeterIdentifier in subMeterIdentifierList)
                 {
@@ -121,61 +125,40 @@ namespace CommitSubMeterUsageData.api.Controllers
                     _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
                     _systemMethods.SetProcessQueueGUIDInJObject(newJsonObject, newProcessQueueGUID);
 
-                    //Add subMeter type to newJsonObject
-                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
-
                     //Add subMeterIdentifier to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, subMeterIdentifier);
 
-                    if(subMeterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier))
+                    //Get periodic usage
+                    var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier);
+
+                    //Convert to Tuple
+                    var periodicUsageTupleList = new List<Tuple<string, string, string>>();
+
+                    foreach (DataRow r in periodicUsageDataRows)
                     {
-                        //Update Process GUID to CommitPeriodicUsage Process GUID
-                        _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
+                        var tup = Tuple.Create((string)r["Date"], (string)r["TimePeriod"], (string)r["Value"]);
+                        periodicUsageTupleList.Add(tup);
+                    }
 
-                        //Get periodic usage
-                        var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier);
-
-                        //Convert to dictionary
-                        var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
-                        foreach(var periodicUsageDate in periodicUsageDataRows)
+                    //Convert to dictionary
+                    var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
+                    foreach(var periodicUsageTuple in periodicUsageTupleList)
+                    {
+                        if(!periodicUsageDictionary.ContainsKey(periodicUsageTuple.Item1))
                         {
-                            if(!periodicUsageDictionary.ContainsKey(periodicUsageDate.Field<string>("Date")))
-                            {
-                                periodicUsageDictionary.Add(periodicUsageDate.Field<string>("Date"), new Dictionary<string, string>());
-                            }
-                            
-                            var date = periodicUsageDictionary[periodicUsageDate.Field<string>("Date")];
-
-                            if(!date.ContainsKey(periodicUsageDate.Field<string>("TimePeriod")))
-                            {
-                                date.Add(periodicUsageDate.Field<string>("TimePeriod"), periodicUsageDate.Field<string>("Value"));
-                            }
+                            periodicUsageDictionary.Add(periodicUsageTuple.Item1, new Dictionary<string, string>());
                         }
+                        
+                        var date = periodicUsageDictionary[periodicUsageTuple.Item1];
 
-                        //Add granularity to newJsonObject
-                        var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.IsElectricityDefault);
-                        var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
-                        var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
-                        var granularityDescription = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityDescriptionGranularityAttributeId);
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDescription);
-
-                        //Add usage type to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.UsageType, _informationUsageTypeEnums.CustomerEstimated);
-
-                        //Add periodic usage to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
+                        if(!date.ContainsKey(periodicUsageTuple.Item2))
+                        {
+                            date.Add(periodicUsageTuple.Item2, periodicUsageTuple.Item3);
+                        }
                     }
-                    else 
-                    {
-                        //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
-                        _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
 
-                        //Get EstimatedAnnualUsage
-                        var estimatedAnnualUsage = subMeterUsageCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
-
-                        //Add EstimatedAnnualUsage to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
-                    }
+                    //Add periodic usage to newJsonObject
+                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
 
                     //Connect to Routing API and POST data
                     _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, newJsonObject);
@@ -194,4 +177,3 @@ namespace CommitSubMeterUsageData.api.Controllers
         }
     }
 }
-

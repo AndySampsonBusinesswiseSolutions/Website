@@ -36,6 +36,7 @@ namespace enums
                     public string FutureDateId = "FutureDateId";
                     public string EarliestUsageDate = "EarliestUsageDate";
                     public string LatestUsageDate = "LatestUsageDate";
+                    public string HasPeriodicUsage = "HasPeriodicUsage";
                 }
             }
         }

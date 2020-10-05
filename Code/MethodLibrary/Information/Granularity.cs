@@ -98,6 +98,14 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("GranularityId"))
                     .ToList();
             }
+
+            public string GetDefaultGranularityDescriptionByCommodity(string granularityAttributeDescription)
+            {
+                var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(granularityAttributeDescription);
+                var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
+                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
+                return _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityDescriptionGranularityAttributeId);
+            }
         }
     }
 }
