@@ -6,12 +6,12 @@ EXEC msdb.dbo.sp_delete_database_backuphistory @database_name = N'EMaaS'
 GO
 USE [master]
 GO
-ALTER DATABASE [EMaaS] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
-GO
-USE [master]
-GO
 /****** Object:  Database [EMaaS]    Script Date: 05/05/2020 08:33:02 ******/
-DROP DATABASE [EMaaS]
+IF EXISTS(SELECT TOP 1 1 FROM sys.databases where name = 'EMaas')
+	BEGIN
+		ALTER DATABASE [EMaaS] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
+		DROP DATABASE [EMaaS]
+	END
 GO
 
 /****** Object:  Database [EMaaS]    Script Date: 05/05/2020 08:28:12 ******/

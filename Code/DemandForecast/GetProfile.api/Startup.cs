@@ -26,7 +26,7 @@ namespace GetProfile.api
                     name: MyAllowSpecificOrigins,
                     builder =>
                         {
-                            builder.WithOrigins("http://energyportal").AllowAnyMethod().AllowAnyHeader();
+                            builder.WithOrigins("http://energyportal:8080").AllowAnyMethod().AllowAnyHeader();
                         }
                 );
             });

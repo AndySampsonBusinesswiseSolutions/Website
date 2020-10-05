@@ -11,7 +11,7 @@ namespace databaseInteraction
     {
         private string userName;
         private string password;
-        private string ConnectionString => $@"Data Source=BWS-W10-L24;User ID={userName};Initial Catalog=EMaaS;Persist Security Info=True;Password={password};";
+        private string ConnectionString => $@"Data Source=BWS-SQL-DEV;User ID={userName};Initial Catalog=EMaaS;Persist Security Info=True;Password={password};";
 
         public DatabaseInteraction(string userName, string password)
         {
@@ -118,7 +118,7 @@ namespace databaseInteraction
 
         public void ExecuteScript(string script)
         {
-            var serverConnection = new ServerConnection("BWS-W10-L24", userName, password);
+            var serverConnection = new ServerConnection("BWS-SQL-DEV", userName, password);
             serverConnection.ConnectTimeout = 0;
             var server = new Server(serverConnection);
             server.ConnectionContext.ExecuteNonQuery(script);
