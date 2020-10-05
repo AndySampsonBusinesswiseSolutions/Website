@@ -1992,5 +1992,16 @@
                 "CreateForecastUsage.api",
             ]
         },
+        {"name": "Website",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "CreateManageCustomersWebpage.api",
+            ]
+        },
     ]
 }

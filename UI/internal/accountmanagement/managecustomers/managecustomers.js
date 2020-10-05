@@ -568,7 +568,7 @@ var subBranchCount = 0;
 
 async function getTree(data) {
 	try {
-	const response = await fetch(uri + '/BuildCustomerTree', {
+	const response = await fetch('http://localhost:5194/CreateManageCustomersWebpage/Create', {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',
