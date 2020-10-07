@@ -152,5 +152,22 @@ namespace Website.api.Controllers
             //Return Process Archive Detail Description in message
             return new OkObjectResult(new { message = processArchiveDetailDescription });
         }
+
+        [HttpPost]
+        [Route("Website/GetPageRequestResult")]
+        public IActionResult GetPageRequestResult([FromBody] string processQueueGUID)
+        {
+            //Get User Email Address
+            // var userEmailAddress = _systemMethods.GetEmailAddressFromJObject(jsonObject);
+
+            //Get UserId from Email Address
+            var userId = _administrationMethods.GetSystemUserId();
+
+            //Get HTML from Page Request by Process Queue GUID and User Id
+            var pageRequestResult = _systemMethods.PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);
+            
+            //Return Process Archive Detail Description in message
+            return new OkObjectResult(new { message = pageRequestResult });
+        }
     }
 }

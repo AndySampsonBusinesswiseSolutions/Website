@@ -566,31 +566,29 @@ function getCustomers() {
 var branchCount = 0;
 var subBranchCount = 0;
 
-async function getTree(data) {
-	try {
-	const response = await fetch('http://localhost:5194/CreateManageCustomersWebpage/Create', {
-		method: 'POST',
-		mode: 'cors',
-		cache: 'no-cache',
-		credentials: 'same-origin',
-		headers: {
-		  'Content-Type': 'application/json',
-		},
-		redirect: 'follow',
-		referrerPolicy: 'no-referrer',
-		body: JSON.stringify(data)
-	  });
-  
-	  return response.json();
+async function getTree() {
+	var processQueueGUID = CreateGUID();
+	var data = {ProcessQueueGUID: processQueueGUID, CustomerGUID: CreateGUID(), ProcessGUID: 'DC33F3E1-B925-4EB7-B2B2-74ED3DD828A1'};
+	var postSuccessful = postData(data);
+
+	if(postSuccessful) {
+		var response = await getProcessResponse(processQueueGUID);
+		return await processTreeResponse(response, processQueueGUID);;
 	}
-	catch{
-	  return null;
+}
+
+async function processTreeResponse(response, processQueueGUID) {
+	if(response) {
+	  if(response.message == "OK") {
+		var result = await getPageRequestResult(processQueueGUID);
+		return result;
+	  }
 	}
-  }
+}
 
 async function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
-	var treeResponse = await getTree({CustomerGUID:CreateGUID()});
+	var treeResponse = await getTree();
 	tree.innerHTML = treeResponse.message;
 
     var div = document.getElementById(divId);

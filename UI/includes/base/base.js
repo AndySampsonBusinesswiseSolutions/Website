@@ -499,6 +499,28 @@ async function getProcessResponse(processQueueGUID) {
   }
 }
 
+async function getPageRequestResult(processQueueGUID) {
+  try {
+    const response = await fetch(uri + '/GetPageRequestResult', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(processQueueGUID)
+    });
+  
+    return response.json();
+  }
+  catch {
+    return null;
+  }
+}
+
 function showLoader(show) {
   loader.style.display = show ? '' : 'none';
 }

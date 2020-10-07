@@ -25,6 +25,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 createManageCustomersWebpageAPIId;
 
@@ -47,10 +48,27 @@ namespace CreateManageCustomersWebpage.api.Controllers
 
         [HttpPost]
         [Route("CreateManageCustomersWebpage/Create")]
-        public IActionResult Create([FromBody] object data)
+        public void Create([FromBody] object data)
         {
-            //Get Queue GUID
+            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+
+            //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
+            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+
+            //Insert into ProcessQueue
+            _systemMethods.ProcessQueue_Insert(
+                processQueueGUID, 
+                createdByUserId,
+                sourceId,
+                createManageCustomersWebpageAPIId);
+
+            //Update Process Queue
+            _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
+
+            //Get Page Id
+            var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.ManageCustomers);
 
             //TODO: Get Role
 
@@ -146,7 +164,12 @@ namespace CreateManageCustomersWebpage.api.Controllers
 
             var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{customerLi}<ul>";
             var tree = $"<div class='scrolling-wrapper'>{baseUl}</div>";
-            return new OkObjectResult(new { message = tree });
+            
+            //Write HTML to System.PageRequest
+            _systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, tree);
+
+            //Update Process Queue
+            _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
         }
     }
 }
