@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace MethodLibrary
 {
@@ -64,6 +66,41 @@ namespace MethodLibrary
                         var SQL = $"GRANT EXECUTE ON OBJECT::{storedProcedureFullName} TO [{api}];";
                         ExecuteSQL(SQL);
                     }
+                }
+            }
+
+            public void InsertGranularSupplyForecast(DataTable dataTable, string meterType, long meterId, string granularityCode, string processQueueGUID)
+            {
+                var latestDataTable = dataTable.Copy();
+                latestDataTable.Columns.Remove("CreatedByUserId");
+                latestDataTable.Columns.Remove("SourceId");
+
+                //Bulk insert into Latest Temp table
+                ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+
+                //Delete existing latest forecast
+                ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+
+                //Insert new latest forecast
+                ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
+
+                var skip = 0;
+                var dataTableRowCount = dataTable.Rows.Count;
+
+                while(skip < dataTableRowCount)
+                {
+                    var newDataTable = dataTable.AsEnumerable().Skip(skip).Take(50000).CopyToDataTable();
+
+                    //Bulk insert into History Temp table
+                    ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, newDataTable);
+
+                    //End date existing history forecast
+                    ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
+
+                    //Insert new history forecast
+                    ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
+
+                    skip += 50000;
                 }
             }
         }
