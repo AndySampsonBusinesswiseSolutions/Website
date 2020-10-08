@@ -24,16 +24,16 @@ namespace MethodLibrary
                         ForecastUsageGranularityHistory_CreateTable(meterId, granularityId, meterType);
                     }
 
-                    tableName = SupplyForecastUsageTableName(granularityId, "History_Temp");
-                    tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
+                    // tableName = SupplyForecastUsageTableName(granularityId, "History_Temp");
+                    // tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
 
-                    if(tableId == 0)
-                    {
-                        ForecastUsageGranularityHistory_CreateTempTable(meterId, granularityId, meterType);
-                    }
+                    // if(tableId == 0)
+                    // {
+                    //     ForecastUsageGranularityHistory_CreateTempTable(meterId, granularityId, meterType);
+                    // }
 
-                    ForecastUsageGranularityHistory_CreateDeleteStoredProcedure(meterId, granularityId, meterType);
-                    ForecastUsageGranularityHistory_CreateInsertStoredProcedure(meterId, granularityId, meterType);
+                    // ForecastUsageGranularityHistory_CreateDeleteStoredProcedure(meterId, granularityId, meterType);
+                    // ForecastUsageGranularityHistory_CreateInsertStoredProcedure(meterId, granularityId, meterType);
                     ForecastUsageGranularityHistory_CreateGetLatestStoredProcedure(meterId, granularityId, meterType);
                     ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(meterId, granularityId, meterType);
                 }
@@ -86,18 +86,16 @@ namespace MethodLibrary
                 ExecuteNonQuery(parameterInfoList, forecastUsageGranularityHistoryInsertStoredProcedure, processQueueGUID);
             }
 
-            public List<DataRow> ForecastUsageGranularityHistory_GetHistory(string meterType, long meterId, string granularityCode)
+            public DataTable ForecastUsageGranularityHistory_GetLatestDataTable(string meterType, long meterId, string granularityCode)
             {
-                var forecastUsageGranularityHistoryGetHistoryStoredProcedure = string.Format(_storedProcedureSupplyEnums.ForecastUsageGranularityHistory_GetLatest, meterType, meterId, granularityCode);
+                var forecastUsageGranularityHistoryGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.ForecastUsageGranularityHistory_GetLatest, meterType, meterId, granularityCode);
 
-                var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), forecastUsageGranularityHistoryGetHistoryStoredProcedure);
-
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return GetDataTable(new List<ParameterInfo>().ToArray(), forecastUsageGranularityHistoryGetLatestStoredProcedure);
             }
 
-            public void ForecastUsageGranularityHistoryTemp_Insert(string meterType, long meterId, string granularityCode, DataTable forecastUsageGranularityHistoryDataTable)
+            public void ForecastUsageGranularityHistory_Insert(string meterType, long meterId, string granularityCode, DataTable forecastUsageGranularityHistoryDataTable)
             {
-                new Methods().BulkInsert(forecastUsageGranularityHistoryDataTable, $"[Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}History_Temp]");
+                new Methods().BulkInsert(forecastUsageGranularityHistoryDataTable, $"[Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}History]");
             }
         }
     }

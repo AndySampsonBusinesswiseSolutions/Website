@@ -22,16 +22,16 @@ namespace MethodLibrary
                         ForecastUsageGranularityLatest_CreateTable(meterId, granularityId, meterType);
                     }
 
-                    tableName = SupplyForecastUsageTableName(granularityId, "Latest_Temp");
-                    tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
+                    // tableName = SupplyForecastUsageTableName(granularityId, "Latest_Temp");
+                    // tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
 
-                    if(tableId == 0)
-                    {
-                        ForecastUsageGranularityLatest_CreateTempTable(meterId, granularityId, meterType);
-                    }
+                    // if(tableId == 0)
+                    // {
+                    //     ForecastUsageGranularityLatest_CreateTempTable(meterId, granularityId, meterType);
+                    // }
 
-                    ForecastUsageGranularityLatest_CreateDeleteStoredProcedure(meterId, granularityId, meterType);
-                    ForecastUsageGranularityLatest_CreateInsertStoredProcedure(meterId, granularityId, meterType);
+                    // ForecastUsageGranularityLatest_CreateDeleteStoredProcedure(meterId, granularityId, meterType);
+                    // ForecastUsageGranularityLatest_CreateInsertStoredProcedure(meterId, granularityId, meterType);
                     ForecastUsageGranularityLatest_CreateGetLatestStoredProcedure(meterId, granularityId, meterType);
                     ForecastUsageGranularityLatest_GrantExecuteToStoredProcedures(meterId, granularityId, meterType);
                 }
@@ -93,7 +93,7 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
-            public List<Tuple<long, long, decimal>> ForecastUsageGranularityLatest_GetLatestTuple(string meterType, long meterId, string granularityCode)
+            public List<Tuple<long, long, decimal>> ForecastUsageGranularityLatest_GetLatestTuple(string meterType, long meterId, string granularityCode, string mainId, string additionalId)
             {
                 var dataRows = ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
 
@@ -101,16 +101,31 @@ namespace MethodLibrary
 
                 foreach (DataRow r in dataRows)
                 {
-                    var tup = Tuple.Create((long)r["DateId"], (long)r["TimePeriodId"], (decimal)r["Usage"]);
+                    var tup = Tuple.Create((long)r[mainId], (long)r[additionalId], (decimal)r["Usage"]);
                     tuple.Add(tup);
                 }
 
                 return tuple;
             }
 
-            public void ForecastUsageGranularityLatestTemp_Insert(string meterType, long meterId, string granularityCode, DataTable forecastUsageGranularityLatestDataTable)
+            public List<Tuple<long, decimal>> ForecastUsageGranularityLatest_GetLatestTuple(string meterType, long meterId, string granularityCode, string mainId)
             {
-                new Methods().BulkInsert(forecastUsageGranularityLatestDataTable, $"[Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}Latest_Temp]");
+                var dataRows = ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+
+                var tuple = new List<Tuple<long, decimal>>();
+
+                foreach (DataRow r in dataRows)
+                {
+                    var tup = Tuple.Create((long)r[mainId], (decimal)r["Usage"]);
+                    tuple.Add(tup);
+                }
+
+                return tuple;
+            }
+
+            public void ForecastUsageGranularityLatest_Insert(string meterType, long meterId, string granularityCode, DataTable forecastUsageGranularityLatestDataTable)
+            {
+                new Methods().BulkInsert(forecastUsageGranularityLatestDataTable, $"[Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}Latest]");
             }
         }
     }

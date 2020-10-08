@@ -7,27 +7,27 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 DECLARE @ForecastUsageHistoryGetLatestStoredProcedureSQLGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Forecast Usage History Get Latest Stored Procedure SQL')
 DECLARE @ForecastUsageLatestGetLatestStoredProcedureSQLGranularityAttributeId BIGINT = (SELECT GranularityAttributeId FROM [Information].[GranularityAttribute] WHERE GranularityAttributeDescription = 'Forecast Usage Latest Get Latest Stored Procedure SQL')
 
---Week
-DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '8FD4C63A-84D5-4A03-B488-1A99C2331726')
+--Quarter
+DECLARE @GranularityId BIGINT = (SELECT GranularityId FROM [Information].[Granularity] WHERE GranularityGUID = '8029270C-1ECB-43B0-B313-9082890CDC8B')
 
 DECLARE @SQL NVARCHAR(MAX) = N'
     USE [EMaaS]
 
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
-    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageWeekHistory_GetLatest]''))
+    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageQuarterHistory_GetLatest]''))
     BEGIN
-        EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageWeekHistory_GetLatest] AS BEGIN SET NOCOUNT ON; END'')
+        EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageQuarterHistory_GetLatest] AS BEGIN SET NOCOUNT ON; END'')
     END
     GO
 
 	-- =============================================
     -- Author:		System Generated
     -- Create date: 2020-09-28
-    -- Description:	Delete usage from [Supply.X].[ForecastUsageWeekHistory] table
+    -- Description:	Get latest usage from [Supply.X].[ForecastUsageQuarterHistory] table
     -- =============================================
 
-    ALTER PROCEDURE [Supply.X].[ForecastUsageWeekHistory_GetLatest]
+    ALTER PROCEDURE [Supply.X].[ForecastUsageQuarterHistory_GetLatest]
     AS
     BEGIN
         -- =============================================
@@ -39,20 +39,32 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
+        WITH Latest AS
+        (
+            SELECT
+                YearId,
+                QuarterId,
+                MAX(ForecastUsageQuarterHistoryId) AS ForecastUsageQuarterHistoryId
+            FROM
+                [Supply.X].[ForecastUsageQuarterHistory]
+            GROUP BY
+                YearId,
+                QuarterId
+        )
+
         SELECT
-            ForecastUsageWeekHistoryId,
-            EffectiveFromDateTime,
-            EffectiveToDateTime,
-            CreatedDateTime,
-            CreatedByUserId,
-            SourceId,
-            YearId,
-            WeekId,
-            Usage
+            ForecastUsageQuarterHistory.ForecastUsageQuarterHistoryId,
+            ForecastUsageQuarterHistory.CreatedDateTime,
+            ForecastUsageQuarterHistory.CreatedByUserId,
+            ForecastUsageQuarterHistory.SourceId,
+            ForecastUsageQuarterHistory.YearId,
+            ForecastUsageQuarterHistory.QuarterId,
+            ForecastUsageQuarterHistory.Usage
         FROM
-            [Supply.X].[ForecastUsageWeekHistory]
-        WHERE
-            EffectiveToDateTime = ''9999-12-31''
+            [Supply.X].[ForecastUsageQuarterHistory]
+        INNER JOIN
+            Latest
+            ON Latest.ForecastUsageQuarterHistoryId = ForecastUsageQuarterHistory.ForecastUsageQuarterHistoryId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryGetLatestStoredProcedureSQLGranularityAttributeId, @SQL
@@ -62,19 +74,19 @@ SET @SQL = N'
 
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
-    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageWeekLatest_GetLatest]''))
+    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[Supply.X].[ForecastUsageQuarterLatest_GetLatest]''))
     BEGIN
-        EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageWeekLatest_GetLatest] AS BEGIN SET NOCOUNT ON; END'')
+        EXEC(''CREATE PROCEDURE [Supply.X].[ForecastUsageQuarterLatest_GetLatest] AS BEGIN SET NOCOUNT ON; END'')
     END
     GO
 
 	-- =============================================
     -- Author:		System Generated
     -- Create date: 2020-09-28
-    -- Description:	Delete usage from [Supply.X].[ForecastUsageWeekLatest] table
+    -- Description:	Get latest usage from [Supply.X].[ForecastUsageQuarterLatest] table
     -- =============================================
 
-    ALTER PROCEDURE [Supply.X].[ForecastUsageWeekLatest_GetLatest]
+    ALTER PROCEDURE [Supply.X].[ForecastUsageQuarterLatest_GetLatest]
     AS
     BEGIN
         -- =============================================
@@ -88,10 +100,10 @@ SET @SQL = N'
 
         SELECT
             YearId,
-            WeekId,
+            QuarterId,
             Usage
         FROM
-            [Supply.X].[ForecastUsageWeekLatest]
+            [Supply.X].[ForecastUsageQuarterLatest]
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageLatestGetLatestStoredProcedureSQLGranularityAttributeId, @SQL

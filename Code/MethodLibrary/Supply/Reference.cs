@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
+using System;
 
 namespace MethodLibrary
 {
@@ -69,39 +69,48 @@ namespace MethodLibrary
                 }
             }
 
-            public void InsertGranularSupplyForecast(DataTable dataTable, string meterType, long meterId, string granularityCode, string processQueueGUID)
+            public void InsertGranularSupplyForecast(DataTable dataTable, DataTable latestForecastDataTable, string meterType, long meterId, string granularityCode)
             {
-                var latestDataTable = dataTable.Copy();
-                latestDataTable.Columns.Remove("CreatedByUserId");
-                latestDataTable.Columns.Remove("SourceId");
+                //Bulk insert into History table
+                ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, dataTable);
 
-                //Bulk insert into Latest Temp table
-                ForecastUsageGranularityLatestTemp_Insert(meterType, meterId, granularityCode, latestDataTable);
+                //Bulk insert into Latest table
+                ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, latestForecastDataTable);
+            }
 
-                //Delete existing latest forecast
-                ForecastUsageGranularityLatest_Delete(meterType, meterId, granularityCode);
+            public DataTable CreateHistoryForecastDataTable(string granularityCode, List<string> idList, long createdByUserId, long sourceId)
+            {
+                //Create DataTable
+                var dataTable = new DataTable();
+                dataTable.Columns.Add($"ForecastUsage{granularityCode}HistoryId", typeof(long));
+                dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
+                dataTable.Columns.Add("CreatedByUserId", typeof(long));
+                dataTable.Columns.Add("SourceId", typeof(long));
 
-                //Insert new latest forecast
-                ForecastUsageGranularityLatest_Insert(meterType, meterId, granularityCode, processQueueGUID);
-
-                var skip = 0;
-                var dataTableRowCount = dataTable.Rows.Count;
-
-                while(skip < dataTableRowCount)
+                foreach(var id in idList)
                 {
-                    var newDataTable = dataTable.AsEnumerable().Skip(skip).Take(50000).CopyToDataTable();
-
-                    //Bulk insert into History Temp table
-                    ForecastUsageGranularityHistoryTemp_Insert(meterType, meterId, granularityCode, newDataTable);
-
-                    //End date existing history forecast
-                    ForecastUsageGranularityHistory_Delete(meterType, meterId, granularityCode);
-
-                    //Insert new history forecast
-                    ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, processQueueGUID);
-
-                    skip += 50000;
+                    dataTable.Columns.Add(id, typeof(long));
                 }
+                
+                dataTable.Columns.Add("Usage", typeof(decimal));
+
+                //Set default values
+                dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
+                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
+                dataTable.Columns["SourceId"].DefaultValue = sourceId;
+
+                return dataTable;
+            }
+
+            public DataTable CreateLatestForecastDataTable(DataTable dataTable, string granularityCode)
+            {
+                var latestForecastDataTable = dataTable.Clone();
+                latestForecastDataTable.Columns.Remove($"ForecastUsage{granularityCode}HistoryId");
+                latestForecastDataTable.Columns.Remove("CreatedDateTime");
+                latestForecastDataTable.Columns.Remove("CreatedByUserId");
+                latestForecastDataTable.Columns.Remove("SourceId");
+
+                return latestForecastDataTable;
             }
         }
     }

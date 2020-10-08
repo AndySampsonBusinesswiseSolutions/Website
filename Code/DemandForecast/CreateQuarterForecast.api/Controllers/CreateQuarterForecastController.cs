@@ -120,30 +120,18 @@ namespace CreateQuarterForecast.api.Controllers
                 var granularityCode = "Quarter";
 
                 //Get existing quarter forecast
-                var existingQuarterForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
-                var existingQuarterForecastDictionary = existingQuarterForecasts.Select(d => d.Field<long>("YearId")).Distinct()
+                var existingQuarterForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId", "QuarterId");
+                var existingQuarterForecastDictionary = existingQuarterForecasts.Select(f => f.Item1).Distinct()
                     .ToDictionary(
                         d => d,
-                        d => existingQuarterForecasts.Where(e => e.Field<long>("YearId") == d).ToDictionary(
-                            t => t.Field<long>("QuarterId"),
-                            t => t.Field<decimal>("Usage")
+                        d => existingQuarterForecasts.Where(f => f.Item1 == d).ToDictionary(
+                            t => t.Item2,
+                            t => t.Item3
                         )
                 );
 
                 //Create DataTable
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
-                dataTable.Columns.Add("CreatedByUserId", typeof(long));
-                dataTable.Columns.Add("SourceId", typeof(long));
-                dataTable.Columns.Add("YearId", typeof(long));
-                dataTable.Columns.Add("QuarterId", typeof(long));
-                dataTable.Columns.Add("Usage", typeof(decimal));
-
-                //Set default values
-                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
-                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-                dataTable.Columns["SourceId"].DefaultValue = sourceId;
-
+                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"YearId", "QuarterId"}, createdByUserId, sourceId);
                 var dataRowAdded = false;
 
                 foreach(var forecastYearId in forecastYearIds)
@@ -161,21 +149,40 @@ namespace CreateQuarterForecast.api.Controllers
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdQuarterId.Contains(f.Key))
                             .Sum(f => f.Value);
 
-                        var addUsageToDataTable = !existingQuarterForecastDictionary.ContainsKey(forecastYearId)
-                            || !existingQuarterForecastDictionary[forecastYearId].ContainsKey(forecastQuarterId)
+                        var isNewPeriod = !existingQuarterForecastDictionary.ContainsKey(forecastYearId)
+                            || !existingQuarterForecastDictionary[forecastYearId].ContainsKey(forecastQuarterId);
+                        var addUsageToDataTable = isNewPeriod
                             || existingQuarterForecastDictionary[forecastYearId][forecastQuarterId] != Math.Round(forecast, 10);
 
                         if(addUsageToDataTable)
                         {
                             AddToDataTable(dataTable, forecastYearId, forecastQuarterId, forecast);
                             dataRowAdded = true;
+
+                            if(!isNewPeriod)
+                            {
+                                var existingQuarterForecastTuple = existingQuarterForecasts.First(t => t.Item1 == forecastYearId && t.Item2 == forecastQuarterId);
+                                existingQuarterForecasts.Remove(existingQuarterForecastTuple);
+                            }
+
+                            var newQuarterForecastTuple = new Tuple<long, long, decimal>(forecastYearId, forecastQuarterId, forecast);
+                            existingQuarterForecasts.Add(newQuarterForecastTuple);
                         }
                     }
                 }
 
                 if(dataRowAdded)
                 {
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, meterType, meterId, granularityCode, processQueueGUID);
+                    //Setup latest forecast
+                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
+
+                    foreach(var existingQuarterForecast in existingQuarterForecasts)
+                    {
+                        AddToDataTable(latestForecastDataTable, existingQuarterForecast.Item1, existingQuarterForecast.Item2, existingQuarterForecast.Item3);
+                    }
+
+                    //Insert into history and latest tables
+                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
                 }  
 
                 //Update Process Queue

@@ -196,7 +196,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
                 }
 
                 //Get existing five minute forecast
-                var existingFiveMinuteForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode);
+                var existingFiveMinuteForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId", "TimePeriodId");
                 var existingFiveMinuteForecastDictionary = existingFiveMinuteForecasts.Select(f => f.Item1).Distinct()
                     .ToDictionary(
                         d => d,
@@ -207,40 +207,47 @@ namespace CreateFiveMinuteForecast.api.Controllers
                 );
 
                 //Create DataTable
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
-                dataTable.Columns.Add("CreatedByUserId", typeof(long));
-                dataTable.Columns.Add("SourceId", typeof(long));
-                dataTable.Columns.Add("DateId", typeof(long));
-                dataTable.Columns.Add("TimePeriodId", typeof(long));
-                dataTable.Columns.Add("Usage", typeof(decimal));
-
-                //Set default values
-                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
-                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-                dataTable.Columns["SourceId"].DefaultValue = sourceId;
-
+                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"DateId", "TimePeriodId"}, createdByUserId, sourceId);
                 var dataRowAdded = false;
 
                 foreach(var forecastDate in forecastDictionary)
                 {
                     foreach(var forecastTimePeriod in forecastDate.Value)
                     {
-                        var addUsageToDataTable = !existingFiveMinuteForecastDictionary.ContainsKey(forecastDate.Key)
-                            || !existingFiveMinuteForecastDictionary[forecastDate.Key].ContainsKey(forecastTimePeriod.Key)
+                        var isNewPeriod = !existingFiveMinuteForecastDictionary.ContainsKey(forecastDate.Key)
+                            || !existingFiveMinuteForecastDictionary[forecastDate.Key].ContainsKey(forecastTimePeriod.Key);
+                        var addUsageToDataTable = isNewPeriod
                             || existingFiveMinuteForecastDictionary[forecastDate.Key][forecastTimePeriod.Key] != forecastTimePeriod.Value;
 
                         if(addUsageToDataTable)
                         {
                             AddToDataTable(dataTable, forecastDate.Key, forecastTimePeriod.Key, forecastTimePeriod.Value);
-                        dataRowAdded = true;
+                            dataRowAdded = true;
+
+                            if(!isNewPeriod)
+                            {
+                                var existingFiveMinuteForecastTuple = existingFiveMinuteForecasts.First(t => t.Item1 == forecastDate.Key && t.Item2 == forecastTimePeriod.Key);
+                                existingFiveMinuteForecasts.Remove(existingFiveMinuteForecastTuple);
+                            }
+
+                            var newFiveMinuteForecastTuple = new Tuple<long, long, decimal>(forecastDate.Key, forecastTimePeriod.Key, forecastTimePeriod.Value);
+                            existingFiveMinuteForecasts.Add(newFiveMinuteForecastTuple);
                         }
                     }
                 }
 
                 if(dataRowAdded)
                 {
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, meterType, meterId, granularityCode, processQueueGUID);
+                    //Setup latest forecast
+                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
+
+                    foreach(var existingFiveMinuteForecast in existingFiveMinuteForecasts)
+                    {
+                        AddToDataTable(latestForecastDataTable, existingFiveMinuteForecast.Item1, existingFiveMinuteForecast.Item2, existingFiveMinuteForecast.Item3);
+                    }
+
+                    //Insert into history and latest tables
+                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
                 }  
                 
                 //Update Process Queue

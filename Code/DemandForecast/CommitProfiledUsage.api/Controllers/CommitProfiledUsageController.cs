@@ -92,7 +92,8 @@ namespace CommitProfiledUsage.api.Controllers
 
                 //Create DataTable
                 var dataTable = new DataTable();
-                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("LoadedUsageId", typeof(long));
+                dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
                 dataTable.Columns.Add("CreatedByUserId", typeof(long));
                 dataTable.Columns.Add("SourceId", typeof(long));
                 dataTable.Columns.Add("DateId", typeof(long));
@@ -101,7 +102,7 @@ namespace CommitProfiledUsage.api.Controllers
                 dataTable.Columns.Add("Usage", typeof(decimal));
 
                 //Set default values
-                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
                 dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
                 dataTable.Columns["SourceId"].DefaultValue = sourceId;
                 dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(_informationUsageTypeEnums.Profile);
@@ -128,13 +129,13 @@ namespace CommitProfiledUsage.api.Controllers
 
                 //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
                 var supplyMethods = new Methods.Supply();
-                supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
+                supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
 
                 //End date existing Periodic Usage
-                supplyMethods.LoadedUsage_Delete(meterType, meterId);
+                // supplyMethods.LoadedUsage_Delete(meterType, meterId);
 
                 //Insert new Periodic Usage into LoadedUsage table
-                supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
+                // supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitProfiledUsageAPIId, false, null);

@@ -68,21 +68,33 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
+        WITH Latest AS
+        (
+            SELECT
+                DateId,
+                TimePeriodId,
+                MAX(LoadedUsageId) AS LoadedUsageId
+            FROM
+                [' + @SchemaName +'].[LoadedUsage]
+            GROUP BY
+                DateId,
+                TimePeriodId
+        )
+
         SELECT
-            LoadedUsageId,
-            EffectiveFromDateTime,
-            EffectiveToDateTime,
-            CreatedDateTime,
-            CreatedByUserId,
-            SourceId,
-            DateId,
-            TimePeriodId,
-            UsageTypeId,
-            Usage
+            LoadedUsage.LoadedUsageId,
+            LoadedUsage.CreatedDateTime,
+            LoadedUsage.CreatedByUserId,
+            LoadedUsage.SourceId,
+            LoadedUsage.DateId,
+            LoadedUsage.TimePeriodId,
+            LoadedUsage.UsageTypeId,
+            LoadedUsage.Usage
         FROM
             [' + @SchemaName +'].[LoadedUsage]
-        WHERE
-            EffectiveToDateTime = ''9999-12-31''
+        INNER JOIN
+            Latest
+            ON Latest.LoadedUsageId = LoadedUsage.LoadedUsageId
     END'
 
     SET @MetaSQL = '

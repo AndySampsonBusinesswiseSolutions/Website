@@ -18,8 +18,8 @@ namespace enums
                 {
                     return new List<string>
                     {
-                        ForecastUsageGranularityLatest_Delete,
-                        ForecastUsageGranularityLatest_Insert,
+                        // ForecastUsageGranularityLatest_Delete,
+                        // ForecastUsageGranularityLatest_Insert,
                         ForecastUsageGranularityLatest_GetLatest,
                     };
                 }

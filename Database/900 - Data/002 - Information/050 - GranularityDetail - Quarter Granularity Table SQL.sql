@@ -18,8 +18,6 @@ SET QUOTED_IDENTIFIER ON
 
 CREATE TABLE [Supply.X].[ForecastUsageQuarterHistory](
 	[ForecastUsageQuarterHistoryId] [bigint] IDENTITY(1,1) NOT NULL,
-	[EffectiveFromDateTime] [datetime] NOT NULL,
-	[EffectiveToDateTime] [datetime] NOT NULL,
 	[CreatedDateTime] [datetime] NOT NULL,
 	[CreatedByUserId] [bigint] NOT NULL,
 	[SourceId] [bigint] NOT NULL,
@@ -31,10 +29,6 @@ CREATE TABLE [Supply.X].[ForecastUsageQuarterHistory](
 	[ForecastUsageQuarterHistoryId] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [Supply]
 ) ON [Supply]
-
-ALTER TABLE [Supply.X].[ForecastUsageQuarterHistory] ADD  CONSTRAINT [DF_ForecastUsageQuarterHistory_EffectiveFromDateTime]  DEFAULT (GETUTCDATE()) FOR [EffectiveFromDateTime]
-
-ALTER TABLE [Supply.X].[ForecastUsageQuarterHistory] ADD  CONSTRAINT [DF_ForecastUsageQuarterHistory_EffectiveToDateTime]  DEFAULT (''9999-12-31'') FOR [EffectiveToDateTime]
 
 ALTER TABLE [Supply.X].[ForecastUsageQuarterHistory] ADD  CONSTRAINT [DF_ForecastUsageQuarterHistory_CreatedDateTime]  DEFAULT (GETUTCDATE()) FOR [CreatedDateTime]
 

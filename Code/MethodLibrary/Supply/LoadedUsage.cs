@@ -22,16 +22,16 @@ namespace MethodLibrary
                     LoadedUsage_CreateTable(meterId, meterType);
                 }
 
-                tableName = $"LoadedUsage_Temp";
-                tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
+                // tableName = $"LoadedUsage_Temp";
+                // tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
 
-                if(tableId == 0)
-                {
-                    LoadedUsage_CreateTempTable(meterId, meterType);
-                }
+                // if(tableId == 0)
+                // {
+                //     LoadedUsage_CreateTempTable(meterId, meterType);
+                // }
 
-                LoadedUsage_CreateDeleteStoredProcedure(meterId, meterType);
-                LoadedUsage_CreateInsertStoredProcedure(meterId, meterType);
+                // LoadedUsage_CreateDeleteStoredProcedure(meterId, meterType);
+                // LoadedUsage_CreateInsertStoredProcedure(meterId, meterType);
                 LoadedUsage_CreateGetLatestStoredProcedure(meterId, meterType);
                 LoadedUsage_GrantExecuteToStoredProcedures(meterId, meterType);
             }
@@ -89,9 +89,9 @@ namespace MethodLibrary
                     processQueueGUID);
             }
 
-            public void LoadedUsageTemp_Insert(string meterType, long meterId, DataTable loadedUsageDataTable)
+            public void LoadedUsage_Insert(string meterType, long meterId, DataTable loadedUsageDataTable)
             {
-                new Methods().BulkInsert(loadedUsageDataTable, $"[Supply.{meterType}{meterId}].[LoadedUsage_Temp]");
+                new Methods().BulkInsert(loadedUsageDataTable, $"[Supply.{meterType}{meterId}].[LoadedUsage]");
             }
 
             public List<DataRow> LoadedUsage_GetLatest(string meterType, long meterId)

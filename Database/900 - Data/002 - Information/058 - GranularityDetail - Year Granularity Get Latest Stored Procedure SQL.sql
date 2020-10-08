@@ -24,7 +24,7 @@ DECLARE @SQL NVARCHAR(MAX) = N'
 	-- =============================================
     -- Author:		System Generated
     -- Create date: 2020-09-28
-    -- Description:	Delete usage from [Supply.X].[ForecastUsageYearHistory] table
+    -- Description:	Get latest usage from [Supply.X].[ForecastUsageYearHistory] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageYearHistory_GetLatest]
@@ -39,19 +39,29 @@ DECLARE @SQL NVARCHAR(MAX) = N'
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
+        WITH Latest AS
+        (
+            SELECT
+                YearId,
+                MAX(ForecastUsageYearHistoryId) AS ForecastUsageYearHistoryId
+            FROM
+                [Supply.X].[ForecastUsageYearHistory]
+            GROUP BY
+                YearId
+        )
+
         SELECT
-            ForecastUsageYearHistoryId,
-            EffectiveFromDateTime,
-            EffectiveToDateTime,
-            CreatedDateTime,
-            CreatedByUserId,
-            SourceId,
-            YearId,
-            Usage
+            ForecastUsageYearHistory.ForecastUsageYearHistoryId,
+            ForecastUsageYearHistory.CreatedDateTime,
+            ForecastUsageYearHistory.CreatedByUserId,
+            ForecastUsageYearHistory.SourceId,
+            ForecastUsageYearHistory.YearId,
+            ForecastUsageYearHistory.Usage
         FROM
             [Supply.X].[ForecastUsageYearHistory]
-        WHERE
-            EffectiveToDateTime = ''9999-12-31''
+        INNER JOIN
+            Latest
+            ON Latest.ForecastUsageYearHistoryId = ForecastUsageYearHistory.ForecastUsageYearHistoryId
     END'
 
 EXEC [Information].[GranularityDetail_Insert] @CreatedByUserId, @SourceId, @GranularityId, @ForecastUsageHistoryGetLatestStoredProcedureSQLGranularityAttributeId, @SQL
@@ -70,7 +80,7 @@ SET @SQL = N'
 	-- =============================================
     -- Author:		System Generated
     -- Create date: 2020-09-28
-    -- Description:	Delete usage from [Supply.X].[ForecastUsageYearLatest] table
+    -- Description:	Get latest usage from [Supply.X].[ForecastUsageYearLatest] table
     -- =============================================
 
     ALTER PROCEDURE [Supply.X].[ForecastUsageYearLatest_GetLatest]

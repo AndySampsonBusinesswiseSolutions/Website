@@ -116,10 +116,6 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                     return;
                 }
 
-                //Get UsageTypeId
-                var usageType = "Customer Estimated";
-                var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
-
                 //Launch GetProfile process and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
                 var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, jsonObject);
@@ -132,7 +128,8 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
 
                 //Create DataTable
                 var dataTable = new DataTable();
-                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+                dataTable.Columns.Add("LoadedUsageId", typeof(long));
+                dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
                 dataTable.Columns.Add("CreatedByUserId", typeof(long));
                 dataTable.Columns.Add("SourceId", typeof(long));
                 dataTable.Columns.Add("DateId", typeof(long));
@@ -141,10 +138,10 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 dataTable.Columns.Add("Usage", typeof(decimal));
 
                 //Set default values
-                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+                dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
                 dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
                 dataTable.Columns["SourceId"].DefaultValue = sourceId;
-                dataTable.Columns["UsageTypeId"].DefaultValue = usageTypeId;
+                dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription("Customer Estimated");
 
                 foreach(var date in periodicUsageDictionary)
                 {
@@ -159,13 +156,13 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 }   
 
                 //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
-                _supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
+                _supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
 
                 //End date existing Periodic Usage
-                _supplyMethods.LoadedUsage_Delete(meterType, meterId);
+                // _supplyMethods.LoadedUsage_Delete(meterType, meterId);
 
                 //Insert new Periodic Usage into LoadedUsage table
-                _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
+                // _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
 
                 //Call CreateForecastUsage API
                 var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);

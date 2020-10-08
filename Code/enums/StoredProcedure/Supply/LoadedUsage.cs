@@ -23,8 +23,8 @@ namespace enums
                 {
                     return new List<string>
                     {
-                        LoadedUsage_Delete,
-                        LoadedUsage_Insert,
+                        // LoadedUsage_Delete,
+                        // LoadedUsage_Insert,
                         LoadedUsage_GetLatest,
                     };
                 }

@@ -29,13 +29,14 @@ namespace CommitPeriodicUsageData.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+        private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Int64 commitPeriodicUsageDataAPIId;
         private long createdByUserId;
         private long sourceId;
         private string processQueueGUID;
         private string meterType;
         private long meterId;
-        private long usageTypeId;
+        private string usageType;
         private long granularityId;
         private Dictionary<string, long> dateDictionary;
 
@@ -94,8 +95,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                     : GetSubMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.SubMeterIdentifier].ToString());
 
                 //Get UsageTypeId
-                var usageType = jsonObject[_systemAPIRequiredDataKeyEnums.UsageType].ToString();
-                usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
+                usageType = jsonObject[_systemAPIRequiredDataKeyEnums.UsageType].ToString();
 
                 //Get GranularityId
                 var granularity = jsonObject[_systemAPIRequiredDataKeyEnums.Granularity].ToString();
@@ -141,9 +141,25 @@ namespace CommitPeriodicUsageData.api.Controllers
                     latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
                 }
 
+                //Create new ProcessQueueGUID
+                var newProcessQueueGUID = Guid.NewGuid().ToString();
+
+                //Map current ProcessQueueGUID to new ProcessQueueGUID
+                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+
+                //Update Process GUID to Create Forecast Usage Process GUID
+                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CreateForecastUsage);
+
+                //Get Routing.API URL
+                var routingAPIId = _systemMethods.GetRoutingAPIId();
+
+                //Connect to Routing API and POST data
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+
                 //Call CreateForecastUsage API
-                var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
-                var createForecastUsageAPI = _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+                // var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
+                // var createForecastUsageAPI = _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
 
                 //Get Existing Estimated Annual Usage
                 var existingEstimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);
@@ -275,7 +291,8 @@ namespace CommitPeriodicUsageData.api.Controllers
 
             //Create DataTable
             var dataTable = new DataTable();
-            dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
+            dataTable.Columns.Add("LoadedUsageId", typeof(long));
+            dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
             dataTable.Columns.Add("CreatedByUserId", typeof(long));
             dataTable.Columns.Add("SourceId", typeof(long));
             dataTable.Columns.Add("DateId", typeof(long));
@@ -284,10 +301,10 @@ namespace CommitPeriodicUsageData.api.Controllers
             dataTable.Columns.Add("Usage", typeof(decimal));
 
             //Set default values
-            dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
+            dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
             dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
             dataTable.Columns["SourceId"].DefaultValue = sourceId;
-            dataTable.Columns["UsageTypeId"].DefaultValue = usageTypeId;
+            dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
 
             //Create datarows
             var dataRows = AddDataRows(periodicUsageDictionary, dates, timePeriods, dataTable);
@@ -297,14 +314,8 @@ namespace CommitPeriodicUsageData.api.Controllers
                 dataTable.Rows.Add(dataRow);
             }
 
-            //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
-            _supplyMethods.LoadedUsageTemp_Insert(meterType, meterId, dataTable);
-
-            //End date existing Periodic Usage
-            _supplyMethods.LoadedUsage_Delete(meterType, meterId);
-
-            //Insert new Periodic Usage into LoadedUsage table
-            _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
+            //Bulk Insert new Periodic Usage into LoadedUsage table
+            _supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
 
             //Return latest periodic usage
             return _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);

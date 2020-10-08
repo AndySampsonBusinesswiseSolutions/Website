@@ -106,25 +106,14 @@ namespace CreateDateForecast.api.Controllers
                 var granularityCode = "Date";
 
                 //Get existing date forecast
-                var existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+                var existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
                 var existingDateForecastDictionary = existingDateForecasts.ToDictionary(
-                        d => d.Field<long>("DateId"),
-                        d => d.Field<decimal>("Usage")
+                        d => d.Item1,
+                        d => d.Item2
                 );
 
                 //Create DataTable
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
-                dataTable.Columns.Add("CreatedByUserId", typeof(long));
-                dataTable.Columns.Add("SourceId", typeof(long));
-                dataTable.Columns.Add("DateId", typeof(long));
-                dataTable.Columns.Add("Usage", typeof(decimal));
-
-                //Set default values
-                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
-                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-                dataTable.Columns["SourceId"].DefaultValue = sourceId;
-
+                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"DateId"}, createdByUserId, sourceId);
                 var dataRowAdded = false;
 
                 foreach(var forecastDate in forecastDictionary)
@@ -136,12 +125,30 @@ namespace CreateDateForecast.api.Controllers
                     {
                         AddToDataTable(dataTable, forecastDate.Key, forecastDate.Value);
                         dataRowAdded = true;
+
+                        if(existingDateForecastDictionary.ContainsKey(forecastDate.Key))
+                        {
+                            var existingDateForecastTuple = existingDateForecasts.First(t => t.Item1 == forecastDate.Key);
+                            existingDateForecasts.Remove(existingDateForecastTuple);
+                        }
+
+                        var newDateForecastTuple = new Tuple<long, decimal>(forecastDate.Key, forecastDate.Value);
+                        existingDateForecasts.Add(newDateForecastTuple);
                     }
                 }
 
                 if(dataRowAdded)
                 {
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, meterType, meterId, granularityCode, processQueueGUID);
+                    //Setup latest forecast
+                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
+
+                    foreach(var existingDateForecast in existingDateForecasts)
+                    {
+                        AddToDataTable(latestForecastDataTable, existingDateForecast.Item1, existingDateForecast.Item2);
+                    }
+
+                    //Insert into history and latest tables
+                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
                 }                
 
                 //Update Process Queue

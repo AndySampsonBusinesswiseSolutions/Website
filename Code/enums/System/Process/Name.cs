@@ -16,6 +16,7 @@ namespace enums
                     public string SendEmail = "Send Email";
                     public string CommitEstimatedAnnualUsage = "Commit Estimated Annual Usage";
                     public string CommitPeriodicUsage = "Commit Periodic Usage";
+                    public string CreateForecastUsage = "Create Forecast Usage";
                 }
             }
         }

@@ -44,8 +44,6 @@ BEGIN
     CREATE TABLE [' + @SchemaName + '].[LoadedUsage]
 	(
         LoadedUsageId BIGINT IDENTITY(1,1) NOT NULL,
-        EffectiveFromDateTime DATETIME NOT NULL,
-        EffectiveToDateTime DATETIME NOT NULL,
         CreatedDateTime DATETIME NOT NULL,
         CreatedByUserId BIGINT NOT NULL,
         SourceId BIGINT NOT NULL,
@@ -68,20 +66,6 @@ BEGIN
     EXEC sp_sqlexec @SQL
 
     --Add Defaults
-    SET @SQL = N'
-    USE [EMaaS]
-    
-    ALTER TABLE [' + @SchemaName + '].[LoadedUsage] ADD CONSTRAINT
-	    DF_LoadedUsage_EffectiveFromDateTime DEFAULT GETUTCDATE() FOR EffectiveFromDateTime'
-    EXEC sp_sqlexec @SQL
-
-    SET @SQL = N'
-    USE [EMaaS]
-    
-    ALTER TABLE [' + @SchemaName + '].[LoadedUsage] ADD CONSTRAINT
-	    DF_LoadedUsage_EffectiveToDateTime DEFAULT ''9999-12-31'' FOR EffectiveToDateTime'
-    EXEC sp_sqlexec @SQL
-
     SET @SQL = N'
     USE [EMaaS]
     

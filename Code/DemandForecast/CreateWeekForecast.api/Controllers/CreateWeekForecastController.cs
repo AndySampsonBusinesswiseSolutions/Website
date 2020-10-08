@@ -120,30 +120,18 @@ namespace CreateWeekForecast.api.Controllers
                 var granularityCode = "Week";
 
                 //Get existing week forecast
-                var existingWeekForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
-                var existingWeekForecastDictionary = existingWeekForecasts.Select(d => d.Field<long>("YearId")).Distinct()
+                var existingWeekForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId", "WeekId");
+                var existingWeekForecastDictionary = existingWeekForecasts.Select(f => f.Item1).Distinct()
                     .ToDictionary(
                         d => d,
-                        d => existingWeekForecasts.Where(e => e.Field<long>("YearId") == d).ToDictionary(
-                            t => t.Field<long>("WeekId"),
-                            t => t.Field<decimal>("Usage")
+                        d => existingWeekForecasts.Where(f => f.Item1 == d).ToDictionary(
+                            t => t.Item2,
+                            t => t.Item3
                         )
                 );
 
                 //Create DataTable
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("ProcessQueueGUID", typeof(string));
-                dataTable.Columns.Add("CreatedByUserId", typeof(long));
-                dataTable.Columns.Add("SourceId", typeof(long));
-                dataTable.Columns.Add("YearId", typeof(long));
-                dataTable.Columns.Add("WeekId", typeof(long));
-                dataTable.Columns.Add("Usage", typeof(decimal));
-
-                //Set default values
-                dataTable.Columns["ProcessQueueGUID"].DefaultValue = processQueueGUID;
-                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-                dataTable.Columns["SourceId"].DefaultValue = sourceId;
-
+                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"YearId", "WeekId"}, createdByUserId, sourceId);
                 var dataRowAdded = false;
 
                 foreach(var forecastYearId in forecastYearIds)
@@ -161,21 +149,40 @@ namespace CreateWeekForecast.api.Controllers
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdWeekId.Contains(f.Key))
                             .Sum(f => f.Value);
 
-                        var addUsageToDataTable = !existingWeekForecastDictionary.ContainsKey(forecastYearId)
-                            || !existingWeekForecastDictionary[forecastYearId].ContainsKey(forecastWeekId)
+                        var isNewPeriod = !existingWeekForecastDictionary.ContainsKey(forecastYearId)
+                            || !existingWeekForecastDictionary[forecastYearId].ContainsKey(forecastWeekId);
+                        var addUsageToDataTable = isNewPeriod
                             || existingWeekForecastDictionary[forecastYearId][forecastWeekId] != Math.Round(forecast, 10);
 
                         if(addUsageToDataTable)
                         {
                             AddToDataTable(dataTable, forecastYearId, forecastWeekId, forecast);
                             dataRowAdded = true;
+
+                            if(!isNewPeriod)
+                            {
+                                var existingWeekForecastTuple = existingWeekForecasts.First(t => t.Item1 == forecastYearId && t.Item2 == forecastWeekId);
+                                existingWeekForecasts.Remove(existingWeekForecastTuple);
+                            }
+
+                            var newWeekForecastTuple = new Tuple<long, long, decimal>(forecastYearId, forecastWeekId, forecast);
+                            existingWeekForecasts.Add(newWeekForecastTuple);
                         }
                     }
                 }
 
                 if(dataRowAdded)
                 {
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, meterType, meterId, granularityCode, processQueueGUID);
+                    //Setup latest forecast
+                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
+
+                    foreach(var existingWeekForecast in existingWeekForecasts)
+                    {
+                        AddToDataTable(latestForecastDataTable, existingWeekForecast.Item1, existingWeekForecast.Item2, existingWeekForecast.Item3);
+                    }
+
+                    //Insert into history and latest tables
+                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
                 }  
 
                 //Update Process Queue
