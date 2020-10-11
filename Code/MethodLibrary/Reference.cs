@@ -295,11 +295,6 @@ namespace MethodLibrary
                 return false;
             }
         }
-
-        public bool IsValidMPXN(string mpxn)
-        {
-            return IsValidMPAN(mpxn) || IsValidMPRN(mpxn);
-        }
         
         public bool IsValidMPAN(string mpan)
         {

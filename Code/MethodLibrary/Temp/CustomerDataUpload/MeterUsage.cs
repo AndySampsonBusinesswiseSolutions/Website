@@ -10,13 +10,6 @@ namespace MethodLibrary
         {
             public partial class CustomerDataUpload
             {
-                public void MeterUsage_Insert(string processQueueGUID, int rowId, string MPXN, string date, string timePeriod, string value)
-                {
-                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerDataUploadEnums.MeterUsage_Insert, 
-                        processQueueGUID, rowId, MPXN, date, timePeriod, value);
-                }
-
                 public List<DataRow> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                 {
                     var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

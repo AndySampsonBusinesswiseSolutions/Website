@@ -35,17 +35,6 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public long LocalDistributionZoneDetail_GetLocalDistributionZoneDetailIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(long localDistributionZoneAttributeId, string localDistributionZoneDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.LocalDistributionZoneDetail_GetByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription, 
-                    localDistributionZoneAttributeId, localDistributionZoneDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("LocalDistributionZoneDetailId"))
-                    .FirstOrDefault();
-            }
-
             public long LocalDistributionZoneDetail_GetLocalDistributionZoneIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(long localDistributionZoneAttributeId, string localDistributionZoneDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

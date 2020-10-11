@@ -98,16 +98,6 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("SiteId"))
                     .ToList();
             }
-
-            public Dictionary<long, string> SiteDetail_GetSiteDetailDescriptionDictionaryBySiteAttributeId(long siteAttributeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.SiteDetail_GetBySiteAttributeId, 
-                    siteAttributeId);
-
-                return dataTable.AsEnumerable()
-                    .ToDictionary(d => d.Field<long>("SiteId"), d => d.Field<string>("SiteDetailDescription"));
-            }
         }
     }
 }

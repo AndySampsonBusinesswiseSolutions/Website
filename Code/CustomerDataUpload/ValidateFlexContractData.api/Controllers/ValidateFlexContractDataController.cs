@@ -182,7 +182,7 @@ namespace ValidateFlexContractData.api.Controllers
                 //Validate Rates
                 var invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
                     && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("Rate")
-                    && !_methods.IsValidFixedContractRate(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
+                    && !_methods.IsValidFlexContractRate(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {

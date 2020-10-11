@@ -39,16 +39,6 @@ namespace MethodLibrary
 
                 return tuple;
             }
-
-            public Dictionary<long, List<long>> AreaToMeter_GetMeterToAreaDictionaryByMeterIdList(Dictionary<long, string> meterIdentifierDictionary)
-            {
-                var tuple = AreaToMeter_GetLatestTuple();
-
-                return tuple.Where(t => meterIdentifierDictionary.ContainsKey(t.Item2)).Select(t => t.Item2).Distinct().ToDictionary(
-                    t => t,
-                    t => tuple.Where(t1 => t1.Item2 == t).Select(t1 => t1.Item1).Distinct().ToList()
-                );
-            }
         }
     }
 }

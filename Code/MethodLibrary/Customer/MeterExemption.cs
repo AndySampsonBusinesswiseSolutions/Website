@@ -25,17 +25,6 @@ namespace MethodLibrary
                 return MeterExemption_GetMeterExemptionIdByMeterExemptionGUID(GUID);
             }
 
-            public long MeterExemptionDetail_GetMeterExemptionDetailIdByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(long MeterExemptionAttributeId, string MeterExemptionDetailDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.MeterExemptionDetail_GetByMeterExemptionAttributeIdAndMeterExemptionDetailDescription, 
-                    MeterExemptionAttributeId, MeterExemptionDetailDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("MeterExemptionDetailId"))
-                    .FirstOrDefault();
-            }
-
             public long MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(string MeterExemptionAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
@@ -70,15 +59,6 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureCustomerEnums.MeterExemptionDetail_Insert, 
                     createdByUserId, sourceId, meterExemptionId, meterExemptionAttributeId, meterExemptionDetailDescription);
-            }
-
-            public DataRow MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId(long meterExemptionId, long meterExemptionAttributeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.MeterExemptionDetail_GetByMeterExemptionIdAndMeterExemptionAttributeId, 
-                    meterExemptionId, meterExemptionAttributeId);
-
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
             }
 
             public List<long> MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(long meterExemptionAttributeId, string meterExemptionDetailDescription)

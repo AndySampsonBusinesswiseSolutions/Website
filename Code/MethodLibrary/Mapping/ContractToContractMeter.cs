@@ -20,17 +20,6 @@ namespace MethodLibrary
                     .ToList();
             }
 
-            public long ContractToContractMeter_GetContractToContractMeterIdByContractIdAndContractMeterId(long contractId, long contractMeterId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.ContractToContractMeter_GetByContractIdAndContractMeterId, 
-                    contractId, contractMeterId);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("ContractToContractMeterId"))
-                    .FirstOrDefault();
-            }
-
             public void ContractToContractMeter_Insert(long createdByUserId, long sourceId, long contractId, long contractMeterId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

@@ -64,31 +64,6 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public void Granularity_Insert(long createdByUserId, long sourceId, string granularityGUID)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureInformationEnums.Granularity_Insert, 
-                    createdByUserId, sourceId, granularityGUID);
-            }
-
-            public long Granularity_GetGranularityIdByGranularityGUID(string granularityGUID)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.Granularity_GetByGranularityGUID, 
-                    granularityGUID);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("GranularityId"))
-                    .FirstOrDefault();
-            }
-
-            public void GranularityDetail_Insert(long createdByUserId, long sourceId, long granularityId, long granularityAttributeId, string granularityDetailDescription)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureInformationEnums.GranularityDetail_Insert, 
-                    createdByUserId, sourceId, granularityId, granularityAttributeId, granularityDetailDescription);
-            }
-
             public List<long> Granularity_GetGranularityIdList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

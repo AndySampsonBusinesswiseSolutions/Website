@@ -70,15 +70,6 @@ namespace MethodLibrary
                     _storedProcedureCustomerEnums.AssetDetail_Insert, 
                     createdByUserId, sourceId, assetId, assetAttributeId, assetDetailDescription);
             }
-
-            public DataRow AssetDetail_GetByAssetIdAndAssetAttributeId(long assetId, long assetAttributeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.AssetDetail_GetByAssetIdAndAssetAttributeId, 
-                    assetId, assetAttributeId);
-
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
-            }
         }
     }
 }

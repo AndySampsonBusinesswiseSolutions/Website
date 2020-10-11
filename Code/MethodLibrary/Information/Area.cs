@@ -1,7 +1,6 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -25,15 +24,6 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureInformationEnums.Area_Insert, 
                     createdByUserId, sourceId, areaDescription);
-            }
-
-            public Dictionary<long, string> Area_GetAreaDictionary()
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.Area_GetList);
-
-                return dataTable.AsEnumerable()
-                    .ToDictionary(d => d.Field<long>("AreaId"), d => d.Field<string>("AreaDescription"));
             }
         }
     }

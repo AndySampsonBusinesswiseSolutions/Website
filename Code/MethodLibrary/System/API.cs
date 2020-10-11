@@ -130,12 +130,6 @@ namespace MethodLibrary
                 return apiData;
             }
 
-            public string GetAPIURLByAPIGUID(string APIGUID) 
-            {
-                var APIId = API_GetAPIIdByAPIGUID(APIGUID);
-                return GetAPIURLByAPIId(APIId);
-            }
-
             public string GetAPIURLByAPIId(long APIId) 
             {
                 var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
@@ -171,31 +165,9 @@ namespace MethodLibrary
                 return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
             }
 
-            public string GetRoutingAPIURL()
-            {
-                return GetAPIURLByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
-            }
-
-            public string GetRoutingAPIPOSTRoute()
-            {
-                var APIId = API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
-                return GetAPIPOSTRouteByAPIId(APIId);
-            }
-
             public long GetArchiveProcessQueueAPIId()
             {
                 return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
-            }
-
-            public string GetArchiveProcessQueueAPIURL()
-            {
-                return GetAPIURLByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
-            }
-
-            public string GetArchiveProcessQueueAPIPOSTRoute()
-            {
-                var APIId = API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
-                return GetAPIPOSTRouteByAPIId(APIId);
             }
 
             public long GetValidateProcessGUIDAPIId()

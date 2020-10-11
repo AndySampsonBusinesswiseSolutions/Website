@@ -61,15 +61,6 @@ namespace MethodLibrary
                     createdByUserId, sourceId, tradeId, tradeAttributeId, tradeDetailDescription);
             }
 
-            public DataRow TradeDetail_GetByTradeIdAndTradeAttributeId(long tradeId, long tradeAttributeId)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.TradeDetail_GetByTradeIdAndTradeAttributeId, 
-                    tradeId, tradeAttributeId);
-
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
-            }
-
             public void TradeDetail_DeleteByTradeDetailId(long customerDetailId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

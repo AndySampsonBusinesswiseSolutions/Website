@@ -22,16 +22,6 @@ namespace MethodLibrary
                     LoadedUsage_CreateTable(meterId, meterType);
                 }
 
-                // tableName = $"LoadedUsage_Temp";
-                // tableId = Table_GetTableIdByTableNameAndSchemaId(tableName, schemaId);
-
-                // if(tableId == 0)
-                // {
-                //     LoadedUsage_CreateTempTable(meterId, meterType);
-                // }
-
-                // LoadedUsage_CreateDeleteStoredProcedure(meterId, meterType);
-                // LoadedUsage_CreateInsertStoredProcedure(meterId, meterType);
                 LoadedUsage_CreateGetLatestStoredProcedure(meterId, meterType);
                 LoadedUsage_GrantExecuteToStoredProcedures(meterId, meterType);
             }
@@ -43,50 +33,11 @@ namespace MethodLibrary
                     meterId, meterType);
             }
 
-            private void LoadedUsage_CreateTempTable(long meterId, string meterType)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.LoadedUsage_CreateTempTable, 
-                    meterId, meterType);
-            }
-
-            private void LoadedUsage_CreateDeleteStoredProcedure(long meterId, string meterType)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.LoadedUsage_CreateDeleteStoredProcedure, 
-                    meterId, meterType);
-            }
-
-            private void LoadedUsage_CreateInsertStoredProcedure(long meterId, string meterType)
-            {
-                ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                    _storedProcedureSupplyEnums.LoadedUsage_CreateInsertStoredProcedure, 
-                    meterId, meterType);
-            }
-
             private void LoadedUsage_CreateGetLatestStoredProcedure(long meterId, string meterType)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureSupplyEnums.LoadedUsage_CreateGetLatestStoredProcedure, 
                     meterId, meterType);
-            }
-
-            public void LoadedUsage_Delete(string meterType, long meterId)
-            {
-                var loadedUsageDeleteStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Delete, meterType, meterId);
-
-                ExecuteNonQuery(new List<ParameterInfo>().ToArray(), loadedUsageDeleteStoredProcedure);
-            }
-
-            public void LoadedUsage_Insert(string meterType, long meterId, string processQueueGUID)
-            {
-                var loadedUsageInsertStoredProcedure = string.Format(_storedProcedureSupplyEnums.LoadedUsage_Insert, meterType, meterId);
-                var parameterInfoList = MethodBase.GetCurrentMethod().GetParameters()
-                    .Where(p => p.Name != "meterType" && p.Name != "meterId").ToArray();
-
-                ExecuteNonQuery(parameterInfoList, 
-                    loadedUsageInsertStoredProcedure,
-                    processQueueGUID);
             }
 
             public void LoadedUsage_Insert(string meterType, long meterId, DataTable loadedUsageDataTable)

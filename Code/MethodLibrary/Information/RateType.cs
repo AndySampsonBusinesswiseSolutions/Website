@@ -18,17 +18,6 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("RateTypeId"))
                     .FirstOrDefault();
             }
-
-            public long RateType_GetRateTypeIdByRateTypeDescription(string rateTypeDescription)
-            {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureInformationEnums.RateType_GetByRateTypeDescription, 
-                    rateTypeDescription);
-
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("RateTypeId"))
-                    .FirstOrDefault();
-            }
         }
     }
 }
