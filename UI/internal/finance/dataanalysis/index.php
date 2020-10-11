@@ -127,7 +127,7 @@
 <script type="text/javascript" src="/includes/jsuites/jsuites.js"></script>
 <script type="text/javascript" src="dataanalysis.js"></script>
 
-<script type="text/javascript" src="usage.json"></script>
+<!-- <script type="text/javascript" src="usage.json"></script>
 <script type="text/javascript" src="cost.json"></script>
 <script type="text/javascript" src="capacity.json"></script>
 
@@ -168,7 +168,7 @@
 <script type="text/javascript" src="capacity market.json"></script>
 <script type="text/javascript" src="balancing system use of system.json"></script>
 <script type="text/javascript" src="residual cashflow reallocation cashflow.json"></script>
-<script type="text/javascript" src="sundry.json"></script>
+<script type="text/javascript" src="sundry.json"></script> -->
 
 <script type="text/javascript"> 
 	pageLoad();

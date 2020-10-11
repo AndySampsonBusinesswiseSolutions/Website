@@ -435,7 +435,7 @@ function createTimePeriodTree() {
 
 async function getTree(data) {
 	try {
-	const response = await fetch('http://localhost:5000/EagleEye/BuildLocationTree', {
+	const response = await fetch('http://localhost:5196/CreateDataAnalysisWebpage/BuildLocationTree', {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',
@@ -457,7 +457,9 @@ async function getTree(data) {
 
 //build site
 async function buildSiteBranch(elementToAppendTo) {
-  var treeResponse = await getTree({});
+  var processQueueGUID = CreateGUID();
+	var data = {ProcessQueueGUID: processQueueGUID};
+  var treeResponse = await getTree(data);
   elementToAppendTo.innerHTML = treeResponse.message;
 }
 
@@ -1376,7 +1378,7 @@ function convertMonthIdToQuarter(monthId) {
 
 async function getDailyForecast(data) {
 	try {
-	const response = await fetch('http://localhost:5000/EagleEye/GetDailyForecast', {
+	const response = await fetch('http://localhost:5196/CreateDataAnalysisWebpage/GetDailyForecast', {
 		method: 'POST',
 		mode: 'cors',
 		cache: 'no-cache',

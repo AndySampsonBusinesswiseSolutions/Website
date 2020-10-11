@@ -7,4 +7,4 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 DECLARE @APIId BIGINT = (SELECT APIId FROM [System].[API] WHERE APIGUID = 'D0FC5C37-400C-41BE-A612-10E69EE44CBA')
 DECLARE @APIAttributeId BIGINT = (SELECT APIAttributeId FROM [System].[APIAttribute] WHERE APIAttributeDescription = 'POST Route')
 
-EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'CreateDataAnalysisWebpage/Create'
+EXEC [System].[APIDetail_Insert] @CreatedByUserId, @SourceId, @APIId, @APIAttributeId, 'CreateDataAnalysisWebpage/BuildLocationTree'

@@ -2023,6 +2023,7 @@
                 "ValidatePageGUID.api",
                 "ValidateProcessGUID.api",
                 "CreateManageCustomersWebpage.api",
+                "CreateDataAnalysisWebpage.api"
             ]
         },
     ]
