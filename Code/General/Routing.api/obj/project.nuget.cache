@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "kM0u5bjVjw9AyCfJU/cM0owHkLDnj3flnVJqWK8iD84azNctD4JXnk4qwuYHvxKzzYylVMWyezAaUte060Q4AQ==",
+  "dgSpecHash": "wpLerRoNngAphYOBND0S9hYwpb/tWI5vn8phH08+Bhwa/Df0PHysl1qesyeNGE+hj487zs7WoFl3N87ka4rRyQ==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\General\\Routing.api\\Routing.api.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.authentication.certificate\\3.1.4\\microsoft.aspnetcore.authentication.certificate.3.1.4.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.2.0\\microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",
+    "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\2.2.0\\microsoft.aspnetcore.cryptography.internal.2.2.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.dataprotection\\2.2.0\\microsoft.aspnetcore.dataprotection.2.2.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.aspnetcore.dataprotection.abstractions\\2.2.0\\microsoft.aspnetcore.dataprotection.abstractions.2.2.0.nupkg.sha512",
@@ -23,7 +24,7 @@
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.0\\microsoft.data.sqlclient.2.0.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.0.0\\microsoft.data.sqlclient.sni.runtime.2.0.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\2.2.0\\microsoft.extensions.configuration.abstractions.2.2.0.nupkg.sha512",
-    "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\2.2.0\\microsoft.extensions.dependencyinjection.abstractions.2.2.0.nupkg.sha512",
+    "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\3.1.0\\microsoft.extensions.dependencyinjection.abstractions.3.1.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\2.2.0\\microsoft.extensions.fileproviders.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\2.2.0\\microsoft.extensions.hosting.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\2.2.0\\microsoft.extensions.logging.abstractions.2.2.0.nupkg.sha512",

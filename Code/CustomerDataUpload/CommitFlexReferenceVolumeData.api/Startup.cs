@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MethodLibrary;
 
 namespace CommitFlexReferenceVolumeData.api
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        private readonly Methods.System _systemMethods = new Methods.System();
 
         public Startup(IConfiguration configuration)
         {
@@ -20,16 +21,7 @@ namespace CommitFlexReferenceVolumeData.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy(
-                    name: MyAllowSpecificOrigins,
-                    builder =>
-                        {
-                            builder.WithOrigins("http://energyportal:8080").AllowAnyMethod().AllowAnyHeader();
-                        }
-                );
-            });
+            _systemMethods.ConfigureAPIStartupServices(services);
 
             services.AddControllers();
         }
@@ -46,7 +38,7 @@ namespace CommitFlexReferenceVolumeData.api
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors("_myAllowSpecificOrigins");
 
             app.UseAuthorization();
 

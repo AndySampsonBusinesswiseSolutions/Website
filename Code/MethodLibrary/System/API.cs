@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Threading;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MethodLibrary
 {
@@ -222,6 +223,20 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<string>("APIDetailDescription"))
                     .ToList();
+            }
+
+            public void ConfigureAPIStartupServices(IServiceCollection services)
+            {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(
+                        name: "_myAllowSpecificOrigins",
+                        builder =>
+                            {
+                                builder.WithOrigins("http://energyportal:8080").AllowAnyMethod().AllowAnyHeader();
+                            }
+                    );
+                });
             }
         }
     }
