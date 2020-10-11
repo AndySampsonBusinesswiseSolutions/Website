@@ -4,6 +4,27 @@
    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
    "version": "0.2.0",
    "configurations": [
+        {"name": "CreateDataAnalysisWebpage.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Webpage/CreateDataAnalysisWebpage.api/bin/Debug/netcoreapp3.1/CreateDataAnalysisWebpage.api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Webpage/CreateDataAnalysisWebpage.api",
+            "stopAtEntry": false,
+            // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Webpage/CreateDataAnalysisWebpage.api/Views"
+            }
+        },
         {"name": "CreateManageCustomersWebpage.api",
             "type": "coreclr",
             "request": "launch",
@@ -1777,6 +1798,7 @@
         },
         {"name": "All Projects",
             "configurations": [
+                "CreateDataAnalysisWebpage.api",
                 "CreateManageCustomersWebpage.api",
                 "CreateYearForecast.api",
                 "CreateQuarterForecast.api",

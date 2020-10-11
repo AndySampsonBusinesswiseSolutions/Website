@@ -134,4 +134,3 @@ namespace ValidateSubMeterData.api.Controllers
         }
     }
 }
-

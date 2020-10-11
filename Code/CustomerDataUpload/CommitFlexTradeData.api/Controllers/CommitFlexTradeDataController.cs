@@ -239,4 +239,3 @@ namespace CommitFlexTradeData.api.Controllers
         }
     }
 }
-

@@ -159,4 +159,3 @@ namespace CommitSubMeterData.api.Controllers
         }
     }
 }
-

@@ -126,4 +126,3 @@ namespace StoreSubMeterUsageData.api.Controllers
         }
     }
 }
-

@@ -57,4 +57,3 @@ namespace StoreSubMeterUsageData.api
         }
     }
 }
-

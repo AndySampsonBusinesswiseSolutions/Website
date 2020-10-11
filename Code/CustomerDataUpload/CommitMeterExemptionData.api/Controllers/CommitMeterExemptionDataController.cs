@@ -174,4 +174,3 @@ namespace CommitMeterExemptionData.api.Controllers
         }
     }
 }
-

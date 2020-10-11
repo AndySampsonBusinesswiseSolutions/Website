@@ -126,4 +126,3 @@ namespace CommitCommodityToMeterData.api.Controllers
         }
     }
 }
-

@@ -57,4 +57,3 @@ namespace GetGenericProfile.api
         }
     }
 }
-

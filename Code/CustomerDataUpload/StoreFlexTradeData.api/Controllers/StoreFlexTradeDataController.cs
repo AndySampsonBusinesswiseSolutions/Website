@@ -94,4 +94,3 @@ namespace StoreFlexTradeData.api.Controllers
         }
     }
 }
-

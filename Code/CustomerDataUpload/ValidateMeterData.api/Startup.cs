@@ -57,4 +57,3 @@ namespace ValidateMeterData.api
         }
     }
 }
-

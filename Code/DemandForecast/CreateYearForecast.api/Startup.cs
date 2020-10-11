@@ -57,4 +57,3 @@ namespace CreateYearForecast.api
         }
     }
 }
-

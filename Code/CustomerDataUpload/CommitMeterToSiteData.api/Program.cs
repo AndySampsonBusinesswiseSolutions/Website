@@ -28,4 +28,3 @@ namespace CommitMeterToSiteData.api
                 });
     }
 }
-

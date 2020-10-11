@@ -57,4 +57,3 @@ namespace CreateHalfHourForecast.api
         }
     }
 }
-

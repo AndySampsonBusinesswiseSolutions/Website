@@ -207,4 +207,3 @@ namespace CreateMonthForecast.api.Controllers
         }
     }
 }
-

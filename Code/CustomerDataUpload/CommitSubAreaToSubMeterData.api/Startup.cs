@@ -57,4 +57,3 @@ namespace CommitSubAreaToSubMeterData.api
         }
     }
 }
-

@@ -57,4 +57,3 @@ namespace DetermineFileType.api
         }
     }
 }
-

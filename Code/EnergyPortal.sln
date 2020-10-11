@@ -177,6 +177,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateYearForecast.api", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateManageCustomersWebpage.api", "Webpage\CreateManageCustomersWebpage.api\CreateManageCustomersWebpage.api.csproj", "{DD39D82C-3D6B-472B-883B-FD92192F54D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateDataAnalysisWebpage.api", "Webpage\CreateDataAnalysisWebpage.api\CreateDataAnalysisWebpage.api.csproj", "{D0FC5C37-400C-41BE-A612-10E69EE44CBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1246,8 +1248,22 @@ Global
         {DD39D82C-3D6B-472B-883B-FD92192F54D1}.Release|x64.Build.0 = Release|Any CPU
         {DD39D82C-3D6B-472B-883B-FD92192F54D1}.Release|x86.ActiveCfg = Release|Any CPU
         {DD39D82C-3D6B-472B-883B-FD92192F54D1}.Release|x86.Build.0 = Release|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Debug|x64.ActiveCfg = Debug|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Debug|x64.Build.0 = Debug|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Debug|x86.ActiveCfg = Debug|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Debug|x86.Build.0 = Debug|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Release|Any CPU.Build.0 = Release|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Release|x64.ActiveCfg = Release|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Release|x64.Build.0 = Release|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Release|x86.ActiveCfg = Release|Any CPU
+        {D0FC5C37-400C-41BE-A612-10E69EE44CBA}.Release|x86.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
+
+
 
 
 

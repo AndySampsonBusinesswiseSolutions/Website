@@ -28,4 +28,3 @@ namespace CreateYearForecast.api
                 });
     }
 }
-

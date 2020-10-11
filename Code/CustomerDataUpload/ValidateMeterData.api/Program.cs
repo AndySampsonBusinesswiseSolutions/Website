@@ -28,4 +28,3 @@ namespace ValidateMeterData.api
                 });
     }
 }
-

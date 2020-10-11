@@ -140,4 +140,3 @@ namespace DetermineFileType.api.Controllers
         }
     }
 }
-

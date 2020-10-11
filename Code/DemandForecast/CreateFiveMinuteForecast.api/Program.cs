@@ -28,4 +28,3 @@ namespace CreateFiveMinuteForecast.api
                 });
     }
 }
-

@@ -93,4 +93,3 @@ namespace GetMeterSpecificProfile.api.Controllers
         }
     }
 }
-

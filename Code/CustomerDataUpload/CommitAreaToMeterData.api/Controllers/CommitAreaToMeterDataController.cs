@@ -140,4 +140,3 @@ namespace CommitAreaToMeterData.api.Controllers
         }
     }
 }
-

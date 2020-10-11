@@ -8,6 +8,7 @@ namespace enums
             {
                 public class Name
                 {
+                    public string CreateDataAnalysisWebpageAPI = "CreateDataAnalysisWebpage.api";
                     public string CreateManageCustomersWebpageAPI = "CreateManageCustomersWebpage.api";
                     public string CreateYearForecastAPI = "CreateYearForecast.api";
                     public string CreateQuarterForecastAPI = "CreateQuarterForecast.api";

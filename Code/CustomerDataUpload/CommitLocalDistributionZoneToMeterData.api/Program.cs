@@ -28,4 +28,3 @@ namespace CommitLocalDistributionZoneToMeterData.api
                 });
     }
 }
-

@@ -57,4 +57,3 @@ namespace CreateWeekForecast.api
         }
     }
 }
-

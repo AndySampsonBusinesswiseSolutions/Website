@@ -285,4 +285,3 @@ namespace CreateFiveMinuteForecast.api.Controllers
         }
     }
 }
-

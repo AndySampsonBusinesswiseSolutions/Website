@@ -95,4 +95,3 @@ namespace StoreMeterExemptionData.api.Controllers
         }
     }
 }
-
