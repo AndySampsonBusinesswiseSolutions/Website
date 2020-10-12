@@ -6,6 +6,8 @@ async function pageLoad() {
 
   mySidenav.style.display = "none";
   overlay.style.display = "none";
+
+  await updateChart(true);
 }
 
 function getCommodityOption() {
@@ -44,8 +46,6 @@ async function createTrees(isPageLoad) {
   }
   
   await createSiteTree(isPageLoad);
-
-  await updateChart(isPageLoad);
   
   addExpanderOnClickEvents();
   setOpenExpanders();
@@ -458,7 +458,18 @@ async function getTree(data) {
 //build site
 async function buildSiteBranch(elementToAppendTo) {
   var processQueueGUID = CreateGUID();
-	var data = {ProcessQueueGUID: processQueueGUID};
+  var filterData = {
+    SiteChecked: siteLocationcheckbox.checked,
+    AreaChecked: areaLocationcheckbox.checked,
+    CommodityChecked: commodityLocationcheckbox.checked,
+    ElectricityChecked: electricityCommoditycheckbox.checked,
+    GasChecked: gasCommoditycheckbox.checked,
+    MeterChecked: meterLocationcheckbox.checked,
+    SubAreaChecked: subareaLocationcheckbox.checked,
+    AssetChecked: assetLocationcheckbox.checked,
+    SubMeterChecked: submeterLocationcheckbox.checked
+  };
+	var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData};
   var treeResponse = await getTree(data);
   elementToAppendTo.innerHTML = treeResponse.message;
 }
