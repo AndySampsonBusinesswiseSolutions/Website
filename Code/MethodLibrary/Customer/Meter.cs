@@ -67,6 +67,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public Guid Meter_GetMeterGUIDByMeterId(long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Meter_GetByMeterId, 
+                    meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<Guid>("MeterGUID"))
+                    .FirstOrDefault();
+            }
+
             public List<long> Meter_GetMeterIdList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

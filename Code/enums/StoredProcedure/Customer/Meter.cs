@@ -16,6 +16,7 @@ namespace enums
                 public string MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription = "[Customer].[MeterDetail_GetByMeterAttributeIdAndMeterDetailDescription]";
                 public string MeterDetail_GetByMeterAttributeId = "[Customer].[MeterDetail_GetByMeterAttributeId]";
                 public string Meter_GetList = "[Customer].[Meter_GetList]";
+                public string Meter_GetByMeterId = "[Customer].[Meter_GetByMeterId]";
             }
         }
     }

@@ -13,6 +13,7 @@ namespace enums
                 public string Asset_GetByAssetGUID = "[Customer].[Asset_GetByAssetGUID]";
                 public string AssetDetail_Insert = "[Customer].[AssetDetail_Insert]";
                 public string AssetDetail_GetByAssetAttributeIdAndAssetDetailDescription = "[Customer].[AssetDetail_GetByAssetAttributeIdAndAssetDetailDescription]";
+                public string Asset_GetByAssetId = "[Customer].[Asset_GetByAssetId]";
             }
         }
     }

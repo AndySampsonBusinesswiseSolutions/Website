@@ -15,6 +15,7 @@ namespace enums
                 public string SiteAttribute_GetBySiteAttributeDescription = "[Customer].[SiteAttribute_GetBySiteAttributeDescription]";
                 public string SiteDetail_GetBySiteAttributeIdAndSiteDetailDescription = "[Customer].[SiteDetail_GetBySiteAttributeIdAndSiteDetailDescription]";
                 public string SiteDetail_GetBySiteAttributeId = "[Customer].[SiteDetail_GetBySiteAttributeId]";
+                public string Site_GetBySiteId = "[Customer].[Site_GetBySiteId]";
             }
         }
     }

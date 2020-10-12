@@ -92,8 +92,16 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 //Get SiteNameSiteAttributeId
                 var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
 
+                //Get SitePostcodeSiteAttributeId
+                var sitePostcodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
+
                 //Get Site names
-                var siteDictionary = _customerMethods.SiteDetail_GetSiteDetailDescriptionDictionaryBySiteAttributeId(siteNameSiteAttributeId);
+                var siteNameDictionary = _customerMethods.SiteDetail_GetSiteDetailDescriptionDictionaryBySiteAttributeId(siteNameSiteAttributeId);
+                var sitePostcodeDictionary = _customerMethods.SiteDetail_GetSiteDetailDescriptionDictionaryBySiteAttributeId(sitePostcodeSiteAttributeId);
+                var siteDictionary = new Dictionary<long, string>(siteNameDictionary.ToDictionary(
+                    sn => sn.Key, 
+                    sn => $"{sn.Value}, {sitePostcodeDictionary.First(sp => sp.Key == sn.Key).Value}")
+                );
 
                 //Get MeterToSite mappings
                 var siteToMeterDictionary = _mappingMethods.MeterToSite_GetSiteToMeterDictionaryBySiteIdList(siteDictionary);
@@ -228,10 +236,33 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             var branchListDiv = $"<div id='{type}{dictionary.Key}List' class='listitem-hidden'>{ulHTML}</div>";
             var span = $"<span id='{type}{dictionary.Key}span'>{dictionary.Value}</span>";
             var icon = $"<i class='fas fa-site' style='padding-left: 3px; padding-right: 3px;'></i>";
-            var checkbox = $"<input type='checkbox' id='{type}{dictionary.Key}checkbox' GUID='{dictionary.Key}' Branch='{type}' onclick='updatePage(this);'></input>";
+            var checkbox = $"<input type='checkbox' id='{type}{dictionary.Key}checkbox' GUID='{type}|{GetGUID(type, dictionary.Key)}' Branch='{type}' onclick='updatePage(this);'></input>";
             var branchDiv = $"<i id='{type}{dictionary.Key}' class='far fa-plus-square show-pointer expander'></i>";
 
             return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
+        }
+
+        private string GetGUID(string type, long value)
+        {
+            switch(type)
+            {
+                case "Site":
+                    return _customerMethods.Site_GetSiteGUIDBySiteId(value).ToString();
+                case "Meter":
+                    return _customerMethods.Meter_GetMeterGUIDByMeterId(value).ToString();
+                case "Area":
+                    return _informationMethods.Area_GetAreaDictionary()[value];
+                case "Commodity":
+                    return _informationMethods.Commodity_GetCommodityDictionary()[value];
+                case "SubArea":
+                    return _informationMethods.SubArea_GetSubAreaDictionary()[value];
+                case "Asset":
+                    return _customerMethods.Asset_GetAssetGUIDByAssetId(value).ToString();
+                case "SubMeter":
+                    return _customerMethods.SubMeter_GetSubMeterGUIDBySubMeterId(value).ToString();
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

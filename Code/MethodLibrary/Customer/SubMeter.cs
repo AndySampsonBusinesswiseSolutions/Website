@@ -66,6 +66,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public Guid SubMeter_GetSubMeterGUIDBySubMeterId(long subMeterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.SubMeter_GetBySubMeterGUID, 
+                    subMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<Guid>("SubMeterGUID"))
+                    .FirstOrDefault();
+            }
+
             public void SubMeterDetail_Insert(long createdByUserId, long sourceId, long subMeterId, long subMeterAttributeId, string subMeterDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

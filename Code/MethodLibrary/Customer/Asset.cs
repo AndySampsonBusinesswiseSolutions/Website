@@ -64,6 +64,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public Guid Asset_GetAssetGUIDByAssetId(long assetId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Asset_GetByAssetId, 
+                    assetId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<Guid>("AssetGUID"))
+                    .FirstOrDefault();
+            }
+
             public void AssetDetail_Insert(long createdByUserId, long sourceId, long assetId, long assetAttributeId, string assetDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

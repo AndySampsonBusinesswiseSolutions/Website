@@ -43,6 +43,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public Guid Site_GetSiteGUIDBySiteId(long siteId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.Site_GetBySiteId, 
+                    siteId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<Guid>("SiteGUID"))
+                    .FirstOrDefault();
+            }
+
             public void SiteDetail_Insert(long createdByUserId, long sourceId, long siteId, long siteAttributeId, string siteDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
