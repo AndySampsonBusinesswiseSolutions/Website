@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 
 namespace CreateDateForecast.api.Controllers
 {
@@ -28,6 +27,10 @@ namespace CreateDateForecast.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createDateForecastAPIId;
+        private readonly string granularityCode = "Date";
+        private List<Tuple<long, decimal>> existingDateForecasts;
+        private Dictionary<long, decimal> existingDateForecastDictionary;
+        private Dictionary<long, decimal> forecastDictionary;
 
         public CreateDateForecastController(ILogger<CreateDateForecastController> logger)
         {
@@ -62,12 +65,12 @@ namespace CreateDateForecast.api.Controllers
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
+                    processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createDateForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, jsonObject))
+                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, jsonObject))
                 {
                     return;
                 }
@@ -81,80 +84,43 @@ namespace CreateDateForecast.api.Controllers
                 //Get MeterId
                 var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
 
-                //Get latest loaded usage
-                var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+                GetForecastDictionary(meterType, meterId);
+                GetExistingForecast(meterType, meterId);
 
-                //Set up forecast dictionary
-                var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
-                var futureDateToUsageDateDictionary = dateMappings.ToDictionary(
-                    d => d.Field<long>("DateId"),
-                    d => d.Field<long>("MappedDateId")
-                );
-                
-                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
+                var newDateForecastTuples = new List<Tuple<long, decimal>>();
+                var oldDateForecastTuples = new List<Tuple<long, decimal>>();                
 
-                var forecastDictionary = new ConcurrentDictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
-
-                //Loop through future date ids
-                foreach(var futureDateId in forecastDictionary.Keys)
-                {
-                    forecastDictionary[futureDateId] = latestLoadedUsage
-                        .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<decimal>("Usage"));
-                }
-
-                var granularityCode = "Date";
-
-                //Get existing date forecast
-                var existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
-                var existingDateForecastDictionary = existingDateForecasts.ToDictionary(
-                        d => d.Item1,
-                        d => d.Item2
-                );
-
-                //Create DataTable
-                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"DateId"}, createdByUserId, sourceId);
-                var dataRowAdded = false;
-
-                foreach(var forecastDate in forecastDictionary)
+                foreach (var forecastDate in forecastDictionary)
                 {
                     var addUsageToDataTable = !existingDateForecastDictionary.ContainsKey(forecastDate.Key)
                         || existingDateForecastDictionary[forecastDate.Key] != forecastDate.Value;
 
-                    if(addUsageToDataTable)
+                    if (addUsageToDataTable)
                     {
-                        AddToDataTable(dataTable, forecastDate.Key, forecastDate.Value);
-                        dataRowAdded = true;
-
-                        if(existingDateForecastDictionary.ContainsKey(forecastDate.Key))
+                        if (existingDateForecastDictionary.ContainsKey(forecastDate.Key))
                         {
                             var existingDateForecastTuple = existingDateForecasts.First(t => t.Item1 == forecastDate.Key);
-                            existingDateForecasts.Remove(existingDateForecastTuple);
+                            oldDateForecastTuples.Add(existingDateForecastTuple);
                         }
 
                         var newDateForecastTuple = new Tuple<long, decimal>(forecastDate.Key, forecastDate.Value);
-                        existingDateForecasts.Add(newDateForecastTuple);
+                        newDateForecastTuples.Add(newDateForecastTuple);
                     }
                 }
 
-                if(dataRowAdded)
+                if (newDateForecastTuples.Any())
                 {
-                    //Setup latest forecast
-                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
-
-                    foreach(var existingDateForecast in existingDateForecasts)
-                    {
-                        AddToDataTable(latestForecastDataTable, existingDateForecast.Item1, existingDateForecast.Item2);
-                    }
+                    existingDateForecasts = existingDateForecasts.Except(oldDateForecastTuples).ToList();
+                    existingDateForecasts.AddRange(newDateForecastTuples);
 
                     //Insert into history and latest tables
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
-                }                
+                    _supplyMethods.CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId" }, newDateForecastTuples, existingDateForecasts);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, false, null);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
@@ -163,12 +129,34 @@ namespace CreateDateForecast.api.Controllers
             }
         }
 
-        private void AddToDataTable(DataTable dataTable, long forecastDateId, decimal usage)
+        private void GetExistingForecast(string meterType, long meterId)
         {
-            var dataRow = dataTable.NewRow();
-            dataRow["DateId"] = forecastDateId;
-            dataRow["Usage"] = usage;
-            dataTable.Rows.Add(dataRow);
+            //Get existing date forecast
+            existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
+            existingDateForecastDictionary = existingDateForecasts.ToDictionary(
+                    d => d.Item1,
+                    d => d.Item2
+            );
+        }
+
+        private void GetForecastDictionary(string meterType, long meterId)
+        {
+            //Get latest loaded usage
+            var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatestTuple(meterType, meterId);
+
+            //Set up forecast dictionary
+            var futureDateToUsageDateDictionary = _supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
+
+            forecastDictionary = new Dictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
+
+            //Loop through future date ids
+            var forecastDictionaryKeys = forecastDictionary.Keys.ToList();
+            foreach (var futureDateId in forecastDictionaryKeys)
+            {
+                forecastDictionary[futureDateId] = latestLoadedUsage
+                    .Where(u => u.Item1 == futureDateToUsageDateDictionary[futureDateId])
+                    .Sum(u => u.Item4);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
-using System.Collections.Generic;
-using System.Data;
 using System;
+using System.Linq;
+using System.Data;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -69,7 +70,47 @@ namespace MethodLibrary
                 }
             }
 
-            public void InsertGranularSupplyForecast(DataTable dataTable, DataTable latestForecastDataTable, string meterType, long meterId, string granularityCode)
+            public void GrantAlterTable(long granularityId, string meterType, long meterId)
+            {
+                var granularityCodeGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityCode);
+                var granularityCode = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityCodeGranularityAttributeId);
+
+                foreach(var api in _systemAPIRequireAccessToUsageEntitiesEnums.APIList)
+                {
+                    var SQL = $"GRANT ALTER ON OBJECT::[Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}Latest] TO [{api}];";
+                    ExecuteSQL(SQL);
+                }
+            }
+
+            public void CreateGranularSupplyForecastDataTables(string meterType, long meterId, string granularityCode, long createdByUserId, long sourceId, List<string> columnNames, List<Tuple<long, long, decimal>> newForecasts, List<Tuple<long, long, decimal>> existingForecasts)
+            {
+                //Create DataTable
+                var dataTable = CreateHistoryForecastDataTable(granularityCode, columnNames, createdByUserId, sourceId);
+                PopulateForecastDataTable(columnNames, newForecasts, dataTable);
+
+                //Setup latest forecast
+                var latestForecastDataTable = CreateLatestForecastDataTable(dataTable, granularityCode);
+                PopulateForecastDataTable(columnNames, existingForecasts, latestForecastDataTable);
+
+                //Insert into history and latest tables
+                InsertGranularSupplyForecasts(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
+            }
+
+            public void CreateGranularSupplyForecastDataTables(string meterType, long meterId, string granularityCode, long createdByUserId, long sourceId, List<string> columnNames, List<Tuple<long, decimal>> newForecasts, List<Tuple<long, decimal>> existingForecasts)
+            {
+                //Create DataTable
+                var dataTable = CreateHistoryForecastDataTable(granularityCode, columnNames, createdByUserId, sourceId);
+                PopulateForecastDataTable(columnNames, newForecasts, dataTable);
+
+                //Setup latest forecast
+                var latestForecastDataTable = CreateLatestForecastDataTable(dataTable, granularityCode);
+                PopulateForecastDataTable(columnNames, existingForecasts, latestForecastDataTable);
+
+                //Insert into history and latest tables
+                InsertGranularSupplyForecasts(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
+            }
+
+            public void InsertGranularSupplyForecasts(DataTable dataTable, DataTable latestForecastDataTable, string meterType, long meterId, string granularityCode)
             {
                 //Bulk insert into History table
                 ForecastUsageGranularityHistory_Insert(meterType, meterId, granularityCode, dataTable);
@@ -111,6 +152,49 @@ namespace MethodLibrary
                 latestForecastDataTable.Columns.Remove("SourceId");
 
                 return latestForecastDataTable;
+            }
+
+            public void PopulateForecastDataTable(List<string> columnNames, List<Tuple<long, long, decimal>> forecasts, DataTable dataTable)
+            {
+                foreach (var forecast in forecasts)
+                {
+                    AddToForecastDataTable(dataTable, columnNames, new List<long>{forecast.Item1, forecast.Item2}, forecast.Item3);
+                }
+            }
+
+            public void PopulateForecastDataTable(List<string> columnNames, List<Tuple<long, decimal>> forecasts, DataTable dataTable)
+            {
+                foreach (var forecast in forecasts)
+                {
+                    AddToForecastDataTable(dataTable, columnNames, new List<long>{forecast.Item1}, forecast.Item2);
+                }
+            }
+
+            public void AddToForecastDataTable(DataTable dataTable, List<string> columnNames, List<long> ids, decimal usage)
+            {
+                var dataRow = dataTable.NewRow();
+
+                for(var i = 0; i < columnNames.Count; i++)
+                {
+                    dataRow[columnNames[i]] = ids[i];
+                }
+
+                dataRow["Usage"] = usage;
+                dataTable.Rows.Add(dataRow);
+            }
+
+            public decimal GetUsageByUsageType(List<Tuple<long, long, long, decimal>> usageForTimePeriodList)
+            {
+                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
+                return usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Item3).Key, u => u.Item4)
+                    .OrderBy(u => u.Key).First().Value;
+            }
+
+            public void SetForecastValue(Dictionary<long, decimal> forecast, Dictionary<long, bool> forecastFound, long timePeriodId, decimal usage)
+            {
+                //Add usage to forecast
+                forecast[timePeriodId] = Math.Round(usage, 10);
+                forecastFound[timePeriodId] = true;
             }
         }
     }

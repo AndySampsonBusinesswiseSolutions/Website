@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 
 namespace CreateWeekForecast.api.Controllers
 {
@@ -29,6 +28,13 @@ namespace CreateWeekForecast.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createWeekForecastAPIId;
+        private string granularityCode = "Week";
+        private List<Tuple<long, long, decimal>> existingWeekForecasts;
+        private Dictionary<long, Dictionary<long, decimal>> existingWeekForecastDictionary;
+        private Dictionary<long, decimal> forecastDictionary;
+        private List<long> forecastYearIds;
+        private Dictionary<long, List<long>> WeekToDateDictionary;
+        private Dictionary<long, List<long>> yearToDateDictionary;
 
         public CreateWeekForecastController(ILogger<CreateWeekForecastController> logger)
         {
@@ -63,7 +69,7 @@ namespace CreateWeekForecast.api.Controllers
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
+                    processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createWeekForecastAPIId);
@@ -77,74 +83,23 @@ namespace CreateWeekForecast.api.Controllers
                 //Get MeterId
                 var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
 
-                //Get latest loaded usage
-                var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+                GetForecastDictionary(meterType, meterId);
+                GetExistingForecast(meterType, meterId);
 
-                //Get Date to Week mappings
-                var dateToWeekMappings = _mappingMethods.DateToWeek_GetList();
-                var weekToDateDictionary = dateToWeekMappings.Select(d => d.Field<long>("WeekId")).Distinct()
-                    .ToDictionary(
-                        w => w,
-                        w => dateToWeekMappings.Where(d => d.Field<long>("WeekId") == w).Select(d => d.Field<long>("DateId")).ToList()
-                    );
-                
-                //Get Date to Year mappings
-                var dateToYearMappings = _mappingMethods.DateToYear_GetList();
-                var yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
-                    .ToDictionary(
-                        w => w,
-                        w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
-                    );
+                var newWeekForecastTuples = new List<Tuple<long, long, decimal>>();
+                var oldWeekForecastTuples = new List<Tuple<long, long, decimal>>();
 
-                //Set up forecast dictionary
-                var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
-                var futureDateToUsageDateDictionary = dateMappings.ToDictionary(
-                    d => d.Field<long>("DateId"),
-                    d => d.Field<long>("MappedDateId")
-                );
-                var forecastDictionary = new ConcurrentDictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
-                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
-
-                //Loop through future date ids
-                foreach(var futureDateId in forecastDictionary.Keys)
-                {
-                    forecastDictionary[futureDateId] = latestLoadedUsage
-                        .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<decimal>("Usage"));
-                }
-
-                //Get Forecast by Year
-                var forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
-                    .Select(y => y.Key).Distinct().ToList();
-
-                var granularityCode = "Week";
-
-                //Get existing week forecast
-                var existingWeekForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId", "WeekId");
-                var existingWeekForecastDictionary = existingWeekForecasts.Select(f => f.Item1).Distinct()
-                    .ToDictionary(
-                        d => d,
-                        d => existingWeekForecasts.Where(f => f.Item1 == d).ToDictionary(
-                            t => t.Item2,
-                            t => t.Item3
-                        )
-                );
-
-                //Create DataTable
-                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"YearId", "WeekId"}, createdByUserId, sourceId);
-                var dataRowAdded = false;
-
-                foreach(var forecastYearId in forecastYearIds)
+                foreach (var forecastYearId in forecastYearIds)
                 {
                     var dateIdsForYearId = yearToDateDictionary[forecastYearId];
 
                     //Get Forecast by Week
-                    var forecastWeekIds = weekToDateDictionary.Where(w => w.Value.Any(wv => dateIdsForYearId.Contains(wv)))
+                    var forecastWeekIds = WeekToDateDictionary.Where(w => w.Value.Any(wv => dateIdsForYearId.Contains(wv)))
                         .Select(w => w.Key).Distinct().ToList();
 
-                    foreach(var forecastWeekId in forecastWeekIds)
+                    foreach (var forecastWeekId in forecastWeekIds)
                     {
-                        var dateIdsForYearIdWeekId = weekToDateDictionary[forecastWeekId].Intersect(dateIdsForYearId);
+                        var dateIdsForYearIdWeekId = WeekToDateDictionary[forecastWeekId].Intersect(dateIdsForYearId);
 
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdWeekId.Contains(f.Key))
                             .Sum(f => f.Value);
@@ -154,41 +109,32 @@ namespace CreateWeekForecast.api.Controllers
                         var addUsageToDataTable = isNewPeriod
                             || existingWeekForecastDictionary[forecastYearId][forecastWeekId] != Math.Round(forecast, 10);
 
-                        if(addUsageToDataTable)
+                        if (addUsageToDataTable)
                         {
-                            AddToDataTable(dataTable, forecastYearId, forecastWeekId, forecast);
-                            dataRowAdded = true;
-
-                            if(!isNewPeriod)
+                            if (!isNewPeriod)
                             {
-                                var existingWeekForecastTuple = existingWeekForecasts.First(t => t.Item1 == forecastYearId && t.Item2 == forecastWeekId);
-                                existingWeekForecasts.Remove(existingWeekForecastTuple);
+                                oldWeekForecastTuples.Add(new Tuple<long, long, decimal>(forecastYearId, forecastWeekId, existingWeekForecastDictionary[forecastYearId][forecastWeekId]));
                             }
 
                             var newWeekForecastTuple = new Tuple<long, long, decimal>(forecastYearId, forecastWeekId, forecast);
-                            existingWeekForecasts.Add(newWeekForecastTuple);
+                            newWeekForecastTuples.Add(newWeekForecastTuple);
                         }
                     }
                 }
 
-                if(dataRowAdded)
+                if (newWeekForecastTuples.Any())
                 {
-                    //Setup latest forecast
-                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
-
-                    foreach(var existingWeekForecast in existingWeekForecasts)
-                    {
-                        AddToDataTable(latestForecastDataTable, existingWeekForecast.Item1, existingWeekForecast.Item2, existingWeekForecast.Item3);
-                    }
+                    existingWeekForecasts = existingWeekForecasts.Except(oldWeekForecastTuples).ToList();
+                    existingWeekForecasts.AddRange(newWeekForecastTuples);
 
                     //Insert into history and latest tables
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
-                }  
+                    _supplyMethods.CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId", "WeekId" }, newWeekForecastTuples, existingWeekForecasts);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createWeekForecastAPIId, false, null);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
@@ -197,13 +143,57 @@ namespace CreateWeekForecast.api.Controllers
             }
         }
 
-        private void AddToDataTable(DataTable dataTable, long forecastYearId, long forecastWeekId, decimal usage)
+        private void GetExistingForecast(string meterType, long meterId)
         {
-            var dataRow = dataTable.NewRow();
-            dataRow["YearId"] = forecastYearId;
-            dataRow["WeekId"] = forecastWeekId;
-            dataRow["Usage"] = usage;
-            dataTable.Rows.Add(dataRow);
+            //Get existing Week forecast
+            existingWeekForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId", "WeekId");
+            existingWeekForecastDictionary = existingWeekForecasts.Select(f => f.Item1).Distinct()
+                .ToDictionary(
+                    d => d,
+                    d => existingWeekForecasts.Where(f => f.Item1 == d).ToDictionary(
+                        t => t.Item2,
+                        t => t.Item3
+                    )
+            );
+        }
+
+        private void GetForecastDictionary(string meterType, long meterId)
+        {
+            //Get latest loaded usage
+            var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+
+            //Get Date to Week mappings
+            var dateToWeekMappings = _mappingMethods.DateToWeek_GetList();
+            WeekToDateDictionary = dateToWeekMappings.Select(d => d.Field<long>("WeekId")).Distinct()
+                .ToDictionary(
+                    w => w,
+                    w => dateToWeekMappings.Where(d => d.Field<long>("WeekId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                );
+
+            //Get Date to Year mappings
+            var dateToYearMappings = _mappingMethods.DateToYear_GetList();
+            yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
+                .ToDictionary(
+                    w => w,
+                    w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                );
+
+            //Set up forecast dictionary
+            var futureDateToUsageDateDictionary = _supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
+            forecastDictionary = new Dictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
+
+            //Loop through future date ids
+            var forecastDictionaryKeys = forecastDictionary.Keys.ToList();
+            foreach (var futureDateId in forecastDictionaryKeys)
+            {
+                forecastDictionary[futureDateId] = latestLoadedUsage
+                    .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
+                    .Sum(u => u.Field<decimal>("Usage"));
+            }
+
+            //Get Forecast by Year
+            forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
+                .Select(y => y.Key).Distinct().ToList();
         }
     }
 }

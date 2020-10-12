@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Collections.Generic;
 using enums;
+using System;
 
 namespace MethodLibrary
 {
@@ -52,6 +53,21 @@ namespace MethodLibrary
                 var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), loadedUsageGetLatestStoredProcedure);
 
                 return dataTable.Rows.Cast<DataRow>().ToList();
+            }
+
+            public List<Tuple<long, long, long, decimal>> LoadedUsage_GetLatestTuple(string meterType, long meterId)
+            {
+                var dataRows = LoadedUsage_GetLatest(meterType, meterId);
+
+                var tuple = new List<Tuple<long, long, long, decimal>>();
+
+                foreach (DataRow r in dataRows)
+                {
+                    var tup = Tuple.Create((long)r["DateId"], (long)r["TimePeriodId"], (long)r["UsageTypeId"], (decimal)r["Usage"]);
+                    tuple.Add(tup);
+                }
+
+                return tuple;
             }
 
             private void LoadedUsage_GrantExecuteToStoredProcedures(long meterId, string meterType)

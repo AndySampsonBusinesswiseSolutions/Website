@@ -24,6 +24,7 @@ namespace MethodLibrary
 
                     ForecastUsageGranularityLatest_CreateGetLatestStoredProcedure(meterId, granularityId, meterType);
                     ForecastUsageGranularityLatest_GrantExecuteToStoredProcedures(meterId, granularityId, meterType);
+                    GrantAlterTable(granularityId, meterType, meterId);
                 }
             }
 
@@ -83,6 +84,7 @@ namespace MethodLibrary
 
             public void ForecastUsageGranularityLatest_Insert(string meterType, long meterId, string granularityCode, DataTable forecastUsageGranularityLatestDataTable)
             {
+                ExecuteSQL($"TRUNCATE TABLE [Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}Latest]");
                 new Methods().BulkInsert(forecastUsageGranularityLatestDataTable, $"[Supply.{meterType}{meterId}].[ForecastUsage{granularityCode}Latest]");
             }
         }

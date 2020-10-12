@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 
 namespace CreateYearForecast.api.Controllers
 {
@@ -29,6 +28,12 @@ namespace CreateYearForecast.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createYearForecastAPIId;
+        private string granularityCode = "Year";
+        private List<Tuple<long, decimal>> existingYearForecasts;
+        private Dictionary<long, decimal> existingYearForecastDictionary;
+        private Dictionary<long, decimal> forecastDictionary;
+        private List<long> forecastYearIds;
+        private Dictionary<long, List<long>> yearToDateDictionary;
 
         public CreateYearForecastController(ILogger<CreateYearForecastController> logger)
         {
@@ -63,7 +68,7 @@ namespace CreateYearForecast.api.Controllers
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
+                    processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createYearForecastAPIId);
@@ -77,50 +82,11 @@ namespace CreateYearForecast.api.Controllers
                 //Get MeterId
                 var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
 
-                //Get latest loaded usage
-                var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
-                
-                //Get Date to Year mappings
-                var dateToYearMappings = _mappingMethods.DateToYear_GetList();
-                var yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
-                    .ToDictionary(
-                        w => w,
-                        w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
-                    );
+                GetForecastDictionary(meterType, meterId);
+                GetExistingForecast(meterType, meterId);
 
-                //Set up forecast dictionary
-                var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
-                var futureDateToUsageDateDictionary = dateMappings.ToDictionary(
-                    d => d.Field<long>("DateId"),
-                    d => d.Field<long>("MappedDateId")
-                );
-                var forecastDictionary = new ConcurrentDictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
-                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
-
-                //Loop through future date ids
-                foreach(var futureDateId in forecastDictionary.Keys)
-                {
-                    forecastDictionary[futureDateId] = latestLoadedUsage
-                        .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
-                        .Sum(u => u.Field<decimal>("Usage"));
-                }
-
-                //Get Forecast by Year
-                var forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
-                    .Select(y => y.Key).Distinct().ToList();
-
-                var granularityCode = "Year";
-
-                //Get existing year forecast
-                var existingYearForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId");
-                var existingYearForecastDictionary = existingYearForecasts.ToDictionary(
-                        d => d.Item1,
-                        d => d.Item2
-                );
-
-                //Create DataTable
-                var dataTable = _supplyMethods.CreateHistoryForecastDataTable(granularityCode, new List<string>{"YearId"}, createdByUserId, sourceId);
-                var dataRowAdded = false;
+                var newYearForecastTuples = new List<Tuple<long, decimal>>();
+                var oldYearForecastTuples = new List<Tuple<long, decimal>>();
 
                 foreach(var forecastYearId in forecastYearIds)
                 {
@@ -134,38 +100,29 @@ namespace CreateYearForecast.api.Controllers
 
                     if(addUsageToDataTable)
                     {
-                        AddToDataTable(dataTable, forecastYearId, forecast);
-                        dataRowAdded = true;
-
                         if(existingYearForecastDictionary.ContainsKey(forecastYearId))
                         {
-                            var existingYearForecastTuple = existingYearForecasts.First(t => t.Item1 == forecastYearId);
-                            existingYearForecasts.Remove(existingYearForecastTuple);
+                            oldYearForecastTuples.Add(new Tuple<long, decimal>(forecastYearId, existingYearForecastDictionary[forecastYearId]));
                         }
 
-                        var newDateForecastTuple = new Tuple<long, decimal>(forecastYearId, forecast);
-                        existingYearForecasts.Add(newDateForecastTuple);
+                        var newYearForecastTuple = new Tuple<long, decimal>(forecastYearId, forecast);
+                        newYearForecastTuples.Add(newYearForecastTuple);
                     }
                 }
 
-                if(dataRowAdded)
+                if (newYearForecastTuples.Any())
                 {
-                    //Setup latest forecast
-                    var latestForecastDataTable = _supplyMethods.CreateLatestForecastDataTable(dataTable, granularityCode);
-
-                    foreach(var existingYearForecast in existingYearForecasts)
-                    {
-                        AddToDataTable(latestForecastDataTable, existingYearForecast.Item1, existingYearForecast.Item2);
-                    }
+                    existingYearForecasts = existingYearForecasts.Except(oldYearForecastTuples).ToList();
+                    existingYearForecasts.AddRange(newYearForecastTuples);
 
                     //Insert into history and latest tables
-                    _supplyMethods.InsertGranularSupplyForecast(dataTable, latestForecastDataTable, meterType, meterId, granularityCode);
-                }  
+                    _supplyMethods.CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId" }, newYearForecastTuples, existingYearForecasts);
+                }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, false, null);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
@@ -174,12 +131,49 @@ namespace CreateYearForecast.api.Controllers
             }
         }
 
-        private void AddToDataTable(DataTable dataTable, long forecastYearId, decimal usage)
+        private void GetExistingForecast(string meterType, long meterId)
         {
-            var dataRow = dataTable.NewRow();
-            dataRow["YearId"] = forecastYearId;
-            dataRow["Usage"] = usage;
-            dataTable.Rows.Add(dataRow);
+            //Get existing Year forecast
+            existingYearForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId");
+            existingYearForecastDictionary = existingYearForecasts.ToDictionary(
+                d => d.Item1,
+                d => d.Item2
+            );
+        }
+
+        private void GetForecastDictionary(string meterType, long meterId)
+        {
+            //Get latest loaded usage
+            var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+
+            //Get Date to Year mappings
+            var dateToYearMappings = _mappingMethods.DateToYear_GetList();
+            yearToDateDictionary = dateToYearMappings.Select(d => d.Field<long>("YearId")).Distinct()
+                .ToDictionary(
+                    w => w,
+                    w => dateToYearMappings.Where(d => d.Field<long>("YearId") == w).Select(d => d.Field<long>("DateId")).ToList()
+                );
+
+            //Set up forecast dictionary
+            var futureDateToUsageDateDictionary = _supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
+            forecastDictionary = new Dictionary<long, decimal>(
+                futureDateToUsageDateDictionary.ToDictionary(
+                    f => f.Key, 
+                    f => new decimal())
+                );
+
+            //Loop through future date ids
+            var forecastDictionaryKeys = forecastDictionary.Keys.ToList();
+            foreach (var futureDateId in forecastDictionaryKeys)
+            {
+                forecastDictionary[futureDateId] = latestLoadedUsage
+                    .Where(u => u.Field<long>("DateId") == futureDateToUsageDateDictionary[futureDateId])
+                    .Sum(u => u.Field<decimal>("Usage"));
+            }
+
+            //Get Forecast by Year
+            forecastYearIds = yearToDateDictionary.Where(y => y.Value.Any(yv => futureDateToUsageDateDictionary.ContainsKey(yv)))
+                .Select(y => y.Key).Distinct().ToList();
         }
     }
 }

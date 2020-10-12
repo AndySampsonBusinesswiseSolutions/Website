@@ -102,6 +102,15 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
+            public Dictionary<long, long> DateMapping_GetLatestDictionary(string meterType, long meterId)
+            {
+                var dateMappings = DateMapping_GetLatest(meterType, meterId);
+                return dateMappings.ToDictionary(
+                    d => d.Field<long>("DateId"),
+                    d => d.Field<long>("MappedDateId")
+                );
+            }
+
             private void DateMapping_GrantExecuteToStoredProcedures(long meterId, string meterType)
             {
                 foreach(var dateMappingStoredProcedure in _storedProcedureSupplyEnums.DateMappingStoredProcedureList)
