@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
-using Newtonsoft.Json;
 
 namespace CreateDataAnalysisWebpage.api.Controllers
 {
@@ -30,6 +30,10 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Int64 createDataAnalysisWebpageAPIId;
+        private string HTML = string.Empty;
+        private JObject jsonObject;
+        private Dictionary<string, long> attributeDictionary = new Dictionary<string, long>();
+        private FilterData filterData;
 
         private class Usage
         {
@@ -46,6 +50,17 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private class Forecast
         {
             public List<Meter> Meters;
+        }
+
+        public class FilterData    {
+            public bool SiteChecked { get; set; } 
+            public bool AreaChecked { get; set; } 
+            public bool CommodityChecked { get; set; } 
+            public bool MeterChecked { get; set; } 
+            public bool SubAreaChecked { get; set; } 
+            public bool AssetChecked { get; set; } 
+            public bool SubMeterChecked { get; set; } 
+            public List<string> Commodities { get; set; } 
         }
 
         public CreateDataAnalysisWebpageController(ILogger<CreateDataAnalysisWebpageController> logger)
@@ -74,14 +89,15 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
+            jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            filterData = JsonConvert.DeserializeObject<FilterData>(jsonObject["FilterData"].ToString()); 
 
             try
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
+                    processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createDataAnalysisWebpageAPIId);
@@ -89,83 +105,31 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDataAnalysisWebpageAPIId);
 
-                //Get SiteNameSiteAttributeId
-                var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
+                //Setup required Attribute Ids
+                GetRequiredAttributes();
 
-                //Get SitePostcodeSiteAttributeId
-                var sitePostcodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
+                //TODO: Get Customer GUIDs
 
-                //Get Site names
-                var siteNameDictionary = _customerMethods.SiteDetail_GetSiteDetailDescriptionDictionaryBySiteAttributeId(siteNameSiteAttributeId);
-                var sitePostcodeDictionary = _customerMethods.SiteDetail_GetSiteDetailDescriptionDictionaryBySiteAttributeId(sitePostcodeSiteAttributeId);
-                var siteDictionary = new Dictionary<long, string>(siteNameDictionary.ToDictionary(
-                    sn => sn.Key, 
-                    sn => $"{sn.Value}, {sitePostcodeDictionary.First(sp => sp.Key == sn.Key).Value}")
-                );
+                //If no customers selected, get all customers linked to user
+                var customerIds = _customerMethods.Customer_GetCustomerIdList();
 
-                //Get MeterToSite mappings
-                var siteToMeterDictionary = _mappingMethods.MeterToSite_GetSiteToMeterDictionaryBySiteIdList(siteDictionary);
-
-                //Get MeterIdentifierMeterAttributeId
-                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
-                //Get Meter identifiers
-                var meterIdentifierDictionary = _customerMethods.MeterDetail_GetMeterDetailDescriptionDictionaryByMeterAttributeId(meterIdentifierMeterAttributeId);
-
-                //Get AreaToMeter mappings
-                var meterToAreaDictionary = _mappingMethods.AreaToMeter_GetMeterToAreaDictionaryByMeterIdList(meterIdentifierDictionary);
-                
-                //Get Areas
-                var areaDictionary = _informationMethods.Area_GetAreaDictionary();
-
-                //Get CommodityToMeter mappings
-                var meterToCommodityDictionary = _mappingMethods.CommodityToMeter_GetMeterToCommodityDictionaryByMeterIdList(meterIdentifierDictionary);
-
-                //Get Commodities
-                var commodityDictionary = _informationMethods.Commodity_GetCommodityDictionary();
-
-                //Build HTML
-                var html = string.Empty;
-                foreach(var site in siteDictionary)
+                foreach (var customerId in customerIds)
                 {
-                    var siteUlHTML = $"<ul class='format-listitem'>";
+                    //Get sites linked to customer
+                    var siteIds = _mappingMethods.CustomerToSite_GetSiteIdListByCustomerId(customerId).Distinct().ToList();;
 
-                    var meterIdList = siteToMeterDictionary[site.Key];
-                    var areaIdList = meterToAreaDictionary.Where(m => meterIdList.Contains(m.Key)).SelectMany(m => m.Value).Distinct().ToList();
-
-                    foreach(var area in areaDictionary.Where(a => areaIdList.Contains(a.Key)))
-                    {
-                        var areaUlHTML = $"<ul class='format-listitem'>";
-
-                        var commodityIdList = meterToCommodityDictionary.Where(m => meterIdList.Contains(m.Key)).SelectMany(m => m.Value).Distinct().ToList();
-
-                        foreach(var commodity in commodityDictionary.Where(c => commodityIdList.Contains(c.Key)))
-                        {
-                            var commodityUlHTML = $"<ul class='format-listitem'>";
-
-                            foreach(var meter in meterIdentifierDictionary.Where(m => meterIdList.Contains(m.Key)))
-                            {
-                                var meterUlHTML = $"<ul class='format-listitem'>";
-                                commodityUlHTML += $"{GetLiHtml("Meter", meter, meterUlHTML)}";
-                            }
-
-                            areaUlHTML += $"{GetLiHtml("Commodity", commodity, commodityUlHTML)}";
-                        }
-
-                        siteUlHTML += $"{GetLiHtml("Area", area, areaUlHTML)}";
-                    }
-
-                    html += $"{GetLiHtml("Site", site, siteUlHTML)}";
+                    //Build branches for sites
+                    BuildSiteBranch(siteIds);
                 }
 
-                var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{html}<ul>";
+                var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{HTML}<ul>";
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, false, null);
 
                 return new OkObjectResult(new { message = baseUl });
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
@@ -174,6 +138,103 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
                 return new OkObjectResult(new { message = string.Empty });
             }
+        }
+
+        private void GetRequiredAttributes()
+        {
+            //Get SiteNameSiteAttributeId
+            attributeDictionary.Add("SiteName", _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName));
+
+            //Get SitePostcodeSiteAttributeId
+            attributeDictionary.Add("SitePostcode", _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode));
+
+            //Get MeterIdentifierMeterAttributeId
+            attributeDictionary.Add("MeterIdentifier", _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier));
+        }
+
+        private void BuildSiteBranch(List<long> siteIds)
+        {
+            var siteMeterDictionary = siteIds.ToDictionary(s => s, s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s));
+            var commodityMatchingSiteDictionary = siteMeterDictionary.Where(s => CommodityMeterMatch(s.Value)).ToDictionary(s => s.Key, s => s.Value.Where(m => CommodityMeterMatch(m)).ToList());
+
+            if(filterData.SiteChecked)
+            {
+                foreach(var site in commodityMatchingSiteDictionary)
+                {
+                    var siteHTML = "<ul class='format-listitem'>";
+
+                    //Get Site GUID
+                    var siteGUID = _customerMethods.Site_GetSiteGUIDBySiteId(site.Key).ToString();
+
+                    //Get Site name
+                    var siteName = GetSiteName(site.Key);
+
+                    //Get areas linked to site
+                    var areaMeterDictionary = BuildAreaMeterDictionary(site.Value);
+
+                    //Finish html
+                    HTML += $"{GetLiHtml("Site", siteGUID, siteName, siteHTML)}";
+                }
+            }
+            else
+            {
+                var meterIds = commodityMatchingSiteDictionary.SelectMany(s => s.Value).ToList();
+                var allAreaMeterDictionary = BuildAreaMeterDictionary(meterIds);
+            }
+        }
+
+        private void BuildAreaBranch()
+        {
+            if(filterData.AreaChecked)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+
+        private Dictionary<long, List<long>> BuildAreaMeterDictionary(List<long> meterIds)
+        {
+            var areaMeterDictionary = new Dictionary<long, List<long>>();
+
+            foreach(var meterId in meterIds)
+            {
+                var areaId = _mappingMethods.AreaToMeter_GetAreaIdByMeterId(meterId);
+                if(!areaMeterDictionary.ContainsKey(areaId))
+                {
+                    areaMeterDictionary.Add(areaId, new List<long>());
+                }
+                areaMeterDictionary[areaId].Add(meterId);
+            }
+
+            return areaMeterDictionary;
+        }
+
+        private bool CommodityMeterMatch(long meterId)
+        {
+            return CommodityMeterMatch(new List<long>{meterId});
+        }
+
+        private bool CommodityMeterMatch(List<long> meterIds)
+        {
+            //Get commodities linked to meters
+            var commodityIds = meterIds.Select(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m)).Distinct().ToList();
+            var meterCommodities = commodityIds.Select(c => _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(c)).ToList();
+
+            return filterData.Commodities.Any(c => meterCommodities.Contains(c));
+        }
+
+        private string GetSiteName(long siteId)
+        {
+            //Get Site name
+            var siteName = _customerMethods.SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(siteId, attributeDictionary["SiteName"]);
+
+            //Get Site postcode
+            var sitePostcode = _customerMethods.SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(siteId, attributeDictionary["SitePostcode"]);
+
+            return $"{siteName}, {sitePostcode}";
         }
 
         [HttpPost]
@@ -229,40 +290,17 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             return new OkObjectResult(new { message = JsonConvert.SerializeObject(forecast) });
         }
 
-        private string GetLiHtml(string type, KeyValuePair<long, string> dictionary, string ulHTML)
+        private string GetLiHtml(string type, string guid, string value, string ulHTML)
         {
             ulHTML += $"</ul>";
 
-            var branchListDiv = $"<div id='{type}{dictionary.Key}List' class='listitem-hidden'>{ulHTML}</div>";
-            var span = $"<span id='{type}{dictionary.Key}span'>{dictionary.Value}</span>";
+            var branchListDiv = $"<div id='{type}{guid}List' class='listitem-hidden'>{ulHTML}</div>";
+            var span = $"<span id='{type}{guid}span'>{value}</span>";
             var icon = $"<i class='fas fa-site' style='padding-left: 3px; padding-right: 3px;'></i>";
-            var checkbox = $"<input type='checkbox' id='{type}{dictionary.Key}checkbox' GUID='{type}|{GetGUID(type, dictionary.Key)}' Branch='{type}' onclick='updatePage(this);'></input>";
-            var branchDiv = $"<i id='{type}{dictionary.Key}' class='far fa-plus-square show-pointer expander'></i>";
+            var checkbox = $"<input type='checkbox' id='{type}{guid}checkbox' GUID='{type}|{guid}' Branch='{type}' onclick='updatePage(this);'></input>";
+            var branchDiv = $"<i id='{type}{guid}' class='far fa-plus-square show-pointer expander'></i>";
 
             return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
-        }
-
-        private string GetGUID(string type, long value)
-        {
-            switch(type)
-            {
-                case "Site":
-                    return _customerMethods.Site_GetSiteGUIDBySiteId(value).ToString();
-                case "Meter":
-                    return _customerMethods.Meter_GetMeterGUIDByMeterId(value).ToString();
-                case "Area":
-                    return _informationMethods.Area_GetAreaDictionary()[value];
-                case "Commodity":
-                    return _informationMethods.Commodity_GetCommodityDictionary()[value];
-                case "SubArea":
-                    return _informationMethods.SubArea_GetSubAreaDictionary()[value];
-                case "Asset":
-                    return _customerMethods.Asset_GetAssetGUIDByAssetId(value).ToString();
-                case "SubMeter":
-                    return _customerMethods.SubMeter_GetSubMeterGUIDBySubMeterId(value).ToString();
-                default:
-                    return string.Empty;
-            }
         }
     }
 }

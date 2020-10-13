@@ -25,6 +25,17 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
+            public List<long> MeterToSite_GetMeterIdListBySiteId(long siteId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.MeterToSite_GetBySiteId,
+                    siteId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterId"))
+                    .ToList();
+            }
+
             public List<Tuple<long, long>> MeterToSite_GetLatestTuple()
             {
                 var dataRows = MeterToSite_GetList();
@@ -38,16 +49,6 @@ namespace MethodLibrary
                 }
 
                 return tuple;
-            }
-
-            public Dictionary<long, List<long>> MeterToSite_GetSiteToMeterDictionaryBySiteIdList(Dictionary<long, string> siteNameDictionary)
-            {
-                var tuple = MeterToSite_GetLatestTuple();
-
-                return tuple.Where(t => siteNameDictionary.ContainsKey(t.Item2)).Select(t => t.Item2).Distinct().ToDictionary(
-                    t => t,
-                    t => tuple.Where(t1 => t1.Item2 == t).Select(t1 => t1.Item1).Distinct().ToList()
-                );
             }
         }
     }

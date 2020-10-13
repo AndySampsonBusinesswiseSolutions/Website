@@ -70,6 +70,17 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
             }
 
+            public string SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(long siteId, long siteAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.SiteDetail_GetBySiteIdAndSiteAttributeId, 
+                    siteId, siteAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("SiteDetailDescription"))
+                    .FirstOrDefault();
+            }
+
             public void SiteDetail_DeleteBySiteDetailId(long customerDetailId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

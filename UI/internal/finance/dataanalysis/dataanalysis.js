@@ -458,16 +458,19 @@ async function getTree(data) {
 //build site
 async function buildSiteBranch(elementToAppendTo) {
   var processQueueGUID = CreateGUID();
+  var commodities = [];
+  if(electricityCommoditycheckbox.checked){commodities.push('Electricity')};
+  if(gasCommoditycheckbox.checked){commodities.push('Gas')};
+
   var filterData = {
     SiteChecked: siteLocationcheckbox.checked,
     AreaChecked: areaLocationcheckbox.checked,
     CommodityChecked: commodityLocationcheckbox.checked,
-    ElectricityChecked: electricityCommoditycheckbox.checked,
-    GasChecked: gasCommoditycheckbox.checked,
     MeterChecked: meterLocationcheckbox.checked,
     SubAreaChecked: subareaLocationcheckbox.checked,
     AssetChecked: assetLocationcheckbox.checked,
-    SubMeterChecked: submeterLocationcheckbox.checked
+    SubMeterChecked: submeterLocationcheckbox.checked,
+    Commodities: commodities
   };
 	var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData};
   var treeResponse = await getTree(data);

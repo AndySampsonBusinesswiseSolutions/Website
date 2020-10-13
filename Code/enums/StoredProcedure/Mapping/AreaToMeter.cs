@@ -8,6 +8,7 @@ namespace enums
             {
                 public string AreaToMeter_Insert = "[Mapping].[AreaToMeter_Insert]";
                 public string AreaToMeter_GetList = "[Mapping].[AreaToMeter_GetList]";
+                public string AreaToMeter_GetByMeterId = "[Mapping].[AreaToMeter_GetByMeterId]";
             }
         }
     }
