@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace CreateForecastUsage.api.Controllers
 {
@@ -101,17 +100,6 @@ namespace CreateForecastUsage.api.Controllers
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $"System Error Id {errorId}");
                     return;
                 }
-
-                //Launch Forecast API for each granularity
-                var forecastAPIGUIDGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.ForecastAPIGUID);
-                var forecastAPIGUIDList = _informationMethods.GranularityDetail_GetGranularityDetailDescriptionListByGranularityAttributeId(forecastAPIGUIDGranularityAttributeId);
-
-                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
-                Parallel.ForEach(forecastAPIGUIDList, parallelOptions, forecastAPIGUID => {
-                    var APIId = _systemMethods.API_GetAPIIdByAPIGUID(forecastAPIGUID);
-                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CreateForecastUsageAPI, jsonObject);
-                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result;
-                });
 
                 //TODO: check if forecasts have worked
                 //TODO: if all ok, email customer

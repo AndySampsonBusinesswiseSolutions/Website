@@ -33,7 +33,7 @@ namespace CreateWeekForecast.api.Controllers
         private Dictionary<long, Dictionary<long, decimal>> existingWeekForecastDictionary;
         private Dictionary<long, decimal> forecastDictionary;
         private List<long> forecastYearIds;
-        private Dictionary<long, List<long>> WeekToDateDictionary;
+        private Dictionary<long, List<long>> weekToDateDictionary;
         private Dictionary<long, List<long>> yearToDateDictionary;
 
         public CreateWeekForecastController(ILogger<CreateWeekForecastController> logger)
@@ -74,6 +74,11 @@ namespace CreateWeekForecast.api.Controllers
                     sourceId,
                     createWeekForecastAPIId);
 
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateWeekForecastAPI, createWeekForecastAPIId, jsonObject))
+                {
+                    return;
+                }
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createWeekForecastAPIId);
 
@@ -89,17 +94,18 @@ namespace CreateWeekForecast.api.Controllers
                 var newWeekForecastTuples = new List<Tuple<long, long, decimal>>();
                 var oldWeekForecastTuples = new List<Tuple<long, long, decimal>>();
 
+                //TODO: Work out how to speed this up
                 foreach (var forecastYearId in forecastYearIds)
                 {
                     var dateIdsForYearId = yearToDateDictionary[forecastYearId];
 
                     //Get Forecast by Week
-                    var forecastWeekIds = WeekToDateDictionary.Where(w => w.Value.Any(wv => dateIdsForYearId.Contains(wv)))
+                    var forecastWeekIds = weekToDateDictionary.Where(w => w.Value.Any(wv => dateIdsForYearId.Contains(wv)))
                         .Select(w => w.Key).Distinct().ToList();
 
                     foreach (var forecastWeekId in forecastWeekIds)
                     {
-                        var dateIdsForYearIdWeekId = WeekToDateDictionary[forecastWeekId].Intersect(dateIdsForYearId);
+                        var dateIdsForYearIdWeekId = weekToDateDictionary[forecastWeekId].Intersect(dateIdsForYearId);
 
                         var forecast = forecastDictionary.Where(f => dateIdsForYearIdWeekId.Contains(f.Key))
                             .Sum(f => f.Value);
@@ -164,7 +170,7 @@ namespace CreateWeekForecast.api.Controllers
 
             //Get Date to Week mappings
             var dateToWeekMappings = _mappingMethods.DateToWeek_GetList();
-            WeekToDateDictionary = dateToWeekMappings.Select(d => d.Field<long>("WeekId")).Distinct()
+            weekToDateDictionary = dateToWeekMappings.Select(d => d.Field<long>("WeekId")).Distinct()
                 .ToDictionary(
                     w => w,
                     w => dateToWeekMappings.Where(d => d.Field<long>("WeekId") == w).Select(d => d.Field<long>("DateId")).ToList()

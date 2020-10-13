@@ -73,6 +73,11 @@ namespace CreateHalfHourForecast.api.Controllers
                     sourceId,
                     createHalfHourForecastAPIId);
 
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateHalfHourForecastAPI, createHalfHourForecastAPIId, jsonObject))
+                {
+                    return;
+                }
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createHalfHourForecastAPIId);
 

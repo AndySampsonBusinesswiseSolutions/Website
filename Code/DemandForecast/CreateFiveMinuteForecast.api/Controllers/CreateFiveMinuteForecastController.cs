@@ -73,6 +73,11 @@ namespace CreateFiveMinuteForecast.api.Controllers
                     sourceId,
                     createFiveMinuteForecastAPIId);
 
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI, createFiveMinuteForecastAPIId, jsonObject))
+                {
+                    return;
+                }
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createFiveMinuteForecastAPIId);
 

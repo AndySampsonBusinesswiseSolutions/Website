@@ -73,6 +73,11 @@ namespace CreateYearForecast.api.Controllers
                     sourceId,
                     createYearForecastAPIId);
 
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateYearForecastAPI, createYearForecastAPIId, jsonObject))
+                {
+                    return;
+                }
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createYearForecastAPIId);
 

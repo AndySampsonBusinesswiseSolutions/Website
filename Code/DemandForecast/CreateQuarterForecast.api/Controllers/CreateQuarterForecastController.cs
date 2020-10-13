@@ -74,6 +74,11 @@ namespace CreateQuarterForecast.api.Controllers
                     sourceId,
                     createQuarterForecastAPIId);
 
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateQuarterForecastAPI, createQuarterForecastAPIId, jsonObject))
+                {
+                    return;
+                }
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createQuarterForecastAPIId);
 

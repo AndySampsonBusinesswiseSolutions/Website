@@ -68,18 +68,17 @@ BEGIN
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
-        WITH Latest AS
-        (
-            SELECT
-                DateId,
-                TimePeriodId,
-                MAX(LoadedUsageId) AS LoadedUsageId
-            FROM
-                [' + @SchemaName +'].[LoadedUsage]
-            GROUP BY
-                DateId,
-                TimePeriodId
-        )
+        SELECT
+            DateId,
+            TimePeriodId,
+            MAX(LoadedUsageId) AS LoadedUsageId
+		INTO
+			#Latest
+        FROM
+            [' + @SchemaName +'].[LoadedUsage]
+        GROUP BY
+            DateId,
+            TimePeriodId
 
         SELECT
             LoadedUsage.LoadedUsageId,
@@ -93,8 +92,10 @@ BEGIN
         FROM
             [' + @SchemaName +'].[LoadedUsage]
         INNER JOIN
-            Latest
+            #Latest Latest
             ON Latest.LoadedUsageId = LoadedUsage.LoadedUsageId
+
+		DROP TABLE #Latest
     END'
 
     SET @MetaSQL = '

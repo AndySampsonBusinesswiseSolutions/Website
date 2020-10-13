@@ -74,6 +74,11 @@ namespace CreateMonthForecast.api.Controllers
                     sourceId,
                     createMonthForecastAPIId);
 
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateMonthForecastAPI, createMonthForecastAPIId, jsonObject))
+                {
+                    return;
+                }
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createMonthForecastAPIId);
 
