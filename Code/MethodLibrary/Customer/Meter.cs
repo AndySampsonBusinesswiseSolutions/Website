@@ -104,6 +104,17 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
             }
 
+            public string MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(long meterId, long meterAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.MeterDetail_GetByMeterIdAndMeterAttributeId, 
+                    meterId, meterAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("MeterDetailDescription"))
+                    .FirstOrDefault();
+            }
+
             public void MeterDetail_DeleteByMeterDetailId(long meterDetailId)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

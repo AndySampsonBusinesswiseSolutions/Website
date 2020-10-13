@@ -161,8 +161,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             {
                 foreach(var site in commodityMatchingSiteDictionary)
                 {
-                    var siteHTML = "<ul class='format-listitem'>";
-
                     //Get Site GUID
                     var siteGUID = _customerMethods.Site_GetSiteGUIDBySiteId(site.Key).ToString();
 
@@ -173,25 +171,92 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var areaMeterDictionary = BuildAreaMeterDictionary(site.Value);
 
                     //Finish html
-                    HTML += $"{GetLiHtml("Site", siteGUID, siteName, siteHTML)}";
+                    var areaHTML = BuildAreaBranch(areaMeterDictionary);
+                    var siteHTML = GetLiHtml("Site", siteGUID, siteName, areaHTML);
+                    HTML += siteHTML;
                 }
             }
             else
             {
                 var meterIds = commodityMatchingSiteDictionary.SelectMany(s => s.Value).ToList();
-                var allAreaMeterDictionary = BuildAreaMeterDictionary(meterIds);
+                var areaMeterDictionary = BuildAreaMeterDictionary(meterIds);
+                HTML = BuildAreaBranch(areaMeterDictionary);
             }
         }
 
-        private void BuildAreaBranch()
+        private string BuildAreaBranch(Dictionary<long, List<long>> areaMeterDictionary)
         {
             if(filterData.AreaChecked)
             {
+                var areaHTML = string.Empty;
 
+                foreach(var areaMeter in areaMeterDictionary)
+                {
+                    //Get Area description
+                    var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaMeter.Key);
+
+                    var commodityHTML = BuildCommodityBranch(areaMeter.Value);
+                    areaHTML += GetLiHtml("Area", areaMeter.Key.ToString(), areaDescription, commodityHTML);
+                }
+
+                return areaHTML;
             }
             else
             {
+                var meterIds = areaMeterDictionary.SelectMany(s => s.Value).ToList();
+                return BuildCommodityBranch(meterIds);
+            }
+        }
 
+        private string BuildCommodityBranch(List<long> meterIds)
+        {
+            if(filterData.CommodityChecked)
+            {
+                var commodityHTML = string.Empty;
+
+                //Get commodities linked to meters
+                var commodityIds = meterIds.Select(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m)).Distinct().ToList();
+
+                foreach(var commodityId in commodityIds)
+                {
+                    //Get Commodity description
+                    var commodity = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+                    var commodityMeterIds = meterIds.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
+
+                    var meterHTML = BuildMeterBranch(commodityMeterIds);
+                    commodityHTML += GetLiHtml("Commodity", commodityId.ToString(), commodity, meterHTML);
+                }
+
+                return commodityHTML;
+            }
+            else
+            {
+                return BuildMeterBranch(meterIds);
+            }
+        }
+
+        private string BuildMeterBranch(List<long> meterIds)
+        {
+            if(filterData.MeterChecked)
+            {
+                var meterHTML = string.Empty;
+
+                foreach(var meterId in meterIds)
+                {
+                    //Get Meter GUID
+                    var meterGUID = _customerMethods.Meter_GetMeterGUIDByMeterId(meterId).ToString();
+
+                    //Get Meter identifier
+                    var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, attributeDictionary["MeterIdentifier"]);
+
+                    meterHTML += GetLiHtml("Meter", meterGUID, meterIdentifier, string.Empty);
+                }
+
+                return meterHTML;
+            }
+            else
+            {
+                return string.Empty;
             }
         }
 
@@ -237,6 +302,19 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             return $"{siteName}, {sitePostcode}";
         }
 
+        private string GetLiHtml(string type, string guid, string value, string ulHTML)
+        {
+            ulHTML = $"<ul class='format-listitem'>{ulHTML}</ul>";
+
+            var branchListDiv = $"<div id='{type}|{guid}List' class='listitem-hidden'>{ulHTML}</div>";
+            var span = $"<span id='{type}|{guid}span'>{value}</span>";
+            var icon = $"<i class='fas fa-site' style='padding-left: 3px; padding-right: 3px;'></i>";
+            var checkbox = $"<input type='checkbox' id='{type}|{guid}checkbox' GUID='{type}|{guid}' Branch='{type}' onclick='updatePage(this);'></input>";
+            var branchDiv = $"<i id='{type}|{guid}' class='far fa-plus-square show-pointer expander'></i>";
+
+            return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
+        }
+        
         [HttpPost]
         [Route("CreateDataAnalysisWebpage/GetDailyForecast")]
         public IActionResult GetDailyForecast([FromBody] object data) //TODO: Build into new API
@@ -288,19 +366,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             forecast.Meters = meterList;
 
             return new OkObjectResult(new { message = JsonConvert.SerializeObject(forecast) });
-        }
-
-        private string GetLiHtml(string type, string guid, string value, string ulHTML)
-        {
-            ulHTML += $"</ul>";
-
-            var branchListDiv = $"<div id='{type}{guid}List' class='listitem-hidden'>{ulHTML}</div>";
-            var span = $"<span id='{type}{guid}span'>{value}</span>";
-            var icon = $"<i class='fas fa-site' style='padding-left: 3px; padding-right: 3px;'></i>";
-            var checkbox = $"<input type='checkbox' id='{type}{guid}checkbox' GUID='{type}|{guid}' Branch='{type}' onclick='updatePage(this);'></input>";
-            var branchDiv = $"<i id='{type}{guid}' class='far fa-plus-square show-pointer expander'></i>";
-
-            return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
         }
     }
 }

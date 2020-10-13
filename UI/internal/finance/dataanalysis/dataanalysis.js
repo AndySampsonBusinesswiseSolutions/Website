@@ -477,7 +477,7 @@ async function buildSiteBranch(elementToAppendTo) {
   elementToAppendTo.innerHTML = treeResponse.message;
 }
 
-function updatePage(callingElement) {
+async function updatePage(callingElement) {
   var branch = callingElement.getAttribute('branch');
   var refreshChart = true;
   
@@ -491,7 +491,7 @@ function updatePage(callingElement) {
       break;
     case 'commoditySelector':
     case 'locationSelector':
-      createSiteTree(); 
+      await createSiteTree(); 
       addExpanderOnClickEvents();
       break;
     case 'groupingOptionSelector':
