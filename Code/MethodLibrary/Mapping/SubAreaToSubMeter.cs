@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Data;
+using System.Linq;
 
 namespace MethodLibrary
 {
@@ -11,6 +13,17 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.SubAreaToSubMeter_Insert, 
                     createdByUserId, sourceId, subAreaId, subMeterId);
+            }
+
+            public long SubAreaToSubMeter_GetSubAreaIdBySubMeterId(long subMeterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.SubAreaToSubMeter_GetBySubMeterId,
+                    subMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SubMeterId"))
+                    .FirstOrDefault();
             }
         }
     }

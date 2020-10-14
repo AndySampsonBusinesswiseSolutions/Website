@@ -27,6 +27,17 @@ namespace MethodLibrary
                     createdByUserId, sourceId, subAreaDescription);
             }
 
+            public string SubArea_GetSubAreaDescriptionBySubAreaId(long subAreaId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.SubArea_GetBySubAreaId, 
+                    subAreaId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("SubAreaDescription"))
+                    .FirstOrDefault();
+            }
+
             public Dictionary<long, string> SubArea_GetSubAreaDictionary()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

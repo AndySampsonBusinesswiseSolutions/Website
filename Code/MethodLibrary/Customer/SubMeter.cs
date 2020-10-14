@@ -69,7 +69,7 @@ namespace MethodLibrary
             public Guid SubMeter_GetSubMeterGUIDBySubMeterId(long subMeterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureCustomerEnums.SubMeter_GetBySubMeterGUID, 
+                    _storedProcedureCustomerEnums.SubMeter_GetBySubMeterId, 
                     subMeterId);
 
                 return dataTable.AsEnumerable()
@@ -82,6 +82,17 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureCustomerEnums.SubMeterDetail_Insert, 
                     createdByUserId, sourceId, subMeterId, subMeterAttributeId, subMeterDetailDescription);
+            }
+
+            public string SubMeterDetail_GetSubMeterDetailDescriptionBySubMeterIdAndSubMeterAttributeId(long subMeterId, long subMeterAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId, 
+                    subMeterId, subMeterAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("SubMeterDetailDescription"))
+                    .FirstOrDefault();
             }
 
             public DataRow SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(long subMeterId, long subMeterAttributeId)

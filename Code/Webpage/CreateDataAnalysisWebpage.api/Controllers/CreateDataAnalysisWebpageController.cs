@@ -29,6 +29,8 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
+        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Int64 createDataAnalysisWebpageAPIId;
         private string HTML = string.Empty;
         private JObject jsonObject;
@@ -150,6 +152,12 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
             //Get MeterIdentifierMeterAttributeId
             attributeDictionary.Add("MeterIdentifier", _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier));
+
+            //Get AssetNameAssetAttributeId
+            attributeDictionary.Add("AssetName", _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName));
+
+            //Get SubMeterIdentifierSubMeterAttributeId
+            attributeDictionary.Add("SubMeterIdentifier", _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier));
         }
 
         private void BuildSiteBranch(List<long> siteIds)
@@ -171,7 +179,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var areaMeterDictionary = BuildAreaMeterDictionary(site.Value);
 
                     //Finish html
-                    var areaHTML = BuildAreaBranch(areaMeterDictionary);
+                    var areaHTML = BuildAreaBranch(areaMeterDictionary, site.Key);
                     var siteHTML = GetLiHtml("Site", siteGUID, siteName, areaHTML);
                     HTML += siteHTML;
                 }
@@ -180,11 +188,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             {
                 var meterIds = commodityMatchingSiteDictionary.SelectMany(s => s.Value).ToList();
                 var areaMeterDictionary = BuildAreaMeterDictionary(meterIds);
-                HTML = BuildAreaBranch(areaMeterDictionary);
+                HTML = BuildAreaBranch(areaMeterDictionary, 0);
             }
         }
 
-        private string BuildAreaBranch(Dictionary<long, List<long>> areaMeterDictionary)
+        private string BuildAreaBranch(Dictionary<long, List<long>> areaMeterDictionary, long siteId)
         {
             if(filterData.AreaChecked)
             {
@@ -195,8 +203,8 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     //Get Area description
                     var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaMeter.Key);
 
-                    var commodityHTML = BuildCommodityBranch(areaMeter.Value);
-                    areaHTML += GetLiHtml("Area", areaMeter.Key.ToString(), areaDescription, commodityHTML);
+                    var commodityHTML = BuildCommodityBranch(areaMeter.Value, siteId, areaMeter.Key);
+                    areaHTML += GetLiHtml("Area", $"{siteId}_{areaMeter.Key}", areaDescription, commodityHTML);
                 }
 
                 return areaHTML;
@@ -204,11 +212,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             else
             {
                 var meterIds = areaMeterDictionary.SelectMany(s => s.Value).ToList();
-                return BuildCommodityBranch(meterIds);
+                return BuildCommodityBranch(meterIds, siteId, 0);
             }
         }
 
-        private string BuildCommodityBranch(List<long> meterIds)
+        private string BuildCommodityBranch(List<long> meterIds, long siteId, long areaId)
         {
             if(filterData.CommodityChecked)
             {
@@ -224,7 +232,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var commodityMeterIds = meterIds.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
 
                     var meterHTML = BuildMeterBranch(commodityMeterIds);
-                    commodityHTML += GetLiHtml("Commodity", commodityId.ToString(), commodity, meterHTML);
+                    commodityHTML += GetLiHtml("Commodity", $"{siteId}_{areaId}_{commodityId}", commodity, meterHTML);
                 }
 
                 return commodityHTML;
@@ -237,22 +245,111 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
         private string BuildMeterBranch(List<long> meterIds)
         {
+            var meterSubMeterDictionary = meterIds.ToDictionary(m => m, m => _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(m));
+
             if(filterData.MeterChecked)
             {
                 var meterHTML = string.Empty;
 
-                foreach(var meterId in meterIds)
+                foreach(var meter in meterSubMeterDictionary)
                 {
                     //Get Meter GUID
-                    var meterGUID = _customerMethods.Meter_GetMeterGUIDByMeterId(meterId).ToString();
+                    var meterGUID = _customerMethods.Meter_GetMeterGUIDByMeterId(meter.Key).ToString();
 
                     //Get Meter identifier
-                    var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, attributeDictionary["MeterIdentifier"]);
+                    var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meter.Key, attributeDictionary["MeterIdentifier"]);
 
-                    meterHTML += GetLiHtml("Meter", meterGUID, meterIdentifier, string.Empty);
+                    //Get subareas linked to meter
+                    var subAreaSubMeterDictionary = BuildSubAreaSubMeterDictionary(meter.Value);
+
+                    //Finish html
+                    var subAreaHTML = BuildSubAreaBranch(subAreaSubMeterDictionary, meter.Key);
+                    meterHTML += GetLiHtml("Meter", meterGUID, meterIdentifier, subAreaHTML);
                 }
 
                 return meterHTML;
+            }
+            else
+            {
+                var subMeterIds = meterSubMeterDictionary.SelectMany(m => m.Value).ToList();
+                var subAreaSubMeterDictionary = BuildSubAreaSubMeterDictionary(subMeterIds);
+                return BuildSubAreaBranch(subAreaSubMeterDictionary, 0);
+            }
+        }
+
+        private string BuildSubAreaBranch(Dictionary<long, List<long>> subAreaSubMeterDictionary, long meterId)
+        {
+            if(filterData.SubAreaChecked)
+            {
+                var subAreaHTML = string.Empty;
+
+                foreach(var subAreaSubMeter in subAreaSubMeterDictionary)
+                {
+                    //Get SubArea description
+                    var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaSubMeter.Key);
+
+                    var assetHTML = BuildAssetBranch(subAreaSubMeter.Value, meterId, subAreaSubMeter.Key);
+                    subAreaHTML += GetLiHtml("SubArea", $"{meterId}_{subAreaSubMeter.Key}", subAreaDescription, assetHTML);
+                }
+
+                return subAreaHTML;
+            }
+            else
+            {
+                var subMeterIds = subAreaSubMeterDictionary.SelectMany(s => s.Value).ToList();
+                return BuildAssetBranch(subMeterIds, meterId, 0);
+            }
+        }
+
+        private string BuildAssetBranch(List<long> subMeterIds, long meterId, long subAreaId)
+        {
+            if(filterData.AssetChecked)
+            {
+                var assetHTML = string.Empty;
+
+                //Get commodities linked to meters
+                var assetIds = subMeterIds.Select(m => _mappingMethods.AssetToSubMeter_GetAssetIdBySubMeterId(m)).Distinct().ToList();
+
+                foreach(var assetId in assetIds)
+                {
+                    //Get Asset GUID
+                    var assetGUID = _customerMethods.Asset_GetAssetGUIDByAssetId(assetId);
+
+                    //Get Asset name
+                    var assetName = _customerMethods.AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(assetId, attributeDictionary["AssetName"]);
+                    var assetSubMeterIds = subMeterIds.Where(m => _mappingMethods.AssetToSubMeter_GetAssetIdBySubMeterId(m) == assetId).ToList();
+
+                    var meterHTML = BuildSubMeterBranch(assetSubMeterIds);
+                    assetHTML += GetLiHtml("Asset", $"{meterId}_{subAreaId}_{assetGUID}", assetName, meterHTML);
+                }
+
+                return assetHTML;
+            }
+            else
+            {
+                return BuildSubMeterBranch(subMeterIds);
+            }
+        }
+
+        private string BuildSubMeterBranch(List<long> subMeterIds)
+        {
+            if(filterData.SubMeterChecked)
+            {
+                var subMeterHTML = string.Empty;
+
+                foreach(var subMeterId in subMeterIds)
+                {
+                    //Get SubMeter GUID
+                    var meterGUID = _customerMethods.SubMeter_GetSubMeterGUIDBySubMeterId(subMeterId).ToString();
+
+                    //Get SubMeter identifier
+                    var meterIdentifier = _customerMethods.SubMeterDetail_GetSubMeterDetailDescriptionBySubMeterIdAndSubMeterAttributeId(subMeterId, attributeDictionary["SubMeterIdentifier"]);
+
+                    //Finish html
+                    subMeterHTML += GetLiHtml("SubMeter", meterGUID, meterIdentifier, string.Empty);
+                }
+
+                return subMeterHTML;
             }
             else
             {
@@ -275,6 +372,23 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             }
 
             return areaMeterDictionary;
+        }
+
+        private Dictionary<long, List<long>> BuildSubAreaSubMeterDictionary(List<long> subMeterIds)
+        {
+            var subAreaSubMeterDictionary = new Dictionary<long, List<long>>();
+
+            foreach(var subMeterId in subMeterIds)
+            {
+                var subAreaId = _mappingMethods.SubAreaToSubMeter_GetSubAreaIdBySubMeterId(subMeterId);
+                if(!subAreaSubMeterDictionary.ContainsKey(subAreaId))
+                {
+                    subAreaSubMeterDictionary.Add(subAreaId, new List<long>());
+                }
+                subAreaSubMeterDictionary[subAreaId].Add(subMeterId);
+            }
+
+            return subAreaSubMeterDictionary;
         }
 
         private bool CommodityMeterMatch(long meterId)

@@ -27,11 +27,11 @@ namespace MethodLibrary
                     createdByUserId, sourceId, areaDescription);
             }
 
-            public string Area_GetAreaDescriptionByAreaId(long AreaId)
+            public string Area_GetAreaDescriptionByAreaId(long areaId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.Area_GetByAreaId, 
-                    AreaId);
+                    areaId);
 
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<string>("AreaDescription"))

@@ -75,6 +75,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public string AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(long assetId, long assetAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureCustomerEnums.AssetDetail_GetByAssetIdAndAssetAttributeId, 
+                    assetId, assetAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<string>("AssetDetailDescription"))
+                    .FirstOrDefault();
+            }
+
             public void AssetDetail_Insert(long createdByUserId, long sourceId, long assetId, long assetAttributeId, string assetDetailDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
