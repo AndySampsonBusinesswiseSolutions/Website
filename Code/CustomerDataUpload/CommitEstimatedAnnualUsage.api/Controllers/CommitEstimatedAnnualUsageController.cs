@@ -29,6 +29,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Int64 commitEstimatedAnnualUsageAPIId;
 
         public CommitEstimatedAnnualUsageController(ILogger<CommitEstimatedAnnualUsageController> logger)
@@ -158,15 +159,21 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
                 _supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
 
-                //End date existing Periodic Usage
-                // _supplyMethods.LoadedUsage_Delete(meterType, meterId);
+                //Create new ProcessQueueGUID
+                var newProcessQueueGUID = Guid.NewGuid().ToString();
 
-                //Insert new Periodic Usage into LoadedUsage table
-                // _supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
+                //Map current ProcessQueueGUID to new ProcessQueueGUID
+                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
 
-                //Call CreateForecastUsage API
-                var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
-                var createForecastUsageAPI = _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, _systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI, jsonObject);
+                //Update Process GUID to Create Forecast Usage Process GUID
+                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CreateForecastUsage);
+
+                //Get Routing.API URL
+                var routingAPIId = _systemMethods.GetRoutingAPIId();
+
+                //Connect to Routing API and POST data
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);

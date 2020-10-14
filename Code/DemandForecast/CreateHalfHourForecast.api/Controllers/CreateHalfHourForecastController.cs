@@ -200,12 +200,13 @@ namespace CreateHalfHourForecast.api.Controllers
                 )
             );
 
-            var timePeriodToMappedTimePeriodDictionary = new Dictionary<long, KeyValuePair<long, List<long>>>(
+            var timePeriodToMappedTimePeriodDictionary = new Dictionary<long, Dictionary<long, List<long>>>(
                 timePeriodToTimePeriodDictionary.ToDictionary(
                     t => t.Key,
                     t => t.Value.Select(m => m).Distinct()
                         .ToDictionary(m => m, m => timePeriodToTimePeriodDictionary.Where(t => t.Value.Contains(m)).Select(t => t.Key).ToList())
-                        .OrderBy(m => m.Value.Count()).First()
+                        .OrderBy(m => m.Value.Count())
+                        .ToDictionary(o => o.Key, o => o.Value)
                 )
             );
 
@@ -236,7 +237,8 @@ namespace CreateHalfHourForecast.api.Controllers
                     }
                     else
                     {
-                        var mappedTimePeriodDictionary = timePeriodToMappedTimePeriodDictionary[timePeriodId];
+                        var mappedTimePeriodDictionary = timePeriodToMappedTimePeriodDictionary[timePeriodId]
+                            .First(t => usageForDateList.Any(u => u.Item2 == t.Key));
 
                         usageForTimePeriodList = usageForDateList.Where(u => u.Item2 == mappedTimePeriodDictionary.Key).ToList();
 

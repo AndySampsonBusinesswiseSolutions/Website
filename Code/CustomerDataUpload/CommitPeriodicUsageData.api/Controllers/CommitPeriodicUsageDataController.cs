@@ -113,14 +113,6 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Insert periodic usage
                 var latestPeriodicUsageList = InsertPeriodicUsage(periodicUsageDictionary);
 
-                if(meterType == "SubMeter")
-                {
-                    //Update Process Queue
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
-
-                    return;
-                }
-
                 //Check to see if full 365days are available
                 var dateIdList = latestPeriodicUsageList.Select(r => r.Field<long>("DateId")).Distinct().ToList();
                 var latestPeriodicUsageDictionary = CreateDictionary(latestPeriodicUsageList, dateIdList, "DateId", "TimePeriodId");
@@ -130,9 +122,17 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                 var latestPeriodicUsageRequiresProfiling = DoesLatestPeriodicUsageRequiresProfiling(latestPeriodicUsageDictionary, latestPeriodicUsageDate, earliestRequiredPeriodicUsageDate);
 
-                //If not 365 days, get generic profile
+                //If not 365 days, get generic profile unless it's a submeter in which case just stop
                 if (latestPeriodicUsageRequiresProfiling)
                 {
+                    if(meterType == "SubMeter")
+                    {
+                        //Update Process Queue
+                        _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
+
+                        return;
+                    }
+
                     //Call CommitProfiledUsage API and wait for response
                     var commitProfiledUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
                     var commitProfiledUsageAPI = _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
@@ -157,9 +157,13 @@ namespace CommitPeriodicUsageData.api.Controllers
                 //Connect to Routing API and POST data
                 _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
 
-                //Call CreateForecastUsage API
-                // var createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
-                // var createForecastUsageAPI = _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+                if(meterType == "SubMeter")
+                {
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
+
+                    return;
+                }
 
                 //Get Existing Estimated Annual Usage
                 var existingEstimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);

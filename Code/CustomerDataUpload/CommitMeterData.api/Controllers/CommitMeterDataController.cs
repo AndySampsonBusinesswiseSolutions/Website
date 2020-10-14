@@ -136,7 +136,7 @@ namespace CommitMeterData.api.Controllers
 
                             if(detail.Value != currentDetail)
                             {
-                                var meterDetailId = currentDetailDataRow.Field<int>("MeterDetailId");
+                                var meterDetailId = currentDetailDataRow.Field<long>("MeterDetailId");
                                 _customerMethods.MeterDetail_DeleteByMeterDetailId(meterDetailId);
                                 _customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
                             }

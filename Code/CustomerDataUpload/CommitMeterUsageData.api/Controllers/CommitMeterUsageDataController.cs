@@ -136,6 +136,9 @@ namespace CommitMeterUsageData.api.Controllers
                     _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
                     _systemMethods.SetProcessQueueGUIDInJObject(newJsonObject, newProcessQueueGUID);
 
+                    //Update Process GUID to CommitPeriodicUsage Process GUID
+                    _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
+
                     //Add mpxn to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, mpxn);
 
@@ -150,11 +153,18 @@ namespace CommitMeterUsageData.api.Controllers
                     //Add HasPeriodicUsage to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.HasPeriodicUsage, hasPeriodicUsage);
 
-                    //Launch CommitEstimatedAnnualUsage process
-                    var API = _systemMethods.PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                    //Connect to Routing API and POST data
+                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
 
                     if (hasPeriodicUsage)
                     {
+                        //Create new ProcessQueueGUID
+                        newProcessQueueGUID = Guid.NewGuid().ToString();
+
+                        //Map current ProcessQueueGUID to new ProcessQueueGUID
+                        _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                        _systemMethods.SetProcessQueueGUIDInJObject(newJsonObject, newProcessQueueGUID);
+
                         //Update Process GUID to CommitPeriodicUsage Process GUID
                         _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
 

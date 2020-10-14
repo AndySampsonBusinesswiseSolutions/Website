@@ -114,7 +114,7 @@ namespace GetProfile.api.Controllers
                     }
                     else if(process == 2)
                     {
-                        GetTimePeriodIdList();
+                        GetTimePeriodIdList(profileId);
                     }
                     else if(process == 3)
                     {
@@ -197,12 +197,21 @@ namespace GetProfile.api.Controllers
             estimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage("Meter", meterId);
         }
 
-        private void GetTimePeriodIdList()
+        private void GetTimePeriodIdList(long profileId)
         {
+            //Get CommodityId for profileId
+            var commodityId = _mappingMethods.CommodityToProfile_GetCommodityIdByProfileId(profileId);
+
+            //Get Commodity
+            var commodity = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+
             var informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+            var granularityAttributeDescription = commodity == "Electricity"
+                ? informationGranularityAttributeEnums.IsElectricityDefault
+                : informationGranularityAttributeEnums.IsGasDefault;
 
             //Get GranularityId
-            var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(informationGranularityAttributeEnums.IsElectricityDefault);
+            var granularityDefaultGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(granularityAttributeDescription);
             var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
 
             //Get TimePeriods for granularity

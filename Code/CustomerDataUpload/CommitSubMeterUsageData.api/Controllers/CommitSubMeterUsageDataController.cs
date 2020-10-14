@@ -126,7 +126,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                     _systemMethods.SetProcessQueueGUIDInJObject(newJsonObject, newProcessQueueGUID);
 
                     //Add subMeterIdentifier to newJsonObject
-                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, subMeterIdentifier);
+                    newJsonObject.Add(_systemAPIRequiredDataKeyEnums.SubMeterIdentifier, subMeterIdentifier);
 
                     //Get periodic usage
                     var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier);

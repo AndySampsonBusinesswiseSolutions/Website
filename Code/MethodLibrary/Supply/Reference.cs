@@ -27,8 +27,11 @@ namespace MethodLibrary
                 //Create ForecastUsageLatest tables and stored procedures by granularity
                 CreateForecastUsageGranularityLatestEntities(granularityIdList, schemaId, meterId, meterType);
 
-                //Create EstimatedUsage tables and stored procedures
-                CreateEstimatedAnnualUsageEntities(schemaId, meterId, meterType);
+                if(meterType == "Meter")
+                {
+                    //Create EstimatedUsage tables and stored procedures
+                    CreateEstimatedAnnualUsageEntities(schemaId, meterId, meterType);
+                }
 
                 //Create LoadedUsage tables and stored procedures
                 CreateLoadedUsageEntities(schemaId, meterId, meterType);
