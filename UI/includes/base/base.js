@@ -499,6 +499,15 @@ async function getProcessResponse(processQueueGUID) {
   }
 }
 
+async function processTreeResponse(response, processQueueGUID) {
+	if(response) {
+	  if(response.message == "OK") {
+		var result = await getPageRequestResult(processQueueGUID);
+		return result;
+	  }
+	}
+}
+
 async function getPageRequestResult(processQueueGUID) {
   try {
     const response = await fetch(uri + '/GetPageRequestResult', {

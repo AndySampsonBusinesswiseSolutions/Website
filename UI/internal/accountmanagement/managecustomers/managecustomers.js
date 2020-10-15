@@ -577,15 +577,6 @@ async function getTree() {
 	}
 }
 
-async function processTreeResponse(response, processQueueGUID) {
-	if(response) {
-	  if(response.message == "OK") {
-		var result = await getPageRequestResult(processQueueGUID);
-		return result;
-	  }
-	}
-}
-
 async function createTree(baseData, divId, checkboxFunction) {
     var tree = document.createElement('div');
 	var treeResponse = await getTree();

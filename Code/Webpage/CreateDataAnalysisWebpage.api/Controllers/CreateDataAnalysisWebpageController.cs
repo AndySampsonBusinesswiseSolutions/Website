@@ -31,6 +31,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
         private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+        private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
         private readonly Int64 createDataAnalysisWebpageAPIId;
         private string HTML = string.Empty;
         private JObject jsonObject;
@@ -84,7 +85,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
         [HttpPost]
         [Route("CreateDataAnalysisWebpage/BuildLocationTree")]
-        public IActionResult BuildLocationTree([FromBody] object data)
+        public void BuildLocationTree([FromBody] object data)
         {
             //Get base variables
             var createdByUserId = _administrationMethods.GetSystemUserId();
@@ -107,6 +108,9 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDataAnalysisWebpageAPIId);
 
+                //Get Page Id
+                var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.ManageCustomers);
+
                 //Setup required Attribute Ids
                 GetRequiredAttributes();
 
@@ -126,10 +130,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
                 var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{HTML}<ul>";
 
+                //Write HTML to System.PageRequest
+                _systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, baseUl);
+
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, false, null);
-
-                return new OkObjectResult(new { message = baseUl });
             }
             catch (Exception error)
             {
@@ -137,8 +142,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, true, $"System Error Id {errorId}");
-
-                return new OkObjectResult(new { message = string.Empty });
             }
         }
 

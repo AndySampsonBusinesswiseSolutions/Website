@@ -433,25 +433,12 @@ function createTimePeriodTree() {
   div.appendChild(ul);
 }
 
-async function getTree(data) {
-	try {
-	const response = await fetch('http://localhost:5196/CreateDataAnalysisWebpage/BuildLocationTree', {
-		method: 'POST',
-		mode: 'cors',
-		cache: 'no-cache',
-		credentials: 'same-origin',
-		headers: {
-		  'Content-Type': 'application/json',
-		},
-		redirect: 'follow',
-		referrerPolicy: 'no-referrer',
-		body: JSON.stringify(data)
-	  });
-  
-	  return response.json();
-	}
-	catch{
-	  return null;
+async function getTree(data, processQueueGUID) {
+	var postSuccessful = postData(data);
+
+	if(postSuccessful) {
+		var response = await getProcessResponse(processQueueGUID);
+		return await processTreeResponse(response, processQueueGUID);;
 	}
 }
 
@@ -472,14 +459,14 @@ async function buildSiteBranch(elementToAppendTo) {
     SubMeterChecked: submeterLocationcheckbox.checked,
     Commodities: commodities
   };
-	var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData};
-  var treeResponse = await getTree(data);
+	var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData, ProcessGUID: '7A8E05B5-34EF-4A14-9076-34F53BD7C5F6'};
+  var treeResponse = await getTree(data, processQueueGUID);
   elementToAppendTo.innerHTML = treeResponse.message;
 }
 
 async function updatePage(callingElement) {
   var branch = callingElement.getAttribute('branch');
-  var refreshChart = true;
+  var refreshChart = false;
   
   switch(branch) {
     case 'displaySelector':
