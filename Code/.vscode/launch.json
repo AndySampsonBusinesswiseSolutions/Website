@@ -9,9 +9,9 @@
             "request": "launch",
             // "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Webpage\DataAnalysis/DataAnalysisWebpageGetForecast.api/bin/Debug/netcoreapp3.1/DataAnalysisWebpageGetForecast.api.dll",
+            "program": "${workspaceFolder}/Webpage/DataAnalysis/DataAnalysisWebpageGetForecast.api/bin/Debug/netcoreapp3.1/DataAnalysisWebpageGetForecast.api.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Webpage\DataAnalysis/DataAnalysisWebpageGetForecast.api",
+            "cwd": "${workspaceFolder}/Webpage/DataAnalysis/DataAnalysisWebpageGetForecast.api",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {
@@ -22,7 +22,7 @@
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
             "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Webpage\DataAnalysis/DataAnalysisWebpageGetForecast.api/Views"
+                "/Views": "${workspaceFolder}/Webpage/DataAnalysis/DataAnalysisWebpageGetForecast.api/Views"
             }
         },
         {"name": "CreateDataAnalysisWebpage.api",
@@ -2045,7 +2045,8 @@
                 "ValidatePageGUID.api",
                 "ValidateProcessGUID.api",
                 "CreateManageCustomersWebpage.api",
-                "CreateDataAnalysisWebpage.api"
+                "CreateDataAnalysisWebpage.api",
+                "DataAnalysisWebpageGetForecast.api",
             ]
         },
     ]

@@ -499,7 +499,7 @@ async function getProcessResponse(processQueueGUID) {
   }
 }
 
-async function processTreeResponse(response, processQueueGUID) {
+async function processResponse(response, processQueueGUID) {
 	if(response) {
 	  if(response.message == "OK") {
 		var result = await getPageRequestResult(processQueueGUID);

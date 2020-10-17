@@ -9,6 +9,15 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public string GetGranularityCodeByGranularityDisplayDescription(string granularityDisplayDescription)
+            {
+                var granularityDisplayDescriptionGranularityAttributeId = GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDisplayDescription);
+                var granularityId = GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDisplayDescriptionGranularityAttributeId, granularityDisplayDescription);
+
+                var granularityCodeGranularityAttributeId = GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityCode);
+                return GranularityDetail_GetGranularityDetailDescriptionByGranularityIdAndGranularityAttributeId(granularityId, granularityCodeGranularityAttributeId);
+            }
+
             public long GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(string granularityAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

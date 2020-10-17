@@ -433,12 +433,12 @@ function createTimePeriodTree() {
   div.appendChild(ul);
 }
 
-async function getTree(data, processQueueGUID) {
+async function getDataFromAPI(data, processQueueGUID) {
 	var postSuccessful = postData(data);
 
 	if(postSuccessful) {
 		var response = await getProcessResponse(processQueueGUID);
-		return await processTreeResponse(response, processQueueGUID);;
+		return await processResponse(response, processQueueGUID);;
 	}
 }
 
@@ -460,7 +460,7 @@ async function buildSiteBranch(elementToAppendTo) {
     Commodities: commodities
   };
 	var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData, ProcessGUID: '7A8E05B5-34EF-4A14-9076-34F53BD7C5F6'};
-  var treeResponse = await getTree(data, processQueueGUID);
+  var treeResponse = await getDataFromAPI(data, processQueueGUID);
   elementToAppendTo.innerHTML = treeResponse.message;
 }
 
@@ -1377,30 +1377,51 @@ function convertMonthIdToQuarter(monthId) {
 	}
 }
 
-async function getDailyForecast(data) {
-	try {
-	const response = await fetch('http://localhost:5196/CreateDataAnalysisWebpage/GetDailyForecast', {
-		method: 'POST',
-		mode: 'cors',
-		cache: 'no-cache',
-		credentials: 'same-origin',
-		headers: {
-		  'Content-Type': 'application/json',
-		},
-		redirect: 'follow',
-		referrerPolicy: 'no-referrer',
-		body: JSON.stringify(data)
-	  });
-  
-	  return response.json();
-	}
-	catch{
-	  return null;
-	}
+function getCheckedLocations()
+{
+  var div = document.getElementById('siteTree');
+  var inputs = div.getElementsByTagName('input');
+  var checkedElements = getCheckedElements(inputs);
+  var checkedGUIDS = [];
+
+  for(var i = 0; i < checkedElements.length; i++)
+  {
+    var checkedElement = checkedElements[i];
+    if(checkedElement.hasAttribute("guid"))
+    {
+      checkedGUIDS.push(checkedElement.getAttribute("guid"));
+    }
+  }
+
+  return checkedGUIDS;
 }
 
 async function getChartSeries(showByArray, meters, categories, dateFormat, startDate, endDate) {
-  var dailyForecast = await getDailyForecast({});
+  var processQueueGUID = CreateGUID();
+  var grouping = [];
+  if(groupingOption2GroupingOptionSelectorradio.checked){grouping.push('No Grouping')}
+  if(groupingOption1GroupingOptionSelectorradio.checked && sumGroupingOption1CostGroupingOptionSelectorcheckbox.checked){grouping.push('Sum')}
+  if(groupingOption1GroupingOptionSelectorradio.checked && averageGroupingOption1CostGroupingOptionSelectorcheckbox.checked){grouping.push('Average')}
+
+  var commodities = [];
+  if(electricityCommoditycheckbox.checked){commodities.push('Electricity')};
+  if(gasCommoditycheckbox.checked){commodities.push('Gas')};
+
+  var filterData = {
+    EnergyUnit: 'Usage',
+    EnergyUnitInstance: 'BWS Forecast',
+    Locations: getCheckedLocations(),
+    StartDate: '1-JAN-2021',
+    EndDate: '31-DEC-2021',
+    Granularity: 'Daily',
+    LatestCreated: createdDisplayCheckboxcheckbox.checked,
+    CreatedDate: '01-JAN-2020',
+    Grouping: grouping,
+    Commodities: commodities
+  };
+  var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData, ProcessGUID: '7626BEDC-AB23-4F6E-B87B-2D4976DA1608'};
+  
+  var dailyForecast = await getDataFromAPI(data, processQueueGUID);
   var tempMeters = JSON.parse(dailyForecast.message);
 
   for(var i = 0; i < tempMeters.Meters.length; i++) {

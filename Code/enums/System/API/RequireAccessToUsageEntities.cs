@@ -27,7 +27,8 @@ namespace enums
                         "CreateQuarterForecast.api",
                         "CreateYearForecast.api",
                         "Website.api",
-                        "CreateDataAnalysisWebpage.api"
+                        "CreateDataAnalysisWebpage.api",
+                        "DataAnalysisWebpageGetForecast.api"
                     };
                 }
             }

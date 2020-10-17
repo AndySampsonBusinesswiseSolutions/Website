@@ -38,23 +38,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private Dictionary<string, long> attributeDictionary = new Dictionary<string, long>();
         private FilterData filterData;
 
-        private class Usage
-        {
-            public string Date;
-            public string Value;
-        }
-
-        private class Meter
-        {
-            public string SeriesName;
-            public List<Usage> Usage;
-        }
-
-        private class Forecast
-        {
-            public List<Meter> Meters;
-        }
-
         public class FilterData    {
             public bool SiteChecked { get; set; } 
             public bool AreaChecked { get; set; } 
@@ -109,7 +92,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDataAnalysisWebpageAPIId);
 
                 //Get Page Id
-                var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.ManageCustomers);
+                var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.DataAnalysis);
 
                 //Setup required Attribute Ids
                 GetRequiredAttributes();
@@ -147,12 +130,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
         private void GetRequiredAttributes()
         {
-            //Get SiteNameSiteAttributeId
-            attributeDictionary.Add("SiteName", _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName));
-
-            //Get SitePostcodeSiteAttributeId
-            attributeDictionary.Add("SitePostcode", _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode));
-
             //Get MeterIdentifierMeterAttributeId
             attributeDictionary.Add("MeterIdentifier", _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier));
 
@@ -176,7 +153,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var siteGUID = _customerMethods.Site_GetSiteGUIDBySiteId(site.Key).ToString();
 
                     //Get Site name
-                    var siteName = GetSiteName(site.Key);
+                    var siteName = _customerMethods.GetSiteName(site.Key);
 
                     //Get areas linked to site
                     var areaMeterDictionary = BuildAreaMeterDictionary(site.Value);
@@ -408,17 +385,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             return filterData.Commodities.Any(c => meterCommodities.Contains(c));
         }
 
-        private string GetSiteName(long siteId)
-        {
-            //Get Site name
-            var siteName = _customerMethods.SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(siteId, attributeDictionary["SiteName"]);
-
-            //Get Site postcode
-            var sitePostcode = _customerMethods.SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(siteId, attributeDictionary["SitePostcode"]);
-
-            return $"{siteName}, {sitePostcode}";
-        }
-
         private string GetLiHtml(string type, string guid, string value, string ulHTML)
         {
             ulHTML = $"<ul class='format-listitem'>{ulHTML}</ul>";
@@ -430,59 +396,6 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             var branchDiv = $"<i id='{type}|{guid}' class='far fa-plus-square show-pointer expander'></i>";
 
             return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
-        }
-        
-        [HttpPost]
-        [Route("CreateDataAnalysisWebpage/GetDailyForecast")]
-        public IActionResult GetDailyForecast([FromBody] object data) //TODO: Build into new API
-        {
-            //Get Date dictionary
-            var dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
-
-            //Get MeterIds
-            var meterIdList = _customerMethods.Meter_GetMeterIdList();
-
-            //Get MeterIdentifierMeterAttributeId
-            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
-            //Get Meter identifiers
-            var meterIdentifierDictionary = _customerMethods.MeterDetail_GetMeterDetailDescriptionDictionaryByMeterAttributeId(meterIdentifierMeterAttributeId);
-
-            var forecast = new Forecast();
-            var meterList = new List<Meter>();
-
-            foreach(var meterId in meterIdList)
-            {
-                var meter = new Meter();
-                meter.SeriesName = meterIdentifierDictionary[meterId];
-                meter.Usage = new List<Usage>();
-
-                //Get latest daily forecast
-                var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest("Meter", meterId, "Date");
-                var forecastTuple = new List<Tuple<long, decimal>>();
-
-                foreach (DataRow r in forecastDataRows)
-                {
-                    var tup = Tuple.Create((long)r["DateId"], (decimal)r["Usage"]);
-                    forecastTuple.Add(tup);
-                }
-
-                var meterForecastList = forecastTuple.ToDictionary(
-                    f => dateDictionary.First(d => d.Value == f.Item1).Key,
-                    f => f.Item2.ToString()
-                )
-                .OrderBy(f => Convert.ToDateTime(f.Key))
-                .ToDictionary(f => f.Key, f => f.Value)
-                .Select(f => new Usage{Date = f.Key, Value = f.Value})
-                .ToList();
-
-                meter.Usage.AddRange(meterForecastList);
-                meterList.Add(meter);
-            }
-
-            forecast.Meters = meterList;
-
-            return new OkObjectResult(new { message = JsonConvert.SerializeObject(forecast) });
         }
     }
 }

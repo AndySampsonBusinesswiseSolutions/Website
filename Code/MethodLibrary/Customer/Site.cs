@@ -10,6 +10,23 @@ namespace MethodLibrary
     {
         public partial class Customer
         {
+            public string GetSiteName(long siteId)
+            {
+                //Get SiteNameSiteAttributeId
+                var siteNameSiteAttributeId = SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
+
+                //Get Site name
+                var siteName = SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(siteId, siteNameSiteAttributeId);
+
+                //Get SitePostcodeSiteAttributeId
+                var sitePostcodeSiteAttributeId = SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
+
+                //Get Site postcode
+                var sitePostcode = SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(siteId, sitePostcodeSiteAttributeId);
+
+                return $"{siteName}, {sitePostcode}";
+            }
+
             public long InsertNewSite(long createdByUserId, long sourceId)
             {
                 //Create new SiteGUID
