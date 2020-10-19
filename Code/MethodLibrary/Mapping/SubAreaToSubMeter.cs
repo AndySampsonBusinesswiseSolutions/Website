@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Data;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -22,8 +23,19 @@ namespace MethodLibrary
                     subMeterId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SubMeterId"))
+                    .Select(r => r.Field<long>("SubAreaId"))
                     .FirstOrDefault();
+            }
+
+            public List<long> SubAreaToSubMeter_GetSubMeterIdListBySubAreaId(long subAreaId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.SubAreaToSubMeter_GetBySubAreaId,
+                    subAreaId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SubMeterId"))
+                    .ToList();
             }
         }
     }

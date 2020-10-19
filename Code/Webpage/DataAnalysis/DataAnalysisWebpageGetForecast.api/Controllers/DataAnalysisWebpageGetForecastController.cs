@@ -278,7 +278,43 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "SubArea")
                     {
+                        var meterId = Convert.ToInt64(locationGUID.Split('_')[0]);
+                        var subAreaId = Convert.ToInt64(locationGUID.Split('_')[1]);
 
+                        //get area description
+                        var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
+
+                        if(meterId == 0)
+                        {
+                            //TODO: do something.....don't know what yet
+                        }
+                        else
+                        {
+                            //get all submeters for meter
+                            var subMeterIdList = _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(meterId);
+
+                            //get MeterIdentifierMeterAttributeId
+                            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+
+                            //Get Meter identifier
+                            var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
+
+                            //get submeters by subarea
+                            var subAreaSubMeterIdList = _mappingMethods.SubAreaToSubMeter_GetSubMeterIdListBySubAreaId(subAreaId).Intersect(subMeterIdList).ToList();
+
+                            //get commodity for meter
+                            var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                            var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+
+                            //get usage for every submeter
+                            var usageList = subAreaSubMeterIdList.SelectMany(m => GetMeterForecast("SubMeter", m)).ToList();
+                            var series = CreateNewSeries(locationType, commodityDescription, $"{meterIdentifier} - {subAreaDescription}", splitByCommodity, usageList);
+
+                            if(series.Usage.Any())
+                            {
+                                seriesList.Add(series);
+                            }
+                        }
                     }
                     else if(locationType == "Asset")
                     {
