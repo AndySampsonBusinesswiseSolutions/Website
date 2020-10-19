@@ -8,6 +8,7 @@ namespace enums
             {
                 public string MeterToSubMeter_Insert = "[Mapping].[MeterToSubMeter_Insert]";
                 public string MeterToSubMeter_GetByMeterId = "[Mapping].[MeterToSubMeter_GetByMeterId]";
+                public string MeterToSubMeter_GetBySubMeterId = "[Mapping].[MeterToSubMeter_GetBySubMeterId]";
             }
         }
     }

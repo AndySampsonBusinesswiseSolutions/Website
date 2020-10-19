@@ -30,6 +30,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
+        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Int64 dataAnalysisWebpageGetForecastAPIId;
         private FilterData filterData;
         private Dictionary<string, long> dateDictionary;
@@ -159,7 +160,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             var meterIdListByCommodity = meterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
 
                             //get usage for every meter
-                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast(m)).ToList();
+                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast("Meter", m)).ToList();
                             var series = CreateNewSeries(locationType, commodity.Value, siteName, splitByCommodity, usageList);
 
                             if(series.Usage.Any())
@@ -197,7 +198,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                                 var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
 
                                 //get usage for every meter
-                                var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast(m)).ToList();
+                                var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast("Meter", m)).ToList();
                                 var series = CreateNewSeries(locationType, commodity.Value, $"{siteName} - {areaDescription}", splitByCommodity, usageList);
 
                                 if(series.Usage.Any())
@@ -242,7 +243,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
 
                             //get usage for every meter
-                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast(m)).ToList();
+                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast("Meter", m)).ToList();
                             var series = CreateNewSeries(locationType, commodityDescription, $"{siteName} - {areaDescription}", true, usageList);
 
                             if(series.Usage.Any())
@@ -267,8 +268,41 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
 
                         //get usage for meter
-                        var usageList = GetMeterForecast(meterId);
+                        var usageList = GetMeterForecast("Meter", meterId);
                         var series = CreateNewSeries(locationType, commodityDescription, meterIdentifier, true, usageList);
+
+                        if(series.Usage.Any())
+                        {
+                            seriesList.Add(series);
+                        }
+                    }
+                    else if(locationType == "SubArea")
+                    {
+
+                    }
+                    else if(locationType == "Asset")
+                    {
+
+                    }
+                    else if(locationType == "SubMeter")
+                    {
+                        //get SubMeterIdentifierSubMeterAttributeId
+                        var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
+
+                        //Get SubMeter Id
+                        var subMeterId = _customerMethods.SubMeter_GetSubMeterIdBySubMeterGUID(locationGUID);
+
+                        //Get SubMeter identifier
+                        var subMeterIdentifier = _customerMethods.SubMeterDetail_GetSubMeterDetailDescriptionBySubMeterIdAndSubMeterAttributeId(subMeterId, subMeterIdentifierSubMeterAttributeId);
+
+                        //get commodity for subMeter
+                        var meterId = _mappingMethods.MeterToSubMeter_GetMeterIdBySubMeterId(subMeterId);
+                        var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                        var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+
+                        //get usage for subMeter
+                        var usageList = GetMeterForecast("SubMeter", subMeterId);
+                        var series = CreateNewSeries(locationType, commodityDescription, subMeterIdentifier, true, usageList);
 
                         if(series.Usage.Any())
                         {
@@ -368,10 +402,10 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             }
         }
 
-        private List<Usage> GetMeterForecast(long meterId)
+        private List<Usage> GetMeterForecast(string meterType, long meterId)
         {
             //Get latest daily forecast
-            var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest("Meter", meterId, "Date");
+            var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, "Date");
             var forecastTuple = new List<Tuple<long, decimal>>();
 
             foreach (DataRow r in forecastDataRows)
