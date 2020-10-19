@@ -38,6 +38,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         {
             public string Date;
             public decimal Value;
+            public long EntityCount;
         }
 
         private class Series
@@ -50,7 +51,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
         private class Forecast
         {
-            public List<Series> Meters;
+            public List<Series> Meters = new List<Series>();
         }
 
         public class FilterData    {
@@ -184,6 +185,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                                 else
                                 {
                                     seriesUsage.Value += usage.Value;
+                                    seriesUsage.EntityCount += usage.EntityCount;
                                 }
                             }
 
@@ -198,7 +200,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 }
                 else
                 {
-                    var groupedSeriesList = new List<Series>();
+                    var sumSeriesList = new List<Series>();
 
                     var locationGroups = seriesList.GroupBy(s => new { s.Type, s.Commodity }).ToList();
                     foreach(var locationGroup in locationGroups)
@@ -224,15 +226,45 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             else
                             {
                                 seriesUsage.Value += usage.Value;
+                                seriesUsage.EntityCount += usage.EntityCount;
                             }
                         }
 
-                        groupedSeriesList.Add(series);
+                        sumSeriesList.Add(series);
                     }
 
+                    if(filterData.Grouping.Contains("Sum"))
+                    {
+                        forecast.Meters.AddRange(sumSeriesList);
+                    }
 
+                    if(filterData.Grouping.Contains("Average"))
+                    {
+                        var averageSeriesList = new List<Series>();
 
-                    forecast.Meters = groupedSeriesList;
+                        foreach(var locationGroup in locationGroups)
+                        {
+                            var sumSeries = sumSeriesList.First(s => s.Type == locationGroup.Key.Type && s.Commodity == locationGroup.Key.Commodity);
+
+                            var series = new Series();
+                            series.Type = locationGroup.Key.Type;
+                            series.Commodity = locationGroup.Key.Commodity;
+                            series.SeriesName = sumSeries.SeriesName.Replace(" - Sum", " - Average");
+                            series.Usage = new List<Usage>();
+
+                            foreach(var sumUsage in sumSeries.Usage)
+                            {
+                                var averageUsage = new Usage();
+                                averageUsage.Date = sumUsage.Date;
+                                averageUsage.Value = sumUsage.Value / sumUsage.EntityCount;
+                                series.Usage.Add(averageUsage);
+                            }
+
+                            averageSeriesList.Add(series);
+                        }
+
+                        forecast.Meters.AddRange(averageSeriesList);
+                    }
                 }
 
                 //Write HTML to System.PageRequest
@@ -270,9 +302,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             )
             .OrderBy(f => Convert.ToDateTime(f.Key))
             .ToDictionary(f => f.Key, f => f.Value)
-            .Select(f => new Usage{Date = f.Key, Value = Convert.ToDecimal(f.Value)})
+            .Select(f => new Usage{Date = f.Key, Value = Convert.ToDecimal(f.Value), EntityCount = 1})
             .ToList();
         }
     }
 }
-

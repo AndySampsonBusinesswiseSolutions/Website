@@ -466,7 +466,7 @@ async function buildSiteBranch(elementToAppendTo) {
 
 async function updatePage(callingElement) {
   var branch = callingElement.getAttribute('branch');
-  var refreshChart = false;
+  var refreshChart = true;
   
   switch(branch) {
     case 'displaySelector':
@@ -1633,10 +1633,10 @@ function getSummedMeterSeries(meters, showBy, categories, dateFormat, startDate,
 }
 
 function finaliseData(summedMeterSeries, seriesName) {
-  var finalSeries = [];
-  var noGroupradio = document.getElementById('groupingOption2GroupingOptionSelectorradio');
+  // var finalSeries = [];
+  // var noGroupradio = document.getElementById('groupingOption2GroupingOptionSelectorradio');
 
-  if(noGroupradio.checked) {
+  // if(noGroupradio.checked) {
     var series = {
       name: seriesName,
       data: summedMeterSeries.value,
@@ -1644,37 +1644,37 @@ function finaliseData(summedMeterSeries, seriesName) {
     };
 
     return series;
-  }
-  else {
-    var sumcheckbox = document.getElementById('sumGroupingOption1CostGroupingOptionSelectorcheckbox');
-    if(sumcheckbox.checked) {
-      var series = {
-        name: seriesName + ' - Sum',
-        data: summedMeterSeries.value,
-        type: seriesName.includes('Invoice') ? 'bar' : 'line'
-      };
+  // }
+  // else {
+  //   var sumcheckbox = document.getElementById('sumGroupingOption1CostGroupingOptionSelectorcheckbox');
+  //   if(sumcheckbox.checked) {
+  //     var series = {
+  //       name: seriesName + ' - Sum',
+  //       data: summedMeterSeries.value,
+  //       type: seriesName.includes('Invoice') ? 'bar' : 'line'
+  //     };
   
-      finalSeries.push(series);
-    }
+  //     finalSeries.push(series);
+  //   }
 
-    var averagecheckbox = document.getElementById('averageGroupingOption1CostGroupingOptionSelectorcheckbox');
-    if(averagecheckbox.checked) {
-      var series = {
-        name: seriesName + ' - Average',
-        data: [],
-        type: seriesName.includes('Invoice') ? 'bar' : 'line'
-      };
+  //   var averagecheckbox = document.getElementById('averageGroupingOption1CostGroupingOptionSelectorcheckbox');
+  //   if(averagecheckbox.checked) {
+  //     var series = {
+  //       name: seriesName + ' - Average',
+  //       data: [],
+  //       type: seriesName.includes('Invoice') ? 'bar' : 'line'
+  //     };
   
-      for(var i = 0; i < summedMeterSeries.value.length; i++) {
-        series.data.push(summedMeterSeries.value[i]/summedMeterSeries.count[i]);
-      }
+  //     for(var i = 0; i < summedMeterSeries.value.length; i++) {
+  //       series.data.push(summedMeterSeries.value[i]/summedMeterSeries.count[i]);
+  //     }
   
-      finalSeries.push(series);
-    }
-  }
+  //     finalSeries.push(series);
+  //   }
+  // }
 
-  var temp = [...finalSeries];
-  return temp;
+  // var temp = [...finalSeries];
+  // return temp;
 }
 
 function getDisplayType() {
