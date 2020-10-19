@@ -63,7 +63,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             public string EndDate { get; set; } 
             public string Granularity { get; set; } 
             public bool LatestCreated { get; set; } 
-            public string CreatedDate { get; set; } 
+            public string CreatedDate { get; set; }
+            public string CustomerGUID {get; set; }
             public List<string> Locations { get; set; }
             public List<string> Grouping { get; set; }
             public List<string> Commodities { get; set; }
@@ -97,7 +98,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            filterData = JsonConvert.DeserializeObject<FilterData>(jsonObject["FilterData"].ToString()); 
 
             try
             {
@@ -113,18 +113,14 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                 //Get Page Id
                 var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.DataAnalysis);
+                
+                filterData = JsonConvert.DeserializeObject<FilterData>(jsonObject["FilterData"].ToString()); 
 
                 //Get Date dictionary
                 dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary()
                     .Where(d => Convert.ToDateTime(d.Key) >= Convert.ToDateTime(filterData.StartDate))
                     .Where(d => Convert.ToDateTime(d.Key) <= Convert.ToDateTime(filterData.EndDate))
                     .ToDictionary(d => d.Key, d => d.Value);
-
-                //Get SiteNameSiteAttributeId
-                var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
-
-                //Get SitePostcodeSiteAttributeId
-                var SitePostcodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
 
                 //get granularity code
                 var granularityCode = _informationMethods.GetGranularityCodeByGranularityDisplayDescription(filterData.Granularity);
@@ -134,6 +130,9 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     c => _informationMethods.Commodity_GetCommodityIdByCommodityDescription(c),
                     c => c
                 );
+
+                //get customer Id
+                var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(filterData.CustomerGUID);
 
                 var forecast = new Forecast();
                 var seriesList = new List<Series>();
@@ -159,15 +158,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         {
                             //get meters that match commodity
                             var meterIdListByCommodity = meterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
-
-                            //get usage for every meter
-                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast("Meter", m)).ToList();
-                            var series = CreateNewSeries(locationType, commodity.Value, siteName, splitByCommodity, usageList);
-
-                            if(series.Usage.Any())
-                            {
-                                seriesList.Add(series);
-                            }
+                            GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, siteName, commodity.Value, meterIdListByCommodity, "Meter");
                         }
                     }
                     else if(locationType == "Area")
@@ -178,34 +169,39 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         //get area description
                         var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaId);
 
+                        //get meters by area
+                        var areaMeterIdList = _mappingMethods.AreaToMeter_GetMeterIdListByAreaId(areaId).ToList();
+
                         if(siteId == 0)
                         {
-                            //TODO: do something.....don't know what yet
-                        }
-                        else
-                        {
-                            //get all meters for site
-                            var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId);
+                            //get all sites for customer
+                            var siteIdList = _mappingMethods.CustomerToSite_GetSiteIdListByCustomerId(customerId);
 
-                            //get site name
-                            var siteName = _customerMethods.GetSiteName(siteId);
-
-                            //get meters by area
-                            var areaMeterIdList = _mappingMethods.AreaToMeter_GetMeterIdListByAreaId(areaId).Intersect(meterIdList).ToList();
+                            //get all meters for all sites
+                            var meterIdList = siteIdList.SelectMany(s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s)).ToList();
+                            areaMeterIdList = areaMeterIdList.Intersect(meterIdList).ToList();
 
                             foreach(var commodity in commodityDictionary)
                             {
                                 //get meters that match commodity
                                 var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
+                                GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, areaDescription, commodity.Value, meterIdListByCommodity, "Meter");
+                            }
+                        }
+                        else
+                        {
+                            //get all meters for site
+                            var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId).ToList();
+                            areaMeterIdList = areaMeterIdList.Intersect(meterIdList).ToList();
 
-                                //get usage for every meter
-                                var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast("Meter", m)).ToList();
-                                var series = CreateNewSeries(locationType, commodity.Value, $"{siteName} - {areaDescription}", splitByCommodity, usageList);
+                            //get site name
+                            var siteName = _customerMethods.GetSiteName(siteId);
 
-                                if(series.Usage.Any())
-                                {
-                                    seriesList.Add(series);
-                                }
+                            foreach(var commodity in commodityDictionary)
+                            {
+                                //get meters that match commodity
+                                var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
+                                GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{siteName} - {areaDescription}", commodity.Value, meterIdListByCommodity, "Meter");
                             }
                         }
                     }
@@ -216,7 +212,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         var commodityId = Convert.ToInt64(locationGUID.Split('_')[2]);
 
                         //get commodity description
-                        var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+                        var commodityDescription = commodityDictionary[commodityId];
 
                         if(siteId == 0)
                         {
@@ -242,15 +238,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                             //get meters that match commodity
                             var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
-
-                            //get usage for every meter
-                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast("Meter", m)).ToList();
-                            var series = CreateNewSeries(locationType, commodityDescription, $"{siteName} - {areaDescription}", true, usageList);
-
-                            if(series.Usage.Any())
-                            {
-                                seriesList.Add(series);
-                            }
+                            GetUsageAndAddToSeriesList(seriesList, true, locationType, $"{siteName} - {areaDescription}", commodityDescription, meterIdListByCommodity, "Meter");
                         }
                     }
                     else if(locationType == "Meter")
@@ -266,16 +254,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                         //get commodity for meter
                         var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
-                        var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
-
-                        //get usage for meter
-                        var usageList = GetMeterForecast("Meter", meterId);
-                        var series = CreateNewSeries(locationType, commodityDescription, meterIdentifier, true, usageList);
-
-                        if(series.Usage.Any())
-                        {
-                            seriesList.Add(series);
-                        }
+                        var commodityDescription = commodityDictionary[commodityId];
+                        GetUsageAndAddToSeriesList(seriesList, true, locationType, meterIdentifier, commodityDescription, new List<long>{meterId}, "Meter");
                     }
                     else if(locationType == "SubArea")
                     {
@@ -305,16 +285,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                             //get commodity for meter
                             var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
-                            var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
-
-                            //get usage for every submeter
-                            var usageList = subAreaSubMeterIdList.SelectMany(m => GetMeterForecast("SubMeter", m)).ToList();
-                            var series = CreateNewSeries(locationType, commodityDescription, $"{meterIdentifier} - {subAreaDescription}", splitByCommodity, usageList);
-
-                            if(series.Usage.Any())
-                            {
-                                seriesList.Add(series);
-                            }
+                            var commodityDescription = commodityDictionary[commodityId];
+                            GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{meterIdentifier} - {subAreaDescription}", commodityDescription, subAreaSubMeterIdList, "SubMeter");
                         }
                     }
                     else if(locationType == "Asset")
@@ -359,16 +331,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                             //get commodity for meter
                             var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
-                            var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
-
-                            //get usage for every submeter
-                            var usageList = assetSubMeterIdList.SelectMany(m => GetMeterForecast("SubMeter", m)).ToList();
-                            var series = CreateNewSeries(locationType, commodityDescription, $"{meterIdentifier} - {subAreaDescription} - {assetName}", splitByCommodity, usageList);
-
-                            if(series.Usage.Any())
-                            {
-                                seriesList.Add(series);
-                            }
+                            var commodityDescription = commodityDictionary[commodityId];
+                            GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{meterIdentifier} - {subAreaDescription} - {assetName}", commodityDescription, assetSubMeterIdList, "SubMeter");
                         }
                     }
                     else if(locationType == "SubMeter")
@@ -385,16 +349,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         //get commodity for subMeter
                         var meterId = _mappingMethods.MeterToSubMeter_GetMeterIdBySubMeterId(subMeterId);
                         var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
-                        var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
-
-                        //get usage for subMeter
-                        var usageList = GetMeterForecast("SubMeter", subMeterId);
-                        var series = CreateNewSeries(locationType, commodityDescription, subMeterIdentifier, true, usageList);
-
-                        if(series.Usage.Any())
-                        {
-                            seriesList.Add(series);
-                        }
+                        var commodityDescription = commodityDictionary[commodityId];
+                        GetUsageAndAddToSeriesList(seriesList, true, locationType, subMeterIdentifier, commodityDescription, new List<long>{subMeterId}, "SubMeter");
                     }
                 }
 
@@ -453,6 +409,18 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, dataAnalysisWebpageGetForecastAPIId, true, $"System Error Id {errorId}");
+            }
+        }
+
+        private void GetUsageAndAddToSeriesList(List<Series> seriesList, bool splitByCommodity, string type, string baseName, string commodity, List<long> meterIdList, string meterType)
+        {
+            //get usage for every meter
+            var usageList = meterIdList.SelectMany(m => GetMeterForecast(meterType, m)).ToList();
+
+            if (usageList.Any())
+            {
+                var series = CreateNewSeries(type, commodity, baseName, splitByCommodity, usageList);
+                seriesList.Add(series);
             }
         }
 

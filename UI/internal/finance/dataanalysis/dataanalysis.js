@@ -1418,7 +1418,8 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
     LatestCreated: createdDisplayCheckboxcheckbox.checked,
     CreatedDate: '01-JAN-2020',
     Grouping: grouping,
-    Commodities: commodities
+    Commodities: commodities,
+    CustomerGUID: '33669AEC-6C36-4DE9-98F0-A604F3877BB8'
   };
   var data = {ProcessQueueGUID: processQueueGUID, FilterData: filterData, ProcessGUID: '7626BEDC-AB23-4F6E-B87B-2D4976DA1608'};
   
