@@ -135,6 +135,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                 var forecast = new Forecast();
                 var seriesList = new List<Series>();
+                var splitByCommodity = filterData.Commodities.Count != 1;
 
                 foreach(var location in filterData.Locations)
                 {
@@ -154,40 +155,12 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                         foreach(var commodity in commodityDictionary)
                         {
-                            var series = new Series();
-                            series.Type = locationType;
-                            series.Commodity = commodity.Value;
-                            series.Usage = new List<Usage>();
-
-                            var seriesCommodity = filterData.Commodities.Count == 1
-                                ? string.Empty
-                                : $" - {commodity.Value}";
-
-                            series.SeriesName = $"{siteName}{seriesCommodity}";
-
                             //get meters that match commodity
                             var meterIdListByCommodity = meterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
 
                             //get usage for every meter
-                            var usageList = new List<Usage>();
-                            foreach(var meterId in meterIdListByCommodity)
-                            {
-                                usageList.AddRange(GetMeterForecast(meterId));
-                            }
-
-                            foreach(var usage in usageList)
-                            {
-                                var seriesUsage = series.Usage.FirstOrDefault(s => s.Date == usage.Date);
-                                if(seriesUsage == null)
-                                {
-                                    series.Usage.Add(usage);
-                                }
-                                else
-                                {
-                                    seriesUsage.Value += usage.Value;
-                                    seriesUsage.EntityCount += usage.EntityCount;
-                                }
-                            }
+                            var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast(m)).ToList();
+                            var series = CreateNewSeries(locationType, commodity.Value, siteName, splitByCommodity, usageList);
 
                             seriesList.Add(series);
                         }
@@ -205,30 +178,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     var locationGroups = seriesList.GroupBy(s => new { s.Type, s.Commodity }).ToList();
                     foreach(var locationGroup in locationGroups)
                     {
-                        var series = new Series();
-                        series.Type = locationGroup.Key.Type;
-                        series.Commodity = locationGroup.Key.Commodity;
-                        series.Usage = new List<Usage>();
-
-                        var seriesCommodity = filterData.Commodities.Count == 1
-                                ? string.Empty
-                                : $" - {series.Commodity}";
-                            
-                        series.SeriesName = $"{series.Type}{seriesCommodity} - Sum";
-
-                        foreach(var usage in locationGroup.SelectMany(s => s.Usage).ToList())
-                        {
-                            var seriesUsage = series.Usage.FirstOrDefault(s => s.Date == usage.Date);
-                            if(seriesUsage == null)
-                            {
-                                series.Usage.Add(usage);
-                            }
-                            else
-                            {
-                                seriesUsage.Value += usage.Value;
-                                seriesUsage.EntityCount += usage.EntityCount;
-                            }
-                        }
+                        var series = CreateNewSeries(locationGroup.Key.Type, locationGroup.Key.Commodity, locationGroup.Key.Type, true, locationGroup.SelectMany(s => s.Usage).ToList());                            
+                        series.SeriesName += " - Sum";
 
                         sumSeriesList.Add(series);
                     }
@@ -245,22 +196,14 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         foreach(var locationGroup in locationGroups)
                         {
                             var sumSeries = sumSeriesList.First(s => s.Type == locationGroup.Key.Type && s.Commodity == locationGroup.Key.Commodity);
+                            var averageSeries = CreateNewSeries(locationGroup.Key.Type, locationGroup.Key.Commodity, sumSeries.SeriesName.Replace(" - Sum", " - Average"), false, sumSeries.Usage);
 
-                            var series = new Series();
-                            series.Type = locationGroup.Key.Type;
-                            series.Commodity = locationGroup.Key.Commodity;
-                            series.SeriesName = sumSeries.SeriesName.Replace(" - Sum", " - Average");
-                            series.Usage = new List<Usage>();
-
-                            foreach(var sumUsage in sumSeries.Usage)
+                            foreach(var averageUsage in averageSeries.Usage)
                             {
-                                var averageUsage = new Usage();
-                                averageUsage.Date = sumUsage.Date;
-                                averageUsage.Value = sumUsage.Value / sumUsage.EntityCount;
-                                series.Usage.Add(averageUsage);
+                                averageUsage.Value = averageUsage.Value / averageUsage.EntityCount;
                             }
 
-                            averageSeriesList.Add(series);
+                            averageSeriesList.Add(averageSeries);
                         }
 
                         forecast.Meters.AddRange(averageSeriesList);
@@ -279,6 +222,39 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, dataAnalysisWebpageGetForecastAPIId, true, $"System Error Id {errorId}");
+            }
+        }
+
+        private Series CreateNewSeries(string type, string commodity, string baseName, bool splitByCommodity, List<Usage> usages)
+        {
+            var series = new Series();
+            series.Type = type;
+            series.Commodity = commodity;
+            AddUsage(series, usages);
+
+            var seriesCommodity = splitByCommodity
+                ? $" - {commodity}"
+                : string.Empty;
+
+            series.SeriesName = $"{baseName}{seriesCommodity}";
+
+            return series;
+        }
+
+        private void AddUsage(Series series, List<Usage> usages)
+        {
+            foreach(var usage in usages)
+            {
+                var seriesUsage = series.Usage.FirstOrDefault(s => s.Date == usage.Date);
+                if(seriesUsage == null)
+                {
+                    series.Usage.Add(usage);
+                }
+                else
+                {
+                    seriesUsage.Value += usage.Value;
+                    seriesUsage.EntityCount += usage.EntityCount;
+                }
             }
         }
 
