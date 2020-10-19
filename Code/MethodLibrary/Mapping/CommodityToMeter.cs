@@ -28,6 +28,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public List<long> CommodityToMeter_GetMeterIdByCommodityId(long commodityId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.CommodityToMeter_GetByCommodityId, 
+                    commodityId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterId"))
+                    .ToList();
+            }
+
             public List<DataRow> CommodityToMeter_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

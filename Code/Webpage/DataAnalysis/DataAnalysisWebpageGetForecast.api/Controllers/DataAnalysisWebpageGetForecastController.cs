@@ -163,8 +163,9 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "Area")
                     {
-                        var siteId = Convert.ToInt64(locationGUID.Split('_')[0]);
-                        var areaId = Convert.ToInt64(locationGUID.Split('_')[1]);
+                        var locationGUIDArray = locationGUID.Split('_');
+                        var siteId = Convert.ToInt64(locationGUIDArray[0]);
+                        var areaId = Convert.ToInt64(locationGUIDArray[1]);
 
                         //get area description
                         var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaId);
@@ -193,20 +194,46 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "Commodity")
                     {
-                        var siteId = Convert.ToInt64(locationGUID.Split('_')[0]);
-                        var areaId = Convert.ToInt64(locationGUID.Split('_')[1]);
-                        var commodityId = Convert.ToInt64(locationGUID.Split('_')[2]);
-
-                        //get commodity description
-                        var commodityDescription = commodityDictionary[commodityId];
+                        var locationGUIDArray = locationGUID.Split('_');
+                        var siteId = Convert.ToInt64(locationGUIDArray[0]);
+                        var areaId = Convert.ToInt64(locationGUIDArray[1]);
+                        var commodityId = Convert.ToInt64(locationGUIDArray[2]);
 
                         if(siteId == 0)
                         {
-                            //TODO: do something.....don't know what yet
+                            //get all sites for customer
+                            var siteIdList = _mappingMethods.CustomerToSite_GetSiteIdListByCustomerId(customerId);
+
+                            //get meters for sites that match commodity
+                            var meterIdList = siteIdList.SelectMany(s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s))
+                                .Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
+
+                            if(areaId == 0)
+                            {
+                                GetUsageAndAddToSeriesList(seriesList, false, locationType, commodityDictionary[commodityId], commodityDictionary[commodityId], meterIdList, "Meter");
+                            }
+                            else
+                            {
+                                //get area description
+                                var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaId);
+
+                                //get meters by area
+                                var areaMeterIdList = _mappingMethods.AreaToMeter_GetMeterIdListByAreaId(areaId).Intersect(meterIdList).ToList();
+
+                                GetUsageAndAddToSeriesList(seriesList, true, locationType, $"{areaDescription}", commodityDictionary[commodityId], areaMeterIdList, "Meter");
+                            }
                         }
                         else if(areaId == 0)
                         {
-                            //TODO: do something.....don't know what yet
+                            //get site name
+                            var siteName = _customerMethods.GetSiteName(siteId);
+
+                            //get all meters for site
+                            var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId);
+
+                            //get meters that match commodity
+                            var meterIdListByCommodity = meterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
+                            GetUsageAndAddToSeriesList(seriesList, true, locationType, siteName, commodityDictionary[commodityId], meterIdListByCommodity, "Meter");
                         }
                         else
                         {
@@ -224,7 +251,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                             //get meters that match commodity
                             var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
-                            GetUsageAndAddToSeriesList(seriesList, true, locationType, $"{siteName} - {areaDescription}", commodityDescription, meterIdListByCommodity, "Meter");
+                            GetUsageAndAddToSeriesList(seriesList, true, locationType, $"{siteName} - {areaDescription}", commodityDictionary[commodityId], meterIdListByCommodity, "Meter");
                         }
                     }
                     else if(locationType == "Meter")
@@ -245,20 +272,67 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "SubArea")
                     {
-                        var meterId = Convert.ToInt64(locationGUID.Split('_')[0]);
-                        var subAreaId = Convert.ToInt64(locationGUID.Split('_')[1]);
+                        var locationGUIDArray = locationGUID.Split('_');
+                        var siteId = Convert.ToInt64(locationGUIDArray[0]);
+                        var areaId = Convert.ToInt64(locationGUIDArray[1]);
+                        var commodityId = Convert.ToInt64(locationGUIDArray[2]);
+                        var meterId = Convert.ToInt64(locationGUIDArray[3]);
+                        var subAreaId = Convert.ToInt64(locationGUIDArray[4]);
 
                         //get subarea description
                         var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
 
                         if(meterId == 0)
                         {
-                            //TODO: do something.....don't know what yet
+                            //find all meters that meet the ids provided
+                            var seriesBaseName = string.Empty;
+
+                            if(siteId > 0)
+                            {
+                                seriesBaseName += $"{_customerMethods.GetSiteName(siteId)} - ";
+                            }
+
+                            if(areaId > 0)
+                            {
+                                seriesBaseName += $"{_informationMethods.Area_GetAreaDescriptionByAreaId(areaId)} - ";
+                            }
+
+                            //get meters for sites
+                            var siteIdList = siteId == 0
+                                ? _mappingMethods.CustomerToSite_GetSiteIdListByCustomerId(customerId)
+                                : new List<long>{siteId};
+
+                            var meterIdList = siteIdList.SelectMany(s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s)).ToList();
+
+                            //get meters that match areaId
+                            var areaMeterIdList = areaId == 0
+                                ? meterIdList
+                                : _mappingMethods.AreaToMeter_GetMeterIdListByAreaId(areaId).Intersect(meterIdList).ToList();
+
+                            //get meters that match commodityId
+                            var commodityMeterIdList = commodityId == 0
+                                ? areaMeterIdList
+                                : _mappingMethods.CommodityToMeter_GetMeterIdByCommodityId(commodityId).Intersect(areaMeterIdList).ToList();
+
+                            //get submeters from meter list
+                            var subMeterIdList = commodityMeterIdList.SelectMany(m => _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(m)).ToList();
+
+                            //get submeters by subarea
+                            var subAreaSubMeterIdList = _mappingMethods.SubAreaToSubMeter_GetSubMeterIdListBySubAreaId(subAreaId).Intersect(subMeterIdList).ToList();
+
+                            //get commodities from meters
+                            var meterCommodityIdList = commodityMeterIdList.Select(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m)).Distinct().ToList();
+
+                            foreach(var meterCommodityId in meterCommodityIdList)
+                            {
+                                var commodityDescription = commodityDictionary[meterCommodityId];
+                                GetUsageAndAddToSeriesList(seriesList, true, locationType, $"{seriesBaseName}{subAreaDescription}", commodityDescription, subAreaSubMeterIdList, "SubMeter");
+                            }
                         }
                         else
                         {
                             //get all submeters for meter
-                            var subMeterIdList = _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(meterId);
+                            var subMeterIdList = _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(meterId).ToList();
 
                             //get MeterIdentifierMeterAttributeId
                             var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
@@ -270,56 +344,51 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             var subAreaSubMeterIdList = _mappingMethods.SubAreaToSubMeter_GetSubMeterIdListBySubAreaId(subAreaId).Intersect(subMeterIdList).ToList();
 
                             //get commodity for meter
-                            var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                            if(commodityId == 0)
+                            {
+                                commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                            }
+                            
                             var commodityDescription = commodityDictionary[commodityId];
                             GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{meterIdentifier} - {subAreaDescription}", commodityDescription, subAreaSubMeterIdList, "SubMeter");
                         }
                     }
                     else if(locationType == "Asset")
                     {
-                        var meterId = Convert.ToInt64(locationGUID.Split('_')[0]);
-                        var subAreaId = Convert.ToInt64(locationGUID.Split('_')[1]);
-                        var assetGUID = locationGUID.Split('_')[2];
-
                         //get AssetNameAssetAttributeId
                         var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
 
                         //Get asset id
-                        var assetId = _customerMethods.Asset_GetAssetIdByAssetGUID(assetGUID);
+                        var assetId = _customerMethods.Asset_GetAssetIdByAssetGUID(locationGUID);
 
                         //Get asset name
                         var assetName = _customerMethods.AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(assetId, assetNameAssetAttributeId);
 
-                        if(meterId == 0)
-                        {
-                            //TODO: do something.....don't know what yet
-                        }
-                        else if(subAreaId == 0)
-                        {
-                            //TODO: do something.....don't know what yet
-                        }
-                        else
-                        {
-                            //get all submeters for meter
-                            var subMeterIdList = _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(meterId);
+                        //get submeter for asset
+                        var subMeterIdList = _mappingMethods.AssetToSubMeter_GetSubMeterIdListByAssetId(assetId);
 
-                            //get subarea description
-                            var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
+                        //get subarea for submeters
+                        var subAreaId = _mappingMethods.SubAreaToSubMeter_GetSubAreaIdBySubMeterId(subMeterIdList.First());
 
-                            //get MeterIdentifierMeterAttributeId
-                            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                        //get meter for submeter
+                        var meterId = _mappingMethods.MeterToSubMeter_GetMeterIdBySubMeterId(subMeterIdList.First());
 
-                            //Get Meter identifier
-                            var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
+                        //get subarea description
+                        var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
 
-                            //get submeters by asset
-                            var assetSubMeterIdList = _mappingMethods.AssetToSubMeter_GetSubMeterIdListByAssetId(assetId).Intersect(subMeterIdList).ToList();
+                        //get MeterIdentifierMeterAttributeId
+                        var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
 
-                            //get commodity for meter
-                            var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
-                            var commodityDescription = commodityDictionary[commodityId];
-                            GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{meterIdentifier} - {subAreaDescription} - {assetName}", commodityDescription, assetSubMeterIdList, "SubMeter");
-                        }
+                        //Get Meter identifier
+                        var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
+
+                        //get submeters by asset
+                        var assetSubMeterIdList = _mappingMethods.AssetToSubMeter_GetSubMeterIdListByAssetId(assetId).Intersect(subMeterIdList).ToList();
+
+                        //get commodity for meter
+                        var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                        var commodityDescription = commodityDictionary[commodityId];
+                        GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{meterIdentifier} - {subAreaDescription} - {assetName}", commodityDescription, assetSubMeterIdList, "SubMeter");
                     }
                     else if(locationType == "SubMeter")
                     {

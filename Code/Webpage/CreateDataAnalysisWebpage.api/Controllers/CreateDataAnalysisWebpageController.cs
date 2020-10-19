@@ -211,7 +211,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var commodity = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
                     var commodityMeterIds = meterIds.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
 
-                    var meterHTML = BuildMeterBranch(commodityMeterIds);
+                    var meterHTML = BuildMeterBranch(siteId, areaId, commodityId, commodityMeterIds);
                     commodityHTML += GetLiHtml("Commodity", $"{siteId}_{areaId}_{commodityId}", commodity, meterHTML);
                 }
 
@@ -219,11 +219,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             }
             else
             {
-                return BuildMeterBranch(meterIds);
+                return BuildMeterBranch(siteId, areaId, 0, meterIds);
             }
         }
 
-        private string BuildMeterBranch(List<long> meterIds)
+        private string BuildMeterBranch(long siteId, long areaId, long commodityId, List<long> meterIds)
         {
             var meterSubMeterDictionary = meterIds.ToDictionary(m => m, m => _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(m));
 
@@ -243,7 +243,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var subAreaSubMeterDictionary = BuildSubAreaSubMeterDictionary(meter.Value);
 
                     //Finish html
-                    var subAreaHTML = BuildSubAreaBranch(subAreaSubMeterDictionary, meter.Key);
+                    var subAreaHTML = BuildSubAreaBranch(subAreaSubMeterDictionary, siteId, areaId, commodityId, meter.Key);
                     meterHTML += GetLiHtml("Meter", meterGUID, meterIdentifier, subAreaHTML);
                 }
 
@@ -253,11 +253,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             {
                 var subMeterIds = meterSubMeterDictionary.SelectMany(m => m.Value).ToList();
                 var subAreaSubMeterDictionary = BuildSubAreaSubMeterDictionary(subMeterIds);
-                return BuildSubAreaBranch(subAreaSubMeterDictionary, 0);
+                return BuildSubAreaBranch(subAreaSubMeterDictionary, siteId, areaId, commodityId, 0);
             }
         }
 
-        private string BuildSubAreaBranch(Dictionary<long, List<long>> subAreaSubMeterDictionary, long meterId)
+        private string BuildSubAreaBranch(Dictionary<long, List<long>> subAreaSubMeterDictionary, long siteId, long areaId, long commodityId, long meterId)
         {
             if(filterData.SubAreaChecked)
             {
@@ -268,8 +268,8 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     //Get SubArea description
                     var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaSubMeter.Key);
 
-                    var assetHTML = BuildAssetBranch(subAreaSubMeter.Value, meterId, subAreaSubMeter.Key);
-                    subAreaHTML += GetLiHtml("SubArea", $"{meterId}_{subAreaSubMeter.Key}", subAreaDescription, assetHTML);
+                    var assetHTML = BuildAssetBranch(subAreaSubMeter.Value);
+                    subAreaHTML += GetLiHtml("SubArea", $"{siteId}_{areaId}_{commodityId}_{meterId}_{subAreaSubMeter.Key}", subAreaDescription, assetHTML);
                 }
 
                 return subAreaHTML;
@@ -277,11 +277,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             else
             {
                 var subMeterIds = subAreaSubMeterDictionary.SelectMany(s => s.Value).ToList();
-                return BuildAssetBranch(subMeterIds, meterId, 0);
+                return BuildAssetBranch(subMeterIds);
             }
         }
 
-        private string BuildAssetBranch(List<long> subMeterIds, long meterId, long subAreaId)
+        private string BuildAssetBranch(List<long> subMeterIds)
         {
             if(filterData.AssetChecked)
             {
@@ -299,8 +299,8 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                     var assetName = _customerMethods.AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(assetId, attributeDictionary["AssetName"]);
                     var assetSubMeterIds = subMeterIds.Where(m => _mappingMethods.AssetToSubMeter_GetAssetIdBySubMeterId(m) == assetId).ToList();
 
-                    var meterHTML = BuildSubMeterBranch(assetSubMeterIds);
-                    assetHTML += GetLiHtml("Asset", $"{meterId}_{subAreaId}_{assetGUID}", assetName, meterHTML);
+                    var subMeterHTML = BuildSubMeterBranch(assetSubMeterIds);
+                    assetHTML += GetLiHtml("Asset", $"{assetGUID}", assetName, subMeterHTML);
                 }
 
                 return assetHTML;
