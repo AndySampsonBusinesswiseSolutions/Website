@@ -498,6 +498,7 @@ async function updatePage(callingElement) {
     case 'SubArea':
     case 'Asset':
     case 'SubMeter':
+    case 'Commodity':
       recurseSelection(callingElement, 'recurseSelectionCheckboxcheckbox');
       break;
     default:
