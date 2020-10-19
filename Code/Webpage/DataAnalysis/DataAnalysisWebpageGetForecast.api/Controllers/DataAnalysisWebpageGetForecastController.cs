@@ -46,7 +46,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             public string SeriesName;
             public string Type;
             public string Commodity;
-            public List<Usage> Usage;
+            public List<Usage> Usage = new List<Usage>();
         }
 
         private class Forecast
@@ -163,6 +163,45 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             var series = CreateNewSeries(locationType, commodity.Value, siteName, splitByCommodity, usageList);
 
                             seriesList.Add(series);
+                        }
+                    }
+                    else if(locationType == "Area")
+                    {
+                        var siteId = Convert.ToInt64(locationGUID.Split('_')[0]);
+                        var areaId = Convert.ToInt64(locationGUID.Split('_')[1]);
+
+                        if(siteId == 0)
+                        {
+                            //TODO: do something.....don't know what yet
+                        }
+                        else
+                        {
+                            //get all meters for site
+                            var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId);
+
+                            //get site name
+                            var siteName = _customerMethods.GetSiteName(siteId);
+
+                            //get area description
+                            var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaId);
+
+                            //get meters by area
+                            var areaMeterIdList = _mappingMethods.AreaToMeter_GetMeterIdListByAreaId(areaId).Intersect(meterIdList);
+
+                            foreach(var commodity in commodityDictionary)
+                            {
+                                //get meters that match commodity
+                                var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
+
+                                //get usage for every meter
+                                var usageList = meterIdListByCommodity.SelectMany(m => GetMeterForecast(m)).ToList();
+                                var series = CreateNewSeries(locationType, commodity.Value, $"{siteName} - {areaDescription}", splitByCommodity, usageList);
+
+                                if(series.Usage.Any())
+                                {
+                                    seriesList.Add(series);
+                                }
+                            }
                         }
                     }
                 }

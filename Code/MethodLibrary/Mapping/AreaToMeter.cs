@@ -36,6 +36,17 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public List<long> AreaToMeter_GetMeterIdListByAreaId(long areaId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.AreaToMeter_GetByAreaId, 
+                    areaId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterId"))
+                    .ToList();
+            }
+
             public List<Tuple<long, long>> AreaToMeter_GetLatestTuple()
             {
                 var dataRows = AreaToMeter_GetList();
