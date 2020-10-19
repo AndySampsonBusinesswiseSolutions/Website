@@ -172,37 +172,23 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         //get meters by area
                         var areaMeterIdList = _mappingMethods.AreaToMeter_GetMeterIdListByAreaId(areaId).ToList();
 
-                        if(siteId == 0)
+                        var siteIdList = siteId == 0
+                            ? _mappingMethods.CustomerToSite_GetSiteIdListByCustomerId(customerId) //get all sites for customer
+                            : new List<long>{siteId};
+
+                        //get meters for sites
+                        var meterIdList = siteIdList.SelectMany(s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s)).ToList();
+                        areaMeterIdList = areaMeterIdList.Intersect(meterIdList).ToList();
+
+                        var baseSeriesName = siteId == 0
+                            ? areaDescription
+                            : $"{_customerMethods.GetSiteName(siteId)} - {areaDescription}";
+
+                        foreach(var commodity in commodityDictionary)
                         {
-                            //get all sites for customer
-                            var siteIdList = _mappingMethods.CustomerToSite_GetSiteIdListByCustomerId(customerId);
-
-                            //get all meters for all sites
-                            var meterIdList = siteIdList.SelectMany(s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s)).ToList();
-                            areaMeterIdList = areaMeterIdList.Intersect(meterIdList).ToList();
-
-                            foreach(var commodity in commodityDictionary)
-                            {
-                                //get meters that match commodity
-                                var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
-                                GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, areaDescription, commodity.Value, meterIdListByCommodity, "Meter");
-                            }
-                        }
-                        else
-                        {
-                            //get all meters for site
-                            var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId).ToList();
-                            areaMeterIdList = areaMeterIdList.Intersect(meterIdList).ToList();
-
-                            //get site name
-                            var siteName = _customerMethods.GetSiteName(siteId);
-
-                            foreach(var commodity in commodityDictionary)
-                            {
-                                //get meters that match commodity
-                                var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
-                                GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, $"{siteName} - {areaDescription}", commodity.Value, meterIdListByCommodity, "Meter");
-                            }
+                            //get meters that match commodity
+                            var meterIdListByCommodity = areaMeterIdList.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodity.Key).ToList();
+                            GetUsageAndAddToSeriesList(seriesList, splitByCommodity, locationType, baseSeriesName, commodity.Value, meterIdListByCommodity, "Meter");
                         }
                     }
                     else if(locationType == "Commodity")
@@ -414,6 +400,11 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
         private void GetUsageAndAddToSeriesList(List<Series> seriesList, bool splitByCommodity, string type, string baseName, string commodity, List<long> meterIdList, string meterType)
         {
+            if(!meterIdList.Any())
+            {
+                return;
+            }
+
             //get usage for every meter
             var usageList = meterIdList.SelectMany(m => GetMeterForecast(meterType, m)).ToList();
 
