@@ -31,6 +31,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+        private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
         private readonly Int64 dataAnalysisWebpageGetForecastAPIId;
         private FilterData filterData;
         private Dictionary<string, long> dateDictionary;
@@ -281,7 +282,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         var meterId = Convert.ToInt64(locationGUID.Split('_')[0]);
                         var subAreaId = Convert.ToInt64(locationGUID.Split('_')[1]);
 
-                        //get area description
+                        //get subarea description
                         var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
 
                         if(meterId == 0)
@@ -318,7 +319,57 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "Asset")
                     {
+                        var meterId = Convert.ToInt64(locationGUID.Split('_')[0]);
+                        var subAreaId = Convert.ToInt64(locationGUID.Split('_')[1]);
+                        var assetGUID = locationGUID.Split('_')[2];
 
+                        //get AssetNameAssetAttributeId
+                        var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
+
+                        //Get asset id
+                        var assetId = _customerMethods.Asset_GetAssetIdByAssetGUID(assetGUID);
+
+                        //Get asset name
+                        var assetName = _customerMethods.AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(assetId, assetNameAssetAttributeId);
+
+                        if(meterId == 0)
+                        {
+                            //TODO: do something.....don't know what yet
+                        }
+                        else if(subAreaId == 0)
+                        {
+                            //TODO: do something.....don't know what yet
+                        }
+                        else
+                        {
+                            //get all submeters for meter
+                            var subMeterIdList = _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(meterId);
+
+                            //get subarea description
+                            var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
+
+                            //get MeterIdentifierMeterAttributeId
+                            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+
+                            //Get Meter identifier
+                            var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
+
+                            //get submeters by asset
+                            var assetSubMeterIdList = _mappingMethods.AssetToSubMeter_GetSubMeterIdListByAssetId(assetId).Intersect(subMeterIdList).ToList();
+
+                            //get commodity for meter
+                            var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                            var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+
+                            //get usage for every submeter
+                            var usageList = assetSubMeterIdList.SelectMany(m => GetMeterForecast("SubMeter", m)).ToList();
+                            var series = CreateNewSeries(locationType, commodityDescription, $"{meterIdentifier} - {subAreaDescription} - {assetName}", splitByCommodity, usageList);
+
+                            if(series.Usage.Any())
+                            {
+                                seriesList.Add(series);
+                            }
+                        }
                     }
                     else if(locationType == "SubMeter")
                     {

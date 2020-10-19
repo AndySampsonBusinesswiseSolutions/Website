@@ -32,8 +32,19 @@ namespace MethodLibrary
                     subMeterId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("SubMeterId"))
+                    .Select(r => r.Field<long>("AssetId"))
                     .FirstOrDefault();
+            }
+
+            public List<long> AssetToSubMeter_GetSubMeterIdListByAssetId(long assetId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.AssetToSubMeter_GetByAssetId,
+                    assetId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SubMeterId"))
+                    .ToList();
             }
 
             public List<Tuple<long, long>> AssetToSubMeter_GetLatestTuple()
