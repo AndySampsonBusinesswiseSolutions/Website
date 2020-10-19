@@ -251,6 +251,30 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             }
                         }
                     }
+                    else if(locationType == "Meter")
+                    {
+                        //get MeterIdentifierMeterAttributeId
+                        var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+
+                        //Get Meter Id
+                        var meterId = _customerMethods.Meter_GetMeterIdByMeterGUID(locationGUID);
+
+                        //Get Meter identifier
+                        var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
+
+                        //get commodity for meter
+                        var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
+                        var commodityDescription = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
+
+                        //get usage for meter
+                        var usageList = GetMeterForecast(meterId);
+                        var series = CreateNewSeries(locationType, commodityDescription, meterIdentifier, true, usageList);
+
+                        if(series.Usage.Any())
+                        {
+                            seriesList.Add(series);
+                        }
+                    }
                 }
 
                 if(filterData.Grouping.First() == "No Grouping")
