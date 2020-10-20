@@ -34,12 +34,14 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
         private readonly Int64 dataAnalysisWebpageGetForecastAPIId;
         private FilterData filterData;
-        private Dictionary<string, long> dateDictionary;
+        private Dictionary<long, string> dateDictionary;
+        private string granularityCode;
+        private long granularityId;
 
         private class Usage
         {
             public string Date;
-            public decimal Value;
+            public decimal? Value;
             public long EntityCount;
         }
 
@@ -114,16 +116,21 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 //Get Page Id
                 var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.DataAnalysis);
                 
-                filterData = JsonConvert.DeserializeObject<FilterData>(jsonObject["FilterData"].ToString()); 
+                filterData = JsonConvert.DeserializeObject<FilterData>(jsonObject["FilterData"].ToString());
 
                 //Get Date dictionary
                 dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary()
                     .Where(d => Convert.ToDateTime(d.Key) >= Convert.ToDateTime(filterData.StartDate))
                     .Where(d => Convert.ToDateTime(d.Key) <= Convert.ToDateTime(filterData.EndDate))
-                    .ToDictionary(d => d.Key, d => d.Value);
+                    .OrderBy(d => Convert.ToDateTime(d.Key))
+                    .ToDictionary(d => d.Value, d => d.Key);
 
                 //get granularity code
-                var granularityCode = _informationMethods.GetGranularityCodeByGranularityDisplayDescription(filterData.Granularity);
+                granularityCode = _informationMethods.GetGranularityCodeByGranularityDisplayDescription(filterData.Granularity);
+
+                var informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+                var granularityCodeGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(informationGranularityAttributeEnums.GranularityCode);
+                granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityCodeGranularityAttributeId, granularityCode);
 
                 //get commodity Ids
                 var commodityDictionary = filterData.Commodities.ToDictionary(
@@ -520,25 +527,224 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private List<Usage> GetMeterForecast(string meterType, long meterId)
         {
             //Get latest daily forecast
-            var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, "Date");
+            var forecastDataRows = _supplyMethods.ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
+            var idColumns = forecastDataRows.First().Table.Columns.Cast<DataColumn>().Where(c => c.ColumnName != "Usage").Select(c => c.ColumnName).ToList();
+
+            return idColumns.Count == 1
+                ? SetupUsageListFromSingleIdForecast(idColumns.First(), forecastDataRows)
+                : SetupUsageListFromDoubleIdForecast(idColumns, forecastDataRows);
+        }
+
+        private List<Usage> SetupUsageListFromSingleIdForecast(string idColumn, List<DataRow> forecastDataRows)
+        {
+            //Granularity is Year or Date
             var forecastTuple = new List<Tuple<long, decimal>>();
 
             foreach (DataRow r in forecastDataRows)
             {
-                var tup = Tuple.Create((long)r["DateId"], (decimal)r["Usage"]);
+                var tup = Tuple.Create((long)r[idColumn], (decimal)r["Usage"]);
                 forecastTuple.Add(tup);
             }
 
-            var forecastTupleInDateDictionary = forecastTuple.Where(f => dateDictionary.Any(d => d.Value == f.Item1)).ToList();
+            if (granularityCode == "Date")
+            {
+                return CreateUsageListFromSingleIdForecast(forecastTuple, dateDictionary);
+            }
 
-            return forecastTupleInDateDictionary.ToDictionary(
-                f => dateDictionary.First(d => d.Value == f.Item1).Key,
-                f => f.Item2.ToString()
-            )
-            .OrderBy(f => Convert.ToDateTime(f.Key))
-            .ToDictionary(f => f.Key, f => f.Value)
-            .Select(f => new Usage{Date = f.Key, Value = Convert.ToDecimal(f.Value), EntityCount = 1})
-            .ToList();
+            //get date to year mappings
+            var dateToYearMapping = _mappingMethods.GetDateToYearDictionary()
+                .Where(d => dateDictionary.Keys.Contains(d.Key))
+                .ToDictionary(d => d.Key, d => d.Value);
+
+            //get years
+            var yearIdList = dateToYearMapping.Values.Distinct().ToList();
+
+            var informationYearMethods = new Methods.Information.Year();
+            var yearDictionary = yearIdList.ToDictionary(y => y, y => informationYearMethods.Year_GetYearDescriptionByYearId(y))
+                .OrderBy(y => Convert.ToInt64(y.Value))
+                .ToDictionary(y => y.Key, y => y.Value);
+
+            return CreateUsageListFromSingleIdForecast(forecastTuple, yearDictionary);
+        }
+
+        private static List<Usage> CreateUsageListFromSingleIdForecast(List<Tuple<long, decimal>> forecastTuple, Dictionary<long, string> dictionary)
+        {
+            //create base usage list
+            var usageList = dictionary
+                .Select(d => new Usage { Date = d.Value, Value = null, EntityCount = 0 })
+                .ToList();
+
+            var forecastTupleInDictionary = forecastTuple.Where(f => dictionary.ContainsKey(f.Item1)).ToList();
+
+            //populate with data from forecast
+            foreach (var forecast in forecastTupleInDictionary)
+            {
+                var usage = usageList.FirstOrDefault(u => u.Date == dictionary[forecast.Item1]);
+                usage.EntityCount += 1;
+                usage.Value = (usage.Value ?? 0) + forecast.Item2;
+            }
+
+            return usageList;
+        }
+
+        private List<Usage> SetupUsageListFromDoubleIdForecast(List<string> idColumns, List<DataRow> forecastDataRows)
+        {
+            var forecastTuple = new List<Tuple<long, long, decimal>>();
+
+            foreach (DataRow r in forecastDataRows)
+            {
+                var tup = Tuple.Create((long)r[idColumns.First()], (long)r[idColumns.Last()], (decimal)r["Usage"]);
+                forecastTuple.Add(tup);
+            }
+
+            var dictionary = new Dictionary<long, Dictionary<long, string>>();
+            var granularMappingDictionary = new Dictionary<long, List<long>>();
+            var granularDictionary = new Dictionary<long, string>();
+
+            if(granularityCode == "FiveMinute"
+                || granularityCode == "HalfHour")
+            {
+                //map date to itself for generic code to work
+                var dateToDateMapping = dateDictionary.ToDictionary(d => d.Key, d => d.Key);
+
+                //get time periods
+                var timePeriodDictionary = _informationMethods.TimePeriod_GetStartTimeDictionary();
+
+                //Get dates that have additional number of time periods for granularity
+                var granularityToTimePeriodNonStandardDateList = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetTupleByGranularityId(granularityId);
+                var granularityToTimePeriodStandardDateList = _mappingMethods.GranularityToTimePeriod_StandardDate_GetTimePeriodListByGranularityId(granularityId);
+
+                granularMappingDictionary = dateDictionary.ToDictionary(
+                    d => d.Key,
+                    d => (granularityToTimePeriodNonStandardDateList.Any(g => g.Item1 == d.Key)
+                        ? granularityToTimePeriodNonStandardDateList.Where(g => g.Item1 == d.Key).Select(t => t.Item2).ToList()
+                        : granularityToTimePeriodStandardDateList)
+                            .OrderBy(g => timePeriodDictionary[g]).ToList()
+                );
+
+                granularDictionary = timePeriodDictionary.ToDictionary(
+                    t => t.Key,
+                    t => $"{t.Value.Hours.ToString().PadLeft(2, '0')}:{t.Value.Minutes.ToString().PadLeft(2, '0')}"
+                );
+
+                dictionary = GetDictionary(dateToDateMapping, dateDictionary, granularMappingDictionary, granularDictionary);
+            }
+            else 
+            {
+                //get date to year mappings
+                var dateToYearMapping = _mappingMethods.GetDateToYearDictionary()
+                    .Where(d => dateDictionary.Keys.Contains(d.Key))
+                    .ToDictionary(d => d.Key, d => d.Value);
+
+                //get years
+                var yearIdList = dateToYearMapping.Values.Distinct().ToList();
+
+                var informationYearMethods = new Methods.Information.Year();
+                var yearDictionary = yearIdList.ToDictionary(
+                    y => y,
+                    y => informationYearMethods.Year_GetYearDescriptionByYearId(y)
+                );
+
+                if(granularityCode == "Week")
+                {
+                    //get date to week mappings
+                    granularMappingDictionary = _mappingMethods.GetDateToWeekDictionary()
+                        .Where(d => dateDictionary.Keys.Contains(d.Key))
+                        .ToDictionary(d => d.Key, d => new List<long>{d.Value});
+
+                    //get weeks
+                    var weekIdList = granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList();
+
+                    var informationWeekMethods = new Methods.Information.Week();
+                    granularDictionary = weekIdList.ToDictionary(
+                        w => w,
+                        w => informationWeekMethods.Week_GetWeekDescriptionByWeekId(w)
+                    );
+                }
+                else if(granularityCode == "Month")
+                {
+                    //get date to month mappings
+                    granularMappingDictionary = _mappingMethods.GetDateToMonthDictionary()
+                        .Where(d => dateDictionary.Keys.Contains(d.Key))
+                        .ToDictionary(d => d.Key, d => new List<long>{d.Value});
+
+                    //get months
+                    var monthIdList = granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList();
+
+                    var informationMonthMethods = new Methods.Information.Month();
+                    granularDictionary = monthIdList.ToDictionary(
+                        m => m,
+                        m => informationMonthMethods.Month_GetMonthDescriptionByMonthId(m)
+                    );
+                }
+                else if(granularityCode == "Quarter")
+                {
+                    //get date to quarter mappings
+                    granularMappingDictionary = _mappingMethods.GetDateToQuarterDictionary()
+                        .Where(d => dateDictionary.Keys.Contains(d.Key))
+                        .ToDictionary(d => d.Key, d => new List<long>{d.Value});
+
+                    //get quarters
+                    var quarterIdList = granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList();
+
+                    var informationQuarterMethods = new Methods.Information.Quarter();
+                    granularDictionary = quarterIdList.ToDictionary(
+                        q => q,
+                        q => informationQuarterMethods.Quarter_GetQuarterDescriptionByQuarterId(q)
+                    );
+                }
+
+                dictionary = GetDictionary(dateToYearMapping, yearDictionary, granularMappingDictionary, granularDictionary);
+            }
+
+            return CreateUsageListFromDoubleIdForecast(forecastTuple, dictionary);
+        }
+
+        private Dictionary<long, Dictionary<long, string>> GetDictionary(Dictionary<long, long> baseMapping, Dictionary<long, string> baseDictionary, Dictionary<long, List<long>> subMapping, Dictionary<long, string> subDictionary)
+        {
+            var dictionary = new Dictionary<long, Dictionary<long, string>>();
+            foreach (var date in dateDictionary)
+            {
+                var baseId = baseMapping[date.Key];
+                var baseDescription = baseDictionary[baseId];
+
+                if (!dictionary.ContainsKey(baseId))
+                {
+                    dictionary.Add(baseId, new Dictionary<long, string>());
+                }
+
+                foreach(var subId in subMapping[date.Key])
+                {
+                    if (!dictionary[baseId].ContainsKey(subId))
+                    {
+                        var subDescription = subDictionary[subId];
+                        dictionary[baseId].Add(subId, $"{baseDescription}-{subDescription}");
+                    }
+                }
+            }
+
+            return dictionary;
+        }
+
+        private static List<Usage> CreateUsageListFromDoubleIdForecast(List<Tuple<long, long, decimal>> forecastTuple, Dictionary<long, Dictionary<long, string>> dictionary)
+        {
+            //create base usage list
+            var usageList = (from baseDictionary in dictionary
+                             from subDictionary in baseDictionary.Value
+                             let usage = new Usage { Date = subDictionary.Value, Value = null, EntityCount = 0 }
+                             select usage).ToList();
+
+            var forecastTupleInDictionary = forecastTuple.Where(f => dictionary.ContainsKey(f.Item1) && dictionary[f.Item1].ContainsKey(f.Item2)).ToList();
+
+            //populate with data from forecast
+            foreach (var forecast in forecastTupleInDictionary)
+            {
+                var usage = usageList.FirstOrDefault(u => u.Date == dictionary[forecast.Item1][forecast.Item2]);
+                usage.EntityCount += 1;
+                usage.Value = (usage.Value ?? 0) + forecast.Item3;
+            }
+
+            return usageList;
         }
     }
 }

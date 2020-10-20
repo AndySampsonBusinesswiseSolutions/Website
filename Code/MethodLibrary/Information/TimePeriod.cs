@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System;
 
 namespace MethodLibrary
 {
@@ -15,6 +16,11 @@ namespace MethodLibrary
                     _storedProcedureInformationEnums.TimePeriod_GetList);
 
                 return dataTable.Rows.Cast<DataRow>().ToList();
+            }
+
+            public Dictionary<long, TimeSpan> TimePeriod_GetStartTimeDictionary()
+            {
+                return TimePeriod_GetList().ToDictionary(r => r.Field<long>("TimePeriodId"), r => r.Field<TimeSpan>("StartTime"));
             }
         }
     }

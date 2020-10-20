@@ -1408,13 +1408,16 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
   if(electricityCommoditycheckbox.checked){commodities.push('Electricity')};
   if(gasCommoditycheckbox.checked){commodities.push('Gas')};
 
+  var timePeriodOptionsDisplayTimeSpan = document.getElementById('timePeriodOptionsDisplayTimeSpan');
+  var granularity = timePeriodOptionsDisplayTimeSpan.children[6].innerHTML;
+
   var filterData = {
     EnergyUnit: 'Usage',
     EnergyUnitInstance: 'BWS Forecast',
     Locations: getCheckedLocations(),
     StartDate: '1-JAN-2021',
-    EndDate: '31-DEC-2021',
-    Granularity: 'Daily',
+    EndDate: '31-DEC-2025',
+    Granularity: granularity,
     LatestCreated: createdDisplayCheckboxcheckbox.checked,
     CreatedDate: '01-JAN-2020',
     Grouping: grouping,
@@ -1452,8 +1455,22 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
     }
 
     for(var j = 0; j < meters.length; j++) {
+      var usageData = [];
+      var usageLength = meters[j].Meters[0].Usage.length;
+
+      for(var k = 0; k < usageLength; k++) {
+        var usage = meters[j].Meters[0].Usage[k];
+        usageData.push(usage["Value"]);
+      }
+
+      var series = {
+        name: meters[j].SeriesName,
+        data: usageData,
+        type: 'line'
+      };
+
       // if(meters[j].ShowBy == showByArray[i]) {
-        var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 1);
+        //var series = getNewChartSeries(meters[j].Meters, showByArray[i], categories, dateFormat, startDate, endDate, meters[j].SeriesName, showByLength > 1);
 
         if(series.length) {
           newSeries.push(...series);
@@ -1465,37 +1482,37 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
     }    
   }
 
-  if(costDataUsed && usageDataUsed) {
-    var rateSeries = [];
+  // if(costDataUsed && usageDataUsed) {
+  //   var rateSeries = [];
 
-    for(var i = 0; i < newSeries.length; i++) {
-      if(newSeries[i].name.includes('Cost')) {
-        for(var j = 0; j < newSeries.length; j++) {
-          if(newSeries[j].name.includes('Usage')
-          && compareUsageNameToCostName(newSeries[j].name, newSeries[i].name)) {
-            for(var k = 0; k < newSeries[j].data.length; k++) {
-              if(newSeries[i].data[k]) {
-                newSeries[i].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
-              }
-              else {
-                newSeries[i].data[k] = null;
-              }
-            }
+  //   for(var i = 0; i < newSeries.length; i++) {
+  //     if(newSeries[i].name.includes('Cost')) {
+  //       for(var j = 0; j < newSeries.length; j++) {
+  //         if(newSeries[j].name.includes('Usage')
+  //         && compareUsageNameToCostName(newSeries[j].name, newSeries[i].name)) {
+  //           for(var k = 0; k < newSeries[j].data.length; k++) {
+  //             if(newSeries[i].data[k]) {
+  //               newSeries[i].data[k] = JSON.parse(JSON.stringify(preciseRound(newSeries[i].data[k] * 100 / newSeries[j].data[k], 3)));
+  //             }
+  //             else {
+  //               newSeries[i].data[k] = null;
+  //             }
+  //           }
 
-            var series = {
-              name: newSeries[i].name.replace(' - Cost', ''),
-              data: newSeries[i].data
-            }
+  //           var series = {
+  //             name: newSeries[i].name.replace(' - Cost', ''),
+  //             data: newSeries[i].data
+  //           }
 
-            rateSeries.push(series);
-            break;
-          }
-        }
-      }
-    }
+  //           rateSeries.push(series);
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
 
-    return rateSeries;
-  }
+  //   return rateSeries;
+  // }
 
   return newSeries;
 }
