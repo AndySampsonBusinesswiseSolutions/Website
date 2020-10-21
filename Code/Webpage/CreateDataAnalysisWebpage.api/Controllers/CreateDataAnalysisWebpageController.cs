@@ -392,7 +392,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             var branchListDiv = $"<div id='{type}|{guid}List' class='listitem-hidden'>{ulHTML}</div>";
             var span = $"<span id='{type}|{guid}span'>{value}</span>";
             var icon = $"<i class='fas fa-site' style='padding-left: 3px; padding-right: 3px;'></i>";
-            var checkbox = $"<input type='checkbox' id='{type}|{guid}checkbox' GUID='{type}|{guid}' Branch='{type}' onclick='updatePage(this);'></input>";
+            var checkbox = $"<input type='checkbox' id='{type}|{guid}checkbox' GUID='{type}|{guid}' Branch='{type}'></input>";
             var branchDiv = $"<i id='{type}|{guid}' class='far fa-plus-square show-pointer expander'></i>";
 
             return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";

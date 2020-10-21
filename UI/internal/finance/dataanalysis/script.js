@@ -5,7 +5,7 @@
   .controller('dateRangeCtrl', function dateRangeCtrl($scope) {
     // Single Date Slider    
     var timeSpans = [];
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= 6; i++) {
       timeSpans.push(new Date(2000, 0, i));
     }
 
@@ -19,14 +19,16 @@
       var day = date.getDate();
       switch(day) {
         case 1:
-          return 'Half Hourly';
+          return 'Five Minutely';
         case 2:
-          return 'Daily';
+          return 'Half Hourly';
         case 3:
-          return 'Monthly';
+          return 'Daily';
         case 4:
-          return 'Quarterly';
+          return 'Monthly';
         case 5:
+          return 'Quarterly';
+        case 6:
           return 'Yearly';
         default:
           return '';
@@ -53,7 +55,7 @@
 
     //Configs
     $scope.timePeriodOptionsDisplayTimeSpan = {
-      value: timeSpans[1],
+      value: timeSpans[2],
       options: {
         id: 'timePeriodOptionsDisplayTimeSpan',
         stepsArray: timeSpans,
@@ -62,18 +64,18 @@
             return dateToTimePeriod(date);
           return '';
         },
-        onEnd: function() {
-          updateChart();
-        } 
+        // onEnd: function() {
+        //   updateChart();
+        // } 
       }
     };
 
     $scope.makeTimePeriodOptionsTimeSpanMonthly = function () {
-      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
+      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[3];
     };
 
     $scope.resetSliders = function () {
-      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[1];
+      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
       $scope.timePeriodOptionsFilteredCreated.value = dates[dates.length - 1];
 
       $scope.timePeriodOptionsDisplayDateRange = {
@@ -93,9 +95,9 @@
             }
             return '';
           },
-          onEnd: function() {
-            updateChart();
-          } 
+          // onEnd: function() {
+          //   updateChart();
+          // } 
         }
       };
 
@@ -140,9 +142,9 @@
           }
           return '';
         },
-        onEnd: function() {
-          updateChart();
-        } 
+        // onEnd: function() {
+        //   updateChart();
+        // } 
       }
     };
 

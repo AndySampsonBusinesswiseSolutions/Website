@@ -507,9 +507,9 @@ async function updatePage(callingElement) {
       break;
   }
 
-  if (refreshChart) {
-    updateChart();
-  }
+  // if (refreshChart) {
+  //   updateChart();
+  // }
 }
 
 function updateChartHeader(callingElement) {
@@ -1241,6 +1241,16 @@ function getEndDate() {
   return new Date(endDateMilliseconds + (24*60*60*1000));
 }
 
+function getStartDateText() {
+  var timePeriodOptionsDisplayDateRange = document.getElementById('timePeriodOptionsDisplayDateRange');
+  return timePeriodOptionsDisplayDateRange.getElementsByClassName('rz-pointer-min')[0].getAttribute('aria-valuetext');
+}
+
+function getEndDateText() {
+  var timePeriodOptionsDisplayDateRange = document.getElementById('timePeriodOptionsDisplayDateRange');
+  return timePeriodOptionsDisplayDateRange.getElementsByClassName('rz-pointer-max')[0].getAttribute('aria-valuetext');
+}
+
 function getPeriodDateFormat() {
   var timePeriodOptionsDisplayTimeSpan = document.getElementById('timePeriodOptionsDisplayTimeSpan');
   switch(timePeriodOptionsDisplayTimeSpan.children[6].innerHTML) {
@@ -1415,10 +1425,10 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
     EnergyUnit: 'Usage',
     EnergyUnitInstance: 'BWS Forecast',
     Locations: getCheckedLocations(),
-    StartDate: '1-JAN-2021',
-    EndDate: '31-DEC-2025',
+    StartDate: getStartDateText(),
+    EndDate: getEndDateText(),
     Granularity: granularity,
-    LatestCreated: createdDisplayCheckboxcheckbox.checked,
+    LatestCreated: true, //createdDisplayCheckboxcheckbox.checked,
     CreatedDate: '01-JAN-2020',
     Grouping: grouping,
     Commodities: commodities,
