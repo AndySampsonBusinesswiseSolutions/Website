@@ -81,7 +81,7 @@
 					<div style="clear: both;"></div>
 					<div class="header">
 						<button class="resetbtn" onclick="createTrees(false); resetSlider()">Reset To Default</button>
-						<button class="applybtn" onclick="closeNav()">Done</button>
+						<button class="applybtn" onclick="closeNav(); updateChart(false)">Done</button>
 					</div>
 				</div>
 				<i id="openNav" class="fas fa-filter sidenav-icon" onclick="openNav()"></i>
