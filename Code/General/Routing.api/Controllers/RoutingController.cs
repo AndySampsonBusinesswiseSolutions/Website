@@ -17,7 +17,6 @@ namespace Routing.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
@@ -47,8 +46,10 @@ namespace Routing.api.Controllers
         [Route("Routing/POST")] //TODO:Change POST route to better name
         public void Route([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try

@@ -16,7 +16,6 @@ namespace Website.api.Controllers
         private readonly ILogger<WebsiteController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         public readonly Methods.Information _informationMethods = new Methods.Information();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -37,7 +36,10 @@ namespace Website.api.Controllers
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var administrationUserMethods = new Methods.Administration.User();
+
+            //Get base variables
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
@@ -75,7 +77,10 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponse")]
         public IActionResult GetProcessResponse([FromBody] string processQueueGUID)
         {
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var administrationUserMethods = new Methods.Administration.User();
+
+            //Get base variables
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
@@ -157,11 +162,13 @@ namespace Website.api.Controllers
         [Route("Website/GetPageRequestResult")]
         public IActionResult GetPageRequestResult([FromBody] string processQueueGUID)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get User Email Address
             // var userEmailAddress = _systemMethods.GetEmailAddressFromJObject(jsonObject);
 
             //Get UserId from Email Address
-            var userId = _administrationMethods.GetSystemUserId();
+            var userId = administrationUserMethods.GetSystemUserId();
 
             //Get HTML from Page Request by Process Queue GUID and User Id
             var pageRequestResult = _systemMethods.PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);

@@ -16,7 +16,6 @@ namespace AddNewCustomer.api.Controllers
         private readonly ILogger<AddNewCustomerController> _logger;
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -46,8 +45,10 @@ namespace AddNewCustomer.api.Controllers
         [Route("AddNewCustomer/Add")]
         public void Add([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

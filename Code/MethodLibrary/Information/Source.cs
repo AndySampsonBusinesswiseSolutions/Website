@@ -21,7 +21,7 @@ namespace MethodLibrary
 
             public long GetSystemUserGeneratedSourceId()
             {
-                var systemUserId = new Administration().User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
+                var systemUserId = new Administration.User().GetSystemUserId();
                 var sourceAttributeId = SourceAttribute_GetSourceAttributeIdBySourceAttributeDescription(_informationSourceAttributeEnums.UserGenerated);
 
                 return SourceDetail_GetSourceIdBySourceAttributeIdAndSourceDetailDescription(sourceAttributeId, systemUserId.ToString());

@@ -15,21 +15,14 @@ namespace StoreLoginAttempt.api.Controllers
     {
         private readonly ILogger<StoreLoginAttemptController> _logger;
         private readonly Methods _methods = new Methods();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+        private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeLoginAttemptAPIId;
 
         public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger)
         {
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreLoginAttemptAPI, _systemAPIPasswordEnums.StoreLoginAttemptAPI);
+            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().StoreLoginAttemptAPI, new Enums.System.API.Password().StoreLoginAttemptAPI);
             storeLoginAttemptAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
         }
 
@@ -47,13 +40,19 @@ namespace StoreLoginAttempt.api.Controllers
         [Route("StoreLoginAttempt/Store")]
         public void Store([FromBody] object data)
         {
+            var administrationLoginMethods = new Methods.Administration.Login();
+            var administrationUserMethods = new Methods.Administration.User();
+            var informationMethods = new Methods.Information();
+
+            var systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();                    
+
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = jsonObject[_systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
+            var processQueueGUID = jsonObject[systemAPIRequiredDataKeyEnums.ProcessQueueGUID].ToString();
 
             try
             {
@@ -77,19 +76,21 @@ namespace StoreLoginAttempt.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeLoginAttemptAPIId);
 
                 //Get User Id
-                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+                var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
 
                 if(userId != 0)
                 {
                     //Store login attempt
-                    _administrationMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), processQueueGUID);
+                    administrationLoginMethods.Login_Insert(userId, sourceId, !erroredPrerequisiteAPIs.Any(), processQueueGUID);
 
                     //Get Login Id
-                    var loginId = _administrationMethods.Login_GetLoginIdByProcessArchiveGUID(processQueueGUID);
+                    var loginId = administrationLoginMethods.Login_GetLoginIdByProcessArchiveGUID(processQueueGUID);
 
                     //Store mapping between login attempt and user
-                    var systemUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-                    _mappingMethods.LoginToUser_Insert(systemUserId, 
+                    var systemUserId = administrationUserMethods.GetSystemUserId();
+
+                    var mappingMethods = new Methods.Mapping();
+                    mappingMethods.LoginToUser_Insert(systemUserId, 
                         sourceId, 
                         loginId, 
                         userId);

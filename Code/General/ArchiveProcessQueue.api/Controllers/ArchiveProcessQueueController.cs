@@ -16,7 +16,6 @@ namespace ArchiveProcessQueue.api.Controllers
         private readonly ILogger<ArchiveProcessQueueController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -46,8 +45,10 @@ namespace ArchiveProcessQueue.api.Controllers
         [Route("ArchiveProcessQueue/Archive")]
         public void Archive([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID

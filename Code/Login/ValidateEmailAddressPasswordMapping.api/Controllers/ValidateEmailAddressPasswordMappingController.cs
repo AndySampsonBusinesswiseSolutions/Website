@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 using System;
 
 namespace ValidateEmailAddressPasswordMapping.api.Controllers
@@ -14,20 +13,14 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
     public class ValidateEmailAddressPasswordMappingController : ControllerBase
     {
         private readonly ILogger<ValidateEmailAddressPasswordMappingController> _logger;
-        private readonly Methods _methods = new Methods();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateEmailAddressPasswordMappingAPIId;
 
         public ValidateEmailAddressPasswordMappingController(ILogger<ValidateEmailAddressPasswordMappingController> logger)
         {
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateEmailAddressPasswordMappingAPI, _systemAPIPasswordEnums.ValidateEmailAddressPasswordMappingAPI);
+            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidateEmailAddressPasswordMappingAPI, new Enums.System.API.Password().ValidateEmailAddressPasswordMappingAPI);
             validateEmailAddressPasswordMappingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
         }
 
@@ -45,9 +38,12 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         [Route("ValidateEmailAddressPasswordMapping/Validate")]
         public void Validate([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+            var informationMethods = new Methods.Information();            
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -70,18 +66,19 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId);
 
-                string errorMessage = null;
-                long mappingId = 0;
-
                 //Get Password Id
                 var password = _systemMethods.GetPasswordFromJObject(jsonObject);
-                var passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
+
+                var administrationPasswordMethods = new Methods.Administration.Password();
+                var passwordId = administrationPasswordMethods.Password_GetPasswordIdByPassword(password);
 
                 //Get User Id
-                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+                var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
 
                 //Validate Password and User combination
-                mappingId = _mappingMethods.PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
+                var mappingMethods = new Methods.Mapping();
+                var mappingId = mappingMethods.PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
+                string errorMessage = null;
 
                 //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error
                 if(mappingId == 0)

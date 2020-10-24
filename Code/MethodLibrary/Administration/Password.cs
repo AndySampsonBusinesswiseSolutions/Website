@@ -8,15 +8,18 @@ namespace MethodLibrary
     {
         public partial class Administration
         {
-            public long Password_GetPasswordIdByPassword(string password)
+            public class Password
             {
-                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureAdministrationEnums.Password_GetByPassword, 
-                    password);
+                public long Password_GetPasswordIdByPassword(string password)
+                {
+                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                        _storedProcedureAdministrationEnums.Password_GetByPassword, 
+                        password);
 
-                return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("PasswordId"))
-                    .FirstOrDefault();
+                    return dataTable.AsEnumerable()
+                        .Select(r => r.Field<long>("PasswordId"))
+                        .FirstOrDefault();
+                }
             }
         }
     }

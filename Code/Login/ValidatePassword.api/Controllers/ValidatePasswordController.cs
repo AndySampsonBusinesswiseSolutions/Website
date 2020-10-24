@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using System.Linq;
 using System;
 
 namespace ValidatePassword.api.Controllers
@@ -14,19 +13,14 @@ namespace ValidatePassword.api.Controllers
     public class ValidatePasswordController : ControllerBase
     {
         private readonly ILogger<ValidatePasswordController> _logger;
-        private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validatePasswordAPIId;
 
         public ValidatePasswordController(ILogger<ValidatePasswordController> logger)
         {
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidatePasswordAPI, _systemAPIPasswordEnums.ValidatePasswordAPI);
+            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidatePasswordAPI, new Enums.System.API.Password().ValidatePasswordAPI);
             validatePasswordAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
         }
 
@@ -44,9 +38,12 @@ namespace ValidatePassword.api.Controllers
         [Route("ValidatePassword/Validate")]
         public void Validate([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+            var informationMethods = new Methods.Information();            
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -69,14 +66,13 @@ namespace ValidatePassword.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validatePasswordAPIId);
 
-                long passwordId = 0;
-                string errorMessage = null;
-
                 //Get Password
                 var password = _systemMethods.GetPasswordFromJObject(jsonObject);
 
                 //Validate Password
-                passwordId = _administrationMethods.Password_GetPasswordIdByPassword(password);
+                var administrationPasswordMethods = new Methods.Administration.Password();
+                var passwordId = administrationPasswordMethods.Password_GetPasswordIdByPassword(password);
+                string errorMessage = null;
 
                 //If passwordId == 0 then the password provided isn't valid so create an error
                 if(passwordId == 0)

@@ -15,23 +15,14 @@ namespace LockUser.api.Controllers
     {
         private readonly ILogger<LockUserController> _logger;
         private static readonly Methods _methods = new Methods();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.System.API.Attribute _systemAPIAttributeEnums = new Enums.System.API.Attribute();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private readonly Enums.Administration.User.Attribute _administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
+        private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 lockUserAPIId;
 
         public LockUserController(ILogger<LockUserController> logger)
         {
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.LockUserAPI, _systemAPIPasswordEnums.LockUserAPI);
+            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().LockUserAPI, new Enums.System.API.Password().LockUserAPI);
             lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 
@@ -49,9 +40,14 @@ namespace LockUser.api.Controllers
         [Route("LockUser/Lock")]
         public void Lock([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+            var informationMethods = new Methods.Information();
+
+            var administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.User_GetUserIdByUserGUID(_administrationUserGUIDEnums.System);
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -79,11 +75,12 @@ namespace LockUser.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, lockUserAPIId);
 
                 //Get User Id
-                var userId = _administrationMethods.GetUserIdByEmailAddress(jsonObject);
+                var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
                 
                 //Check to see if account is already locked
-                var accountLockedAttributeId = _administrationMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(_administrationUserAttributeEnums.AccountLocked);
-                var accountLockedId = _administrationMethods.UserDetail_GetUserDetailIdByUserIdAndUserAttributeId(userId, accountLockedAttributeId);
+                var administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
+                var accountLockedAttributeId = administrationUserMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(administrationUserAttributeEnums.AccountLocked);
+                var accountLockedId = administrationUserMethods.UserDetail_GetUserDetailIdByUserIdAndUserAttributeId(userId, accountLockedAttributeId);
 
                 if(accountLockedId == 0)
                 {
@@ -94,14 +91,18 @@ namespace LockUser.api.Controllers
                         if(userId != 0)
                         {
                             //Get logins by user id and order by descending
-                            var loginList = _mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
+                            var mappingMethods = new Methods.Mapping();
+                            var loginList = mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
 
                             //Get invalidAttempts count
-                            var invalidAttempts = CountInvalidAttempts(loginList);
+                            var administrationLoginMethods = new Methods.Administration.Login();
+                            var invalidAttempts = administrationLoginMethods.CountInvalidAttempts(loginList);
 
                             //Get maximum attempts allowed before locking
                             var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
-                            var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
+
+                            var systemAPIAttributeEnums = new Enums.System.API.Attribute();
+                            var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
                             var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
                                 .Select(a => Convert.ToInt64(a))
                                 .FirstOrDefault();
@@ -110,7 +111,7 @@ namespace LockUser.api.Controllers
                             if (invalidAttempts >= maximumInvalidAttempts)
                             {
                                 //Lock account by adding 'Account Locked' to user detail
-                                _administrationMethods.UserDetail_Insert(
+                                administrationUserMethods.UserDetail_Insert(
                                     createdByUserId,
                                     sourceId,
                                     userId,
@@ -139,31 +140,6 @@ namespace LockUser.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, lockUserAPIId, true, $"System Error Id {errorId}");
             }
-        }
-
-        private int CountInvalidAttempts(IOrderedEnumerable<long> loginList)
-        {
-            var invalidAttempts = 0;
-
-            //Loop through each login
-            foreach (var login in loginList)
-            {
-                //Get LoginSuccessful attribute
-                var loginSucessful = _administrationMethods.Login_GetLoginSuccessfulByLoginId(login);
-
-                //If login is successful, then exit loop
-                //Else increment invalidAttempts
-                if (loginSucessful)
-                {
-                    break;
-                }
-                else
-                {
-                    invalidAttempts++;
-                }
-            }
-
-            return invalidAttempts;
         }
     }
 }

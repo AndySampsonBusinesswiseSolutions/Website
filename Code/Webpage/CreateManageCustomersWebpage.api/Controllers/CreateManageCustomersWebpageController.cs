@@ -17,7 +17,6 @@ namespace CreateManageCustomersWebpage.api.Controllers
         private readonly ILogger<CreateManageCustomersWebpageController> _logger;
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         public readonly Methods.Customer _customerMethods = new Methods.Customer();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
@@ -50,7 +49,10 @@ namespace CreateManageCustomersWebpage.api.Controllers
         [Route("CreateManageCustomersWebpage/Create")]
         public void Create([FromBody] object data)
         {
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var administrationUserMethods = new Methods.Administration.User();
+
+            //Get base variables
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID

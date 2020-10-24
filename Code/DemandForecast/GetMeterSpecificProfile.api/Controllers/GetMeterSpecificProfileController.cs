@@ -16,7 +16,6 @@ namespace GetMeterSpecificProfile.api.Controllers
         private readonly ILogger<GetMeterSpecificProfileController> _logger;
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -47,8 +46,10 @@ namespace GetMeterSpecificProfile.api.Controllers
         [Route("GetMeterSpecificProfile/Get")]
         public long Get([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

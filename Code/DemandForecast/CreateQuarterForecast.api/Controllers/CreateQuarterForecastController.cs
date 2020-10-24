@@ -18,7 +18,6 @@ namespace CreateQuarterForecast.api.Controllers
         private readonly ILogger<CreateQuarterForecastController> _logger;
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -57,8 +56,10 @@ namespace CreateQuarterForecast.api.Controllers
         [Route("CreateQuarterForecast/Create")]
         public void Create([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

@@ -21,7 +21,6 @@ namespace GetMappedUsageDateId.api.Controllers
         private readonly ILogger<GetMappedUsageDateIdController> _logger;
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -59,8 +58,10 @@ namespace GetMappedUsageDateId.api.Controllers
         [Route("GetMappedUsageDateId/Get")]
         public void Get([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

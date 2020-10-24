@@ -15,7 +15,6 @@ namespace ValidateEmailAddress.api.Controllers
     {
         private readonly ILogger<ValidateEmailAddressController> _logger;
         private readonly Methods _methods = new Methods();
-        private readonly Methods.Administration _administrationMethods = new Methods.Administration();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -44,8 +43,10 @@ namespace ValidateEmailAddress.api.Controllers
         [Route("ValidateEmailAddress/Validate")]
         public void Validate([FromBody] object data)
         {
+            var administrationUserMethods = new Methods.Administration.User();
+
             //Get base variables
-            var createdByUserId = _administrationMethods.GetSystemUserId();
+            var createdByUserId = administrationUserMethods.GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -76,7 +77,7 @@ namespace ValidateEmailAddress.api.Controllers
                 var emailAddress = _systemMethods.GetEmailAddressFromJObject(jsonObject);
 
                 //Validate Email Address
-                emailAddressId = _administrationMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
+                emailAddressId = administrationUserMethods.UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
 
                 //If emailAddressId == 0 then the email address provided isn't valid so create an error
                 if(emailAddressId == 0)
