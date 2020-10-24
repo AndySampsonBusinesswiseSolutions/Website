@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[MeterTimeswitchCodeDetail] WHERE MeterTimeswitchCodeId = @MeterTimeswitchCodeId 
-        AND MeterTimeswitchCodeAttributeId = @MeterTimeswitchCodeAttributeId 
-        AND MeterTimeswitchCodeDetailDescription = @MeterTimeswitchCodeDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[MeterTimeswitchCodeDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                MeterTimeswitchCodeId,
-                MeterTimeswitchCodeAttributeId,
-                MeterTimeswitchCodeDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @MeterTimeswitchCodeId,
-                @MeterTimeswitchCodeAttributeId,
-                @MeterTimeswitchCodeDetailDescription
-            )
-        END
+    INSERT INTO [Information].[MeterTimeswitchCodeDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        MeterTimeswitchCodeId,
+        MeterTimeswitchCodeAttributeId,
+        MeterTimeswitchCodeDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @MeterTimeswitchCodeId,
+        @MeterTimeswitchCodeAttributeId,
+        @MeterTimeswitchCodeDetailDescription
+    )
 END
 GO

@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[GridSupplyPoint] WHERE GridSupplyPointGUID = @GridSupplyPointGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[GridSupplyPoint]
-            (
-                CreatedByUserId,
-                SourceId,
-                GridSupplyPointGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @GridSupplyPointGUID
-            )
-        END
+    INSERT INTO [Information].[GridSupplyPoint]
+    (
+        CreatedByUserId,
+        SourceId,
+        GridSupplyPointGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @GridSupplyPointGUID
+    )
 END
 GO

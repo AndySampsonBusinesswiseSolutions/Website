@@ -35,23 +35,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[APIAttribute] WHERE APIAttributeDescription = @APIAttributeDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[APIAttribute]
-            (
-                CreatedByUserId,
-                SourceId,
-                APIAttributeDescription,
-                AllowsMultipleActiveInstances
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @APIAttributeDescription,
-                @AllowsMultipleActiveInstances
-            )
-        END
+    INSERT INTO [System].[APIAttribute]
+    (
+        CreatedByUserId,
+        SourceId,
+        APIAttributeDescription,
+        AllowsMultipleActiveInstances
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @APIAttributeDescription,
+        @AllowsMultipleActiveInstances
+    )
 END
 GO

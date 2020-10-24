@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Customer].[ContractMeterRateDetail] WHERE ContractMeterRateId = @ContractMeterRateId 
-        AND ContractMeterRateAttributeId = @ContractMeterRateAttributeId 
-        AND ContractMeterRateDetailDescription = @ContractMeterRateDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Customer].[ContractMeterRateDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                ContractMeterRateId,
-                ContractMeterRateAttributeId,
-                ContractMeterRateDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ContractMeterRateId,
-                @ContractMeterRateAttributeId,
-                @ContractMeterRateDetailDescription
-            )
-        END
+    INSERT INTO [Customer].[ContractMeterRateDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        ContractMeterRateId,
+        ContractMeterRateAttributeId,
+        ContractMeterRateDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ContractMeterRateId,
+        @ContractMeterRateAttributeId,
+        @ContractMeterRateDetailDescription
+    )
 END
 GO

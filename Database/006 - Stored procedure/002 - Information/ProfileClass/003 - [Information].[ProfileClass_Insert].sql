@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[ProfileClass] WHERE ProfileClassGUID = @ProfileClassGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[ProfileClass]
-            (
-                CreatedByUserId,
-                SourceId,
-                ProfileClassGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ProfileClassGUID
-            )
-        END
+    INSERT INTO [Information].[ProfileClass]
+    (
+        CreatedByUserId,
+        SourceId,
+        ProfileClassGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ProfileClassGUID
+    )
 END
 GO

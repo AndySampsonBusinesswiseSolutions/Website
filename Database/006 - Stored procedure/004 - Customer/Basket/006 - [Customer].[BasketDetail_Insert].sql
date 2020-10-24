@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Customer].[BasketDetail] WHERE BasketId = @BasketId 
-        AND BasketAttributeId = @BasketAttributeId 
-        AND BasketDetailDescription = @BasketDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Customer].[BasketDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                BasketId,
-                BasketAttributeId,
-                BasketDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @BasketId,
-                @BasketAttributeId,
-                @BasketDetailDescription
-            )
-        END
+    INSERT INTO [Customer].[BasketDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        BasketId,
+        BasketAttributeId,
+        BasketDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @BasketId,
+        @BasketAttributeId,
+        @BasketDetailDescription
+    )
 END
 GO

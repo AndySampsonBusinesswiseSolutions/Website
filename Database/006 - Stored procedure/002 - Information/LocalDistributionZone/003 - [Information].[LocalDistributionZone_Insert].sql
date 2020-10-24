@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[LocalDistributionZone] WHERE LocalDistributionZoneGUID = @LocalDistributionZoneGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[LocalDistributionZone]
-            (
-                CreatedByUserId,
-                SourceId,
-                LocalDistributionZoneGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @LocalDistributionZoneGUID
-            )
-        END
+    INSERT INTO [Information].[LocalDistributionZone]
+    (
+        CreatedByUserId,
+        SourceId,
+        LocalDistributionZoneGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @LocalDistributionZoneGUID
+    )
 END
 GO

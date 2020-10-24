@@ -33,18 +33,15 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Source] WHERE SourceGUID = @SourceGUID)
-        BEGIN
-            INSERT INTO [Information].[Source]
-            (
-                CreatedByUserId,
-                SourceGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceGUID
-            )
-        END
+    INSERT INTO [Information].[Source]
+    (
+        CreatedByUserId,
+        SourceGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceGUID
+    )
 END
 GO

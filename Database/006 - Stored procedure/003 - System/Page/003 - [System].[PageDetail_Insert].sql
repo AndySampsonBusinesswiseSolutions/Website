@@ -36,27 +36,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[PageDetail] WHERE PageId = @PageId 
-        AND PageAttributeId = @PageAttributeId 
-        AND PageDetailDescription = @PageDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[PageDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                PageId,
-                PageAttributeId,
-                PageDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @PageId,
-                @PageAttributeId,
-                @PageDetailDescription
-            )
-        END
+    INSERT INTO [System].[PageDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        PageId,
+        PageAttributeId,
+        PageDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @PageId,
+        @PageAttributeId,
+        @PageDetailDescription
+    )
 END
 GO

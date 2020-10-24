@@ -34,24 +34,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[TimePeriod] WHERE StartTime = @StartTime
-        AND EndTime = @EndTime
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[TimePeriod]
-            (
-                CreatedByUserId,
-                SourceId,
-                StartTime,
-                EndTime
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @StartTime,
-                @EndTime
-            )
-        END
+    INSERT INTO [Information].[TimePeriod]
+    (
+        CreatedByUserId,
+        SourceId,
+        StartTime,
+        EndTime
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @StartTime,
+        @EndTime
+    )
 END
 GO

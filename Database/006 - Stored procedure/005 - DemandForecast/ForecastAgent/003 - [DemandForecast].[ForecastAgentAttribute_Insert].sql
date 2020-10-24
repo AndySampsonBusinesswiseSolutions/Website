@@ -32,21 +32,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [DemandForecast].[ForecastAgentAttribute] WHERE ForecastAgentAttributeDescription = @ForecastAgentAttributeDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [DemandForecast].[ForecastAgentAttribute]
-            (
-                CreatedByUserId,
-                SourceId,
-                ForecastAgentAttributeDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ForecastAgentAttributeDescription
-            )
-        END
+    INSERT INTO [DemandForecast].[ForecastAgentAttribute]
+    (
+        CreatedByUserId,
+        SourceId,
+        ForecastAgentAttributeDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ForecastAgentAttributeDescription
+    )
 END
 GO

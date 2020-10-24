@@ -5,7 +5,7 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [System].[Page_Insert] 
+EXEC [System].[PageGroupAttribute_Insert] 
     @CreatedByUserId, 
     @SourceId, 
-    '714F10C4-ACF3-4409-97A8-C605E8E2FD0C'
+    'Navigation HTML'

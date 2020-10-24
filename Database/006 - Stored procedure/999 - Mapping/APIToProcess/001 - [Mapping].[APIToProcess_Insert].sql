@@ -35,23 +35,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Mapping].[APIToProcess] WHERE APIId = @APIId AND ProcessId = @ProcessId
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Mapping].APIToProcess
-            (
-                CreatedByUserId,
-                SourceId,
-                APIId,
-                ProcessId
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @APIId,
-                @ProcessId
-            )
-        END
+    INSERT INTO [Mapping].APIToProcess
+    (
+        CreatedByUserId,
+        SourceId,
+        APIId,
+        ProcessId
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @APIId,
+        @ProcessId
+    )
 END
 GO

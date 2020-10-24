@@ -34,24 +34,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Mapping].[MeterExemptionToMeterExemptionProduct] WHERE MeterExemptionId = @MeterExemptionId
-        AND MeterExemptionProductId = @MeterExemptionProductId 
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Mapping].MeterExemptionToMeterExemptionProduct
-            (
-                CreatedByUserId,
-                SourceId,
-                MeterExemptionId,
-                MeterExemptionProductId
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @MeterExemptionId,
-                @MeterExemptionProductId                
-            )
-        END
+    INSERT INTO [Mapping].MeterExemptionToMeterExemptionProduct
+    (
+        CreatedByUserId,
+        SourceId,
+        MeterExemptionId,
+        MeterExemptionProductId
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @MeterExemptionId,
+        @MeterExemptionProductId                
+    )
 END
 GO

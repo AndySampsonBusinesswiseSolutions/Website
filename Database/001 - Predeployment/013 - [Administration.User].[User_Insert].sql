@@ -32,16 +32,13 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Administration.User].[User] WHERE UserGUID = @UserGUID)
-        BEGIN
-            INSERT INTO [Administration.User].[User]
-            (
-                UserGUID
-            )
-            VALUES
-            (
-                @UserGUID
-            )
-        END
+    INSERT INTO [Administration.User].[User]
+    (
+        UserGUID
+    )
+    VALUES
+    (
+        @UserGUID
+    )
 END
 GO

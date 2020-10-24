@@ -32,21 +32,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[DateAttribute] WHERE DateAttributeDescription = @DateAttributeDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[DateAttribute]
-            (
-                CreatedByUserId,
-                SourceId,
-                DateAttributeDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @DateAttributeDescription
-            )
-        END
+    INSERT INTO [Information].[DateAttribute]
+    (
+        CreatedByUserId,
+        SourceId,
+        DateAttributeDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @DateAttributeDescription
+    )
 END
 GO

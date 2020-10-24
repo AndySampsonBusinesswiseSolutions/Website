@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [DemandForecast].[ForecastGroup] WHERE ForecastGroupDescription = @ForecastGroupDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [DemandForecast].[ForecastGroup]
-            (
-                CreatedByUserId,
-                SourceId,
-                ForecastGroupDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ForecastGroupDescription
-            )
-        END
+    INSERT INTO [DemandForecast].[ForecastGroup]
+    (
+        CreatedByUserId,
+        SourceId,
+        ForecastGroupDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ForecastGroupDescription
+    )
 END
 GO

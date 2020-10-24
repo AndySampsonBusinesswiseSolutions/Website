@@ -36,23 +36,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[ProcessArchive] WHERE ProcessArchiveGUID = @ProcessArchiveGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[ProcessArchive]
-            (
-                CreatedByUserId,
-                SourceId,
-                ProcessArchiveGUID,
-                HasError
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ProcessArchiveGUID,
-                @HasError
-            )
-        END
+    INSERT INTO [System].[ProcessArchive]
+    (
+        CreatedByUserId,
+        SourceId,
+        ProcessArchiveGUID,
+        HasError
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ProcessArchiveGUID,
+        @HasError
+    )
 END
 GO

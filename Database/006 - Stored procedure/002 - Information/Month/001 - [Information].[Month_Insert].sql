@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Month] WHERE MonthDescription = @MonthDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[Month]
-            (
-                CreatedByUserId,
-                SourceId,
-                MonthDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @MonthDescription
-            )
-        END
+    INSERT INTO [Information].[Month]
+    (
+        CreatedByUserId,
+        SourceId,
+        MonthDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @MonthDescription
+    )
 END
 GO

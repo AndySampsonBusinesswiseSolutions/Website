@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[DateDetail] WHERE DateId = @DateId 
-        AND DateAttributeId = @DateAttributeId 
-        AND DateDetailDescription = @DateDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[DateDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                DateId,
-                DateAttributeId,
-                DateDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @DateId,
-                @DateAttributeId,
-                @DateDetailDescription
-            )
-        END
+    INSERT INTO [Information].[DateDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        DateId,
+        DateAttributeId,
+        DateDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @DateId,
+        @DateAttributeId,
+        @DateDetailDescription
+    )
 END
 GO

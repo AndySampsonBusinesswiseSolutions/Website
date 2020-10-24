@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Customer].[DataUploadValidationError] WHERE DataUploadValidationErrorGUID = @DataUploadValidationErrorGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Customer].[DataUploadValidationError]
-            (
-                CreatedByUserId,
-                SourceId,
-                DataUploadValidationErrorGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @DataUploadValidationErrorGUID
-            )
-        END
+    INSERT INTO [Customer].[DataUploadValidationError]
+    (
+        CreatedByUserId,
+        SourceId,
+        DataUploadValidationErrorGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @DataUploadValidationErrorGUID
+    )
 END
 GO

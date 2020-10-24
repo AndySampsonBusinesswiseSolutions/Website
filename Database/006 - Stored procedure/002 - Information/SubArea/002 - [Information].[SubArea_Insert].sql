@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[SubArea] WHERE SubAreaDescription = @SubAreaDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[SubArea]
-            (
-                CreatedByUserId,
-                SourceId,
-                SubAreaDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @SubAreaDescription
-            )
-        END
+    INSERT INTO [Information].[SubArea]
+    (
+        CreatedByUserId,
+        SourceId,
+        SubAreaDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @SubAreaDescription
+    )
 END
 GO

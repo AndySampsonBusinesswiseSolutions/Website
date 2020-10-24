@@ -5,7 +5,4 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [System].[Page_Insert] 
-    @CreatedByUserId, 
-    @SourceId, 
-    'A78E3EB1-C69E-4DFE-9653-C30ADDD4D3BF'
+EXEC [System].[PageHeader_Insert] @CreatedByUserId, @SourceId, 'EB7B2CCF-B1C7-46D5-A4E9-9068D04E1E59' --Standard

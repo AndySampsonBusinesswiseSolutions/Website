@@ -34,23 +34,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Mapping].[FileTypeToProcess] WHERE FileTypeId = @FileTypeId AND ProcessId = @ProcessId
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Mapping].FileTypeToProcess
-            (
-                CreatedByUserId,
-                SourceId,
-                FileTypeId,
-                ProcessId
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @FileTypeId,
-                @ProcessId
-            )
-        END
+    INSERT INTO [Mapping].FileTypeToProcess
+    (
+        CreatedByUserId,
+        SourceId,
+        FileTypeId,
+        ProcessId
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @FileTypeId,
+        @ProcessId
+    )
 END
 GO

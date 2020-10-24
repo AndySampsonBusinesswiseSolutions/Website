@@ -34,23 +34,19 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[Year] WHERE YearDescription = @YearDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[Year]
-            (
-                CreatedByUserId,
-                SourceId,
-                YearDescription,
-                IsLeapYear
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @YearDescription,
-                @IsLeapYear
-            )
-        END
+    INSERT INTO [Information].[Year]
+    (
+        CreatedByUserId,
+        SourceId,
+        YearDescription,
+        IsLeapYear
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @YearDescription,
+        @IsLeapYear
+    )
 END
 GO

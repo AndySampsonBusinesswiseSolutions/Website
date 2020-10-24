@@ -70,7 +70,7 @@ ALTER TABLE [Mapping].[CommunicationToEmail] ADD CONSTRAINT
 	
 GO
 DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Mapping].[CommunicationToEmail].EmailId to [Administration.User].[Email].EmailId'
+SET @v = N'Foreign Key constraint joining [Mapping].[CommunicationToEmail].EmailId to [Communication].[Email].EmailId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'CommunicationToEmail', N'CONSTRAINT', N'FK_CommunicationToEmail_EmailId'
 GO
 ALTER TABLE [Mapping].[CommunicationToEmail] ADD CONSTRAINT

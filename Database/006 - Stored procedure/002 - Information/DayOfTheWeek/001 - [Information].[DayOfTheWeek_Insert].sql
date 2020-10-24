@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[DayOfTheWeek] WHERE DayOfTheWeekDescription = @DayOfTheWeekDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[DayOfTheWeek]
-            (
-                CreatedByUserId,
-                SourceId,
-                DayOfTheWeekDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @DayOfTheWeekDescription
-            )
-        END
+    INSERT INTO [Information].[DayOfTheWeek]
+    (
+        CreatedByUserId,
+        SourceId,
+        DayOfTheWeekDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @DayOfTheWeekDescription
+    )
 END
 GO

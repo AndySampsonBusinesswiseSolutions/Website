@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[TimePeriodDetail] WHERE TimePeriodId = @TimePeriodId 
-        AND TimePeriodAttributeId = @TimePeriodAttributeId 
-        AND TimePeriodDetailDescription = @TimePeriodDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[TimePeriodDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                TimePeriodId,
-                TimePeriodAttributeId,
-                TimePeriodDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @TimePeriodId,
-                @TimePeriodAttributeId,
-                @TimePeriodDetailDescription
-            )
-        END
+    INSERT INTO [Information].[TimePeriodDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        TimePeriodId,
+        TimePeriodAttributeId,
+        TimePeriodDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @TimePeriodId,
+        @TimePeriodAttributeId,
+        @TimePeriodDetailDescription
+    )
 END
 GO

@@ -34,21 +34,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Administration.User].[UserAttribute] WHERE UserAttributeDescription = @UserAttributeDescription 
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Administration.User].[UserAttribute]
-            (
-                CreatedByUserId,
-                SourceId,
-                UserAttributeDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @UserAttributeDescription
-            )
-        END
+    INSERT INTO [Administration.User].[UserAttribute]
+    (
+        CreatedByUserId,
+        SourceId,
+        UserAttributeDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @UserAttributeDescription
+    )
 END
 GO

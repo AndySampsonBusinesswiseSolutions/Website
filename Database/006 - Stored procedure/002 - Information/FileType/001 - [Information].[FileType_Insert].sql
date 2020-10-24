@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[FileType] WHERE FileTypeDescription = @FileTypeDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[FileType]
-            (
-                CreatedByUserId,
-                SourceId,
-                FileTypeDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @FileTypeDescription
-            )
-        END
+    INSERT INTO [Information].[FileType]
+    (
+        CreatedByUserId,
+        SourceId,
+        FileTypeDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @FileTypeDescription
+    )
 END
 GO

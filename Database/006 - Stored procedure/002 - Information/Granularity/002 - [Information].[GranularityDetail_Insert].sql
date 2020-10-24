@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[GranularityDetail] WHERE GranularityId = @GranularityId 
-        AND GranularityAttributeId = @GranularityAttributeId 
-        AND GranularityDetailDescription = @GranularityDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[GranularityDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                GranularityId,
-                GranularityAttributeId,
-                GranularityDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @GranularityId,
-                @GranularityAttributeId,
-                @GranularityDetailDescription
-            )
-        END
+    INSERT INTO [Information].[GranularityDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        GranularityId,
+        GranularityAttributeId,
+        GranularityDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @GranularityId,
+        @GranularityAttributeId,
+        @GranularityDetailDescription
+    )
 END
 GO

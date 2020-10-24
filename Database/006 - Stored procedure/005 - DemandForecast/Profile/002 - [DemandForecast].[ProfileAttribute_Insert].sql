@@ -32,21 +32,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [DemandForecast].[ProfileAttribute] WHERE ProfileAttributeDescription = @ProfileAttributeDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [DemandForecast].[ProfileAttribute]
-            (
-                CreatedByUserId,
-                SourceId,
-                ProfileAttributeDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ProfileAttributeDescription
-            )
-        END
+    INSERT INTO [DemandForecast].[ProfileAttribute]
+    (
+        CreatedByUserId,
+        SourceId,
+        ProfileAttributeDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ProfileAttributeDescription
+    )
 END
 GO

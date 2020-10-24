@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[OrdinalNumber] WHERE OrdinalNumberDescription = @OrdinalNumberDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[OrdinalNumber]
-            (
-                CreatedByUserId,
-                SourceId,
-                OrdinalNumberDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @OrdinalNumberDescription
-            )
-        END
+    INSERT INTO [Information].[OrdinalNumber]
+    (
+        CreatedByUserId,
+        SourceId,
+        OrdinalNumberDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @OrdinalNumberDescription
+    )
 END
 GO

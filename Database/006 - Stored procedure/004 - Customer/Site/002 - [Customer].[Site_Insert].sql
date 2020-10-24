@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Customer].[Site] WHERE SiteGUID = @SiteGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Customer].[Site]
-            (
-                CreatedByUserId,
-                SourceId,
-                SiteGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @SiteGUID
-            )
-        END
+    INSERT INTO [Customer].[Site]
+    (
+        CreatedByUserId,
+        SourceId,
+        SiteGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @SiteGUID
+    )
 END
 GO

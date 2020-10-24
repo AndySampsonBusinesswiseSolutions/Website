@@ -36,27 +36,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[APIDetail] WHERE APIId = @APIId 
-        AND APIAttributeId = @APIAttributeId 
-        AND APIDetailDescription = @APIDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[APIDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                APIId,
-                APIAttributeId,
-                APIDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @APIId,
-                @APIAttributeId,
-                @APIDetailDescription
-            )
-        END
+    INSERT INTO [System].[APIDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        APIId,
+        APIAttributeId,
+        APIDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @APIId,
+        @APIAttributeId,
+        @APIDetailDescription
+    )
 END
 GO

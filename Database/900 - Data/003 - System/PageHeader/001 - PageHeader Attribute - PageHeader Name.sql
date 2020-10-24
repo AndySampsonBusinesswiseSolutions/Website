@@ -5,7 +5,7 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-EXEC [System].[Page_Insert] 
+EXEC [System].[PageAttribute_Insert] 
     @CreatedByUserId, 
     @SourceId, 
-    '6641A1BF-84C8-48F8-9D79-70D0AB2BB787'
+    'PageHeader Name'

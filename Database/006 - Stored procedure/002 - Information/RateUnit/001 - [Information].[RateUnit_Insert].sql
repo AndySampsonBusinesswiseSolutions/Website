@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[RateUnit] WHERE RateUnitDescription = @RateUnitDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[RateUnit]
-            (
-                CreatedByUserId,
-                SourceId,
-                RateUnitDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @RateUnitDescription
-            )
-        END
+    INSERT INTO [Information].[RateUnit]
+    (
+        CreatedByUserId,
+        SourceId,
+        RateUnitDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @RateUnitDescription
+    )
 END
 GO

@@ -36,27 +36,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[ProcessDetail] WHERE ProcessId = @ProcessId 
-        AND ProcessAttributeId = @ProcessAttributeId 
-        AND ProcessDetailDescription = @ProcessDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[ProcessDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                ProcessId,
-                ProcessAttributeId,
-                ProcessDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ProcessId,
-                @ProcessAttributeId,
-                @ProcessDetailDescription
-            )
-        END
+    INSERT INTO [System].[ProcessDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        ProcessId,
+        ProcessAttributeId,
+        ProcessDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ProcessId,
+        @ProcessAttributeId,
+        @ProcessDetailDescription
+    )
 END
 GO

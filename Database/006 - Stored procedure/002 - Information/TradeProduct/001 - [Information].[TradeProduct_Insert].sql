@@ -33,21 +33,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[TradeProduct] WHERE TradeProductDescription = @TradeProductDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[TradeProduct]
-            (
-                CreatedByUserId,
-                SourceId,
-                TradeProductDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @TradeProductDescription
-            )
-        END
+    INSERT INTO [Information].[TradeProduct]
+    (
+        CreatedByUserId,
+        SourceId,
+        TradeProductDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @TradeProductDescription
+    )
 END
 GO

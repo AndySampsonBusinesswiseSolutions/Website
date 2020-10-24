@@ -36,27 +36,23 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[Error] WHERE ErrorGUID = @ErrorGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[Error]
-            (
-                CreatedByUserId,
-                SourceId,
-                ErrorGUID,
-                ErrorMessage,
-                ErrorType,
-                ErrorSource
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ErrorGUID,
-                @ErrorMessage,
-                @ErrorType,
-                @ErrorSource
-            )
-        END
+    INSERT INTO [System].[Error]
+    (
+        CreatedByUserId,
+        SourceId,
+        ErrorGUID,
+        ErrorMessage,
+        ErrorType,
+        ErrorSource
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ErrorGUID,
+        @ErrorMessage,
+        @ErrorType,
+        @ErrorSource
+    )
 END
 GO

@@ -34,21 +34,17 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [System].[API] WHERE APIGUID = @APIGUID
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [System].[API]
-            (
-                CreatedByUserId,
-                SourceId,
-                APIGUID
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @APIGUID
-            )
-        END
+    INSERT INTO [System].[API]
+    (
+        CreatedByUserId,
+        SourceId,
+        APIGUID
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @APIGUID
+    )
 END
 GO

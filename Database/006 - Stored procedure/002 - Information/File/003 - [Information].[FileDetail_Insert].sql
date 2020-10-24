@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [Information].[FileDetail] WHERE FileId = @FileId 
-        AND FileAttributeId = @FileAttributeId 
-        AND FileDetailDescription = @FileDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [Information].[FileDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                FileId,
-                FileAttributeId,
-                FileDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @FileId,
-                @FileAttributeId,
-                @FileDetailDescription
-            )
-        END
+    INSERT INTO [Information].[FileDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        FileId,
+        FileAttributeId,
+        FileDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @FileId,
+        @FileAttributeId,
+        @FileDetailDescription
+    )
 END
 GO

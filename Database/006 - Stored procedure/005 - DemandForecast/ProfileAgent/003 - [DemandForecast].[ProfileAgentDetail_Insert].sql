@@ -35,27 +35,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-    IF NOT EXISTS(SELECT TOP 1 1 FROM [DemandForecast].[ProfileAgentDetail] WHERE ProfileAgentId = @ProfileAgentId 
-        AND ProfileAgentAttributeId = @ProfileAgentAttributeId 
-        AND ProfileAgentDetailDescription = @ProfileAgentDetailDescription
-        AND EffectiveToDateTime = '9999-12-31')
-        BEGIN
-            INSERT INTO [DemandForecast].[ProfileAgentDetail]
-            (
-                CreatedByUserId,
-                SourceId,
-                ProfileAgentId,
-                ProfileAgentAttributeId,
-                ProfileAgentDetailDescription
-            )
-            VALUES
-            (
-                @CreatedByUserId,
-                @SourceId,
-                @ProfileAgentId,
-                @ProfileAgentAttributeId,
-                @ProfileAgentDetailDescription
-            )
-        END
+    INSERT INTO [DemandForecast].[ProfileAgentDetail]
+    (
+        CreatedByUserId,
+        SourceId,
+        ProfileAgentId,
+        ProfileAgentAttributeId,
+        ProfileAgentDetailDescription
+    )
+    VALUES
+    (
+        @CreatedByUserId,
+        @SourceId,
+        @ProfileAgentId,
+        @ProfileAgentAttributeId,
+        @ProfileAgentDetailDescription
+    )
 END
 GO

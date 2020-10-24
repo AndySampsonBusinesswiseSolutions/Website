@@ -70,7 +70,7 @@ ALTER TABLE [Mapping].[PageToProcess] ADD CONSTRAINT
 	
 GO
 DECLARE @v sql_variant 
-SET @v = N'Foreign Key constraint joining [Mapping].[PageToProcess].ProcessId to [Administration.Process].[Process].ProcessId'
+SET @v = N'Foreign Key constraint joining [Mapping].[PageToProcess].ProcessId to [System].[Process].ProcessId'
 EXECUTE sp_addextendedproperty N'MS_Description', @v, N'SCHEMA', N'Mapping', N'TABLE', N'PageToProcess', N'CONSTRAINT', N'FK_PageToProcess_ProcessId'
 GO
 ALTER TABLE [Mapping].[PageToProcess] ADD CONSTRAINT
