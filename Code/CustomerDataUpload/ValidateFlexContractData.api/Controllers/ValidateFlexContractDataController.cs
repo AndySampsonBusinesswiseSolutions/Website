@@ -86,20 +86,20 @@ namespace ValidateFlexContractData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.ContractReference, "Contract Reference"},
-                        {_customerDataUploadValidationEntityEnums.BasketReference, "Basket Reference"},
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.Supplier, _customerDataUploadValidationEntityEnums.Supplier},
-                        {_customerDataUploadValidationEntityEnums.ContractStartDate, "Contract Start Date"},
-                        {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"},
-                        {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
-                        {_customerDataUploadValidationEntityEnums.RateType, "Rate Type"},
-                        {_customerDataUploadValidationEntityEnums.Value, _customerDataUploadValidationEntityEnums.Value},
+                        _customerDataUploadValidationEntityEnums.ContractReference,
+                        _customerDataUploadValidationEntityEnums.BasketReference,
+                        _customerDataUploadValidationEntityEnums.MPXN,
+                        _customerDataUploadValidationEntityEnums.Supplier,
+                        _customerDataUploadValidationEntityEnums.ContractStartDate,
+                        _customerDataUploadValidationEntityEnums.ContractEndDate,
+                        _customerDataUploadValidationEntityEnums.Product,
+                        _customerDataUploadValidationEntityEnums.RateType,
+                        _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexContractDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexContractDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

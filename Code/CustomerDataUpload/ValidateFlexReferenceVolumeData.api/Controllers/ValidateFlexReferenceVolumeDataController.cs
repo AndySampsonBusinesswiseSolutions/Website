@@ -85,15 +85,15 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.ContractReference, "Contract Reference"},
-                        {_customerDataUploadValidationEntityEnums.DateFrom, "Date From"},
-                        {_customerDataUploadValidationEntityEnums.DateTo, "Date To"},
-                        {_customerDataUploadValidationEntityEnums.Volume, _customerDataUploadValidationEntityEnums.Volume}
+                        _customerDataUploadValidationEntityEnums.ContractReference,
+                        _customerDataUploadValidationEntityEnums.DateFrom,
+                        _customerDataUploadValidationEntityEnums.DateTo,
+                        _customerDataUploadValidationEntityEnums.Volume,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

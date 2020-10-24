@@ -85,22 +85,22 @@ namespace ValidateSiteData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.CustomerName, "Customer Name"},
-                        {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
-                        {_customerDataUploadValidationEntityEnums.SiteAddress, "Site Address"},
-                        {_customerDataUploadValidationEntityEnums.SiteTown, "Site Town"},
-                        {_customerDataUploadValidationEntityEnums.SiteCounty, "Site County"},
-                        {_customerDataUploadValidationEntityEnums.SitePostCode, "Site Post Code"},
-                        {_customerDataUploadValidationEntityEnums.SiteDescription, "Site Description"},
-                        {_customerDataUploadValidationEntityEnums.ContactName, "Contact Name"},
-                        {_customerDataUploadValidationEntityEnums.ContactRole, _customerDataUploadValidationEntityEnums.ContactRole},
-                        {_customerDataUploadValidationEntityEnums.ContactTelephoneNumber, "Contact Telephone Number"},
-                        {_customerDataUploadValidationEntityEnums.ContactEmailAddress, "Contact Email Address"}
+                        _customerDataUploadValidationEntityEnums.CustomerName,
+                        _customerDataUploadValidationEntityEnums.SiteName,
+                        _customerDataUploadValidationEntityEnums.SiteAddress,
+                        _customerDataUploadValidationEntityEnums.SiteTown,
+                        _customerDataUploadValidationEntityEnums.SiteCounty,
+                        _customerDataUploadValidationEntityEnums.SitePostCode,
+                        _customerDataUploadValidationEntityEnums.SiteDescription,
+                        _customerDataUploadValidationEntityEnums.ContactName,
+                        _customerDataUploadValidationEntityEnums.ContactRole,
+                        _customerDataUploadValidationEntityEnums.ContactTelephoneNumber,
+                        _customerDataUploadValidationEntityEnums.ContactEmailAddress,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
                 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

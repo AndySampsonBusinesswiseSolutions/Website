@@ -85,16 +85,16 @@ namespace ValidateMeterExemptionData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.DateFrom, "Date From"},
-                        {_customerDataUploadValidationEntityEnums.DateTo, "Date To"},
-                        {_customerDataUploadValidationEntityEnums.ExemptionProduct, "Exemption Product"},
-                        {_customerDataUploadValidationEntityEnums.ExemptionProportion, "Exemption Proportion"}
+                        _customerDataUploadValidationEntityEnums.MPXN,
+                        _customerDataUploadValidationEntityEnums.DateFrom,
+                        _customerDataUploadValidationEntityEnums.DateTo,
+                        _customerDataUploadValidationEntityEnums.ExemptionProduct,
+                        _customerDataUploadValidationEntityEnums.ExemptionProportion,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

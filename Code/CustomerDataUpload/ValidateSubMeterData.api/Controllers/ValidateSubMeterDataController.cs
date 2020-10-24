@@ -87,16 +87,16 @@ namespace ValidateSubMeterData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.SubMeterIdentifier, "SubMeter Name"},
-                        {_customerDataUploadValidationEntityEnums.SerialNumber, "SubMeter Serial Number"},
-                        {_customerDataUploadValidationEntityEnums.SubArea, _customerDataUploadValidationEntityEnums.SubArea},
-                        {_customerDataUploadValidationEntityEnums.Asset, _customerDataUploadValidationEntityEnums.Asset}
+                        _customerDataUploadValidationEntityEnums.MPXN,
+                        _customerDataUploadValidationEntityEnums.SubMeterIdentifier,
+                        _customerDataUploadValidationEntityEnums.SerialNumber,
+                        _customerDataUploadValidationEntityEnums.SubArea,
+                        _customerDataUploadValidationEntityEnums.Asset
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

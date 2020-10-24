@@ -85,15 +85,15 @@ namespace ValidateSubMeterUsageData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.SubMeterIdentifier, "SubMeter Identifier"},
-                        {_customerDataUploadValidationEntityEnums.Date, "Read Date"},
-                        {_customerDataUploadValidationEntityEnums.TimePeriod, "Time Period"},
-                        {_customerDataUploadValidationEntityEnums.Value, "Volume"},
+                        _customerDataUploadValidationEntityEnums.SubMeterIdentifier,
+                        _customerDataUploadValidationEntityEnums.Date,
+                        _customerDataUploadValidationEntityEnums.TimePeriod,
+                        _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

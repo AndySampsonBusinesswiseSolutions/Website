@@ -86,20 +86,20 @@ namespace ValidateFixedContractData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.ContractReference, "Contract Reference"},
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.Supplier, _customerDataUploadValidationEntityEnums.Supplier},
-                        {_customerDataUploadValidationEntityEnums.ContractStartDate, "Contract Start Date"},
-                        {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"},
-                        {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
-                        {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"},
-                        {_customerDataUploadValidationEntityEnums.RateType, _customerDataUploadValidationEntityEnums.RateType},
-                        {_customerDataUploadValidationEntityEnums.Value, _customerDataUploadValidationEntityEnums.Value}
+                        _customerDataUploadValidationEntityEnums.ContractReference,
+                        _customerDataUploadValidationEntityEnums.MPXN,
+                        _customerDataUploadValidationEntityEnums.Supplier,
+                        _customerDataUploadValidationEntityEnums.ContractStartDate,
+                        _customerDataUploadValidationEntityEnums.ContractEndDate,
+                        _customerDataUploadValidationEntityEnums.Product,
+                        _customerDataUploadValidationEntityEnums.RateCount,
+                        _customerDataUploadValidationEntityEnums.RateType,
+                        _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

@@ -85,18 +85,18 @@ namespace ValidateFlexTradeData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.BasketReference, "Basket Reference"},
-                        {_customerDataUploadValidationEntityEnums.TradeReference, "Trade Reference"},
-                        {_customerDataUploadValidationEntityEnums.TradeDate, "Trade Date"},
-                        {_customerDataUploadValidationEntityEnums.TradeProduct, "Trade Product"},
-                        {_customerDataUploadValidationEntityEnums.Volume, _customerDataUploadValidationEntityEnums.Volume},
-                        {_customerDataUploadValidationEntityEnums.Price, _customerDataUploadValidationEntityEnums.Price},
-                        {_customerDataUploadValidationEntityEnums.Direction, "Trade Direction"}
+                        _customerDataUploadValidationEntityEnums.BasketReference,
+                        _customerDataUploadValidationEntityEnums.TradeReference,
+                        _customerDataUploadValidationEntityEnums.TradeDate,
+                        _customerDataUploadValidationEntityEnums.TradeProduct,
+                        _customerDataUploadValidationEntityEnums.Volume,
+                        _customerDataUploadValidationEntityEnums.Price,
+                        _customerDataUploadValidationEntityEnums.Direction,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexTradeDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexTradeDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

@@ -119,22 +119,12 @@ namespace MethodLibrary
                     return dataRows;
                 }
 
-                public Dictionary<int, Dictionary<string, List<string>>> InitialiseRecordsDictionary(List<DataRow> dataRows, Dictionary<string, string> columns)
+                public Dictionary<int, Dictionary<string, List<string>>> InitialiseRecordsDictionary(List<int> rowIds, List<string> columns)
                 {
-                    var records = new Dictionary<int, Dictionary<string, List<string>>>();
-                    var rowIds = dataRows.Select(d => d.Field<int>("RowId")).Distinct();
-
-                    foreach(var rowId in rowIds)
-                    {
-                        records.Add(rowId, new Dictionary<string, List<string>>());
-
-                        foreach(var column in columns)
-                        {
-                            records[rowId].Add(column.Key, new List<string>());
-                        }
-                    }
-
-                    return records;
+                    return rowIds.ToDictionary(
+                        r => r,
+                        r => columns.ToDictionary(c => c, c => new List<string>())
+                    );
                 }
 
                 public void GetMissingRecords(Dictionary<int, Dictionary<string, List<string>>> records, List<DataRow> dataRows, Dictionary<string, string> columns)
@@ -149,6 +139,23 @@ namespace MethodLibrary
                             if(!records[rowId][column.Key].Contains($"Required column {column.Value} has no value"))
                             {
                                 records[rowId][column.Key].Add($"Required column {column.Value} has no value");
+                            }
+                        }
+                    }
+                }
+
+                public void GetMissingRecords<T>(Dictionary<int, Dictionary<string, List<string>>> records, List<T> dataItems, Dictionary<string, string> columns)
+                {
+                    foreach(var column in columns)
+                    {
+                        var emptyRecordRowIds = dataItems.Where(d => string.IsNullOrWhiteSpace(d.GetType().GetProperty(column.Key).GetValue(d).ToString()))
+                            .Select(d => Convert.ToInt32(d.GetType().GetProperty("RowId").GetValue(d).ToString())).ToList();
+
+                        foreach(var emptyRecordRowId in emptyRecordRowIds)
+                        {
+                            if(!records[emptyRecordRowId][column.Key].Contains($"Required column {column.Value} has no value"))
+                            {
+                                records[emptyRecordRowId][column.Key].Add($"Required column {column.Value} has no value");
                             }
                         }
                     }

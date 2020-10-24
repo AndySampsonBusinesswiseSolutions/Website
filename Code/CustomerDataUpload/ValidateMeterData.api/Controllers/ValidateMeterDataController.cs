@@ -87,25 +87,25 @@ namespace ValidateMeterData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
-                        {_customerDataUploadValidationEntityEnums.SitePostCode, "Site PostCode"},
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.GridSupplyPoint, "GSP"},
-                        {_customerDataUploadValidationEntityEnums.ProfileClass, "Profile Class"},
-                        {_customerDataUploadValidationEntityEnums.MeterTimeswitchCode, "MTC"},
-                        {_customerDataUploadValidationEntityEnums.LineLossFactorClass, "LLFC"},
-                        {_customerDataUploadValidationEntityEnums.Capacity, _customerDataUploadValidationEntityEnums.Capacity},
-                        {_customerDataUploadValidationEntityEnums.LocalDistributionZone, "LDZ"},
-                        {_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity, "Standard Offtake Quantity"},
-                        {_customerDataUploadValidationEntityEnums.AnnualUsage, "Annual Usage"},
-                        {_customerDataUploadValidationEntityEnums.MeterSerialNumber, "Meter Serial Number"},
-                        {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area},
-                        {_customerDataUploadValidationEntityEnums.ImportExport, "Import/Export"}
+                        _customerDataUploadValidationEntityEnums.SiteName,
+                        _customerDataUploadValidationEntityEnums.SitePostCode,
+                        _customerDataUploadValidationEntityEnums.MPXN,
+                        _customerDataUploadValidationEntityEnums.GridSupplyPoint,
+                        _customerDataUploadValidationEntityEnums.ProfileClass,
+                        _customerDataUploadValidationEntityEnums.MeterTimeswitchCode,
+                        _customerDataUploadValidationEntityEnums.LineLossFactorClass,
+                        _customerDataUploadValidationEntityEnums.Capacity,
+                        _customerDataUploadValidationEntityEnums.LocalDistributionZone,
+                        _customerDataUploadValidationEntityEnums.StandardOfftakeQuantity,
+                        _customerDataUploadValidationEntityEnums.AnnualUsage,
+                        _customerDataUploadValidationEntityEnums.MeterSerialNumber,
+                        _customerDataUploadValidationEntityEnums.Area,
+                        _customerDataUploadValidationEntityEnums.ImportExport,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

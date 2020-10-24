@@ -85,15 +85,15 @@ namespace ValidateCustomerData.api.Controllers
                     return;
                 }
 
-                var columns = new Dictionary<string, string>
+                var columns = new List<string>
                     {
-                        {_customerDataUploadValidationEntityEnums.CustomerName, "Customer Name"},
-                        {_customerDataUploadValidationEntityEnums.ContactName, "Contact Name"},
-                        {_customerDataUploadValidationEntityEnums.ContactTelephoneNumber, "Contact Telephone Number"},
-                        {_customerDataUploadValidationEntityEnums.ContactEmailAddress, "Contact Email Address"}
+                        _customerDataUploadValidationEntityEnums.CustomerName,
+                        _customerDataUploadValidationEntityEnums.ContactName,
+                        _customerDataUploadValidationEntityEnums.ContactTelephoneNumber,
+                        _customerDataUploadValidationEntityEnums.ContactEmailAddress,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(customerDataRows, columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(customerDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
