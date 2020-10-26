@@ -1146,7 +1146,7 @@ input[type=checkbox]:checked + .switch-btn {
       height: 100%;
       background: black;
       opacity: .5;
-      z-index: 10;
+      z-index: 1000000000;
   }
 
   /* Safari */

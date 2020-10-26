@@ -1,13 +1,11 @@
 function openNav(sidebar, newSidebarWidth) {
   mySidenav.style.display = '';
   document.getElementById("openNav").style.color = "#3d3c3e";
-  overlay.style.display = '';
 }
   
 function closeNav(sidebar) {
   document.getElementById("openNav").style.color = "white";
   mySidenav.style.display = 'none';
-  overlay.style.display = 'none';
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){

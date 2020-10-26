@@ -2,12 +2,23 @@ var categories;
 var chartSeries;
 
 async function pageLoad() {
-  await createTrees(true);  
+  showOverlay(true);
+  await createTrees(true);
+  await updateChart(true);
 
   mySidenav.style.display = "none";
-  overlay.style.display = "none";
+  showOverlay(false);
+}
 
-  await updateChart(true);
+async function doneOnClick() {
+  showOverlay(true);
+  await updateChart(false);
+  closeNav();
+  showOverlay(false);
+}
+
+function showOverlay(show) {
+  overlay.style.display = show ? '' : 'none';
 }
 
 function getCommodityOption() {
@@ -295,8 +306,6 @@ async function createSiteTree(isPageLoad) {
     }    
   }
 
-  clearElement(div);
-
   var headerDiv = createHeaderDiv("siteHeader", 'Location', true);
   var ul = createBranchUl("siteSelector", false, true);
 
@@ -315,6 +324,7 @@ async function createSiteTree(isPageLoad) {
 
   await buildSiteBranch(ul);  
 
+  clearElement(div);
   div.appendChild(headerDiv);
   ul.appendChild(breakDisplayListItem);
   ul.appendChild(recurseSelectionListItem);

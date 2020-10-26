@@ -14,6 +14,9 @@
 <body>
 	<div id="outerContainer">
 		<div id="mainContainer">
+			<div id="overlay" style="display: none;">
+				<div class="loader"></div>
+			</div>
 			<div class="section-header">
 				<div id="mySidenav" class="sidenav">
 					<div class="header">
@@ -81,15 +84,13 @@
 					<div style="clear: both;"></div>
 					<div class="header">
 						<button class="resetbtn" onclick="createTrees(false); resetSlider()">Reset To Default</button>
-						<button class="applybtn" onclick="closeNav(); updateChart(false)">Done</button>
+						<button class="applybtn" onclick="doneOnClick()">Done</button>
 					</div>
 				</div>
 				<i id="openNav" class="fas fa-filter sidenav-icon" onclick="openNav()"></i>
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i><i class="far fa-question-circle show-pointer" title="Analyse your portfolio using filters on the left-hand side"></i></div>
 			</div>
 			<div class="final-column">
-				<div id="overlay">
-				</div>
 				<div class="outer-container expander-container pad-container">
 					<div class="expander-header">
 						<span style="color: lightslategrey;" id="chartHeaderSpan">Usage</span>						
