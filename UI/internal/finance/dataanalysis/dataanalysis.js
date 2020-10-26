@@ -2,22 +2,22 @@ var categories;
 var chartSeries;
 
 async function pageLoad() {
-  showOverlay(true);
+  await showLoader(true);
   await createTrees(true);
   await updateChart(true);
 
   mySidenav.style.display = "none";
-  showOverlay(false);
+  await showLoader(false);
 }
 
 async function doneOnClick() {
-  showOverlay(true);
+  await showLoader(true);
   await updateChart(false);
   closeNav();
-  showOverlay(false);
+  await showLoader(false);
 }
 
-function showOverlay(show) {
+async function showLoader(show) {
   overlay.style.display = show ? '' : 'none';
 }
 
@@ -322,12 +322,12 @@ async function createSiteTree(isPageLoad) {
   recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
   recurseSelectionListItem.appendChild(recurseSelectionSpan);
 
-  await buildSiteBranch(ul);  
-
   clearElement(div);
   div.appendChild(headerDiv);
   ul.appendChild(breakDisplayListItem);
   ul.appendChild(recurseSelectionListItem);
+
+  await buildSiteBranch(ul);  
   div.appendChild(ul);
 
   for(var i = 0; i < checkboxIds.length; i++) {
@@ -1280,15 +1280,15 @@ function getPeriodDateFormat() {
 function getCategoryTexts(startDate, endDate, dateFormat) {
   var categories = [];
 
-  for(var newDate = new Date(startDate); newDate < new Date(endDate); newDate.setDate(newDate.getDate() + 1)) {
-    for(var hh = 0; hh < 48; hh++) {
-      var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat).toString();
+  // for(var newDate = new Date(startDate); newDate < new Date(endDate); newDate.setDate(newDate.getDate() + 1)) {
+  //   for(var hh = 0; hh < 48; hh++) {
+  //     var newCategoryText = formatDate(new Date(newDate.getTime() + hh*30*60000), dateFormat).toString();
 
-      if(!categories.includes(newCategoryText)) {
-        categories.push(newCategoryText);
-      }      
-    }
-  }
+  //     if(!categories.includes(newCategoryText)) {
+  //       categories.push(newCategoryText);
+  //     }      
+  //   }
+  // }
 
   return categories;
 }
@@ -1480,6 +1480,10 @@ async function getChartSeries(showByArray, meters, categories, dateFormat, start
 
       for(var k = 0; k < usageLength; k++) {
         var usage = meters[j].Meters[0].Usage[k];
+
+        if(!categories.includes(usage["Date"])) {
+          categories.push(usage["Date"]);
+        }  
         usageData.push(usage["Value"]);
       }
 
@@ -1850,17 +1854,7 @@ function refreshChart(newSeries, displayType, chartOptions) {
         autoScaleYaxis: true
       },
       animations: {
-        enabled: true,
-        easing: 'easeout',
-        speed: 800,
-        animateGradually: {
-            enabled: true,
-            delay: 150
-        },
-        dynamicAnimation: {
-            enabled: true,
-            speed: 350
-        }
+        enabled: false,
       },
       toolbar: {
         autoSelected: 'zoom',

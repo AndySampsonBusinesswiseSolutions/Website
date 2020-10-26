@@ -5,7 +5,7 @@
   .controller('dateRangeCtrl', function dateRangeCtrl($scope) {
     // Single Date Slider    
     var timeSpans = [];
-    for (var i = 1; i <= 6; i++) {
+    for (var i = 1; i <= 7; i++) {
       timeSpans.push(new Date(2000, 0, i));
     }
 
@@ -25,10 +25,12 @@
         case 3:
           return 'Daily';
         case 4:
-          return 'Monthly';
+          return 'Weekly';
         case 5:
-          return 'Quarterly';
+          return 'Monthly';
         case 6:
+          return 'Quarterly';
+        case 7:
           return 'Yearly';
         default:
           return '';
@@ -53,34 +55,35 @@
       return date.getDate()+"-"+monthNames[date.getMonth()]+"-"+date.getFullYear();
     }
 
-    //Configs
-    $scope.timePeriodOptionsDisplayTimeSpan = {
-      value: timeSpans[2],
-      options: {
-        id: 'timePeriodOptionsDisplayTimeSpan',
-        stepsArray: timeSpans,
-        translate: function(date) {
-          if (date !== null)
-            return dateToTimePeriod(date);
-          return '';
-        },
-        // onEnd: function() {
-        //   updateChart();
-        // } 
-      }
-    };
-
     $scope.makeTimePeriodOptionsTimeSpanMonthly = function () {
       $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[3];
     };
 
-    $scope.resetSliders = function () {
-      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
-      $scope.timePeriodOptionsFilteredCreated.value = dates[dates.length - 1];
+    function checkDateRangeIsWithinTolerances() {
+      var granularity = timePeriodOptionsDisplayTimeSpan.children[6].innerHTML;
+      var startDate = getStartDate();
+      var endDate = getEndDate();
+      var toleranceEndDate = getEndDate();
+    
+      if(granularity == 'Half Hourly') {
+        toleranceEndDate = new Date(startDate.setMonth(startDate.getMonth()+1));
+      }
+      if(granularity == 'Five Minutely') {
+        toleranceEndDate = new Date(startDate.setDate(startDate.getDate()+7));
+      }
+    
+      if(endDate > toleranceEndDate) {
+        toleranceEndDate = new Date(toleranceEndDate.setDate(toleranceEndDate.getDate()-1));
+        if(toleranceEndDate > maxDate) {toleranceEndDate = maxDate}
+        setTimePeriodOptionsDisplayDateRange(getStartDate(), toleranceEndDate);
+      }  
+    }
 
+    function setTimePeriodOptionsDisplayDateRange(newMinDate, newMaxDate)
+    {
       $scope.timePeriodOptionsDisplayDateRange = {
-        minValue: minDate,
-        maxValue: maxDate,
+        minValue: newMinDate,
+        maxValue: newMaxDate,
         options: {
           id: 'timePeriodOptionsDisplayDateRange',
           floor: floorDate,
@@ -95,11 +98,14 @@
             }
             return '';
           },
-          // onEnd: function() {
-          //   updateChart();
-          // } 
         }
       };
+    }
+
+    $scope.resetSliders = function () {
+      $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
+      $scope.timePeriodOptionsFilteredCreated.value = dates[dates.length - 1];
+      setTimePeriodOptionsDisplayDateRange(minDate, maxDate);
 
       $scope.timePeriodOptionsFilterDateRange = {
         minValue: minDate,
@@ -118,11 +124,25 @@
             }
             return '';
           },
-          onEnd: function() {
-            updatePage(timePeriodOptionsFilterDateRange);
-          } 
         }
       };
+    };
+
+    //Configs
+    $scope.timePeriodOptionsDisplayTimeSpan = {
+      value: timeSpans[2],
+      options: {
+        id: 'timePeriodOptionsDisplayTimeSpan',
+        stepsArray: timeSpans,
+        translate: function(date) {
+          if (date !== null)
+            return dateToTimePeriod(date);
+          return '';
+        },
+        onEnd: function() {
+          checkDateRangeIsWithinTolerances();
+        } 
+      }
     };
 
     $scope.timePeriodOptionsDisplayDateRange = {
@@ -142,9 +162,9 @@
           }
           return '';
         },
-        // onEnd: function() {
-        //   updateChart();
-        // } 
+        onEnd: function() {
+          checkDateRangeIsWithinTolerances();
+        } 
       }
     };
 
@@ -165,9 +185,6 @@
           }
           return '';
         },
-        onEnd: function() {
-          updatePage(timePeriodOptionsFilterDateRange);
-        } 
       }
     };
 
@@ -183,9 +200,6 @@
           }
           return '';
         },
-        onEnd: function() {
-          updatePage(timePeriodOptionsFilteredCreated);
-        } 
       }
     };
   });

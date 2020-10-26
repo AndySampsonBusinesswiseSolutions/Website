@@ -497,7 +497,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             var series = new Series();
             series.Type = type;
             series.Commodity = commodity;
-            AddUsage(series, usages);
+            series.Usage = AddUsage(usages);
 
             var seriesCommodity = splitByCommodity
                 ? $" - {commodity}"
@@ -508,21 +508,20 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             return series;
         }
 
-        private void AddUsage(Series series, List<Usage> usages)
+        private List<Usage> AddUsage(List<Usage> usages)
         {
-            foreach(var usage in usages)
-            {
-                var seriesUsage = series.Usage.FirstOrDefault(s => s.Date == usage.Date);
-                if(seriesUsage == null)
-                {
-                    series.Usage.Add(usage);
-                }
-                else
-                {
-                    seriesUsage.Value += usage.Value;
-                    seriesUsage.EntityCount += usage.EntityCount;
-                }
-            }
+            var dateList = usages.Select(u => u.Date).Distinct().ToList();
+            var usageDictionary = dateList.ToDictionary(
+                d => d,
+                d => usages.Where(u => u.Date == d).ToList()
+            );
+
+            return (from date in usageDictionary
+                             let usage = new Usage { 
+                                 Date = date.Key, 
+                                 Value = date.Value.Sum(u => u.Value), 
+                                 EntityCount = date.Value.Sum(u => u.EntityCount) }
+                             select usage).ToList();
         }
 
         private List<Usage> GetMeterForecast(string meterType, long meterId)
@@ -568,22 +567,25 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             return CreateUsageListFromSingleIdForecast(forecastTuple, yearDictionary);
         }
 
-        private static List<Usage> CreateUsageListFromSingleIdForecast(List<Tuple<long, decimal>> forecastTuple, Dictionary<long, string> dictionary)
+        private List<Usage> CreateUsageListFromSingleIdForecast(List<Tuple<long, decimal>> forecastTuple, Dictionary<long, string> dictionary)
         {
+            var forecastTupleInDictionary = forecastTuple.Where(f => dictionary.ContainsKey(f.Item1)).ToList();
+
+            var dictionaryInForecastTuple = dictionary.Where(d => forecastTuple.Any(f => f.Item1 == d.Key))
+                .ToDictionary(d => d.Key, d => d.Value);
+            var dictionaryNotInForecastTuple = dictionary.Where(d => !forecastTuple.Any(f => f.Item1 == d.Key))
+                .ToDictionary(d => d.Key, d => d.Value);
+
             //create base usage list
-            var usageList = dictionary
+            var dictionaryNotInForecastTupleUsageList = dictionaryNotInForecastTuple
                 .Select(d => new Usage { Date = d.Value, Value = null, EntityCount = 0 })
                 .ToList();
 
-            var forecastTupleInDictionary = forecastTuple.Where(f => dictionary.ContainsKey(f.Item1)).ToList();
+            var dictionaryInForecastTupleUsageList = dictionaryInForecastTuple
+                .Select(d => new Usage { Date = d.Value, Value = forecastTupleInDictionary.Where(f => f.Item1 == d.Key).Sum(f => f.Item2), EntityCount = forecastTupleInDictionary.Count(f => f.Item1 == d.Key) })
+                .ToList();
 
-            //populate with data from forecast
-            foreach (var forecast in forecastTupleInDictionary)
-            {
-                var usage = usageList.FirstOrDefault(u => u.Date == dictionary[forecast.Item1]);
-                usage.EntityCount += 1;
-                usage.Value = (usage.Value ?? 0) + forecast.Item2;
-            }
+            var usageList = dictionaryNotInForecastTupleUsageList.Union(dictionaryInForecastTupleUsageList).OrderBy(u => u.Date).ToList();
 
             return usageList;
         }
@@ -727,25 +729,101 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             return dictionary;
         }
 
-        private static List<Usage> CreateUsageListFromDoubleIdForecast(List<Tuple<long, long, decimal>> forecastTuple, Dictionary<long, Dictionary<long, string>> dictionary)
+        private List<Usage> CreateUsageListFromDoubleIdForecast(List<Tuple<long, long, decimal>> forecastTuple, Dictionary<long, Dictionary<long, string>> dictionary)
         {
-            //create base usage list
-            var usageList = (from baseDictionary in dictionary
-                             from subDictionary in baseDictionary.Value
-                             let usage = new Usage { Date = subDictionary.Value, Value = null, EntityCount = 0 }
-                             select usage).ToList();
-
             var forecastTupleInDictionary = forecastTuple.Where(f => dictionary.ContainsKey(f.Item1) && dictionary[f.Item1].ContainsKey(f.Item2)).ToList();
+            var forecastStringTupleList = (from forecast in forecastTupleInDictionary
+                                            let forecastStringTuple = Tuple.Create((string)dictionary[forecast.Item1][forecast.Item2], (decimal)forecast.Item3)
+                                            select forecastStringTuple).ToList();
 
-            //populate with data from forecast
-            foreach (var forecast in forecastTupleInDictionary)
+            var forecastStringPeriodList = forecastStringTupleList.Select(f => f.Item1).Distinct().ToList();
+            var forecastTupleDictionary = new Dictionary<string, List<decimal>>();
+
+            if(forecastStringPeriodList.Count() == forecastStringTupleList.Count())
             {
-                var usage = usageList.FirstOrDefault(u => u.Date == dictionary[forecast.Item1][forecast.Item2]);
-                usage.EntityCount += 1;
-                usage.Value = (usage.Value ?? 0) + forecast.Item3;
+                forecastTupleDictionary = forecastStringTupleList.ToDictionary(
+                    f => f.Item1,
+                    f => new List<decimal> { f.Item2 }
+                );
+            }
+            else
+            {
+                var forecastStringTupleGroup = forecastStringTupleList.GroupBy(f => f.Item1);
+                forecastTupleDictionary = forecastStringPeriodList.ToDictionary(
+                    d => d,
+                    d => forecastStringTupleList.Where(f => f.Item1 == d).Select(f => f.Item2).ToList()
+                );
             }
 
+            var periodList = dictionary.SelectMany(d => d.Value).Select(d => d.Value).ToList();
+            var periodsNotInForecastList = periodList.Except(forecastStringPeriodList).ToList();
+            var periodsNotInForecastTupleUsageList = (from period in periodsNotInForecastList
+                             let usage = new Usage { Date = period, Value = null, EntityCount = 0 }
+                             select usage).ToList();
+
+            var periodsInForecastTupleUsageList = (from forecast in forecastTupleDictionary
+                             let usage = new Usage { Date = forecast.Key, Value = forecast.Value.Sum(), EntityCount = forecast.Value.Count() }
+                             select usage).ToList();
+
+            var usageList = periodsNotInForecastTupleUsageList.Union(periodsInForecastTupleUsageList)
+                .OrderBy(u => granularityCode == "Month" ? ConvertMonth(u.Date) : u.Date).ToList();
+
             return usageList;
+        }
+
+        private string ConvertMonth(string fullMonth)
+        {
+            var year = fullMonth.Substring(0, 5);
+            var month = fullMonth.Replace(year, string.Empty);
+
+            if(month == "January")
+            {
+                return $"{year}01";
+            }
+            else if(month == "February")
+            {
+                return $"{year}02";
+            }
+            else if(month == "March")
+            {
+                return $"{year}03";
+            }
+            else if(month == "April")
+            {
+                return $"{year}04";
+            }
+            else if(month == "May")
+            {
+                return $"{year}05";
+            }
+            else if(month == "June")
+            {
+                return $"{year}06";
+            }
+            else if(month == "July")
+            {
+                return $"{year}07";
+            }
+            else if(month == "August")
+            {
+                return $"{year}08";
+            }
+            else if(month == "September")
+            {
+                return $"{year}09";
+            }
+            else if(month == "October")
+            {
+                return $"{year}10";
+            }
+            else if(month == "November")
+            {
+                return $"{year}11";
+            }
+            else
+            {
+                return $"{year}12";
+            }
         }
     }
 }
