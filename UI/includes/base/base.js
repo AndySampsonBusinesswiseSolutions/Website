@@ -1,11 +1,16 @@
 function openNav(sidebar, newSidebarWidth) {
-  mySidenav.style.display = '';
+  setElementDisplayStyle(mySidenav, '');
   document.getElementById("openNav").style.color = "#3d3c3e";
 }
   
 function closeNav(sidebar) {
   document.getElementById("openNav").style.color = "white";
-  mySidenav.style.display = 'none';
+  setElementDisplayStyle(mySidenav, 'none');
+}
+
+function setElementDisplayStyle(element, displayValue)
+{
+  element.style.display = displayValue;
 }
 
 function updateClassOnClick(elementId, firstClass, secondClass){
@@ -256,12 +261,11 @@ function createBranchSpan(id, innerHTML) {
 }
 
 function finalisePopup(title, titleHTML, modal, span) {
-    title.innerHTML = titleHTML;
-
-	modal.style.display = "block";
+  title.innerHTML = titleHTML;
+  setElementDisplayStyle(modal, 'block');
 
 	span.onclick = function() {
-		modal.style.display = "none";
+    setElementDisplayStyle(modal, 'none');
 	}
 }
 
@@ -528,8 +532,12 @@ async function getPageRequestResult(processQueueGUID) {
   }
 }
 
-function showLoader(show) {
-  loader.style.display = show ? '' : 'none';
+function showOverlay(show) {
+  showElement(loader, show);
+}
+
+function showElement(element, show) {
+  setElementDisplayStyle(element, show ? '' : 'none');
 }
 
 function alertMessage() {
