@@ -511,16 +511,19 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private List<Usage> AddUsage(List<Usage> usages)
         {
             var dateList = usages.Select(u => u.Date).Distinct().ToList();
-            var usageDictionary = dateList.ToDictionary(
-                d => d,
-                d => usages.Where(u => u.Date == d).ToList()
-            );
 
-            return (from date in usageDictionary
+            if(dateList.Count() == usages.Count())
+            {
+                return usages;
+            }
+
+            var usageGroups = usages.GroupBy(u => u.Date).ToList();
+
+            return (from date in usageGroups
                              let usage = new Usage { 
                                  Date = date.Key, 
-                                 Value = date.Value.Sum(u => u.Value), 
-                                 EntityCount = date.Value.Sum(u => u.EntityCount) }
+                                 Value = date.Select(s => s.Value).Sum(), 
+                                 EntityCount = date.Select(u => u.EntityCount).Sum() }
                              select usage).ToList();
         }
 
