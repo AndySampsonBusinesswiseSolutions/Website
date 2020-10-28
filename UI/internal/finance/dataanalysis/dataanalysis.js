@@ -1763,7 +1763,7 @@ function getChartOptions(categories, displayType, xAxisType, dateFormat) {
     yaxis: [{
       title: {
         style: {
-          fontSize: '10px',
+          fontSize: '15px',
           fontFamily: 'Helvetica, Arial, sans-serif',
           fontWeight: 400,
         },
@@ -1771,6 +1771,11 @@ function getChartOptions(categories, displayType, xAxisType, dateFormat) {
       },
       forceNiceScale: true,
       labels: {
+        style: {
+          fontSize: '15px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 400,
+        },
         formatter: function(val) {
           return getYAxisLabelFormat(displayType, val);
         }
