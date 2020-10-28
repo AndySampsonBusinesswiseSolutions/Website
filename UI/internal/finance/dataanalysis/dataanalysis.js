@@ -2,23 +2,24 @@ var categories;
 var chartSeries;
 
 async function pageLoad() {
-  await showLoader(true);
   await createTrees(true);
   await updateChart(true);
-
-  mySidenav.style.display = "none";
-  await showLoader(false);
+  showElement(timePeriodOptionsFilteredCreated, false);
+  showElement(timePeriodOptionsFilteredCreatedBreak, false);
+  showElement(mySidenav, false);
+  await showOverlay(false);
 }
 
 async function doneOnClick() {
-  await showLoader(true);
+  await showOverlay(true, false);
   await updateChart(false);
   closeNav();
-  await showLoader(false);
+  await showOverlay(false);
 }
 
-async function showLoader(show) {
-  overlay.style.display = show ? '' : 'none';
+async function showOverlay(show, isPageLoading = true) {
+  loader.style.opacity = isPageLoading ? 1 : 0.5;
+  setElementDisplayStyle(loader, show ? '' : 'none');
 }
 
 function getCommodityOption() {
@@ -408,35 +409,24 @@ function createTimePeriodTree() {
   var ul = createBranchUl("timePeriodSelector", false, true);
   ul.classList.add("slider-list");
 
-  var dateRangeDisplayListItem = document.createElement('li');
-  var dateRangeDisplayCheckbox = createBranchCheckbox('dateRangeDisplayCheckbox', '', 'dateRangeDisplay', 'checkbox', 'dateRangeDisplay', false);
-  var dateRangeDisplaySpan = createBranchSpan('dateRangeDisplaySpan', "Date Range");
-  var dateRangeDisplayRZSlider = document.createElement('rzslider');
-  dateRangeDisplayRZSlider.id = 'timePeriodOptionsFilterDateRange';
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsFilterDateRange.minValue');
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-high', 'timePeriodOptionsFilterDateRange.maxValue');
-  dateRangeDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsFilterDateRange.options');
-
-  dateRangeDisplayListItem.appendChild(dateRangeDisplayCheckbox);
-  dateRangeDisplayListItem.appendChild(dateRangeDisplaySpan);
-  dateRangeDisplayListItem.appendChild(createBreakDisplayListItem());
-  dateRangeDisplayListItem.appendChild(dateRangeDisplayRZSlider);
-
   var createdDisplayListItem = document.createElement('li');
   var createdDisplayCheckbox = createBranchCheckbox('createdDisplayCheckbox', '', 'createdDisplay', 'checkbox', 'createdDisplay', true);
+  createdDisplayCheckbox.setAttribute('onclick', 'showElement(timePeriodOptionsFilteredCreatedBreak, !this.checked); showElement(timePeriodOptionsFilteredCreated, !this.checked);');
+
   var createdDisplaySpan = createBranchSpan('createdDisplaySpan', "Latest Created");
   var createdDisplayRZSlider = document.createElement('rzslider');
   createdDisplayRZSlider.id = 'timePeriodOptionsFilteredCreated';
   createdDisplayRZSlider.setAttribute('rz-slider-model', 'timePeriodOptionsFilteredCreated.value');
   createdDisplayRZSlider.setAttribute('rz-slider-options', 'timePeriodOptionsFilteredCreated.options');
 
+  var breakDisplayListItem = createBreakDisplayListItem();
+  breakDisplayListItem.id = 'timePeriodOptionsFilteredCreatedBreak';
+
   createdDisplayListItem.appendChild(createdDisplayCheckbox);
   createdDisplayListItem.appendChild(createdDisplaySpan);
-  createdDisplayListItem.appendChild(createBreakDisplayListItem());
+  createdDisplayListItem.appendChild(breakDisplayListItem);
   createdDisplayListItem.appendChild(createdDisplayRZSlider);
 
-  ul.appendChild(dateRangeDisplayListItem);
-  ul.appendChild(createBreakDisplayListItem());
   ul.appendChild(createdDisplayListItem);
 
   div.appendChild(headerDiv);

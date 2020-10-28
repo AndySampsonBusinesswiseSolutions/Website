@@ -106,26 +106,6 @@
       $scope.timePeriodOptionsDisplayTimeSpan.value = timeSpans[2];
       $scope.timePeriodOptionsFilteredCreated.value = dates[dates.length - 1];
       setTimePeriodOptionsDisplayDateRange(minDate, maxDate);
-
-      $scope.timePeriodOptionsFilterDateRange = {
-        minValue: minDate,
-        maxValue: maxDate,
-        options: {
-          id: 'timePeriodOptionsFilterDateRange',
-          floor: floorDate,
-          ceil: ceilDate,
-          step: millisInDay,
-          showTicks: false,
-          draggableRange: true,
-          translate: function(date_millis) {
-            if ((date_millis !== null)) {
-              var dateFromMillis = new Date(date_millis);
-              return formatDate(dateFromMillis);
-            }
-            return '';
-          },
-        }
-      };
     };
 
     //Configs
@@ -165,26 +145,6 @@
         onEnd: function() {
           checkDateRangeIsWithinTolerances();
         } 
-      }
-    };
-
-    $scope.timePeriodOptionsFilterDateRange = {
-      minValue: minDate,
-      maxValue: maxDate,
-      options: {
-        id: 'timePeriodOptionsFilterDateRange',
-        floor: floorDate,
-        ceil: ceilDate,
-        step: millisInDay,
-        showTicks: false,
-        draggableRange: true,
-        translate: function(date_millis) {
-          if ((date_millis !== null)) {
-            var dateFromMillis = new Date(date_millis);
-            return formatDate(dateFromMillis);
-          }
-          return '';
-        },
       }
     };
 
