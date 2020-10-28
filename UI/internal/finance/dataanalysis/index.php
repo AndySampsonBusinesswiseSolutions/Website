@@ -29,7 +29,7 @@
 							</div>
 							<div id="displayListItemAdditionalTitlespan" class="tree-div">
 							</div>
-							<div id="siteTree" class="tree-div">
+							<div id="siteTree" class="tree-div scrolling-wrapper" style="max-height: 185px;">
 							</div>
 							<div id="commodityTree" class="tree-div">
 							</div>
