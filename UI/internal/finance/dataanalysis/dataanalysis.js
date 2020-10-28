@@ -1888,6 +1888,9 @@ function refreshChart(newSeries, displayType, chartOptions) {
       formatter: function(seriesName) {
         return getLegendFormat(displayType, seriesName);
       },
+      fontSize: '20px',
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontWeight: 'normal',
     },
     stroke: {
       width: 2
