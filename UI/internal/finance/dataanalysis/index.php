@@ -29,7 +29,7 @@
 							</div>
 							<div id="displayListItemAdditionalTitlespan" class="tree-div">
 							</div>
-							<div id="siteTree" class="tree-div">
+							<div id="siteTree" class="tree-div scrolling-wrapper" style="max-height: 185px;">
 							</div>
 							<div id="commodityTree" class="tree-div">
 							</div>
@@ -40,38 +40,40 @@
 						</div>
 						<div style="float: right; margin-left: 15px;">
 							<div class="tree-div scrolling-wrapper">
-								<div class="expander-header">
-									<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose whether to display Sites and/or Meters in the 'Location' tree on the left-hand side"></i>
-									<i id="locationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
-								</div>
-								<div id="configureLocationSelectorList" class="expander-container">
-									<div style="width: 45%; text-align: center; float: left;">
-										<span>Sites</span>
-										<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+								<div style="width: 360px;">
+									<div class="expander-header">
+										<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose which attributes to display in the 'Location' tree on the left-hand side"></i>
+										<i id="locationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
 									</div>
-									<div style="width: 45%; text-align: center; float: right;">
-										<span>Areas</span>
-										<label class="switch"><input type="checkbox" id="areaLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
-									</div>
-									<div style="width: 45%; text-align: center; float: left;">
-										<span>Commodities</span>
-										<label class="switch"><input type="checkbox" id="commodityLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
-									</div>
-									<div style="width: 45%; text-align: center; float: right;">
-										<span>Meters</span>
-										<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
-									</div>
-									<div style="width: 45%; text-align: center; float: left;">
-										<span>SubAreas</span>
-										<label class="switch"><input type="checkbox" id="subareaLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
-									</div>
-									<div style="width: 45%; text-align: center; float: right;">
-										<span>Assets</span>
-										<label class="switch"><input type="checkbox" id="assetLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
-									</div>
-									<div style="width: 45%; text-align: center; float: left;">
-										<span>SubMeters</span>
-										<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+									<div id="locationSelectorList" class="expander-container">
+										<div style="width: 45%; text-align: center; float: left;">
+											<span>Sites</span>
+											<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
+										<div style="width: 45%; text-align: center; float: right;">
+											<span>Areas</span>
+											<label class="switch"><input type="checkbox" id="areaLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
+										<div style="width: 45%; text-align: center; float: left;">
+											<span>Commodities</span>
+											<label class="switch"><input type="checkbox" id="commodityLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
+										<div style="width: 45%; text-align: center; float: right;">
+											<span>Meters</span>
+											<label class="switch"><input type="checkbox" id="meterLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
+										<div style="width: 45%; text-align: center; float: left;">
+											<span>SubAreas</span>
+											<label class="switch"><input type="checkbox" id="subareaLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
+										<div style="width: 45%; text-align: center; float: right;">
+											<span>Assets</span>
+											<label class="switch"><input type="checkbox" id="assetLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
+										<div style="width: 45%; text-align: center; float: left;">
+											<span>SubMeters</span>
+											<label class="switch"><input type="checkbox" id="submeterLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
+										</div>
 									</div>
 								</div>
 							</div>
