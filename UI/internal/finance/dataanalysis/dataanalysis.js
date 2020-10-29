@@ -323,11 +323,10 @@ async function createSiteTree(isPageLoad) {
   recurseSelectionListItem.appendChild(recurseSelectionSpan);
 
   clearElement(div);
+  await buildSiteBranch(ul);  
   div.appendChild(headerDiv);
   ul.appendChild(breakDisplayListItem);
   ul.appendChild(recurseSelectionListItem);
-
-  await buildSiteBranch(ul);  
   div.appendChild(ul);
 
   for(var i = 0; i < checkboxIds.length; i++) {
