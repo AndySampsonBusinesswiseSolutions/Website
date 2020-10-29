@@ -21,7 +21,7 @@
 				<div id="mySidenav" class="sidenav">
 					<div class="header">
 						<button class="closebtn" onclick="closeNav()">Close</button>
-						<i class="fas fa-filter sidenav-icon-close"></i>
+						<i class="fas fa-filter sidenav-icon-close" onclick="closeNav()"></i>
 					</div>
 					<div class="tree-column">
 						<div style="float: left;">
