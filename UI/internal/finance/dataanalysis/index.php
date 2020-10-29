@@ -19,6 +19,9 @@
 			</div>
 			<div class="section-header">
 				<div id="mySidenav" class="sidenav">
+					<div id="miniLoader" class="mini-loader" style="display: none">
+						<div class="loader"></div>
+					</div>
 					<div class="header">
 						<button class="closebtn" onclick="setElementDisplayStyle(overlay, 'none'); closeNav()">Close</button>
 						<i class="fas fa-filter sidenav-icon-close"></i>
@@ -29,7 +32,7 @@
 							</div>
 							<div id="displayListItemAdditionalTitlespan" class="tree-div">
 							</div>
-							<div id="siteTree" class="tree-div scrolling-wrapper" style="max-height: 185px;">
+							<div id="siteTree" class="tree-div scrolling-wrapper" style="max-height: 160px">
 							</div>
 							<div id="commodityTree" class="tree-div">
 							</div>
@@ -39,13 +42,13 @@
 							</div>
 						</div>
 						<div style="float: right; margin-left: 15px;">
-							<div class="tree-div scrolling-wrapper">
+							<div id="locationSelectorTree" class="tree-div scrolling-wrapper">
 								<div style="width: 360px;">
 									<div class="expander-header">
-										<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose which attributes to display in the 'Location' tree on the left-hand side"></i>
+										<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose whether to display Sites and/or Meters in the 'Location' tree on the left-hand side"></i>
 										<i id="locationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
 									</div>
-									<div id="locationSelectorList" class="expander-container">
+									<div id="configureLocationSelectorList" class="expander-container">
 										<div style="width: 45%; text-align: center; float: left;">
 											<span>Sites</span>
 											<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>
@@ -85,7 +88,7 @@
 					</div>
 					<div style="clear: both;"></div>
 					<div class="header">
-						<button class="resetbtn" onclick="createTrees(false); resetSlider()">Reset To Default</button>
+						<button class="resetbtn" onclick="updatePage(this)" branch="reset">Reset To Default</button>
 						<button class="applybtn" onclick="doneOnClick(); setElementDisplayStyle(overlay, 'none')">Done</button>
 					</div>
 				</div>
@@ -93,7 +96,7 @@
 				<div class="section-header-text"><?php echo $PAGE_TITLE ?><i style="font-size: 10px; vertical-align: text-top;" class="fas fa-trademark"></i><i class="far fa-question-circle show-pointer" title="Analyse your portfolio using filters on the left-hand side"></i></div>
 			</div>
 			<div class="final-column">
-				<div id="overlay" style="display: none">
+				<div id="overlay" class="overlay" style="display: none">
 				</div>
 				<div class="outer-container expander-container pad-container">
 					<div class="expander-header">
