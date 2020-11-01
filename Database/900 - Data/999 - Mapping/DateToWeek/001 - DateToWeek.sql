@@ -7,27 +7,27 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-DECLARE 
-	@DateId BIGINT,
-	@DateDescription VARCHAR(255),
-	@WeekId BIGINT
-
-DECLARE DateDescriptionCursor CURSOR FOR
-SELECT DateId, DateDescription
-FROM [Information].[Date]
-
-OPEN DateDescriptionCursor
-
-FETCH NEXT FROM DateDescriptionCursor
-INTO @DateId, @DateDescription
-
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @WeekId = (SELECT WeekId FROM [Information].[Week] WHERE [Week].WeekDescription = 'Week ' + CONVERT(VARCHAR, DATEPART(wk, @DateDescription)))
-		EXEC [Mapping].[DateToWeek_Insert] @CreatedByUserId, @SourceId, @DateId, @WeekId
-
-		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateId, @DateDescription
-	END
-CLOSE DateDescriptionCursor;
-DEALLOCATE DateDescriptionCursor;
+INSERT INTO
+	[Mapping].[DateToWeek]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		WeekId
+	)
+SELECT
+	@CreatedByUserId,
+	@SourceId,
+	[Date].[DateId],
+	[Week].[WeekId]
+FROM 
+	[Information].[Date]
+INNER JOIN
+	[Information].[Week]
+	ON [Week].WeekDescription = 'Week ' + CONVERT(VARCHAR, DATEPART(wk, [Date].[DateDescription]))
+LEFT OUTER JOIN
+	[Mapping].[DateToWeek]
+	ON [DateToWeek].[DateId] = [Date].[DateId]
+	AND [DateToWeek].[WeekId] = [Week].[WeekId]
+WHERE
+	[DateToWeek].[DateToWeekId] IS NULL

@@ -149,7 +149,7 @@ namespace MethodLibrary
                     foreach(var column in columns)
                     {
                         var emptyRecordRowIds = dataItems.Where(d => string.IsNullOrWhiteSpace(d.GetType().GetProperty(column.Key).GetValue(d).ToString()))
-                            .Select(d => Convert.ToInt32(d.GetType().GetProperty("RowId").GetValue(d).ToString())).ToList();
+                            .Select(d => Convert.ToInt32(d.GetType().GetProperty("RowId").GetValue(d).ToString())).Distinct().ToList();
 
                         foreach(var emptyRecordRowId in emptyRecordRowIds)
                         {
@@ -177,17 +177,20 @@ namespace MethodLibrary
                         var validRows = GetReturnRows(records, false).Where(r => !errorRows.ContainsKey(r.Key)).ToDictionary(x => x.Key, x => x.Value);
 
                         UpdateCanCommit(processQueueGUID, sheetName, validRows, true);
-                    }    
+                    }
 
-                    //Insert error records
-                    var customerMethods = new Methods.Customer();
-                    customerMethods.InsertDataUploadValidationErrors(
-                        processQueueGUID,
-                        createdByUserId,
-                        sourceId,
-                        sheetName,
-                        errorRows);
-                    UpdateCanCommit(processQueueGUID, sheetName, errorRows, false);
+                    if(errorRows.Any())
+                    {
+                        //Insert error records
+                        var customerMethods = new Methods.Customer();
+                        customerMethods.InsertDataUploadValidationErrors(
+                            processQueueGUID,
+                            createdByUserId,
+                            sourceId,
+                            sheetName,
+                            errorRows);
+                        UpdateCanCommit(processQueueGUID, sheetName, errorRows, false);
+                    }
 
                     return errorRows.Any() ? "Validation errors found" : null;
                 }

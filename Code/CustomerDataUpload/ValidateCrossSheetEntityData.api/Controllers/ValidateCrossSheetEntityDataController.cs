@@ -159,7 +159,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         private string ValidateCrossEntities(long createdByUserId, long sourceId, string processQueueGUID, List<DataRow> mainDataRows, List<DataRow> crossEntityDataRows, long attributeId, string columnName, string columnDisplayName, string sheetName, string otherSheetName)
         {
             var mainCrossEntityDataRowsDataRows = mainDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(columnName))).ToList();
-            var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(mainCrossEntityDataRowsDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), new List<string>{columnName});
+            var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(mainCrossEntityDataRowsDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), new List<string>{columnName});
             var newMainCrossEntityDataRows = mainCrossEntityDataRowsDataRows.Where(r => GetDetailId(attributeId, r.Field<string>(columnName), sheetName) == 0);
             var invalidMainCrossEntityDataRows = newMainCrossEntityDataRows.Where(r => !crossEntityDataRows.Any(cr => cr.Field<string>(columnName) == r.Field<string>(columnName)));
 

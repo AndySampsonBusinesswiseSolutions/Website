@@ -88,12 +88,6 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 //Get MeterId
                 var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
-                //Get CommodityId by MeterId
-                var commodityId = _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(meterId);
-
-                //Get Commodity
-                var commodity = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
-
                 //Get MeterType
                 var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
 

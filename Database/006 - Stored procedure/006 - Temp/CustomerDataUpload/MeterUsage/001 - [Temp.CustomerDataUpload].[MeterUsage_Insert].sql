@@ -20,6 +20,7 @@ GO
 
 ALTER PROCEDURE [Temp.CustomerDataUpload].[MeterUsage_Insert]
     @ProcessQueueGUID UNIQUEIDENTIFIER,
+    @SheetName VARCHAR(255),
     @RowId INT,
     @MPXN VARCHAR(255),
     @Date VARCHAR(255),
@@ -30,6 +31,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-07-16 -> Andrew Sampson -> Initial development of script
+    -- 2020-11-01 -> Andrew Sampson -> Added SheetName parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -39,6 +41,7 @@ BEGIN
     INSERT INTO [Temp.CustomerDataUpload].[MeterUsage]
     (
         ProcessQueueGUID,
+        SheetName,
         RowId,
         MPXN,
         Date,
@@ -48,6 +51,7 @@ BEGIN
     VALUES
     (
         @ProcessQueueGUID,
+        @SheetName,
         @RowId,
         @MPXN,
         @Date,

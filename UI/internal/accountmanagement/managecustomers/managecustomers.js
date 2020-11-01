@@ -221,52 +221,52 @@ function saveNewCustomer() {
 	}
 }
 
-async function getProcessResponseDetail(data) {
-	try {
-	  const response = await fetch(uri + '/GetProcessResponseDetail', {
-		method: 'POST',
-		mode: 'cors',
-		cache: 'no-cache',
-		credentials: 'same-origin',
-		headers: {
-		  'Content-Type': 'application/json',
-		},
-		redirect: 'follow',
-		referrerPolicy: 'no-referrer',
-		body: JSON.stringify(data)
-	  });
+// async function getProcessResponseDetail(data) {
+// 	try {
+// 	  const response = await fetch(uri + '/GetProcessResponseDetail', {
+// 		method: 'POST',
+// 		mode: 'cors',
+// 		cache: 'no-cache',
+// 		credentials: 'same-origin',
+// 		headers: {
+// 		  'Content-Type': 'application/json',
+// 		},
+// 		redirect: 'follow',
+// 		referrerPolicy: 'no-referrer',
+// 		body: JSON.stringify(data)
+// 	  });
 	
-	  return response.json();
-	}
-	catch {
-	  return null;
-	}
-  }
+// 	  return response.json();
+// 	}
+// 	catch {
+// 	  return null;
+// 	}
+//   }
 
-async function processResponse(response, processQueueGUID) {
-	if(response) {
-	  if(response.message == "OK") {
-		location.reload();
-	  }
-	  else {
-			//Get response from GetProcessResponseDetail
-		  	var responseDetail = await getProcessResponseDetail({ProcessQueueGUID:processQueueGUID, APIGUID:"1B2E2BA3-D538-47E0-9044-BBBFC6BF3892"});
-			if(responseDetail.message == "Success") {
-				alert('Customer has been created but some attributes were not saved');
-				showLoader(false);
-				location.reload();
-			}
-			else {
-				alert('Customer has not been created');
-				showLoader(false);
-			}
-			//This needs to be an in-page error rather than alert
-	  }
-	}
-	else {
-		//display alert
-	}
-}
+// async function processResponse(response, processQueueGUID) {
+// 	if(response) {
+// 	  if(response.message == "OK") {
+// 		location.reload();
+// 	  }
+// 	  else {
+// 			//Get response from GetProcessResponseDetail
+// 		  	var responseDetail = await getProcessResponseDetail({ProcessQueueGUID:processQueueGUID, APIGUID:"1B2E2BA3-D538-47E0-9044-BBBFC6BF3892"});
+// 			if(responseDetail.message == "Success") {
+// 				alert('Customer has been created but some attributes were not saved');
+// 				showLoader(false);
+// 				location.reload();
+// 			}
+// 			else {
+// 				alert('Customer has not been created');
+// 				showLoader(false);
+// 			}
+// 			//This needs to be an in-page error rather than alert
+// 	  }
+// 	}
+// 	else {
+// 		//display alert
+// 	}
+// }
 
 function displayCustomerDataTable() {
 	var button = document.getElementById('editDetailsButton');
@@ -573,7 +573,7 @@ async function getTree() {
 
 	if(postSuccessful) {
 		var response = await getProcessResponse(processQueueGUID);
-		return await processTreeResponse(response, processQueueGUID);;
+		return await processResponse(response, processQueueGUID);;
 	}
 }
 

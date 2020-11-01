@@ -93,7 +93,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Volume,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

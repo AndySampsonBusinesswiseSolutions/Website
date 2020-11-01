@@ -26,6 +26,7 @@ BEGIN
     --              CHANGE HISTORY
     -- 2020-07-21 -> Andrew Sampson -> Initial development of script
     -- 2020-08-13 -> Andrew Sampson -> Add CanCommit column
+    -- 2020-11-01 -> Andrew Sampson -> Added SheetName parameter
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -34,6 +35,7 @@ BEGIN
 
     SELECT
         ProcessQueueGUID,
+        SheetName,
         RowId,
         MPXN,
         Date,

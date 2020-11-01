@@ -140,7 +140,13 @@ namespace ValidateMeterUsageData.api.Controllers
                 foreach(var sourceSheet in sourceSheetList)
                 {
                     var usages = meterUsages.Where(mu => mu.SheetName == sourceSheet).ToList();
-                    var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(usages.Select(u => u.RowId).ToList(), columns);
+
+                    if(!usages.Any())
+                    {
+                        continue;
+                    }
+
+                    var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(usages.Select(u => u.RowId).Distinct().ToList(), columns);
 
                     //If any are empty records, store error
                     _tempCustomerDataUploadMethods.GetMissingRecords<MeterUsage>(records, usages, requiredColumns);

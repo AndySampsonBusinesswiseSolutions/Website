@@ -7,27 +7,27 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-DECLARE 
-	@DateId BIGINT,
-	@DateDescription VARCHAR(255),
-	@MonthId BIGINT
-
-DECLARE DateDescriptionCursor CURSOR FOR
-SELECT DateId, DateDescription
-FROM [Information].[Date]
-
-OPEN DateDescriptionCursor
-
-FETCH NEXT FROM DateDescriptionCursor
-INTO @DateId, @DateDescription
-
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @MonthId = (SELECT MonthId FROM [Information].[Month] WHERE [Month].MonthDescription = DATENAME(mm, @DateDescription))
-		EXEC [Mapping].[DateToMonth_Insert] @CreatedByUserId, @SourceId, @DateId, @MonthId
-
-		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateId, @DateDescription
-	END
-CLOSE DateDescriptionCursor;
-DEALLOCATE DateDescriptionCursor;
+INSERT INTO
+	[Mapping].[DateToMonth]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		MonthId
+	)
+SELECT
+	@CreatedByUserId,
+	@SourceId,
+	[Date].[DateId],
+	[Month].[MonthId]
+FROM 
+	[Information].[Date]
+INNER JOIN
+	[Information].[Month]
+	ON [Month].MonthDescription = DATENAME(mm, [Date].[DateDescription])
+LEFT OUTER JOIN
+	[Mapping].[DateToMonth]
+	ON [DateToMonth].[DateId] = [Date].[DateId]
+	AND [DateToMonth].[MonthId] = [Month].[MonthId]
+WHERE
+	[DateToMonth].[DateToMonthId] IS NULL

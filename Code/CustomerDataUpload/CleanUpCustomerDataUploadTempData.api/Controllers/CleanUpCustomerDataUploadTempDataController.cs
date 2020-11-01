@@ -5,6 +5,8 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CleanUpCustomerDataUploadTempData.api.Controllers
 {
@@ -71,18 +73,55 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId);
 
+                var processList = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+
                 //Cleanup temp data
-                _tempCustomerDataUploadMethods.Customer_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.FixedContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.FlexContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.FlexReferenceVolume_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.FlexTrade_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.Meter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.MeterExemption_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.MeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.Site_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.SubMeter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                _tempCustomerDataUploadMethods.SubMeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                Parallel.ForEach(processList, new ParallelOptions{MaxDegreeOfParallelism = 5}, process => {
+                    if(process == 1)
+                    {
+                        _tempCustomerDataUploadMethods.MeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 2)
+                    {
+                        _tempCustomerDataUploadMethods.SubMeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 3)
+                    {
+                        _tempCustomerDataUploadMethods.Customer_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 4)
+                    {
+                        _tempCustomerDataUploadMethods.FixedContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 5)
+                    {
+                        _tempCustomerDataUploadMethods.FlexContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 6)
+                    {
+                        _tempCustomerDataUploadMethods.FlexReferenceVolume_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 7)
+                    {
+                        _tempCustomerDataUploadMethods.FlexTrade_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 8)
+                    {
+                        _tempCustomerDataUploadMethods.Meter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 9)
+                    {
+                        _tempCustomerDataUploadMethods.MeterExemption_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 10)
+                    {
+                        _tempCustomerDataUploadMethods.Site_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                    else if(process == 11)
+                    {
+                        _tempCustomerDataUploadMethods.SubMeter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                    }
+                });
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, false, null);

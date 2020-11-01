@@ -96,7 +96,7 @@ namespace ValidateSubMeterData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Asset
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>

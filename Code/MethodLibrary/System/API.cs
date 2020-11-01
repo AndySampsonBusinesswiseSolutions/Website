@@ -233,7 +233,7 @@ namespace MethodLibrary
                         name: "_myAllowSpecificOrigins",
                         builder =>
                             {
-                                builder.WithOrigins("http://energyportal:8080").AllowAnyMethod().AllowAnyHeader();
+                                builder.WithOrigins("http://energyportaldev:8080").AllowAnyMethod().AllowAnyHeader();
                             }
                     );
                 });

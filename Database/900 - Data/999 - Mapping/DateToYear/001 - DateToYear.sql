@@ -7,27 +7,27 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-DECLARE 
-	@DateId BIGINT,
-	@DateDescription VARCHAR(255),
-	@YearId BIGINT
-
-DECLARE DateDescriptionCursor CURSOR FOR
-SELECT DateId, DateDescription
-FROM [Information].[Date]
-
-OPEN DateDescriptionCursor
-
-FETCH NEXT FROM DateDescriptionCursor
-INTO @DateId, @DateDescription
-
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @YearId = (SELECT YearId FROM [Information].[Year] WHERE [Year].YearDescription = DATEPART(year, @DateDescription))
-		EXEC [Mapping].[DateToYear_Insert] @CreatedByUserId, @SourceId, @DateId, @YearId
-
-		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateId, @DateDescription
-	END
-CLOSE DateDescriptionCursor;
-DEALLOCATE DateDescriptionCursor;
+INSERT INTO
+	[Mapping].[DateToYear]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		YearId
+	)
+SELECT
+	@CreatedByUserId,
+	@SourceId,
+	[Date].[DateId],
+	[Year].[YearId]
+FROM 
+	[Information].[Date]
+INNER JOIN
+	[Information].[Year]
+	ON [Year].YearDescription = DATEPART(year, [Date].[DateDescription])
+LEFT OUTER JOIN
+	[Mapping].[DateToYear]
+	ON [DateToYear].[DateId] = [Date].[DateId]
+	AND [DateToYear].[YearId] = [Year].[YearId]
+WHERE
+	[DateToYear].[DateToYearId] IS NULL

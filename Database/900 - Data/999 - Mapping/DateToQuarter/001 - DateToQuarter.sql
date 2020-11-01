@@ -5,8 +5,6 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-truncate table [Mapping].[DateToQuarter]
-
 INSERT INTO [Mapping].[DateToQuarter]
     (
         CreatedByUserId,
@@ -39,3 +37,9 @@ INNER JOIN
 			WHEN DATENAME(mm, DateDescription) = 'December' THEN 'Quarter 4'
 		END
 	)
+LEFT OUTER JOIN
+	[Mapping].[DateToQuarter]
+	ON [DateToQuarter].[DateId] = [Date].[DateId]
+	AND [DateToQuarter].[QuarterId] = [Quarter].[QuarterId]
+WHERE
+	[DateToQuarter].[DateToQuarterId] IS NULL

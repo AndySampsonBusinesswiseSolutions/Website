@@ -7,27 +7,27 @@ DECLARE @CreatedByUserId BIGINT = (SELECT UserId FROM [Administration.User].[Use
 DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information].[SourceAttribute] WHERE SourceAttributeDescription = 'User Generated')
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
-DECLARE 
-	@DateId BIGINT,
-	@DateDescription VARCHAR(255),
-	@DayOfTheWeekId BIGINT
-
-DECLARE DateDescriptionCursor CURSOR FOR
-SELECT DateId, DateDescription
-FROM [Information].[Date]
-
-OPEN DateDescriptionCursor
-
-FETCH NEXT FROM DateDescriptionCursor
-INTO @DateId, @DateDescription
-
-WHILE @@FETCH_STATUS = 0
-	BEGIN
-		SET @DayOfTheWeekId = (SELECT DayOfTheWeekId FROM [Information].[DayOfTheWeek] WHERE [DayOfTheWeek].DayOfTheWeekDescription = DATENAME(dw, @DateDescription))
-		EXEC [Mapping].[DateToDayOfTheWeek_Insert] @CreatedByUserId, @SourceId, @DateId, @DayOfTheWeekId
-
-		FETCH NEXT FROM DateDescriptionCursor
-		INTO @DateId, @DateDescription
-	END
-CLOSE DateDescriptionCursor;
-DEALLOCATE DateDescriptionCursor;
+INSERT INTO
+	[Mapping].[DateToDayOfTheWeek]
+	(
+		CreatedByUserId,
+		SourceId,
+		DateId,
+		DayOfTheWeekId
+	)
+SELECT
+	@CreatedByUserId,
+	@SourceId,
+	[Date].[DateId],
+	[DayOfTheWeek].[DayOfTheWeekId]
+FROM 
+	[Information].[Date]
+INNER JOIN
+	[Information].[DayOfTheWeek]
+	ON [DayOfTheWeek].DayOfTheWeekDescription = DATENAME(dw, [Date].[DateDescription])
+LEFT OUTER JOIN
+	[Mapping].[DateToDayOfTheWeek]
+	ON [DateToDayOfTheWeek].[DateId] = [Date].[DateId]
+	AND [DateToDayOfTheWeek].[DayOfTheWeekId] = [DayOfTheWeek].[DayOfTheWeekId]
+WHERE
+	[DateToDayOfTheWeek].[DateToDayOfTheWeekId] IS NULL

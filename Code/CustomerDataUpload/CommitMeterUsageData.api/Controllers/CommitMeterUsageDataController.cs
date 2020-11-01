@@ -154,8 +154,10 @@ namespace CommitMeterUsageData.api.Controllers
                     //Add HasPeriodicUsage to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.HasPeriodicUsage, hasPeriodicUsage);
 
-                    //Connect to Routing API and POST data
-                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                    //Call CommitEstimatedAnnualUsage API and wait for response
+                    var commitEstimateUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+                    var commitEstimateUsageAPI = _systemMethods.PostAsJsonAsync(commitEstimateUsageAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                    var commitEstimateUsageResult = commitEstimateUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     if (hasPeriodicUsage)
                     {
