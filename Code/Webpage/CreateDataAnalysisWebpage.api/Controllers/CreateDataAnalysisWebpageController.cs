@@ -35,6 +35,12 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private string HTML = string.Empty;
         private JObject jsonObject;
         private Dictionary<string, long> attributeDictionary = new Dictionary<string, long>();
+        private Dictionary<long, long> meterCommodityDictionary = new Dictionary<long, long>();
+        private Dictionary<long, string> commodityDictionary = new Dictionary<long, string>();
+        private Dictionary<long, string> areaDictionary = new Dictionary<long, string>();
+        private Dictionary<long, string> subAreaDictionary = new Dictionary<long, string>();
+        private Dictionary<long, string> assetGUIDDictionary = new Dictionary<long, string>();
+        private Dictionary<long, string> assetNameDictionary = new Dictionary<long, string>();
         private FilterData filterData;
 
         public class FilterData    {
@@ -92,11 +98,11 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDataAnalysisWebpageAPIId);
 
-                //Get Page Id
-                var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.DataAnalysis);
-
                 //Setup required Attribute Ids
                 GetRequiredAttributes();
+
+                //Setup commodityDictionary
+                commodityDictionary = _informationMethods.Commodity_GetCommodityDictionary();
 
                 //TODO: Get Customer GUIDs
 
@@ -113,6 +119,9 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 }
 
                 var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{HTML}<ul>";
+
+                //Get Page Id
+                var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.DataAnalysis);
 
                 //Write HTML to System.PageRequest
                 _systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, baseUl);
@@ -144,6 +153,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private void BuildSiteBranch(List<long> siteIds)
         {
             var siteMeterDictionary = siteIds.ToDictionary(s => s, s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s));
+            meterCommodityDictionary = siteMeterDictionary.Values.SelectMany(m => m).ToDictionary(m => m, m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m));
             var commodityMatchingSiteDictionary = siteMeterDictionary.Where(s => CommodityMeterMatch(s.Value)).ToDictionary(s => s.Key, s => s.Value.Where(m => CommodityMeterMatch(m)).ToList());
 
             if(filterData.SiteChecked)
@@ -182,10 +192,13 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 foreach(var areaMeter in areaMeterDictionary)
                 {
                     //Get Area description
-                    var areaDescription = _informationMethods.Area_GetAreaDescriptionByAreaId(areaMeter.Key);
+                    if(!areaDictionary.ContainsKey(areaMeter.Key))
+                    {
+                        areaDictionary.Add(areaMeter.Key, _informationMethods.Area_GetAreaDescriptionByAreaId(areaMeter.Key));
+                    }
 
                     var commodityHTML = BuildCommodityBranch(areaMeter.Value, siteId, areaMeter.Key);
-                    areaHTML += GetLiHtml("Area", $"{siteId}_{areaMeter.Key}", areaDescription, commodityHTML);
+                    areaHTML += GetLiHtml("Area", $"{siteId}_{areaMeter.Key}", areaDictionary[areaMeter.Key], commodityHTML);
                 }
 
                 return areaHTML;
@@ -204,13 +217,13 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 var commodityHTML = string.Empty;
 
                 //Get commodities linked to meters
-                var commodityIds = meterIds.Select(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m)).Distinct().ToList();
+                var commodityIds = meterIds.Select(m => meterCommodityDictionary[m]).Distinct().ToList();
 
                 foreach(var commodityId in commodityIds)
                 {
                     //Get Commodity description
-                    var commodity = _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(commodityId);
-                    var commodityMeterIds = meterIds.Where(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m) == commodityId).ToList();
+                    var commodity = commodityDictionary[commodityId];
+                    var commodityMeterIds = meterIds.Where(m => meterCommodityDictionary[m] == commodityId).ToList();
 
                     var meterHTML = BuildMeterBranch(siteId, areaId, commodityId, commodityMeterIds);
                     commodityHTML += GetLiHtml("Commodity", $"{siteId}_{areaId}_{commodityId}", commodity, meterHTML);
@@ -267,10 +280,13 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 foreach(var subAreaSubMeter in subAreaSubMeterDictionary)
                 {
                     //Get SubArea description
-                    var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaSubMeter.Key);
+                    if(!subAreaDictionary.ContainsKey(subAreaSubMeter.Key))
+                    {
+                        subAreaDictionary.Add(subAreaSubMeter.Key, _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaSubMeter.Key));
+                    }
 
                     var assetHTML = BuildAssetBranch(subAreaSubMeter.Value);
-                    subAreaHTML += GetLiHtml("SubArea", $"{siteId}_{areaId}_{commodityId}_{meterId}_{subAreaSubMeter.Key}", subAreaDescription, assetHTML);
+                    subAreaHTML += GetLiHtml("SubArea", $"{siteId}_{areaId}_{commodityId}_{meterId}_{subAreaSubMeter.Key}", subAreaDictionary[subAreaSubMeter.Key], assetHTML);
                 }
 
                 return subAreaHTML;
@@ -288,20 +304,28 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             {
                 var assetHTML = string.Empty;
 
-                //Get commodities linked to meters
-                var assetIds = subMeterIds.Select(m => _mappingMethods.AssetToSubMeter_GetAssetIdBySubMeterId(m)).Distinct().ToList();
+                //Get assets linked to submeters
+                var subMeterAssetDictionary = subMeterIds.ToDictionary(s => s, s => _mappingMethods.AssetToSubMeter_GetAssetIdBySubMeterId(s));
+                var assetIds = subMeterAssetDictionary.Values.Select(a => a).Distinct().ToList();
 
                 foreach(var assetId in assetIds)
                 {
                     //Get Asset GUID
-                    var assetGUID = _customerMethods.Asset_GetAssetGUIDByAssetId(assetId);
+                    if(!assetGUIDDictionary.ContainsKey(assetId))
+                    {
+                        assetGUIDDictionary.Add(assetId, _customerMethods.Asset_GetAssetGUIDByAssetId(assetId).ToString());
+                    }
 
                     //Get Asset name
-                    var assetName = _customerMethods.AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(assetId, attributeDictionary["AssetName"]);
-                    var assetSubMeterIds = subMeterIds.Where(m => _mappingMethods.AssetToSubMeter_GetAssetIdBySubMeterId(m) == assetId).ToList();
+                    if(!assetNameDictionary.ContainsKey(assetId))
+                    {
+                        assetNameDictionary.Add(assetId, _customerMethods.AssetDetail_GetAssetDetailDescriptionByAssetIdAndAssetAttributeId(assetId, attributeDictionary["AssetName"]));
+                    }
+
+                    var assetSubMeterIds = subMeterIds.Where(s => subMeterAssetDictionary[s] == assetId).ToList();
 
                     var subMeterHTML = BuildSubMeterBranch(assetSubMeterIds);
-                    assetHTML += GetLiHtml("Asset", $"{assetGUID}", assetName, subMeterHTML);
+                    assetHTML += GetLiHtml("Asset", assetGUIDDictionary[assetId], assetNameDictionary[assetId], subMeterHTML);
                 }
 
                 return assetHTML;
@@ -321,13 +345,13 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 foreach(var subMeterId in subMeterIds)
                 {
                     //Get SubMeter GUID
-                    var meterGUID = _customerMethods.SubMeter_GetSubMeterGUIDBySubMeterId(subMeterId).ToString();
+                    var subMeterGUID = _customerMethods.SubMeter_GetSubMeterGUIDBySubMeterId(subMeterId).ToString();
 
                     //Get SubMeter identifier
-                    var meterIdentifier = _customerMethods.SubMeterDetail_GetSubMeterDetailDescriptionBySubMeterIdAndSubMeterAttributeId(subMeterId, attributeDictionary["SubMeterIdentifier"]);
+                    var subMeterIdentifier = _customerMethods.SubMeterDetail_GetSubMeterDetailDescriptionBySubMeterIdAndSubMeterAttributeId(subMeterId, attributeDictionary["SubMeterIdentifier"]);
 
                     //Finish html
-                    subMeterHTML += GetLiHtml("SubMeter", meterGUID, meterIdentifier, string.Empty);
+                    subMeterHTML += GetLiHtml("SubMeter", subMeterGUID, subMeterIdentifier, string.Empty);
                 }
 
                 return subMeterHTML;
@@ -380,21 +404,25 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private bool CommodityMeterMatch(List<long> meterIds)
         {
             //Get commodities linked to meters
-            var commodityIds = meterIds.Select(m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m)).Distinct().ToList();
-            var meterCommodities = commodityIds.Select(c => _informationMethods.Commodity_GetCommodityDescriptionByCommodityId(c)).ToList();
+            var commodityIds = meterIds.Select(m => meterCommodityDictionary[m]).Distinct().ToList();
+            var meterCommodities = commodityIds.Select(c => commodityDictionary[c]).ToList();
 
             return filterData.Commodities.Any(c => meterCommodities.Contains(c));
         }
 
         private string GetLiHtml(string type, string guid, string value, string ulHTML)
         {
+            var branchDivClass = string.IsNullOrWhiteSpace(ulHTML)
+                ? "fa-times-circle"
+                : "fa-plus-square show-pointer";
+
             ulHTML = $"<ul class='format-listitem'>{ulHTML}</ul>";
 
             var branchListDiv = $"<div id='{type}|{guid}List' class='listitem-hidden'>{ulHTML}</div>";
             var span = $"<span id='{type}|{guid}span'>{value}</span>";
             var icon = $"<i class='fas fa-site' style='padding-left: 3px; padding-right: 3px;'></i>";
-            var checkbox = $"<input type='checkbox' id='{type}|{guid}checkbox' GUID='{type}|{guid}' Branch='{type}'></input>";
-            var branchDiv = $"<i id='{type}|{guid}' class='far fa-plus-square show-pointer expander'></i>";
+            var checkbox = $"<input type='checkbox' id='{type}|{guid}checkbox' onclick='updatePage(this)' GUID='{type}|{guid}' Branch='{type}'></input>";
+            var branchDiv = $"<i id='{type}|{guid}' class='far {branchDivClass} expander'></i>";
 
             return $"<li>{branchDiv}{checkbox}{icon}{span}{branchListDiv}</li>";
         }

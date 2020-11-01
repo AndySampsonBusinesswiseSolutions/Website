@@ -8,7 +8,9 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace DataAnalysisWebpageGetForecast.api.Controllers
 {
@@ -27,15 +29,14 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
-        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
-        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
         private readonly Int64 dataAnalysisWebpageGetForecastAPIId;
         private FilterData filterData;
         private Dictionary<long, string> dateDictionary;
         private string granularityCode;
         private long granularityId;
+        private ConcurrentDictionary<Tuple<string, long>, List<Usage>> forecastDictionary = new ConcurrentDictionary<Tuple<string, long>, List<Usage>>();
+        private ParallelOptions parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
 
         private class Usage
         {
@@ -141,6 +142,17 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
 
                 //get customer Id
                 var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(filterData.CustomerGUID);
+
+                //get MeterIdentifierMeterAttributeId
+                var customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier);
+
+                //get AssetNameAssetAttributeId
+                var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
+
+                //get SubMeterIdentifierSubMeterAttributeId
+                var customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+                var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(customerSubMeterAttributeEnums.SubMeterIdentifier);
 
                 var forecast = new Forecast();
                 var seriesList = new List<Series>();
@@ -264,9 +276,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "Meter")
                     {
-                        //get MeterIdentifierMeterAttributeId
-                        var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
                         //Get Meter Id
                         var meterId = _customerMethods.Meter_GetMeterIdByMeterGUID(locationGUID);
 
@@ -342,9 +351,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                             //get all submeters for meter
                             var subMeterIdList = _mappingMethods.MeterToSubMeter_GetSubMeterIdListByMeterId(meterId).ToList();
 
-                            //get MeterIdentifierMeterAttributeId
-                            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
                             //Get Meter identifier
                             var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
 
@@ -363,9 +369,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "Asset")
                     {
-                        //get AssetNameAssetAttributeId
-                        var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
-
                         //Get asset id
                         var assetId = _customerMethods.Asset_GetAssetIdByAssetGUID(locationGUID);
 
@@ -384,9 +387,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         //get subarea description
                         var subAreaDescription = _informationMethods.SubArea_GetSubAreaDescriptionBySubAreaId(subAreaId);
 
-                        //get MeterIdentifierMeterAttributeId
-                        var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
                         //Get Meter identifier
                         var meterIdentifier = _customerMethods.MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(meterId, meterIdentifierMeterAttributeId);
 
@@ -400,9 +400,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     }
                     else if(locationType == "SubMeter")
                     {
-                        //get SubMeterIdentifierSubMeterAttributeId
-                        var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-
                         //Get SubMeter Id
                         var subMeterId = _customerMethods.SubMeter_GetSubMeterIdBySubMeterGUID(locationGUID);
 
@@ -483,11 +480,29 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             }
 
             //get usage for every meter
-            var usageList = meterIdList.SelectMany(m => GetMeterForecast(meterType, m)).ToList();
+            //Because there's a possibility that we want the same meters multiple times
+                //the first time we see a meterType/meterId combination, it is stored
+                //in the forecastDictionary. Then, if we need that combination again,
+                //it can be retrieved from the dictionary instead of querying the database
+            var usageList = new ConcurrentBag<Usage>();
+
+            Parallel.ForEach(meterIdList, parallelOptions, meterId => {
+                var meterTypeMeterIdTuple = Tuple.Create(meterType, meterId);
+                if(!forecastDictionary.ContainsKey(meterTypeMeterIdTuple))
+                {
+                    var usages = GetMeterForecast(meterType, meterId).ToList();
+                    forecastDictionary.TryAdd(meterTypeMeterIdTuple, usages);
+                }
+
+                foreach(var usage in forecastDictionary[meterTypeMeterIdTuple])
+                {
+                    usageList.Add(usage);
+                }
+            });
 
             if (usageList.Any())
             {
-                var series = CreateNewSeries(type, commodity, baseName, splitByCommodity, usageList);
+                var series = CreateNewSeries(type, commodity, baseName, splitByCommodity, usageList.ToList());
                 seriesList.Add(series);
             }
         }
@@ -555,17 +570,10 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             }
 
             //get date to year mappings
-            var dateToYearMapping = _mappingMethods.GetDateToYearDictionary()
-                .Where(d => dateDictionary.Keys.Contains(d.Key))
-                .ToDictionary(d => d.Key, d => d.Value);
+            var dateToYearMapping = GetGranularMappingDictionary(granularityCode).ToDictionary(d => d.Key, d => d.Value.First());
 
             //get years
-            var yearIdList = dateToYearMapping.Values.Distinct().ToList();
-
-            var informationYearMethods = new Methods.Information.Year();
-            var yearDictionary = yearIdList.ToDictionary(y => y, y => informationYearMethods.Year_GetYearDescriptionByYearId(y))
-                .OrderBy(y => Convert.ToInt64(y.Value))
-                .ToDictionary(y => y.Key, y => y.Value);
+            var yearDictionary = GetGranularDictionary(dateToYearMapping.Values.Distinct().ToList(), granularityCode);
 
             return CreateUsageListFromSingleIdForecast(forecastTuple, yearDictionary);
         }
@@ -603,15 +611,16 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 forecastTuple.Add(tup);
             }
 
-            var dictionary = new Dictionary<long, Dictionary<long, string>>();
             var granularMappingDictionary = new Dictionary<long, List<long>>();
             var granularDictionary = new Dictionary<long, string>();
+            var baseMapping = new Dictionary<long, long>();
+            var baseDictionary = dateDictionary.ToDictionary(d => d.Key, d => d.Value);
 
             if(granularityCode == "FiveMinute"
                 || granularityCode == "HalfHour")
             {
                 //map date to itself for generic code to work
-                var dateToDateMapping = dateDictionary.ToDictionary(d => d.Key, d => d.Key);
+                baseMapping = baseDictionary.ToDictionary(d => d.Key, d => d.Key);
 
                 //get time periods
                 var timePeriodDictionary = _informationMethods.TimePeriod_GetStartTimeDictionary();
@@ -620,7 +629,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 var granularityToTimePeriodNonStandardDateList = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetTupleByGranularityId(granularityId);
                 var granularityToTimePeriodStandardDateList = _mappingMethods.GranularityToTimePeriod_StandardDate_GetTimePeriodListByGranularityId(granularityId);
 
-                granularMappingDictionary = dateDictionary.ToDictionary(
+                granularMappingDictionary = baseDictionary.ToDictionary(
                     d => d.Key,
                     d => (granularityToTimePeriodNonStandardDateList.Any(g => g.Item1 == d.Key)
                         ? granularityToTimePeriodNonStandardDateList.Where(g => g.Item1 == d.Key).Select(t => t.Item2).ToList()
@@ -632,78 +641,92 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                     t => t.Key,
                     t => $"{t.Value.Hours.ToString().PadLeft(2, '0')}:{t.Value.Minutes.ToString().PadLeft(2, '0')}"
                 );
-
-                dictionary = GetDictionary(dateToDateMapping, dateDictionary, granularMappingDictionary, granularDictionary);
             }
             else 
             {
                 //get date to year mappings
-                var dateToYearMapping = _mappingMethods.GetDateToYearDictionary()
-                    .Where(d => dateDictionary.Keys.Contains(d.Key))
-                    .ToDictionary(d => d.Key, d => d.Value);
+                baseMapping = GetGranularMappingDictionary("Year").ToDictionary(d => d.Key, d => d.Value.First());
+                baseDictionary = GetGranularDictionary(baseMapping.Values.Distinct().ToList(), "Year");
 
-                //get years
-                var yearIdList = dateToYearMapping.Values.Distinct().ToList();
-
-                var informationYearMethods = new Methods.Information.Year();
-                var yearDictionary = yearIdList.ToDictionary(
-                    y => y,
-                    y => informationYearMethods.Year_GetYearDescriptionByYearId(y)
-                );
-
-                if(granularityCode == "Week")
-                {
-                    //get date to week mappings
-                    granularMappingDictionary = _mappingMethods.GetDateToWeekDictionary()
-                        .Where(d => dateDictionary.Keys.Contains(d.Key))
-                        .ToDictionary(d => d.Key, d => new List<long>{d.Value});
-
-                    //get weeks
-                    var weekIdList = granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList();
-
-                    var informationWeekMethods = new Methods.Information.Week();
-                    granularDictionary = weekIdList.ToDictionary(
-                        w => w,
-                        w => informationWeekMethods.Week_GetWeekDescriptionByWeekId(w)
-                    );
-                }
-                else if(granularityCode == "Month")
-                {
-                    //get date to month mappings
-                    granularMappingDictionary = _mappingMethods.GetDateToMonthDictionary()
-                        .Where(d => dateDictionary.Keys.Contains(d.Key))
-                        .ToDictionary(d => d.Key, d => new List<long>{d.Value});
-
-                    //get months
-                    var monthIdList = granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList();
-
-                    var informationMonthMethods = new Methods.Information.Month();
-                    granularDictionary = monthIdList.ToDictionary(
-                        m => m,
-                        m => informationMonthMethods.Month_GetMonthDescriptionByMonthId(m)
-                    );
-                }
-                else if(granularityCode == "Quarter")
-                {
-                    //get date to quarter mappings
-                    granularMappingDictionary = _mappingMethods.GetDateToQuarterDictionary()
-                        .Where(d => dateDictionary.Keys.Contains(d.Key))
-                        .ToDictionary(d => d.Key, d => new List<long>{d.Value});
-
-                    //get quarters
-                    var quarterIdList = granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList();
-
-                    var informationQuarterMethods = new Methods.Information.Quarter();
-                    granularDictionary = quarterIdList.ToDictionary(
-                        q => q,
-                        q => informationQuarterMethods.Quarter_GetQuarterDescriptionByQuarterId(q)
-                    );
-                }
-
-                dictionary = GetDictionary(dateToYearMapping, yearDictionary, granularMappingDictionary, granularDictionary);
+                granularMappingDictionary = GetGranularMappingDictionary(granularityCode);
+                granularDictionary = GetGranularDictionary(granularMappingDictionary.Values.SelectMany(v => v).Distinct().ToList(), granularityCode);                
             }
 
+            var dictionary = GetDictionary(baseMapping, baseDictionary, granularMappingDictionary, granularDictionary);
             return CreateUsageListFromDoubleIdForecast(forecastTuple, dictionary);
+        }
+
+        private Dictionary<long, string> GetGranularDictionary(List<long> idList, string granularityCode)
+        {
+            if(granularityCode == "Year")
+            {
+                //get years
+                var informationYearMethods = new Methods.Information.Year();
+                return idList.ToDictionary(
+                    id => id,
+                    id => informationYearMethods.Year_GetYearDescriptionByYearId(id)
+                );
+            }
+
+            if(granularityCode == "Week")
+            {
+                //get weeks
+                var informationWeekMethods = new Methods.Information.Week();
+                return idList.ToDictionary(
+                    id => id,
+                    id => informationWeekMethods.Week_GetWeekDescriptionByWeekId(id)
+                );
+            }
+
+            if(granularityCode == "Month")
+            {
+                //get months
+                var informationMonthMethods = new Methods.Information.Month();
+                return idList.ToDictionary(
+                    id => id,
+                    id => informationMonthMethods.Month_GetMonthDescriptionByMonthId(id)
+                );
+            }
+
+            if(granularityCode == "Quarter")
+            {
+                //get quarters
+                var informationQuarterMethods = new Methods.Information.Quarter();
+                return idList.ToDictionary(
+                    id => id,
+                    id => informationQuarterMethods.Quarter_GetQuarterDescriptionByQuarterId(id)
+                );
+            }
+
+            return new Dictionary<long, string>();
+        }
+
+        private Dictionary<long, List<long>> GetGranularMappingDictionary(string granularityCode)
+        {
+            var dictionary = new Dictionary<long, long>();
+
+            if(granularityCode == "Year")
+            {
+                //get date to quarter mappings
+                dictionary = _mappingMethods.GetDateToYearDictionary();
+            }
+            else if(granularityCode == "Week")
+            {
+                //get date to week mappings
+                dictionary = _mappingMethods.GetDateToWeekDictionary();
+            }
+            else if(granularityCode == "Month")
+            {
+                //get date to month mappings
+                dictionary = _mappingMethods.GetDateToMonthDictionary();
+            }
+            else if(granularityCode == "Quarter")
+            {
+                //get date to quarter mappings
+                dictionary = _mappingMethods.GetDateToQuarterDictionary();
+            }
+            
+            return dictionary.Where(d => dateDictionary.Keys.Contains(d.Key)).ToDictionary(d => d.Key, d => new List<long> { d.Value });
         }
 
         private Dictionary<long, Dictionary<long, string>> GetDictionary(Dictionary<long, long> baseMapping, Dictionary<long, string> baseDictionary, Dictionary<long, List<long>> subMapping, Dictionary<long, string> subDictionary)
@@ -751,7 +774,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             }
             else
             {
-                var forecastStringTupleGroup = forecastStringTupleList.GroupBy(f => f.Item1);
                 forecastTupleDictionary = forecastStringPeriodList.ToDictionary(
                     d => d,
                     d => forecastStringTupleList.Where(f => f.Item1 == d).Select(f => f.Item2).ToList()

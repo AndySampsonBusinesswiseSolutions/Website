@@ -41,16 +41,26 @@ function resetSlider() {
   scope.$apply(function () {
     scope.resetSliders();
   });
+}
 
-  updateChart(false);
+function resetSwitchButtons() {
+  siteLocationcheckbox.checked = true;
+  areaLocationcheckbox.checked = true;
+  commodityLocationcheckbox.checked = true;
+  meterLocationcheckbox.checked = true;
+  subareaLocationcheckbox.checked = true;
+  assetLocationcheckbox.checked = true;
+  submeterLocationcheckbox.checked = true;
+  electricityCommoditycheckbox.checked = true;
+  gasCommoditycheckbox.checked = true;
 }
 
 async function createTrees(isPageLoad) {
   createEnergyUnitListItem();
   createEnergyUnitInstanceListItem();
-  createCommodityListItem();
   
   if(isPageLoad) {
+    createCommodityListItem();
     createDateRangeDisplayListItem();
     createGranularityDisplayListItem();
     createGroupingOptionTree();
@@ -323,12 +333,11 @@ async function createSiteTree(isPageLoad) {
   recurseSelectionListItem.appendChild(recurseSelectionCheckbox);
   recurseSelectionListItem.appendChild(recurseSelectionSpan);
 
+  await buildSiteBranch(ul);
   clearElement(div);
   div.appendChild(headerDiv);
   ul.appendChild(breakDisplayListItem);
   ul.appendChild(recurseSelectionListItem);
-
-  await buildSiteBranch(ul);  
   div.appendChild(ul);
 
   for(var i = 0; i < checkboxIds.length; i++) {
@@ -466,9 +475,15 @@ async function buildSiteBranch(elementToAppendTo) {
 
 async function updatePage(callingElement) {
   var branch = callingElement.getAttribute('branch');
-  var refreshChart = true;
   
   switch(branch) {
+    case 'reset':
+      showElement(miniLoader, true);
+      resetSlider();
+      resetSwitchButtons();
+      await createTrees(false);
+      showElement(miniLoader, false);
+      break;
     case 'displaySelector':
     case 'usageDisplaySelector':
       updateChartHeader(callingElement);
@@ -478,19 +493,17 @@ async function updatePage(callingElement) {
       break;
     case 'commoditySelector':
     case 'locationSelector':
-      await createSiteTree(); 
-      addExpanderOnClickEvents();
+      showElement(miniLoader, true);
+      await createTrees(false);
+      showElement(miniLoader, false);
       break;
     case 'groupingOptionSelector':
     case 'groupingOption1GroupingOptionSelector':
     case 'budgetSelector':
     case 'varianceSelector':
     case 'forecastSelector':
-      break;
     case 'costDisplaySelector':
     case 'rateDisplaySelector':
-      var displayBranchElement = document.getElementById(branch + 'radio');
-      refreshChart = displayBranchElement.checked;
       break;
     case 'Site':
     case 'Area':
@@ -503,13 +516,8 @@ async function updatePage(callingElement) {
       break;
     default:
       alert(branch);
-      refreshChart = false;
       break;
   }
-
-  // if (refreshChart) {
-  //   updateChart();
-  // }
 }
 
 function updateChartHeader(callingElement) {
