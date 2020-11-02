@@ -130,6 +130,9 @@ namespace CheckPrerequisiteAPI.api.Controllers
                             }
                         }    
                     }
+
+                    //wait 5 seconds
+                    System.Threading.Thread.Sleep(5000);
                 }
             }
             catch(Exception error)
