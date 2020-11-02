@@ -118,3 +118,5 @@ C:\wamp64\www\Website\Code\DemandForecast\CreateFiveMinuteForecast.api\obj\Debug
 C:\wamp64\www\Website\Code\DemandForecast\CreateFiveMinuteForecast.api\obj\Debug\netcoreapp3.1\CreateFiveMinuteForecast.api.dll
 C:\wamp64\www\Website\Code\DemandForecast\CreateFiveMinuteForecast.api\obj\Debug\netcoreapp3.1\CreateFiveMinuteForecast.api.pdb
 C:\wamp64\www\Website\Code\DemandForecast\CreateFiveMinuteForecast.api\obj\Debug\netcoreapp3.1\CreateFiveMinuteForecast.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\DemandForecast\CreateFiveMinuteForecast.api\bin\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\DemandForecast\CreateFiveMinuteForecast.api\bin\Debug\netcoreapp3.1\Entity.pdb

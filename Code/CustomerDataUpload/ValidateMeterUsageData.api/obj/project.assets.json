@@ -2181,6 +2181,16 @@
           "bin/placeholder/databaseInteraction.dll": {}
         }
       },
+      "Entity/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/Entity.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Entity.dll": {}
+        }
+      },
       "enums/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -2201,6 +2211,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
+          "Entity": "1.0.0",
           "Microsoft.AspNet.WebApi.Client": "5.2.7",
           "Microsoft.AspNetCore.Cors": "2.2.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0",
@@ -7561,6 +7572,11 @@
       "path": "../../databaseInteraction/databaseInteraction.csproj",
       "msbuildProject": "../../databaseInteraction/databaseInteraction.csproj"
     },
+    "Entity/1.0.0": {
+      "type": "project",
+      "path": "../../Entity/Entity.csproj",
+      "msbuildProject": "../../Entity/Entity.csproj"
+    },
     "enums/1.0.0": {
       "type": "project",
       "path": "../../enums/enums.csproj",
@@ -7574,6 +7590,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
+      "Entity >= 1.0.0",
       "MethodLibrary >= 1.0.0",
       "Newtonsoft.Json >= 12.0.3",
       "enums >= 1.0.0"
@@ -7603,6 +7620,9 @@
       "frameworks": {
         "netcoreapp3.1": {
           "projectReferences": {
+            "C:\\wamp64\\www\\Website\\Code\\Entity\\Entity.csproj": {
+              "projectPath": "C:\\wamp64\\www\\Website\\Code\\Entity\\Entity.csproj"
+            },
             "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj": {
               "projectPath": "C:\\wamp64\\www\\Website\\Code\\enums\\enums.csproj"
             },

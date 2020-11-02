@@ -1,6 +1,7 @@
 using System.Reflection;
-using System.Data;
+using System.Linq;
 using System.Collections.Generic;
+using System.Data;
 
 namespace MethodLibrary
 {
@@ -17,6 +18,11 @@ namespace MethodLibrary
                         processQueueGUID);
 
                     return CleanedUpDataTable(dataTable);
+                }
+
+                public List<Entity.Temp.CustomerDataUpload.MeterUsage> MeterUsage_GetMeterUsageEntityListByProcessQueueGUID(string processQueueGUID)
+                {
+                    return MeterUsage_GetByProcessQueueGUID(processQueueGUID).Select(dataRow => new Entity.Temp.CustomerDataUpload.MeterUsage(dataRow)).ToList();
                 }
 
                 public void MeterUsage_DeleteByProcessQueueGUID(string processQueueGUID)

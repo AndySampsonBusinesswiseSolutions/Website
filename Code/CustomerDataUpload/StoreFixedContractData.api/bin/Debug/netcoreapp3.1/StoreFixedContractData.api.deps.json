@@ -1735,6 +1735,14 @@
           "databaseInteraction.dll": {}
         }
       },
+      "Entity/1.0.0": {
+        "runtime": {
+          "Entity.dll": {}
+        },
+        "compile": {
+          "Entity.dll": {}
+        }
+      },
       "enums/1.0.0": {
         "dependencies": {
           "System.Data.DataSetExtensions": "4.5.0",
@@ -1751,6 +1759,7 @@
       },
       "MethodLibrary/1.0.0": {
         "dependencies": {
+          "Entity": "1.0.0",
           "Microsoft.AspNet.WebApi.Client": "5.2.7",
           "Microsoft.AspNetCore.Cors": "2.2.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.0",
@@ -4405,6 +4414,11 @@
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
     },
     "databaseInteraction/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Entity/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

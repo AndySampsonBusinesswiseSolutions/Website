@@ -24,7 +24,7 @@
 					</div>
 					<div class="header">
 						<button class="closebtn" onclick="setElementDisplayStyle(overlay, 'none'); closeNav()">Close</button>
-						<i class="fas fa-filter sidenav-icon-close" onclick="closeNav()"></i>
+						<i class="fas fa-filter sidenav-icon-close" onclick="setElementDisplayStyle(overlay, 'none'); closeNav()"></i>
 					</div>
 					<div class="tree-column">
 						<div style="float: left;">
@@ -48,7 +48,7 @@
 										<span id="locationSelectorSpan">Location Visibility</span><i class="far fa-question-circle show-pointer" title="Choose whether to display Sites and/or Meters in the 'Location' tree on the left-hand side"></i>
 										<i id="locationSelector" class="far fa-plus-square expander-container-control openExpander show-pointer"></i>
 									</div>
-									<div id="configureLocationSelectorList" class="expander-container">
+									<div id="locationSelectorList" class="expander-container">
 										<div style="width: 45%; text-align: center; float: left;">
 											<span>Sites</span>
 											<label class="switch"><input type="checkbox" id="siteLocationcheckbox" checked onclick="updatePage(this)" branch="locationSelector"></input><div class="switch-btn"></div></label>

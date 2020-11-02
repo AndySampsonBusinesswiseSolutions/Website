@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\databaseInteraction\databaseInteraction.csproj" />
     <ProjectReference Include="..\enums\enums.csproj" />
+    <ProjectReference Include="..\Entity\Entity.csproj" />
   </ItemGroup>
 
   <ItemGroup>

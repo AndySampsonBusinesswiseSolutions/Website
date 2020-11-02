@@ -12,3 +12,5 @@ C:\wamp64\www\Website\Code\MethodLibrary\obj\Debug\netcoreapp3.1\MethodLibrary.A
 C:\wamp64\www\Website\Code\MethodLibrary\obj\Debug\netcoreapp3.1\MethodLibrary.csproj.CopyComplete
 C:\wamp64\www\Website\Code\MethodLibrary\obj\Debug\netcoreapp3.1\MethodLibrary.dll
 C:\wamp64\www\Website\Code\MethodLibrary\obj\Debug\netcoreapp3.1\MethodLibrary.pdb
+C:\wamp64\www\Website\Code\MethodLibrary\bin\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\MethodLibrary\bin\Debug\netcoreapp3.1\Entity.pdb

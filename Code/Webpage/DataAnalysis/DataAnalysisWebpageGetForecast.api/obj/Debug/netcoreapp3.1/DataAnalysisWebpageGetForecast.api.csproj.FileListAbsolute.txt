@@ -118,3 +118,5 @@ C:\wamp64\www\Website\Code\Webpage\DataAnalysis\DataAnalysisWebpageGetForecast.a
 C:\wamp64\www\Website\Code\Webpage\DataAnalysis\DataAnalysisWebpageGetForecast.api\obj\Debug\netcoreapp3.1\staticwebassets\DataAnalysisWebpageGetForecast.api.StaticWebAssets.Manifest.cache
 C:\wamp64\www\Website\Code\Webpage\DataAnalysis\DataAnalysisWebpageGetForecast.api\obj\Debug\netcoreapp3.1\staticwebassets\DataAnalysisWebpageGetForecast.api.StaticWebAssets.xml
 C:\wamp64\www\Website\Code\Webpage\DataAnalysis\DataAnalysisWebpageGetForecast.api\obj\Debug\netcoreapp3.1\DataAnalysisWebpageGetForecast.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\Webpage\DataAnalysis\DataAnalysisWebpageGetForecast.api\bin\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\Webpage\DataAnalysis\DataAnalysisWebpageGetForecast.api\bin\Debug\netcoreapp3.1\Entity.pdb

@@ -118,3 +118,5 @@ C:\wamp64\www\Website\Code\Webpage\CreateDataAnalysisWebpage.api\obj\Debug\netco
 C:\wamp64\www\Website\Code\Webpage\CreateDataAnalysisWebpage.api\obj\Debug\netcoreapp3.1\CreateDataAnalysisWebpage.api.dll
 C:\wamp64\www\Website\Code\Webpage\CreateDataAnalysisWebpage.api\obj\Debug\netcoreapp3.1\CreateDataAnalysisWebpage.api.pdb
 C:\wamp64\www\Website\Code\Webpage\CreateDataAnalysisWebpage.api\obj\Debug\netcoreapp3.1\CreateDataAnalysisWebpage.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\Webpage\CreateDataAnalysisWebpage.api\bin\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\Webpage\CreateDataAnalysisWebpage.api\bin\Debug\netcoreapp3.1\Entity.pdb

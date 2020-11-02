@@ -118,3 +118,5 @@ C:\wamp64\www\Website\Code\DemandForecast\CreateMonthForecast.api\obj\Debug\netc
 C:\wamp64\www\Website\Code\DemandForecast\CreateMonthForecast.api\obj\Debug\netcoreapp3.1\CreateMonthForecast.api.dll
 C:\wamp64\www\Website\Code\DemandForecast\CreateMonthForecast.api\obj\Debug\netcoreapp3.1\CreateMonthForecast.api.pdb
 C:\wamp64\www\Website\Code\DemandForecast\CreateMonthForecast.api\obj\Debug\netcoreapp3.1\CreateMonthForecast.api.genruntimeconfig.cache
+C:\wamp64\www\Website\Code\DemandForecast\CreateMonthForecast.api\bin\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\DemandForecast\CreateMonthForecast.api\bin\Debug\netcoreapp3.1\Entity.pdb

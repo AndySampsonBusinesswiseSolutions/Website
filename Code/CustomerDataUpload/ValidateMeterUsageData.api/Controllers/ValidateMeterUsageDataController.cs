@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
+using Entity;
 
 namespace ValidateMeterUsageData.api.Controllers
 {
@@ -26,20 +27,6 @@ namespace ValidateMeterUsageData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateMeterUsageDataAPIId;
-
-        //TODO: Move this into entity file
-        
-        private class MeterUsage
-        {
-            public Guid ProcessQueueGUID {get; set;}
-            public string SheetName {get; set;}
-            public int RowId {get; set;}
-            public string MPXN {get; set;}
-            public string Date {get; set;}
-            public string TimePeriod {get; set;}
-            public string Value {get; set;}
-            public bool CanCommit {get; set;}
-        }
 
         public ValidateMeterUsageDataController(ILogger<ValidateMeterUsageDataController> logger)
         {
@@ -90,31 +77,13 @@ namespace ValidateMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] table
-                var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var meterUsageEntities = _tempCustomerDataUploadMethods.MeterUsage_GetMeterUsageEntityListByProcessQueueGUID(processQueueGUID);
 
-                if(!meterUsageDataRows.Any())
+                if(!meterUsageEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterUsageDataAPIId, false, null);
                     return;
-                }
-
-                //ProcessQueueGUID, SheetName, RowId, MPXN, Date, TimePeriod, Value, CanCommit
-                var meterUsages = new List<MeterUsage>();
-                foreach (DataRow r in meterUsageDataRows)
-                {
-                    var meterUsage = new MeterUsage
-                    {
-                        ProcessQueueGUID = (Guid)r["ProcessQueueGUID"],
-                        SheetName = (string)r["SheetName"],
-                        RowId = (int)r["RowId"],
-                        MPXN = (string)r["MPXN"],
-                        Date = (string)r["Date"],
-                        TimePeriod = (string)r["TimePeriod"],
-                        Value = (string)r["Value"],
-                        CanCommit = (bool)r["CanCommit"],
-                    };
-                    meterUsages.Add(meterUsage);
                 }
 
                 string errorMessage = null;
@@ -139,7 +108,7 @@ namespace ValidateMeterUsageData.api.Controllers
 
                 foreach(var sourceSheet in sourceSheetList)
                 {
-                    var usages = meterUsages.Where(mu => mu.SheetName == sourceSheet).ToList();
+                    var usages = meterUsageEntities.Where(mu => mu.SheetName == sourceSheet).ToList();
 
                     if(!usages.Any())
                     {
@@ -149,10 +118,10 @@ namespace ValidateMeterUsageData.api.Controllers
                     var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(usages.Select(u => u.RowId).Distinct().ToList(), columns);
 
                     //If any are empty records, store error
-                    _tempCustomerDataUploadMethods.GetMissingRecords<MeterUsage>(records, usages, requiredColumns);
+                    _tempCustomerDataUploadMethods.GetMissingRecords<Temp.CustomerDataUpload.MeterUsage>(records, usages, requiredColumns);
 
                     //Check dates are valid
-                    var invalidDates = usages.Where(u => !_methods.IsValidDate(u.Date)).ToList();
+                    var invalidDates = usages.Where(u => !_methods.IsValidDate(u.Date)).Select(u => new {u.RowId, u.Date}).Distinct().ToList();
 
                     foreach(var invalidDate in invalidDates)
                     {
