@@ -120,3 +120,6 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.
 C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.api\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.api\bin\Debug\netcoreapp3.1\Entity.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.api\bin\Debug\netcoreapp3.1\Entity.pdb
+C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\wamp64\www\Website\Code\CustomerDataUpload\CleanUpCustomerDataUploadTempData.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll

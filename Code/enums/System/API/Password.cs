@@ -10,7 +10,6 @@ namespace enums
                 public class Password
                 {
                     public string DataAnalysisWebpageGetForecastAPI = "nJbgPkmV6JFh26GS";
-                    public string CreateDataAnalysisWebpageAPI = "T4Ss27brmmYtMAPN";
                     public string CreateManageCustomersWebpageAPI = "J33e23q9DXJw5aTL";
                     public string CreateYearForecastAPI = "YgK7auZuW5LnxKXB";
                     public string CreateQuarterForecastAPI = "J6qwzGCxU7ERtjwy";

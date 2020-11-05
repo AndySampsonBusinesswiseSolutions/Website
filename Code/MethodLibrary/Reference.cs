@@ -17,12 +17,13 @@ namespace MethodLibrary
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.StoredProcedure.System _storedProcedureSystemEnums = new Enums.StoredProcedure.System();
         private static readonly Enums.StoredProcedure.Mapping _storedProcedureMappingEnums = new Enums.StoredProcedure.Mapping();
+        private static readonly Enums.StoredProcedure.Mapping.APIDetailToHostEnvironment _storedProcedureMappingAPIDetailToHostEnvironmentEnums = new Enums.StoredProcedure.Mapping.APIDetailToHostEnvironment();
         private static readonly Enums.StoredProcedure.Administration _storedProcedureAdministrationEnums = new Enums.StoredProcedure.Administration();
         private static readonly Enums.StoredProcedure.Customer _storedProcedureCustomerEnums = new Enums.StoredProcedure.Customer();
         private static readonly Enums.StoredProcedure.DemandForecast _storedProcedureDemandForecastEnums = new Enums.StoredProcedure.DemandForecast();
         private static readonly Enums.StoredProcedure.Information _storedProcedureInformationEnums = new Enums.StoredProcedure.Information();
         private static readonly Enums.StoredProcedure.Supplier _storedProcedureSupplierEnums = new Enums.StoredProcedure.Supplier();
-        private static readonly Enums.StoredProcedure.Supply _storedProcedureSupplyEnums = new Enums.StoredProcedure.Supply();
+        private static readonly Enums.StoredProcedure.System.HostEnvironment _storedProcedureSystemHostEnvironmentEnums = new Enums.StoredProcedure.System.HostEnvironment();
         private static readonly Enums.StoredProcedure.Temp.CustomerDataUpload _storedProcedureTempCustomerDataUploadEnums = new Enums.StoredProcedure.Temp.CustomerDataUpload();
         private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
         private static readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
@@ -43,6 +44,7 @@ namespace MethodLibrary
         private static readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private static readonly Information _informationMethods = new Information();
         private static readonly Supplier _supplierMethods = new Supplier();
+        private static readonly Enums.System.HostEnvironment.Attribute _systemHostEnvironmentAttributeEnums = new Enums.System.HostEnvironment.Attribute();
 
         //TODO: Work out how many of these can be moved/integrated with database
 
@@ -51,6 +53,11 @@ namespace MethodLibrary
         public void InitialiseDatabaseInteraction(string userName, string password)
         {
             _databaseInteraction = new DatabaseInteraction(userName, password);
+        }
+
+        public void InitialiseDatabaseInteraction(string environment, string userName, string password)
+        {
+            _databaseInteraction = new DatabaseInteraction(environment, userName, password);
         }
 
         public void BulkInsert(DataTable dataTable, string destinationTable)

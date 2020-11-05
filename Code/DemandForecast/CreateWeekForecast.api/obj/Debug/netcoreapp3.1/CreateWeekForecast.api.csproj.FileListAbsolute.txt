@@ -120,3 +120,6 @@ C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\obj\Debug\netco
 C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\obj\Debug\netcoreapp3.1\CreateWeekForecast.api.genruntimeconfig.cache
 C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\bin\Debug\netcoreapp3.1\Entity.dll
 C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\bin\Debug\netcoreapp3.1\Entity.pdb
+C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
+C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecast.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll

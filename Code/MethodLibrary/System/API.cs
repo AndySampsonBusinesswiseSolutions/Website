@@ -161,6 +161,36 @@ namespace MethodLibrary
                 return $"{httpsURL};{httpURL}";
             }
 
+            public string GetAPIStartupURLs(string hostEnvironmentName, string APIGUID)
+            {
+                var APIId = API_GetAPIIdByAPIGUID(APIGUID);
+                var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
+                var HTTPSApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPSApplicationURL);
+
+                var httpURLDictionary = APIDetail_GetAPIDetailIdDescriptionDictionaryByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId);
+                var httpsURLDictionary = APIDetail_GetAPIDetailIdDescriptionDictionaryByAPIIdAndAPIAttributeId(APIId, HTTPSApplicationURLAttributeId);
+
+                //Get hostEnvironment Id
+                var hostEnvironmentId = new HostEnvironment().GetHostEnvironmentIdByHostEnvironmentName(hostEnvironmentName);
+                
+                //Get hostEnvironment to url mappings
+                var APIDetailToHostEnvironmentMappings = new Mapping.APIDetailToHostEnvironment().APIDetailToHostEnvironment_GetAPIDetailIdListByHostEnvironmentId(hostEnvironmentId);
+
+                if(APIDetailToHostEnvironmentMappings.Any())
+                {
+                    //Match mappings to hostEnvironment
+                    var httpURL = httpURLDictionary.First(u => APIDetailToHostEnvironmentMappings.Contains(u.Key)).Value;
+                    var httpsURL = httpsURLDictionary.First(u => APIDetailToHostEnvironmentMappings.Contains(u.Key)).Value;
+
+                    //Get hostEnvironment URL
+                    var hostEnvironmentURL = new HostEnvironment().GetHostEnvironmentURLByHostEnvironmentId(hostEnvironmentId);
+
+                    return $"{httpsURL.Replace("localhost", hostEnvironmentURL)};{httpURL.Replace("localhost", hostEnvironmentURL)}";
+                }
+
+                return $"{httpsURLDictionary.First().Value};{httpURLDictionary.First().Value}";
+            }
+
             public long GetRoutingAPIId()
             {
                 return API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
@@ -225,8 +255,36 @@ namespace MethodLibrary
                     .ToList();
             }
 
+            public Dictionary<long, string> APIDetail_GetAPIDetailIdDescriptionDictionaryByAPIIdAndAPIAttributeId(long APIId, long APIAttributeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureSystemEnums.APIDetail_GetByAPIIdAndAPIAttributeId, 
+                    APIId, APIAttributeId);
+
+                return dataTable.AsEnumerable()
+                    .ToDictionary(
+                        r => r.Field<long>("APIDetailId"),
+                        r => r.Field<string>("APIDetailDescription")
+                    );
+            }
+
             public void ConfigureAPIStartupServices(IServiceCollection services)
             {
+                services.AddCors(options =>
+                {
+                    options.AddPolicy(
+                        name: "_myAllowSpecificOrigins",
+                        builder =>
+                            {
+                                builder.WithOrigins("http://energyportaldev:8080").AllowAnyMethod().AllowAnyHeader();
+                            }
+                    );
+                });
+            }
+
+            public void ConfigureAPIStartupServices(IServiceCollection services, string password)
+            {
+                //TODO: get origin from database
                 services.AddCors(options =>
                 {
                     options.AddPolicy(

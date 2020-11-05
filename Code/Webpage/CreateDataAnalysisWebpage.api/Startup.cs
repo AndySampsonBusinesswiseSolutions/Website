@@ -21,7 +21,7 @@ namespace CreateDataAnalysisWebpage.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _systemMethods.ConfigureAPIStartupServices(services);
+            _systemMethods.ConfigureAPIStartupServices(services, Configuration.GetValue<string>("Password"));
 
             services.AddControllers();
         }
