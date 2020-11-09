@@ -25,7 +25,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidateEmailAddressPasswordMappingAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateEmailAddressPasswordMappingAPI, password);
             validateEmailAddressPasswordMappingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
         }
 

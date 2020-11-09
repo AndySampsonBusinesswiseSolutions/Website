@@ -27,7 +27,7 @@ namespace LockUser.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().LockUserAPI, password);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().LockUserAPI, password);
             lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 

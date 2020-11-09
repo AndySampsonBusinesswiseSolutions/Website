@@ -19,14 +19,6 @@ namespace databaseInteraction
                                                 Initial Catalog=EMaaS;
                                                 Persist Security Info=True;
                                                 Password={password};";
-        private readonly string hostEnvironment;
-
-        public DatabaseInteraction(string userName, string password)
-        {
-            this.dataSource = "DEV-SQL-ONPREM";
-            this.userName = userName;
-            this.password = password;
-        }
 
         public DatabaseInteraction(string environment, string userName, string password)
         {

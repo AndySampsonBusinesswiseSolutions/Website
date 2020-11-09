@@ -50,11 +50,6 @@ namespace MethodLibrary
 
         public static DatabaseInteraction _databaseInteraction;
 
-        public void InitialiseDatabaseInteraction(string userName, string password)
-        {
-            _databaseInteraction = new DatabaseInteraction(userName, password);
-        }
-
         public void InitialiseDatabaseInteraction(string environment, string userName, string password)
         {
             _databaseInteraction = new DatabaseInteraction(environment, userName, password);
