@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace GetProfileId.api.Controllers
 {
@@ -19,15 +20,18 @@ namespace GetProfileId.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.DemandForecast.ProfileAgent.Attribute _demandForecastProfileAgentAttributeEnums = new Enums.DemandForecast.ProfileAgent.Attribute();
         private readonly Int64 getProfileIdAPIId;
+        private readonly string hostEnvironment;
 
-        public GetProfileIdController(ILogger<GetProfileIdController> logger)
+        public GetProfileIdController(ILogger<GetProfileIdController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.GetProfileIdAPI, _systemAPIPasswordEnums.GetProfileIdAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetProfileIdAPI, password);
             getProfileIdAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
         }
 
@@ -36,7 +40,7 @@ namespace GetProfileId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getProfileIdAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(getProfileIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

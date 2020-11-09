@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateDateForecast.api.Controllers
 {
@@ -22,7 +23,6 @@ namespace CreateDateForecast.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createDateForecastAPIId;
@@ -30,11 +30,15 @@ namespace CreateDateForecast.api.Controllers
         private List<Tuple<long, decimal>> existingDateForecasts;
         private Dictionary<long, decimal> existingDateForecastDictionary;
         private Dictionary<long, decimal> forecastDictionary;
+        private readonly string hostEnvironment;
 
-        public CreateDateForecastController(ILogger<CreateDateForecastController> logger)
+        public CreateDateForecastController(ILogger<CreateDateForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateDateForecastAPI, _systemAPIPasswordEnums.CreateDateForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateDateForecastAPI, password);
             createDateForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDateForecastAPI);
         }
 
@@ -43,7 +47,7 @@ namespace CreateDateForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createDateForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

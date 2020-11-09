@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace GetMeterSpecificProfile.api.Controllers
 {
@@ -19,16 +20,19 @@ namespace GetMeterSpecificProfile.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
         private readonly Int64 getMeterSpecificProfileAPIId;
+        private readonly string hostEnvironment;
 
-        public GetMeterSpecificProfileController(ILogger<GetMeterSpecificProfileController> logger)
+        public GetMeterSpecificProfileController(ILogger<GetMeterSpecificProfileController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.GetMeterSpecificProfileAPI, _systemAPIPasswordEnums.GetMeterSpecificProfileAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetMeterSpecificProfileAPI, password);
             getMeterSpecificProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMeterSpecificProfileAPI);
         }
 
@@ -37,7 +41,7 @@ namespace GetMeterSpecificProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getMeterSpecificProfileAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(getMeterSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

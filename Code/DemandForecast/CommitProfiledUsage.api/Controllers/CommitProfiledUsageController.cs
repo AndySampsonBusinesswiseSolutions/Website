@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitProfiledUsage.api.Controllers
 {
@@ -21,16 +22,19 @@ namespace CommitProfiledUsage.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.UsageType _informationUsageTypeEnums = new Enums.Information.UsageType();
         private readonly Int64 commitProfiledUsageAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitProfiledUsageController(ILogger<CommitProfiledUsageController> logger)
+        public CommitProfiledUsageController(ILogger<CommitProfiledUsageController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitProfiledUsageAPI, _systemAPIPasswordEnums.CommitProfiledUsageAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitProfiledUsageAPI, password);
             commitProfiledUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
         }
 
@@ -39,7 +43,7 @@ namespace CommitProfiledUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

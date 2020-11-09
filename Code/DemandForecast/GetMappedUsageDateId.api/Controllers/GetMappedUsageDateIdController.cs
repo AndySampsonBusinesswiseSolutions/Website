@@ -11,6 +11,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace GetMappedUsageDateId.api.Controllers
 {
@@ -27,7 +28,6 @@ namespace GetMappedUsageDateId.api.Controllers
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 getMappedUsageDateIdAPIId;
@@ -36,11 +36,15 @@ namespace GetMappedUsageDateId.api.Controllers
         private Dictionary<DateTime, long> loadedUsageDateDictionary;
         private DateTime earliestUsageDate;
         private DateTime latestUsageDate;
+        private readonly string hostEnvironment;
 
-        public GetMappedUsageDateIdController(ILogger<GetMappedUsageDateIdController> logger)
+        public GetMappedUsageDateIdController(ILogger<GetMappedUsageDateIdController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.GetMappedUsageDateIdAPI, _systemAPIPasswordEnums.GetMappedUsageDateIdAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetMappedUsageDateIdAPI, password);
             getMappedUsageDateIdAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
         }
 
@@ -49,7 +53,7 @@ namespace GetMappedUsageDateId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getMappedUsageDateIdAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

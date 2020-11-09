@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitEstimatedAnnualUsage.api.Controllers
 {
@@ -24,17 +25,20 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Int64 commitEstimatedAnnualUsageAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitEstimatedAnnualUsageController(ILogger<CommitEstimatedAnnualUsageController> logger)
+        public CommitEstimatedAnnualUsageController(ILogger<CommitEstimatedAnnualUsageController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitEstimatedAnnualUsageAPI, _systemAPIPasswordEnums.CommitEstimatedAnnualUsageAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitEstimatedAnnualUsageAPI, password);
             commitEstimatedAnnualUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
         }
 
@@ -43,7 +47,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

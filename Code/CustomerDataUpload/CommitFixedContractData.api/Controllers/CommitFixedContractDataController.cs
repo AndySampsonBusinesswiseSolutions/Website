@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Data;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitFixedContractData.api.Controllers
 {
@@ -20,17 +21,20 @@ namespace CommitFixedContractData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitFixedContractDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitFixedContractDataController(ILogger<CommitFixedContractDataController> logger)
+        public CommitFixedContractDataController(ILogger<CommitFixedContractDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitFixedContractDataAPI, _systemAPIPasswordEnums.CommitFixedContractDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitFixedContractDataAPI, password);
             commitFixedContractDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFixedContractDataAPI);
         }
 
@@ -39,7 +43,7 @@ namespace CommitFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitFixedContractDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

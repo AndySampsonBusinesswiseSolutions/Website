@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitSubMeterData.api.Controllers
 {
@@ -23,16 +24,19 @@ namespace CommitSubMeterData.api.Controllers
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitSubMeterDataController(ILogger<CommitSubMeterDataController> logger)
+        public CommitSubMeterDataController(ILogger<CommitSubMeterDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitSubMeterDataAPI, _systemAPIPasswordEnums.CommitSubMeterDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitSubMeterDataAPI, password);
             commitSubMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSubMeterDataAPI);
         }
 
@@ -41,7 +45,7 @@ namespace CommitSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitSubMeterDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

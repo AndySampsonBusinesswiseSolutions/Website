@@ -5,6 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace ValidateEmailAddressPasswordMapping.api.Controllers
 {
@@ -16,11 +17,15 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateEmailAddressPasswordMappingAPIId;
+        private readonly string hostEnvironment;
 
-        public ValidateEmailAddressPasswordMappingController(ILogger<ValidateEmailAddressPasswordMappingController> logger)
+        public ValidateEmailAddressPasswordMappingController(ILogger<ValidateEmailAddressPasswordMappingController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidateEmailAddressPasswordMappingAPI, new Enums.System.API.Password().ValidateEmailAddressPasswordMappingAPI);
+            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidateEmailAddressPasswordMappingAPI, password);
             validateEmailAddressPasswordMappingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
         }
 
@@ -29,7 +34,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

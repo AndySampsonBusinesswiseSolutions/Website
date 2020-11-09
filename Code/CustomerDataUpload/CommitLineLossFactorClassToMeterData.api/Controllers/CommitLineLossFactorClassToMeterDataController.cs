@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitLineLossFactorClassToMeterData.api.Controllers
 {
@@ -22,17 +23,20 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         // private readonly Enums.Information.LineLossFactorClass.Attribute _informationLineLossFactorClassAttributeEnums = new Enums.Information.LineLossFactorClass.Attribute();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitLineLossFactorClassToMeterDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitLineLossFactorClassToMeterDataController(ILogger<CommitLineLossFactorClassToMeterDataController> logger)
+        public CommitLineLossFactorClassToMeterDataController(ILogger<CommitLineLossFactorClassToMeterDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitLineLossFactorClassToMeterDataAPI, _systemAPIPasswordEnums.CommitLineLossFactorClassToMeterDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitLineLossFactorClassToMeterDataAPI, password);
             commitLineLossFactorClassToMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitLineLossFactorClassToMeterDataAPI);
         }
 
@@ -41,7 +45,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitLineLossFactorClassToMeterDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

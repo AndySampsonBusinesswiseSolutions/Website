@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace ValidateCrossSheetEntityData.api.Controllers
 {
@@ -22,7 +23,6 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private static readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
@@ -32,11 +32,15 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         private static readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
         private readonly Int64 validateCrossSheetEntityDataAPIId;
+        private readonly string hostEnvironment;
 
-        public ValidateCrossSheetEntityDataController(ILogger<ValidateCrossSheetEntityDataController> logger)
+        public ValidateCrossSheetEntityDataController(ILogger<ValidateCrossSheetEntityDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateCrossSheetEntityDataAPI, _systemAPIPasswordEnums.ValidateCrossSheetEntityDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateCrossSheetEntityDataAPI, password);
             validateCrossSheetEntityDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateCrossSheetEntityDataAPI);
         }
 
@@ -45,7 +49,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateCrossSheetEntityDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

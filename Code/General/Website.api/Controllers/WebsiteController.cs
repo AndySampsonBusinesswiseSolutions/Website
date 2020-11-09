@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace Website.api.Controllers
 {
@@ -19,16 +20,19 @@ namespace Website.api.Controllers
         public readonly Methods.Information _informationMethods = new Methods.Information();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Int64 websiteAPIId;
+        private readonly string hostEnvironment;
 
-        public WebsiteController(ILogger<WebsiteController> logger)
+        public WebsiteController(ILogger<WebsiteController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.WebsiteAPI, _systemAPIPasswordEnums.WebsiteAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.WebsiteAPI, password);
             websiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
         }
 

@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitCustomerToSiteData.api.Controllers
 {
@@ -22,17 +23,20 @@ namespace CommitCustomerToSiteData.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitCustomerToSiteDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitCustomerToSiteDataController(ILogger<CommitCustomerToSiteDataController> logger)
+        public CommitCustomerToSiteDataController(ILogger<CommitCustomerToSiteDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitCustomerToSiteDataAPI, _systemAPIPasswordEnums.CommitCustomerToSiteDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitCustomerToSiteDataAPI, password);
             commitCustomerToSiteDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitCustomerToSiteDataAPI);
         }
 
@@ -41,7 +45,7 @@ namespace CommitCustomerToSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitCustomerToSiteDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitCustomerToSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

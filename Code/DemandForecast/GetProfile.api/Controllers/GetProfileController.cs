@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace GetProfile.api.Controllers
 {
@@ -26,7 +27,6 @@ namespace GetProfile.api.Controllers
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 getProfileAPIId;
@@ -38,11 +38,15 @@ namespace GetProfile.api.Controllers
         private Dictionary<long, decimal> profileValueDictionary;
         private Dictionary<long, long> forecastGroupToTimePeriodToProfileDictionary;
         private List<Tuple<long, long, long>> forecastGroupToTimePeriodTuple;
+        private readonly string hostEnvironment;
 
-        public GetProfileController(ILogger<GetProfileController> logger)
+        public GetProfileController(ILogger<GetProfileController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.GetProfileAPI, _systemAPIPasswordEnums.GetProfileAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetProfileAPI, password);
             getProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
         }
 
@@ -51,7 +55,7 @@ namespace GetProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getProfileAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

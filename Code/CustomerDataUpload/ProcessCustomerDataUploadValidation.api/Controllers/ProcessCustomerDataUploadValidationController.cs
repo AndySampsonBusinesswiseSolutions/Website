@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace ProcessCustomerDataUploadValidation.api.Controllers
 {
@@ -20,16 +21,19 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 processCustomerDataUploadValidationAPIId;
+        private readonly string hostEnvironment;
 
-        public ProcessCustomerDataUploadValidationController(ILogger<ProcessCustomerDataUploadValidationController> logger)
+        public ProcessCustomerDataUploadValidationController(ILogger<ProcessCustomerDataUploadValidationController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ProcessCustomerDataUploadValidationAPI, _systemAPIPasswordEnums.ProcessCustomerDataUploadValidationAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ProcessCustomerDataUploadValidationAPI, password);
             processCustomerDataUploadValidationAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI);
         }
 
@@ -38,7 +42,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(processCustomerDataUploadValidationAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

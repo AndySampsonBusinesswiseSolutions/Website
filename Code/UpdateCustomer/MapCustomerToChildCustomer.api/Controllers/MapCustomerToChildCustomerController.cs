@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace MapCustomerToChildCustomer.api.Controllers
 {
@@ -20,15 +21,18 @@ namespace MapCustomerToChildCustomer.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 mapCustomerToChildCustomerAPIId;
+        private readonly string hostEnvironment;
 
-        public MapCustomerToChildCustomerController(ILogger<MapCustomerToChildCustomerController> logger)
+        public MapCustomerToChildCustomerController(ILogger<MapCustomerToChildCustomerController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.MapCustomerToChildCustomerAPI, _systemAPIPasswordEnums.MapCustomerToChildCustomerAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.MapCustomerToChildCustomerAPI, password);
             mapCustomerToChildCustomerAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI);
         }
 
@@ -37,7 +41,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(mapCustomerToChildCustomerAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(mapCustomerToChildCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

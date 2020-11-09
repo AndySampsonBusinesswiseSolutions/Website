@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateQuarterForecast.api.Controllers
 {
@@ -23,7 +24,6 @@ namespace CreateQuarterForecast.api.Controllers
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createQuarterForecastAPIId;
@@ -34,11 +34,15 @@ namespace CreateQuarterForecast.api.Controllers
         private List<long> forecastYearIds;
         private Dictionary<long, List<long>> quarterToDateDictionary;
         private Dictionary<long, List<long>> yearToDateDictionary;
+        private readonly string hostEnvironment;
 
-        public CreateQuarterForecastController(ILogger<CreateQuarterForecastController> logger)
+        public CreateQuarterForecastController(ILogger<CreateQuarterForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateQuarterForecastAPI, _systemAPIPasswordEnums.CreateQuarterForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateQuarterForecastAPI, password);
             createQuarterForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateQuarterForecastAPI);
         }
 
@@ -47,7 +51,7 @@ namespace CreateQuarterForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createQuarterForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createQuarterForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

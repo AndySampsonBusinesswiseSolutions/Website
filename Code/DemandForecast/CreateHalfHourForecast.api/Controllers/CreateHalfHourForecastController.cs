@@ -9,6 +9,7 @@ using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateHalfHourForecast.api.Controllers
 {
@@ -24,7 +25,6 @@ namespace CreateHalfHourForecast.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
@@ -33,11 +33,15 @@ namespace CreateHalfHourForecast.api.Controllers
         private List<Tuple<long, long, decimal>> existingHalfHourForecasts;
         private Dictionary<long, Dictionary<long, decimal>> existingHalfHourForecastDictionary;
         private Dictionary<long, Dictionary<long, decimal>> forecastDictionary;
+        private readonly string hostEnvironment;
 
-        public CreateHalfHourForecastController(ILogger<CreateHalfHourForecastController> logger)
+        public CreateHalfHourForecastController(ILogger<CreateHalfHourForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateHalfHourForecastAPI, _systemAPIPasswordEnums.CreateHalfHourForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateHalfHourForecastAPI, password);
             createHalfHourForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateHalfHourForecastAPI);
         }
 
@@ -46,7 +50,7 @@ namespace CreateHalfHourForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createHalfHourForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createHalfHourForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using enums;
 using MethodLibrary;
 
 namespace CommitSubAreaToSubMeterData.api
 {
     public class Startup
     {
-        private readonly Methods.System _systemMethods = new Methods.System();
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,8 +20,7 @@ namespace CommitSubAreaToSubMeterData.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _systemMethods.ConfigureAPIStartupServices(services);
-
+            new Methods.System.API.Startup().ConfigureServices(services, Configuration, new Enums.System.API.Name().CommitSubAreaToSubMeterDataAPI);
             services.AddControllers();
         }
 

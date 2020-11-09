@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Data;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitFlexContractData.api.Controllers
 {
@@ -20,17 +21,20 @@ namespace CommitFlexContractData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitFlexContractDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitFlexContractDataController(ILogger<CommitFlexContractDataController> logger)
+        public CommitFlexContractDataController(ILogger<CommitFlexContractDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitFlexContractDataAPI, _systemAPIPasswordEnums.CommitFlexContractDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitFlexContractDataAPI, password);
             commitFlexContractDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexContractDataAPI);
         }
 
@@ -39,7 +43,7 @@ namespace CommitFlexContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitFlexContractDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

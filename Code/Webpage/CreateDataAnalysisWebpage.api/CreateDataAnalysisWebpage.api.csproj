@@ -12,7 +12,4 @@
     <ProjectReference Include="..\..\enums\enums.csproj" />
     <ProjectReference Include="..\..\MethodLibrary\MethodLibrary.csproj" />
   </ItemGroup>
-
-
 </Project>
-

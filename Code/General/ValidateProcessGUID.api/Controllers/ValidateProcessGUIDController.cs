@@ -5,6 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace ValidateProcessGUID.api.Controllers
 {
@@ -17,14 +18,17 @@ namespace ValidateProcessGUID.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateProcessGUIDAPIId;
+        private readonly string hostEnvironment;
 
-        public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger)
+        public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateProcessGUIDAPI, _systemAPIPasswordEnums.ValidateProcessGUIDAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateProcessGUIDAPI, password);
             validateProcessGUIDAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
         }
 
@@ -33,7 +37,7 @@ namespace ValidateProcessGUID.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

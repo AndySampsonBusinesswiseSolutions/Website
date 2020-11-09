@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitFlexTradeData.api.Controllers
 {
@@ -23,7 +24,6 @@ namespace CommitFlexTradeData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
         private readonly Enums.Customer.Trade.Attribute _customerTradeAttributeEnums = new Enums.Customer.Trade.Attribute();
@@ -32,11 +32,15 @@ namespace CommitFlexTradeData.api.Controllers
         private readonly Enums.Information.VolumeUnit _informationVolumeUnitEnums = new Enums.Information.VolumeUnit();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitFlexTradeDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitFlexTradeDataController(ILogger<CommitFlexTradeDataController> logger)
+        public CommitFlexTradeDataController(ILogger<CommitFlexTradeDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitFlexTradeDataAPI, _systemAPIPasswordEnums.CommitFlexTradeDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitFlexTradeDataAPI, password);
             commitFlexTradeDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexTradeDataAPI);
         }
 
@@ -45,7 +49,7 @@ namespace CommitFlexTradeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitFlexTradeDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateDataAnalysisWebpage.api.Controllers
 {
@@ -20,13 +21,10 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
         private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
@@ -42,8 +40,9 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private Dictionary<long, string> assetGUIDDictionary = new Dictionary<long, string>();
         private Dictionary<long, string> assetNameDictionary = new Dictionary<long, string>();
         private FilterData filterData;
+        private string hostEnvironment;
 
-        public class FilterData    {
+        private class FilterData    {
             public bool SiteChecked { get; set; } 
             public bool AreaChecked { get; set; } 
             public bool CommodityChecked { get; set; } 
@@ -54,10 +53,13 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             public List<string> Commodities { get; set; } 
         }
 
-        public CreateDataAnalysisWebpageController(ILogger<CreateDataAnalysisWebpageController> logger)
+        public CreateDataAnalysisWebpageController(ILogger<CreateDataAnalysisWebpageController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateDataAnalysisWebpageAPI, _systemAPIPasswordEnums.CreateDataAnalysisWebpageAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateDataAnalysisWebpageAPI, password);
             createDataAnalysisWebpageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDataAnalysisWebpageAPI);
         }
 
@@ -66,7 +68,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createDataAnalysisWebpageAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createDataAnalysisWebpageAPIId, hostEnvironment, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

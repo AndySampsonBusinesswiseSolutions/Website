@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitMeterToSiteData.api.Controllers
 {
@@ -22,17 +23,20 @@ namespace CommitMeterToSiteData.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterToSiteDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CommitMeterToSiteDataController(ILogger<CommitMeterToSiteDataController> logger)
+        public CommitMeterToSiteDataController(ILogger<CommitMeterToSiteDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitMeterToSiteDataAPI, _systemAPIPasswordEnums.CommitMeterToSiteDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitMeterToSiteDataAPI, password);
             commitMeterToSiteDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI);
         }
 
@@ -41,7 +45,7 @@ namespace CommitMeterToSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitMeterToSiteDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitMeterToSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

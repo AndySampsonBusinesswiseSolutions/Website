@@ -4,27 +4,51 @@ using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.SqlServer.Management.Common;
 using Microsoft.SqlServer.Management.Smo;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace databaseInteraction
 {
     public class DatabaseInteraction
     {
-        private string dataSource => "DEV-SQL-ONPREM";
+        private string dataSource;
         private string userName;
         private string password;
-        private string ConnectionString => $@"Data Source={dataSource};User ID={userName};Initial Catalog=EMaaS;Persist Security Info=True;Password={password};";
+        private string connectionString => $@"Data Source={dataSource};
+                                                User ID={userName};
+                                                Initial Catalog=EMaaS;
+                                                Persist Security Info=True;
+                                                Password={password};";
+        private readonly string hostEnvironment;
 
         public DatabaseInteraction(string userName, string password)
         {
+            this.dataSource = "DEV-SQL-ONPREM";
             this.userName = userName;
             this.password = password;
+        }
+
+        public DatabaseInteraction(string environment, string userName, string password)
+        {
+            this.dataSource = GetDataSourceFromEnvironment(environment);
+            this.userName = userName;
+            this.password = password;
+        }
+
+        private string GetDataSourceFromEnvironment(string environment)
+        {
+            //get the appsettings.json that relates to the environment being run
+            var json = string.Join("", File.ReadAllLines($@"C:\wamp64\www\Website\Code\databaseInteraction\appsettings.{environment}.json").ToList()); 
+            var configuration = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            return configuration["DatabaseName"];
         }
 
         public DataTable GetDataTable(string storedProcedure, List<SqlParameter> sqlParameters)
         {
             var dataTable = new DataTable();
 
-            using (var sqlConnection = new SqlConnection(ConnectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
                 using (var sqlCommand = new SqlCommand(storedProcedure, sqlConnection))
                 {
@@ -66,7 +90,7 @@ namespace databaseInteraction
 
         public void BulkInsert(DataTable dataTable, string destinationTable)
         {
-            using (var sqlConnection = new SqlConnection(ConnectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
                 using (var sqlBulkCopy = new SqlBulkCopy(sqlConnection, SqlBulkCopyOptions.Default, null))
                 {
@@ -82,7 +106,7 @@ namespace databaseInteraction
 
         public void ExecuteNonQuery(string storedProcedure, List<SqlParameter> sqlParameters)
         {
-            using (var sqlConnection = new SqlConnection(ConnectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
                 using (var sqlCommand = new SqlCommand(storedProcedure, sqlConnection))
                 {
@@ -103,7 +127,7 @@ namespace databaseInteraction
 
         public void ExecuteSQL(string SQL)
         {
-            using (var sqlConnection = new SqlConnection(ConnectionString))
+            using (var sqlConnection = new SqlConnection(connectionString))
             {
                 using (var sqlCommand = new SqlCommand(SQL, sqlConnection))
                 {

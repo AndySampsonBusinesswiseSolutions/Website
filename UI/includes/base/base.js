@@ -456,7 +456,6 @@ function CreateGUID() {
   ).toUpperCase();
 }
 
-const uri = 'http://localhost:5000/Website';
 async function getDataFromAPI(data, processQueueGUID) {
 	var postSuccessful = postData(data);
 
@@ -466,6 +465,7 @@ async function getDataFromAPI(data, processQueueGUID) {
 	}
 }
 
+const uri = 'http://energyportaldev:5000/Website';
 async function postData(data) {
   try {
     await fetch(uri + '/Validate', {

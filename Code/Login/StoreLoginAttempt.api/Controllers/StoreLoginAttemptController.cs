@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace StoreLoginAttempt.api.Controllers
 {
@@ -18,11 +19,15 @@ namespace StoreLoginAttempt.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeLoginAttemptAPIId;
+        private readonly string hostEnvironment;
 
-        public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger)
+        public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().StoreLoginAttemptAPI, new Enums.System.API.Password().StoreLoginAttemptAPI);
+            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().StoreLoginAttemptAPI, password);
             storeLoginAttemptAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
         }
 
@@ -31,7 +36,7 @@ namespace StoreLoginAttempt.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeLoginAttemptAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(storeLoginAttemptAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

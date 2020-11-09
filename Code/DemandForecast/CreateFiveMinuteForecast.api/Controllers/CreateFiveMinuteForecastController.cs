@@ -9,6 +9,7 @@ using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateFiveMinuteForecast.api.Controllers
 {
@@ -24,7 +25,6 @@ namespace CreateFiveMinuteForecast.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
@@ -33,11 +33,15 @@ namespace CreateFiveMinuteForecast.api.Controllers
         private List<Tuple<long, long, decimal>> existingFiveMinuteForecasts;
         private Dictionary<long, Dictionary<long, decimal>> existingFiveMinuteForecastDictionary;
         private Dictionary<long, Dictionary<long, decimal>> forecastDictionary;
+        private readonly string hostEnvironment;
 
-        public CreateFiveMinuteForecastController(ILogger<CreateFiveMinuteForecastController> logger)
+        public CreateFiveMinuteForecastController(ILogger<CreateFiveMinuteForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateFiveMinuteForecastAPI, _systemAPIPasswordEnums.CreateFiveMinuteForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateFiveMinuteForecastAPI, password);
             createFiveMinuteForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI);
         }
 
@@ -46,7 +50,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createFiveMinuteForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createFiveMinuteForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
