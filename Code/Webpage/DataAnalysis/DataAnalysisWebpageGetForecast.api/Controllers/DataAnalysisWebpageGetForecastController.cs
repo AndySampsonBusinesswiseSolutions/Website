@@ -532,7 +532,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 return usages;
             }
 
-            var usageGroups = usages.GroupBy(u => u.Date).ToList();
+            var usageGroups = usages.OrderBy(u => granularityCode == "Month" ? ConvertMonth(u.Date) : u.Date).GroupBy(u => u.Date).ToList();
 
             return (from date in usageGroups
                              let usage = new Usage { 
@@ -746,8 +746,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 {
                     if (!dictionary[baseId].ContainsKey(subId))
                     {
-                        var subDescription = subDictionary[subId];
-                        dictionary[baseId].Add(subId, $"{baseDescription}-{subDescription}");
+                        var subDescription = (subDictionary[subId].Contains(':') ? " " : "-") + subDictionary[subId];
+                        dictionary[baseId].Add(subId, $"{baseDescription}{subDescription}");
                     }
                 }
             }
@@ -790,8 +790,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                              let usage = new Usage { Date = forecast.Key, Value = forecast.Value.Sum(), EntityCount = forecast.Value.Count() }
                              select usage).ToList();
 
-            var usageList = periodsNotInForecastTupleUsageList.Union(periodsInForecastTupleUsageList)
-                .OrderBy(u => granularityCode == "Month" ? ConvertMonth(u.Date) : u.Date).ToList();
+            var usageList = periodsNotInForecastTupleUsageList.Union(periodsInForecastTupleUsageList).ToList();
 
             return usageList;
         }

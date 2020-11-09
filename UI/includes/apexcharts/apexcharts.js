@@ -5744,6 +5744,8 @@
                     {
                         key: "drawXaxis",
                         value: function () {
+                            xAxisIsBeingDrawn = true;
+                            xAxisLabelCount = 0;
                             var t,
                                 e = this,
                                 i = this.w,
@@ -5807,6 +5809,8 @@
                                     b = a.drawLine(i.globals.padHorizontal + i.config.xaxis.axisBorder.offsetX - x, this.offY, this.xaxisBorderWidth + x, this.offY, i.config.xaxis.axisBorder.color, 0, this.xaxisBorderHeight);
                                 s.add(b);
                             }
+                            xAxisIsBeingDrawn = false;
+                            xAxisLabelCount = 0;
                             return s;
                         },
                     },

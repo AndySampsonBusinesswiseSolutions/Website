@@ -133,10 +133,10 @@ function preciseRound(num, dec){
 	return Number((Math.round((num*Math.pow(10,dec))+(num_sign*0.0001))/Math.pow(10,dec)).toFixed(dec));
 }
 
-function renderChart(chartId, options) {
+async function renderChart(chartId, options) {
   clearElement(document.getElementById(chartId.replace('#', '')));
     var chart = new ApexCharts(document.querySelector(chartId), options);
-    chart.render();
+    await chart.render();
 }
 
 function getAttribute(attributes, attributeRequired) {
@@ -457,6 +457,15 @@ function CreateGUID() {
 }
 
 const uri = 'http://localhost:5000/Website';
+async function getDataFromAPI(data, processQueueGUID) {
+	var postSuccessful = postData(data);
+
+	if(postSuccessful) {
+		var response = await getProcessResponse(processQueueGUID);
+		return await processResponse(response, processQueueGUID);;
+	}
+}
+
 async function postData(data) {
   try {
     await fetch(uri + '/Validate', {
