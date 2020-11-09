@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace StoreSubMeterUsageData.api.Controllers
 {
@@ -20,14 +21,17 @@ namespace StoreSubMeterUsageData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeSubMeterUsageDataAPIId;
+        private readonly string hostEnvironment;
 
-        public StoreSubMeterUsageDataController(ILogger<StoreSubMeterUsageDataController> logger)
+        public StoreSubMeterUsageDataController(ILogger<StoreSubMeterUsageDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreSubMeterUsageDataAPI, _systemAPIPasswordEnums.StoreSubMeterUsageDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreSubMeterUsageDataAPI, password);
             storeSubMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreSubMeterUsageDataAPI);
         }
 
@@ -36,7 +40,7 @@ namespace StoreSubMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeSubMeterUsageDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(storeSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

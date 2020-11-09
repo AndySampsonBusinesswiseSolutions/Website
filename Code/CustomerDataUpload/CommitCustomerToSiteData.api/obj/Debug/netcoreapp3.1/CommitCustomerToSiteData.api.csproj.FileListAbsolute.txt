@@ -123,3 +123,5 @@ C:\wamp64\www\Website\Code\CustomerDataUpload\CommitCustomerToSiteData.api\bin\D
 C:\wamp64\www\Website\Code\CustomerDataUpload\CommitCustomerToSiteData.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\CommitCustomerToSiteData.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Configuration.Abstractions.dll
 C:\wamp64\www\Website\Code\CustomerDataUpload\CommitCustomerToSiteData.api\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
+C:\wamp64\www\Website\Code\CustomerDataUpload\CommitCustomerToSiteData.api\bin\Debug\netcoreapp3.1\appsettings.Production.json
+C:\wamp64\www\Website\Code\CustomerDataUpload\CommitCustomerToSiteData.api\bin\Debug\netcoreapp3.1\appsettings.UAT.json

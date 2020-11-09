@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace Routing.api.Controllers
 {
@@ -18,14 +19,17 @@ namespace Routing.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly string hostEnvironment;
 
-        public RoutingController(ILogger<RoutingController> logger)
+        public RoutingController(ILogger<RoutingController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.RoutingAPI, _systemAPIPasswordEnums.RoutingAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.RoutingAPI, password);
         }
 
         [HttpPost]
@@ -37,7 +41,7 @@ namespace Routing.api.Controllers
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(routingAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(routingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -89,7 +93,7 @@ namespace Routing.api.Controllers
                 foreach(var APIId in APIIdList)
                 {
                     //Call API
-                    API = _systemMethods.PostAsJson(APIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
+                    API = _systemMethods.PostAsJson(APIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                     try
                     {
@@ -113,7 +117,7 @@ namespace Routing.api.Controllers
                 archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
 
                 //Connect to Archive API and POST API list
-                API = _systemMethods.PostAsJson(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, archiveObject, false);
+                API = _systemMethods.PostAsJson(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveObject, false);
 
                 try
                 {

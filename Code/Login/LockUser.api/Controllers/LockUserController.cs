@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace LockUser.api.Controllers
 {
@@ -18,11 +19,15 @@ namespace LockUser.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 lockUserAPIId;
+        private readonly string hostEnvironment;
 
-        public LockUserController(ILogger<LockUserController> logger)
+        public LockUserController(ILogger<LockUserController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().LockUserAPI, new Enums.System.API.Password().LockUserAPI);
+            _methods.InitialiseDatabaseInteraction(new Enums.System.API.Name().LockUserAPI, password);
             lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 
@@ -31,7 +36,7 @@ namespace LockUser.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(lockUserAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(lockUserAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

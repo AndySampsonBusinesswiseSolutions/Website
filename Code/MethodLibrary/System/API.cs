@@ -39,38 +39,38 @@ namespace MethodLibrary
                 return !erroredPrerequisiteAPIs.Any();
             }
 
-            public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, JObject jsonObject, bool buildJSONObject = true)
+            public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
             {
                 var APIIsRunningRoute = GetAPIIsRunningRouteByAPIId(APIID);
 
-                return Post(APIID, callingGUID, APIIsRunningRoute, jsonObject, buildJSONObject);
+                return Post(APIID, callingGUID, hostEnvironmentName, APIIsRunningRoute, jsonObject, buildJSONObject);
             }
 
-            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, JObject jsonObject, bool buildJSONObject = true)
+            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
             {
                 var callingGUID = GetCallingGUIDFromJObject(jsonObject);
 
-                return PostAsJsonAsync(APIID, callingGUID, jsonObject, buildJSONObject);
+                return PostAsJsonAsync(APIID, callingGUID, hostEnvironmentName, jsonObject, buildJSONObject);
             }
 
-            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string callingGUID, JObject jsonObject, bool buildJSONObject = true)
+            public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string callingGUID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
             {
                 var APIPostRoute = GetAPIPOSTRouteByAPIId(APIID);
 
-                return Post(APIID, callingGUID, APIPostRoute, jsonObject, buildJSONObject);
+                return Post(APIID, callingGUID, APIPostRoute, hostEnvironmentName, jsonObject, buildJSONObject);
             }
 
-            private Task<HttpResponseMessage> Post(long APIID, string callingGUID, string route, JObject jsonObject, bool buildJSONObject)
+            private Task<HttpResponseMessage> Post(long APIID, string callingGUID, string route, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject)
             {
-                var API = CreateAPI(APIID);
+                var API = CreateAPI(APIID, hostEnvironmentName);
                 var APIData = buildJSONObject ? GetAPIData(APIID, callingGUID, jsonObject) : jsonObject;
 
                 return API.PostAsJsonAsync(route, APIData);
             }
 
-            public HttpClient CreateAPI(long APIId)
+            public HttpClient CreateAPI(long APIId, string hostEnvironmentName)
             {
-                var URL = GetAPIURLByAPIId(APIId);
+                var URL = GetAPIURLByAPIId(APIId, hostEnvironmentName);
                 
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(URL);
@@ -131,10 +131,11 @@ namespace MethodLibrary
                 return apiData;
             }
 
-            public string GetAPIURLByAPIId(long APIId) 
+            public string GetAPIURLByAPIId(long APIId, string hostEnvironmentName) 
             {
                 var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
-                return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId).First();
+                var httpURLDictionary = APIDetail_GetAPIDetailIdDescriptionDictionaryByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId);
+                return GetEnvironmentSpecificAPIURL(httpURLDictionary, hostEnvironmentName);
             }
 
             public string GetAPIIsRunningRouteByAPIId(long APIId) 
@@ -149,18 +150,6 @@ namespace MethodLibrary
                 return APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, POSTRouteAttributeId).First();
             }
 
-            public string GetAPIStartupURLs(string APIGUID)
-            {
-                var APIId = API_GetAPIIdByAPIGUID(APIGUID);
-                var HTTPApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPApplicationURL);
-                var HTTPSApplicationURLAttributeId = APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributeEnums.HTTPSApplicationURL);
-
-                var httpURL = APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId).First();
-                var httpsURL = APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(APIId, HTTPSApplicationURLAttributeId).First();
-
-                return $"{httpsURL};{httpURL}";
-            }
-
             public string GetAPIStartupURLs(string hostEnvironmentName, string APIGUID)
             {
                 var APIId = API_GetAPIIdByAPIGUID(APIGUID);
@@ -170,25 +159,29 @@ namespace MethodLibrary
                 var httpURLDictionary = APIDetail_GetAPIDetailIdDescriptionDictionaryByAPIIdAndAPIAttributeId(APIId, HTTPApplicationURLAttributeId);
                 var httpsURLDictionary = APIDetail_GetAPIDetailIdDescriptionDictionaryByAPIIdAndAPIAttributeId(APIId, HTTPSApplicationURLAttributeId);
 
+                return $"{GetEnvironmentSpecificAPIURL(httpsURLDictionary, hostEnvironmentName)};{GetEnvironmentSpecificAPIURL(httpURLDictionary, hostEnvironmentName)}";
+            }
+
+            private string GetEnvironmentSpecificAPIURL(Dictionary<long, string> URLDictionary, string hostEnvironmentName)
+            {
                 //Get hostEnvironment Id
                 var hostEnvironmentId = new HostEnvironment().GetHostEnvironmentIdByHostEnvironmentName(hostEnvironmentName);
-                
+
                 //Get hostEnvironment to url mappings
                 var APIDetailToHostEnvironmentMappings = new Mapping.APIDetailToHostEnvironment().APIDetailToHostEnvironment_GetAPIDetailIdListByHostEnvironmentId(hostEnvironmentId);
 
                 if(APIDetailToHostEnvironmentMappings.Any())
                 {
                     //Match mappings to hostEnvironment
-                    var httpURL = httpURLDictionary.First(u => APIDetailToHostEnvironmentMappings.Contains(u.Key)).Value;
-                    var httpsURL = httpsURLDictionary.First(u => APIDetailToHostEnvironmentMappings.Contains(u.Key)).Value;
+                    var URL = URLDictionary.First(u => APIDetailToHostEnvironmentMappings.Contains(u.Key)).Value;
 
                     //Get hostEnvironment URL
                     var hostEnvironmentURL = new HostEnvironment().GetHostEnvironmentURLByHostEnvironmentId(hostEnvironmentId);
 
-                    return $"{httpsURL.Replace("localhost", hostEnvironmentURL)};{httpURL.Replace("localhost", hostEnvironmentURL)}";
+                    return URL.Replace("localhost", hostEnvironmentURL);
                 }
 
-                return $"{httpsURLDictionary.First().Value};{httpURLDictionary.First().Value}";
+                return URLDictionary.First().Value;
             }
 
             public long GetRoutingAPIId()
@@ -268,30 +261,18 @@ namespace MethodLibrary
                     );
             }
 
-            public void ConfigureAPIStartupServices(IServiceCollection services)
+            public void ConfigureAPIStartupServices(IServiceCollection services, string hostEnvironmentName)
             {
-                services.AddCors(options =>
-                {
-                    options.AddPolicy(
-                        name: "_myAllowSpecificOrigins",
-                        builder =>
-                            {
-                                builder.WithOrigins("http://energyportaldev:8080").AllowAnyMethod().AllowAnyHeader();
-                            }
-                    );
-                });
-            }
+                //Get origin from database
+                var hostEnvironmentOrigin = new HostEnvironment().GetHostEnvironmentURLByHostEnvironmentName(hostEnvironmentName);
 
-            public void ConfigureAPIStartupServices(IServiceCollection services, string password)
-            {
-                //TODO: get origin from database
                 services.AddCors(options =>
                 {
                     options.AddPolicy(
                         name: "_myAllowSpecificOrigins",
                         builder =>
                             {
-                                builder.WithOrigins("http://energyportaldev:8080").AllowAnyMethod().AllowAnyHeader();
+                                builder.WithOrigins(hostEnvironmentOrigin).AllowAnyMethod().AllowAnyHeader();
                             }
                     );
                 });

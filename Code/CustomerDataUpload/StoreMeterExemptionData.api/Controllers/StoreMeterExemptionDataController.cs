@@ -5,6 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace StoreMeterExemptionData.api.Controllers
 {
@@ -18,14 +19,17 @@ namespace StoreMeterExemptionData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeMeterExemptionDataAPIId;
+        private readonly string hostEnvironment;
 
-        public StoreMeterExemptionDataController(ILogger<StoreMeterExemptionDataController> logger)
+        public StoreMeterExemptionDataController(ILogger<StoreMeterExemptionDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreMeterExemptionDataAPI, _systemAPIPasswordEnums.StoreMeterExemptionDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreMeterExemptionDataAPI, password);
             storeMeterExemptionDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterExemptionDataAPI);
         }
 
@@ -34,7 +38,7 @@ namespace StoreMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeMeterExemptionDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(storeMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

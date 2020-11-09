@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CleanUpCustomerDataUploadTempData.api.Controllers
 {
@@ -20,14 +21,17 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 cleanUpCustomerDataUploadTempDataAPIId;
+        private readonly string hostEnvironment;
 
-        public CleanUpCustomerDataUploadTempDataController(ILogger<CleanUpCustomerDataUploadTempDataController> logger)
+        public CleanUpCustomerDataUploadTempDataController(ILogger<CleanUpCustomerDataUploadTempDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CleanUpCustomerDataUploadTempDataAPI, _systemAPIPasswordEnums.CleanUpCustomerDataUploadTempDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CleanUpCustomerDataUploadTempDataAPI, password);
             cleanUpCustomerDataUploadTempDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CleanUpCustomerDataUploadTempDataAPI);
         }
 
@@ -36,7 +40,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

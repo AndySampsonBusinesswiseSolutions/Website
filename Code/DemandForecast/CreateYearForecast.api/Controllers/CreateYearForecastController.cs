@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateYearForecast.api.Controllers
 {
@@ -23,7 +24,6 @@ namespace CreateYearForecast.api.Controllers
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createYearForecastAPIId;
@@ -33,11 +33,15 @@ namespace CreateYearForecast.api.Controllers
         private Dictionary<long, decimal> forecastDictionary;
         private List<long> forecastYearIds;
         private Dictionary<long, List<long>> yearToDateDictionary;
+        private readonly string hostEnvironment;
 
-        public CreateYearForecastController(ILogger<CreateYearForecastController> logger)
+        public CreateYearForecastController(ILogger<CreateYearForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateYearForecastAPI, _systemAPIPasswordEnums.CreateYearForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateYearForecastAPI, password);
             createYearForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateYearForecastAPI);
         }
 
@@ -46,7 +50,7 @@ namespace CreateYearForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createYearForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

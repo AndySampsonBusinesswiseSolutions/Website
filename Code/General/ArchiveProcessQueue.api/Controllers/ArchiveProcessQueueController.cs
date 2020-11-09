@@ -6,6 +6,7 @@ using MethodLibrary;
 using enums;
 using System;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace ArchiveProcessQueue.api.Controllers
 {
@@ -20,14 +21,17 @@ namespace ArchiveProcessQueue.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Int64 archiveProcessQueueAPIId;
+        private readonly string hostEnvironment;
 
-        public ArchiveProcessQueueController(ILogger<ArchiveProcessQueueController> logger)
+        public ArchiveProcessQueueController(ILogger<ArchiveProcessQueueController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ArchiveProcessQueueAPI, _systemAPIPasswordEnums.ArchiveProcessQueueAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ArchiveProcessQueueAPI, password);
             archiveProcessQueueAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
         }
 
@@ -36,7 +40,7 @@ namespace ArchiveProcessQueue.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(archiveProcessQueueAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

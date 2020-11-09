@@ -19,6 +19,7 @@ namespace databaseInteraction
                                                 Initial Catalog=EMaaS;
                                                 Persist Security Info=True;
                                                 Password={password};";
+        private readonly string hostEnvironment;
 
         public DatabaseInteraction(string userName, string password)
         {

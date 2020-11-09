@@ -5,6 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace ValidatePassword.api.Controllers
 {
@@ -16,11 +17,15 @@ namespace ValidatePassword.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validatePasswordAPIId;
+        private readonly string hostEnvironment;
 
-        public ValidatePasswordController(ILogger<ValidatePasswordController> logger)
+        public ValidatePasswordController(ILogger<ValidatePasswordController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidatePasswordAPI, new Enums.System.API.Password().ValidatePasswordAPI);
+            new Methods().InitialiseDatabaseInteraction(new Enums.System.API.Name().ValidatePasswordAPI, password);
             validatePasswordAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
         }
 
@@ -29,7 +34,7 @@ namespace ValidatePassword.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validatePasswordAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(validatePasswordAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

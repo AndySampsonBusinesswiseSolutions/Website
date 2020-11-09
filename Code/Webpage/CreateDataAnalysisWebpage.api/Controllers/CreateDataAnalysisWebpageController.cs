@@ -40,8 +40,9 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private Dictionary<long, string> assetGUIDDictionary = new Dictionary<long, string>();
         private Dictionary<long, string> assetNameDictionary = new Dictionary<long, string>();
         private FilterData filterData;
+        private string hostEnvironment;
 
-        public class FilterData    {
+        private class FilterData    {
             public bool SiteChecked { get; set; } 
             public bool AreaChecked { get; set; } 
             public bool CommodityChecked { get; set; } 
@@ -55,10 +56,10 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         public CreateDataAnalysisWebpageController(ILogger<CreateDataAnalysisWebpageController> logger, IConfiguration configuration)
         {
             var password = configuration["Password"];
-            var environment = configuration["Environment"];
+            hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(environment, _systemAPINameEnums.CreateDataAnalysisWebpageAPI, password);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateDataAnalysisWebpageAPI, password);
             createDataAnalysisWebpageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDataAnalysisWebpageAPI);
         }
 
@@ -67,7 +68,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createDataAnalysisWebpageAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createDataAnalysisWebpageAPIId, hostEnvironment, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

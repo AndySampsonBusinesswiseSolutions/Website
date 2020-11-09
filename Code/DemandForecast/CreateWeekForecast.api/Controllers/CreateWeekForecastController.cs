@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateWeekForecast.api.Controllers
 {
@@ -23,7 +24,6 @@ namespace CreateWeekForecast.api.Controllers
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 createWeekForecastAPIId;
@@ -34,11 +34,15 @@ namespace CreateWeekForecast.api.Controllers
         private List<long> forecastYearIds;
         private Dictionary<long, List<long>> weekToDateDictionary;
         private Dictionary<long, List<long>> yearToDateDictionary;
+        private readonly string hostEnvironment;
 
-        public CreateWeekForecastController(ILogger<CreateWeekForecastController> logger)
+        public CreateWeekForecastController(ILogger<CreateWeekForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateWeekForecastAPI, _systemAPIPasswordEnums.CreateWeekForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateWeekForecastAPI, password);
             createWeekForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateWeekForecastAPI);
         }
 
@@ -47,7 +51,7 @@ namespace CreateWeekForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createWeekForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createWeekForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

@@ -18,12 +18,29 @@ namespace MethodLibrary
                     return HostEnvironment_GetHostEnvironmentIdByHostEnvironmentAttributeIdAndHostEnvironmentDetailDescription(hostEnvironmentNameHostEnvironmentAttributeId, hostEnvironmentName);
                 }
 
+                public string GetHostEnvironmentURLByHostEnvironmentName(string hostEnvironmentName)
+                {
+                    var hostEnvironmentId = GetHostEnvironmentIdByHostEnvironmentName(hostEnvironmentName);
+
+                    return GetHostEnvironmentURLByHostEnvironmentId(hostEnvironmentId);
+                }
+
                 public string GetHostEnvironmentURLByHostEnvironmentId(long hostEnvironmentId)
                 {
                     //Get hostEnvironmentURLHostEnvironmentAttributeId
                     var hostEnvironmentURLHostEnvironmentAttributeId = HostEnvironmentAttribute_GetHostEnvironmentAttributeIdByHostEnvironmentAttributeDescription(_systemHostEnvironmentAttributeEnums.HostEnvironmentURL);
 
                     return HostEnvironment_GetHostEnvironmentDetailDescriptionByHostEnvironmentIdAndHostEnvironmentAttributeId(hostEnvironmentId, hostEnvironmentURLHostEnvironmentAttributeId);
+                }
+
+                public string GetHostEnvironmentOriginByHostEnvironmentName(string hostEnvironmentName)
+                {
+                    var hostEnvironmentId = GetHostEnvironmentIdByHostEnvironmentName(hostEnvironmentName);
+
+                    //Get hostEnvironmentOriginHostEnvironmentAttributeId
+                    var hostEnvironmentOriginHostEnvironmentAttributeId = HostEnvironmentAttribute_GetHostEnvironmentAttributeIdByHostEnvironmentAttributeDescription(_systemHostEnvironmentAttributeEnums.HostEnvironmentOrigin);
+
+                    return HostEnvironment_GetHostEnvironmentDetailDescriptionByHostEnvironmentIdAndHostEnvironmentAttributeId(hostEnvironmentId, hostEnvironmentOriginHostEnvironmentAttributeId);
                 }
 
                 public long HostEnvironmentAttribute_GetHostEnvironmentAttributeIdByHostEnvironmentAttributeDescription(string hostEnvironmentAttributeDescription)

@@ -7,6 +7,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace CheckPrerequisiteAPI.api.Controllers
 {
@@ -19,13 +20,16 @@ namespace CheckPrerequisiteAPI.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private readonly Enums.System.API.Attribute _systemAPIAttributes = new Enums.System.API.Attribute();
+        private readonly string hostEnvironment;
 
-        public CheckPrerequisiteAPIController(ILogger<CheckPrerequisiteAPIController> logger)
+        public CheckPrerequisiteAPIController(ILogger<CheckPrerequisiteAPIController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CheckPrerequisiteAPIAPI, _systemAPIPasswordEnums.CheckPrerequisiteAPIAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CheckPrerequisiteAPIAPI, password);
         }
 
         [HttpPost]
@@ -33,7 +37,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(_systemMethods.GetCheckPrerequisiteAPIAPIId(), JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(_systemMethods.GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

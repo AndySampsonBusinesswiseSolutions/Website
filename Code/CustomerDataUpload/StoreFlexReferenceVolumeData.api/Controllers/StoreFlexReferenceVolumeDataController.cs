@@ -5,6 +5,7 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace StoreFlexReferenceVolumeData.api.Controllers
 {
@@ -18,14 +19,17 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeFlexReferenceVolumeDataAPIId;
+        private readonly string hostEnvironment;
 
-        public StoreFlexReferenceVolumeDataController(ILogger<StoreFlexReferenceVolumeDataController> logger)
+        public StoreFlexReferenceVolumeDataController(ILogger<StoreFlexReferenceVolumeDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.StoreFlexReferenceVolumeDataAPI, _systemAPIPasswordEnums.StoreFlexReferenceVolumeDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreFlexReferenceVolumeDataAPI, password);
             storeFlexReferenceVolumeDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexReferenceVolumeDataAPI);
         }
 
@@ -34,7 +38,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeFlexReferenceVolumeDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(storeFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateForecastUsage.api.Controllers
 {
@@ -23,16 +24,19 @@ namespace CreateForecastUsage.api.Controllers
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Int64 createForecastUsageAPIId;
+        private readonly string hostEnvironment;
 
-        public CreateForecastUsageController(ILogger<CreateForecastUsageController> logger)
+        public CreateForecastUsageController(ILogger<CreateForecastUsageController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateForecastUsageAPI, _systemAPIPasswordEnums.CreateForecastUsageAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateForecastUsageAPI, password);
             createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
         }
 
@@ -41,7 +45,7 @@ namespace CreateForecastUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

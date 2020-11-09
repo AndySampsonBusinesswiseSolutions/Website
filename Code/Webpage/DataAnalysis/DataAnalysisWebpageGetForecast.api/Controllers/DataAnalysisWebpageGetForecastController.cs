@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace DataAnalysisWebpageGetForecast.api.Controllers
 {
@@ -26,7 +27,6 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
         private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
@@ -37,6 +37,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private long granularityId;
         private ConcurrentDictionary<Tuple<string, long>, List<Usage>> forecastDictionary = new ConcurrentDictionary<Tuple<string, long>, List<Usage>>();
         private ParallelOptions parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 5};
+        private string hostEnvironment;
 
         private class Usage
         {
@@ -72,10 +73,13 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             public List<string> Commodities { get; set; }
         }
 
-        public DataAnalysisWebpageGetForecastController(ILogger<DataAnalysisWebpageGetForecastController> logger)
+        public DataAnalysisWebpageGetForecastController(ILogger<DataAnalysisWebpageGetForecastController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.DataAnalysisWebpageGetForecastAPI, _systemAPIPasswordEnums.DataAnalysisWebpageGetForecastAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.DataAnalysisWebpageGetForecastAPI, password);
             dataAnalysisWebpageGetForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DataAnalysisWebpageGetForecastAPI);
         }
 
@@ -84,7 +88,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(dataAnalysisWebpageGetForecastAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(dataAnalysisWebpageGetForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

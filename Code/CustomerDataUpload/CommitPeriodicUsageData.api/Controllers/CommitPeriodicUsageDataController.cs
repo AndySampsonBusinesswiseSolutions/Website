@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitPeriodicUsageData.api.Controllers
 {
@@ -24,7 +25,6 @@ namespace CommitPeriodicUsageData.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
@@ -38,11 +38,15 @@ namespace CommitPeriodicUsageData.api.Controllers
         private string usageType;
         private long granularityId;
         private Dictionary<string, long> dateDictionary;
+        private readonly string hostEnvironment;
 
-        public CommitPeriodicUsageDataController(ILogger<CommitPeriodicUsageDataController> logger)
+        public CommitPeriodicUsageDataController(ILogger<CommitPeriodicUsageDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CommitPeriodicUsageDataAPI, _systemAPIPasswordEnums.CommitPeriodicUsageDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitPeriodicUsageDataAPI, password);
             commitPeriodicUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI);
         }
 
@@ -51,7 +55,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitPeriodicUsageDataAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

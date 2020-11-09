@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CreateManageCustomersWebpage.api.Controllers
 {
@@ -21,17 +22,20 @@ namespace CreateManageCustomersWebpage.api.Controllers
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 createManageCustomersWebpageAPIId;
+        private readonly string hostEnvironment;
 
-        public CreateManageCustomersWebpageController(ILogger<CreateManageCustomersWebpageController> logger)
+        public CreateManageCustomersWebpageController(ILogger<CreateManageCustomersWebpageController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.CreateManageCustomersWebpageAPI, _systemAPIPasswordEnums.CreateManageCustomersWebpageAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateManageCustomersWebpageAPI, password);
             createManageCustomersWebpageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateManageCustomersWebpageAPI);
         }
 
@@ -40,7 +44,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createManageCustomersWebpageAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

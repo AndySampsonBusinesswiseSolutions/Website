@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace ValidateEmailAddress.api.Controllers
 {
@@ -18,14 +19,17 @@ namespace ValidateEmailAddress.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateEmailAddressAPIId;
+        private readonly string hostEnvironment;
 
-        public ValidateEmailAddressController(ILogger<ValidateEmailAddressController> logger)
+        public ValidateEmailAddressController(ILogger<ValidateEmailAddressController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.ValidateEmailAddressAPI, _systemAPIPasswordEnums.ValidateEmailAddressAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateEmailAddressAPI, password);
             validateEmailAddressAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
         }
 
@@ -34,7 +38,7 @@ namespace ValidateEmailAddress.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateEmailAddressAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(validateEmailAddressAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

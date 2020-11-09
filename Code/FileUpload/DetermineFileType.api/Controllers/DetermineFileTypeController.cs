@@ -6,6 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace DetermineFileType.api.Controllers
 {
@@ -19,15 +20,18 @@ namespace DetermineFileType.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 determineFileTypeAPIId;
+        private readonly string hostEnvironment;
 
-        public DetermineFileTypeController(ILogger<DetermineFileTypeController> logger)
+        public DetermineFileTypeController(ILogger<DetermineFileTypeController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.DetermineFileTypeAPI, _systemAPIPasswordEnums.DetermineFileTypeAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.DetermineFileTypeAPI, password);
             determineFileTypeAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DetermineFileTypeAPI);
         }
 
@@ -36,7 +40,7 @@ namespace DetermineFileType.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(determineFileTypeAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

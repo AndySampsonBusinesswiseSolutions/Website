@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace GetGenericProfile.api.Controllers
 {
@@ -23,17 +24,20 @@ namespace GetGenericProfile.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.Password _systemAPIPasswordEnums = new Enums.System.API.Password();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
         private static readonly Enums.DemandForecast.Profile.EntityToMatch _demandForecastProfileEntityToMatchEnums = new Enums.DemandForecast.Profile.EntityToMatch();
         private readonly Int64 getGenericProfileAPIId;
+        private readonly string hostEnvironment;
 
-        public GetGenericProfileController(ILogger<GetGenericProfileController> logger)
+        public GetGenericProfileController(ILogger<GetGenericProfileController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(_systemAPINameEnums.GetGenericProfileAPI, _systemAPIPasswordEnums.GetGenericProfileAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetGenericProfileAPI, password);
             getGenericProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetGenericProfileAPI);
         }
 
@@ -42,7 +46,7 @@ namespace GetGenericProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getGenericProfileAPIId, JObject.Parse(data.ToString()));
+            _systemMethods.PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
