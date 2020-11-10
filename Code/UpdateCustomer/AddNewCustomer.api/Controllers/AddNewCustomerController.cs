@@ -68,7 +68,7 @@ namespace AddNewCustomer.api.Controllers
                     sourceId,
                     addNewCustomerAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.AddNewCustomerAPI, addNewCustomerAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.AddNewCustomerAPI, addNewCustomerAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

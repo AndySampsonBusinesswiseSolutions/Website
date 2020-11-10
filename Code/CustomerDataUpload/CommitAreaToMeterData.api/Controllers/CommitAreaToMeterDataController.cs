@@ -73,7 +73,7 @@ namespace CommitAreaToMeterData.api.Controllers
                     sourceId,
                     commitAreaToMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitAreaToMeterDataAPI, commitAreaToMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitAreaToMeterDataAPI, commitAreaToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

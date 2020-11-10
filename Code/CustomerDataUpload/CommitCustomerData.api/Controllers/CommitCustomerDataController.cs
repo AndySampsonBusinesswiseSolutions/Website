@@ -73,7 +73,7 @@ namespace CommitCustomerData.api.Controllers
                     sourceId,
                     commitCustomerDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCustomerDataAPI, commitCustomerDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCustomerDataAPI, commitCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

@@ -71,7 +71,7 @@ namespace ValidateSiteData.api.Controllers
                     sourceId,
                     validateSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSiteDataAPI, validateSiteDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSiteDataAPI, validateSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

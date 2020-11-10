@@ -66,7 +66,7 @@ namespace Routing.api.Controllers
                 var validateProcessGUIDAPIId = _systemMethods.GetValidateProcessGUIDAPIId();
                 
                 //Call ValidateProcessGUID API
-                var API = _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
+                var API = _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                 var processId = 0L;
 

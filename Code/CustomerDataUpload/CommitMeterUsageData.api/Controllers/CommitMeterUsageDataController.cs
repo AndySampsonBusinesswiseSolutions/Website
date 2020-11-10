@@ -77,7 +77,7 @@ namespace CommitMeterUsageData.api.Controllers
                     sourceId,
                     commitMeterUsageDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterUsageDataAPI, commitMeterUsageDataAPIId, jsonObject))
+                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterUsageDataAPI, commitMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -160,7 +160,7 @@ namespace CommitMeterUsageData.api.Controllers
 
                     //Call CommitEstimatedAnnualUsage API and wait for response
                     var commitEstimateUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
-                    var commitEstimateUsageAPI = _systemMethods.PostAsJsonAsync(commitEstimateUsageAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                    var commitEstimateUsageAPI = _systemMethods.PostAsJsonAsync(commitEstimateUsageAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
                     var commitEstimateUsageResult = commitEstimateUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     if (hasPeriodicUsage)
@@ -214,7 +214,7 @@ namespace CommitMeterUsageData.api.Controllers
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
 
                         //Connect to Routing API and POST data
-                        _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, newJsonObject);
+                        _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
                     }
                 }
 

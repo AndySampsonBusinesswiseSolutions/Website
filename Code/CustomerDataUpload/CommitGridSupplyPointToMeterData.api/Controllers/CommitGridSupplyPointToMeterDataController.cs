@@ -74,7 +74,7 @@ namespace CommitGridSupplyPointToMeterData.api.Controllers
                     sourceId,
                     commitGridSupplyPointToMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitGridSupplyPointToMeterDataAPI, commitGridSupplyPointToMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitGridSupplyPointToMeterDataAPI, commitGridSupplyPointToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

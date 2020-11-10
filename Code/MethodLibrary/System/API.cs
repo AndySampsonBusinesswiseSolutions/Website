@@ -17,7 +17,7 @@ namespace MethodLibrary
     {
         public partial class System
         {
-            public bool PrerequisiteAPIsAreSuccessful(string APIGUID, long APIId, JObject jsonObject)
+            public bool PrerequisiteAPIsAreSuccessful(string APIGUID, long APIId, string hostEnvironmentName, JObject jsonObject)
             {
                 var processQueueGUID = GetProcessQueueGUIDFromJObject(jsonObject);
 
@@ -25,7 +25,7 @@ namespace MethodLibrary
                 var checkPrerequisiteAPIAPIId = GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API
-                var API = PostAsJsonAsync(checkPrerequisiteAPIAPIId, APIGUID, jsonObject);
+                var API = PostAsJsonAsync(checkPrerequisiteAPIAPIId, APIGUID, hostEnvironmentName, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                 var erroredPrerequisiteAPIs = new Methods().GetArray(result.Result.ToString());
 
@@ -43,7 +43,7 @@ namespace MethodLibrary
             {
                 var APIIsRunningRoute = GetAPIIsRunningRouteByAPIId(APIID);
 
-                return Post(APIID, callingGUID, hostEnvironmentName, APIIsRunningRoute, jsonObject, buildJSONObject);
+                return Post(APIID, callingGUID, APIIsRunningRoute, hostEnvironmentName, jsonObject, buildJSONObject);
             }
 
             public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
@@ -264,7 +264,7 @@ namespace MethodLibrary
             public void ConfigureAPIStartupServices(IServiceCollection services, string hostEnvironmentName)
             {
                 //Get origin from database
-                var hostEnvironmentOrigin = new HostEnvironment().GetHostEnvironmentURLByHostEnvironmentName(hostEnvironmentName);
+                var hostEnvironmentOrigin = new HostEnvironment().GetHostEnvironmentOriginByHostEnvironmentName(hostEnvironmentName);
 
                 services.AddCors(options =>
                 {

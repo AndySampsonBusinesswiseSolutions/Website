@@ -154,7 +154,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
         private void BuildSiteBranch(List<long> siteIds)
         {
-            var siteMeterDictionary = siteIds.ToDictionary(s => s, s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s));
+            var siteMeterDictionary = siteIds.ToDictionary(s => s, s => _mappingMethods.MeterToSite_GetMeterIdListBySiteId(s).Distinct().ToList());
             meterCommodityDictionary = siteMeterDictionary.Values.SelectMany(m => m).ToDictionary(m => m, m => _mappingMethods.CommodityToMeter_GetCommodityIdByMeterId(m));
             var commodityMatchingSiteDictionary = siteMeterDictionary.Where(s => CommodityMeterMatch(s.Value)).ToDictionary(s => s.Key, s => s.Value.Where(m => CommodityMeterMatch(m)).ToList());
 

@@ -78,7 +78,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
                     sourceId,
                     createFiveMinuteForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI, createFiveMinuteForecastAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI, createFiveMinuteForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

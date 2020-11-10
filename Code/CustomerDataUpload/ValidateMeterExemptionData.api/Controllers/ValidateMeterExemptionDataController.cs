@@ -71,7 +71,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                     sourceId,
                     ValidateMeterExemptionDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI, ValidateMeterExemptionDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI, ValidateMeterExemptionDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

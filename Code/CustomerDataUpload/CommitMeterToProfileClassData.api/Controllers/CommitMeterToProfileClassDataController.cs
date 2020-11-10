@@ -74,7 +74,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
                     sourceId,
                     commitMeterToProfileClassDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToProfileClassDataAPI, commitMeterToProfileClassDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToProfileClassDataAPI, commitMeterToProfileClassDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

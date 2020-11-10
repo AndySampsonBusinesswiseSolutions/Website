@@ -79,7 +79,7 @@ namespace CreateWeekForecast.api.Controllers
                     sourceId,
                     createWeekForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateWeekForecastAPI, createWeekForecastAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateWeekForecastAPI, createWeekForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

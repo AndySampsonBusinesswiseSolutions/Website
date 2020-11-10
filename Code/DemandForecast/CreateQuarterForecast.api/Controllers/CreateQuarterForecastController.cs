@@ -79,7 +79,7 @@ namespace CreateQuarterForecast.api.Controllers
                     sourceId,
                     createQuarterForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateQuarterForecastAPI, createQuarterForecastAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateQuarterForecastAPI, createQuarterForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

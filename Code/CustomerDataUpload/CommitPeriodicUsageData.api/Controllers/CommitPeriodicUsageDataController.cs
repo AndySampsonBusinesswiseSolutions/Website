@@ -83,7 +83,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                     sourceId,
                     commitPeriodicUsageDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, commitPeriodicUsageDataAPIId, jsonObject))
+                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, commitPeriodicUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -140,7 +140,7 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                     //Call CommitProfiledUsage API and wait for response
                     var commitProfiledUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
-                    var commitProfiledUsageAPI = _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+                    var commitProfiledUsageAPI = _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
                     var commitProfiledUsageResult = commitProfiledUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
@@ -160,7 +160,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                 var routingAPIId = _systemMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, jsonObject);
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
 
                 if(meterType == "SubMeter")
                 {

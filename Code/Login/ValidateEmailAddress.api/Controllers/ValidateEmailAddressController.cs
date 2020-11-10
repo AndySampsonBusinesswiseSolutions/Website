@@ -66,7 +66,7 @@ namespace ValidateEmailAddress.api.Controllers
                     sourceId,
                     validateEmailAddressAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressAPI, validateEmailAddressAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressAPI, validateEmailAddressAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

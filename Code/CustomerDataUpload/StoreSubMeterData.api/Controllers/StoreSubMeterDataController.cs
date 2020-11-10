@@ -66,7 +66,7 @@ namespace StoreSubMeterData.api.Controllers
                     sourceId,
                     storeSubMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSubMeterDataAPI, storeSubMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSubMeterDataAPI, storeSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

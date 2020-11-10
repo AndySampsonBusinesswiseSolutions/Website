@@ -72,7 +72,7 @@ namespace ValidateFlexContractData.api.Controllers
                     sourceId,
                     validateFlexContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexContractDataAPI, validateFlexContractDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexContractDataAPI, validateFlexContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

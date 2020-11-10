@@ -24,6 +24,7 @@ namespace DetermineFileType.api.Controllers
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 determineFileTypeAPIId;
         private readonly string hostEnvironment;
+        private Int64 fileId;
 
         public DetermineFileTypeController(ILogger<DetermineFileTypeController> logger, IConfiguration configuration)
         {
@@ -68,7 +69,7 @@ namespace DetermineFileType.api.Controllers
                     sourceId,
                     determineFileTypeAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.DetermineFileTypeAPI, determineFileTypeAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.DetermineFileTypeAPI, determineFileTypeAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -78,7 +79,7 @@ namespace DetermineFileType.api.Controllers
 
                 //Get FileId by FileGUID
                 var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
-                var fileId = _informationMethods.File_GetFileIdByFileGUID(fileGUID);
+                fileId = _informationMethods.File_GetFileIdByFileGUID(fileGUID);
 
                 //Check if FileType has been passed through
                 var fileType = _systemMethods.GetFileTypeFromJObject(jsonObject);
@@ -130,7 +131,7 @@ namespace DetermineFileType.api.Controllers
                 var routingAPIId = _systemMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, jsonObject);
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, false, null);

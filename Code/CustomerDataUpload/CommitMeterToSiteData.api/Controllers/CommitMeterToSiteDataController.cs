@@ -74,7 +74,7 @@ namespace CommitMeterToSiteData.api.Controllers
                     sourceId,
                     commitMeterToSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI, commitMeterToSiteDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI, commitMeterToSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

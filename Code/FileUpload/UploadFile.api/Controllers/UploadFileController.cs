@@ -66,7 +66,7 @@ namespace UploadFile.api.Controllers
                     sourceId,
                     uploadFileAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UploadFileAPI, uploadFileAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UploadFileAPI, uploadFileAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

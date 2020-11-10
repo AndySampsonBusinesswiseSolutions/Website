@@ -73,7 +73,7 @@ namespace ValidateMeterData.api.Controllers
                     sourceId,
                     validateMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterDataAPI, validateMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterDataAPI, validateMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

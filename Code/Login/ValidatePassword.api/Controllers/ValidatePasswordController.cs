@@ -63,7 +63,7 @@ namespace ValidatePassword.api.Controllers
                     sourceId,
                     validatePasswordAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePasswordAPI, validatePasswordAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePasswordAPI, validatePasswordAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

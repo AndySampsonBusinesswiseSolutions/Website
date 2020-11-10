@@ -73,7 +73,7 @@ namespace CommitSiteData.api.Controllers
                     sourceId,
                     commitSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSiteDataAPI, commitSiteDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

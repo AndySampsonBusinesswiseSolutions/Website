@@ -71,7 +71,7 @@ namespace ValidateFlexTradeData.api.Controllers
                     sourceId,
                     validateFlexTradeDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexTradeDataAPI, validateFlexTradeDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexTradeDataAPI, validateFlexTradeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

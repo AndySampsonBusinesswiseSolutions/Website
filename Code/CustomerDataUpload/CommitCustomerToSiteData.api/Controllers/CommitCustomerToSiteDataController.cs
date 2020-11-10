@@ -74,7 +74,7 @@ namespace CommitCustomerToSiteData.api.Controllers
                     sourceId,
                     commitCustomerToSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCustomerToSiteDataAPI, commitCustomerToSiteDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCustomerToSiteDataAPI, commitCustomerToSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

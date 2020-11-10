@@ -68,7 +68,7 @@ namespace StoreFlexContractData.api.Controllers
                     sourceId,
                     storeFlexContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexContractDataAPI, storeFlexContractDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexContractDataAPI, storeFlexContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

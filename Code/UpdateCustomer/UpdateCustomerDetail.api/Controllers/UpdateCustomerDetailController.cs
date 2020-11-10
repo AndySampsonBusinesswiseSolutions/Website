@@ -67,7 +67,7 @@ namespace UpdateCustomerDetail.api.Controllers
                     sourceId,
                     updateCustomerDetailAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UpdateCustomerDetailAPI, updateCustomerDetailAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UpdateCustomerDetailAPI, updateCustomerDetailAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

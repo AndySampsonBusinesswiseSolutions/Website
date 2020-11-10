@@ -94,7 +94,7 @@ namespace GetProfileId.api.Controllers
                     
                     //Call API and wait for response
                     var APIId = _systemMethods.API_GetAPIIdByAPIGUID(APIGUID);
-                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileIdAPI, jsonObject);
+                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileIdAPI, hostEnvironment, jsonObject);
                     var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                     profileId = Convert.ToInt64(result.Result.ToString());
 

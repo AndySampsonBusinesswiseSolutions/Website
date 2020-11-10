@@ -68,7 +68,7 @@ namespace StoreFixedContractData.api.Controllers
                     sourceId,
                     storeFixedContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFixedContractDataAPI, storeFixedContractDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFixedContractDataAPI, storeFixedContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

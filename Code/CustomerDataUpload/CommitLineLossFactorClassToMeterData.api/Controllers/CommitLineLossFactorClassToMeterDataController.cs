@@ -74,7 +74,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
                     sourceId,
                     commitLineLossFactorClassToMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitLineLossFactorClassToMeterDataAPI, commitLineLossFactorClassToMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitLineLossFactorClassToMeterDataAPI, commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

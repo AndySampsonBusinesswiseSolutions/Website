@@ -78,7 +78,7 @@ namespace CreateYearForecast.api.Controllers
                     sourceId,
                     createYearForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateYearForecastAPI, createYearForecastAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateYearForecastAPI, createYearForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

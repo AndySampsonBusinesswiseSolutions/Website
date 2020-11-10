@@ -66,7 +66,7 @@ namespace StoreSiteData.api.Controllers
                     sourceId,
                     storeSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSiteDataAPI, storeSiteDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSiteDataAPI, storeSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

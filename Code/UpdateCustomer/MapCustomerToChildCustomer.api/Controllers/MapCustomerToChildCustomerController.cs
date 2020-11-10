@@ -69,7 +69,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                     sourceId,
                     mapCustomerToChildCustomerAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI, mapCustomerToChildCustomerAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI, mapCustomerToChildCustomerAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

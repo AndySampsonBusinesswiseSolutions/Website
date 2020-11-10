@@ -66,7 +66,7 @@ namespace StoreCustomerData.api.Controllers
                     sourceId,
                     storeCustomerDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreCustomerDataAPI, storeCustomerDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreCustomerDataAPI, storeCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

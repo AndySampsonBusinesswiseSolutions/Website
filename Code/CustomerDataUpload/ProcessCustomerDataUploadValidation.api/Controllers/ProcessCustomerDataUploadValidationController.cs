@@ -74,14 +74,8 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
+                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-
-                //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId);
-
-                //Get DataUploadValidationErrorId
-                var dataUploadValidationErrorId = _customerMethods.DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(processQueueGUID);
 
                 //Get Routing.API URL
                 var routingAPIId = _systemMethods.GetRoutingAPIId();
@@ -100,7 +94,21 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 jsonObject.Add(_systemAPIRequiredDataKeyEnums.CustomerDataUploadProcessQueueGUID, processQueueGUID);
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
+
+                //Update Process Queue
+                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId);
+
+                //Get DataUploadValidationErrorId
+                var dataUploadValidationErrorId = _customerMethods.DataUploadValidationError_GetDataUploadValidationErrorIdByDataUploadValidationErrorGUID(processQueueGUID);
+
+                if(dataUploadValidationErrorId == 0)
+                {
+                    //Update Process Queue
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId, false, null);
+
+                    return;
+                }
 
                 //Get FileGUID
                 var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
@@ -168,7 +176,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.SendEmail);
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, jsonObject);
+                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId, false, null);

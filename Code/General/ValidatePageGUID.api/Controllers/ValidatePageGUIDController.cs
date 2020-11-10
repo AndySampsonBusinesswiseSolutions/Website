@@ -66,7 +66,7 @@ namespace ValidatePageGUID.api.Controllers
                     sourceId,
                     validatePageGUIDAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePageGUIDAPI, validatePageGUIDAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePageGUIDAPI, validatePageGUIDAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

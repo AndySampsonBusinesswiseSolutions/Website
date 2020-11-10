@@ -78,7 +78,7 @@ namespace CreateHalfHourForecast.api.Controllers
                     sourceId,
                     createHalfHourForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateHalfHourForecastAPI, createHalfHourForecastAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateHalfHourForecastAPI, createHalfHourForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

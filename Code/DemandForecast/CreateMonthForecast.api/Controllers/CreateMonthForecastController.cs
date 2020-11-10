@@ -79,7 +79,7 @@ namespace CreateMonthForecast.api.Controllers
                     sourceId,
                     createMonthForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateMonthForecastAPI, createMonthForecastAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateMonthForecastAPI, createMonthForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

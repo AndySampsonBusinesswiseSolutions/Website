@@ -75,7 +75,7 @@ namespace CreateDateForecast.api.Controllers
                     sourceId,
                     createDateForecastAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, jsonObject))
+                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

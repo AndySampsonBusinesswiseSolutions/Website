@@ -83,7 +83,7 @@ namespace CommitContractData.api.Controllers
                     sourceId,
                     commitContractDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitContractDataAPI, commitContractDataAPIId, jsonObject))
+                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitContractDataAPI, commitContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

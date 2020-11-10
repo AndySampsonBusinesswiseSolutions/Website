@@ -66,7 +66,7 @@ namespace StoreMeterData.api.Controllers
                     sourceId,
                     storeMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterDataAPI, storeMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterDataAPI, storeMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

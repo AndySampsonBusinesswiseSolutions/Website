@@ -73,7 +73,7 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
                     sourceId,
                     commitSubAreaToSubMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubAreaToSubMeterDataAPI, commitSubAreaToSubMeterDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubAreaToSubMeterDataAPI, commitSubAreaToSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

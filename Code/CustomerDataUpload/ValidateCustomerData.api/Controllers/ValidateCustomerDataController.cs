@@ -71,7 +71,7 @@ namespace ValidateCustomerData.api.Controllers
                     sourceId,
                     validateCustomerDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateCustomerDataAPI, validateCustomerDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateCustomerDataAPI, validateCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

@@ -77,7 +77,7 @@ namespace CommitBasketData.api.Controllers
                     sourceId,
                     commitBasketDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitBasketDataAPI, commitBasketDataAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitBasketDataAPI, commitBasketDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

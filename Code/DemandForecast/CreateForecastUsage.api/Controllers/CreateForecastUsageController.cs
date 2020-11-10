@@ -84,7 +84,7 @@ namespace CreateForecastUsage.api.Controllers
 
                 //Call GetMappedUsageDateId API and wait for response
                 var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
-                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, jsonObject);
+                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
 
                 var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);

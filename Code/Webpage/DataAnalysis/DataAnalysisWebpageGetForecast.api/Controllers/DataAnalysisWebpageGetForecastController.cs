@@ -176,7 +176,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                         var siteName = _customerMethods.GetSiteName(siteId);
 
                         //get all meters for site
-                        var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId);
+                        var meterIdList = _mappingMethods.MeterToSite_GetMeterIdListBySiteId(siteId).Distinct().ToList();
 
                         foreach(var commodity in commodityDictionary)
                         {

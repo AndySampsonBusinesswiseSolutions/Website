@@ -63,7 +63,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                     sourceId,
                     validateEmailAddressPasswordMappingAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, jsonObject))
+                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
