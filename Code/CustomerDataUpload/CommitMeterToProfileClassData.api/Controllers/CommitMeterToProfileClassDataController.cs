@@ -15,9 +15,10 @@ namespace CommitMeterToProfileClassData.api.Controllers
     [ApiController]
     public class CommitMeterToProfileClassDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitMeterToProfileClassDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -29,6 +30,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterToProfileClassDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitMeterToProfileClassDataController(ILogger<CommitMeterToProfileClassDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace CommitMeterToProfileClassData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitMeterToProfileClassDataAPI, password);
-            commitMeterToProfileClassDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterToProfileClassDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitMeterToProfileClassDataAPI, password);
+            commitMeterToProfileClassDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterToProfileClassDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitMeterToProfileClassDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitMeterToProfileClassDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -74,7 +76,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
                     sourceId,
                     commitMeterToProfileClassDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToProfileClassDataAPI, commitMeterToProfileClassDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToProfileClassDataAPI, commitMeterToProfileClassDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -83,10 +85,10 @@ namespace CommitMeterToProfileClassData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterToProfileClassDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
+                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterToProfileClassDataAPIId, false, null);
@@ -96,21 +98,19 @@ namespace CommitMeterToProfileClassData.api.Controllers
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var profileClassCodeProfileClassAttributeId = _informationMethods.ProfileClassAttribute_GetProfileClassAttributeIdByProfileClassAttributeDescription(_informationProfileClassAttributeEnums.ProfileClassCode);
 
-                var profileClasses = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass).PadLeft(2, '0'))
-                    .Distinct()
+                var profileClasses = commitableMeterEntities.Select(cme => cme.ProfileClass).Distinct()
                     .ToDictionary(pc => pc, pc => GetProfileClassId(pc, profileClassCodeProfileClassAttributeId));
                 
-                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
-                    .Distinct()
+                var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
                     .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var meterEntity in commitableMeterEntities)
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
+                    var meterId = meters[meterEntity.MPXN];
                     
                     //Get ProfileClassId from [Information].[ProfileClassDetail]
-                    var profileClassId = profileClasses[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass).PadLeft(2, '0')];
+                    var profileClassId = profileClasses[meterEntity.ProfileClass];
 
                     //Does mapping exist between meter and profile class
                     var existingMeterProfileClassId = _mappingMethods.MeterToProfileClass_GetProfileClassIdByMeterId(meterId);

@@ -15,9 +15,10 @@ namespace CommitCommodityToMeterData.api.Controllers
     [ApiController]
     public class CommitCommodityToMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitCommodityToMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -29,6 +30,7 @@ namespace CommitCommodityToMeterData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitCommodityToMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitCommodityToMeterDataController(ILogger<CommitCommodityToMeterDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace CommitCommodityToMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitCommodityToMeterDataAPI, password);
-            commitCommodityToMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitCommodityToMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitCommodityToMeterDataAPI, password);
+            commitCommodityToMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitCommodityToMeterDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace CommitCommodityToMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitCommodityToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitCommodityToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,6 +57,7 @@ namespace CommitCommodityToMeterData.api.Controllers
         public void Commit([FromBody] object data)
         {
             var administrationUserMethods = new Methods.Administration.User();
+            var methods = new Methods();
 
             //Get base variables
             var createdByUserId = administrationUserMethods.GetSystemUserId();
@@ -74,7 +77,7 @@ namespace CommitCommodityToMeterData.api.Controllers
                     sourceId,
                     commitCommodityToMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCommodityToMeterDataAPI, commitCommodityToMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCommodityToMeterDataAPI, commitCommodityToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -83,10 +86,10 @@ namespace CommitCommodityToMeterData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitCommodityToMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
+                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCommodityToMeterDataAPIId, false, null);
@@ -95,27 +98,31 @@ namespace CommitCommodityToMeterData.api.Controllers
 
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
 
-                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
-                    .Distinct()
+                var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
                     .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
-                var commodities = meters.Select(m => _methods.IsValidMPAN(m.Key) ? _informationCommodityEnums.Electricity : _informationCommodityEnums.Gas)
+                var commodities = meters.Select(m => methods.IsValidMPAN(m.Key) ? _informationCommodityEnums.Electricity : _informationCommodityEnums.Gas)
                     .Distinct()
                     .ToDictionary(c => c, c => _informationMethods.Commodity_GetCommodityIdByCommodityDescription(c));
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var meterEntity in commitableMeterEntities)
                 {
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
+                    var meterId = meters[meterEntity.MPXN];
 
                     //Get CommodityId from [Information].[Commodity]
-                    var commodity = _methods.IsValidMPAN(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) 
+                    var commodity = methods.IsValidMPAN(meterEntity.MPXN) 
                         ? _informationCommodityEnums.Electricity 
                         : _informationCommodityEnums.Gas;
                     var commodityId = commodities[commodity];
 
-                    //Insert into [Mapping].[CommodityToMeter]
-                    _mappingMethods.CommodityToMeter_Insert(createdByUserId, sourceId, commodityId, meterId);
+                    var commodityToMeterId = _mappingMethods.CommodityToMeter_GetCommodityToMeterIdByCommodityIdAndMeterId(commodityId, meterId);
+
+                    if(commodityToMeterId == 0)
+                    {
+                        //Insert into [Mapping].[CommodityToMeter]
+                        _mappingMethods.CommodityToMeter_Insert(createdByUserId, sourceId, commodityId, meterId);
+                    }
                 }
 
                 //Update Process Queue

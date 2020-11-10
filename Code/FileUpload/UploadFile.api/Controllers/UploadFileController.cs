@@ -13,15 +13,17 @@ namespace UploadFile.api.Controllers
     [ApiController]
     public class UploadFileController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<UploadFileController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Enums.Information.File.Attribute _informationFileAttributeEnums = new Enums.Information.File.Attribute();
         private readonly Int64 uploadFileAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public UploadFileController(ILogger<UploadFileController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace UploadFile.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.UploadFileAPI, password);
-            uploadFileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UploadFileAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().UploadFileAPI, password);
+            uploadFileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UploadFileAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace UploadFile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(uploadFileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(uploadFileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,7 +68,7 @@ namespace UploadFile.api.Controllers
                     sourceId,
                     uploadFileAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UploadFileAPI, uploadFileAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UploadFileAPI, uploadFileAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

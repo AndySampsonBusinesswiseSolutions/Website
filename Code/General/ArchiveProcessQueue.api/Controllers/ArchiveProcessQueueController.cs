@@ -14,9 +14,11 @@ namespace ArchiveProcessQueue.api.Controllers
     [ApiController]
     public class ArchiveProcessQueueController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ArchiveProcessQueueController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
@@ -24,6 +26,7 @@ namespace ArchiveProcessQueue.api.Controllers
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Int64 archiveProcessQueueAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ArchiveProcessQueueController(ILogger<ArchiveProcessQueueController> logger, IConfiguration configuration)
         {
@@ -31,8 +34,8 @@ namespace ArchiveProcessQueue.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ArchiveProcessQueueAPI, password);
-            archiveProcessQueueAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ArchiveProcessQueueAPI, password);
+            archiveProcessQueueAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
         }
 
         [HttpPost]
@@ -40,7 +43,7 @@ namespace ArchiveProcessQueue.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -65,10 +68,10 @@ namespace ArchiveProcessQueue.api.Controllers
             try
             {
                 //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+                var checkPrerequisiteAPIAPIId = _systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, hostEnvironment, jsonObject);
+                var API = _systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get whether there is an error in the API records

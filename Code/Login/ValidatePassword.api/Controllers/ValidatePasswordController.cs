@@ -13,11 +13,14 @@ namespace ValidatePassword.api.Controllers
     [ApiController]
     public class ValidatePasswordController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidatePasswordController> _logger;
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validatePasswordAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidatePasswordController(ILogger<ValidatePasswordController> logger, IConfiguration configuration)
         {
@@ -26,7 +29,7 @@ namespace ValidatePassword.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidatePasswordAPI, password);
-            validatePasswordAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
+            validatePasswordAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
         }
 
         [HttpPost]
@@ -34,7 +37,7 @@ namespace ValidatePassword.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validatePasswordAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validatePasswordAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -63,7 +66,7 @@ namespace ValidatePassword.api.Controllers
                     sourceId,
                     validatePasswordAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePasswordAPI, validatePasswordAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePasswordAPI, validatePasswordAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

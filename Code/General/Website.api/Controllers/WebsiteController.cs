@@ -14,9 +14,11 @@ namespace Website.api.Controllers
     [ApiController]
     public class WebsiteController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<WebsiteController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         public readonly Methods.Information _informationMethods = new Methods.Information();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -25,6 +27,7 @@ namespace Website.api.Controllers
         private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
         private readonly Int64 websiteAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public WebsiteController(ILogger<WebsiteController> logger, IConfiguration configuration)
         {
@@ -32,8 +35,8 @@ namespace Website.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.WebsiteAPI, password);
-            websiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().WebsiteAPI, password);
+            websiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
         }
 
         [HttpPost]
@@ -63,10 +66,10 @@ namespace Website.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, websiteAPIId);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, hostEnvironment, jsonObject);
+                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, websiteAPIId);
@@ -147,7 +150,7 @@ namespace Website.api.Controllers
             var APIGUID = jsonObject[_systemAPIRequiredDataKeyEnums.APIGUID].ToString();
 
             //Get API Id
-            var websiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(APIGUID);
+            var websiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(APIGUID);
 
             //Get Process Archive Detail Id List by API Id
             var APIProcessArchiveDetailIdList = _mappingMethods.APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);

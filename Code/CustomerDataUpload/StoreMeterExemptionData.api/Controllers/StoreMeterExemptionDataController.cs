@@ -13,15 +13,17 @@ namespace StoreMeterExemptionData.api.Controllers
     [ApiController]
     public class StoreMeterExemptionDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreMeterExemptionDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeMeterExemptionDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreMeterExemptionDataController(ILogger<StoreMeterExemptionDataController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace StoreMeterExemptionData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreMeterExemptionDataAPI, password);
-            storeMeterExemptionDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterExemptionDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreMeterExemptionDataAPI, password);
+            storeMeterExemptionDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterExemptionDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace StoreMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,7 +68,7 @@ namespace StoreMeterExemptionData.api.Controllers
                     sourceId,
                     storeMeterExemptionDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterExemptionDataAPI, storeMeterExemptionDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterExemptionDataAPI, storeMeterExemptionDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,17 +76,20 @@ namespace StoreMeterExemptionData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeMeterExemptionDataAPIId);
 
+                var methods = new Methods();
+                var tempCustomerDataUploadMeterExemptionMethods = new Methods.Temp.CustomerDataUpload.MeterExemption();
+
                 //Get Meter Exemption data from Customer Data Upload
                 var meterExemptionDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Meter Exemptions']");
 
                 foreach(var row in meterExemptionDictionary.Keys)
                 {
                     var values = meterExemptionDictionary[row];
-                    var dateFrom = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
-                    var dateTo = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
+                    var dateFrom = methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
+                    var dateTo = methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert meter exemption data into [Temp.CustomerDataUpload].[MeterExemption]
-                    _tempCustomerDataUploadMethods.MeterExemption_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3], values[4]);
+                    tempCustomerDataUploadMeterExemptionMethods.MeterExemption_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3], values[4]);
                 }
 
                 //Update Process Queue

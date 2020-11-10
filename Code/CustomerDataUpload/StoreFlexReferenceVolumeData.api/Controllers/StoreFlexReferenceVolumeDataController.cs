@@ -13,15 +13,17 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
     [ApiController]
     public class StoreFlexReferenceVolumeDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreFlexReferenceVolumeDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeFlexReferenceVolumeDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreFlexReferenceVolumeDataController(ILogger<StoreFlexReferenceVolumeDataController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreFlexReferenceVolumeDataAPI, password);
-            storeFlexReferenceVolumeDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexReferenceVolumeDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreFlexReferenceVolumeDataAPI, password);
+            storeFlexReferenceVolumeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexReferenceVolumeDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,7 +68,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                     sourceId,
                     storeFlexReferenceVolumeDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexReferenceVolumeDataAPI, storeFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexReferenceVolumeDataAPI, storeFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,17 +76,20 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId);
 
+                var methods = new Methods();
+                var tempCustomerDataUploadFlexReferenceVolumeMethods = new Methods.Temp.CustomerDataUpload.FlexReferenceVolume();
+
                 //Get Flex Reference Volume data from Customer Data Upload
                 var flexReferenceVolumeDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
 
                 foreach(var row in flexReferenceVolumeDictionary.Keys)
                 {
                     var values = flexReferenceVolumeDictionary[row];
-                    var dateFrom = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
-                    var dateTo = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
+                    var dateFrom = methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
+                    var dateTo = methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert flex reference volume data into [Temp.CustomerDataUpload].[FlexReferenceVolume]
-                    _tempCustomerDataUploadMethods.FlexReferenceVolume_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3]);
+                    tempCustomerDataUploadFlexReferenceVolumeMethods.FlexReferenceVolume_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3]);
                 }
 
                 //Update Process Queue

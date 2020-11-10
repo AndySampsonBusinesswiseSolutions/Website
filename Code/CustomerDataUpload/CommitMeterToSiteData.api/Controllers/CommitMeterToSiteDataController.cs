@@ -15,9 +15,10 @@ namespace CommitMeterToSiteData.api.Controllers
     [ApiController]
     public class CommitMeterToSiteDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitMeterToSiteDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -29,6 +30,7 @@ namespace CommitMeterToSiteData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterToSiteDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitMeterToSiteDataController(ILogger<CommitMeterToSiteDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace CommitMeterToSiteData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitMeterToSiteDataAPI, password);
-            commitMeterToSiteDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitMeterToSiteDataAPI, password);
+            commitMeterToSiteDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace CommitMeterToSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitMeterToSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitMeterToSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -74,7 +76,7 @@ namespace CommitMeterToSiteData.api.Controllers
                     sourceId,
                     commitMeterToSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI, commitMeterToSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterToSiteDataAPI, commitMeterToSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -83,10 +85,10 @@ namespace CommitMeterToSiteData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterToSiteDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
+                var meterDataRows = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterDataRows);
 
-                if(!commitableDataRows.Any())
+                if(!commitableMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterToSiteDataAPIId, false, null);
@@ -97,29 +99,23 @@ namespace CommitMeterToSiteData.api.Controllers
                 var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
                 var sitePostCodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
 
-                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
-                    .Distinct()
+                var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
                     .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
-                var siteNames = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SiteName))
-                    .Distinct()
+                var siteNames = commitableMeterEntities.Select(cme => cme.SiteName).Distinct()
                     .ToDictionary(sn => sn, sn => _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, sn));
 
-                var sitePostCodes = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode))
-                    .Distinct()
+                var sitePostCodes = commitableMeterEntities.Select(cme => cme.SitePostCode).Distinct()
                     .ToDictionary(spc => spc, spc => _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, spc));
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var meterEntity in commitableMeterEntities)
                 {
                     //Get MeterId by MPXN
-                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
+                    var meterId = meters[meterEntity.MPXN];
 
                     //Get SiteId by SiteName and SitePostCode
-                    var siteName = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName);
-                    var sitePostCode = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode);
-
-                    var siteNameSiteIdList = siteNames[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SiteName)];
-                    var sitePostCodeSiteIdList = sitePostCodes[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode)];
+                    var siteNameSiteIdList = siteNames[meterEntity.SiteName];
+                    var sitePostCodeSiteIdList = sitePostCodes[meterEntity.SitePostCode];
 
                     var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
                     var siteId = matchingSiteIdList.FirstOrDefault();

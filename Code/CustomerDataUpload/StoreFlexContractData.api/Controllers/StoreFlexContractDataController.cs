@@ -15,15 +15,17 @@ namespace StoreFlexContractData.api.Controllers
     [ApiController]
     public class StoreFlexContractDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreFlexContractDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeFlexContractDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreFlexContractDataController(ILogger<StoreFlexContractDataController> logger, IConfiguration configuration)
         {
@@ -31,8 +33,8 @@ namespace StoreFlexContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreFlexContractDataAPI, password);
-            storeFlexContractDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexContractDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreFlexContractDataAPI, password);
+            storeFlexContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexContractDataAPI);
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace StoreFlexContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -68,13 +70,16 @@ namespace StoreFlexContractData.api.Controllers
                     sourceId,
                     storeFlexContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexContractDataAPI, storeFlexContractDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexContractDataAPI, storeFlexContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexContractDataAPIId);
+
+                var methods = new Methods();
+                var tempCustomerDataUploadFlexContract = new Methods.Temp.CustomerDataUpload.FlexContract();
 
                 //Get Flex Contract data from Customer Data Upload
                 var flexContractDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
@@ -86,13 +91,13 @@ namespace StoreFlexContractData.api.Controllers
                 foreach(var row in flexContractDictionary.Keys)
                 {
                     var values = flexContractDictionary[row];
-                    var contractStartDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[4]);
-                    var contractEndDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[5]);
+                    var contractStartDate = methods.GetDateTimeSqlParameterFromDateTimeString(values[4]);
+                    var contractEndDate = methods.GetDateTimeSqlParameterFromDateTimeString(values[5]);
 
                     for(var rateCount = 7; rateCount < values.Count(); rateCount++)
                     {
                         //Insert fixed contract data into [Temp.CustomerDataUpload].[FlexContract]
-                        _tempCustomerDataUploadMethods.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], columns[rateCount - 7], values[rateCount]);
+                        tempCustomerDataUploadFlexContract.FlexContract_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], contractStartDate, contractEndDate, values[6], columns[rateCount - 7], values[rateCount]);
                     }
                 }
 

@@ -17,6 +17,17 @@ namespace MethodLibrary
                     createdByUserId, sourceId, commodityId, meterId);
             }
 
+            public long CommodityToMeter_GetCommodityToMeterIdByCommodityIdAndMeterId(long commodityId, long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.CommodityToMeter_GetByCommodityIdAndMeterId, 
+                    commodityId, meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("CommodityToMeterId"))
+                    .FirstOrDefault();
+            }
+
             public long CommodityToMeter_GetCommodityIdByMeterId(long meterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

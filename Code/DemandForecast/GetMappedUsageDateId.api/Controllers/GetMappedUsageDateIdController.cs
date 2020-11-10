@@ -19,9 +19,10 @@ namespace GetMappedUsageDateId.api.Controllers
     [ApiController]
     public class GetMappedUsageDateIdController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<GetMappedUsageDateIdController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -37,6 +38,7 @@ namespace GetMappedUsageDateId.api.Controllers
         private DateTime earliestUsageDate;
         private DateTime latestUsageDate;
         private readonly string hostEnvironment;
+        #endregion
 
         public GetMappedUsageDateIdController(ILogger<GetMappedUsageDateIdController> logger, IConfiguration configuration)
         {
@@ -44,8 +46,8 @@ namespace GetMappedUsageDateId.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetMappedUsageDateIdAPI, password);
-            getMappedUsageDateIdAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetMappedUsageDateIdAPI, password);
+            getMappedUsageDateIdAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
         }
 
         [HttpPost]
@@ -53,7 +55,7 @@ namespace GetMappedUsageDateId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

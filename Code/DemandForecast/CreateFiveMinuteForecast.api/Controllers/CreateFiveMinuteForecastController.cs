@@ -17,9 +17,10 @@ namespace CreateFiveMinuteForecast.api.Controllers
     [ApiController]
     public class CreateFiveMinuteForecastController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateFiveMinuteForecastController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
@@ -34,6 +35,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
         private Dictionary<long, Dictionary<long, decimal>> existingFiveMinuteForecastDictionary;
         private Dictionary<long, Dictionary<long, decimal>> forecastDictionary;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateFiveMinuteForecastController(ILogger<CreateFiveMinuteForecastController> logger, IConfiguration configuration)
         {
@@ -41,8 +43,8 @@ namespace CreateFiveMinuteForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateFiveMinuteForecastAPI, password);
-            createFiveMinuteForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateFiveMinuteForecastAPI, password);
+            createFiveMinuteForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI);
         }
 
         [HttpPost]
@@ -50,7 +52,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createFiveMinuteForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createFiveMinuteForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -78,7 +80,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
                     sourceId,
                     createFiveMinuteForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI, createFiveMinuteForecastAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateFiveMinuteForecastAPI, createFiveMinuteForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

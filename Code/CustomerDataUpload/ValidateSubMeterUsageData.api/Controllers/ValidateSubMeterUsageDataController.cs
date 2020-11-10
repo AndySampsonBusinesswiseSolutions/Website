@@ -16,9 +16,10 @@ namespace ValidateSubMeterUsageData.api.Controllers
     [ApiController]
     public class ValidateSubMeterUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateSubMeterUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -27,6 +28,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateSubMeterUsageDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateSubMeterUsageDataController(ILogger<ValidateSubMeterUsageDataController> logger, IConfiguration configuration)
         {
@@ -34,8 +36,8 @@ namespace ValidateSubMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateSubMeterUsageDataAPI, password);
-            validateSubMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSubMeterUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateSubMeterUsageDataAPI, password);
+            validateSubMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSubMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,7 +73,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                     sourceId,
                     validateSubMeterUsageDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSubMeterUsageDataAPI, validateSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSubMeterUsageDataAPI, validateSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -80,14 +82,16 @@ namespace ValidateSubMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateSubMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] table
-                var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterUsageEntities = new Methods.Temp.CustomerDataUpload.SubMeterUsage().SubMeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!subMeterUsageDataRows.Any())
+                if(!subMeterUsageEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateSubMeterUsageDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -97,7 +101,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageEntities.Select(smue => smue.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -107,56 +111,52 @@ namespace ValidateSubMeterUsageData.api.Controllers
                     };
                 
                 //If any are empty records, store error
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, subMeterUsageDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, subMeterUsageEntities, requiredColumns);
 
                 //Check dates are valid
-                var invalidDateDataRows = subMeterUsageDataRows.Where(r => !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.Date)));
+                var invalidDateEntities = subMeterUsageEntities.Where(smue => !methods.IsValidDate(smue.Date));
 
-                foreach(var invalidDateDataRow in invalidDateDataRows)
+                foreach(var invalidDateEntity in invalidDateEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidDateDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Invalid date {invalidDateDataRow[_customerDataUploadValidationEntityEnums.Date]} found"))
+                    if(!records[invalidDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Invalid date '{invalidDateEntity.Date}' found"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Date].Add($"Invalid date {invalidDateDataRow[_customerDataUploadValidationEntityEnums.Date]} found");
+                        records[invalidDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Add($"Invalid date '{invalidDateEntity.Date}' found");
                     }
                 }
 
                 //Check all dates are in the past
-                var validDateDataRows = subMeterUsageDataRows.Where(r => _methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.Date)));
-                var futureDateDataRows = validDateDataRows.Where(r => Convert.ToDateTime(r.Field<string>(_customerDataUploadValidationEntityEnums.Date)) >= DateTime.Today);
+                var validDateEntities = subMeterUsageEntities.Where(smue => methods.IsValidDate(smue.Date));
+                var futureDateEntities = validDateEntities.Where(smue => Convert.ToDateTime(smue.Date) >= DateTime.Today);
 
-                foreach(var futureDateDataRow in futureDateDataRows)
+                foreach(var futureDateEntity in futureDateEntities)
                 {
-                    var rowId = Convert.ToInt32(futureDateDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Future date {futureDateDataRow[_customerDataUploadValidationEntityEnums.Date]} found"))
+                    if(!records[futureDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Future date '{futureDateEntity.Date}' found"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Date].Add($"Future date {futureDateDataRow[_customerDataUploadValidationEntityEnums.Date]} found");
+                        records[futureDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Add($"Future date '{futureDateEntity.Date}' found");
                     }
                 }
 
                 //Check usage is valid
-                var invalidUsageDataRows = subMeterUsageDataRows.Where(r => !_methods.IsValidUsage(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
+                var invalidUsageEntities = subMeterUsageEntities.Where(smue => !methods.IsValidUsage(smue.Value));
 
-                foreach(var invalidUsageDataRow in invalidUsageDataRows)
+                foreach(var invalidUsageEntity in invalidUsageEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidUsageDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid usage {invalidUsageDataRow[_customerDataUploadValidationEntityEnums.Value]} for {invalidUsageDataRow[_customerDataUploadValidationEntityEnums.Date]} {invalidUsageDataRow[_customerDataUploadValidationEntityEnums.TimePeriod]}"))
+                    if(!records[invalidUsageEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid usage {invalidUsageEntity.Value} for {invalidUsageEntity.Date} {invalidUsageEntity.TimePeriod}"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid usage {invalidUsageDataRow[_customerDataUploadValidationEntityEnums.Value]} for {invalidUsageDataRow[_customerDataUploadValidationEntityEnums.Date]} {invalidUsageDataRow[_customerDataUploadValidationEntityEnums.TimePeriod]}");
+                        records[invalidUsageEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid usage {invalidUsageEntity.Value} for {invalidUsageEntity.Date} {invalidUsageEntity.TimePeriod}");
                     }
                 }
 
                 //If day is not October clock change, don't allow HH49 or HH50 to be populated
-                var additionalHalfHourDataRows = subMeterUsageDataRows.Where(r => _methods.IsAdditionalTimePeriod(r.Field<string>(_customerDataUploadValidationEntityEnums.TimePeriod))
-                    && !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
-                var invalidAdditionalHalfHourDataRows = additionalHalfHourDataRows.Where(r => !_methods.IsOctoberClockChange(r.Field<string>(_customerDataUploadValidationEntityEnums.Date)));
+                var additionalHalfHourEntities = subMeterUsageEntities.Where(smue => methods.IsAdditionalTimePeriod(smue.TimePeriod)
+                    && !string.IsNullOrWhiteSpace(smue.Value));
+                var invalidAdditionalHalfHourEntities = additionalHalfHourEntities.Where(smue => !methods.IsOctoberClockChange(smue.Date));
 
-                foreach(var invalidAdditionalHalfHourDataRow in invalidAdditionalHalfHourDataRows)
+                foreach(var invalidAdditionalHalfHourEntity in invalidAdditionalHalfHourEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidAdditionalHalfHourDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Usage found in additional half hour {invalidAdditionalHalfHourDataRow[_customerDataUploadValidationEntityEnums.TimePeriod]} but {invalidAdditionalHalfHourDataRow[_customerDataUploadValidationEntityEnums.Date]} is not an October clock change date"))
+                    if(!records[invalidAdditionalHalfHourEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Usage found in additional half hour {invalidAdditionalHalfHourEntity.TimePeriod} but {invalidAdditionalHalfHourEntity.Date} is not an October clock change date"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Date].Add($"Usage found in additional half hour {invalidAdditionalHalfHourDataRow[_customerDataUploadValidationEntityEnums.TimePeriod]} but {invalidAdditionalHalfHourDataRow[_customerDataUploadValidationEntityEnums.Date]} is not an October clock change date");
+                        records[invalidAdditionalHalfHourEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Add($"Usage found in additional half hour {invalidAdditionalHalfHourEntity.TimePeriod} but {invalidAdditionalHalfHourEntity.Date} is not an October clock change date");
                     }
                 }
 

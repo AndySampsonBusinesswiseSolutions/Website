@@ -13,15 +13,17 @@ namespace StoreFlexTradeData.api.Controllers
     [ApiController]
     public class StoreFlexTradeDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreFlexTradeDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeFlexTradeDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreFlexTradeDataController(ILogger<StoreFlexTradeDataController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace StoreFlexTradeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreFlexTradeDataAPI, password);
-            storeFlexTradeDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexTradeDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreFlexTradeDataAPI, password);
+            storeFlexTradeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFlexTradeDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace StoreFlexTradeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,7 +68,7 @@ namespace StoreFlexTradeData.api.Controllers
                     sourceId,
                     storeFlexTradeDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexTradeDataAPI, storeFlexTradeDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreFlexTradeDataAPI, storeFlexTradeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,16 +76,19 @@ namespace StoreFlexTradeData.api.Controllers
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexTradeDataAPIId);
 
+                var methods = new Methods();
+                var tempCustomerDataUploadFlexTradeMethods = new Methods.Temp.CustomerDataUpload.FlexTrade();
+
                 //Get Flex Trade data from Customer Data Upload
                 var flexTradeDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Trades']");
 
                 foreach(var row in flexTradeDictionary.Keys)
                 {
                     var values = flexTradeDictionary[row];
-                    var tradeDate = _methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
+                    var tradeDate = methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
 
                     //Insert flex trade data into [Temp.CustomerDataUpload].[FlexTrade]
-                    _tempCustomerDataUploadMethods.FlexTrade_Insert(processQueueGUID, row, values[0], values[1], tradeDate, values[3], values[4], values[5], values[6]);
+                    tempCustomerDataUploadFlexTradeMethods.FlexTrade_Insert(processQueueGUID, row, values[0], values[1], tradeDate, values[3], values[4], values[5], values[6]);
                 }
 
                 //Update Process Queue

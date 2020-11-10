@@ -16,9 +16,10 @@ namespace CommitSiteData.api.Controllers
     [ApiController]
     public class CommitSiteDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitSiteDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -28,6 +29,7 @@ namespace CommitSiteData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSiteDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitSiteDataController(ILogger<CommitSiteDataController> logger, IConfiguration configuration)
         {
@@ -35,8 +37,8 @@ namespace CommitSiteData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitSiteDataAPI, password);
-            commitSiteDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSiteDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitSiteDataAPI, password);
+            commitSiteDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSiteDataAPI);
         }
 
         [HttpPost]
@@ -44,7 +46,7 @@ namespace CommitSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -73,7 +75,7 @@ namespace CommitSiteData.api.Controllers
                     sourceId,
                     commitSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -82,10 +84,10 @@ namespace CommitSiteData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSiteDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
-                var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(siteDataRows);
+                var siteEntities = new Methods.Temp.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSiteEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(siteEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableSiteEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, false, null);
@@ -117,11 +119,11 @@ namespace CommitSiteData.api.Controllers
                     detailDictionary.Add(attribute.Key, string.Empty);
                 }
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var siteEntity in commitableSiteEntities)
                 {
                     foreach(var attribute in attributes)
                     {
-                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                        detailDictionary[attribute.Key] = siteEntity.GetType().GetProperty(attribute.Value).GetValue(siteEntity).ToString();
                     }
 
                     //Get SiteId by SiteName and SitePostCode
@@ -148,12 +150,12 @@ namespace CommitSiteData.api.Controllers
                         //Update [Site].[SiteDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            var currentDetailDataRow = _customerMethods.SiteDetail_GetBySiteIdAndSiteAttributeId(siteId, detail.Key);
-                            var currentDetail = currentDetailDataRow.Field<string>("SiteDetailDescription");
+                            var currentDetailEntity = _customerMethods.SiteDetail_GetBySiteIdAndSiteAttributeId(siteId, detail.Key);
+                            var currentDetail = currentDetailEntity.Field<string>("SiteDetailDescription");
 
                             if(detail.Value != currentDetail)
                             {
-                                var siteDetailId = currentDetailDataRow.Field<int>("SiteDetailId");
+                                var siteDetailId = currentDetailEntity.Field<int>("SiteDetailId");
                                 _customerMethods.SiteDetail_DeleteBySiteDetailId(siteDetailId);
                                 _customerMethods.SiteDetail_Insert(createdByUserId, sourceId, siteId, detail.Key, detail.Value);
                             }

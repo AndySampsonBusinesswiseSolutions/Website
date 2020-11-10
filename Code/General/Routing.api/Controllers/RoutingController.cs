@@ -13,15 +13,18 @@ namespace Routing.api.Controllers
     [ApiController]
     public class RoutingController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<RoutingController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly string hostEnvironment;
+        #endregion
 
         public RoutingController(ILogger<RoutingController> logger, IConfiguration configuration)
         {
@@ -29,7 +32,7 @@ namespace Routing.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.RoutingAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().RoutingAPI, password);
         }
 
         [HttpPost]
@@ -37,11 +40,11 @@ namespace Routing.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var routingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
+            var routingAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
             var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
 
             //Launch API process
-            _systemMethods.PostAsJsonAsync(routingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(routingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -63,10 +66,10 @@ namespace Routing.api.Controllers
                 var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
                 
                 //Get ValidateProcessGUID API Id
-                var validateProcessGUIDAPIId = _systemMethods.GetValidateProcessGUIDAPIId();
+                var validateProcessGUIDAPIId = _systemAPIMethods.GetValidateProcessGUIDAPIId();
                 
                 //Call ValidateProcessGUID API
-                var API = _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
+                var API = _systemAPIMethods.PostAsJsonAsync(validateProcessGUIDAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                 var processId = 0L;
 
@@ -87,13 +90,13 @@ namespace Routing.api.Controllers
                 var APIIdList = _mappingMethods.APIToProcess_GetAPIIdListByProcessId(processId);
                 var APIGUIDList = new List<string>
                     {
-                        _systemMethods.API_GetAPIGUIDByAPIId(validateProcessGUIDAPIId)
+                        _systemAPIMethods.API_GetAPIGUIDByAPIId(validateProcessGUIDAPIId)
                     };
 
                 foreach(var APIId in APIIdList)
                 {
                     //Call API
-                    API = _systemMethods.PostAsJson(APIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
+                    API = _systemAPIMethods.PostAsJson(APIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                     try
                     {
@@ -106,18 +109,18 @@ namespace Routing.api.Controllers
                         _systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, APIId, error.Message);
                     }
                     
-                    APIGUIDList.Add(_systemMethods.API_GetAPIGUIDByAPIId(APIId));
+                    APIGUIDList.Add(_systemAPIMethods.API_GetAPIGUIDByAPIId(APIId));
                 }
 
                 //Get Archive.API Id
-                var archiveAPIId = _systemMethods.GetArchiveProcessQueueAPIId();
+                var archiveAPIId = _systemAPIMethods.GetArchiveProcessQueueAPIId();
 
                 //Create required jsonObject
-                var archiveObject = _systemMethods.GetAPIData(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
+                var archiveObject = _systemAPIMethods.GetAPIData(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
                 archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
 
                 //Connect to Archive API and POST API list
-                API = _systemMethods.PostAsJson(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveObject, false);
+                API = _systemAPIMethods.PostAsJson(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveObject, false);
 
                 try
                 {

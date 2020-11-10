@@ -13,15 +13,17 @@ namespace StoreSubMeterData.api.Controllers
     [ApiController]
     public class StoreSubMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreSubMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeSubMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreSubMeterDataController(ILogger<StoreSubMeterDataController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace StoreSubMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreSubMeterDataAPI, password);
-            storeSubMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreSubMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreSubMeterDataAPI, password);
+            storeSubMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace StoreSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,13 +68,15 @@ namespace StoreSubMeterData.api.Controllers
                     sourceId,
                     storeSubMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSubMeterDataAPI, storeSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSubMeterDataAPI, storeSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSubMeterDataAPIId);
+
+                var tempCustomerDataUploadSubMeterMethods = new Methods.Temp.CustomerDataUpload.SubMeter();
 
                 //Get SubMeter data from Customer Data Upload
                 var subMeterDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.SubMeters");
@@ -82,7 +86,7 @@ namespace StoreSubMeterData.api.Controllers
                     var values = subMeterDictionary[row];
 
                     //Insert submeter data into [Temp.CustomerDataUpload].[SubMeter]
-                    _tempCustomerDataUploadMethods.SubMeter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4]);
+                    tempCustomerDataUploadSubMeterMethods.SubMeter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4]);
                 }
 
                 //Update Process Queue

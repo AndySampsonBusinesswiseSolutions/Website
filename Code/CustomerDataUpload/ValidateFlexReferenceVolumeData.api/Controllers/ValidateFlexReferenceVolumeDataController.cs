@@ -16,9 +16,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
     [ApiController]
     public class ValidateFlexReferenceVolumeDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateFlexReferenceVolumeDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -27,6 +28,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateFlexReferenceVolumeDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateFlexReferenceVolumeDataController(ILogger<ValidateFlexReferenceVolumeDataController> logger, IConfiguration configuration)
         {
@@ -34,8 +36,8 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateFlexReferenceVolumeDataAPI, password);
-            validateFlexReferenceVolumeDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFlexReferenceVolumeDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateFlexReferenceVolumeDataAPI, password);
+            validateFlexReferenceVolumeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFlexReferenceVolumeDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,7 +73,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     sourceId,
                     validateFlexReferenceVolumeDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexReferenceVolumeDataAPI, validateFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexReferenceVolumeDataAPI, validateFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -80,14 +82,16 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFlexReferenceVolumeDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] table
-                var flexReferenceVolumeDataRows = _tempCustomerDataUploadMethods.FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
+                var flexReferenceVolumeEntities = new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!flexReferenceVolumeDataRows.Any())
+                if(!flexReferenceVolumeEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexReferenceVolumeDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -97,65 +101,61 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Volume,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeEntities.Select(frve => frve.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.ContractReference, "Contract Reference"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, flexReferenceVolumeDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, flexReferenceVolumeEntities, requiredColumns);
 
                 //Validate Contract Dates
-                var invalidDateFromDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom))
-                    && !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom)));
+                var invalidDateFromDataRecords = flexReferenceVolumeEntities.Where(frve => !string.IsNullOrWhiteSpace(frve.DateFrom)
+                    && !methods.IsValidDate(frve.DateFrom));
 
                 foreach(var invalidDateFromDataRecord in invalidDateFromDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidDateFromDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Date From '{invalidDateFromDataRecord[_customerDataUploadValidationEntityEnums.DateFrom]}'"))
+                    if(!records[invalidDateFromDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Date From '{invalidDateFromDataRecord.DateFrom}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Date From '{invalidDateFromDataRecord[_customerDataUploadValidationEntityEnums.DateFrom]}'");
+                        records[invalidDateFromDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Date From '{invalidDateFromDataRecord.DateFrom}'");
                     }
                 }
 
-                var invalidDateToDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.DateTo))
-                    && !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.DateTo)));
+                var invalidDateToDataRecords = flexReferenceVolumeEntities.Where(frve => !string.IsNullOrWhiteSpace(frve.DateTo)
+                    && !methods.IsValidDate(frve.DateTo));
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidDateToDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.DateTo].Contains($"Invalid Date to '{invalidDateToDataRecord[_customerDataUploadValidationEntityEnums.DateTo]}'"))
+                    if(!records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateTo].Contains($"Invalid Date to '{invalidDateToDataRecord.DateTo}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.DateTo].Add($"Invalid Date to '{invalidDateToDataRecord[_customerDataUploadValidationEntityEnums.DateTo]}'");
+                        records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateTo].Add($"Invalid Date to '{invalidDateToDataRecord.DateTo}'");
                     }
                 }
 
-                var invalidContractDateDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom))
-                    && !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.DateTo))
-                    && _methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom))
-                    && _methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.DateTo))
-                    && r.Field<DateTime>(_customerDataUploadValidationEntityEnums.DateFrom) >= r.Field<DateTime>(_customerDataUploadValidationEntityEnums.DateTo));
+                var invalidContractDateDataRecords = flexReferenceVolumeEntities.Where(frve => !string.IsNullOrWhiteSpace(frve.DateFrom)
+                    && !string.IsNullOrWhiteSpace(frve.DateTo)
+                    && methods.IsValidDate(frve.DateFrom)
+                    && methods.IsValidDate(frve.DateTo)
+                    && Convert.ToDateTime(frve.DateFrom) >= Convert.ToDateTime(frve.DateTo));
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidDateToDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Contract Dates '{invalidDateToDataRecord[_customerDataUploadValidationEntityEnums.DateFrom]}' is equal to or later than '{invalidDateToDataRecord[_customerDataUploadValidationEntityEnums.DateTo]}'"))
+                    if(!records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Contract Dates '{invalidDateToDataRecord.DateFrom}' is equal to or later than '{invalidDateToDataRecord.DateTo}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Contract Dates '{invalidDateToDataRecord[_customerDataUploadValidationEntityEnums.DateFrom]}' is equal to or later than '{invalidDateToDataRecord[_customerDataUploadValidationEntityEnums.DateTo]}'");
+                        records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Contract Dates '{invalidDateToDataRecord.DateFrom}' is equal to or later than '{invalidDateToDataRecord.DateTo}'");
                     }
                 }
 
                 //Validate Volume
-                var invalidVolumeDataRecords = flexReferenceVolumeDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Volume))
-                    && !_methods.IsValidFlexReferenceVolume(r.Field<string>(_customerDataUploadValidationEntityEnums.Volume)));
+                var invalidVolumeDataRecords = flexReferenceVolumeEntities.Where(frve => !string.IsNullOrWhiteSpace(frve.Volume)
+                    && !methods.IsValidFlexReferenceVolume(frve.Volume));
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidVolumeDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Reference Volume '{invalidVolumeDataRecord[_customerDataUploadValidationEntityEnums.Volume]}'"))
+                    if(!records[invalidVolumeDataRecord.RowId][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Reference Volume '{invalidVolumeDataRecord.Volume}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Reference Volume '{invalidVolumeDataRecord[_customerDataUploadValidationEntityEnums.Volume]}'");
+                        records[invalidVolumeDataRecord.RowId][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Reference Volume '{invalidVolumeDataRecord.Volume}'");
                     }
                 }
 

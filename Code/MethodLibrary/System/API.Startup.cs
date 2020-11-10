@@ -17,7 +17,7 @@ namespace MethodLibrary
                         var hostEnvironment = configuration.GetValue<string>("HostEnvironment");
 
                         new Methods().InitialiseDatabaseInteraction(hostEnvironment, APIName, password);
-                        new Methods.System().ConfigureAPIStartupServices(services, hostEnvironment);
+                        new Methods.System.API().ConfigureAPIStartupServices(services, hostEnvironment);
                     }
                 }
             }

@@ -17,9 +17,10 @@ namespace ValidateMeterUsageData.api.Controllers
     [ApiController]
     public class ValidateMeterUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateMeterUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -28,6 +29,7 @@ namespace ValidateMeterUsageData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateMeterUsageDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateMeterUsageDataController(ILogger<ValidateMeterUsageDataController> logger, IConfiguration configuration)
         {
@@ -35,8 +37,8 @@ namespace ValidateMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateMeterUsageDataAPI, password);
-            validateMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateMeterUsageDataAPI, password);
+            validateMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -44,7 +46,7 @@ namespace ValidateMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -72,7 +74,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     sourceId,
                     validateMeterUsageDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterUsageDataAPI, validateMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterUsageDataAPI, validateMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -81,7 +83,7 @@ namespace ValidateMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] table
-                var meterUsageEntities = _tempCustomerDataUploadMethods.MeterUsage_GetMeterUsageEntityListByProcessQueueGUID(processQueueGUID);
+                var meterUsageEntities = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetMeterUsageEntityListByProcessQueueGUID(processQueueGUID);
 
                 if(!meterUsageEntities.Any())
                 {
@@ -89,6 +91,8 @@ namespace ValidateMeterUsageData.api.Controllers
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterUsageDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 string errorMessage = null;
                 var sourceSheetList = new List<string>
@@ -125,7 +129,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     _tempCustomerDataUploadMethods.GetMissingRecords<Temp.CustomerDataUpload.MeterUsage>(records, usages, requiredColumns);
 
                     //Check dates are valid
-                    var invalidDates = usages.Where(u => !_methods.IsValidDate(u.Date)).Select(u => new {u.RowId, u.Date}).Distinct().ToList();
+                    var invalidDates = usages.Where(u => !methods.IsValidDate(u.Date)).Select(u => new {u.RowId, u.Date}).Distinct().ToList();
 
                     foreach(var invalidDate in invalidDates)
                     {
@@ -137,7 +141,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     }
 
                     //Check all dates are in the past
-                    var validDates = usages.Where(u => _methods.IsValidDate(u.Date)).ToList();
+                    var validDates = usages.Where(u => methods.IsValidDate(u.Date)).ToList();
                     var futureDates = validDates.Where(u => Convert.ToDateTime(u.Date) >= DateTime.Today).ToList();
 
                     foreach(var futureDate in futureDates)
@@ -150,7 +154,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     }
 
                     //Check usage is valid (if day is not October clock change, don't allow HH49 or HH50 to be populated)
-                    var invalidUsages = usages.Where(u => !_methods.IsValidUsage(u.Value)).ToList();
+                    var invalidUsages = usages.Where(u => !methods.IsValidUsage(u.Value)).ToList();
 
                     foreach(var invalidUsage in invalidUsages)
                     {
@@ -161,8 +165,8 @@ namespace ValidateMeterUsageData.api.Controllers
                         }
                     }
 
-                    var additionalHalfHours = usages.Where(u => _methods.IsAdditionalTimePeriod(u.TimePeriod) && !string.IsNullOrWhiteSpace(u.Value)).ToList();
-                    var invalidAdditionalHalfHours = additionalHalfHours.Where(u => !_methods.IsOctoberClockChange(u.Date)).ToList();
+                    var additionalHalfHours = usages.Where(u => methods.IsAdditionalTimePeriod(u.TimePeriod) && !string.IsNullOrWhiteSpace(u.Value)).ToList();
+                    var invalidAdditionalHalfHours = additionalHalfHours.Where(u => !methods.IsOctoberClockChange(u.Date)).ToList();
 
                     foreach(var invalidUsage in invalidAdditionalHalfHours)
                     {

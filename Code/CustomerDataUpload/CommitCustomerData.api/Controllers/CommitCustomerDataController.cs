@@ -16,9 +16,10 @@ namespace CommitCustomerData.api.Controllers
     [ApiController]
     public class CommitCustomerDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitCustomerDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -28,6 +29,7 @@ namespace CommitCustomerData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitCustomerDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitCustomerDataController(ILogger<CommitCustomerDataController> logger, IConfiguration configuration)
         {
@@ -35,8 +37,8 @@ namespace CommitCustomerData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitCustomerDataAPI, password);
-            commitCustomerDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitCustomerDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitCustomerDataAPI, password);
+            commitCustomerDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitCustomerDataAPI);
         }
 
         [HttpPost]
@@ -44,7 +46,7 @@ namespace CommitCustomerData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -73,7 +75,7 @@ namespace CommitCustomerData.api.Controllers
                     sourceId,
                     commitCustomerDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCustomerDataAPI, commitCustomerDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitCustomerDataAPI, commitCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -82,10 +84,11 @@ namespace CommitCustomerData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitCustomerDataAPIId);
 
                 //Get data from [Temp.CustomerUploadData].[Customer] where CanCommit = 1
-                var customerDataRows = _tempCustomerDataUploadMethods.Customer_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(customerDataRows);
+                var tempCustomerDataUploadCustomerMethods = new Methods.Temp.CustomerDataUpload.Customer();
+                var customerEntities = tempCustomerDataUploadCustomerMethods.Customer_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableCustomerEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(customerEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableCustomerEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitCustomerDataAPIId, false, null);
@@ -108,11 +111,11 @@ namespace CommitCustomerData.api.Controllers
                     detailDictionary.Add(attribute.Key, string.Empty);
                 }
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var customerEntity in commitableCustomerEntities)
                 {
                     foreach(var attribute in attributes)
                     {
-                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                        detailDictionary[attribute.Key] = customerEntity.GetType().GetProperty(attribute.Value).GetValue(customerEntity).ToString();
                     }
 
                     //Get CustomerId by CustomerName
@@ -133,12 +136,12 @@ namespace CommitCustomerData.api.Controllers
                         //Update [Customer].[CustomerDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            var currentDetailDataRow = _customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, detail.Key);
-                            var currentDetail = currentDetailDataRow.Field<string>("CustomerDetailDescription");
+                            var currentDetailEntity = _customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, detail.Key);
+                            var currentDetail = currentDetailEntity.Field<string>("CustomerDetailDescription");
 
                             if(detail.Value != currentDetail)
                             {
-                                var customerDetailId = currentDetailDataRow.Field<int>("CustomerDetailId");
+                                var customerDetailId = currentDetailEntity.Field<int>("CustomerDetailId");
                                 _customerMethods.CustomerDetail_DeleteByCustomerDetailId(customerDetailId);
                                 _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, detail.Key, detail.Value);
                             }

@@ -16,9 +16,10 @@ namespace GetGenericProfile.api.Controllers
     [ApiController]
     public class GetGenericProfileController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<GetGenericProfileController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -30,6 +31,7 @@ namespace GetGenericProfile.api.Controllers
         private static readonly Enums.DemandForecast.Profile.EntityToMatch _demandForecastProfileEntityToMatchEnums = new Enums.DemandForecast.Profile.EntityToMatch();
         private readonly Int64 getGenericProfileAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public GetGenericProfileController(ILogger<GetGenericProfileController> logger, IConfiguration configuration)
         {
@@ -37,8 +39,8 @@ namespace GetGenericProfile.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetGenericProfileAPI, password);
-            getGenericProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetGenericProfileAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetGenericProfileAPI, password);
+            getGenericProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetGenericProfileAPI);
         }
 
         [HttpPost]
@@ -46,7 +48,7 @@ namespace GetGenericProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

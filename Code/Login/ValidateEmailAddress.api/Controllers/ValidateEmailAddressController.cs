@@ -14,14 +14,17 @@ namespace ValidateEmailAddress.api.Controllers
     [ApiController]
     public class ValidateEmailAddressController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateEmailAddressController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateEmailAddressAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateEmailAddressController(ILogger<ValidateEmailAddressController> logger, IConfiguration configuration)
         {
@@ -29,8 +32,8 @@ namespace ValidateEmailAddress.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateEmailAddressAPI, password);
-            validateEmailAddressAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateEmailAddressAPI, password);
+            validateEmailAddressAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressAPI);
         }
 
         [HttpPost]
@@ -38,7 +41,7 @@ namespace ValidateEmailAddress.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateEmailAddressAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateEmailAddressAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,7 +69,7 @@ namespace ValidateEmailAddress.api.Controllers
                     sourceId,
                     validateEmailAddressAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressAPI, validateEmailAddressAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressAPI, validateEmailAddressAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

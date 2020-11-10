@@ -16,9 +16,10 @@ namespace CreateYearForecast.api.Controllers
     [ApiController]
     public class CreateYearForecastController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateYearForecastController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -34,6 +35,7 @@ namespace CreateYearForecast.api.Controllers
         private List<long> forecastYearIds;
         private Dictionary<long, List<long>> yearToDateDictionary;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateYearForecastController(ILogger<CreateYearForecastController> logger, IConfiguration configuration)
         {
@@ -41,8 +43,8 @@ namespace CreateYearForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateYearForecastAPI, password);
-            createYearForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateYearForecastAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateYearForecastAPI, password);
+            createYearForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateYearForecastAPI);
         }
 
         [HttpPost]
@@ -50,7 +52,7 @@ namespace CreateYearForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -78,7 +80,7 @@ namespace CreateYearForecast.api.Controllers
                     sourceId,
                     createYearForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateYearForecastAPI, createYearForecastAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateYearForecastAPI, createYearForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

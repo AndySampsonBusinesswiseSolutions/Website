@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "6myZJ39t9klytHc2KII2KH+2eGbrvI+20L50trnCoXfwEYyPde0I8CEsO/FE/sdpALDzNJaVPOIKzfUHfwqW2g==",
+  "dgSpecHash": "lpP7UmKjdDSBG2YCRHE40T/BRD3rcGPPjlOAYePz1rhCOh5mdLm4jWtQyOjjZJKiIM5I1MRfnNdOVESsJjKsaw==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\CustomerDataUpload\\ValidateMeterData.api\\ValidateMeterData.api.csproj",
   "expectedPackageFiles": [

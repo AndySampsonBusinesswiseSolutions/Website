@@ -16,9 +16,10 @@ namespace ValidateSiteData.api.Controllers
     [ApiController]
     public class ValidateSiteDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateSiteDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -27,6 +28,7 @@ namespace ValidateSiteData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateSiteDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateSiteDataController(ILogger<ValidateSiteDataController> logger, IConfiguration configuration)
         {
@@ -34,8 +36,8 @@ namespace ValidateSiteData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateSiteDataAPI, password);
-            validateSiteDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSiteDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateSiteDataAPI, password);
+            validateSiteDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSiteDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace ValidateSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,7 +73,7 @@ namespace ValidateSiteData.api.Controllers
                     sourceId,
                     validateSiteDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSiteDataAPI, validateSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSiteDataAPI, validateSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -80,14 +82,16 @@ namespace ValidateSiteData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateSiteDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Site] table
-                var siteDataRows = _tempCustomerDataUploadMethods.Site_GetByProcessQueueGUID(processQueueGUID);
+                var siteEntities = new Methods.Temp.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!siteDataRows.Any())
+                if(!siteEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateSiteDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -104,51 +108,48 @@ namespace ValidateSiteData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ContactEmailAddress,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteEntities.Select(se => se.RowId).Distinct().ToList(), columns);
                 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, siteDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, siteEntities, requiredColumns);
 
                 //Validate post code
-                var invalidPostCodeDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode)) 
-                    && !_methods.IsValidPostCode(r.Field<string>(_customerDataUploadValidationEntityEnums.SitePostCode)));
+                var invalidPostCodeEntities = siteEntities.Where(se => !string.IsNullOrWhiteSpace(se.SitePostCode) 
+                    && !methods.IsValidPostCode(se.SitePostCode));
 
-                foreach(var invalidPostCodeDataRow in invalidPostCodeDataRows)
+                foreach(var invalidPostCodeEntity in invalidPostCodeEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidPostCodeDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.SitePostCode].Contains($"Invalid Site Post Code '{invalidPostCodeDataRow[_customerDataUploadValidationEntityEnums.SitePostCode]}'"))
+                    if(!records[invalidPostCodeEntity.RowId][_customerDataUploadValidationEntityEnums.SitePostCode].Contains($"Invalid Site Post Code '{invalidPostCodeEntity.SitePostCode}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.SitePostCode].Add($"Invalid Site Post Code '{invalidPostCodeDataRow[_customerDataUploadValidationEntityEnums.SitePostCode]}'");
+                        records[invalidPostCodeEntity.RowId][_customerDataUploadValidationEntityEnums.SitePostCode].Add($"Invalid Site Post Code '{invalidPostCodeEntity.SitePostCode}'");
                     }
                 }
 
                 //Validate telephone number
-                var invalidTelephoneNumberDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactTelephoneNumber)) 
-                    && !_methods.IsValidPhoneNumber(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactTelephoneNumber)));
+                var invalidTelephoneNumberEntities = siteEntities.Where(se => !string.IsNullOrWhiteSpace(se.ContactTelephoneNumber) 
+                    && !methods.IsValidPhoneNumber(se.ContactTelephoneNumber));
 
-                foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
+                foreach(var invalidTelephoneNumberEntity in invalidTelephoneNumberEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidTelephoneNumberDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow[_customerDataUploadValidationEntityEnums.ContactTelephoneNumber]}'"))
+                    if(!records[invalidTelephoneNumberEntity.RowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberEntity.ContactTelephoneNumber}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow[_customerDataUploadValidationEntityEnums.ContactTelephoneNumber]}'");
+                        records[invalidTelephoneNumberEntity.RowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberEntity.ContactTelephoneNumber}'");
                     }
                 }
 
                 //Validate email address
-                var invalidEmailAddressDataRows = siteDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactEmailAddress)) 
-                    && !_methods.IsValidEmailAddress(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactEmailAddress)));
+                var invalidEmailAddressEntities = siteEntities.Where(se => !string.IsNullOrWhiteSpace(se.ContactEmailAddress) 
+                    && !methods.IsValidEmailAddress(se.ContactEmailAddress));
 
-                foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)
+                foreach(var invalidEmailAddressEntity in invalidEmailAddressEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidEmailAddressDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Contains($"Invalid Contact Email Address '{invalidEmailAddressDataRow[_customerDataUploadValidationEntityEnums.ContactEmailAddress]}'"))
+                    if(!records[invalidEmailAddressEntity.RowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Contains($"Invalid Contact Email Address '{invalidEmailAddressEntity.ContactEmailAddress}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow[_customerDataUploadValidationEntityEnums.ContactEmailAddress]}'");
+                        records[invalidEmailAddressEntity.RowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Add($"Invalid Contact Email Address '{invalidEmailAddressEntity.ContactEmailAddress}'");
                     }
                 }
 

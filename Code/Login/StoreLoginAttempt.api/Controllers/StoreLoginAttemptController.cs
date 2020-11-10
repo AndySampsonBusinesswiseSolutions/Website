@@ -14,12 +14,15 @@ namespace StoreLoginAttempt.api.Controllers
     [ApiController]
     public class StoreLoginAttemptController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreLoginAttemptController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeLoginAttemptAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreLoginAttemptController(ILogger<StoreLoginAttemptController> logger, IConfiguration configuration)
         {
@@ -28,7 +31,7 @@ namespace StoreLoginAttempt.api.Controllers
 
             _logger = logger;
             _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreLoginAttemptAPI, password);
-            storeLoginAttemptAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
+            storeLoginAttemptAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
         }
 
         [HttpPost]
@@ -36,7 +39,7 @@ namespace StoreLoginAttempt.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeLoginAttemptAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeLoginAttemptAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -69,10 +72,10 @@ namespace StoreLoginAttempt.api.Controllers
                     storeLoginAttemptAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+                var checkPrerequisiteAPIAPIId = _systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreLoginAttemptAPI, hostEnvironment, jsonObject);
+                var API = _systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.StoreLoginAttemptAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                 var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
                 string errorMessage = erroredPrerequisiteAPIs.Any() ? $"Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;

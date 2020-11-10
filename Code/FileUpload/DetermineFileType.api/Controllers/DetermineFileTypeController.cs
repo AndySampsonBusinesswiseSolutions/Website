@@ -14,9 +14,10 @@ namespace DetermineFileType.api.Controllers
     [ApiController]
     public class DetermineFileTypeController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<DetermineFileTypeController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -25,6 +26,7 @@ namespace DetermineFileType.api.Controllers
         private readonly Int64 determineFileTypeAPIId;
         private readonly string hostEnvironment;
         private Int64 fileId;
+        #endregion
 
         public DetermineFileTypeController(ILogger<DetermineFileTypeController> logger, IConfiguration configuration)
         {
@@ -32,8 +34,8 @@ namespace DetermineFileType.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.DetermineFileTypeAPI, password);
-            determineFileTypeAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DetermineFileTypeAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().DetermineFileTypeAPI, password);
+            determineFileTypeAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DetermineFileTypeAPI);
         }
 
         [HttpPost]
@@ -41,7 +43,7 @@ namespace DetermineFileType.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -69,7 +71,7 @@ namespace DetermineFileType.api.Controllers
                     sourceId,
                     determineFileTypeAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.DetermineFileTypeAPI, determineFileTypeAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.DetermineFileTypeAPI, determineFileTypeAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -128,10 +130,10 @@ namespace DetermineFileType.api.Controllers
                 _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, hostEnvironment, jsonObject);
+                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, false, null);

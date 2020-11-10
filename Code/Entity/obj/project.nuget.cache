@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vJwMTpPQmFlwMA+iQS0n42t8jkvNNMKlygru17ZwptxsFsRg3n8C76kvOVKJqyxcirCx1mKW1/IlFcSYAAtonw==",
+  "dgSpecHash": "c/mrA5Dm2YD8JPjPVq/QgdMnt2BUrw96k3iHntkusrmMUKnFElIpqbtYiROQ0MZ5Z55WOqrjn4KuWT4TU7HXaA==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\Entity\\Entity.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\andy.sampson\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Users\\andy.sampson\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }

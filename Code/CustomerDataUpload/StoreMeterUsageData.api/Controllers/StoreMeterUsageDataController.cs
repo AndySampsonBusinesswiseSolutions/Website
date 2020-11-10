@@ -16,9 +16,10 @@ namespace StoreMeterUsageData.api.Controllers
     [ApiController]
     public class StoreMeterUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreMeterUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -26,6 +27,7 @@ namespace StoreMeterUsageData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
         private readonly Int64 storeMeterUsageDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreMeterUsageDataController(ILogger<StoreMeterUsageDataController> logger, IConfiguration configuration)
         {
@@ -33,8 +35,8 @@ namespace StoreMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreMeterUsageDataAPI, password);
-            storeMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreMeterUsageDataAPI, password);
+            storeMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -42,7 +44,7 @@ namespace StoreMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -70,13 +72,15 @@ namespace StoreMeterUsageData.api.Controllers
                     sourceId,
                     storeMeterUsageDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterUsageDataAPI, storeMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterUsageDataAPI, storeMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeMeterUsageDataAPIId);
+
+                var methods = new Methods();
 
                 //Create data table
                 var meterUsageDataTable = new DataTable();
@@ -111,11 +115,11 @@ namespace StoreMeterUsageData.api.Controllers
                     {
                         var values = meterUsageDictionary[row];
                         var mpxn = values[0];
-                        var date = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
+                        var date = methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
 
                         for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
                         {                       
-                            var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod - dailyTimePeriod);
+                            var timePeriodString = methods.ConvertIntegerToHalfHourTimePeriod(timePeriod - dailyTimePeriod);
 
                             //Insert data into meterUsageDataTable
                             var meterUsageDataRow = meterUsageDataTable.NewRow();
@@ -132,7 +136,7 @@ namespace StoreMeterUsageData.api.Controllers
                 }
 
                 //Bulk Insert meterUsageDataTable
-                _methods.BulkInsert(meterUsageDataTable, "[Temp.CustomerDataUpload].[MeterUsage]");
+                methods.BulkInsert(meterUsageDataTable, "[Temp.CustomerDataUpload].[MeterUsage]");
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeMeterUsageDataAPIId, false, null);

@@ -14,12 +14,14 @@ namespace LockUser.api.Controllers
     [ApiController]
     public class LockUserController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<LockUserController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 lockUserAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public LockUserController(ILogger<LockUserController> logger, IConfiguration configuration)
         {
@@ -27,8 +29,8 @@ namespace LockUser.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().LockUserAPI, password);
-            lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().LockUserAPI, password);
+            lockUserAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 
         [HttpPost]
@@ -36,7 +38,7 @@ namespace LockUser.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(lockUserAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(lockUserAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -68,12 +70,12 @@ namespace LockUser.api.Controllers
                     lockUserAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+                var checkPrerequisiteAPIAPIId = _systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.LockUserAPI, hostEnvironment, jsonObject);
+                var API = _systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.LockUserAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                var erroredPrerequisiteAPIs = _methods.GetArray(result.Result.ToString());
+                var erroredPrerequisiteAPIs = new Methods().GetArray(result.Result.ToString());
                 var errorMessage = erroredPrerequisiteAPIs.Any() ? $" Prerequisite APIs {string.Join(",", erroredPrerequisiteAPIs)} errored" : null;
 
                 //Update Process Queue
@@ -104,11 +106,11 @@ namespace LockUser.api.Controllers
                             var invalidAttempts = administrationLoginMethods.CountInvalidAttempts(loginList);
 
                             //Get maximum attempts allowed before locking
-                            var lockUserAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
+                            var lockUserAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
 
                             var systemAPIAttributeEnums = new Enums.System.API.Attribute();
-                            var maximumInvalidLoginAttemptsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
-                            var maximumInvalidAttempts = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
+                            var maximumInvalidLoginAttemptsAttributeId = _systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
+                            var maximumInvalidAttempts = _systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
                                 .Select(a => Convert.ToInt64(a))
                                 .FirstOrDefault();
 

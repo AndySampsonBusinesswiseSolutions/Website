@@ -15,15 +15,17 @@ namespace StoreSubMeterUsageData.api.Controllers
     [ApiController]
     public class StoreSubMeterUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreSubMeterUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeSubMeterUsageDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreSubMeterUsageDataController(ILogger<StoreSubMeterUsageDataController> logger, IConfiguration configuration)
         {
@@ -31,8 +33,8 @@ namespace StoreSubMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreSubMeterUsageDataAPI, password);
-            storeSubMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreSubMeterUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreSubMeterUsageDataAPI, password);
+            storeSubMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreSubMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace StoreSubMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -68,13 +70,15 @@ namespace StoreSubMeterUsageData.api.Controllers
                     sourceId,
                     storeSubMeterUsageDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSubMeterUsageDataAPI, storeSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreSubMeterUsageDataAPI, storeSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSubMeterUsageDataAPIId);
+
+                var methods = new Methods();
 
                 //Get SubMeter Usage data from Customer Data Upload
                 var subMeterUsageDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['SubMeter HH Data']");
@@ -97,11 +101,11 @@ namespace StoreSubMeterUsageData.api.Controllers
                 {
                     var values = subMeterUsageDictionary[row];
                     var subMeterIdentifier = values[0];
-                    var date = _methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
+                    var date = methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
 
                     for(var timePeriod = 2; timePeriod < values.Count(); timePeriod++)
                     {
-                        var timePeriodString = _methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
+                        var timePeriodString = methods.ConvertIntegerToHalfHourTimePeriod(timePeriod);
 
                         //Insert data into subMeterUsageDataTable
                         var subMeterUsageDataRow = subMeterUsageDataTable.NewRow();
@@ -116,7 +120,7 @@ namespace StoreSubMeterUsageData.api.Controllers
                 }
 
                 //Bulk Insert subMeterUsageDataTable
-                _methods.BulkInsert(subMeterUsageDataTable, "[Temp.CustomerDataUpload].[SubMeterUsage]");
+                methods.BulkInsert(subMeterUsageDataTable, "[Temp.CustomerDataUpload].[SubMeterUsage]");
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSubMeterUsageDataAPIId, false, null);

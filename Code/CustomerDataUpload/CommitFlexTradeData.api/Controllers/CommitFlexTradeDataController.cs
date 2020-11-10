@@ -16,9 +16,10 @@ namespace CommitFlexTradeData.api.Controllers
     [ApiController]
     public class CommitFlexTradeDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitFlexTradeDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
@@ -33,6 +34,7 @@ namespace CommitFlexTradeData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitFlexTradeDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitFlexTradeDataController(ILogger<CommitFlexTradeDataController> logger, IConfiguration configuration)
         {
@@ -40,8 +42,8 @@ namespace CommitFlexTradeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitFlexTradeDataAPI, password);
-            commitFlexTradeDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexTradeDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitFlexTradeDataAPI, password);
+            commitFlexTradeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexTradeDataAPI);
         }
 
         [HttpPost]
@@ -49,7 +51,7 @@ namespace CommitFlexTradeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -78,7 +80,7 @@ namespace CommitFlexTradeData.api.Controllers
                     sourceId,
                     commitFlexTradeDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitFlexTradeDataAPI, commitFlexTradeDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitFlexTradeDataAPI, commitFlexTradeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -87,10 +89,10 @@ namespace CommitFlexTradeData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexTradeDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] where CanCommit = 1
-                var flexTradeDataRows = _tempCustomerDataUploadMethods.FlexTrade_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexTradeDataRows);
+                var flexTradeEntities = new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFlexTradeEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(flexTradeEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableFlexTradeEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexTradeDataAPIId, false, null);
@@ -109,36 +111,25 @@ namespace CommitFlexTradeData.api.Controllers
                     {_informationRateUnitEnums.PoundPerMegaWattHour, _informationMethods.RateUnit_GetRateUnitIdByRateUnitDescription(_informationRateUnitEnums.PoundPerMegaWattHour)},
                 };
 
-                var baskets = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference))
-                    .Distinct()
+                var baskets = commitableFlexTradeEntities.Select(cfte => cfte.BasketReference).Distinct()
                     .ToDictionary(b => b, b => _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(attributeIdDictionary[_customerBasketAttributeEnums.BasketReference], b));
 
-                var tradeProducts = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct))
-                    .Distinct()
+                var tradeProducts = commitableFlexTradeEntities.Select(cfte => cfte.TradeProduct).Distinct()
                     .ToDictionary(tp => tp, tp => _informationMethods.TradeProduct_GetTradeProductIdByTradeProductDescription(tp));
 
-                var tradeDirections = commitableDataRows.Select(r => GetTradeDirection(r.Field<string>(_customerDataUploadValidationEntityEnums.Direction)))
-                    .Distinct()
+                var tradeDirections = commitableFlexTradeEntities.Select(cfte => GetTradeDirection(cfte.Direction)).Distinct()
                     .ToDictionary(td => td, td => _informationMethods.TradeDirection_GetTradeDirectionIdByTradeDirectionDescription(td));
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var flexTradeEntity in commitableFlexTradeEntities.Where(cfte => baskets[cfte.BasketReference] > 0))
                 {
-                    //Get BasketId from [Customer].[BasketDetail] by BasketReference
-                    var basketId = baskets[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference)];
-
-                    if(basketId == 0)
-                    {
-                        continue;
-                    }
-
                     //If TradeReference is empty, create new trade
                     //Else update existing trade
                     var tradeDetails = new Dictionary<long, string>
                     {
-                        {attributeIdDictionary[_customerTradeAttributeEnums.TradeReference], dataRow.Field<string>(_customerDataUploadValidationEntityEnums.TradeReference)},
-                        {attributeIdDictionary[_customerTradeAttributeEnums.TradeDate], dataRow.Field<string>(_customerDataUploadValidationEntityEnums.TradeDate)},
-                        {attributeIdDictionary[_customerTradeAttributeEnums.TradeVolume], dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Volume)},
-                        {attributeIdDictionary[_customerTradeAttributeEnums.TradePrice], dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Price)},
+                        {attributeIdDictionary[_customerTradeAttributeEnums.TradeReference], flexTradeEntity.TradeReference},
+                        {attributeIdDictionary[_customerTradeAttributeEnums.TradeDate], flexTradeEntity.TradeDate},
+                        {attributeIdDictionary[_customerTradeAttributeEnums.TradeVolume], flexTradeEntity.Volume},
+                        {attributeIdDictionary[_customerTradeAttributeEnums.TradePrice], flexTradeEntity.Price},
                     };
 
                     var tradeId = 0L;
@@ -176,10 +167,10 @@ namespace CommitFlexTradeData.api.Controllers
                     }
 
                     //Insert into [Mapping].[BasketToTrade]
-                    var basketToTradeId = _mappingMethods.BasketToTrade_GetBasketToTradeIdByBasketIdAndTradeId(basketId, tradeId);
+                    var basketToTradeId = _mappingMethods.BasketToTrade_GetBasketToTradeIdByBasketIdAndTradeId(baskets[flexTradeEntity.BasketReference], tradeId);
                     if(basketToTradeId == 0)
                     {
-                        _mappingMethods.BasketToTrade_Insert(createdByUserId, sourceId, basketId, tradeId);
+                        _mappingMethods.BasketToTrade_Insert(createdByUserId, sourceId, baskets[flexTradeEntity.BasketReference], tradeId);
                     }
 
                     //Get TradeDetailId by TradeId and TradeVolumeTradeAttributeId
@@ -203,7 +194,7 @@ namespace CommitFlexTradeData.api.Controllers
                     }
 
                     //Get TradeProductId from [Information].[TradeProduct] by TradeProductDescription
-                    var tradeProductId = tradeProducts[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.TradeProduct)];
+                    var tradeProductId = tradeProducts[flexTradeEntity.TradeProduct];
 
                     //Insert into [Mapping].[TradeToTradeProduct]
                     var tradeToTradeProductId = _mappingMethods.TradeToTradeProduct_GetTradeToTradeProductIdByTradeIdAndTradeProductId(tradeId, tradeProductId);
@@ -213,7 +204,7 @@ namespace CommitFlexTradeData.api.Controllers
                     }
 
                     //Get TradeDirectionId from [Information].[TradeDirection] by TradeDirectionDescription
-                    var tradeDirection = GetTradeDirection(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.Direction));
+                    var tradeDirection = GetTradeDirection(flexTradeEntity.Direction);
                     var tradeDirectionId = tradeDirections[tradeDirection];
 
                     //Insert into [Mapping].[TradeToTradeDirection]

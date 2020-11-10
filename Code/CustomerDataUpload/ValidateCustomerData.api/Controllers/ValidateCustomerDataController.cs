@@ -16,9 +16,10 @@ namespace ValidateCustomerData.api.Controllers
     [ApiController]
     public class ValidateCustomerDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateCustomerDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -27,6 +28,7 @@ namespace ValidateCustomerData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateCustomerDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateCustomerDataController(ILogger<ValidateCustomerDataController> logger, IConfiguration configuration)
         {
@@ -34,8 +36,8 @@ namespace ValidateCustomerData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateCustomerDataAPI, password);
-            validateCustomerDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateCustomerDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateCustomerDataAPI, password);
+            validateCustomerDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateCustomerDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace ValidateCustomerData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,7 +73,7 @@ namespace ValidateCustomerData.api.Controllers
                     sourceId,
                     validateCustomerDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateCustomerDataAPI, validateCustomerDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateCustomerDataAPI, validateCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -80,14 +82,17 @@ namespace ValidateCustomerData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCustomerDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Customer] table
-                var customerDataRows = _tempCustomerDataUploadMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
+                var tempCustomerDataUploadCustomerMethods = new Methods.Temp.CustomerDataUpload.Customer();
+                var customerEntities = tempCustomerDataUploadCustomerMethods.Customer_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!customerDataRows.Any())
+                if(!customerEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCustomerDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -97,7 +102,7 @@ namespace ValidateCustomerData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ContactEmailAddress,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(customerDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(customerEntities.Select(ce => ce.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -108,31 +113,29 @@ namespace ValidateCustomerData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContactEmailAddress, "Contact Email Address"}
                     };
                 
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, customerDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, customerEntities, requiredColumns);
 
                 //Validate telephone number
-                var invalidTelephoneNumberDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactTelephoneNumber)) 
-                    && !_methods.IsValidPhoneNumber(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactTelephoneNumber)));
+                var invalidTelephoneNumberDataRows = customerEntities.Where(ce => !string.IsNullOrWhiteSpace(ce.ContactTelephoneNumber) 
+                    && !methods.IsValidPhoneNumber(ce.ContactTelephoneNumber));
 
                 foreach(var invalidTelephoneNumberDataRow in invalidTelephoneNumberDataRows)
                 {
-                    var rowId = Convert.ToInt32(invalidTelephoneNumberDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow[_customerDataUploadValidationEntityEnums.ContactTelephoneNumber]}'"))
+                    if(!records[invalidTelephoneNumberDataRow.RowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow.ContactTelephoneNumber}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow[_customerDataUploadValidationEntityEnums.ContactTelephoneNumber]}'");
+                        records[invalidTelephoneNumberDataRow.RowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberDataRow.ContactTelephoneNumber}'");
                     }
                 }
 
                 //Validate email address
-                var invalidEmailAddressDataRows = customerDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactEmailAddress)) 
-                    && !_methods.IsValidEmailAddress(r.Field<string>(_customerDataUploadValidationEntityEnums.ContactEmailAddress)));
+                var invalidEmailAddressDataRows = customerEntities.Where(ce => !string.IsNullOrWhiteSpace(ce.ContactEmailAddress) 
+                    && !methods.IsValidEmailAddress(ce.ContactEmailAddress));
 
                 foreach(var invalidEmailAddressDataRow in invalidEmailAddressDataRows)
                 {
-                    var rowId = Convert.ToInt32(invalidEmailAddressDataRow["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Contains($"Invalid Contact Email Address '{invalidEmailAddressDataRow[_customerDataUploadValidationEntityEnums.ContactEmailAddress]}'"))
+                    if(!records[invalidEmailAddressDataRow.RowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Contains($"Invalid Contact Email Address '{invalidEmailAddressDataRow.ContactEmailAddress}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow[_customerDataUploadValidationEntityEnums.ContactEmailAddress]}'");
+                        records[invalidEmailAddressDataRow.RowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Add($"Invalid Contact Email Address '{invalidEmailAddressDataRow.ContactEmailAddress}'");
                     }
                 }
 

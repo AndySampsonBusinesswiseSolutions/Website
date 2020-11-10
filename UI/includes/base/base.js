@@ -465,7 +465,7 @@ async function getDataFromAPI(data, processQueueGUID) {
 	}
 }
 
-const uri = 'http://localhost:5000/Website';
+const uri = 'http://energyportaldev:5000/Website';
 async function postData(data) {
   try {
     await fetch(uri + '/Validate', {

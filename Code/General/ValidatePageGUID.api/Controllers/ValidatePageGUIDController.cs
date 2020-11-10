@@ -14,14 +14,17 @@ namespace ValidatePageGUID.api.Controllers
     [ApiController]
     public class ValidatePageGUIDController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidatePageGUIDController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validatePageGUIDAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidatePageGUIDController(ILogger<ValidatePageGUIDController> logger, IConfiguration configuration)
         {
@@ -29,8 +32,8 @@ namespace ValidatePageGUID.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidatePageGUIDAPI, password);
-            validatePageGUIDAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePageGUIDAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidatePageGUIDAPI, password);
+            validatePageGUIDAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePageGUIDAPI);
         }
 
         [HttpPost]
@@ -38,7 +41,7 @@ namespace ValidatePageGUID.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validatePageGUIDAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validatePageGUIDAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,7 +69,7 @@ namespace ValidatePageGUID.api.Controllers
                     sourceId,
                     validatePageGUIDAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePageGUIDAPI, validatePageGUIDAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidatePageGUIDAPI, validatePageGUIDAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

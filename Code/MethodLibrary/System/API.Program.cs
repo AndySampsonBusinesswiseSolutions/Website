@@ -27,7 +27,7 @@ namespace MethodLibrary
 
                         webBuilder.UseSetting("Password", password);
                         webBuilder.UseSetting("HostEnvironment", hostEnvironment);
-                        webBuilder.UseUrls(new Methods.System().GetAPIStartupURLs(hostEnvironment, APIGUID));
+                        webBuilder.UseUrls(new Methods.System.API().GetAPIStartupURLs(hostEnvironment, APIGUID));
                         webBuilder.UseStartup<TStartup>();
                     }
 

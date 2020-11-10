@@ -14,9 +14,10 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
     [ApiController]
     public class ProcessCustomerDataUploadValidationController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ProcessCustomerDataUploadValidationController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -26,6 +27,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
         private readonly Int64 processCustomerDataUploadValidationAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ProcessCustomerDataUploadValidationController(ILogger<ProcessCustomerDataUploadValidationController> logger, IConfiguration configuration)
         {
@@ -33,8 +35,8 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ProcessCustomerDataUploadValidationAPI, password);
-            processCustomerDataUploadValidationAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ProcessCustomerDataUploadValidationAPI, password);
+            processCustomerDataUploadValidationAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI);
         }
 
         [HttpPost]
@@ -42,7 +44,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,14 +73,14 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                     processCustomerDataUploadValidationAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemMethods.GetCheckPrerequisiteAPIAPIId();
+                var checkPrerequisiteAPIAPIId = _systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
-                var API = _systemMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
+                var API = _systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
 
                 //Update Process GUID to CommitCustomerDataUpload Process GUID
                 _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitCustomerDataUpload);
@@ -94,7 +96,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 jsonObject.Add(_systemAPIRequiredDataKeyEnums.CustomerDataUploadProcessQueueGUID, processQueueGUID);
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
+                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId);
@@ -176,7 +178,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.SendEmail);
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
+                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, processCustomerDataUploadValidationAPIId, false, null);

@@ -13,11 +13,14 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
     [ApiController]
     public class ValidateEmailAddressPasswordMappingController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateEmailAddressPasswordMappingController> _logger;
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateEmailAddressPasswordMappingAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateEmailAddressPasswordMappingController(ILogger<ValidateEmailAddressPasswordMappingController> logger, IConfiguration configuration)
         {
@@ -26,7 +29,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateEmailAddressPasswordMappingAPI, password);
-            validateEmailAddressPasswordMappingAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
+            validateEmailAddressPasswordMappingAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
         }
 
         [HttpPost]
@@ -34,7 +37,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -63,7 +66,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                     sourceId,
                     validateEmailAddressPasswordMappingAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

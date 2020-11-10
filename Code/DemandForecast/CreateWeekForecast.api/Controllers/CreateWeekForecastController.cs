@@ -16,9 +16,10 @@ namespace CreateWeekForecast.api.Controllers
     [ApiController]
     public class CreateWeekForecastController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateWeekForecastController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -35,6 +36,7 @@ namespace CreateWeekForecast.api.Controllers
         private Dictionary<long, List<long>> weekToDateDictionary;
         private Dictionary<long, List<long>> yearToDateDictionary;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateWeekForecastController(ILogger<CreateWeekForecastController> logger, IConfiguration configuration)
         {
@@ -42,8 +44,8 @@ namespace CreateWeekForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateWeekForecastAPI, password);
-            createWeekForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateWeekForecastAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateWeekForecastAPI, password);
+            createWeekForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateWeekForecastAPI);
         }
 
         [HttpPost]
@@ -51,7 +53,7 @@ namespace CreateWeekForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createWeekForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createWeekForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -79,7 +81,7 @@ namespace CreateWeekForecast.api.Controllers
                     sourceId,
                     createWeekForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateWeekForecastAPI, createWeekForecastAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateWeekForecastAPI, createWeekForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

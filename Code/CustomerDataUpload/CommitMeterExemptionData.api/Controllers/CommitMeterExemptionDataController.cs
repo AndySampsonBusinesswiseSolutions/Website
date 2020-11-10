@@ -15,9 +15,10 @@ namespace CommitMeterExemptionData.api.Controllers
     [ApiController]
     public class CommitMeterExemptionDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitMeterExemptionDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -30,6 +31,7 @@ namespace CommitMeterExemptionData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterExemptionDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitMeterExemptionDataController(ILogger<CommitMeterExemptionDataController> logger, IConfiguration configuration)
         {
@@ -37,8 +39,8 @@ namespace CommitMeterExemptionData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitMeterExemptionDataAPI, password);
-            commitMeterExemptionDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterExemptionDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitMeterExemptionDataAPI, password);
+            commitMeterExemptionDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterExemptionDataAPI);
         }
 
         [HttpPost]
@@ -46,7 +48,7 @@ namespace CommitMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -75,7 +77,7 @@ namespace CommitMeterExemptionData.api.Controllers
                     sourceId,
                     commitMeterExemptionDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterExemptionDataAPI, commitMeterExemptionDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterExemptionDataAPI, commitMeterExemptionDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -84,10 +86,10 @@ namespace CommitMeterExemptionData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterExemptionDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] where CanCommit = 1
-                var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterExemptionDataRows);
+                var meterExemptionEntities = new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterExemptionEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterExemptionEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableMeterExemptionEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterExemptionDataAPIId, false, null);
@@ -103,34 +105,30 @@ namespace CommitMeterExemptionData.api.Controllers
                 var dateToMeterExemptionAttributeId = _customerMethods.MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(_customerMeterExemptionAttributeEnums.DateTo);
                 var exemptionProportionMeterExemptionAttributeId = _customerMethods.MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(_customerMeterExemptionAttributeEnums.ExemptionProportion);
 
-                var meterExemptions = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct))
-                    .Distinct()
+                var meterExemptions = commitableMeterExemptionEntities.Select(cmee => cmee.ExemptionProduct).Distinct()
                     .ToDictionary(me => me, me => _informationMethods.MeterExemptionDetail_GetMeterExemptionIdByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(meterExemptionProductMeterExemptionAttributeId, me));
                 
-                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
-                    .Distinct()
+                var meters = commitableMeterExemptionEntities.Select(cmee => cmee.MPXN).Distinct()
                     .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var meterExemptionEntity in commitableMeterExemptionEntities)
                 {
                     //Get MeterExemptionId from [Information].[MeterExemption]
-                    var meterExemptionId = meterExemptions[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct)];
+                    var meterExemptionId = meterExemptions[meterExemptionEntity.ExemptionProduct];
 
                     //Check if a default value exists
                     var useDefaultValue = _informationMethods.MeterExemptionDetail_GetMeterExemptionDetailDescriptionByMeterExemptionIdAndMeterExemptionAttributeId(meterExemptionId, useDefaultValueMeterExemptionAttributeId);
 
                     //Get ExemptionId from [Customer].[MeterExemptionDetail] by DateFrom, DateTo and ExemptionProportion
-                    var dateFrom = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateFrom);
-                    var dateTo = dataRow.Field<string>(_customerDataUploadValidationEntityEnums.DateTo);
                     var exemptionProportion = string.IsNullOrWhiteSpace(useDefaultValue)
-                        ? (Convert.ToInt64(dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProportion).Replace("%", string.Empty))/100M).ToString()
+                        ? (Convert.ToInt64(meterExemptionEntity.ExemptionProportion.Replace("%", string.Empty))/100M).ToString()
                         : _informationMethods.MeterExemptionDetail_GetMeterExemptionDetailDescriptionByMeterExemptionIdAndMeterExemptionAttributeId(meterExemptionId, meterExemptionProportionMeterExemptionAttributeId);
 
                     var customerMeterExemptionId = 0L;
-                    var dateFromMeterExemptionIdList = _customerMethods.MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(dateFromMeterExemptionAttributeId, dateFrom);
+                    var dateFromMeterExemptionIdList = _customerMethods.MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(dateFromMeterExemptionAttributeId, meterExemptionEntity.DateFrom);
                     if(dateFromMeterExemptionIdList.Any())
                     {
-                        var dateToMeterExemptionIdList = _customerMethods.MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(dateToMeterExemptionAttributeId, dateTo);
+                        var dateToMeterExemptionIdList = _customerMethods.MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(dateToMeterExemptionAttributeId, meterExemptionEntity.DateTo);
                         if(dateToMeterExemptionIdList.Any())
                         {
                             var exemptionProportionMeterExemptionIdList = _customerMethods.MeterExemptionDetail_GetMeterExemptionIdListByMeterExemptionAttributeIdAndMeterExemptionDetailDescription(exemptionProportionMeterExemptionAttributeId, exemptionProportion);
@@ -146,13 +144,13 @@ namespace CommitMeterExemptionData.api.Controllers
                         customerMeterExemptionId = _customerMethods.InsertNewMeterExemption(createdByUserId, sourceId);
 
                         //Insert into [Customer].[MeterExemptionDetail]
-                        _customerMethods.MeterExemptionDetail_Insert(createdByUserId, sourceId, customerMeterExemptionId, dateFromMeterExemptionAttributeId, dateFrom);
-                        _customerMethods.MeterExemptionDetail_Insert(createdByUserId, sourceId, customerMeterExemptionId, dateToMeterExemptionAttributeId, dateTo);
+                        _customerMethods.MeterExemptionDetail_Insert(createdByUserId, sourceId, customerMeterExemptionId, dateFromMeterExemptionAttributeId, meterExemptionEntity.DateFrom);
+                        _customerMethods.MeterExemptionDetail_Insert(createdByUserId, sourceId, customerMeterExemptionId, dateToMeterExemptionAttributeId, meterExemptionEntity.DateTo);
                         _customerMethods.MeterExemptionDetail_Insert(createdByUserId, sourceId, customerMeterExemptionId, exemptionProportionMeterExemptionAttributeId, exemptionProportion);
                     }
 
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
+                    var meterId = meters[meterExemptionEntity.MPXN];
 
                     //Insert into [Mapping].[MeterToMeterExemption]
                     _mappingMethods.MeterToMeterExemption_Insert(createdByUserId, sourceId, meterId, customerMeterExemptionId);

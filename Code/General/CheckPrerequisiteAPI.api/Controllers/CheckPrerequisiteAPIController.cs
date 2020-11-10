@@ -15,13 +15,16 @@ namespace CheckPrerequisiteAPI.api.Controllers
     [ApiController]
     public class CheckPrerequisiteAPIController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CheckPrerequisiteAPIController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private readonly Enums.System.API.Attribute _systemAPIAttributes = new Enums.System.API.Attribute();
         private readonly string hostEnvironment;
+        #endregion
 
         public CheckPrerequisiteAPIController(ILogger<CheckPrerequisiteAPIController> logger, IConfiguration configuration)
         {
@@ -29,7 +32,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CheckPrerequisiteAPIAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CheckPrerequisiteAPIAPI, password);
         }
 
         [HttpPost]
@@ -37,7 +40,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(_systemMethods.GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(_systemAPIMethods.GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -59,7 +62,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             var prerequisiteAPIGUIDs = new List<string>();
             var completedPrerequisiteAPIGUIDs = new List<string>();
             var erroredPrerequisiteAPIGUIDs = new List<string>();
-            var timeoutSecondsAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.TimeoutSeconds);
+            var timeoutSecondsAttributeId = _systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.TimeoutSeconds);
 
             try
             {
@@ -73,15 +76,15 @@ namespace CheckPrerequisiteAPI.api.Controllers
                 {
                     //Get prerequisite APIs from database
                     var callingGUID = _systemMethods.GetCallingGUIDFromJObject(jsonObject);
-                    var prerequisiteAPIId = _systemMethods.API_GetAPIIdByAPIGUID(callingGUID);
-                    var prerequisiteAPIGUIDAttributeId = _systemMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.PrerequisiteAPIGUID);
-                    prerequisiteAPIGUIDs = _systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);
+                    var prerequisiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(callingGUID);
+                    var prerequisiteAPIGUIDAttributeId = _systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.PrerequisiteAPIGUID);
+                    prerequisiteAPIGUIDs = _systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);
                 }
 
                 var prerequisiteAPIDictionary = prerequisiteAPIGUIDs
-                    .ToDictionary(api => api, api => _systemMethods.API_GetAPIIdByAPIGUID(api));
+                    .ToDictionary(api => api, api => _systemAPIMethods.API_GetAPIIdByAPIGUID(api));
                 var prerequisiteAPITimeoutDictionary = prerequisiteAPIGUIDs
-                    .ToDictionary(api => api, api => Convert.ToDouble(_systemMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIDictionary[api], timeoutSecondsAttributeId).First()));
+                    .ToDictionary(api => api, api => Convert.ToDouble(_systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIDictionary[api], timeoutSecondsAttributeId).First()));
 
                 //Wait until prerequisite APIs have completed
                 while(prerequisiteAPIDictionary.Any())
@@ -135,8 +138,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
                         }    
                     }
 
-                    //wait 5 seconds
-                    System.Threading.Thread.Sleep(5000);
+                    //wait 1 second
+                    System.Threading.Thread.Sleep(1000);
                 }
             }
             catch(Exception error)

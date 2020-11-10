@@ -13,15 +13,17 @@ namespace StoreMeterData.api.Controllers
     [ApiController]
     public class StoreMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreMeterDataController(ILogger<StoreMeterDataController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace StoreMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreMeterDataAPI, password);
-            storeMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreMeterDataAPI, password);
+            storeMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace StoreMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,13 +68,15 @@ namespace StoreMeterData.api.Controllers
                     sourceId,
                     storeMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterDataAPI, storeMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterDataAPI, storeMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeMeterDataAPIId);
+
+                var tempCustomerDataUploadMeterMethods = new Methods.Temp.CustomerDataUpload.Meter();
 
                 //Get Meter data from Customer Data Upload
                 var meterDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Meters");
@@ -82,7 +86,7 @@ namespace StoreMeterData.api.Controllers
                     var values = meterDictionary[row];
 
                     //Insert meter data into [Temp.CustomerDataUpload].[Meter]
-                    _tempCustomerDataUploadMethods.Meter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13]);
+                    tempCustomerDataUploadMeterMethods.Meter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10], values[11], values[12], values[13]);
                 }
 
                 //Update Process Queue

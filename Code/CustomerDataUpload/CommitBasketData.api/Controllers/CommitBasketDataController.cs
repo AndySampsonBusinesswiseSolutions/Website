@@ -16,9 +16,10 @@ namespace CommitBasketData.api.Controllers
     [ApiController]
     public class CommitBasketDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitBasketDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -32,6 +33,7 @@ namespace CommitBasketData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitBasketDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitBasketDataController(ILogger<CommitBasketDataController> logger, IConfiguration configuration)
         {
@@ -39,8 +41,8 @@ namespace CommitBasketData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitBasketDataAPI, password);
-            commitBasketDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitBasketDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitBasketDataAPI, password);
+            commitBasketDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitBasketDataAPI);
         }
 
         [HttpPost]
@@ -48,7 +50,7 @@ namespace CommitBasketData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitBasketDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitBasketDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -77,7 +79,7 @@ namespace CommitBasketData.api.Controllers
                     sourceId,
                     commitBasketDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitBasketDataAPI, commitBasketDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitBasketDataAPI, commitBasketDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -86,10 +88,10 @@ namespace CommitBasketData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitBasketDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
-                var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(flexContractDataRows);
+                var flexContractEntities = new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFlexContractEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(flexContractEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableFlexContractEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitBasketDataAPIId, false, null);
@@ -106,32 +108,29 @@ namespace CommitBasketData.api.Controllers
                 //Get ContractIdList from [Mapping].[ContractToContractType] by ContractTypeId
                 var mappingContractIdList = _mappingMethods.ContractToContractType_GetContractIdListByContractTypeId(contractTypeId);
 
-                var baskets = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference))
-                    .Distinct()
+                var baskets = commitableFlexContractEntities.Select(cfce => cfce.BasketReference).Distinct()
                     .ToDictionary(b => b, b => _customerMethods.BasketDetail_GetBasketIdByBasketAttributeIdAndBasketDetailDescription(basketReferenceBasketAttributeId, b));
 
-                var meters = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
-                    .Distinct()
+                var meters = commitableFlexContractEntities.Select(cfce => cfce.MPXN).Distinct()
                     .ToDictionary(m => m, m => _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
-                var contractReferences = commitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference))
-                    .Distinct()
+                var contractReferences = commitableFlexContractEntities.Select(cfce => cfce.ContractReference).Distinct()
                     .ToDictionary(c => c, c => _customerMethods.ContractDetail_GetContractIdListByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, c));
 
                 var contractMeterToMeterContractMeterIdLists = meters.Select(m => m.Value)
                     .Distinct()
                     .ToDictionary(m => m, m => _mappingMethods.ContractMeterToMeter_GetContractMeterIdListByMeterId(m));
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var flexContractEntity in commitableFlexContractEntities)
                 {
                     //Get BasketId from [Customer].[BasketDetail] by BasketReference
-                    var basketId = baskets[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference)];
+                    var basketId = baskets[flexContractEntity.BasketReference];
 
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var meterId = meters[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)];
+                    var meterId = meters[flexContractEntity.MPXN];
 
                     //Get ContractIdList from [Customer].[Contract] by ContractReference
-                    var customerContractIdList = contractReferences[dataRow.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference)];
+                    var customerContractIdList = contractReferences[flexContractEntity.ContractReference];
 
                     //Get ContractId from intersect of Customer ContractIdList and Mapping ContractIdList
                     var contractId = customerContractIdList.Intersect(mappingContractIdList).FirstOrDefault();

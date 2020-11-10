@@ -9,6 +9,19 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public long GetAreaId(long createdByUserId, long sourceId, string area)
+            {
+                var areaId = Area_GetAreaIdByAreaDescription(area);
+
+                if(areaId == 0)
+                {
+                    Area_Insert(createdByUserId, sourceId, area);
+                    areaId = Area_GetAreaIdByAreaDescription(area);
+                }
+
+                return areaId;
+            }
+
             public long Area_GetAreaIdByAreaDescription(string areaDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

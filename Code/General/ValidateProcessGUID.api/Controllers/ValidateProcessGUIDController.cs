@@ -13,14 +13,17 @@ namespace ValidateProcessGUID.api.Controllers
     [ApiController]
     public class ValidateProcessGUIDController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateProcessGUIDController> _logger;
         private readonly Methods _methods = new Methods();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 validateProcessGUIDAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateProcessGUIDController(ILogger<ValidateProcessGUIDController> logger, IConfiguration configuration)
         {
@@ -28,8 +31,8 @@ namespace ValidateProcessGUID.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateProcessGUIDAPI, password);
-            validateProcessGUIDAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateProcessGUIDAPI, password);
+            validateProcessGUIDAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateProcessGUIDAPI);
         }
 
         [HttpPost]
@@ -37,7 +40,7 @@ namespace ValidateProcessGUID.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateProcessGUIDAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateProcessGUIDAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

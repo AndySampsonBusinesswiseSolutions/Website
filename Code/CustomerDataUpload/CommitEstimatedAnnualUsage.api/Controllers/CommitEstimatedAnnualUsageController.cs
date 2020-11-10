@@ -17,9 +17,10 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
     [ApiController]
     public class CommitEstimatedAnnualUsageController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitEstimatedAnnualUsageController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -31,6 +32,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
         private readonly Int64 commitEstimatedAnnualUsageAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitEstimatedAnnualUsageController(ILogger<CommitEstimatedAnnualUsageController> logger, IConfiguration configuration)
         {
@@ -38,8 +40,8 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitEstimatedAnnualUsageAPI, password);
-            commitEstimatedAnnualUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitEstimatedAnnualUsageAPI, password);
+            commitEstimatedAnnualUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
         }
 
         [HttpPost]
@@ -47,7 +49,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -75,7 +77,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                     sourceId,
                     commitEstimatedAnnualUsageAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI, commitEstimatedAnnualUsageAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI, commitEstimatedAnnualUsageAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -117,8 +119,8 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 }
 
                 //Launch GetProfile process and wait for response
-                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
-                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
+                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
+                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get profile from Profiling API
@@ -169,10 +171,10 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CreateForecastUsage);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);

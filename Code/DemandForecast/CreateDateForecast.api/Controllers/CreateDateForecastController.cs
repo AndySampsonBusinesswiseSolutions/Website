@@ -16,9 +16,10 @@ namespace CreateDateForecast.api.Controllers
     [ApiController]
     public class CreateDateForecastController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateDateForecastController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -31,6 +32,7 @@ namespace CreateDateForecast.api.Controllers
         private Dictionary<long, decimal> existingDateForecastDictionary;
         private Dictionary<long, decimal> forecastDictionary;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateDateForecastController(ILogger<CreateDateForecastController> logger, IConfiguration configuration)
         {
@@ -38,8 +40,8 @@ namespace CreateDateForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateDateForecastAPI, password);
-            createDateForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDateForecastAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateDateForecastAPI, password);
+            createDateForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDateForecastAPI);
         }
 
         [HttpPost]
@@ -47,7 +49,7 @@ namespace CreateDateForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -75,7 +77,7 @@ namespace CreateDateForecast.api.Controllers
                     sourceId,
                     createDateForecastAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, hostEnvironment, jsonObject))
+                if (!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

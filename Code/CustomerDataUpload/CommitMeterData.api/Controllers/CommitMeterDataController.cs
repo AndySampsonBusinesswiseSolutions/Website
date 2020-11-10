@@ -16,9 +16,10 @@ namespace CommitMeterData.api.Controllers
     [ApiController]
     public class CommitMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -29,6 +30,7 @@ namespace CommitMeterData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitMeterDataController(ILogger<CommitMeterDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace CommitMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitMeterDataAPI, password);
-            commitMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitMeterDataAPI, password);
+            commitMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace CommitMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -74,7 +76,7 @@ namespace CommitMeterData.api.Controllers
                     sourceId,
                     commitMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterDataAPI, commitMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterDataAPI, commitMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -83,10 +85,10 @@ namespace CommitMeterData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
+                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, false, null);
@@ -111,11 +113,11 @@ namespace CommitMeterData.api.Controllers
                     detailDictionary.Add(attribute.Key, string.Empty);
                 }
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var meterEntity in commitableMeterEntities)
                 {
                     foreach(var attribute in attributes)
                     {
-                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                        detailDictionary[attribute.Key] = meterEntity.GetType().GetProperty(attribute.Value).GetValue(meterEntity).ToString();
                     }
 
                     //Get MeterId by MPXN

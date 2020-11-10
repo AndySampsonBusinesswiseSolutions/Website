@@ -17,9 +17,10 @@ namespace CommitSubMeterUsageData.api.Controllers
     [ApiController]
     public class CommitSubMeterUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitSubMeterUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -31,6 +32,7 @@ namespace CommitSubMeterUsageData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterUsageDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitSubMeterUsageDataController(ILogger<CommitSubMeterUsageDataController> logger, IConfiguration configuration)
         {
@@ -38,8 +40,8 @@ namespace CommitSubMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitSubMeterUsageDataAPI, password);
-            commitSubMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSubMeterUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitSubMeterUsageDataAPI, password);
+            commitSubMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSubMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -47,7 +49,7 @@ namespace CommitSubMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -76,7 +78,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                     sourceId,
                     commitSubMeterUsageDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, commitSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, commitSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -85,10 +87,11 @@ namespace CommitSubMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var subMeterUsageDataRows = _tempCustomerDataUploadMethods.SubMeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var subMeterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterUsageDataRows);
+                var tempCustomerDataUploadSubMeterUsageMethods = new Methods.Temp.CustomerDataUpload.SubMeterUsage();
+                var subMeterUsageEntities = tempCustomerDataUploadSubMeterUsageMethods.SubMeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var subMeterUsageCommitableEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(subMeterUsageEntities);
 
-                if(!subMeterUsageCommitableDataRows.Any())
+                if(!subMeterUsageCommitableEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
@@ -96,11 +99,10 @@ namespace CommitSubMeterUsageData.api.Controllers
                 }
 
                 //Get list of subMeterIdentifiers from datasets
-                var subMeterIdentifierList = subMeterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier))
-                    .Distinct();
+                var subMeterIdentifierList = subMeterUsageCommitableEntities.Select(smue => smue.SubMeterIdentifier).Distinct().ToList();
 
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
 
                 //Add subMeter type to jsonObject
                 jsonObject.Add(_systemAPIRequiredDataKeyEnums.MeterType, "SubMeter");
@@ -134,31 +136,22 @@ namespace CommitSubMeterUsageData.api.Controllers
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.SubMeterIdentifier, subMeterIdentifier);
 
                     //Get periodic usage
-                    var periodicUsageDataRows = subMeterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier) == subMeterIdentifier);
-
-                    //Convert to Tuple
-                    var periodicUsageTupleList = new List<Tuple<string, string, string>>();
-
-                    foreach (DataRow r in periodicUsageDataRows)
-                    {
-                        var tup = Tuple.Create((string)r["Date"], (string)r["TimePeriod"], (string)r["Value"]);
-                        periodicUsageTupleList.Add(tup);
-                    }
+                    var periodicUsageEntities = subMeterUsageCommitableEntities.Where(smue => smue.SubMeterIdentifier == subMeterIdentifier).ToList();
 
                     //Convert to dictionary
                     var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
-                    foreach(var periodicUsageTuple in periodicUsageTupleList)
+                    foreach(var periodicUsageEntity in periodicUsageEntities)
                     {
-                        if(!periodicUsageDictionary.ContainsKey(periodicUsageTuple.Item1))
+                        if(!periodicUsageDictionary.ContainsKey(periodicUsageEntity.Date))
                         {
-                            periodicUsageDictionary.Add(periodicUsageTuple.Item1, new Dictionary<string, string>());
+                            periodicUsageDictionary.Add(periodicUsageEntity.Date, new Dictionary<string, string>());
                         }
                         
-                        var date = periodicUsageDictionary[periodicUsageTuple.Item1];
+                        var date = periodicUsageDictionary[periodicUsageEntity.Date];
 
-                        if(!date.ContainsKey(periodicUsageTuple.Item2))
+                        if(!date.ContainsKey(periodicUsageEntity.TimePeriod))
                         {
-                            date.Add(periodicUsageTuple.Item2, periodicUsageTuple.Item3);
+                            date.Add(periodicUsageEntity.TimePeriod, periodicUsageEntity.Value);
                         }
                     }
 
@@ -166,7 +159,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
 
                     //Connect to Routing API and POST data
-                    _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, hostEnvironment, newJsonObject);
+                    _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitSubMeterUsageDataAPI, hostEnvironment, newJsonObject);
                 }
 
                 //Update Process Queue

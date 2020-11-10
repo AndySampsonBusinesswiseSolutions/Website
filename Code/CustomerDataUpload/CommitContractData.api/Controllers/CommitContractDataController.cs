@@ -17,9 +17,10 @@ namespace CommitContractData.api.Controllers
     [ApiController]
     public class CommitContractDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitContractDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -39,6 +40,7 @@ namespace CommitContractData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitContractDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitContractDataController(ILogger<CommitContractDataController> logger, IConfiguration configuration)
         {
@@ -46,8 +48,8 @@ namespace CommitContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitContractDataAPI, password);
-            commitContractDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitContractDataAPI, password);
+            commitContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
         }
 
         [HttpPost]
@@ -55,7 +57,7 @@ namespace CommitContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -83,7 +85,7 @@ namespace CommitContractData.api.Controllers
                     sourceId,
                     commitContractDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitContractDataAPI, commitContractDataAPIId, hostEnvironment, jsonObject))
+                if (!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitContractDataAPI, commitContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SUrnAXJtNVHWQ52cEb47GYZi0gdwFyukQ1nLe9s/l5jIweWA0Wruiu7N5JAcDca7FYlJInm6QXJGrYIwfR59og==",
+  "dgSpecHash": "HMltDsPcdaA3pIGGoibBLp8rZf7Z58G9mjWvPR5Jnb0J7foBrixI69sDO4HZNZegmI6Rl/rMAdj4uzwJ4SorXw==",
   "success": true,
   "projectFilePath": "C:\\wamp64\\www\\Website\\Code\\FileUpload\\DetermineFileType.api\\DetermineFileType.api.csproj",
   "expectedPackageFiles": [

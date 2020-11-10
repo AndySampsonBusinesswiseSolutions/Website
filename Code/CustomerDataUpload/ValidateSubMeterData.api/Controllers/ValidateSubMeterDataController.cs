@@ -16,9 +16,10 @@ namespace ValidateSubMeterData.api.Controllers
     [ApiController]
     public class ValidateSubMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateSubMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -29,6 +30,7 @@ namespace ValidateSubMeterData.api.Controllers
         private static readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
         private readonly Int64 validateSubMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateSubMeterDataController(ILogger<ValidateSubMeterDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace ValidateSubMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateSubMeterDataAPI, password);
-            validateSubMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSubMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateSubMeterDataAPI, password);
+            validateSubMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace ValidateSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -73,7 +75,7 @@ namespace ValidateSubMeterData.api.Controllers
                     sourceId,
                     validateSubMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSubMeterDataAPI, validateSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateSubMeterDataAPI, validateSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -82,9 +84,9 @@ namespace ValidateSubMeterData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateSubMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] table
-                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterEntities = new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!subMeterDataRows.Any())
+                if(!subMeterEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateSubMeterDataAPIId, false, null);
@@ -100,19 +102,19 @@ namespace ValidateSubMeterData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Asset
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterEntities.Select(sme => sme.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
                         {_customerDataUploadValidationEntityEnums.SubMeterIdentifier, "SubMeter Name"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, subMeterDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, subMeterEntities, requiredColumns);
 
                 //Get submeters not stored in database
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-                var newSubMeterDataRecords = subMeterDataRows.Where(r => 
-                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.SubMeterIdentifier)) == 0)
+                var newSubMeterDataRecords = subMeterEntities.Where(sme => 
+                    _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, sme.SubMeterIdentifier) == 0)
                     .ToList();
 
                 //MPXN, SerialNumber, SubArea and Asset must be populated

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Data;
 using System;
 using System.Linq;
@@ -15,9 +16,10 @@ namespace CommitFixedContractData.api.Controllers
     [ApiController]
     public class CommitFixedContractDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitFixedContractDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -27,6 +29,7 @@ namespace CommitFixedContractData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitFixedContractDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitFixedContractDataController(ILogger<CommitFixedContractDataController> logger, IConfiguration configuration)
         {
@@ -34,8 +37,8 @@ namespace CommitFixedContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitFixedContractDataAPI, password);
-            commitFixedContractDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFixedContractDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitFixedContractDataAPI, password);
+            commitFixedContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFixedContractDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +46,7 @@ namespace CommitFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -72,7 +75,7 @@ namespace CommitFixedContractData.api.Controllers
                     sourceId,
                     commitFixedContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitFixedContractDataAPI, commitFixedContractDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitFixedContractDataAPI, commitFixedContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -81,10 +84,11 @@ namespace CommitFixedContractData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFixedContractDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] where CanCommit = 1
-                var fixedContractDataRows = _tempCustomerDataUploadMethods.FixedContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(fixedContractDataRows);
+                var tempCustomerDataUploadFixedContractMethods = new Methods.Temp.CustomerDataUpload.FixedContract();
+                var fixedContractEntities = tempCustomerDataUploadFixedContractMethods.FixedContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFixedContractEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(fixedContractEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableFixedContractEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFixedContractDataAPIId, false, null);
@@ -95,18 +99,14 @@ namespace CommitFixedContractData.api.Controllers
                 jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractType, _informationContractTypeEnums.Fixed);
 
                 //Convert dataRows to a string
-                var commitableDataRowJSON = string.Empty;
-                foreach(var dataRow in commitableDataRows.Where(d => !string.IsNullOrWhiteSpace(d.Field<string>(_customerDataUploadValidationEntityEnums.Value))))
-                {
-                    commitableDataRowJSON += $"{string.Join('|' , dataRow.ItemArray)};;";
-                }
+                var commitableEntityJSON = JsonConvert.SerializeObject(commitableFixedContractEntities.Where(cfce => !string.IsNullOrWhiteSpace(cfce.Value)));
 
                 //Add ContractData to jsonObject
-                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractData, commitableDataRowJSON);
+                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractData, commitableEntityJSON);
 
                 //Call CommitContractData API and wait for response
-                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
-                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFixedContractDataAPI, hostEnvironment, jsonObject);
+                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
+                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFixedContractDataAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue

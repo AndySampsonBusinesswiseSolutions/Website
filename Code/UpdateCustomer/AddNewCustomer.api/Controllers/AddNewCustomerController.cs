@@ -14,9 +14,10 @@ namespace AddNewCustomer.api.Controllers
     [ApiController]
     public class AddNewCustomerController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<AddNewCustomerController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -24,6 +25,7 @@ namespace AddNewCustomer.api.Controllers
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 addNewCustomerAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public AddNewCustomerController(ILogger<AddNewCustomerController> logger, IConfiguration configuration)
         {
@@ -31,8 +33,8 @@ namespace AddNewCustomer.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.AddNewCustomerAPI, password);
-            addNewCustomerAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.AddNewCustomerAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().AddNewCustomerAPI, password);
+            addNewCustomerAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.AddNewCustomerAPI);
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace AddNewCustomer.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(addNewCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(addNewCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -68,7 +70,7 @@ namespace AddNewCustomer.api.Controllers
                     sourceId,
                     addNewCustomerAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.AddNewCustomerAPI, addNewCustomerAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.AddNewCustomerAPI, addNewCustomerAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -80,7 +82,7 @@ namespace AddNewCustomer.api.Controllers
                 var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
 
                 //Split Customer Data to an array of attribute/value
-                var customerData = _methods.GetArray(jsonObject["CustomerData"].ToString(), "{", "}");
+                var customerData = new Methods().GetArray(jsonObject["CustomerData"].ToString(), "{", "}");
 
                 //Loop through array and find Customer Name attribute
                 var customerName = "";

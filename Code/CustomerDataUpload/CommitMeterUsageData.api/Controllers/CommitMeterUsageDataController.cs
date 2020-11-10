@@ -17,9 +17,10 @@ namespace CommitMeterUsageData.api.Controllers
     [ApiController]
     public class CommitMeterUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitMeterUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -32,6 +33,7 @@ namespace CommitMeterUsageData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitMeterUsageDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitMeterUsageDataController(ILogger<CommitMeterUsageDataController> logger, IConfiguration configuration)
         {
@@ -39,8 +41,8 @@ namespace CommitMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitMeterUsageDataAPI, password);
-            commitMeterUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitMeterUsageDataAPI, password);
+            commitMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -48,7 +50,7 @@ namespace CommitMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -77,7 +79,7 @@ namespace CommitMeterUsageData.api.Controllers
                     sourceId,
                     commitMeterUsageDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterUsageDataAPI, commitMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if (!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterUsageDataAPI, commitMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -86,14 +88,14 @@ namespace CommitMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var meterCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterDataRows);
+                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
-                var meterUsageDataRows = _tempCustomerDataUploadMethods.MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var meterUsageDataRows = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var meterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterUsageDataRows);
 
-                if (!meterCommitableDataRows.Any() && !meterUsageCommitableDataRows.Any())
+                if (!commitableMeterEntities.Any() && !meterUsageCommitableDataRows.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterUsageDataAPIId, false, null);
@@ -101,7 +103,7 @@ namespace CommitMeterUsageData.api.Controllers
                 }
 
                 //Get list of mpxns from datasets
-                var mpxnList = meterCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN))
+                var mpxnList = commitableMeterEntities.Select(cme => cme.MPXN)
                     .Union(meterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)))
                     .Distinct();
 
@@ -112,9 +114,11 @@ namespace CommitMeterUsageData.api.Controllers
                     return;
                 }
 
+                var methods = new Methods();
+
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
-                var commitEstimatedAnnualUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
+                var commitEstimatedAnnualUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
 
                 //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
                 _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
@@ -148,7 +152,7 @@ namespace CommitMeterUsageData.api.Controllers
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.MPXN, mpxn);
 
                     //Get EstimatedAnnualUsage
-                    var estimatedAnnualUsage = meterCommitableDataRows.First(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn)[_customerDataUploadValidationEntityEnums.AnnualUsage].ToString();
+                    var estimatedAnnualUsage = commitableMeterEntities.First(cme => cme.MPXN == mpxn).AnnualUsage;
 
                     //Add EstimatedAnnualUsage to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
@@ -159,8 +163,8 @@ namespace CommitMeterUsageData.api.Controllers
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.HasPeriodicUsage, hasPeriodicUsage);
 
                     //Call CommitEstimatedAnnualUsage API and wait for response
-                    var commitEstimateUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
-                    var commitEstimateUsageAPI = _systemMethods.PostAsJsonAsync(commitEstimateUsageAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
+                    var commitEstimateUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+                    var commitEstimateUsageAPI = _systemAPIMethods.PostAsJsonAsync(commitEstimateUsageAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
                     var commitEstimateUsageResult = commitEstimateUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     if (hasPeriodicUsage)
@@ -208,13 +212,13 @@ namespace CommitMeterUsageData.api.Controllers
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.UsageType, _informationUsageTypeEnums.CustomerEstimated);
 
                         //Add granularity description to newJsonObject
-                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDictionary[_methods.IsValidMPAN(mpxn)]);
+                        newJsonObject.Add(_systemAPIRequiredDataKeyEnums.Granularity, granularityDictionary[methods.IsValidMPAN(mpxn)]);
 
                         //Add periodic usage to newJsonObject
                         newJsonObject.Add(_systemAPIRequiredDataKeyEnums.PeriodicUsage, JsonConvert.SerializeObject(periodicUsageDictionary));
 
                         //Connect to Routing API and POST data
-                        _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
+                        _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
                     }
                 }
 

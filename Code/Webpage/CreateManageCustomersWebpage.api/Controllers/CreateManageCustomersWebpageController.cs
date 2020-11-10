@@ -15,9 +15,10 @@ namespace CreateManageCustomersWebpage.api.Controllers
     [ApiController]
     public class CreateManageCustomersWebpageController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateManageCustomersWebpageController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         public readonly Methods.Customer _customerMethods = new Methods.Customer();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
@@ -28,6 +29,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 createManageCustomersWebpageAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateManageCustomersWebpageController(ILogger<CreateManageCustomersWebpageController> logger, IConfiguration configuration)
         {
@@ -35,8 +37,8 @@ namespace CreateManageCustomersWebpage.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateManageCustomersWebpageAPI, password);
-            createManageCustomersWebpageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateManageCustomersWebpageAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateManageCustomersWebpageAPI, password);
+            createManageCustomersWebpageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateManageCustomersWebpageAPI);
         }
 
         [HttpPost]
@@ -44,7 +46,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

@@ -13,15 +13,17 @@ namespace StoreCustomerData.api.Controllers
     [ApiController]
     public class StoreCustomerDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<StoreCustomerDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
         private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 storeCustomerDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public StoreCustomerDataController(ILogger<StoreCustomerDataController> logger, IConfiguration configuration)
         {
@@ -29,8 +31,8 @@ namespace StoreCustomerData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.StoreCustomerDataAPI, password);
-            storeCustomerDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreCustomerDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreCustomerDataAPI, password);
+            storeCustomerDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreCustomerDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +40,7 @@ namespace StoreCustomerData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(storeCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(storeCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,13 +68,15 @@ namespace StoreCustomerData.api.Controllers
                     sourceId,
                     storeCustomerDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreCustomerDataAPI, storeCustomerDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreCustomerDataAPI, storeCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeCustomerDataAPIId);
+
+                var tempCustomerDataUploadCustomerMethods = new Methods.Temp.CustomerDataUpload.Customer();
 
                 //Get Customer data from Customer Data Upload
                 var customerDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Customers");
@@ -82,7 +86,7 @@ namespace StoreCustomerData.api.Controllers
                     var values = customerDictionary[row];
 
                     //Insert customer data into [Temp.CustomerDataUpload].[FlexContract]
-                    _tempCustomerDataUploadMethods.Customer_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3]);
+                    tempCustomerDataUploadCustomerMethods.Customer_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3]);
                 }
 
                 //Update Process Queue

@@ -13,9 +13,10 @@ namespace GetFlexSpecificProfile.api.Controllers
     [ApiController]
     public class GetFlexSpecificProfileController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<GetFlexSpecificProfileController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -24,6 +25,7 @@ namespace GetFlexSpecificProfile.api.Controllers
         private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
         private readonly Int64 getFlexSpecificProfileAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public GetFlexSpecificProfileController(ILogger<GetFlexSpecificProfileController> logger, IConfiguration configuration)
         {
@@ -31,8 +33,8 @@ namespace GetFlexSpecificProfile.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetFlexSpecificProfileAPI, password);
-            getFlexSpecificProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetFlexSpecificProfileAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetFlexSpecificProfileAPI, password);
+            getFlexSpecificProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetFlexSpecificProfileAPI);
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace GetFlexSpecificProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getFlexSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(getFlexSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

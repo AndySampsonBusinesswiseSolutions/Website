@@ -17,9 +17,11 @@ namespace CommitPeriodicUsageData.api.Controllers
     [ApiController]
     public class CommitPeriodicUsageDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitPeriodicUsageDataController> _logger;
-        private static readonly Methods _methods = new Methods();
+        private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -39,6 +41,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         private long granularityId;
         private Dictionary<string, long> dateDictionary;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitPeriodicUsageDataController(ILogger<CommitPeriodicUsageDataController> logger, IConfiguration configuration)
         {
@@ -46,8 +49,8 @@ namespace CommitPeriodicUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitPeriodicUsageDataAPI, password);
-            commitPeriodicUsageDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitPeriodicUsageDataAPI, password);
+            commitPeriodicUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI);
         }
 
         [HttpPost]
@@ -55,7 +58,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -83,7 +86,7 @@ namespace CommitPeriodicUsageData.api.Controllers
                     sourceId,
                     commitPeriodicUsageDataAPIId);
 
-                if (!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, commitPeriodicUsageDataAPIId, hostEnvironment, jsonObject))
+                if (!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, commitPeriodicUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -139,8 +142,8 @@ namespace CommitPeriodicUsageData.api.Controllers
                     }
 
                     //Call CommitProfiledUsage API and wait for response
-                    var commitProfiledUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
-                    var commitProfiledUsageAPI = _systemMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                    var commitProfiledUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
+                    var commitProfiledUsageAPI = _systemAPIMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
                     var commitProfiledUsageResult = commitProfiledUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
@@ -157,10 +160,10 @@ namespace CommitPeriodicUsageData.api.Controllers
                 _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CreateForecastUsage);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemMethods.GetRoutingAPIId();
+                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
 
                 if(meterType == "SubMeter")
                 {

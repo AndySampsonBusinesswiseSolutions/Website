@@ -16,9 +16,10 @@ namespace CommitSubMeterData.api.Controllers
     [ApiController]
     public class CommitSubMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CommitSubMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -29,6 +30,7 @@ namespace CommitSubMeterData.api.Controllers
         private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CommitSubMeterDataController(ILogger<CommitSubMeterDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace CommitSubMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CommitSubMeterDataAPI, password);
-            commitSubMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSubMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitSubMeterDataAPI, password);
+            commitSubMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace CommitSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -74,7 +76,7 @@ namespace CommitSubMeterData.api.Controllers
                     sourceId,
                     commitSubMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubMeterDataAPI, commitSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubMeterDataAPI, commitSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -83,10 +85,11 @@ namespace CommitSubMeterData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var subMeterDataRows = _tempCustomerDataUploadMethods.SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(subMeterDataRows);
+                var tempCustomerDataUploadSubMeterMethods = new Methods.Temp.CustomerDataUpload.SubMeter();
+                var subMeterEntities = tempCustomerDataUploadSubMeterMethods.SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSubMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(subMeterEntities);
 
-                if(!commitableDataRows.Any())
+                if(!commitableSubMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, false, null);
@@ -107,11 +110,11 @@ namespace CommitSubMeterData.api.Controllers
                     detailDictionary.Add(attribute.Key, string.Empty);
                 }
 
-                foreach(var dataRow in commitableDataRows)
+                foreach(var subMeterEntity in commitableSubMeterEntities)
                 {
                     foreach(var attribute in attributes)
                     {
-                        detailDictionary[attribute.Key] = dataRow.Field<string>(attribute.Value);
+                        detailDictionary[attribute.Key] = subMeterEntity.GetType().GetProperty(attribute.Value).GetValue(subMeterEntity).ToString();
                     }
 
                     //Get SubMeterId by MPXN
@@ -132,12 +135,12 @@ namespace CommitSubMeterData.api.Controllers
                         //Update [Customer].[SubMeterDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            var currentDetailDataRow = _customerMethods.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(subMeterId, detail.Key);
-                            var currentDetail = currentDetailDataRow.Field<string>("SubMeterDetailDescription");
+                            var currentDetailEntity = _customerMethods.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(subMeterId, detail.Key);
+                            var currentDetail = currentDetailEntity.Field<string>("SubMeterDetailDescription");
 
                             if(detail.Value != currentDetail)
                             {
-                                var subMeterDetailId = currentDetailDataRow.Field<int>("SubMeterDetailId");
+                                var subMeterDetailId = currentDetailEntity.Field<int>("SubMeterDetailId");
                                 _customerMethods.SubMeterDetail_DeleteBySubMeterDetailId(subMeterDetailId);
                                 _customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
                             }

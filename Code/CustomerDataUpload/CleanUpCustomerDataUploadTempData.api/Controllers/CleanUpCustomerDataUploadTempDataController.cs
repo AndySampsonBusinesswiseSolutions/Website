@@ -15,15 +15,11 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
     [ApiController]
     public class CleanUpCustomerDataUploadTempDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CleanUpCustomerDataUploadTempDataController> _logger;
-        private static readonly Methods _methods = new Methods();
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
         private readonly Int64 cleanUpCustomerDataUploadTempDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CleanUpCustomerDataUploadTempDataController(ILogger<CleanUpCustomerDataUploadTempDataController> logger, IConfiguration configuration)
         {
@@ -31,8 +27,8 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CleanUpCustomerDataUploadTempDataAPI, password);
-            cleanUpCustomerDataUploadTempDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CleanUpCustomerDataUploadTempDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CleanUpCustomerDataUploadTempDataAPI, password);
+            cleanUpCustomerDataUploadTempDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.System.API.GUID().CleanUpCustomerDataUploadTempDataAPI);
         }
 
         [HttpPost]
@@ -40,7 +36,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -50,92 +46,63 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         public void Clean([FromBody] object data)
         {
             var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     cleanUpCustomerDataUploadTempDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.System.API.GUID().CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId);
 
-                var processList = new List<int> {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+                var deleteMethodList = new List<Action>
+                {
+                    () => new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.SubMeterUsage().SubMeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.Customer().Customer_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.Meter().Meter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.Site().Site_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID)
+                };
 
                 //Cleanup temp data
-                Parallel.ForEach(processList, new ParallelOptions{MaxDegreeOfParallelism = 5}, process => {
-                    if(process == 1)
-                    {
-                        _tempCustomerDataUploadMethods.MeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 2)
-                    {
-                        _tempCustomerDataUploadMethods.SubMeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 3)
-                    {
-                        _tempCustomerDataUploadMethods.Customer_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 4)
-                    {
-                        _tempCustomerDataUploadMethods.FixedContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 5)
-                    {
-                        _tempCustomerDataUploadMethods.FlexContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 6)
-                    {
-                        _tempCustomerDataUploadMethods.FlexReferenceVolume_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 7)
-                    {
-                        _tempCustomerDataUploadMethods.FlexTrade_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 8)
-                    {
-                        _tempCustomerDataUploadMethods.Meter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 9)
-                    {
-                        _tempCustomerDataUploadMethods.MeterExemption_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 10)
-                    {
-                        _tempCustomerDataUploadMethods.Site_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
-                    else if(process == 11)
-                    {
-                        _tempCustomerDataUploadMethods.SubMeter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                    }
+                Parallel.ForEach(deleteMethodList, new ParallelOptions{MaxDegreeOfParallelism = 5}, deleteMethod => {
+                    deleteMethod();
                 });
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

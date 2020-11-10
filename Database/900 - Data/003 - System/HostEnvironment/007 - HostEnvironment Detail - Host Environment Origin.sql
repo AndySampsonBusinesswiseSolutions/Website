@@ -13,4 +13,4 @@ SET @HostEnvironmentId = (SELECT HostEnvironmentId FROM [System].[HostEnvironmen
 EXEC [System].[HostEnvironmentDetail_Insert] @CreatedByUserId, @SourceId, @HostEnvironmentId, @HostEnvironmentAttributeId, 'http://energyportaluat:8080'
 
 SET @HostEnvironmentId = (SELECT HostEnvironmentId FROM [System].[HostEnvironment] WHERE HostEnvironmentGUID = 'B97B795A-8E6A-4A00-88FB-9524037788E8') --Development
-EXEC [System].[HostEnvironmentDetail_Insert] @CreatedByUserId, @SourceId, @HostEnvironmentId, @HostEnvironmentAttributeId, 'http://energyportaldev:8080'
+EXEC [System].[HostEnvironmentDetail_Insert] @CreatedByUserId, @SourceId, @HostEnvironmentId, @HostEnvironmentAttributeId, 'http://energyportaldev'

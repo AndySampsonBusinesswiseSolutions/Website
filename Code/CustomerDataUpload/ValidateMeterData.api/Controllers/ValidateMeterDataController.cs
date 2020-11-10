@@ -16,9 +16,10 @@ namespace ValidateMeterData.api.Controllers
     [ApiController]
     public class ValidateMeterDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateMeterDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -29,6 +30,7 @@ namespace ValidateMeterData.api.Controllers
         private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
         private readonly Int64 validateMeterDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateMeterDataController(ILogger<ValidateMeterDataController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace ValidateMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateMeterDataAPI, password);
-            validateMeterDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateMeterDataAPI, password);
+            validateMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterDataAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace ValidateMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -73,7 +75,7 @@ namespace ValidateMeterData.api.Controllers
                     sourceId,
                     validateMeterDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterDataAPI, validateMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterDataAPI, validateMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -82,14 +84,16 @@ namespace ValidateMeterData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] table
-                var meterDataRows = _tempCustomerDataUploadMethods.Meter_GetByProcessQueueGUID(processQueueGUID);
+                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!meterDataRows.Any())
+                if(!meterEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -109,7 +113,7 @@ namespace ValidateMeterData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ImportExport,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterEntities.Select(me => me.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -117,32 +121,32 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
                         {_customerDataUploadValidationEntityEnums.AnnualUsage, "Annual Usage"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterEntities, requiredColumns);
 
                 //Get MPANs
-                var mpanDataRecords = meterDataRows.Where(r => _methods.IsValidMPAN(r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)));
-                var mpanRows = mpanDataRecords.Select(r => r.Field<int>("RowId"));
+                var mpanEntities = meterEntities.Where(me => methods.IsValidMPAN(me.MPXN));
+                var mpanRows = mpanEntities.Select(me => me.RowId);
 
                 //Get MPRNs
-                var mprnDataRecords = meterDataRows.Where(r => _methods.IsValidMPRN(r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)));
-                var mprnRows = mprnDataRecords.Select(r => r.Field<int>("RowId"));
+                var mprnEntities = meterEntities.Where(me => methods.IsValidMPRN(me.MPXN));
+                var mprnRows = mprnEntities.Select(me => me.RowId);
 
                 //Get any MPXNs not in MPANs or MPRNs
-                var invalidMPXNRows = meterDataRows.Select(r => r.Field<int>("RowId")).Except(mpanRows).Except(mprnRows);
+                var invalidMPXNRows = meterEntities.Select(me => me.RowId).Except(mpanRows).Except(mprnRows);
 
                 foreach(var row in invalidMPXNRows)
                 {
-                    var dataRow = meterDataRows.First(r => r.Field<int>("RowId") == row);
-                    if(!records[row][_customerDataUploadValidationEntityEnums.MPXN].Contains($"Invalid MPAN/MPRN {dataRow[_customerDataUploadValidationEntityEnums.MPXN]}"))
+                    var meterEntity = meterEntities.First(me => me.RowId == row);
+                    if(!records[row][_customerDataUploadValidationEntityEnums.MPXN].Contains($"Invalid MPAN/MPRN '{meterEntity.MPXN}'"))
                     {
-                        records[row][_customerDataUploadValidationEntityEnums.MPXN].Add($"Invalid MPAN/MPRN {dataRow[_customerDataUploadValidationEntityEnums.MPXN]}");
+                        records[row][_customerDataUploadValidationEntityEnums.MPXN].Add($"Invalid MPAN/MPRN '{meterEntity.MPXN}'");
                     }
                 }
 
                 //Get MPANs not stored in database
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-                var newMPANDataRecords = mpanDataRecords.Where(r => 
-                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) == 0)
+                var newMPANEntities = mpanEntities.Where(me => 
+                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, me.MPXN) == 0)
                     .ToList();
 
                 //Site, GSP, PC, MTC, LLFC and Area must be populated
@@ -155,76 +159,71 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.LineLossFactorClass, "LLFC"},
                         {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPANDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPANEntities, requiredColumns);
 
                 //Validate GSP
-                var invalidGridSupplyPointDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.GridSupplyPoint))
-                    && !_methods.IsValidGridSupplyPoint(r.Field<string>(_customerDataUploadValidationEntityEnums.GridSupplyPoint)));
+                var invalidGridSupplyPointEntities = mpanEntities.Where(me => !string.IsNullOrWhiteSpace(me.GridSupplyPoint)
+                    && !methods.IsValidGridSupplyPoint(me.GridSupplyPoint));
 
-                foreach(var invalidGridSupplyPointDataRecord in invalidGridSupplyPointDataRecords)
+                foreach(var invalidGridSupplyPointEntity in invalidGridSupplyPointEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidGridSupplyPointDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Contains($"Invalid GSP {invalidGridSupplyPointDataRecord[_customerDataUploadValidationEntityEnums.GridSupplyPoint]}"))
+                    if(!records[invalidGridSupplyPointEntity.RowId][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Contains($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Add($"Invalid GSP {invalidGridSupplyPointDataRecord[_customerDataUploadValidationEntityEnums.GridSupplyPoint]}");
+                        records[invalidGridSupplyPointEntity.RowId][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Add($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'");
                     }
                 }
 
                 //Validate Profile Class
-                var invalidProfileClassDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass))
-                    && !_methods.IsValidProfileClass(r.Field<string>(_customerDataUploadValidationEntityEnums.ProfileClass)));
+                var invalidProfileClassEntities = mpanEntities.Where(me => !string.IsNullOrWhiteSpace(me.ProfileClass)
+                    && !methods.IsValidProfileClass(me.ProfileClass));
 
-                foreach(var invalidProfileClassDataRecord in invalidProfileClassDataRecords)
+                foreach(var invalidProfileClassEntity in invalidProfileClassEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidProfileClassDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ProfileClass].Contains($"Invalid Profile Class {invalidProfileClassDataRecord[_customerDataUploadValidationEntityEnums.ProfileClass]}"))
+                    if(!records[invalidProfileClassEntity.RowId][_customerDataUploadValidationEntityEnums.ProfileClass].Contains($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ProfileClass].Add($"Invalid Profile Class {invalidProfileClassDataRecord[_customerDataUploadValidationEntityEnums.ProfileClass]}");
+                        records[invalidProfileClassEntity.RowId][_customerDataUploadValidationEntityEnums.ProfileClass].Add($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'");
                     }
                 }
 
                 //Validate MTC
-                var invalidMeterTimeswitchCodeDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.MeterTimeswitchCode))
-                    && !_methods.IsValidMeterTimeswitchCode(r.Field<string>(_customerDataUploadValidationEntityEnums.MeterTimeswitchCode)));
+                var invalidMeterTimeswitchCodeEntities = mpanEntities.Where(me => !string.IsNullOrWhiteSpace(me.MeterTimeswitchCode)
+                    && !methods.IsValidMeterTimeswitchCode(me.MeterTimeswitchCode));
 
-                foreach(var invalidMeterTimeswitchCodeDataRecord in invalidMeterTimeswitchCodeDataRecords)
+                foreach(var invalidMeterTimeswitchCodeEntity in invalidMeterTimeswitchCodeEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidMeterTimeswitchCodeDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Contains($"Invalid MTC {invalidMeterTimeswitchCodeDataRecord[_customerDataUploadValidationEntityEnums.MeterTimeswitchCode]}"))
+                    if(!records[invalidMeterTimeswitchCodeEntity.RowId][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Contains($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Add($"Invalid MTC {invalidMeterTimeswitchCodeDataRecord[_customerDataUploadValidationEntityEnums.MeterTimeswitchCode]}");
+                        records[invalidMeterTimeswitchCodeEntity.RowId][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Add($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'");
                     }
                 }
 
                 //Validate LLFC
-                var invalidLineLossFactorClassDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.LineLossFactorClass))
-                    && !_methods.IsValidLineLossFactorClass(r.Field<string>(_customerDataUploadValidationEntityEnums.LineLossFactorClass)));
+                var invalidLineLossFactorClassEntities = mpanEntities.Where(me => !string.IsNullOrWhiteSpace(me.LineLossFactorClass)
+                    && !methods.IsValidLineLossFactorClass(me.LineLossFactorClass));
 
-                foreach(var invalidLineLossFactorClassDataRecord in invalidLineLossFactorClassDataRecords)
+                foreach(var invalidLineLossFactorClassEntity in invalidLineLossFactorClassEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidLineLossFactorClassDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Contains($"Invalid LLFC {invalidLineLossFactorClassDataRecord[_customerDataUploadValidationEntityEnums.LineLossFactorClass]}"))
+                    if(!records[invalidLineLossFactorClassEntity.RowId][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Contains($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Add($"Invalid LLFC {invalidLineLossFactorClassDataRecord[_customerDataUploadValidationEntityEnums.LineLossFactorClass]}");
+                        records[invalidLineLossFactorClassEntity.RowId][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Add($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'");
                     }
                 }
 
                 //Validate Capacity if it is populated
-                var invalidCapacityDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Capacity))
-                    && !_methods.IsValidCapacity(r.Field<string>(_customerDataUploadValidationEntityEnums.Capacity)));
+                var invalidCapacityEntities = mpanEntities.Where(me => !string.IsNullOrWhiteSpace(me.Capacity)
+                    && !methods.IsValidCapacity(me.Capacity));
 
-                foreach(var invalidCapacityDataRecord in invalidCapacityDataRecords)
+                foreach(var invalidCapacityEntity in invalidCapacityEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidCapacityDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Capacity].Contains($"Invalid Capacity {invalidCapacityDataRecord[_customerDataUploadValidationEntityEnums.Capacity]}"))
+                    if(!records[invalidCapacityEntity.RowId][_customerDataUploadValidationEntityEnums.Capacity].Contains($"Invalid Capacity '{invalidCapacityEntity.Capacity}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Capacity].Add($"Invalid Capacity {invalidCapacityDataRecord[_customerDataUploadValidationEntityEnums.Capacity]}");
+                        records[invalidCapacityEntity.RowId][_customerDataUploadValidationEntityEnums.Capacity].Add($"Invalid Capacity '{invalidCapacityEntity.Capacity}'");
                     }
                 }
 
                 //Get MPRNs not stored in database
-                var newMPRNDataRecords = mprnDataRecords.Where(r => 
-                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)) == 0)
+                var newMPRNEntities = mprnEntities.Where(me => 
+                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, me.MPXN) == 0)
                     .ToList();
 
                 //Site, LDZ and Area must be populated
@@ -234,31 +233,29 @@ namespace ValidateMeterData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.LocalDistributionZone, "LDZ"},
                         {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPRNDataRecords, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPRNEntities, requiredColumns);
 
                 //Validate LDZ
-                var invalidLocalDistributionZoneDataRecords = mpanDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.LocalDistributionZone))
-                    && !_methods.IsValidLocalDistributionZone(r.Field<string>(_customerDataUploadValidationEntityEnums.LocalDistributionZone)));
+                var invalidLocalDistributionZoneEntities = mprnEntities.Where(me => !string.IsNullOrWhiteSpace(me.LocalDistributionZone)
+                    && !methods.IsValidLocalDistributionZone(me.LocalDistributionZone));
 
-                foreach(var invalidLocalDistributionZoneDataRecord in invalidLocalDistributionZoneDataRecords)
+                foreach(var invalidLocalDistributionZoneEntity in invalidLocalDistributionZoneEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidLocalDistributionZoneDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Contains($"Invalid LDZ {invalidLocalDistributionZoneDataRecord[_customerDataUploadValidationEntityEnums.LocalDistributionZone]}"))
+                    if(!records[invalidLocalDistributionZoneEntity.RowId][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Contains($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Add($"Invalid LDZ {invalidLocalDistributionZoneDataRecord[_customerDataUploadValidationEntityEnums.LocalDistributionZone]}");
+                        records[invalidLocalDistributionZoneEntity.RowId][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Add($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'");
                     }
                 }
 
                 //Validate SOQ if it is populated
-                var invalidStandardOfftakeQuantityDataRecords = mprnDataRecords.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity))
-                    && !_methods.IsValidStandardOfftakeQuantity(r.Field<string>(_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity)));
+                var invalidStandardOfftakeQuantityEntities = mprnEntities.Where(me => !string.IsNullOrWhiteSpace(me.StandardOfftakeQuantity)
+                    && !methods.IsValidStandardOfftakeQuantity(me.StandardOfftakeQuantity));
 
-                foreach(var invalidStandardOfftakeQuantityDataRecord in invalidStandardOfftakeQuantityDataRecords)
+                foreach(var invalidStandardOfftakeQuantityEntity in invalidStandardOfftakeQuantityEntities)
                 {
-                    var rowId = Convert.ToInt32(invalidStandardOfftakeQuantityDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Contains($"Invalid Standard Offtake Quantity {invalidStandardOfftakeQuantityDataRecord[_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity]}"))
+                    if(!records[invalidStandardOfftakeQuantityEntity.RowId][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Contains($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Add($"Invalid Standard Offtake Quantity {invalidStandardOfftakeQuantityDataRecord[_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity]}");
+                        records[invalidStandardOfftakeQuantityEntity.RowId][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Add($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'");
                     }
                 }
 

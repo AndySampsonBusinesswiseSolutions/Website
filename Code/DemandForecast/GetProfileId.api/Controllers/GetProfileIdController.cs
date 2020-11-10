@@ -14,9 +14,10 @@ namespace GetProfileId.api.Controllers
     [ApiController]
     public class GetProfileIdController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<GetProfileIdController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -24,6 +25,7 @@ namespace GetProfileId.api.Controllers
         private static readonly Enums.DemandForecast.ProfileAgent.Attribute _demandForecastProfileAgentAttributeEnums = new Enums.DemandForecast.ProfileAgent.Attribute();
         private readonly Int64 getProfileIdAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public GetProfileIdController(ILogger<GetProfileIdController> logger, IConfiguration configuration)
         {
@@ -31,8 +33,8 @@ namespace GetProfileId.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetProfileIdAPI, password);
-            getProfileIdAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetProfileIdAPI, password);
+            getProfileIdAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
         }
 
         [HttpPost]
@@ -40,7 +42,7 @@ namespace GetProfileId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getProfileIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(getProfileIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -93,8 +95,8 @@ namespace GetProfileId.api.Controllers
                     var APIGUID = _demandForecastMethods.ProfileAgentDetail_GetProfileAgentDetailDescriptionByProfileAgentIdAndProfileAgentAttributeId(profileAgentId, profileAgentAPIGUIDProfileAgentAttributeId);
                     
                     //Call API and wait for response
-                    var APIId = _systemMethods.API_GetAPIIdByAPIGUID(APIGUID);
-                    var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileIdAPI, hostEnvironment, jsonObject);
+                    var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(APIGUID);
+                    var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileIdAPI, hostEnvironment, jsonObject);
                     var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
                     profileId = Convert.ToInt64(result.Result.ToString());
 

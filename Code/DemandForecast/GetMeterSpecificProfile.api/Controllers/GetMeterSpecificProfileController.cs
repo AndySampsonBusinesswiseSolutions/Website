@@ -14,9 +14,10 @@ namespace GetMeterSpecificProfile.api.Controllers
     [ApiController]
     public class GetMeterSpecificProfileController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<GetMeterSpecificProfileController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -25,6 +26,7 @@ namespace GetMeterSpecificProfile.api.Controllers
         private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
         private readonly Int64 getMeterSpecificProfileAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public GetMeterSpecificProfileController(ILogger<GetMeterSpecificProfileController> logger, IConfiguration configuration)
         {
@@ -32,8 +34,8 @@ namespace GetMeterSpecificProfile.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetMeterSpecificProfileAPI, password);
-            getMeterSpecificProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMeterSpecificProfileAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetMeterSpecificProfileAPI, password);
+            getMeterSpecificProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMeterSpecificProfileAPI);
         }
 
         [HttpPost]
@@ -41,7 +43,7 @@ namespace GetMeterSpecificProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getMeterSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(getMeterSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

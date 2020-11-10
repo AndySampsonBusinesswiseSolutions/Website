@@ -15,7 +15,7 @@ GO
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-10-19
--- Description:	Get CommodityToMeter info from [Mapping].[CommodityToMeter] table by Meter Id
+-- Description:	Get CommodityToMeter info from [Mapping].[CommodityToMeter] table by Commodity Id
 -- =============================================
 
 ALTER PROCEDURE [Mapping].[CommodityToMeter_GetByCommodityId]

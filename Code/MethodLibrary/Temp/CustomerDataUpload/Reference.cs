@@ -19,6 +19,11 @@ namespace MethodLibrary
                     return dataRows.Where(r => r.Field<bool>("CanCommit")).ToList();
                 }
 
+                public List<T> GetCommitableEntities<T>(List<T> entities)
+                {
+                    return entities.Where(e => Convert.ToBoolean(e.GetType().GetProperty("CanCommit").GetValue(e))).ToList();
+                }
+
                 public Dictionary<int, List<string>> ConvertCustomerDataUploadToDictionary(JObject jsonObject, string dataType)
                 {
                     //Get File Content JSON

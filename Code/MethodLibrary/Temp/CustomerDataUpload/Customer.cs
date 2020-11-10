@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Data;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MethodLibrary
 {
@@ -10,27 +11,41 @@ namespace MethodLibrary
         {
             public partial class CustomerDataUpload
             {
-                public void Customer_Insert(string processQueueGUID, int rowId, string customerName, string contactName, string contactTelephoneNumber, string contactEmailAddress)
+                public class Customer
                 {
-                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerDataUploadEnums.Customer_Insert, 
-                        processQueueGUID, rowId, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
-                }
+                    public void Customer_Insert(string processQueueGUID, int rowId, string customerName, string contactName, string contactTelephoneNumber, string contactEmailAddress)
+                    {
+                        ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                            _storedProcedureTempCustomerDataUploadEnums.Customer_Insert, 
+                            processQueueGUID, rowId, customerName, contactName, contactTelephoneNumber, contactEmailAddress);
+                    }
 
-                public List<DataRow> Customer_GetByProcessQueueGUID(string processQueueGUID)
-                {
-                    var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                        _storedProcedureTempCustomerDataUploadEnums.Customer_GetByProcessQueueGUID, 
-                        processQueueGUID);
+                    //TODO: Remove
+                    public List<DataRow> Customer_GetDataRowsByProcessQueueGUID(string processQueueGUID)
+                    {
+                        var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                            _storedProcedureTempCustomerDataUploadEnums.Customer_GetByProcessQueueGUID, 
+                            processQueueGUID);
 
-                    return CleanedUpDataTable(dataTable);
-                }
+                        return new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                    }
 
-                public void Customer_DeleteByProcessQueueGUID(string processQueueGUID)
-                {
-                    ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
-                        _storedProcedureTempCustomerDataUploadEnums.Customer_DeleteByProcessQueueGUID, 
-                        processQueueGUID);
+                    public List<Entity.Temp.CustomerDataUpload.Customer> Customer_GetByProcessQueueGUID(string processQueueGUID)
+                    {
+                        var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                            _storedProcedureTempCustomerDataUploadEnums.Customer_GetByProcessQueueGUID, 
+                            processQueueGUID);
+
+                        var dataRows = new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                        return dataRows.Select(d => new Entity.Temp.CustomerDataUpload.Customer(d)).ToList();
+                    }
+
+                    public void Customer_DeleteByProcessQueueGUID(string processQueueGUID)
+                    {
+                        ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
+                            _storedProcedureTempCustomerDataUploadEnums.Customer_DeleteByProcessQueueGUID, 
+                            processQueueGUID);
+                    }
                 }
             }
         }

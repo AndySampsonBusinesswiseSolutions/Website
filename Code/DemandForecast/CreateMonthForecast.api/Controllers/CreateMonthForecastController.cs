@@ -16,9 +16,10 @@ namespace CreateMonthForecast.api.Controllers
     [ApiController]
     public class CreateMonthForecastController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateMonthForecastController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -35,6 +36,7 @@ namespace CreateMonthForecast.api.Controllers
         private Dictionary<long, List<long>> monthToDateDictionary;
         private Dictionary<long, List<long>> yearToDateDictionary;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateMonthForecastController(ILogger<CreateMonthForecastController> logger, IConfiguration configuration)
         {
@@ -42,8 +44,8 @@ namespace CreateMonthForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateMonthForecastAPI, password);
-            createMonthForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateMonthForecastAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateMonthForecastAPI, password);
+            createMonthForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateMonthForecastAPI);
         }
 
         [HttpPost]
@@ -51,7 +53,7 @@ namespace CreateMonthForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createMonthForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createMonthForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -79,7 +81,7 @@ namespace CreateMonthForecast.api.Controllers
                     sourceId,
                     createMonthForecastAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateMonthForecastAPI, createMonthForecastAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateMonthForecastAPI, createMonthForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

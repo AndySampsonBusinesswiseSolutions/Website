@@ -15,9 +15,10 @@ namespace CreateForecastUsage.api.Controllers
     [ApiController]
     public class CreateForecastUsageController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<CreateForecastUsageController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -29,6 +30,7 @@ namespace CreateForecastUsage.api.Controllers
         private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
         private readonly Int64 createForecastUsageAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public CreateForecastUsageController(ILogger<CreateForecastUsageController> logger, IConfiguration configuration)
         {
@@ -36,8 +38,8 @@ namespace CreateForecastUsage.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.CreateForecastUsageAPI, password);
-            createForecastUsageAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateForecastUsageAPI, password);
+            createForecastUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
         }
 
         [HttpPost]
@@ -45,7 +47,7 @@ namespace CreateForecastUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -83,8 +85,8 @@ namespace CreateForecastUsage.api.Controllers
                 var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
 
                 //Call GetMappedUsageDateId API and wait for response
-                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
-                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
+                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
 
                 var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);

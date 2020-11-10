@@ -18,9 +18,10 @@ namespace GetProfile.api.Controllers
     [ApiController]
     public class GetProfileController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<GetProfileController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
@@ -39,6 +40,7 @@ namespace GetProfile.api.Controllers
         private Dictionary<long, long> forecastGroupToTimePeriodToProfileDictionary;
         private List<Tuple<long, long, long>> forecastGroupToTimePeriodTuple;
         private readonly string hostEnvironment;
+        #endregion
 
         public GetProfileController(ILogger<GetProfileController> logger, IConfiguration configuration)
         {
@@ -46,8 +48,8 @@ namespace GetProfile.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.GetProfileAPI, password);
-            getProfileAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetProfileAPI, password);
+            getProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
         }
 
         [HttpPost]
@@ -55,7 +57,7 @@ namespace GetProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -83,14 +85,14 @@ namespace GetProfile.api.Controllers
                     sourceId,
                     getProfileAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetProfileAPI, getProfileAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.GetProfileAPI, getProfileAPIId, hostEnvironment, jsonObject))
                 {
                     return JsonConvert.SerializeObject(new Dictionary<long, Dictionary<long, decimal>>());
                 }
 
                 //Launch GetProfileId process and wait for response
-                var APIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
-                var API = _systemMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
+                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
@@ -262,6 +264,8 @@ namespace GetProfile.api.Controllers
 
         private void GetDates()
         {
+            var methods = new Methods();
+            
             //Get Date dictionary
             var dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
 
@@ -269,7 +273,7 @@ namespace GetProfile.api.Controllers
             var earliestRequiredPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
             periodicUsageDateIds = Enumerable.Range(0, latestPeriodicUsageDate.Subtract(earliestRequiredPeriodicUsageDate).Days + 1)
                 .Select(offset => earliestRequiredPeriodicUsageDate.AddDays(offset))
-                .Select(d => dateDictionary[_methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)])
+                .Select(d => dateDictionary[methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)])
                 .ToList();
 
             //Get Date to ForecastGroup with priority 1

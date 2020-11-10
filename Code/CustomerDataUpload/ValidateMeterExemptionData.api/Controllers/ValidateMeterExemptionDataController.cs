@@ -16,9 +16,10 @@ namespace ValidateMeterExemptionData.api.Controllers
     [ApiController]
     public class ValidateMeterExemptionDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateMeterExemptionDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
         private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
@@ -27,6 +28,7 @@ namespace ValidateMeterExemptionData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 ValidateMeterExemptionDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateMeterExemptionDataController(ILogger<ValidateMeterExemptionDataController> logger, IConfiguration configuration)
         {
@@ -34,8 +36,8 @@ namespace ValidateMeterExemptionData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateMeterExemptionDataAPI, password);
-            ValidateMeterExemptionDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateMeterExemptionDataAPI, password);
+            ValidateMeterExemptionDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +45,7 @@ namespace ValidateMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(ValidateMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(ValidateMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,7 +73,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                     sourceId,
                     ValidateMeterExemptionDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI, ValidateMeterExemptionDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI, ValidateMeterExemptionDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -80,14 +82,16 @@ namespace ValidateMeterExemptionData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] table
-                var meterExemptionDataRows = _tempCustomerDataUploadMethods.MeterExemption_GetByProcessQueueGUID(processQueueGUID);
+                var meterExemptionEntities = new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!meterExemptionDataRows.Any())
+                if(!meterExemptionEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -98,7 +102,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ExemptionProportion,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionEntities.Select(mee => mee.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -107,33 +111,29 @@ namespace ValidateMeterExemptionData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.DateFrom, "Date From"},
                         {_customerDataUploadValidationEntityEnums.DateTo, "Date To"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterExemptionDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterExemptionEntities, requiredColumns);
 
                 //Validate Exemption Product
-                var invalidExemptionProductDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct))
-                    && !_methods.IsValidExemptionProduct(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct)));
+                var invalidExemptionProductDataRecords = meterExemptionEntities.Where(mee => !string.IsNullOrWhiteSpace(mee.ExemptionProduct)
+                    && !methods.IsValidExemptionProduct(mee.ExemptionProduct));
 
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidExemptionProductDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProduct]}"))
+                    if(!records[invalidExemptionProductDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord.ExemptionProduct}"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProduct]}");
+                        records[invalidExemptionProductDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord.ExemptionProduct}");
                     }
                 }
 
                 //Validate Exemption Proportion
-                var invalidExemptionProportionDataRecords = meterExemptionDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProportion))
-                    && !_methods.IsValidExemptionProportion(r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProduct), 
-                                                            r.Field<string>(_customerDataUploadValidationEntityEnums.ExemptionProportion))
-                    );
+                var invalidExemptionProportionDataRecords = meterExemptionEntities.Where(mee => !string.IsNullOrWhiteSpace(mee.ExemptionProportion)
+                    && !methods.IsValidExemptionProportion(mee.ExemptionProduct, mee.ExemptionProportion));
 
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidExemptionProportionDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProportion]}"))
+                    if(!records[invalidExemptionProportionDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord.ExemptionProportion}"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord[_customerDataUploadValidationEntityEnums.ExemptionProportion]}");
+                        records[invalidExemptionProportionDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord.ExemptionProportion}");
                     }
                 }
 

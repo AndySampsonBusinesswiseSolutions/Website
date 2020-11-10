@@ -16,9 +16,10 @@ namespace ValidateFlexContractData.api.Controllers
     [ApiController]
     public class ValidateFlexContractDataController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<ValidateFlexContractDataController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
@@ -28,6 +29,7 @@ namespace ValidateFlexContractData.api.Controllers
         private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
         private readonly Int64 validateFlexContractDataAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public ValidateFlexContractDataController(ILogger<ValidateFlexContractDataController> logger, IConfiguration configuration)
         {
@@ -35,8 +37,8 @@ namespace ValidateFlexContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.ValidateFlexContractDataAPI, password);
-            validateFlexContractDataAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFlexContractDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateFlexContractDataAPI, password);
+            validateFlexContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFlexContractDataAPI);
         }
 
         [HttpPost]
@@ -44,7 +46,7 @@ namespace ValidateFlexContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(validateFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(validateFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -72,7 +74,7 @@ namespace ValidateFlexContractData.api.Controllers
                     sourceId,
                     validateFlexContractDataAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexContractDataAPI, validateFlexContractDataAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFlexContractDataAPI, validateFlexContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -81,14 +83,16 @@ namespace ValidateFlexContractData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFlexContractDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] table
-                var flexContractDataRows = _tempCustomerDataUploadMethods.FlexContract_GetByProcessQueueGUID(processQueueGUID);
+                var flexContractEntities = new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_GetByProcessQueueGUID(processQueueGUID);
 
-                if(!flexContractDataRows.Any())
+                if(!flexContractEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFlexContractDataAPIId, false, null);
                     return;
                 }
+
+                var methods = new Methods();
 
                 var columns = new List<string>
                     {
@@ -103,7 +107,7 @@ namespace ValidateFlexContractData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexContractDataRows.Select(d => Convert.ToInt32(d["RowId"].ToString())).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexContractEntities.Select(fce => fce.RowId).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -116,12 +120,12 @@ namespace ValidateFlexContractData.api.Controllers
                         {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"}
                     };
 
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, flexContractDataRows, requiredColumns);
+                _tempCustomerDataUploadMethods.GetMissingRecords(records, flexContractEntities, requiredColumns);
 
                 //If Contract Reference, Basket Reference and MPXN doesn't exist then Product is required
                 //Get new contracts
-                var newContractMeterDataRecords = flexContractDataRows.Where(r => 
-                    !_customerMethods.ContractBasketMeterExists(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractReference), r.Field<string>(_customerDataUploadValidationEntityEnums.BasketReference), r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)))
+                var newContractMeterDataRecords = flexContractEntities.Where(fce => 
+                    !_customerMethods.ContractBasketMeterExists(fce.ContractReference, fce.BasketReference, fce.MPXN))
                     .ToList();
 
                 //Product must be populated
@@ -132,82 +136,76 @@ namespace ValidateFlexContractData.api.Controllers
                 _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractMeterDataRecords, requiredColumns);
 
                 //Validate Supplier
-                var invalidSupplierDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Supplier))
-                    && !_methods.IsValidSupplier(r.Field<string>(_customerDataUploadValidationEntityEnums.Supplier)));
+                var invalidSupplierDataRecords = flexContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.Supplier)
+                    && !methods.IsValidSupplier(fce.Supplier));
 
                 foreach(var invalidSupplierDataRecord in invalidSupplierDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidSupplierDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Supplier].Contains($"Invalid Supplier '{invalidSupplierDataRecord[_customerDataUploadValidationEntityEnums.Supplier]}'"))
+                    if(!records[invalidSupplierDataRecord.RowId][_customerDataUploadValidationEntityEnums.Supplier].Contains($"Invalid Supplier '{invalidSupplierDataRecord.Supplier}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Supplier].Add($"Invalid Supplier '{invalidSupplierDataRecord[_customerDataUploadValidationEntityEnums.Supplier]}'");
+                        records[invalidSupplierDataRecord.RowId][_customerDataUploadValidationEntityEnums.Supplier].Add($"Invalid Supplier '{invalidSupplierDataRecord.Supplier}'");
                     }
                 }
 
                 //Validate Contract Dates
-                var invalidContractStartDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractStartDate))
-                    && !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractStartDate)));
+                var invalidContractStartDateDataRecords = flexContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.ContractStartDate)
+                    && !methods.IsValidDate(fce.ContractStartDate));
 
                 foreach(var invalidContractStartDateDataRecord in invalidContractStartDateDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidContractStartDateDataRecord["RowId"]);
-                    if(!records[rowId]["TradeRContractStartDateference"].Contains($"Invalid Contract Start Date '{invalidContractStartDateDataRecord[_customerDataUploadValidationEntityEnums.ContractStartDate]}'"))
+                    if(!records[invalidContractStartDateDataRecord.RowId]["TradeRContractStartDateference"].Contains($"Invalid Contract Start Date '{invalidContractStartDateDataRecord.ContractStartDate}'"))
                     {
-                        records[rowId]["TradeRContractStartDateference"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord[_customerDataUploadValidationEntityEnums.ContractStartDate]}'");
+                        records[invalidContractStartDateDataRecord.RowId]["TradeRContractStartDateference"].Add($"Invalid Contract Start Date '{invalidContractStartDateDataRecord.ContractStartDate}'");
                     }
                 }
 
-                var invalidContractEndDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractEndDate))
-                    && !_methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractEndDate)));
+                var invalidContractEndDateDataRecords = flexContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.ContractEndDate)
+                    && !methods.IsValidDate(fce.ContractEndDate));
 
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ContractEndDate].Contains($"Invalid Contract End Date '{invalidContractEndDateDataRecord[_customerDataUploadValidationEntityEnums.ContractEndDate]}'"))
+                    if(!records[invalidContractEndDateDataRecord.RowId][_customerDataUploadValidationEntityEnums.ContractEndDate].Contains($"Invalid Contract End Date '{invalidContractEndDateDataRecord.ContractEndDate}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ContractEndDate].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord[_customerDataUploadValidationEntityEnums.ContractEndDate]}'");
+                        records[invalidContractEndDateDataRecord.RowId][_customerDataUploadValidationEntityEnums.ContractEndDate].Add($"Invalid Contract End Date '{invalidContractEndDateDataRecord.ContractEndDate}'");
                     }
                 }
 
-                var invalidContractDateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractStartDate))
-                    && !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractEndDate))
-                    && _methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractStartDate))
-                    && _methods.IsValidDate(r.Field<string>(_customerDataUploadValidationEntityEnums.ContractEndDate))
-                    && r.Field<DateTime>(_customerDataUploadValidationEntityEnums.ContractStartDate) >= r.Field<DateTime>(_customerDataUploadValidationEntityEnums.ContractEndDate));
+                var invalidContractDateDataRecords = flexContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.ContractStartDate)
+                    && !string.IsNullOrWhiteSpace(fce.ContractEndDate)
+                    && methods.IsValidDate(fce.ContractStartDate)
+                    && methods.IsValidDate(fce.ContractEndDate)
+                    && Convert.ToDateTime(fce.ContractStartDate) >= Convert.ToDateTime(fce.ContractEndDate));
 
                 foreach(var invalidContractEndDateDataRecord in invalidContractEndDateDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidContractEndDateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Dates '{invalidContractEndDateDataRecord[_customerDataUploadValidationEntityEnums.ContractStartDate]}' is equal to or later than '{invalidContractEndDateDataRecord[_customerDataUploadValidationEntityEnums.ContractEndDate]}'"))
+                    if(!records[invalidContractEndDateDataRecord.RowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Dates '{invalidContractEndDateDataRecord.ContractStartDate}' is equal to or later than '{invalidContractEndDateDataRecord.ContractEndDate}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord[_customerDataUploadValidationEntityEnums.ContractStartDate]}' is equal to or later than '{invalidContractEndDateDataRecord[_customerDataUploadValidationEntityEnums.ContractEndDate]}'");
+                        records[invalidContractEndDateDataRecord.RowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Dates '{invalidContractEndDateDataRecord.ContractStartDate}' is equal to or later than '{invalidContractEndDateDataRecord.ContractEndDate}'");
                     }
                 }
 
                 //Validate Rates
-                var invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
-                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("Rate")
-                    && !_methods.IsValidFlexContractRate(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
+                var invalidRateDataRecords = flexContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.Value)
+                    && fce.RateType.StartsWith("Rate")
+                    && !methods.IsValidFlexContractRate(fce.Value));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}' for '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.RateType]}'"))
+                    if(!records[invalidRateDataRecord.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateDataRecord.Value}' for '{invalidRateDataRecord.RateType}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}' for '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.RateType]}'");
+                        records[invalidRateDataRecord.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateDataRecord.Value}' for '{invalidRateDataRecord.RateType}'");
                     }
                 }
 
-                invalidRateDataRecords = flexContractDataRows.Where(r => !string.IsNullOrWhiteSpace(r.Field<string>(_customerDataUploadValidationEntityEnums.Value))
-                    && r.Field<string>(_customerDataUploadValidationEntityEnums.RateType).StartsWith("StandingCharge")
-                    && !_methods.IsValidFixedContractStandingCharge(r.Field<string>(_customerDataUploadValidationEntityEnums.Value)));
+                invalidRateDataRecords = flexContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.Value)
+                    && fce.RateType.StartsWith("StandingCharge")
+                    && !methods.IsValidFixedContractStandingCharge(fce.Value));
 
                 foreach(var invalidRateDataRecord in invalidRateDataRecords)
                 {
-                    var rowId = Convert.ToInt32(invalidRateDataRecord["RowId"]);
-                    if(!records[rowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'"))
+                    if(!records[invalidRateDataRecord.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateDataRecord.Value}'"))
                     {
-                        records[rowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateDataRecord[_customerDataUploadValidationEntityEnums.Value]}'");
+                        records[invalidRateDataRecord.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateDataRecord.Value}'");
                     }
                 }
 

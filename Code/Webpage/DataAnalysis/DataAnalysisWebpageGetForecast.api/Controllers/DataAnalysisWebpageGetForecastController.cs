@@ -19,9 +19,10 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
     [ApiController]
     public class DataAnalysisWebpageGetForecastController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<DataAnalysisWebpageGetForecastController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
@@ -72,6 +73,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             public List<string> Grouping { get; set; }
             public List<string> Commodities { get; set; }
         }
+        #endregion
 
         public DataAnalysisWebpageGetForecastController(ILogger<DataAnalysisWebpageGetForecastController> logger, IConfiguration configuration)
         {
@@ -79,8 +81,8 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.DataAnalysisWebpageGetForecastAPI, password);
-            dataAnalysisWebpageGetForecastAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DataAnalysisWebpageGetForecastAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().DataAnalysisWebpageGetForecastAPI, password);
+            dataAnalysisWebpageGetForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DataAnalysisWebpageGetForecastAPI);
         }
 
         [HttpPost]
@@ -88,7 +90,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(dataAnalysisWebpageGetForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(dataAnalysisWebpageGetForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

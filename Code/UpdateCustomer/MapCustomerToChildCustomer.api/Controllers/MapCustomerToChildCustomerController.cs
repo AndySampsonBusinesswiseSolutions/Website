@@ -14,9 +14,10 @@ namespace MapCustomerToChildCustomer.api.Controllers
     [ApiController]
     public class MapCustomerToChildCustomerController : ControllerBase
     {
+        #region Variables
         private readonly ILogger<MapCustomerToChildCustomerController> _logger;
-        private static readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
@@ -25,6 +26,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
         private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
         private readonly Int64 mapCustomerToChildCustomerAPIId;
         private readonly string hostEnvironment;
+        #endregion
 
         public MapCustomerToChildCustomerController(ILogger<MapCustomerToChildCustomerController> logger, IConfiguration configuration)
         {
@@ -32,8 +34,8 @@ namespace MapCustomerToChildCustomer.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, _systemAPINameEnums.MapCustomerToChildCustomerAPI, password);
-            mapCustomerToChildCustomerAPIId = _systemMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().MapCustomerToChildCustomerAPI, password);
+            mapCustomerToChildCustomerAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI);
         }
 
         [HttpPost]
@@ -41,7 +43,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemMethods.PostAsJsonAsync(mapCustomerToChildCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(mapCustomerToChildCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -69,7 +71,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                     sourceId,
                     mapCustomerToChildCustomerAPIId);
 
-                if(!_systemMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI, mapCustomerToChildCustomerAPIId, hostEnvironment, jsonObject))
+                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.MapCustomerToChildCustomerAPI, mapCustomerToChildCustomerAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -87,7 +89,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                 var customerChildList = _mappingMethods.CustomerToChildCustomer_GetChildCustomerIdListByCustomerId(customerId);
 
                 //Get New Customer Child Mapping
-                var customerChildData = _methods.GetArray(_systemMethods.GetChildCustomerDataFromJObject(jsonObject), "{", "}");
+                var customerChildData = new Methods().GetArray(_systemMethods.GetChildCustomerDataFromJObject(jsonObject), "{", "}");
 
                 //Get Customer Name attribute Id
                 var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
