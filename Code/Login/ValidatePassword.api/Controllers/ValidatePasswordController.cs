@@ -17,7 +17,7 @@ namespace ValidatePassword.api.Controllers
         private readonly ILogger<ValidatePasswordController> _logger;
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Int64 validatePasswordAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -28,7 +28,7 @@ namespace ValidatePassword.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidatePasswordAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidatePasswordAPI, password);
             validatePasswordAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidatePasswordAPI);
         }
 

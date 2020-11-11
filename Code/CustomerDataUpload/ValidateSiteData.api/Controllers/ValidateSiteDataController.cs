@@ -22,10 +22,10 @@ namespace ValidateSiteData.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 validateSiteDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,7 +36,7 @@ namespace ValidateSiteData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateSiteDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateSiteDataAPI, password);
             validateSiteDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSiteDataAPI);
         }
 
@@ -108,7 +108,7 @@ namespace ValidateSiteData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ContactEmailAddress,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteEntities.Select(se => se.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(siteEntities.Select(se => se.RowId.Value).Distinct().ToList(), columns);
                 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -123,9 +123,9 @@ namespace ValidateSiteData.api.Controllers
 
                 foreach(var invalidPostCodeEntity in invalidPostCodeEntities)
                 {
-                    if(!records[invalidPostCodeEntity.RowId][_customerDataUploadValidationEntityEnums.SitePostCode].Contains($"Invalid Site Post Code '{invalidPostCodeEntity.SitePostCode}'"))
+                    if(!records[invalidPostCodeEntity.RowId.Value][_customerDataUploadValidationEntityEnums.SitePostCode].Contains($"Invalid Site Post Code '{invalidPostCodeEntity.SitePostCode}'"))
                     {
-                        records[invalidPostCodeEntity.RowId][_customerDataUploadValidationEntityEnums.SitePostCode].Add($"Invalid Site Post Code '{invalidPostCodeEntity.SitePostCode}'");
+                        records[invalidPostCodeEntity.RowId.Value][_customerDataUploadValidationEntityEnums.SitePostCode].Add($"Invalid Site Post Code '{invalidPostCodeEntity.SitePostCode}'");
                     }
                 }
 
@@ -135,9 +135,9 @@ namespace ValidateSiteData.api.Controllers
 
                 foreach(var invalidTelephoneNumberEntity in invalidTelephoneNumberEntities)
                 {
-                    if(!records[invalidTelephoneNumberEntity.RowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberEntity.ContactTelephoneNumber}'"))
+                    if(!records[invalidTelephoneNumberEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Contains($"Invalid Contact Telephone Number '{invalidTelephoneNumberEntity.ContactTelephoneNumber}'"))
                     {
-                        records[invalidTelephoneNumberEntity.RowId][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberEntity.ContactTelephoneNumber}'");
+                        records[invalidTelephoneNumberEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContactTelephoneNumber].Add($"Invalid Contact Telephone Number '{invalidTelephoneNumberEntity.ContactTelephoneNumber}'");
                     }
                 }
 
@@ -147,9 +147,9 @@ namespace ValidateSiteData.api.Controllers
 
                 foreach(var invalidEmailAddressEntity in invalidEmailAddressEntities)
                 {
-                    if(!records[invalidEmailAddressEntity.RowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Contains($"Invalid Contact Email Address '{invalidEmailAddressEntity.ContactEmailAddress}'"))
+                    if(!records[invalidEmailAddressEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Contains($"Invalid Contact Email Address '{invalidEmailAddressEntity.ContactEmailAddress}'"))
                     {
-                        records[invalidEmailAddressEntity.RowId][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Add($"Invalid Contact Email Address '{invalidEmailAddressEntity.ContactEmailAddress}'");
+                        records[invalidEmailAddressEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContactEmailAddress].Add($"Invalid Contact Email Address '{invalidEmailAddressEntity.ContactEmailAddress}'");
                     }
                 }
 

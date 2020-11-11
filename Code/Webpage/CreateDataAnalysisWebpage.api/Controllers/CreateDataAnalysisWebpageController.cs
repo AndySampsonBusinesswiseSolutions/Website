@@ -24,12 +24,12 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
-        private readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
-        private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
+        private readonly Enums.CustomerSchema.Asset.Attribute _customerAssetAttributeEnums = new Enums.CustomerSchema.Asset.Attribute();
+        private readonly Enums.CustomerSchema.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
+        private readonly Enums.SystemSchema.Page.GUID _systemPageGUIDEnums = new Enums.SystemSchema.Page.GUID();
         private readonly Int64 createDataAnalysisWebpageAPIId;
         private string HTML = string.Empty;
         private JObject jsonObject;
@@ -61,7 +61,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateDataAnalysisWebpageAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateDataAnalysisWebpageAPI, password);
             createDataAnalysisWebpageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDataAnalysisWebpageAPI);
         }
 

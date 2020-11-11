@@ -125,7 +125,7 @@ namespace MethodLibrary
             public long GetSubMeterId(string subMeterIdentifier)
             {
                 //Get SubMeterIdentifierSubMeterAttributeId
-                var customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+                var customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
                 var subMeterIdentifierSubMeterAttributeId = SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(customerSubMeterAttributeEnums.SubMeterIdentifier);
 
                 //Get SubMeterId

@@ -24,10 +24,10 @@ namespace CreateForecastUsage.api.Controllers
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
         private readonly Int64 createForecastUsageAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +38,7 @@ namespace CreateForecastUsage.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateForecastUsageAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateForecastUsageAPI, password);
             createForecastUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
         }
 

@@ -20,10 +20,10 @@ namespace GetMeterSpecificProfile.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private static readonly Enums.DemandForecast.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecast.Profile.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private static readonly Enums.DemandForecastSchema.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecastSchema.Profile.Attribute();
         private readonly Int64 getMeterSpecificProfileAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -34,7 +34,7 @@ namespace GetMeterSpecificProfile.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetMeterSpecificProfileAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetMeterSpecificProfileAPI, password);
             getMeterSpecificProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMeterSpecificProfileAPI);
         }
 

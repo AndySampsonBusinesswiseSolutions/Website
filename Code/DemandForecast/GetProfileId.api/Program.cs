@@ -9,12 +9,12 @@ namespace GetProfileId.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.System.API.Name().GetProfileIdAPI);
+            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().GetProfileIdAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.System.API.GUID().GetProfileIdAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().GetProfileIdAPI));
     }
 }

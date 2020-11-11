@@ -2,7 +2,7 @@ namespace enums
 {
     public partial class Enums
     {
-        public partial class Supplier
+        public partial class SupplierSchema
         {
             public class Product
             {

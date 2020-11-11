@@ -24,9 +24,9 @@ namespace CreateYearForecast.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
         private readonly Int64 createYearForecastAPIId;
         private string granularityCode = "Year";
         private List<Tuple<long, decimal>> existingYearForecasts;
@@ -43,7 +43,7 @@ namespace CreateYearForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateYearForecastAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateYearForecastAPI, password);
             createYearForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateYearForecastAPI);
         }
 

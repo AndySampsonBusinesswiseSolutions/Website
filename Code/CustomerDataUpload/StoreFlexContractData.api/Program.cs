@@ -9,12 +9,12 @@ namespace StoreFlexContractData.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.System.API.Name().StoreFlexContractDataAPI);
+            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().StoreFlexContractDataAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.System.API.GUID().StoreFlexContractDataAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().StoreFlexContractDataAPI));
     }
 }

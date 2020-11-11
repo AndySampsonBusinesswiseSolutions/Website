@@ -20,20 +20,8 @@ namespace ValidateCrossSheetEntityData.api.Controllers
     {
         #region Variables
         private readonly ILogger<ValidateCrossSheetEntityDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
-        private static readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
-        private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private static readonly Enums.Customer.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
-        private static readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
-        private static readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
         private readonly Int64 validateCrossSheetEntityDataAPIId;
         private readonly string hostEnvironment;
         private Int64 createdByUserId;
@@ -47,8 +35,8 @@ namespace ValidateCrossSheetEntityData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateCrossSheetEntityDataAPI, password);
-            validateCrossSheetEntityDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateCrossSheetEntityDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateCrossSheetEntityDataAPI, password);
+            validateCrossSheetEntityDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI);
         }
 
         [HttpPost]
@@ -56,7 +44,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -66,35 +54,35 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         public void Validate([FromBody] object data)
         {
             var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
+            var systemAPIMethods = new Methods.System.API();
 
             //Get base variables
             createdByUserId = administrationUserMethods.GetSystemUserId();
-            sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID,
                     createdByUserId,
                     sourceId,
                     validateCrossSheetEntityDataAPIId);
 
                 //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
+                var checkPrerequisiteAPIAPIId = systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
-                var API = _systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ValidateCrossSheetEntityDataAPI, hostEnvironment, jsonObject);
+                var API = systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId);
-
-                var errorsFound = false;
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId);
 
                 //TODO: Change to entities
                 var getMethodList = new Dictionary<string, Func<List<DataRow>>>
@@ -112,79 +100,45 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                     {"FlexTrade", () => new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_GetDataRowsByProcessQueueGUID(processQueueGUID)}
                 };
 
-                var dataRowdictionary = new ConcurrentDictionary<string, List<DataRow>>();
+                var dataRowDictionary = new ConcurrentDictionary<string, List<DataRow>>();
                 Parallel.ForEach(getMethodList, new ParallelOptions{MaxDegreeOfParallelism = 5}, getMethod => {
-                    dataRowdictionary.TryAdd(getMethod.Key, getMethod.Value());
+                    dataRowDictionary.TryAdd(getMethod.Key, getMethod.Value());
                 });
 
-                //Get data from required tables
-                var customerDataRows = dataRowdictionary["Customer"];
-                var siteDataRows = dataRowdictionary["Site"];
-                var meterDataRows = dataRowdictionary["Meter"];
-                var meterExemptionDataRows = dataRowdictionary["MeterExemption"];
-                var meterUsageDataRows = dataRowdictionary["MeterUsage"];
-                var subMeterDataRows = dataRowdictionary["SubMeter"];
-                var subMeterUsageDataRows = dataRowdictionary["SubMeterUsage"];
-                var fixedContractDataRows = dataRowdictionary["FixedContract"];
-                var flexContractDataRows = dataRowdictionary["FlexContract"];
-                var flexReferenceVolumeDataRows = dataRowdictionary["FlexReferenceVolume"];
-                var flexTradeDataRows = dataRowdictionary["FlexTrade"];
+                var customerMethods = new Methods.Customer();
+                var customerNameCustomerAttributeId = customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(new Enums.CustomerSchema.Customer.Attribute().CustomerName);
+                var siteNameSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(new Enums.CustomerSchema.Site.Attribute().SiteName);
+                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
+                var subMeterIdentifierSubMeterAttributeId = customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(new Enums.CustomerSchema.SubMeter.Attribute().SubMeterIdentifier);
+                var contractReferenceContractAttributeId = customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(new Enums.CustomerSchema.Contract.Attribute().ContractReference);
+                var basketReferenceBasketAttributeId = customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(new Enums.CustomerSchema.Basket.Attribute().BasketReference);
 
-                //Sites - If Customer Name is populated, check it exists and if not, check it is in the Customers table
-                var customerNameCustomerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
-                var errorMessage = ValidateCrossEntities(siteDataRows, customerDataRows, customerNameCustomerAttributeId, "CustomerName", "Customer Name", _customerDataUploadValidationSheetNameEnums.Site, _customerDataUploadValidationSheetNameEnums.Customer);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
+                var validationTupleList = new List<Tuple<List<DataRow>, List<DataRow>, long, string, string, string, string>>();
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["Site"], dataRowDictionary["Customer"], customerNameCustomerAttributeId, "CustomerName", "Customer Name", _customerDataUploadValidationSheetNameEnums.Site, _customerDataUploadValidationSheetNameEnums.Customer)); //Sites - If Customer Name is populated, check it exists and if not, check it is in the Customers table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["Meter"], dataRowDictionary["Site"], siteNameSiteAttributeId, "SiteName", "Site Name", _customerDataUploadValidationSheetNameEnums.Meter, _customerDataUploadValidationSheetNameEnums.Site)); //Meters - If Site Name is populated, check it exists and if not, check it is in the Sites table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["SubMeter"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.SubMeter, _customerDataUploadValidationSheetNameEnums.Meter)); //SubMeters - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["MeterUsage"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN", _customerDataUploadValidationSheetNameEnums.MeterUsage, _customerDataUploadValidationSheetNameEnums.Meter)); //Meter HH Data - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["MeterExemption"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.MeterExemption, _customerDataUploadValidationSheetNameEnums.Meter)); //Meter Exemptions - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["SubMeterUsage"], dataRowDictionary["SubMeter"], subMeterIdentifierSubMeterAttributeId, "SubMeterIdentifier", "SubMeter Identifier", _customerDataUploadValidationSheetNameEnums.SubMeterUsage, _customerDataUploadValidationSheetNameEnums.SubMeterUsage)); //SubMeter HH Data - If SubMeter Identifier is populated, check it exists and if not, check it is in the SubMeters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FixedContract"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FixedContract, _customerDataUploadValidationSheetNameEnums.Meter)); //Fixed Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexContract"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FlexContract, _customerDataUploadValidationSheetNameEnums.Meter)); //Flex Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexReferenceVolume"], dataRowDictionary["FlexContract"], contractReferenceContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume, _customerDataUploadValidationSheetNameEnums.FlexContract)); //Flex Reference Volumes - If Contract Reference is populated, check it exists and if not, check it is in the Flex Contracts table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexTrade"], dataRowDictionary["FlexContract"], basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade, _customerDataUploadValidationSheetNameEnums.FlexContract)); //Flex Trades - If Basket Reference is populated, check it exists and if not, check it is in the Flex Contracts table
 
-                //Meters - If Site Name is populated, check it exists and if not, check it is in the Sites table
-                var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
-                errorMessage = ValidateCrossEntities(meterDataRows, siteDataRows, siteNameSiteAttributeId, "SiteName", "Site Name", _customerDataUploadValidationSheetNameEnums.Meter, _customerDataUploadValidationSheetNameEnums.Site);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-
-                //SubMeters - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-                errorMessage = ValidateCrossEntities(subMeterDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.SubMeter, _customerDataUploadValidationSheetNameEnums.Meter);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-
-                //Meter HH Data - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(meterUsageDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN", _customerDataUploadValidationSheetNameEnums.MeterUsage, _customerDataUploadValidationSheetNameEnums.Meter);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-                
-                //Meter Exemptions - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(meterExemptionDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.MeterExemption, _customerDataUploadValidationSheetNameEnums.Meter);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-                
-                //SubMeter HH Data - If SubMeter Identifier is populated, check it exists and if not, check it is in the SubMeters table
-                var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-                errorMessage = ValidateCrossEntities(subMeterUsageDataRows, subMeterDataRows, subMeterIdentifierSubMeterAttributeId, "SubMeterIdentifier", "SubMeter Identifier", _customerDataUploadValidationSheetNameEnums.SubMeterUsage, _customerDataUploadValidationSheetNameEnums.SubMeterUsage);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-                
-                //Fixed Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(fixedContractDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FixedContract, _customerDataUploadValidationSheetNameEnums.Meter);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-                
-                //Flex Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                errorMessage = ValidateCrossEntities(flexContractDataRows, meterDataRows, meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FlexContract, _customerDataUploadValidationSheetNameEnums.Meter);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-                
-                //Flex Reference Volumes - If Contract Reference is populated, check it exists and if not, check it is in the Flex Contracts table
-                var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
-                errorMessage = ValidateCrossEntities(flexReferenceVolumeDataRows, flexContractDataRows, contractReferenceContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume, _customerDataUploadValidationSheetNameEnums.FlexContract);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);
-                
-                //Flex Trades - If Basket Reference is populated, check it exists and if not, check it is in the Flex Contracts table
-                var basketReferenceBasketAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerBasketAttributeEnums.BasketReference);
-                errorMessage = ValidateCrossEntities(flexTradeDataRows, flexContractDataRows, basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade, _customerDataUploadValidationSheetNameEnums.FlexContract);
-                errorsFound = errorsFound || !string.IsNullOrWhiteSpace(errorMessage);                
+                var errorList = new ConcurrentBag<string>();
+                Parallel.ForEach(validationTupleList, new ParallelOptions{MaxDegreeOfParallelism = 5}, vt => {
+                    errorList.Add(ValidateCrossEntities(vt.Item1, vt.Item2, vt.Item3, vt.Item4, vt.Item5, vt.Item6, vt.Item7));
+                });              
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId, errorsFound, errorsFound ? "Validation errors found" : null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId, errorList.Any(e => !string.IsNullOrWhiteSpace(e)), errorList.Any(e => !string.IsNullOrWhiteSpace(e)) ? string.Join("; ", errorList.Where(e => !string.IsNullOrWhiteSpace(e)).Distinct()) : null);
             }
             catch (Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId, true, $"System Error Id {errorId}");
             }
         }
 
@@ -198,7 +152,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
             foreach (var invalidMainCrossEntityDataRow in invalidMainCrossEntityDataRows)
             {
                 var rowId = Convert.ToInt32(invalidMainCrossEntityDataRow["RowId"]);
-                records[rowId][columnName].Add($"New {columnDisplayName} entered'{invalidMainCrossEntityDataRow[columnName]}' but not entered in {otherSheetName} sheet");
+                records[rowId][columnName].Add($"New {columnDisplayName} entered '{invalidMainCrossEntityDataRow[columnName]}' but not entered in {otherSheetName} sheet");
             }
 
             return _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, sheetName, false);
@@ -206,14 +160,15 @@ namespace ValidateCrossSheetEntityData.api.Controllers
 
         private long GetDetailId(long attributeId, string detailDescription, string sheetName)
         {
+            var customerMethods = new Methods.Customer();
             if(sheetName == _customerDataUploadValidationSheetNameEnums.Site)
             {
-                return _customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(attributeId, detailDescription);
+                return customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(attributeId, detailDescription);
             }
 
             if(sheetName == _customerDataUploadValidationSheetNameEnums.Meter)
             {
-                return _customerMethods.SiteDetail_GetSiteDetailIdBySiteAttributeIdAndSiteDetailDescription(attributeId, detailDescription);
+                return customerMethods.SiteDetail_GetSiteDetailIdBySiteAttributeIdAndSiteDetailDescription(attributeId, detailDescription);
             }
 
             if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeter
@@ -222,21 +177,22 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 || sheetName == _customerDataUploadValidationSheetNameEnums.FixedContract
                 || sheetName == _customerDataUploadValidationSheetNameEnums.FlexContract)
             {
-                return _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(attributeId, detailDescription);
+                return customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(attributeId, detailDescription);
             }
+
             if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeterUsage)
             {
-                return _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(attributeId, detailDescription);
+                return customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(attributeId, detailDescription);
             }
 
             if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume)
             {
-                return _customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(attributeId, detailDescription);
+                return customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(attributeId, detailDescription);
             }
             
             if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
             {
-                return _customerMethods.BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(attributeId, detailDescription);
+                return customerMethods.BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(attributeId, detailDescription);
             }
             
             return 0;

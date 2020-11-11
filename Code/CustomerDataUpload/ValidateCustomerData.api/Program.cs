@@ -9,12 +9,12 @@ namespace ValidateCustomerData.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.System.API.Name().ValidateCustomerDataAPI);
+            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().ValidateCustomerDataAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.System.API.GUID().ValidateCustomerDataAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().ValidateCustomerDataAPI));
     }
 }

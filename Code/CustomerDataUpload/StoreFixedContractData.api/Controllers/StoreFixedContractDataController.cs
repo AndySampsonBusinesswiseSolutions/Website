@@ -21,8 +21,8 @@ namespace StoreFixedContractData.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Int64 storeFixedContractDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -33,7 +33,7 @@ namespace StoreFixedContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreFixedContractDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreFixedContractDataAPI, password);
             storeFixedContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreFixedContractDataAPI);
         }
 

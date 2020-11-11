@@ -20,9 +20,9 @@ namespace GetProfileId.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.DemandForecast.ProfileAgent.Attribute _demandForecastProfileAgentAttributeEnums = new Enums.DemandForecast.ProfileAgent.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.DemandForecastSchema.ProfileAgent.Attribute _demandForecastProfileAgentAttributeEnums = new Enums.DemandForecastSchema.ProfileAgent.Attribute();
         private readonly Int64 getProfileIdAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -33,7 +33,7 @@ namespace GetProfileId.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().GetProfileIdAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetProfileIdAPI, password);
             getProfileIdAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileIdAPI);
         }
 

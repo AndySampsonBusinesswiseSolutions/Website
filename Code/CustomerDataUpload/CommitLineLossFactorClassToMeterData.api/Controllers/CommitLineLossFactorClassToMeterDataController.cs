@@ -23,11 +23,11 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
         // private readonly Enums.Information.LineLossFactorClass.Attribute _informationLineLossFactorClassAttributeEnums = new Enums.Information.LineLossFactorClass.Attribute();
-        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitLineLossFactorClassToMeterDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +38,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitLineLossFactorClassToMeterDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitLineLossFactorClassToMeterDataAPI, password);
             commitLineLossFactorClassToMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitLineLossFactorClassToMeterDataAPI);
         }
 

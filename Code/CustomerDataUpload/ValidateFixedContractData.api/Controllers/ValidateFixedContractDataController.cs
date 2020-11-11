@@ -23,10 +23,10 @@ namespace ValidateFixedContractData.api.Controllers
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 validateFixedContractDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -37,7 +37,7 @@ namespace ValidateFixedContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateFixedContractDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFixedContractDataAPI, password);
             validateFixedContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFixedContractDataAPI);
         }
 
@@ -107,7 +107,7 @@ namespace ValidateFixedContractData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractEntities.Select(fce => fce.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractEntities.Select(fce => fce.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -151,9 +151,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidSupplierEntity in invalidSupplierEntities)
                 {
-                    if(!records[invalidSupplierEntity.RowId][_customerDataUploadValidationEntityEnums.Supplier].Contains($"Invalid Supplier '{invalidSupplierEntity.Supplier}'"))
+                    if(!records[invalidSupplierEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Supplier].Contains($"Invalid Supplier '{invalidSupplierEntity.Supplier}'"))
                     {
-                        records[invalidSupplierEntity.RowId][_customerDataUploadValidationEntityEnums.Supplier].Add($"Invalid Supplier '{invalidSupplierEntity.Supplier}'");
+                        records[invalidSupplierEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Supplier].Add($"Invalid Supplier '{invalidSupplierEntity.Supplier}'");
                     }
                 }
 
@@ -163,9 +163,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractStartDateEntity in invalidContractStartDateEntities)
                 {
-                    if(!records[invalidContractStartDateEntity.RowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'"))
+                    if(!records[invalidContractStartDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'"))
                     {
-                        records[invalidContractStartDateEntity.RowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'");
+                        records[invalidContractStartDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'");
                     }
                 }
 
@@ -174,9 +174,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractEndDateEntity in invalidContractEndDateEntities)
                 {
-                    if(!records[invalidContractEndDateEntity.RowId][_customerDataUploadValidationEntityEnums.ContractEndDate].Contains($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'"))
+                    if(!records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractEndDate].Contains($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'"))
                     {
-                        records[invalidContractEndDateEntity.RowId][_customerDataUploadValidationEntityEnums.ContractEndDate].Add($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'");
+                        records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractEndDate].Add($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'");
                     }
                 }
 
@@ -186,9 +186,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractEndDateEntity in invalidContractEndDateEntities)
                 {
-                    if(!records[invalidContractEndDateEntity.RowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'"))
+                    if(!records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'"))
                     {
-                        records[invalidContractEndDateEntity.RowId][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'");
+                        records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'");
                     }
                 }
 
@@ -199,9 +199,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateEntity in invalidRateEntities)
                 {
-                    if(!records[invalidRateEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'"))
+                    if(!records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'"))
                     {
-                        records[invalidRateEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'");
+                        records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'");
                     }
                 }
 
@@ -211,9 +211,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateEntity in invalidRateEntities)
                 {
-                    if(!records[invalidRateEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateEntity.Value}'"))
+                    if(!records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateEntity.Value}'"))
                     {
-                        records[invalidRateEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateEntity.Value}'");
+                        records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateEntity.Value}'");
                     }
                 }
 
@@ -223,9 +223,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateEntity in invalidRateEntities)
                 {
-                    if(!records[invalidRateEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'"))
+                    if(!records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'"))
                     {
-                        records[invalidRateEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'");
+                        records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'");
                     }
                 }
 
@@ -235,9 +235,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateCountEntity in invalidRateCountEntities)
                 {
-                    if(!records[invalidRateCountEntity.RowId][_customerDataUploadValidationEntityEnums.RateCount].Contains($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'"))
+                    if(!records[invalidRateCountEntity.RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Contains($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'"))
                     {
-                        records[invalidRateCountEntity.RowId][_customerDataUploadValidationEntityEnums.RateCount].Add($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'");
+                        records[invalidRateCountEntity.RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Add($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'");
                     }
                 }
 
@@ -269,9 +269,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                         if(rateCount != validFixedContractEntities.Count().ToString())
                         {
-                            if(!records[validFixedContractEntities.First().RowId][_customerDataUploadValidationEntityEnums.RateCount].Contains($"Rate Count '{rateCount}' does not match number of rates provided"))
+                            if(!records[validFixedContractEntities.First().RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Contains($"Rate Count '{rateCount}' does not match number of rates provided"))
                             {
-                                records[validFixedContractEntities.First().RowId][_customerDataUploadValidationEntityEnums.RateCount].Add($"Rate Count '{rateCount}' does not match number of rates provided");
+                                records[validFixedContractEntities.First().RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Add($"Rate Count '{rateCount}' does not match number of rates provided");
                             }
                         }
                     }

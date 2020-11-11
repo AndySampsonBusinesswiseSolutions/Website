@@ -18,7 +18,7 @@ namespace LockUser.api.Controllers
         private readonly ILogger<LockUserController> _logger;
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Int64 lockUserAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -29,7 +29,7 @@ namespace LockUser.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().LockUserAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().LockUserAPI, password);
             lockUserAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
         }
 
@@ -50,7 +50,7 @@ namespace LockUser.api.Controllers
             var administrationUserMethods = new Methods.Administration.User();
             var informationMethods = new Methods.Information();
 
-            var administrationUserGUIDEnums = new Enums.Administration.User.GUID();
+            var administrationUserGUIDEnums = new Enums.AdministrationSchema.User.GUID();
 
             //Get base variables
             var createdByUserId = administrationUserMethods.GetSystemUserId();
@@ -85,7 +85,7 @@ namespace LockUser.api.Controllers
                 var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
                 
                 //Check to see if account is already locked
-                var administrationUserAttributeEnums = new Enums.Administration.User.Attribute();
+                var administrationUserAttributeEnums = new Enums.AdministrationSchema.User.Attribute();
                 var accountLockedAttributeId = administrationUserMethods.UserAttribute_GetUserAttributeIdByUserAttributeDescription(administrationUserAttributeEnums.AccountLocked);
                 var accountLockedId = administrationUserMethods.UserDetail_GetUserDetailIdByUserIdAndUserAttributeId(userId, accountLockedAttributeId);
 
@@ -108,7 +108,7 @@ namespace LockUser.api.Controllers
                             //Get maximum attempts allowed before locking
                             var lockUserAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.LockUserAPI);
 
-                            var systemAPIAttributeEnums = new Enums.System.API.Attribute();
+                            var systemAPIAttributeEnums = new Enums.SystemSchema.API.Attribute();
                             var maximumInvalidLoginAttemptsAttributeId = _systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(systemAPIAttributeEnums.MaximumInvalidLoginAttempts);
                             var maximumInvalidAttempts = _systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(lockUserAPIId, maximumInvalidLoginAttemptsAttributeId)
                                 .Select(a => Convert.ToInt64(a))

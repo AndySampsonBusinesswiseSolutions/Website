@@ -9,12 +9,12 @@ namespace ValidateCrossSheetEntityData.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.System.API.Name().ValidateCrossSheetEntityDataAPI);
+            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().ValidateCrossSheetEntityDataAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.System.API.GUID().ValidateCrossSheetEntityDataAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI));
     }
 }

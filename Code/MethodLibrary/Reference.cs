@@ -13,8 +13,8 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        private static readonly Enums.System.API.Attribute _systemAPIAttributeEnums = new Enums.System.API.Attribute();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private static readonly Enums.SystemSchema.API.Attribute _systemAPIAttributeEnums = new Enums.SystemSchema.API.Attribute();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private static readonly Enums.StoredProcedure.System _storedProcedureSystemEnums = new Enums.StoredProcedure.System();
         private static readonly Enums.StoredProcedure.Mapping _storedProcedureMappingEnums = new Enums.StoredProcedure.Mapping();
         private static readonly Enums.StoredProcedure.Mapping.APIDetailToHostEnvironment _storedProcedureMappingAPIDetailToHostEnvironmentEnums = new Enums.StoredProcedure.Mapping.APIDetailToHostEnvironment();
@@ -25,26 +25,26 @@ namespace MethodLibrary
         private static readonly Enums.StoredProcedure.Supplier _storedProcedureSupplierEnums = new Enums.StoredProcedure.Supplier();
         private static readonly Enums.StoredProcedure.System.HostEnvironment _storedProcedureSystemHostEnvironmentEnums = new Enums.StoredProcedure.System.HostEnvironment();
         private static readonly Enums.StoredProcedure.Temp.CustomerDataUpload _storedProcedureTempCustomerDataUploadEnums = new Enums.StoredProcedure.Temp.CustomerDataUpload();
-        private static readonly Enums.Information.Source.Attribute _informationSourceAttributeEnums = new Enums.Information.Source.Attribute();
-        private static readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
-        private static readonly Enums.Information.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.Information.GridSupplyPoint.Attribute();
-        private static readonly Enums.Information.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.Information.ProfileClass.Attribute();
-        private static readonly Enums.Information.MeterTimeswitchCode.Attribute _informationMeterTimeswitchCodeAttributeEnums = new Enums.Information.MeterTimeswitchCode.Attribute();
-        private static readonly Enums.Information.LocalDistributionZone.Attribute _informationLocalDistributionZoneAttributeEnums = new Enums.Information.LocalDistributionZone.Attribute();
-        private static readonly Enums.Information.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.Information.MeterExemption.Attribute();
-        private static readonly Enums.Supplier.Attribute _supplierAttributeEnums = new Enums.Supplier.Attribute();
-        private static readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private static readonly Enums.System.API.RequireAccessToUsageEntities _systemAPIRequireAccessToUsageEntitiesEnums = new Enums.System.API.RequireAccessToUsageEntities();
-        private static readonly Enums.Administration.User.GUID _administrationUserGUIDEnums = new Enums.Administration.User.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
-        private static readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
-        private static readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
-        private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private static readonly Enums.Customer.Site.Attribute _customerSiteAttributeEnums = new Enums.Customer.Site.Attribute();
+        private static readonly Enums.InformationSchema.Source.Attribute _informationSourceAttributeEnums = new Enums.InformationSchema.Source.Attribute();
+        private static readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
+        private static readonly Enums.InformationSchema.GridSupplyPoint.Attribute _informationGridSupplyPointAttributeEnums = new Enums.InformationSchema.GridSupplyPoint.Attribute();
+        private static readonly Enums.InformationSchema.ProfileClass.Attribute _informationProfileClassAttributeEnums = new Enums.InformationSchema.ProfileClass.Attribute();
+        private static readonly Enums.InformationSchema.MeterTimeswitchCode.Attribute _informationMeterTimeswitchCodeAttributeEnums = new Enums.InformationSchema.MeterTimeswitchCode.Attribute();
+        private static readonly Enums.InformationSchema.LocalDistributionZone.Attribute _informationLocalDistributionZoneAttributeEnums = new Enums.InformationSchema.LocalDistributionZone.Attribute();
+        private static readonly Enums.InformationSchema.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.InformationSchema.MeterExemption.Attribute();
+        private static readonly Enums.SupplierSchema.Attribute _supplierAttributeEnums = new Enums.SupplierSchema.Attribute();
+        private static readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private static readonly Enums.SystemSchema.API.RequireAccessToUsageEntities _systemAPIRequireAccessToUsageEntitiesEnums = new Enums.SystemSchema.API.RequireAccessToUsageEntities();
+        private static readonly Enums.AdministrationSchema.User.GUID _administrationUserGUIDEnums = new Enums.AdministrationSchema.User.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+        private static readonly Enums.CustomerSchema.Basket.Attribute _customerBasketAttributeEnums = new Enums.CustomerSchema.Basket.Attribute();
+        private static readonly Enums.CustomerSchema.Contract.Attribute _customerContractAttributeEnums = new Enums.CustomerSchema.Contract.Attribute();
+        private static readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
+        private static readonly Enums.CustomerSchema.Site.Attribute _customerSiteAttributeEnums = new Enums.CustomerSchema.Site.Attribute();
         private static readonly Information _informationMethods = new Information();
         private static readonly Supplier _supplierMethods = new Supplier();
-        private static readonly Enums.System.HostEnvironment.Attribute _systemHostEnvironmentAttributeEnums = new Enums.System.HostEnvironment.Attribute();
+        private static readonly Enums.SystemSchema.HostEnvironment.Attribute _systemHostEnvironmentAttributeEnums = new Enums.SystemSchema.HostEnvironment.Attribute();
 
         //TODO: Work out how many of these can be moved/integrated with database
 

@@ -2,7 +2,7 @@ namespace enums
 {
     public partial class Enums
     {
-        public partial class DemandForecast
+        public partial class DemandForecastSchema
         {
             public class ForecastAgent
             {

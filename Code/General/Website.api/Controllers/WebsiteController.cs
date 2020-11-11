@@ -21,10 +21,10 @@ namespace Website.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         public readonly Methods.Information _informationMethods = new Methods.Information();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.System.ProcessArchive.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.SystemSchema.ProcessArchive.Attribute();
         private readonly Int64 websiteAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -35,7 +35,7 @@ namespace Website.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().WebsiteAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().WebsiteAPI, password);
             websiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
         }
 

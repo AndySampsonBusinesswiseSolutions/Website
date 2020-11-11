@@ -27,8 +27,8 @@ namespace CommitAreaToMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitAreaToMeterDataAPI, password);
-            commitAreaToMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.System.API.GUID().CommitAreaToMeterDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitAreaToMeterDataAPI, password);
+            commitAreaToMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitAreaToMeterDataAPI);
         }
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace CommitAreaToMeterData.api.Controllers
                     sourceId,
                     commitAreaToMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.System.API.GUID().CommitAreaToMeterDataAPI, commitAreaToMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitAreaToMeterDataAPI, commitAreaToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -88,9 +88,9 @@ namespace CommitAreaToMeterData.api.Controllers
 
                 var mappingMethods = new Methods.Mapping();
                 var customerMethods = new Methods.Customer();
-                var customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
 
-                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.Customer.Meter.Attribute().MeterIdentifier);
+                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 
                 var areas = commitableMeterEntities.Select(cme => cme.Area).Distinct()
                     .ToDictionary(a => a, a => informationMethods.GetAreaId(createdByUserId, sourceId, a));

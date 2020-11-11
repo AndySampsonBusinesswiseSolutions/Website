@@ -19,7 +19,7 @@ namespace StoreLoginAttempt.api.Controllers
         private readonly Methods _methods = new Methods();
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
+        private readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Int64 storeLoginAttemptAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -30,7 +30,7 @@ namespace StoreLoginAttempt.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().StoreLoginAttemptAPI, password);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreLoginAttemptAPI, password);
             storeLoginAttemptAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreLoginAttemptAPI);
         }
 
@@ -52,7 +52,7 @@ namespace StoreLoginAttempt.api.Controllers
             var administrationUserMethods = new Methods.Administration.User();
             var informationMethods = new Methods.Information();
 
-            var systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();                    
+            var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();                    
 
             //Get base variables
             var createdByUserId = administrationUserMethods.GetSystemUserId();

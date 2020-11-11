@@ -23,12 +23,12 @@ namespace CommitMeterExemptionData.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private readonly Enums.Information.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.Information.MeterExemption.Attribute();
-        private readonly Enums.Customer.MeterExemption.Attribute _customerMeterExemptionAttributeEnums = new Enums.Customer.MeterExemption.Attribute();
-        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
+        private readonly Enums.InformationSchema.MeterExemption.Attribute _informationMeterExemptionAttributeEnums = new Enums.InformationSchema.MeterExemption.Attribute();
+        private readonly Enums.CustomerSchema.MeterExemption.Attribute _customerMeterExemptionAttributeEnums = new Enums.CustomerSchema.MeterExemption.Attribute();
+        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitMeterExemptionDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -39,7 +39,7 @@ namespace CommitMeterExemptionData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitMeterExemptionDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitMeterExemptionDataAPI, password);
             commitMeterExemptionDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterExemptionDataAPI);
         }
 

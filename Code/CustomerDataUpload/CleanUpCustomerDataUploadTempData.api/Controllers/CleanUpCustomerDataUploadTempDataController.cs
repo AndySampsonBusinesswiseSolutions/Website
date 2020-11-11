@@ -27,8 +27,8 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CleanUpCustomerDataUploadTempDataAPI, password);
-            cleanUpCustomerDataUploadTempDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.System.API.GUID().CleanUpCustomerDataUploadTempDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CleanUpCustomerDataUploadTempDataAPI, password);
+            cleanUpCustomerDataUploadTempDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI);
         }
 
         [HttpPost]
@@ -66,7 +66,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
                     sourceId,
                     cleanUpCustomerDataUploadTempDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.System.API.GUID().CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

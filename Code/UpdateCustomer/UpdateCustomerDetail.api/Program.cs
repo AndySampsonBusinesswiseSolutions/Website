@@ -9,12 +9,12 @@ namespace UpdateCustomerDetail.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.System.API.Name().UpdateCustomerDetailAPI);
+            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().UpdateCustomerDetailAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.System.API.GUID().UpdateCustomerDetailAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI));
     }
 }

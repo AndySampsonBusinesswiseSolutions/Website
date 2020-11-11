@@ -2,7 +2,7 @@ namespace enums
 {
     public partial class Enums
     {
-        public partial class Customer
+        public partial class CustomerSchema
         {
             public class ContractMeterRate
             {

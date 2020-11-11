@@ -22,10 +22,10 @@ namespace ValidateMeterExemptionData.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 ValidateMeterExemptionDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,7 +36,7 @@ namespace ValidateMeterExemptionData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateMeterExemptionDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateMeterExemptionDataAPI, password);
             ValidateMeterExemptionDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterExemptionDataAPI);
         }
 
@@ -102,7 +102,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ExemptionProportion,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionEntities.Select(mee => mee.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterExemptionEntities.Select(mee => mee.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -119,9 +119,9 @@ namespace ValidateMeterExemptionData.api.Controllers
 
                 foreach(var invalidExemptionProductDataRecord in invalidExemptionProductDataRecords)
                 {
-                    if(!records[invalidExemptionProductDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord.ExemptionProduct}"))
+                    if(!records[invalidExemptionProductDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.ExemptionProduct].Contains($"Invalid Exemption Product {invalidExemptionProductDataRecord.ExemptionProduct}"))
                     {
-                        records[invalidExemptionProductDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProduct].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord.ExemptionProduct}");
+                        records[invalidExemptionProductDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.ExemptionProduct].Add($"Invalid Exemption Product {invalidExemptionProductDataRecord.ExemptionProduct}");
                     }
                 }
 
@@ -131,9 +131,9 @@ namespace ValidateMeterExemptionData.api.Controllers
 
                 foreach(var invalidExemptionProportionDataRecord in invalidExemptionProportionDataRecords)
                 {
-                    if(!records[invalidExemptionProportionDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord.ExemptionProportion}"))
+                    if(!records[invalidExemptionProportionDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.ExemptionProportion].Contains($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord.ExemptionProportion}"))
                     {
-                        records[invalidExemptionProportionDataRecord.RowId][_customerDataUploadValidationEntityEnums.ExemptionProportion].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord.ExemptionProportion}");
+                        records[invalidExemptionProportionDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.ExemptionProportion].Add($"Invalid Exemption Proportion {invalidExemptionProportionDataRecord.ExemptionProportion}");
                     }
                 }
 

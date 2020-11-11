@@ -12,7 +12,7 @@ namespace MethodLibrary
         {
             public Dictionary<long, string> GetForecastAgentDictionary()
             {
-                var _demandForecastForecastAgentAttributeEnums = new Enums.DemandForecast.ForecastAgent.Attribute();
+                var _demandForecastForecastAgentAttributeEnums = new Enums.DemandForecastSchema.ForecastAgent.Attribute();
                 var forecastAgentNameForecastAgentAttributeId = ForecastAgentAttribute_GetForecastAgentAttributeIdByForecastAgentAttributeDescription(_demandForecastForecastAgentAttributeEnums.Name);
                 return ForecastAgentDetail_GetForecastAgentDetailDescriptionByForecastAgentAttributeId(forecastAgentNameForecastAgentAttributeId)
                     .ToDictionary(

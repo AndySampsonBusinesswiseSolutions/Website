@@ -9,12 +9,12 @@ namespace CommitSubAreaToSubMeterData.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.System.API.Name().CommitSubAreaToSubMeterDataAPI);
+            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().CommitSubAreaToSubMeterDataAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.System.API.GUID().CommitSubAreaToSubMeterDataAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CommitSubAreaToSubMeterDataAPI));
     }
 }

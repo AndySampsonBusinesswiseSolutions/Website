@@ -24,14 +24,14 @@ namespace CommitFlexTradeData.api.Controllers
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
-        private readonly Enums.Customer.Trade.Attribute _customerTradeAttributeEnums = new Enums.Customer.Trade.Attribute();
-        private readonly Enums.Information.RateUnit _informationRateUnitEnums = new Enums.Information.RateUnit();
-        private readonly Enums.Information.TradeDirection _informationTradeDirectionEnums = new Enums.Information.TradeDirection();
-        private readonly Enums.Information.VolumeUnit _informationVolumeUnitEnums = new Enums.Information.VolumeUnit();
-        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.CustomerSchema.Basket.Attribute _customerBasketAttributeEnums = new Enums.CustomerSchema.Basket.Attribute();
+        private readonly Enums.CustomerSchema.Trade.Attribute _customerTradeAttributeEnums = new Enums.CustomerSchema.Trade.Attribute();
+        private readonly Enums.InformationSchema.RateUnit _informationRateUnitEnums = new Enums.InformationSchema.RateUnit();
+        private readonly Enums.InformationSchema.TradeDirection _informationTradeDirectionEnums = new Enums.InformationSchema.TradeDirection();
+        private readonly Enums.InformationSchema.VolumeUnit _informationVolumeUnitEnums = new Enums.InformationSchema.VolumeUnit();
+        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitFlexTradeDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -42,7 +42,7 @@ namespace CommitFlexTradeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitFlexTradeDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitFlexTradeDataAPI, password);
             commitFlexTradeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexTradeDataAPI);
         }
 

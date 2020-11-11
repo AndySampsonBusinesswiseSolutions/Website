@@ -156,7 +156,7 @@ namespace MethodLibrary
             public long GetMeterId(string mpxn)
             {
                 //Get MeterIdentifierMeterAttributeId
-                var customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+                var customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
                 var meterIdentifierMeterAttributeId = MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier);
 
                 //Get MeterId

@@ -22,10 +22,10 @@ namespace ValidateSubMeterUsageData.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 validateSubMeterUsageDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,7 +36,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateSubMeterUsageDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateSubMeterUsageDataAPI, password);
             validateSubMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateSubMeterUsageDataAPI);
         }
 
@@ -101,7 +101,7 @@ namespace ValidateSubMeterUsageData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageEntities.Select(smue => smue.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(subMeterUsageEntities.Select(smue => smue.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -118,9 +118,9 @@ namespace ValidateSubMeterUsageData.api.Controllers
 
                 foreach(var invalidDateEntity in invalidDateEntities)
                 {
-                    if(!records[invalidDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Invalid date '{invalidDateEntity.Date}' found"))
+                    if(!records[invalidDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Date].Contains($"Invalid date '{invalidDateEntity.Date}' found"))
                     {
-                        records[invalidDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Add($"Invalid date '{invalidDateEntity.Date}' found");
+                        records[invalidDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Date].Add($"Invalid date '{invalidDateEntity.Date}' found");
                     }
                 }
 
@@ -130,9 +130,9 @@ namespace ValidateSubMeterUsageData.api.Controllers
 
                 foreach(var futureDateEntity in futureDateEntities)
                 {
-                    if(!records[futureDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Future date '{futureDateEntity.Date}' found"))
+                    if(!records[futureDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Date].Contains($"Future date '{futureDateEntity.Date}' found"))
                     {
-                        records[futureDateEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Add($"Future date '{futureDateEntity.Date}' found");
+                        records[futureDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Date].Add($"Future date '{futureDateEntity.Date}' found");
                     }
                 }
 
@@ -141,9 +141,9 @@ namespace ValidateSubMeterUsageData.api.Controllers
 
                 foreach(var invalidUsageEntity in invalidUsageEntities)
                 {
-                    if(!records[invalidUsageEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid usage {invalidUsageEntity.Value} for {invalidUsageEntity.Date} {invalidUsageEntity.TimePeriod}"))
+                    if(!records[invalidUsageEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid usage {invalidUsageEntity.Value} for {invalidUsageEntity.Date} {invalidUsageEntity.TimePeriod}"))
                     {
-                        records[invalidUsageEntity.RowId][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid usage {invalidUsageEntity.Value} for {invalidUsageEntity.Date} {invalidUsageEntity.TimePeriod}");
+                        records[invalidUsageEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid usage {invalidUsageEntity.Value} for {invalidUsageEntity.Date} {invalidUsageEntity.TimePeriod}");
                     }
                 }
 
@@ -154,9 +154,9 @@ namespace ValidateSubMeterUsageData.api.Controllers
 
                 foreach(var invalidAdditionalHalfHourEntity in invalidAdditionalHalfHourEntities)
                 {
-                    if(!records[invalidAdditionalHalfHourEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Contains($"Usage found in additional half hour {invalidAdditionalHalfHourEntity.TimePeriod} but {invalidAdditionalHalfHourEntity.Date} is not an October clock change date"))
+                    if(!records[invalidAdditionalHalfHourEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Date].Contains($"Usage found in additional half hour {invalidAdditionalHalfHourEntity.TimePeriod} but {invalidAdditionalHalfHourEntity.Date} is not an October clock change date"))
                     {
-                        records[invalidAdditionalHalfHourEntity.RowId][_customerDataUploadValidationEntityEnums.Date].Add($"Usage found in additional half hour {invalidAdditionalHalfHourEntity.TimePeriod} but {invalidAdditionalHalfHourEntity.Date} is not an October clock change date");
+                        records[invalidAdditionalHalfHourEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Date].Add($"Usage found in additional half hour {invalidAdditionalHalfHourEntity.TimePeriod} but {invalidAdditionalHalfHourEntity.Date} is not an October clock change date");
                     }
                 }
 

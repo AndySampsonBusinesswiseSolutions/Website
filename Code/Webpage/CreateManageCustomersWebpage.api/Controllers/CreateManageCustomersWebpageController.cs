@@ -22,11 +22,11 @@ namespace CreateManageCustomersWebpage.api.Controllers
         public readonly Methods.Customer _customerMethods = new Methods.Customer();
         public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
-        private readonly Enums.Customer.Attribute _customerAttributeEnums = new Enums.Customer.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private readonly Enums.SystemSchema.Page.GUID _systemPageGUIDEnums = new Enums.SystemSchema.Page.GUID();
+        private readonly Enums.CustomerSchema.Customer.Attribute _customerAttributeEnums = new Enums.CustomerSchema.Customer.Attribute();
         private readonly Int64 createManageCustomersWebpageAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -37,7 +37,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CreateManageCustomersWebpageAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateManageCustomersWebpageAPI, password);
             createManageCustomersWebpageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateManageCustomersWebpageAPI);
         }
 

@@ -2,7 +2,7 @@ namespace enums
 {
     public partial class Enums
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public partial class HostEnvironment
             {

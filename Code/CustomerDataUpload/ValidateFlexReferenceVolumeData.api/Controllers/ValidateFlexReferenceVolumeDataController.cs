@@ -22,10 +22,10 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 validateFlexReferenceVolumeDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,7 +36,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateFlexReferenceVolumeDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFlexReferenceVolumeDataAPI, password);
             validateFlexReferenceVolumeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFlexReferenceVolumeDataAPI);
         }
 
@@ -101,7 +101,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Volume,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeEntities.Select(frve => frve.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexReferenceVolumeEntities.Select(frve => frve.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -116,9 +116,9 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidDateFromDataRecord in invalidDateFromDataRecords)
                 {
-                    if(!records[invalidDateFromDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Date From '{invalidDateFromDataRecord.DateFrom}'"))
+                    if(!records[invalidDateFromDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Date From '{invalidDateFromDataRecord.DateFrom}'"))
                     {
-                        records[invalidDateFromDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Date From '{invalidDateFromDataRecord.DateFrom}'");
+                        records[invalidDateFromDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Date From '{invalidDateFromDataRecord.DateFrom}'");
                     }
                 }
 
@@ -127,9 +127,9 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
-                    if(!records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateTo].Contains($"Invalid Date to '{invalidDateToDataRecord.DateTo}'"))
+                    if(!records[invalidDateToDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.DateTo].Contains($"Invalid Date to '{invalidDateToDataRecord.DateTo}'"))
                     {
-                        records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateTo].Add($"Invalid Date to '{invalidDateToDataRecord.DateTo}'");
+                        records[invalidDateToDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.DateTo].Add($"Invalid Date to '{invalidDateToDataRecord.DateTo}'");
                     }
                 }
 
@@ -141,9 +141,9 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidDateToDataRecord in invalidDateToDataRecords)
                 {
-                    if(!records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Contract Dates '{invalidDateToDataRecord.DateFrom}' is equal to or later than '{invalidDateToDataRecord.DateTo}'"))
+                    if(!records[invalidDateToDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.DateFrom].Contains($"Invalid Contract Dates '{invalidDateToDataRecord.DateFrom}' is equal to or later than '{invalidDateToDataRecord.DateTo}'"))
                     {
-                        records[invalidDateToDataRecord.RowId][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Contract Dates '{invalidDateToDataRecord.DateFrom}' is equal to or later than '{invalidDateToDataRecord.DateTo}'");
+                        records[invalidDateToDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.DateFrom].Add($"Invalid Contract Dates '{invalidDateToDataRecord.DateFrom}' is equal to or later than '{invalidDateToDataRecord.DateTo}'");
                     }
                 }
 
@@ -153,9 +153,9 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
-                    if(!records[invalidVolumeDataRecord.RowId][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Reference Volume '{invalidVolumeDataRecord.Volume}'"))
+                    if(!records[invalidVolumeDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Reference Volume '{invalidVolumeDataRecord.Volume}'"))
                     {
-                        records[invalidVolumeDataRecord.RowId][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Reference Volume '{invalidVolumeDataRecord.Volume}'");
+                        records[invalidVolumeDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Reference Volume '{invalidVolumeDataRecord.Volume}'");
                     }
                 }
 

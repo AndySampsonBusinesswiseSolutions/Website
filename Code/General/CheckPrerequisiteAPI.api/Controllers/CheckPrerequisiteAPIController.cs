@@ -21,8 +21,8 @@ namespace CheckPrerequisiteAPI.api.Controllers
         private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private readonly Enums.System.API.Attribute _systemAPIAttributes = new Enums.System.API.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private readonly Enums.SystemSchema.API.Attribute _systemAPIAttributes = new Enums.SystemSchema.API.Attribute();
         private readonly string hostEnvironment;
         #endregion
 
@@ -32,7 +32,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CheckPrerequisiteAPIAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CheckPrerequisiteAPIAPI, password);
         }
 
         [HttpPost]

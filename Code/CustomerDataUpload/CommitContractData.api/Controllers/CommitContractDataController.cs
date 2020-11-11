@@ -25,19 +25,19 @@ namespace CommitContractData.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supplier _supplierMethods = new Methods.Supplier();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
-        private readonly Enums.Information.ContractType _informationContractTypeEnums = new Enums.Information.ContractType();
-        private readonly Enums.Information.RateType _informationRateTypeEnums = new Enums.Information.RateType();
-        private readonly Enums.Supplier.Attribute _supplierAttributeEnums = new Enums.Supplier.Attribute();
-        private readonly Enums.Supplier.Product.Attribute _supplierProductAttributeEnums = new Enums.Supplier.Product.Attribute();
-        private readonly Enums.Customer.Contract.Attribute _customerContractAttributeEnums = new Enums.Customer.Contract.Attribute();
-        private readonly Enums.Customer.Basket.Attribute _customerBasketAttributeEnums = new Enums.Customer.Basket.Attribute();
-        private readonly Enums.Customer.ContractMeterRate.Attribute _customerContractMeterRateAttributeEnums = new Enums.Customer.ContractMeterRate.Attribute();
-        private readonly Enums.Customer.ContractMeter.Attribute _customerContractMeterAttributeEnums = new Enums.Customer.ContractMeter.Attribute();
-        private readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
+        private readonly Enums.InformationSchema.ContractType _informationContractTypeEnums = new Enums.InformationSchema.ContractType();
+        private readonly Enums.InformationSchema.RateType _informationRateTypeEnums = new Enums.InformationSchema.RateType();
+        private readonly Enums.SupplierSchema.Attribute _supplierAttributeEnums = new Enums.SupplierSchema.Attribute();
+        private readonly Enums.SupplierSchema.Product.Attribute _supplierProductAttributeEnums = new Enums.SupplierSchema.Product.Attribute();
+        private readonly Enums.CustomerSchema.Contract.Attribute _customerContractAttributeEnums = new Enums.CustomerSchema.Contract.Attribute();
+        private readonly Enums.CustomerSchema.Basket.Attribute _customerBasketAttributeEnums = new Enums.CustomerSchema.Basket.Attribute();
+        private readonly Enums.CustomerSchema.ContractMeterRate.Attribute _customerContractMeterRateAttributeEnums = new Enums.CustomerSchema.ContractMeterRate.Attribute();
+        private readonly Enums.CustomerSchema.ContractMeter.Attribute _customerContractMeterAttributeEnums = new Enums.CustomerSchema.ContractMeter.Attribute();
+        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitContractDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -48,7 +48,7 @@ namespace CommitContractData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitContractDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitContractDataAPI, password);
             commitContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
         }
 

@@ -8,7 +8,7 @@ namespace MethodLibrary
     {
         public partial class Supply
         {
-            private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+            private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
 
             private void CreateForecastUsageGranularityHistoryEntities(List<long> granularityIdList, long schemaId, long meterId, string meterType)
             {

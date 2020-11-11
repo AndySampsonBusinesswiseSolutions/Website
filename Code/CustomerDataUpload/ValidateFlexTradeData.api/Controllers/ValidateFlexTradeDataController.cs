@@ -22,10 +22,10 @@ namespace ValidateFlexTradeData.api.Controllers
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 validateFlexTradeDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,7 +36,7 @@ namespace ValidateFlexTradeData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateFlexTradeDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFlexTradeDataAPI, password);
             validateFlexTradeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFlexTradeDataAPI);
         }
 
@@ -104,7 +104,7 @@ namespace ValidateFlexTradeData.api.Controllers
                         _customerDataUploadValidationEntityEnums.Direction,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexTradeEntities.Select(fte => fte.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(flexTradeEntities.Select(fte => fte.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -134,9 +134,9 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidTradeReferenceDataRecord in invalidTradeReferenceDataRecords)
                 {
-                    if(!records[invalidTradeReferenceDataRecord.RowId][_customerDataUploadValidationEntityEnums.TradeReference].Contains($"Invalid Trade Reference '{invalidTradeReferenceDataRecord.TradeReference}'"))
+                    if(!records[invalidTradeReferenceDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.TradeReference].Contains($"Invalid Trade Reference '{invalidTradeReferenceDataRecord.TradeReference}'"))
                     {
-                        records[invalidTradeReferenceDataRecord.RowId][_customerDataUploadValidationEntityEnums.TradeReference].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord.TradeReference}'");
+                        records[invalidTradeReferenceDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.TradeReference].Add($"Invalid Trade Reference '{invalidTradeReferenceDataRecord.TradeReference}'");
                     }
                 }
 
@@ -146,9 +146,9 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidTradeDateDataRecord in invalidTradeDateDataRecords)
                 {
-                    if(!records[invalidTradeDateDataRecord.RowId][_customerDataUploadValidationEntityEnums.TradeDate].Contains($"Invalid Trade Date '{invalidTradeDateDataRecord.TradeDate}'"))
+                    if(!records[invalidTradeDateDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.TradeDate].Contains($"Invalid Trade Date '{invalidTradeDateDataRecord.TradeDate}'"))
                     {
-                        records[invalidTradeDateDataRecord.RowId][_customerDataUploadValidationEntityEnums.TradeDate].Add($"Invalid Trade Date '{invalidTradeDateDataRecord.TradeDate}'");
+                        records[invalidTradeDateDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.TradeDate].Add($"Invalid Trade Date '{invalidTradeDateDataRecord.TradeDate}'");
                     }
                 }
 
@@ -158,9 +158,9 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidTradeProductDataRecord in invalidTradeProductDataRecords)
                 {
-                    if(!records[invalidTradeProductDataRecord.RowId][_customerDataUploadValidationEntityEnums.TradeProduct].Contains($"Invalid Trade Product '{invalidTradeProductDataRecord.TradeProduct}'"))
+                    if(!records[invalidTradeProductDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.TradeProduct].Contains($"Invalid Trade Product '{invalidTradeProductDataRecord.TradeProduct}'"))
                     {
-                        records[invalidTradeProductDataRecord.RowId][_customerDataUploadValidationEntityEnums.TradeProduct].Add($"Invalid Trade Product '{invalidTradeProductDataRecord.TradeProduct}'");
+                        records[invalidTradeProductDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.TradeProduct].Add($"Invalid Trade Product '{invalidTradeProductDataRecord.TradeProduct}'");
                     }
                 }
 
@@ -170,9 +170,9 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidVolumeDataRecord in invalidVolumeDataRecords)
                 {
-                    if(!records[invalidVolumeDataRecord.RowId][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Trade Volume '{invalidVolumeDataRecord.Volume}'"))
+                    if(!records[invalidVolumeDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Volume].Contains($"Invalid Trade Volume '{invalidVolumeDataRecord.Volume}'"))
                     {
-                        records[invalidVolumeDataRecord.RowId][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Trade Volume '{invalidVolumeDataRecord.Volume}'");
+                        records[invalidVolumeDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Volume].Add($"Invalid Trade Volume '{invalidVolumeDataRecord.Volume}'");
                     }
                 }
 
@@ -182,9 +182,9 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidPriceDataRecord in invalidPriceDataRecords)
                 {
-                    if(!records[invalidPriceDataRecord.RowId][_customerDataUploadValidationEntityEnums.Price].Contains($"Invalid Trade Price '{invalidPriceDataRecord.Price}'"))
+                    if(!records[invalidPriceDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Price].Contains($"Invalid Trade Price '{invalidPriceDataRecord.Price}'"))
                     {
-                        records[invalidPriceDataRecord.RowId][_customerDataUploadValidationEntityEnums.Price].Add($"Invalid Trade Price '{invalidPriceDataRecord.Price}'");
+                        records[invalidPriceDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Price].Add($"Invalid Trade Price '{invalidPriceDataRecord.Price}'");
                     }
                 }
 
@@ -194,9 +194,9 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 foreach(var invalidDirectionDataRecord in invalidDirectionDataRecords)
                 {
-                    if(!records[invalidDirectionDataRecord.RowId][_customerDataUploadValidationEntityEnums.Direction].Contains($"Invalid Trade Direction '{invalidDirectionDataRecord.Direction}'"))
+                    if(!records[invalidDirectionDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Direction].Contains($"Invalid Trade Direction '{invalidDirectionDataRecord.Direction}'"))
                     {
-                        records[invalidDirectionDataRecord.RowId][_customerDataUploadValidationEntityEnums.Direction].Add($"Invalid Trade Direction '{invalidDirectionDataRecord.Direction}'");
+                        records[invalidDirectionDataRecord.RowId.Value][_customerDataUploadValidationEntityEnums.Direction].Add($"Invalid Trade Direction '{invalidDirectionDataRecord.Direction}'");
                     }
                 }
 

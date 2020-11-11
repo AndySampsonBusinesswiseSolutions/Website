@@ -27,10 +27,10 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.Page.GUID _systemPageGUIDEnums = new Enums.System.Page.GUID();
-        private readonly Enums.Customer.Asset.Attribute _customerAssetAttributeEnums = new Enums.Customer.Asset.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.Page.GUID _systemPageGUIDEnums = new Enums.SystemSchema.Page.GUID();
+        private readonly Enums.CustomerSchema.Asset.Attribute _customerAssetAttributeEnums = new Enums.CustomerSchema.Asset.Attribute();
         private readonly Int64 dataAnalysisWebpageGetForecastAPIId;
         private FilterData filterData;
         private Dictionary<long, string> dateDictionary;
@@ -81,7 +81,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().DataAnalysisWebpageGetForecastAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().DataAnalysisWebpageGetForecastAPI, password);
             dataAnalysisWebpageGetForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DataAnalysisWebpageGetForecastAPI);
         }
 
@@ -136,7 +136,7 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 //get granularity code
                 granularityCode = _informationMethods.GetGranularityCodeByGranularityDisplayDescription(filterData.Granularity);
 
-                var informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
+                var informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
                 var granularityCodeGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(informationGranularityAttributeEnums.GranularityCode);
                 granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityCodeGranularityAttributeId, granularityCode);
 
@@ -150,14 +150,14 @@ namespace DataAnalysisWebpageGetForecast.api.Controllers
                 var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(filterData.CustomerGUID);
 
                 //get MeterIdentifierMeterAttributeId
-                var customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+                var customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier);
 
                 //get AssetNameAssetAttributeId
                 var assetNameAssetAttributeId = _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName);
 
                 //get SubMeterIdentifierSubMeterAttributeId
-                var customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+                var customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
                 var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(customerSubMeterAttributeEnums.SubMeterIdentifier);
 
                 var forecast = new Forecast();

@@ -26,11 +26,11 @@ namespace CommitPeriodicUsageData.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
         private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private readonly Enums.System.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.System.API.RequiredDataKey();
-        private readonly Enums.Information.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.Information.Granularity.Attribute();
-        private readonly Enums.System.Process.GUID _systemProcessGUIDEnums = new Enums.System.Process.GUID();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+        private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
+        private readonly Enums.SystemSchema.Process.GUID _systemProcessGUIDEnums = new Enums.SystemSchema.Process.GUID();
         private readonly Int64 commitPeriodicUsageDataAPIId;
         private long createdByUserId;
         private long sourceId;
@@ -49,7 +49,7 @@ namespace CommitPeriodicUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().CommitPeriodicUsageDataAPI, password);
+            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitPeriodicUsageDataAPI, password);
             commitPeriodicUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI);
         }
 
@@ -359,7 +359,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         private long GetMeterId(string mpxn)
         {
             //Get MeterIdentifierMeterAttributeId
-            var _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+            var _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
             var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
 
             //Get MeterId
@@ -369,7 +369,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         private long GetSubMeterId(string mpxn)
         {
             //Get SubMeterIdentifierSubMeterAttributeId
-            var _customerSubMeterAttributeEnums = new Enums.Customer.SubMeter.Attribute();
+            var _customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
             var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
 
             //Get SubMeterId

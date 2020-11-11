@@ -2,7 +2,7 @@ namespace enums
 {
     public partial class Enums
     {
-        public partial class Information
+        public partial class InformationSchema
         {
             public class Source
             {

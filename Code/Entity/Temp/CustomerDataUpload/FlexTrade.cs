@@ -16,8 +16,8 @@ namespace Entity
                     set { _ProcessQueueGUID = value; }
                 }
 
-                private int _RowId;
-                public int RowId
+                private int? _RowId;
+                public int? RowId
                 {
                     get { return _RowId; }
                     set { _RowId = value; }

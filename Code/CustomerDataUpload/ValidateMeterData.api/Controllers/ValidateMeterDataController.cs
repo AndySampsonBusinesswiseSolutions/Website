@@ -23,11 +23,11 @@ namespace ValidateMeterData.api.Controllers
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.System.API.Name _systemAPINameEnums = new Enums.System.API.Name();
-        private static readonly Enums.System.API.GUID _systemAPIGUIDEnums = new Enums.System.API.GUID();
-        private static readonly Enums.Customer.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.Customer.DataUploadValidation.SheetName();
-        private static readonly Enums.Customer.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.Customer.DataUploadValidation.Entity();
-        private static readonly Enums.Customer.Meter.Attribute _customerMeterAttributeEnums = new Enums.Customer.Meter.Attribute();
+        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
+        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+        private static readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
         private readonly Int64 validateMeterDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +38,7 @@ namespace ValidateMeterData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.System.API.Name().ValidateMeterDataAPI, password);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateMeterDataAPI, password);
             validateMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterDataAPI);
         }
 
@@ -113,7 +113,7 @@ namespace ValidateMeterData.api.Controllers
                         _customerDataUploadValidationEntityEnums.ImportExport,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterEntities.Select(me => me.RowId).Distinct().ToList(), columns);
+                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterEntities.Select(me => me.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
@@ -137,9 +137,9 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var row in invalidMPXNRows)
                 {
                     var meterEntity = meterEntities.First(me => me.RowId == row);
-                    if(!records[row][_customerDataUploadValidationEntityEnums.MPXN].Contains($"Invalid MPAN/MPRN '{meterEntity.MPXN}'"))
+                    if(!records[row.Value][_customerDataUploadValidationEntityEnums.MPXN].Contains($"Invalid MPAN/MPRN '{meterEntity.MPXN}'"))
                     {
-                        records[row][_customerDataUploadValidationEntityEnums.MPXN].Add($"Invalid MPAN/MPRN '{meterEntity.MPXN}'");
+                        records[row.Value][_customerDataUploadValidationEntityEnums.MPXN].Add($"Invalid MPAN/MPRN '{meterEntity.MPXN}'");
                     }
                 }
 
@@ -167,9 +167,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidGridSupplyPointEntity in invalidGridSupplyPointEntities)
                 {
-                    if(!records[invalidGridSupplyPointEntity.RowId][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Contains($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'"))
+                    if(!records[invalidGridSupplyPointEntity.RowId.Value][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Contains($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'"))
                     {
-                        records[invalidGridSupplyPointEntity.RowId][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Add($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'");
+                        records[invalidGridSupplyPointEntity.RowId.Value][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Add($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'");
                     }
                 }
 
@@ -179,9 +179,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidProfileClassEntity in invalidProfileClassEntities)
                 {
-                    if(!records[invalidProfileClassEntity.RowId][_customerDataUploadValidationEntityEnums.ProfileClass].Contains($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'"))
+                    if(!records[invalidProfileClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ProfileClass].Contains($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'"))
                     {
-                        records[invalidProfileClassEntity.RowId][_customerDataUploadValidationEntityEnums.ProfileClass].Add($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'");
+                        records[invalidProfileClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ProfileClass].Add($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'");
                     }
                 }
 
@@ -191,9 +191,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidMeterTimeswitchCodeEntity in invalidMeterTimeswitchCodeEntities)
                 {
-                    if(!records[invalidMeterTimeswitchCodeEntity.RowId][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Contains($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'"))
+                    if(!records[invalidMeterTimeswitchCodeEntity.RowId.Value][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Contains($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'"))
                     {
-                        records[invalidMeterTimeswitchCodeEntity.RowId][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Add($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'");
+                        records[invalidMeterTimeswitchCodeEntity.RowId.Value][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Add($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'");
                     }
                 }
 
@@ -203,9 +203,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidLineLossFactorClassEntity in invalidLineLossFactorClassEntities)
                 {
-                    if(!records[invalidLineLossFactorClassEntity.RowId][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Contains($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'"))
+                    if(!records[invalidLineLossFactorClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Contains($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'"))
                     {
-                        records[invalidLineLossFactorClassEntity.RowId][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Add($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'");
+                        records[invalidLineLossFactorClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Add($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'");
                     }
                 }
 
@@ -215,9 +215,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidCapacityEntity in invalidCapacityEntities)
                 {
-                    if(!records[invalidCapacityEntity.RowId][_customerDataUploadValidationEntityEnums.Capacity].Contains($"Invalid Capacity '{invalidCapacityEntity.Capacity}'"))
+                    if(!records[invalidCapacityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Capacity].Contains($"Invalid Capacity '{invalidCapacityEntity.Capacity}'"))
                     {
-                        records[invalidCapacityEntity.RowId][_customerDataUploadValidationEntityEnums.Capacity].Add($"Invalid Capacity '{invalidCapacityEntity.Capacity}'");
+                        records[invalidCapacityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Capacity].Add($"Invalid Capacity '{invalidCapacityEntity.Capacity}'");
                     }
                 }
 
@@ -241,9 +241,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidLocalDistributionZoneEntity in invalidLocalDistributionZoneEntities)
                 {
-                    if(!records[invalidLocalDistributionZoneEntity.RowId][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Contains($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'"))
+                    if(!records[invalidLocalDistributionZoneEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Contains($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'"))
                     {
-                        records[invalidLocalDistributionZoneEntity.RowId][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Add($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'");
+                        records[invalidLocalDistributionZoneEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Add($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'");
                     }
                 }
 
@@ -253,9 +253,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidStandardOfftakeQuantityEntity in invalidStandardOfftakeQuantityEntities)
                 {
-                    if(!records[invalidStandardOfftakeQuantityEntity.RowId][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Contains($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'"))
+                    if(!records[invalidStandardOfftakeQuantityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Contains($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'"))
                     {
-                        records[invalidStandardOfftakeQuantityEntity.RowId][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Add($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'");
+                        records[invalidStandardOfftakeQuantityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Add($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'");
                     }
                 }
 

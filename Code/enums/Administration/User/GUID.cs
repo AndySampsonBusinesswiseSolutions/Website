@@ -2,7 +2,7 @@ namespace enums
 {
     public partial class Enums
     {
-        public partial class Administration
+        public partial class AdministrationSchema
         {
             public partial class User
             {
