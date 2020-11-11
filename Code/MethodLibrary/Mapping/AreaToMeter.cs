@@ -25,6 +25,17 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
+            public long AreaToMeter_GetAreaToMeterIdByAreaIdAndMeterId(long areaId, long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.AreaToMeter_GetByAreaIdAndMeterId, 
+                    areaId, meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("AreaToMeterId"))
+                    .FirstOrDefault();
+            }
+
             public long AreaToMeter_GetAreaIdByMeterId(long meterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

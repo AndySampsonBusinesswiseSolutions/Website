@@ -25,6 +25,17 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().ToList();
             }
 
+            public long AssetToSubMeter_GetAssetToSubMeterIdByAssetIdAndSubMeterId(long assetId, long subMeterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.AssetToSubMeter_GetByAssetIdAndSubMeterId,
+                    assetId, subMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("AssetAndSubMeterId"))
+                    .FirstOrDefault();
+            }
+
             public long AssetToSubMeter_GetAssetIdBySubMeterId(long subMeterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

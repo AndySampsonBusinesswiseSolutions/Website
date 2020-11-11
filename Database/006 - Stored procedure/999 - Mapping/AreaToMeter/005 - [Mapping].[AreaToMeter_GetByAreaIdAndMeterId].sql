@@ -6,26 +6,27 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[AssetToSubMeter_GetByAssetId]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Mapping].[AreaToMeter_GetByAreaIdAndMeterId]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Mapping].[AssetToSubMeter_GetByAssetId] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Mapping].[AreaToMeter_GetByAreaIdAndMeterId] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
--- Create date: 2020-10-19
--- Description:	Get AssetToSubMeter info from [Mapping].[AssetToSubMeter] table by Asset Id
+-- Create date: 2020-11-11
+-- Description:	Get AreaToMeter info from [Mapping].[AreaToMeter] table by Area Id and Meter Id
 -- =============================================
 
-ALTER PROCEDURE [Mapping].[AssetToSubMeter_GetByAssetId]
-    @AssetId BIGINT,
+ALTER PROCEDURE [Mapping].[AreaToMeter_GetByAreaIdAndMeterId]
+    @AreaId BIGINT,
+    @MeterId BIGINT,
     @EffectiveDateTime DATETIME = NULL
 AS
 BEGIN
     -- =============================================
     --              CHANGE HISTORY
-    -- 2020-10-19 -> Andrew Sampson -> Initial development of script
+    -- 2020-11-11-> Andrew Sampson -> Initial development of script
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -35,18 +36,19 @@ BEGIN
     SET @EffectiveDateTime = ISNULL(@EffectiveDateTime, GETUTCDATE())
 
     SELECT 
-        AssetToSubMeterId,
+        AreaToMeterId,
         EffectiveFromDateTime,
         EffectiveToDateTime,
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        AssetId,
-        SubMeterId
+        AreaId,
+        MeterId
     FROM 
-        [Mapping].[AssetToSubMeter]
+        [Mapping].[AreaToMeter]
     WHERE
-        AssetId = @AssetId
+        AreaId = @AreaId
+        AND MeterId = @MeterId
         AND @EffectiveDateTime BETWEEN EffectiveFromDateTime AND EffectiveToDateTime
 END
 GO

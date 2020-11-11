@@ -24,6 +24,21 @@ namespace MethodLibrary
                 return Asset_GetAssetIdByAssetGUID(GUID);
             }
 
+            public long GetAssetId(string asset, long createdByUserId, long sourceId, long assetNameAssetAttributeId)
+            {
+                var assetId = Asset_GetAssetIdByAssetAttributeIdAndAssetDetailDescription(assetNameAssetAttributeId, asset);
+
+                if(assetId == 0)
+                {
+                    assetId = InsertNewAsset(createdByUserId, sourceId);
+
+                    //Insert into [Customer].[AssetDetail]
+                    AssetDetail_Insert(createdByUserId, sourceId, assetId, assetNameAssetAttributeId, asset);
+                }
+
+                return assetId;
+            }
+
             public long Asset_GetAssetIdByAssetAttributeIdAndAssetDetailDescription(long assetAttributeId, string assetDetailDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

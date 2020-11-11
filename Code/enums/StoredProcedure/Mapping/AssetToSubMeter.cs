@@ -10,6 +10,7 @@ namespace enums
                 public string AssetToSubMeter_GetList = "[Mapping].[AssetToSubMeter_GetList]";
                 public string AssetToSubMeter_GetBySubMeterId = "[Mapping].[AssetToSubMeter_GetBySubMeterId]";
                 public string AssetToSubMeter_GetByAssetId = "[Mapping].[AssetToSubMeter_GetByAssetId]";
+                public string AssetToSubMeter_GetByAssetIdAndSubMeterId = "[Mapping].[AssetToSubMeter_GetByAssetIdAndSubMeterId]";
             }
         }
     }

@@ -98,21 +98,13 @@ namespace CommitAreaToMeterData.api.Controllers
                 var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
                     .ToDictionary(m => m, m => customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
-                var existingAreaToMeterMappings = mappingMethods.AreaToMeter_GetLatestTuple();
+                var newAreaToMeterEntities = commitableMeterEntities.Where(cme => mappingMethods.AreaToMeter_GetAreaToMeterIdByAreaIdAndMeterId(areas[cme.Area], meters[cme.MPXN]) == 0)
+                    .GroupBy(cme => new { cme.Area, cme.MPXN }).ToList();
 
-                foreach(var meterEntity in commitableMeterEntities)
+                foreach(var meterEntity in newAreaToMeterEntities)
                 {
-                    //Get AreaId from [Information].[Area]
-                    var areaId = areas[meterEntity.Area];
-
-                    //Get MeterId from [Customer].[MeterDetail] by MPXN
-                    var meterId = meters[meterEntity.MPXN];
-
-                    if(!existingAreaToMeterMappings.Any(e => e.Item1 == areaId && e.Item2 == meterId))
-                    {
-                        //Insert into [Mapping].[AreaToMeter]
-                        mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areaId, meterId);
-                    }                    
+                    //Insert into [Mapping].[AreaToMeter]
+                    mappingMethods.AreaToMeter_Insert(createdByUserId, sourceId, areas[meterEntity.Key.Area], meters[meterEntity.Key.MPXN]);            
                 }
 
                 //Update Process Queue
