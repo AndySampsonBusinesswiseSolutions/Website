@@ -8,14 +8,10 @@ namespace enums
         {
             public partial class Supply
             {
-                public string LoadedUsage_CreateTable = "[Supply].[LoadedUsage_CreateTable]";
-                public string LoadedUsage_CreateTempTable = "[Supply].[LoadedUsage_CreateTempTable]";
-                public string LoadedUsage_CreateDeleteStoredProcedure = "[Supply].[LoadedUsage_CreateDeleteStoredProcedure]";
-                public string LoadedUsage_CreateInsertStoredProcedure = "[Supply].[LoadedUsage_CreateInsertStoredProcedure]";
-                public string LoadedUsage_CreateGetLatestStoredProcedure = "[Supply].[LoadedUsage_CreateGetLatestStoredProcedure]";
-                public string LoadedUsage_Delete = "[Supply.{0}{1}].[LoadedUsage_Delete]";
-                public string LoadedUsage_Insert = "[Supply.{0}{1}].[LoadedUsage_Insert]";
-                public string LoadedUsage_GetLatest = "[Supply.{0}{1}].[LoadedUsage_GetLatest]";
+                public string LoadedUsageHistory_CreateTable = "[Supply].[LoadedUsageHistory_CreateTable]";
+                public string LoadedUsageLatest_CreateTable = "[Supply].[LoadedUsageLatest_CreateTable]";
+                public string LoadedUsageLatest_CreateGetListStoredProcedure = "[Supply].[LoadedUsageLatest_CreateGetListStoredProcedure]";
+                public string LoadedUsageLatest_GetList = "[Supply.{0}{1}].[LoadedUsageLatest_GetList]";
 
                 public List<string> LoadedUsageStoredProcedureList => AddLoadedUsageStoredProcedures();
 
@@ -23,9 +19,7 @@ namespace enums
                 {
                     return new List<string>
                     {
-                        // LoadedUsage_Delete,
-                        // LoadedUsage_Insert,
-                        LoadedUsage_GetLatest,
+                        LoadedUsageLatest_GetList,
                     };
                 }
             }

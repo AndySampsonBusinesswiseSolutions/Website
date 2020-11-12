@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace MethodLibrary
 {
@@ -667,6 +668,18 @@ namespace MethodLibrary
         public bool IsValidFlexTradeDirection(string direction)
         {
             return direction.StartsWith('B') || direction.StartsWith('S');
+        }
+
+        public Dictionary<long, Dictionary<long, decimal>> DeserializePeriodicUsage(string periodicUsage)
+        {
+            var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(periodicUsage.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
+            return periodicUsageTempDictionary.ToDictionary(x => Convert.ToInt64(x.Key), x => JsonConvert.DeserializeObject<Dictionary<long, decimal>>(x.Value));
+        }
+
+        public Dictionary<string, Dictionary<string, string>> DeserializePeriodicUsageToStringDictionary(string periodicUsage)
+        {
+            var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(periodicUsage.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
+            return periodicUsageTempDictionary.ToDictionary(x => x.Key.Substring(0, 10), x => JsonConvert.DeserializeObject<Dictionary<string, string>>(x.Value));
         }
     }
 }

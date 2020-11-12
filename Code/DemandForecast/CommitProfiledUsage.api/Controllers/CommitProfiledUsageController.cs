@@ -68,7 +68,7 @@ namespace CommitProfiledUsage.api.Controllers
             {
                 //Insert into ProcessQueue
                 _systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
+                    processQueueGUID,
                     createdByUserId,
                     sourceId,
                     commitProfiledUsageAPIId);
@@ -84,48 +84,16 @@ namespace CommitProfiledUsage.api.Controllers
                 var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
 
                 //No profile found so empty dictionary returned
-                if(profileString == "{}")
+                if (profileString == "{}")
                 {
                     return;
                 }
 
-                var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(profileString.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
-                var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => Convert.ToInt64(x.Key), x => JsonConvert.DeserializeObject<Dictionary<long, decimal>>(x.Value));
+                var periodicUsageDictionary = new Methods().DeserializePeriodicUsage(profileString);
 
-                if(!periodicUsageDictionary.Any())
+                if (!periodicUsageDictionary.Any())
                 {
                     return;
-                }
-
-                //Create DataTable
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("LoadedUsageId", typeof(long));
-                dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
-                dataTable.Columns.Add("CreatedByUserId", typeof(long));
-                dataTable.Columns.Add("SourceId", typeof(long));
-                dataTable.Columns.Add("DateId", typeof(long));
-                dataTable.Columns.Add("TimePeriodId", typeof(long));
-                dataTable.Columns.Add("UsageTypeId", typeof(long));
-                dataTable.Columns.Add("Usage", typeof(decimal));
-
-                //Set default values
-                dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
-                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-                dataTable.Columns["SourceId"].DefaultValue = sourceId;
-                dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(_informationUsageTypeEnums.Profile);
-
-                foreach(var periodicUsage in periodicUsageDictionary)
-                {
-                    var timePeriodUsage = periodicUsage.Value;
-
-                    foreach (var timePeriod in timePeriodUsage)
-                    {
-                        var dataRow = dataTable.NewRow();
-                        dataRow["DateId"] = periodicUsage.Key;
-                        dataRow["TimePeriodId"] = timePeriod.Key;
-                        dataRow["Usage"] = timePeriod.Value;
-                        dataTable.Rows.Add(dataRow);
-                    }
                 }
 
                 //Get MeterType
@@ -134,20 +102,14 @@ namespace CommitProfiledUsage.api.Controllers
                 //Get meterId
                 var meterId = GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
 
-                //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
-                var supplyMethods = new Methods.Supply();
-                supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
-
-                //End date existing Periodic Usage
-                // supplyMethods.LoadedUsage_Delete(meterType, meterId);
-
-                //Insert new Periodic Usage into LoadedUsage table
-                // supplyMethods.LoadedUsage_Insert(meterType, meterId, processQueueGUID);
+                //Insert new Periodic Usage into LoadedUsage tables
+                var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(_informationUsageTypeEnums.Profile);
+                new Methods.Supply().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitProfiledUsageAPIId, false, null);
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 

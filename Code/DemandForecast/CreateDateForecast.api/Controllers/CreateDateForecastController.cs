@@ -162,7 +162,7 @@ namespace CreateDateForecast.api.Controllers
             {
                 forecastDictionary[futureDateId] = latestLoadedUsage
                     .Where(u => u.Item1 == futureDateToUsageDateDictionary[futureDateId])
-                    .Sum(u => u.Item4);
+                    .Sum(u => u.Item3);
             }
         }
     }

@@ -125,40 +125,11 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
 
                 //Get profile from Profiling API
                 var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
-                var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(profileString.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
-                var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => Convert.ToInt64(x.Key), x => JsonConvert.DeserializeObject<Dictionary<long, decimal>>(x.Value));
+                var periodicUsageDictionary = new Methods().DeserializePeriodicUsage(profileString);
 
-                //Create DataTable
-                var dataTable = new DataTable();
-                dataTable.Columns.Add("LoadedUsageId", typeof(long));
-                dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
-                dataTable.Columns.Add("CreatedByUserId", typeof(long));
-                dataTable.Columns.Add("SourceId", typeof(long));
-                dataTable.Columns.Add("DateId", typeof(long));
-                dataTable.Columns.Add("TimePeriodId", typeof(long));
-                dataTable.Columns.Add("UsageTypeId", typeof(long));
-                dataTable.Columns.Add("Usage", typeof(decimal));
-
-                //Set default values
-                dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
-                dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-                dataTable.Columns["SourceId"].DefaultValue = sourceId;
-                dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription("Customer Estimated");
-
-                foreach(var date in periodicUsageDictionary)
-                {
-                    foreach(var timePeriod in date.Value)
-                    {
-                        var dataRow = dataTable.NewRow();
-                        dataRow["DateId"] = date.Key;
-                        dataRow["TimePeriodId"] = timePeriod.Key;
-                        dataRow["Usage"] = timePeriod.Value;
-                        dataTable.Rows.Add(dataRow);
-                    }
-                }   
-
-                //Bulk Insert new Periodic Usage into LoadedUsage_Temp table
-                _supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
+                //Insert new Periodic Usage into LoadedUsage tables
+                var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(new Enums.InformationSchema.UsageType().CustomerEstimated);
+                new Methods.Supply().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
                 //Create new ProcessQueueGUID
                 var newProcessQueueGUID = Guid.NewGuid().ToString();

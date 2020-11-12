@@ -22,8 +22,8 @@ namespace MethodLibrary
                         ForecastUsageGranularityHistory_CreateTable(meterId, granularityId, meterType);
                     }
 
-                    ForecastUsageGranularityHistory_CreateGetLatestStoredProcedure(meterId, granularityId, meterType);
-                    ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(meterId, granularityId, meterType);
+                    // ForecastUsageGranularityHistory_CreateGetLatestStoredProcedure(meterId, granularityId, meterType);
+                    // ForecastUsageGranularityHistory_GrantExecuteToStoredProcedures(meterId, granularityId, meterType);
                 }
             }
 

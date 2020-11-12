@@ -5,19 +5,19 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[LoadedUsage_CreateGetLatestStoredProcedure]'))
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = 'P' AND OBJECT_ID = OBJECT_ID('[Supply].[LoadedUsageLatest_CreateGetListStoredProcedure]'))
     BEGIN
-        EXEC('CREATE PROCEDURE [Supply].[LoadedUsage_CreateGetLatestStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
+        EXEC('CREATE PROCEDURE [Supply].[LoadedUsageLatest_CreateGetListStoredProcedure] AS BEGIN SET NOCOUNT ON; END')
     END
 GO
 
 -- =============================================
 -- Author:		Andrew Sampson
 -- Create date: 2020-08-31
--- Description:	Create new LoadedUsage GetLatest Stored Procedure for MeterId
+-- Description:	Create new LoadedUsageLatest GetList Stored Procedure for MeterId
 -- =============================================
 
-ALTER PROCEDURE [Supply].[LoadedUsage_CreateGetLatestStoredProcedure]
+ALTER PROCEDURE [Supply].[LoadedUsageLatest_CreateGetListStoredProcedure]
     @MeterId BIGINT,
     @MeterType VARCHAR(255)
 AS
@@ -25,6 +25,7 @@ BEGIN
     -- =============================================
     --              CHANGE HISTORY
     -- 2020-08-31 -> Andrew Sampson -> Initial development of script
+    -- 2020-11-11 -> Andrew Sampson -> Updated to use new LoadedUsageLatest table
     -- =============================================
 
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -37,9 +38,9 @@ BEGIN
     DECLARE @SQL NVARCHAR(MAX) = N'
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
-    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[' + @SchemaName +'].[LoadedUsage_GetLatest]''))
+    IF NOT EXISTS(SELECT TOP 1 1 FROM sys.objects WHERE type = ''P'' AND OBJECT_ID = OBJECT_ID(''[' + @SchemaName +'].[LoadedUsageLatest_GetList]''))
     BEGIN
-        EXEC(''CREATE PROCEDURE [' + @SchemaName +'].[LoadedUsage_GetLatest] AS BEGIN SET NOCOUNT ON; END'')
+        EXEC(''CREATE PROCEDURE [' + @SchemaName +'].[LoadedUsageLatest_GetList] AS BEGIN SET NOCOUNT ON; END'')
     END'
 
 	DECLARE @MetaSQL NVARCHAR(MAX) = '
@@ -53,10 +54,10 @@ BEGIN
 	-- =============================================
     -- Author:		System Generated
     -- Create date: ' + @TodaysDate + '
-    -- Description:	GetLatest usage from [' + @SchemaName +'].[LoadedUsage] table
+    -- Description:	Get usage from [' + @SchemaName +'].[LoadedUsageLatest] table
     -- =============================================
 
-    ALTER PROCEDURE [' + @SchemaName +'].[LoadedUsage_GetLatest]
+    ALTER PROCEDURE [' + @SchemaName +'].[LoadedUsageLatest_GetList]
     AS
     BEGIN
         -- =============================================
@@ -71,31 +72,9 @@ BEGIN
         SELECT
             DateId,
             TimePeriodId,
-            MAX(LoadedUsageId) AS LoadedUsageId
-		INTO
-			#Latest
+            Usage
         FROM
-            [' + @SchemaName +'].[LoadedUsage]
-        GROUP BY
-            DateId,
-            TimePeriodId
-
-        SELECT
-            LoadedUsage.LoadedUsageId,
-            LoadedUsage.CreatedDateTime,
-            LoadedUsage.CreatedByUserId,
-            LoadedUsage.SourceId,
-            LoadedUsage.DateId,
-            LoadedUsage.TimePeriodId,
-            LoadedUsage.UsageTypeId,
-            LoadedUsage.Usage
-        FROM
-            [' + @SchemaName +'].[LoadedUsage]
-        INNER JOIN
-            #Latest Latest
-            ON Latest.LoadedUsageId = LoadedUsage.LoadedUsageId
-
-		DROP TABLE #Latest
+            [' + @SchemaName +'].[LoadedUsageLatest]
     END'
 
     SET @MetaSQL = '

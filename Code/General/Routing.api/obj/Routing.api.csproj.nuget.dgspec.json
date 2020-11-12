@@ -13,9 +13,6 @@
         "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
         "outputPath": "C:\\wamp64\\www\\Website\\Code\\databaseInteraction\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
@@ -80,7 +77,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -93,9 +90,6 @@
         "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
         "outputPath": "C:\\wamp64\\www\\Website\\Code\\Entity\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
@@ -133,7 +127,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -146,9 +140,6 @@
         "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
         "outputPath": "C:\\wamp64\\www\\Website\\Code\\enums\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
@@ -205,7 +196,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -218,9 +209,6 @@
         "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
         "outputPath": "C:\\wamp64\\www\\Website\\Code\\General\\Routing.api\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
@@ -286,7 +274,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -299,9 +287,6 @@
         "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
         "outputPath": "C:\\wamp64\\www\\Website\\Code\\MethodLibrary\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
           "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
@@ -383,7 +368,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

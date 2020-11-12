@@ -13,7 +13,7 @@ namespace MethodLibrary
             {
                 public class MeterUsage
                 {
-                    public List<DataRow> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
+                    public List<DataRow> MeterUsage_GetDataRowsByProcessQueueGUID(string processQueueGUID)
                     {
                         var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                             _storedProcedureTempCustomerDataUploadEnums.MeterUsage_GetByProcessQueueGUID, 
@@ -22,9 +22,14 @@ namespace MethodLibrary
                         return new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
                     }
 
-                    public List<Entity.Temp.CustomerDataUpload.MeterUsage> MeterUsage_GetMeterUsageEntityListByProcessQueueGUID(string processQueueGUID)
+                    public List<Entity.Temp.CustomerDataUpload.MeterUsage> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
                     {
-                        return MeterUsage_GetByProcessQueueGUID(processQueueGUID).Select(dataRow => new Entity.Temp.CustomerDataUpload.MeterUsage(dataRow)).ToList();
+                        var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                            _storedProcedureTempCustomerDataUploadEnums.MeterUsage_GetByProcessQueueGUID, 
+                            processQueueGUID);
+
+                        var dataRows = new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                        return dataRows.Select(d => new Entity.Temp.CustomerDataUpload.MeterUsage(d)).ToList();
                     }
 
                     public void MeterUsage_DeleteByProcessQueueGUID(string processQueueGUID)

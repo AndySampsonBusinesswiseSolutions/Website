@@ -240,7 +240,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
 
                     if (usageForTimePeriodList.Any())
                     {
-                        _supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, _supplyMethods.GetUsageByUsageType(usageForTimePeriodList));
+                        _supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, usageForTimePeriodList.First().Item3);
                     }
                     else
                     {
@@ -250,7 +250,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
                         usageForTimePeriodList = usageForDateList.Where(u => u.Item2 == mappedTimePeriodDictionary.Key).ToList();
 
                         //Get usage based on usage type priority
-                        var mappedUsage = _supplyMethods.GetUsageByUsageType(usageForTimePeriodList);
+                        var mappedUsage = usageForTimePeriodList.First().Item3;
                         var mappedTimePeriodIdsWithUsageList = mappedTimePeriodDictionary.Value.Where(v => usageForDateList.Any(u => u.Item2 == v)).ToList();
                         var missingTimePeriodIds = mappedTimePeriodDictionary.Value.Except(mappedTimePeriodIdsWithUsageList);
 
@@ -259,7 +259,7 @@ namespace CreateFiveMinuteForecast.api.Controllers
                             //Get usage for time period
                             usageForTimePeriodList = usageForDateList.Where(u => u.Item2 == mappedtimePeriodId).ToList();
 
-                            _supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, _supplyMethods.GetUsageByUsageType(usageForTimePeriodList));
+                            _supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, usageForTimePeriodList.First().Item3);
                         }
 
                         if (missingTimePeriodIds.Any())

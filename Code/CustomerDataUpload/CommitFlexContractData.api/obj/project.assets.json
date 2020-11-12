@@ -8253,8 +8253,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\andy.sampson\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\andy.sampson\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
@@ -8265,9 +8264,6 @@
       "packagesPath": "C:\\Users\\andy.sampson\\.nuget\\packages\\",
       "outputPath": "C:\\wamp64\\www\\Website\\Code\\CustomerDataUpload\\CommitFlexContractData.api\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
         "C:\\Users\\andy.sampson\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
@@ -8321,7 +8317,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

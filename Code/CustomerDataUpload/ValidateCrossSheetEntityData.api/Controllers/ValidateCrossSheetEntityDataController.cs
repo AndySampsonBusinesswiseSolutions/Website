@@ -91,7 +91,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                     {"Site", () => new Methods.Temp.CustomerDataUpload.Site().Site_GetDataRowsByProcessQueueGUID(processQueueGUID)},
                     {"Meter", () => new Methods.Temp.CustomerDataUpload.Meter().Meter_GetDataRowsByProcessQueueGUID(processQueueGUID)},
                     {"MeterExemption", () => new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"MeterUsage", () => new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(processQueueGUID)},
+                    {"MeterUsage", () => new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetDataRowsByProcessQueueGUID(processQueueGUID)},
                     {"SubMeter", () => new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetDataRowsByProcessQueueGUID(processQueueGUID)},
                     {"SubMeterUsage", () => new Methods.Temp.CustomerDataUpload.SubMeterUsage().SubMeterUsage_GetDataRowsByProcessQueueGUID(processQueueGUID)},
                     {"FixedContract", () => new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_GetDataRowsByProcessQueueGUID(processQueueGUID)},

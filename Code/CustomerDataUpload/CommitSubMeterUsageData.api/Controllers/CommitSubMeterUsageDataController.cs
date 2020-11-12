@@ -87,19 +87,34 @@ namespace CommitSubMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var tempCustomerDataUploadSubMeterUsageMethods = new Methods.Temp.CustomerDataUpload.SubMeterUsage();
-                var subMeterUsageEntities = tempCustomerDataUploadSubMeterUsageMethods.SubMeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var subMeterUsageCommitableEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(subMeterUsageEntities);
+                var subMeterEntities = new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSubMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(subMeterEntities);
 
-                if(!subMeterUsageCommitableEntities.Any())
+                //Get data from [Temp.CustomerDataUpload].[SubMeterUsage] where CanCommit = 1
+                var subMeterUsageEntities =  new Methods.Temp.CustomerDataUpload.SubMeterUsage().SubMeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSubMeterUsageEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(subMeterUsageEntities);
+
+                if(!commitableSubMeterEntities.Any() && !commitableSubMeterUsageEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
                     return;
                 }
 
-                //Get list of subMeterIdentifiers from datasets
-                var subMeterIdentifierList = subMeterUsageCommitableEntities.Select(smue => smue.SubMeterIdentifier).Distinct().ToList();
+                var customerMethods = new Methods.Customer();
+
+                //Get list of subMeterIdentifiers from datasets where SubMeter Id is not 0
+                var subMeterIdentifierSubMeterAttributeId = customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(new Enums.CustomerSchema.SubMeter.Attribute().SubMeterIdentifier);
+                var subMeterIdentifierList = commitableSubMeterEntities.Select(smue => smue.SubMeterIdentifier)
+                    .Union(commitableSubMeterUsageEntities.Select(smue => smue.SubMeterIdentifier)).Distinct()
+                    .Where(m => customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, m) > 0);
+
+                if (!subMeterIdentifierList.Any())
+                {
+                    //Nothing to work so update Process Queue and exit
+                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterUsageDataAPIId, false, null);
+                    return;
+                }
 
                 //Get Routing.API URL
                 var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
@@ -136,7 +151,7 @@ namespace CommitSubMeterUsageData.api.Controllers
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.SubMeterIdentifier, subMeterIdentifier);
 
                     //Get periodic usage
-                    var periodicUsageEntities = subMeterUsageCommitableEntities.Where(smue => smue.SubMeterIdentifier == subMeterIdentifier).ToList();
+                    var periodicUsageEntities = commitableSubMeterUsageEntities.Where(smue => smue.SubMeterIdentifier == subMeterIdentifier).ToList();
 
                     //Convert to dictionary
                     var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();

@@ -115,8 +115,7 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                 //Get Periodic Usage
                 var periodicUsageJson = jsonObject[_systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString();
-                var periodicUsageTempDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(periodicUsageJson.Replace(":{", ":\'{").Replace("},", "}\',").Replace("}}", "}\'}"));
-                var periodicUsageDictionary = periodicUsageTempDictionary.ToDictionary(x => x.Key.Substring(0, 10), x => JsonConvert.DeserializeObject<Dictionary<string, string>>(x.Value));
+                var periodicUsageDictionary = new Methods().DeserializePeriodicUsageToStringDictionary(periodicUsageJson);
 
                 //Insert periodic usage
                 var latestPeriodicUsageList = InsertPeriodicUsage(periodicUsageDictionary);
@@ -283,9 +282,9 @@ namespace CommitPeriodicUsageData.api.Controllers
                 .Distinct().ToList();
         }
 
-        private List<DataRow> InsertPeriodicUsage(Dictionary<string, Dictionary<string, string>> periodicUsageDictionary)
+        private List<DataRow> InsertPeriodicUsage(Dictionary<string, Dictionary<string, string>> periodicUsageStringDictionary)
         {
-            var dates = periodicUsageDictionary.Select(u => u.Key)
+            var dates = periodicUsageStringDictionary.Select(u => u.Key)
                 .Distinct()
                 .Select(d => _methods.GetDateTimeSqlParameterFromDateTimeString(d).Substring(0, 10))
                 .ToDictionary(d => d, d => dateDictionary[d]);  
@@ -296,38 +295,19 @@ namespace CommitPeriodicUsageData.api.Controllers
             //Get TimePeriod List
             var timePeriodIdListByEndTime = GetTimePeriodListByEndTime();
 
-            var timePeriods = periodicUsageDictionary.SelectMany(u => u.Value)
+            var timePeriods = periodicUsageStringDictionary.SelectMany(u => u.Value)
                     .Select(d => d.Key)
                     .Distinct()
                     .ToDictionary(t => t, t => timePeriodIdListByEndTime[t].Intersect(granularityToTimePeriodTimePeriodIdListByGranularityId).FirstOrDefault());
 
-            //Create DataTable
-            var dataTable = new DataTable();
-            dataTable.Columns.Add("LoadedUsageId", typeof(long));
-            dataTable.Columns.Add("CreatedDateTime", typeof(DateTime));
-            dataTable.Columns.Add("CreatedByUserId", typeof(long));
-            dataTable.Columns.Add("SourceId", typeof(long));
-            dataTable.Columns.Add("DateId", typeof(long));
-            dataTable.Columns.Add("TimePeriodId", typeof(long));
-            dataTable.Columns.Add("UsageTypeId", typeof(long));
-            dataTable.Columns.Add("Usage", typeof(decimal));
+            var periodicUsageDictionary = periodicUsageStringDictionary.ToDictionary(
+                d => dates[d.Key],
+                d => d.Value.Where(t => !string.IsNullOrWhiteSpace(t.Value)).ToDictionary(t => timePeriods[t.Key], t => Convert.ToDecimal(t.Value))
+            );
 
-            //Set default values
-            dataTable.Columns["CreatedDateTime"].DefaultValue = DateTime.UtcNow;
-            dataTable.Columns["CreatedByUserId"].DefaultValue = createdByUserId;
-            dataTable.Columns["SourceId"].DefaultValue = sourceId;
-            dataTable.Columns["UsageTypeId"].DefaultValue = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
-
-            //Create datarows
-            var dataRows = AddDataRows(periodicUsageDictionary, dates, timePeriods, dataTable);
-
-            foreach (var dataRow in dataRows)
-            {
-                dataTable.Rows.Add(dataRow);
-            }
-
-            //Bulk Insert new Periodic Usage into LoadedUsage table
-            _supplyMethods.LoadedUsage_Insert(meterType, meterId, dataTable);
+            //Insert new Periodic Usage into LoadedUsage tables
+            var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
+            _supplyMethods.InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
             //Return latest periodic usage
             return _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);

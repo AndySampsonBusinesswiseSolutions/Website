@@ -92,20 +92,23 @@ namespace CommitMeterUsageData.api.Controllers
                 var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
-                var meterUsageDataRows = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var meterUsageCommitableDataRows = _tempCustomerDataUploadMethods.GetCommitableRows(meterUsageDataRows);
+                var meterUsageEntities = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterUsageEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterUsageEntities);
 
-                if (!commitableMeterEntities.Any() && !meterUsageCommitableDataRows.Any())
+                if (!commitableMeterEntities.Any() && !commitableMeterUsageEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
                     _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterUsageDataAPIId, false, null);
                     return;
                 }
 
-                //Get list of mpxns from datasets
+                var customerMethods = new Methods.Customer();
+
+                //Get list of mpxns from datasets where Meter Id is not 0
+                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 var mpxnList = commitableMeterEntities.Select(cme => cme.MPXN)
-                    .Union(meterUsageCommitableDataRows.Select(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN)))
-                    .Distinct();
+                    .Union(commitableMeterUsageEntities.Select(cmue => cmue.MPXN)).Distinct()
+                    .Where(m => customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m) > 0);
 
                 if (!mpxnList.Any())
                 {
@@ -157,7 +160,7 @@ namespace CommitMeterUsageData.api.Controllers
                     //Add EstimatedAnnualUsage to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage, estimatedAnnualUsage);
 
-                    var hasPeriodicUsage = meterUsageCommitableDataRows.Any(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn);
+                    var hasPeriodicUsage = commitableMeterUsageEntities.Any(cmue => cmue.MPXN == mpxn);
 
                     //Add HasPeriodicUsage to newJsonObject
                     newJsonObject.Add(_systemAPIRequiredDataKeyEnums.HasPeriodicUsage, hasPeriodicUsage);
@@ -180,31 +183,22 @@ namespace CommitMeterUsageData.api.Controllers
                         _systemMethods.SetProcessGUIDInJObject(newJsonObject, _systemProcessGUIDEnums.CommitPeriodicUsage);
 
                         //Get periodic usage
-                        var periodicUsageDataRows = meterUsageCommitableDataRows.Where(r => r.Field<string>(_customerDataUploadValidationEntityEnums.MPXN) == mpxn);
-
-                        //Convert to Tuple
-                        var periodicUsageTupleList = new List<Tuple<string, string, string>>();
-
-                        foreach (DataRow r in periodicUsageDataRows)
-                        {
-                            var tup = Tuple.Create((string)r["Date"], (string)r["TimePeriod"], (string)r["Value"]);
-                            periodicUsageTupleList.Add(tup);
-                        }
+                        var periodicUsageEntities = commitableMeterUsageEntities.Where(cmue => cmue.MPXN == mpxn);
 
                         //Convert to dictionary
                         var periodicUsageDictionary = new Dictionary<string, Dictionary<string, string>>();
-                        foreach (var periodicUsageTuple in periodicUsageTupleList)
+                        foreach (var periodicUsage in periodicUsageEntities)
                         {
-                            if (!periodicUsageDictionary.ContainsKey(periodicUsageTuple.Item1))
+                            if (!periodicUsageDictionary.ContainsKey(periodicUsage.Date))
                             {
-                                periodicUsageDictionary.Add(periodicUsageTuple.Item1, new Dictionary<string, string>());
+                                periodicUsageDictionary.Add(periodicUsage.Date, new Dictionary<string, string>());
                             }
 
-                            var date = periodicUsageDictionary[periodicUsageTuple.Item1];
+                            var date = periodicUsageDictionary[periodicUsage.Date];
 
-                            if (!date.ContainsKey(periodicUsageTuple.Item2))
+                            if (!date.ContainsKey(periodicUsage.TimePeriod))
                             {
-                                date.Add(periodicUsageTuple.Item2, periodicUsageTuple.Item3);
+                                date.Add(periodicUsage.TimePeriod, periodicUsage.Value);
                             }
                         }
 

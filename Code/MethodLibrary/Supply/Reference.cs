@@ -186,13 +186,6 @@ namespace MethodLibrary
                 dataTable.Rows.Add(dataRow);
             }
 
-            public decimal GetUsageByUsageType(List<Tuple<long, long, long, decimal>> usageForTimePeriodList)
-            {
-                var usageTypePriority = new Dictionary<long, long>{{1, 3}, {2, 2}, {3, 4}, {4, 1}}; //TODO: Resolve
-                return usageForTimePeriodList.ToDictionary(u => usageTypePriority.First(ut => ut.Value == u.Item3).Key, u => u.Item4)
-                    .OrderBy(u => u.Key).First().Value;
-            }
-
             public void SetForecastValue(Dictionary<long, decimal> forecast, Dictionary<long, bool> forecastFound, long timePeriodId, decimal usage)
             {
                 //Add usage to forecast

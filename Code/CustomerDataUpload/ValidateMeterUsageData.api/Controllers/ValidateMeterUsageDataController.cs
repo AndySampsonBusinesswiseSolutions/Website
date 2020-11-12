@@ -83,7 +83,7 @@ namespace ValidateMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] table
-                var meterUsageEntities = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetMeterUsageEntityListByProcessQueueGUID(processQueueGUID);
+                var meterUsageEntities = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterUsageEntities.Any())
                 {
