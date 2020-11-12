@@ -98,7 +98,7 @@ namespace CommitMeterToProfileClassData.api.Controllers
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var profileClassCodeProfileClassAttributeId = _informationMethods.ProfileClassAttribute_GetProfileClassAttributeIdByProfileClassAttributeDescription(_informationProfileClassAttributeEnums.ProfileClassCode);
 
-                var profileClasses = commitableMeterEntities.Select(cme => cme.ProfileClass).Distinct()
+                var profileClasses = commitableMeterEntities.Where(cme => !string.IsNullOrWhiteSpace(cme.ProfileClass)).Select(cme => cme.ProfileClass).Distinct()
                     .ToDictionary(pc => pc, pc => GetProfileClassId(pc, profileClassCodeProfileClassAttributeId));
                 
                 var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
@@ -106,6 +106,11 @@ namespace CommitMeterToProfileClassData.api.Controllers
 
                 foreach(var meterEntity in commitableMeterEntities)
                 {
+                    if(string.IsNullOrWhiteSpace(meterEntity.ProfileClass))
+                    {
+                        continue;
+                    }
+
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var meterId = meters[meterEntity.MPXN];
                     

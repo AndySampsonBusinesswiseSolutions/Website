@@ -55,21 +55,21 @@ namespace Entity
                 public string ProfileClass
                 {
                     get { return _ProfileClass; }
-                    set { _ProfileClass = value.PadLeft(2, '0'); }
+                    set { _ProfileClass = string.IsNullOrWhiteSpace(value) ? string.Empty : value.PadLeft(2, '0'); }
                 }
 
                 private string _MeterTimeswitchCode;
                 public string MeterTimeswitchCode
                 {
                     get { return _MeterTimeswitchCode; }
-                    set { _MeterTimeswitchCode = value.PadLeft(3, '0'); }
+                    set { _MeterTimeswitchCode = string.IsNullOrWhiteSpace(value) ? string.Empty : value.PadLeft(3, '0'); }
                 }
 
                 private string _LineLossFactorClass;
                 public string LineLossFactorClass
                 {
                     get { return _LineLossFactorClass; }
-                    set { _LineLossFactorClass = value.PadLeft(3, '0'); }
+                    set { _LineLossFactorClass = string.IsNullOrWhiteSpace(value) ? string.Empty : value.PadLeft(3, '0'); }
                 }
 
                 private string _Capacity;

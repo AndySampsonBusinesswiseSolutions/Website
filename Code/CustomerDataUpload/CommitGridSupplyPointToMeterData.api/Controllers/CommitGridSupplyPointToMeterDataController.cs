@@ -98,7 +98,7 @@ namespace CommitGridSupplyPointToMeterData.api.Controllers
                 var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
                 var gridSupplyPointGroupIdGridSupplyPointAttributeId = _informationMethods.GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(_informationGridSupplyPointAttributeEnums.GridSupplyPointGroupId);
 
-                var gridSupplyPoints = commitableMeterEntities.Select(cme => cme.GridSupplyPoint).Distinct()
+                var gridSupplyPoints = commitableMeterEntities.Where(cme => !string.IsNullOrWhiteSpace(cme.GridSupplyPoint)).Select(cme => cme.GridSupplyPoint).Distinct()
                     .ToDictionary(gsp => gsp, gsp => GetGridSupplyPointId(gsp, createdByUserId, sourceId, gridSupplyPointGroupIdGridSupplyPointAttributeId));
                 
                 var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
@@ -106,6 +106,11 @@ namespace CommitGridSupplyPointToMeterData.api.Controllers
 
                 foreach(var meterEntity in commitableMeterEntities)
                 {
+                    if(string.IsNullOrWhiteSpace(meterEntity.GridSupplyPoint))
+                    {
+                        continue;
+                    }
+                    
                     //Get MeterId from [Customer].[MeterDetail] by MPXN
                     var meterId = meters[meterEntity.MPXN];
 
