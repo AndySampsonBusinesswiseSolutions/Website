@@ -7,8 +7,6 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
-using System.Collections.Generic;
-using System.Data;
 using Microsoft.Extensions.Configuration;
 
 namespace CommitEstimatedAnnualUsage.api.Controllers
@@ -19,17 +17,6 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitEstimatedAnnualUsageController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.SystemSchema.Process.GUID _systemProcessGUIDEnums = new Enums.SystemSchema.Process.GUID();
         private readonly Int64 commitEstimatedAnnualUsageAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -41,7 +28,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitEstimatedAnnualUsageAPI, password);
-            commitEstimatedAnnualUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+            commitEstimatedAnnualUsageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitEstimatedAnnualUsageAPI);
         }
 
         [HttpPost]
@@ -49,7 +36,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -58,69 +45,76 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         [Route("CommitEstimatedAnnualUsage/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+            var informationMethods = new Methods.Information();
+            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     commitEstimatedAnnualUsageAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI, commitEstimatedAnnualUsageAPIId, hostEnvironment, jsonObject))
+                if(!systemAPIMethods.PrerequisiteAPIsAreSuccessful(systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI, commitEstimatedAnnualUsageAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId);
+
+                var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+                var supplyMethods = new Methods.Supply();
+                var customerMethods = new Methods.Customer();
 
                 //Get mpxn
-                var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
+                var mpxn = jsonObject[systemAPIRequiredDataKeyEnums.MPXN].ToString();
 
                 //Get MeterIdentifierMeterAttributeId
-                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
 
                 //Get MeterId
-                var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
+                var meterId = customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
 
                 //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                var meterType = jsonObject[systemAPIRequiredDataKeyEnums.MeterType].ToString();
 
                 //Get Estimated Annual Usage
-                var estimatedAnnualUsage = Convert.ToDecimal(jsonObject[_systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage]);
+                var estimatedAnnualUsage = Convert.ToDecimal(jsonObject[systemAPIRequiredDataKeyEnums.EstimatedAnnualUsage]);
 
                 //End date existing Estimated Annual Usage
-                _supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);
+                supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);
 
                 //Insert new Estimated Annual Usage
-                _supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
+                supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
 
                 //Get HasPeriodicUsage
-                var hasPeriodicUsage = Convert.ToBoolean(jsonObject[_systemAPIRequiredDataKeyEnums.HasPeriodicUsage]);
+                var hasPeriodicUsage = Convert.ToBoolean(jsonObject[systemAPIRequiredDataKeyEnums.HasPeriodicUsage]);
 
                 //Since the entity has periodic usage, don't bother creating a profiled version of the estimated annual usage
                 if(hasPeriodicUsage)
                 {
                     //Update Process Queue
-                   _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
+                   systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
 
                     return;
                 }
 
                 //Launch GetProfile process and wait for response
-                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
-                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetProfileAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get profile from Profiling API
@@ -128,34 +122,34 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 var periodicUsageDictionary = new Methods().DeserializePeriodicUsage(profileString);
 
                 //Insert new Periodic Usage into LoadedUsage tables
-                var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(new Enums.InformationSchema.UsageType().CustomerEstimated);
+                var usageTypeId = informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(new Enums.InformationSchema.UsageType().CustomerEstimated);
                 new Methods.Supply().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
                 //Create new ProcessQueueGUID
                 var newProcessQueueGUID = Guid.NewGuid().ToString();
 
                 //Map current ProcessQueueGUID to new ProcessQueueGUID
-                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
-                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+                systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
 
                 //Update Process GUID to Create Forecast Usage Process GUID
-                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CreateForecastUsage);
+                systemMethods.SetProcessGUIDInJObject(jsonObject, new Enums.SystemSchema.Process.GUID().CreateForecastUsage);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
+                var routingAPIId = systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                systemAPIMethods.PostAsJsonAsync(routingAPIId, systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

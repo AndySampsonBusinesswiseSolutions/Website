@@ -16,6 +16,17 @@ namespace MethodLibrary
                     createdByUserId, sourceId, subAreaId, subMeterId);
             }
 
+            public long SubAreaToSubMeter_GetSubAreaToSubMeterIdBySubAreaIdAndSubMeterId(long subAreaId, long subMeterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.SubAreaToSubMeter_GetBySubAreaIdAndSubMeterId,
+                    subAreaId, subMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("SubAreaToSubMeterId"))
+                    .FirstOrDefault();
+            }
+
             public long SubAreaToSubMeter_GetSubAreaIdBySubMeterId(long subMeterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

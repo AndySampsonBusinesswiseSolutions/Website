@@ -7,7 +7,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.Extensions.Configuration;
 
 namespace CommitSiteData.api.Controllers
@@ -18,15 +17,6 @@ namespace CommitSiteData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitSiteDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.CustomerSchema.Site.Attribute _customerSiteAttributeEnums = new Enums.CustomerSchema.Site.Attribute();
-        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitSiteDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +28,7 @@ namespace CommitSiteData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitSiteDataAPI, password);
-            commitSiteDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSiteDataAPI);
+            commitSiteDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSiteDataAPI);
         }
 
         [HttpPost]
@@ -46,7 +36,7 @@ namespace CommitSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,94 +45,89 @@ namespace CommitSiteData.api.Controllers
         [Route("CommitSiteData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     commitSiteDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSiteDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSiteDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
                 var siteEntities = new Methods.Temp.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableSiteEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(siteEntities);
+                var commitableSiteEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(siteEntities);
 
                 if(!commitableSiteEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, false, null);
                     return;
                 }
 
-                var siteNameSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteName);
-                var sitePostCodeSiteAttributeId = _customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SitePostCode);
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+                var customerSiteAttributeEnums = new Enums.CustomerSchema.Site.Attribute();
+                var customerMethods = new Methods.Customer();
+
+                var siteNameSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteName);
+                var sitePostCodeSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SitePostCode);
 
                 //For each column, get CustomerAttributeId
                 var attributes = new Dictionary<long, string>
                 {
-                    {siteNameSiteAttributeId, _customerDataUploadValidationEntityEnums.SiteName},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteAddress), _customerDataUploadValidationEntityEnums.SiteAddress},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteTown), _customerDataUploadValidationEntityEnums.SiteTown},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteCounty), _customerDataUploadValidationEntityEnums.SiteCounty},
-                    {sitePostCodeSiteAttributeId, _customerDataUploadValidationEntityEnums.SitePostCode},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.SiteDescription), _customerDataUploadValidationEntityEnums.SiteDescription},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.ContactName), _customerDataUploadValidationEntityEnums.ContactName},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.ContactRole), _customerDataUploadValidationEntityEnums.ContactRole},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.ContactTelephoneNumber), _customerDataUploadValidationEntityEnums.ContactTelephoneNumber},
-                    {_customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(_customerSiteAttributeEnums.ContactEmailAddress), _customerDataUploadValidationEntityEnums.ContactEmailAddress},
+                    {siteNameSiteAttributeId, customerDataUploadValidationEntityEnums.SiteName},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteAddress), customerDataUploadValidationEntityEnums.SiteAddress},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteTown), customerDataUploadValidationEntityEnums.SiteTown},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteCounty), customerDataUploadValidationEntityEnums.SiteCounty},
+                    {sitePostCodeSiteAttributeId, customerDataUploadValidationEntityEnums.SitePostCode},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteDescription), customerDataUploadValidationEntityEnums.SiteDescription},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.ContactName), customerDataUploadValidationEntityEnums.ContactName},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.ContactRole), customerDataUploadValidationEntityEnums.ContactRole},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.ContactTelephoneNumber), customerDataUploadValidationEntityEnums.ContactTelephoneNumber},
+                    {customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.ContactEmailAddress), customerDataUploadValidationEntityEnums.ContactEmailAddress},
                 };
-
-                var detailDictionary = new Dictionary<long, string>();
-
-                foreach(var attribute in attributes)
-                {
-                    detailDictionary.Add(attribute.Key, string.Empty);
-                }
 
                 foreach(var siteEntity in commitableSiteEntities)
                 {
-                    foreach(var attribute in attributes)
-                    {
-                        detailDictionary[attribute.Key] = siteEntity.GetType().GetProperty(attribute.Value).GetValue(siteEntity).ToString();
-                    }
+                    var detailDictionary = attributes.ToDictionary(
+                        a => a.Key,
+                        a => siteEntity.GetType().GetProperty(a.Value).GetValue(siteEntity).ToString()
+                    );
 
                     //Get SiteId by SiteName and SitePostCode
-                    var siteNameSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, detailDictionary[siteNameSiteAttributeId]);
-                    var sitePostCodeSiteIdList = _customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, detailDictionary[sitePostCodeSiteAttributeId]);
+                    var siteNameSiteIdList = customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(siteNameSiteAttributeId, detailDictionary[siteNameSiteAttributeId]);
+                    var sitePostCodeSiteIdList = customerMethods.SiteDetail_GetSiteIdListBySiteAttributeIdAndSiteDetailDescription(sitePostCodeSiteAttributeId, detailDictionary[sitePostCodeSiteAttributeId]);
 
                     var matchingSiteIdList = siteNameSiteIdList.Intersect(sitePostCodeSiteIdList);
                     var siteId = matchingSiteIdList.FirstOrDefault();
 
-                    //TODO: What to do if the update would make another matching entry?
-
                     if(siteId == 0)
                     {
-                        siteId = _customerMethods.InsertNewSite(createdByUserId, sourceId);
+                        siteId = customerMethods.InsertNewSite(createdByUserId, sourceId);
 
                         //Insert into [Site].[SiteDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            _customerMethods.SiteDetail_Insert(createdByUserId, sourceId, siteId, detail.Key, detail.Value);
+                            customerMethods.SiteDetail_Insert(createdByUserId, sourceId, siteId, detail.Key, detail.Value);
                         }
                     }
                     else
@@ -150,28 +135,26 @@ namespace CommitSiteData.api.Controllers
                         //Update [Site].[SiteDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            var currentDetailEntity = _customerMethods.SiteDetail_GetBySiteIdAndSiteAttributeId(siteId, detail.Key);
-                            var currentDetail = currentDetailEntity.Field<string>("SiteDetailDescription");
+                            var currentDetailEntity = customerMethods.SiteDetail_GetBySiteIdAndSiteAttributeId(siteId, detail.Key);
 
-                            if(detail.Value != currentDetail)
+                            if(detail.Value != currentDetailEntity.SiteDetailDescription)
                             {
-                                var siteDetailId = currentDetailEntity.Field<int>("SiteDetailId");
-                                _customerMethods.SiteDetail_DeleteBySiteDetailId(siteDetailId);
-                                _customerMethods.SiteDetail_Insert(createdByUserId, sourceId, siteId, detail.Key, detail.Value);
+                                customerMethods.SiteDetail_DeleteBySiteDetailId(currentDetailEntity.SiteDetailId);
+                                customerMethods.SiteDetail_Insert(createdByUserId, sourceId, siteId, detail.Key, detail.Value);
                             }
                         }
                     }
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSiteDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

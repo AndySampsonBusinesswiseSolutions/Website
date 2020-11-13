@@ -47,13 +47,11 @@ namespace LockUser.api.Controllers
         [Route("LockUser/Lock")]
         public void Lock([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
             var informationMethods = new Methods.Information();
-
             var administrationUserGUIDEnums = new Enums.AdministrationSchema.User.GUID();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -82,6 +80,7 @@ namespace LockUser.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, lockUserAPIId);
 
                 //Get User Id
+                var administrationUserMethods = new Methods.Administration.User();
                 var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
                 
                 //Check to see if account is already locked

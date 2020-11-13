@@ -20,6 +20,19 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
+            public long GetSubAreaId(string subArea, long createdByUserId, long sourceId)
+            {
+                var subAreaId = SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+
+                if(subAreaId == 0)
+                {
+                    SubArea_Insert(createdByUserId, sourceId, subArea);
+                    subAreaId = SubArea_GetSubAreaIdBySubAreaDescription(subArea);
+                }
+
+                return subAreaId;
+            }
+
             public void SubArea_Insert(long createdByUserId, long sourceId, string subAreaDescription)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

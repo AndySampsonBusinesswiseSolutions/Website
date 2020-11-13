@@ -19,12 +19,6 @@ namespace StoreMeterUsageData.api.Controllers
         #region Variables
         private readonly ILogger<StoreMeterUsageDataController> _logger;
         private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
         private readonly Int64 storeMeterUsageDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,7 +30,7 @@ namespace StoreMeterUsageData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreMeterUsageDataAPI, password);
-            storeMeterUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.StoreMeterUsageDataAPI);
+            storeMeterUsageDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -44,7 +38,7 @@ namespace StoreMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(storeMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(storeMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -53,11 +47,10 @@ namespace StoreMeterUsageData.api.Controllers
         [Route("StoreMeterUsageData/Store")]
         public void Store([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -72,7 +65,7 @@ namespace StoreMeterUsageData.api.Controllers
                     sourceId,
                     storeMeterUsageDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.StoreMeterUsageDataAPI, storeMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreMeterUsageDataAPI, storeMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -81,6 +74,7 @@ namespace StoreMeterUsageData.api.Controllers
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeMeterUsageDataAPIId);
 
                 var methods = new Methods();
+                var customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
 
                 //Create data table
                 var meterUsageDataTable = new DataTable();
@@ -99,17 +93,19 @@ namespace StoreMeterUsageData.api.Controllers
 
                 var sourceSheetList = new List<string>
                 {
-                    _customerDataUploadValidationSheetNameEnums.MeterUsage,
-                    _customerDataUploadValidationSheetNameEnums.DailyMeterUsage
+                    customerDataUploadValidationSheetNameEnums.MeterUsage,
+                    customerDataUploadValidationSheetNameEnums.DailyMeterUsage
                 };
+
+                //TODO: Make parallel
 
                 foreach(var sourceSheet in sourceSheetList)
                 {
                     var jsonSheet = $"Sheets['{sourceSheet}']";
-                    var dailyTimePeriod = sourceSheet == _customerDataUploadValidationSheetNameEnums.DailyMeterUsage ? 1 : 0;
+                    var dailyTimePeriod = sourceSheet == customerDataUploadValidationSheetNameEnums.DailyMeterUsage ? 1 : 0;
 
                     //Get Meter Usage data from Customer Data Upload
-                    var meterUsageDictionary = _tempCustomerDataUploadMethods.ConvertCustomerDataUploadToDictionary(jsonObject, jsonSheet);
+                    var meterUsageDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, jsonSheet);
 
                     foreach(var row in meterUsageDictionary.Keys)
                     {

@@ -18,15 +18,6 @@ namespace CommitFlexContractData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitFlexContractDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.InformationSchema.ContractType _informationContractTypeEnums = new Enums.InformationSchema.ContractType();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitFlexContractDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +29,7 @@ namespace CommitFlexContractData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitFlexContractDataAPI, password);
-            commitFlexContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexContractDataAPI);
+            commitFlexContractDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFlexContractDataAPI);
         }
 
         [HttpPost]
@@ -46,7 +37,7 @@ namespace CommitFlexContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,68 +46,73 @@ namespace CommitFlexContractData.api.Controllers
         [Route("CommitFlexContractData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     commitFlexContractDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitFlexContractDataAPI, commitFlexContractDataAPIId, hostEnvironment, jsonObject))
+                if(!systemAPIMethods.PrerequisiteAPIsAreSuccessful(systemAPIGUIDEnums.CommitFlexContractDataAPI, commitFlexContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexContractDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexContractDataAPIId);
+                
+                var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
                 var flexContractEntities = new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableFlexContractEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(flexContractEntities);
+                var commitableFlexContractEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(flexContractEntities);
 
                 if(!commitableFlexContractEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);
                     return;
                 }
 
+                var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+
                 //Add ContractType to jsonObject
-                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractType, _informationContractTypeEnums.Flex);
+                jsonObject.Add(systemAPIRequiredDataKeyEnums.ContractType, new Enums.InformationSchema.ContractType().Flex);
 
                 //Convert dataRows to a string
                 var commitableEntityJSON = JsonConvert.SerializeObject(commitableFlexContractEntities.Where(cfce => !string.IsNullOrWhiteSpace(cfce.Value)));
 
                 //Add ContractData to jsonObject
-                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ContractData, commitableEntityJSON);
+                jsonObject.Add(systemAPIRequiredDataKeyEnums.ContractData, commitableEntityJSON);
 
                 //Call CommitContractData API and wait for response
-                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitContractDataAPI);
-                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitFlexContractDataAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitContractDataAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.CommitFlexContractDataAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

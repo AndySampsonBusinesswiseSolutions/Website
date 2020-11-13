@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Linq;
+using System.Data;
 
 namespace MethodLibrary
 {
@@ -11,6 +13,17 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.ContractToReferenceVolume_Insert, 
                     createdByUserId, sourceId, contractId, referenceVolumeId);
+            }
+
+            public long ContractToReferenceVolume_GetContractToReferenceVolumeIdByContractIdAndReferenceVolumeId(long contractId, long referenceVolumeId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.ContractToReferenceVolume_GetByContractIdAndReferenceVolumeId, 
+                    contractId, referenceVolumeId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("ContractToReferenceVolumeId"))
+                    .FirstOrDefault();
             }
         }
     }

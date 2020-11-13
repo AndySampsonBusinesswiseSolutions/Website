@@ -2,7 +2,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System;
 
 namespace MethodLibrary
 {
@@ -17,12 +16,15 @@ namespace MethodLibrary
                     createdByUserId, sourceId, meterId, siteId);
             }
 
-            public List<DataRow> MeterToSite_GetList()
+            public long MeterToSite_GetMetertoSiteIdByMeterIdAndSiteId(long meterId, long siteId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
-                    _storedProcedureMappingEnums.MeterToSite_GetList);
+                    _storedProcedureMappingEnums.MeterToSite_GetByMeterIdAndSiteId,
+                    meterId, siteId);
 
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterToSiteId"))
+                    .FirstOrDefault();
             }
 
             public List<long> MeterToSite_GetMeterIdListBySiteId(long siteId)
@@ -34,21 +36,6 @@ namespace MethodLibrary
                 return dataTable.AsEnumerable()
                     .Select(r => r.Field<long>("MeterId"))
                     .ToList();
-            }
-
-            public List<Tuple<long, long>> MeterToSite_GetLatestTuple()
-            {
-                var dataRows = MeterToSite_GetList();
-
-                var tuple = new List<Tuple<long, long>>();
-
-                foreach (DataRow r in dataRows)
-                {
-                    var tup = Tuple.Create((long)r["MeterId"], (long)r["SiteId"]);
-                    tuple.Add(tup);
-                }
-
-                return tuple;
             }
         }
     }

@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace MethodLibrary
 {
@@ -18,12 +19,14 @@ namespace MethodLibrary
                     .Select(r => r.Field<long>("MeterTimeswitchCodeAttributeId"))
                     .FirstOrDefault();
             }
-
-            public DataTable MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(long meterTimeswitchCodeAttributeId)
+            
+            public List<Entity.Information.MeterTimeswitchCodeDetail> MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(long meterTimeswitchCodeAttributeId)
             {
-                return GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureInformationEnums.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId, 
                     meterTimeswitchCodeAttributeId);
+                
+                return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Information.MeterTimeswitchCodeDetail(d)).ToList();
             }
         }
     }

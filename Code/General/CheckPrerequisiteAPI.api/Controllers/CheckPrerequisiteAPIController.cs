@@ -49,10 +49,9 @@ namespace CheckPrerequisiteAPI.api.Controllers
         [Route("CheckPrerequisiteAPI/Check")]
         public List<string> Check([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

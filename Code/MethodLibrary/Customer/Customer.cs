@@ -79,13 +79,13 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public DataRow CustomerDetail_GetByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
+            public Entity.Customer.CustomerDetail CustomerDetail_GetByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.CustomerDetail_GetByCustomerIdAndCustomerAttributeId, 
                     customerId, customerAttributeId);
 
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+                return new Entity.Customer.CustomerDetail(dataTable.Rows.Cast<DataRow>().FirstOrDefault());
             }
 
             public string CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(long customerId, long customerAttributeId)

@@ -95,13 +95,13 @@ namespace MethodLibrary
                     .FirstOrDefault();
             }
 
-            public DataRow SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(long subMeterId, long subMeterAttributeId)
+            public Entity.Customer.SubMeterDetail SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(long subMeterId, long subMeterAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId, 
                     subMeterId, subMeterAttributeId);
 
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+                return new Entity.Customer.SubMeterDetail(dataTable.Rows.Cast<DataRow>().FirstOrDefault());
             }
 
             public void SubMeterDetail_DeleteBySubMeterDetailId(long subMeterDetailId)

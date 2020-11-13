@@ -55,7 +55,7 @@ namespace StoreLoginAttempt.api.Controllers
             var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();                    
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

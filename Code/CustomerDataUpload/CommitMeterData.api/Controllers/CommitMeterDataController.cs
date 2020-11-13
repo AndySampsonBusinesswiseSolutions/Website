@@ -6,9 +6,9 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Data;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace CommitMeterData.api.Controllers
 {
@@ -18,16 +18,6 @@ namespace CommitMeterData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitMeterDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
-        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitMeterDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -39,7 +29,7 @@ namespace CommitMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitMeterDataAPI, password);
-            commitMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitMeterDataAPI);
+            commitMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterDataAPI);
         }
 
         [HttpPost]
@@ -47,7 +37,7 @@ namespace CommitMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -56,81 +46,81 @@ namespace CommitMeterData.api.Controllers
         [Route("CommitMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     commitMeterDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitMeterDataAPI, commitMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterDataAPI, commitMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterDataAPIId);
+                
+                var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
                 var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
+                var commitableMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(meterEntities);
 
                 if(!commitableMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, false, null);
                     return;
                 }
+
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+                var customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
+                var customerMethods = new Methods.Customer();
 
                 //For each column, get MeterAttributeId
                 var attributes = new Dictionary<long, string>
                 {
-                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier), _customerDataUploadValidationEntityEnums.MPXN},
-                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.SupplyCapacity), _customerDataUploadValidationEntityEnums.Capacity},
-                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.StandardOfftakeQuantity), _customerDataUploadValidationEntityEnums.StandardOfftakeQuantity},
-                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.AnnualUsage), _customerDataUploadValidationEntityEnums.AnnualUsage},
-                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterSerialNumber), _customerDataUploadValidationEntityEnums.MeterSerialNumber},
-                    {_customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.ImportExport), _customerDataUploadValidationEntityEnums.ImportExport},
+                    {customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier), customerDataUploadValidationEntityEnums.MPXN},
+                    {customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.SupplyCapacity), customerDataUploadValidationEntityEnums.Capacity},
+                    {customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.StandardOfftakeQuantity), customerDataUploadValidationEntityEnums.StandardOfftakeQuantity},
+                    {customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.AnnualUsage), customerDataUploadValidationEntityEnums.AnnualUsage},
+                    {customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterSerialNumber), customerDataUploadValidationEntityEnums.MeterSerialNumber},
+                    {customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.ImportExport), customerDataUploadValidationEntityEnums.ImportExport},
                 };
 
-                var detailDictionary = new Dictionary<long, string>();
-
-                foreach(var attribute in attributes)
-                {
-                    detailDictionary.Add(attribute.Key, string.Empty);
-                }
+                var meterIdList = new List<long>();
 
                 foreach(var meterEntity in commitableMeterEntities)
                 {
-                    foreach(var attribute in attributes)
-                    {
-                        detailDictionary[attribute.Key] = meterEntity.GetType().GetProperty(attribute.Value).GetValue(meterEntity).ToString();
-                    }
+                    var detailDictionary = attributes.ToDictionary(
+                        a => a.Key,
+                        a => meterEntity.GetType().GetProperty(a.Value).GetValue(meterEntity).ToString()
+                    );
 
                     //Get MeterId by MPXN
-                    var meterId = _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value).FirstOrDefault();
+                    var meterId = customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value).FirstOrDefault();
 
                     if(meterId == 0)
                     {
-                        meterId = _customerMethods.InsertNewMeter(createdByUserId, sourceId);
+                        meterId = customerMethods.InsertNewMeter(createdByUserId, sourceId);
 
                         //Insert into [Customer].[MeterDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            _customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
+                            customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
                         }
                     }
                     else
@@ -138,34 +128,38 @@ namespace CommitMeterData.api.Controllers
                         //Update [Customer].[MeterDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            var currentDetailDataRow = _customerMethods.MeterDetail_GetByMeterIdAndMeterAttributeId(meterId, detail.Key);
-                            var currentDetail = currentDetailDataRow.Field<string>("MeterDetailDescription");
+                            var currentDetailEntity = customerMethods.MeterDetail_GetByMeterIdAndMeterAttributeId(meterId, detail.Key);
 
-                            if(detail.Value != currentDetail)
+                            if(detail.Value != currentDetailEntity.MeterDetailDescription)
                             {
-                                var meterDetailId = currentDetailDataRow.Field<long>("MeterDetailId");
-                                _customerMethods.MeterDetail_DeleteByMeterDetailId(meterDetailId);
-                                _customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
+                                customerMethods.MeterDetail_DeleteByMeterDetailId(currentDetailEntity.MeterDetailId);
+                                customerMethods.MeterDetail_Insert(createdByUserId, sourceId, meterId, detail.Key, detail.Value);
                             }
                         }
                     }
 
-                    //Create Meter tables
-                    var meterType = "Meter";
-                    var schemaName = $"Supply.Meter{meterId}";
-
-                    _supplyMethods.CreateMeterTables(schemaName, meterId, meterType);
+                    if(!meterIdList.Contains(meterId)) 
+                    {
+                        meterIdList.Add(meterId);
+                    }
                 }
 
+                //Create Meter tables
+                var supplyMethods = new Methods.Supply();
+                var meterType = "Meter";
+                Parallel.ForEach(meterIdList, new ParallelOptions{MaxDegreeOfParallelism = 5}, meterId => {
+                    supplyMethods.CreateMeterTables($"Supply.{meterType}{meterId}", meterId, meterType);
+                });
+
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitMeterDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

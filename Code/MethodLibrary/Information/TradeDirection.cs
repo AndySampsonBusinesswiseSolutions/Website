@@ -1,6 +1,7 @@
 using System.Data;
 using System.Linq;
 using System.Reflection;
+using enums;
 
 namespace MethodLibrary
 {
@@ -8,6 +9,13 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public string GetTradeDirection(string direction)
+            {
+                var informationTradeDirectionEnums = new Enums.InformationSchema.TradeDirection();
+                return direction.StartsWith("B")
+                    ? informationTradeDirectionEnums.Buy
+                    : informationTradeDirectionEnums.Sell;
+            }
             public long TradeDirection_GetTradeDirectionIdByTradeDirectionDescription(string tradeDirectionDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

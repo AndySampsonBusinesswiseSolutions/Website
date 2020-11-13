@@ -18,16 +18,6 @@ namespace ValidateMeterData.api.Controllers
     {
         #region Variables
         private readonly ILogger<ValidateMeterDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
-        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-        private static readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
         private readonly Int64 validateMeterDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -39,7 +29,7 @@ namespace ValidateMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateMeterDataAPI, password);
-            validateMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateMeterDataAPI);
+            validateMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateMeterDataAPI);
         }
 
         [HttpPost]
@@ -47,7 +37,7 @@ namespace ValidateMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(validateMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(validateMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -56,32 +46,32 @@ namespace ValidateMeterData.api.Controllers
         [Route("ValidateMeterData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     validateMeterDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateMeterDataAPI, validateMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateMeterDataAPI, validateMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] table
                 var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(processQueueGUID);
@@ -89,39 +79,42 @@ namespace ValidateMeterData.api.Controllers
                 if(!meterEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, false, null);
                     return;
                 }
 
                 var methods = new Methods();
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var customerMethods = new Methods.Customer();
 
                 var columns = new List<string>
                     {
-                        _customerDataUploadValidationEntityEnums.SiteName,
-                        _customerDataUploadValidationEntityEnums.SitePostCode,
-                        _customerDataUploadValidationEntityEnums.MPXN,
-                        _customerDataUploadValidationEntityEnums.GridSupplyPoint,
-                        _customerDataUploadValidationEntityEnums.ProfileClass,
-                        _customerDataUploadValidationEntityEnums.MeterTimeswitchCode,
-                        _customerDataUploadValidationEntityEnums.LineLossFactorClass,
-                        _customerDataUploadValidationEntityEnums.Capacity,
-                        _customerDataUploadValidationEntityEnums.LocalDistributionZone,
-                        _customerDataUploadValidationEntityEnums.StandardOfftakeQuantity,
-                        _customerDataUploadValidationEntityEnums.AnnualUsage,
-                        _customerDataUploadValidationEntityEnums.MeterSerialNumber,
-                        _customerDataUploadValidationEntityEnums.Area,
-                        _customerDataUploadValidationEntityEnums.ImportExport,
+                        customerDataUploadValidationEntityEnums.SiteName,
+                        customerDataUploadValidationEntityEnums.SitePostCode,
+                        customerDataUploadValidationEntityEnums.MPXN,
+                        customerDataUploadValidationEntityEnums.GridSupplyPoint,
+                        customerDataUploadValidationEntityEnums.ProfileClass,
+                        customerDataUploadValidationEntityEnums.MeterTimeswitchCode,
+                        customerDataUploadValidationEntityEnums.LineLossFactorClass,
+                        customerDataUploadValidationEntityEnums.Capacity,
+                        customerDataUploadValidationEntityEnums.LocalDistributionZone,
+                        customerDataUploadValidationEntityEnums.StandardOfftakeQuantity,
+                        customerDataUploadValidationEntityEnums.AnnualUsage,
+                        customerDataUploadValidationEntityEnums.MeterSerialNumber,
+                        customerDataUploadValidationEntityEnums.Area,
+                        customerDataUploadValidationEntityEnums.ImportExport,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterEntities.Select(me => me.RowId.Value).Distinct().ToList(), columns);
+                var records = tempCustomerDataUploadMethods.InitialiseRecordsDictionary(meterEntities.Select(me => me.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.AnnualUsage, "Annual Usage"}
+                        {customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
+                        {customerDataUploadValidationEntityEnums.AnnualUsage, "Annual Usage"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, meterEntities, requiredColumns);
+                tempCustomerDataUploadMethods.GetMissingRecords(records, meterEntities, requiredColumns);
 
                 //Get MPANs
                 var mpanEntities = meterEntities.Where(me => methods.IsValidMPAN(me.MPXN));
@@ -137,29 +130,29 @@ namespace ValidateMeterData.api.Controllers
                 foreach(var row in invalidMPXNRows)
                 {
                     var meterEntity = meterEntities.First(me => me.RowId == row);
-                    if(!records[row.Value][_customerDataUploadValidationEntityEnums.MPXN].Contains($"Invalid MPAN/MPRN '{meterEntity.MPXN}'"))
+                    if(!records[row.Value][customerDataUploadValidationEntityEnums.MPXN].Contains($"Invalid MPAN/MPRN '{meterEntity.MPXN}'"))
                     {
-                        records[row.Value][_customerDataUploadValidationEntityEnums.MPXN].Add($"Invalid MPAN/MPRN '{meterEntity.MPXN}'");
+                        records[row.Value][customerDataUploadValidationEntityEnums.MPXN].Add($"Invalid MPAN/MPRN '{meterEntity.MPXN}'");
                     }
                 }
 
                 //Get MPANs not stored in database
-                var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
+                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 var newMPANEntities = mpanEntities.Where(me => 
-                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, me.MPXN) == 0)
+                    customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, me.MPXN) == 0)
                     .ToList();
 
                 //Site, GSP, PC, MTC, LLFC and Area must be populated
                 requiredColumns = new Dictionary<string, string>
                     {
-                        {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
-                        {_customerDataUploadValidationEntityEnums.GridSupplyPoint, "GSP"},
-                        {_customerDataUploadValidationEntityEnums.ProfileClass, "Profile Class"},
-                        {_customerDataUploadValidationEntityEnums.MeterTimeswitchCode, "MTC"},
-                        {_customerDataUploadValidationEntityEnums.LineLossFactorClass, "LLFC"},
-                        {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area}
+                        {customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
+                        {customerDataUploadValidationEntityEnums.GridSupplyPoint, "GSP"},
+                        {customerDataUploadValidationEntityEnums.ProfileClass, "Profile Class"},
+                        {customerDataUploadValidationEntityEnums.MeterTimeswitchCode, "MTC"},
+                        {customerDataUploadValidationEntityEnums.LineLossFactorClass, "LLFC"},
+                        {customerDataUploadValidationEntityEnums.Area, customerDataUploadValidationEntityEnums.Area}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPANEntities, requiredColumns);
+                tempCustomerDataUploadMethods.GetMissingRecords(records, newMPANEntities, requiredColumns);
 
                 //Validate GSP
                 var invalidGridSupplyPointEntities = mpanEntities.Where(me => !string.IsNullOrWhiteSpace(me.GridSupplyPoint)
@@ -167,9 +160,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidGridSupplyPointEntity in invalidGridSupplyPointEntities)
                 {
-                    if(!records[invalidGridSupplyPointEntity.RowId.Value][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Contains($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'"))
+                    if(!records[invalidGridSupplyPointEntity.RowId.Value][customerDataUploadValidationEntityEnums.GridSupplyPoint].Contains($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'"))
                     {
-                        records[invalidGridSupplyPointEntity.RowId.Value][_customerDataUploadValidationEntityEnums.GridSupplyPoint].Add($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'");
+                        records[invalidGridSupplyPointEntity.RowId.Value][customerDataUploadValidationEntityEnums.GridSupplyPoint].Add($"Invalid GSP '{invalidGridSupplyPointEntity.GridSupplyPoint}'");
                     }
                 }
 
@@ -179,9 +172,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidProfileClassEntity in invalidProfileClassEntities)
                 {
-                    if(!records[invalidProfileClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ProfileClass].Contains($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'"))
+                    if(!records[invalidProfileClassEntity.RowId.Value][customerDataUploadValidationEntityEnums.ProfileClass].Contains($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'"))
                     {
-                        records[invalidProfileClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ProfileClass].Add($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'");
+                        records[invalidProfileClassEntity.RowId.Value][customerDataUploadValidationEntityEnums.ProfileClass].Add($"Invalid Profile Class '{invalidProfileClassEntity.ProfileClass}'");
                     }
                 }
 
@@ -191,9 +184,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidMeterTimeswitchCodeEntity in invalidMeterTimeswitchCodeEntities)
                 {
-                    if(!records[invalidMeterTimeswitchCodeEntity.RowId.Value][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Contains($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'"))
+                    if(!records[invalidMeterTimeswitchCodeEntity.RowId.Value][customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Contains($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'"))
                     {
-                        records[invalidMeterTimeswitchCodeEntity.RowId.Value][_customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Add($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'");
+                        records[invalidMeterTimeswitchCodeEntity.RowId.Value][customerDataUploadValidationEntityEnums.MeterTimeswitchCode].Add($"Invalid MTC '{invalidMeterTimeswitchCodeEntity.MeterTimeswitchCode}'");
                     }
                 }
 
@@ -203,9 +196,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidLineLossFactorClassEntity in invalidLineLossFactorClassEntities)
                 {
-                    if(!records[invalidLineLossFactorClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Contains($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'"))
+                    if(!records[invalidLineLossFactorClassEntity.RowId.Value][customerDataUploadValidationEntityEnums.LineLossFactorClass].Contains($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'"))
                     {
-                        records[invalidLineLossFactorClassEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LineLossFactorClass].Add($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'");
+                        records[invalidLineLossFactorClassEntity.RowId.Value][customerDataUploadValidationEntityEnums.LineLossFactorClass].Add($"Invalid LLFC '{invalidLineLossFactorClassEntity.LineLossFactorClass}'");
                     }
                 }
 
@@ -215,25 +208,25 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidCapacityEntity in invalidCapacityEntities)
                 {
-                    if(!records[invalidCapacityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Capacity].Contains($"Invalid Capacity '{invalidCapacityEntity.Capacity}'"))
+                    if(!records[invalidCapacityEntity.RowId.Value][customerDataUploadValidationEntityEnums.Capacity].Contains($"Invalid Capacity '{invalidCapacityEntity.Capacity}'"))
                     {
-                        records[invalidCapacityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Capacity].Add($"Invalid Capacity '{invalidCapacityEntity.Capacity}'");
+                        records[invalidCapacityEntity.RowId.Value][customerDataUploadValidationEntityEnums.Capacity].Add($"Invalid Capacity '{invalidCapacityEntity.Capacity}'");
                     }
                 }
 
                 //Get MPRNs not stored in database
                 var newMPRNEntities = mprnEntities.Where(me => 
-                    _customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, me.MPXN) == 0)
+                    customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, me.MPXN) == 0)
                     .ToList();
 
                 //Site, LDZ and Area must be populated
                 requiredColumns = new Dictionary<string, string>
                     {
-                        {_customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
-                        {_customerDataUploadValidationEntityEnums.LocalDistributionZone, "LDZ"},
-                        {_customerDataUploadValidationEntityEnums.Area, _customerDataUploadValidationEntityEnums.Area}
+                        {customerDataUploadValidationEntityEnums.SiteName, "Site Name"},
+                        {customerDataUploadValidationEntityEnums.LocalDistributionZone, "LDZ"},
+                        {customerDataUploadValidationEntityEnums.Area, customerDataUploadValidationEntityEnums.Area}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, newMPRNEntities, requiredColumns);
+                tempCustomerDataUploadMethods.GetMissingRecords(records, newMPRNEntities, requiredColumns);
 
                 //Validate LDZ
                 var invalidLocalDistributionZoneEntities = mprnEntities.Where(me => !string.IsNullOrWhiteSpace(me.LocalDistributionZone)
@@ -241,9 +234,9 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidLocalDistributionZoneEntity in invalidLocalDistributionZoneEntities)
                 {
-                    if(!records[invalidLocalDistributionZoneEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Contains($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'"))
+                    if(!records[invalidLocalDistributionZoneEntity.RowId.Value][customerDataUploadValidationEntityEnums.LocalDistributionZone].Contains($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'"))
                     {
-                        records[invalidLocalDistributionZoneEntity.RowId.Value][_customerDataUploadValidationEntityEnums.LocalDistributionZone].Add($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'");
+                        records[invalidLocalDistributionZoneEntity.RowId.Value][customerDataUploadValidationEntityEnums.LocalDistributionZone].Add($"Invalid LDZ '{invalidLocalDistributionZoneEntity.LocalDistributionZone}'");
                     }
                 }
 
@@ -253,22 +246,22 @@ namespace ValidateMeterData.api.Controllers
 
                 foreach(var invalidStandardOfftakeQuantityEntity in invalidStandardOfftakeQuantityEntities)
                 {
-                    if(!records[invalidStandardOfftakeQuantityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Contains($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'"))
+                    if(!records[invalidStandardOfftakeQuantityEntity.RowId.Value][customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Contains($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'"))
                     {
-                        records[invalidStandardOfftakeQuantityEntity.RowId.Value][_customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Add($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'");
+                        records[invalidStandardOfftakeQuantityEntity.RowId.Value][customerDataUploadValidationEntityEnums.StandardOfftakeQuantity].Add($"Invalid Standard Offtake Quantity '{invalidStandardOfftakeQuantityEntity.StandardOfftakeQuantity}'");
                     }
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.Meter);
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                var errorMessage = tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, new Enums.CustomerSchema.DataUploadValidation.SheetName().Meter);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateMeterDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

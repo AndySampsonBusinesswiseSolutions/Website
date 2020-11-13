@@ -66,10 +66,9 @@ namespace GetProfile.api.Controllers
         [Route("GetProfile/Get")]
         public string Get([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -222,8 +221,8 @@ namespace GetProfile.api.Controllers
             var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeId(granularityDefaultGranularityAttributeId);
 
             //Get TimePeriods for granularity
-            timePeriodIdList = _mappingMethods.GranularityToTimePeriod_GetList().Where(g => g.Field<long>("GranularityId") == granularityId)
-                                .Select(g => g.Field<long>("TimePeriodId")).Distinct().ToList();
+            timePeriodIdList = _mappingMethods.GranularityToTimePeriod_GetList().Where(g => g.GranularityId == granularityId)
+                                .Select(g => g.TimePeriodId).Distinct().ToList();
         }
 
         private void GetProfileValues(long profileId)

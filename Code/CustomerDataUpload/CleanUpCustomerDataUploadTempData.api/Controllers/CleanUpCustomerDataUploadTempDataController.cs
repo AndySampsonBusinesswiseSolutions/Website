@@ -45,17 +45,15 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         [Route("CleanUpCustomerDataUploadTempData/Clean")]
         public void Clean([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
             var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
             var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
@@ -73,6 +71,8 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId);
+                
+                var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 var deleteMethodList = new List<Action>
                 {

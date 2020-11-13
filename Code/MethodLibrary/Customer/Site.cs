@@ -78,13 +78,13 @@ namespace MethodLibrary
                     createdByUserId, sourceId, siteId, siteAttributeId, siteDetailDescription);
             }
 
-            public DataRow SiteDetail_GetBySiteIdAndSiteAttributeId(long siteId, long siteAttributeId)
+            public Entity.Customer.SiteDetail SiteDetail_GetBySiteIdAndSiteAttributeId(long siteId, long siteAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.SiteDetail_GetBySiteIdAndSiteAttributeId, 
                     siteId, siteAttributeId);
 
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+                return new Entity.Customer.SiteDetail(dataTable.Rows.Cast<DataRow>().FirstOrDefault());
             }
 
             public string SiteDetail_GetSiteDetailDescriptionBySiteIdAndSiteAttributeId(long siteId, long siteAttributeId)

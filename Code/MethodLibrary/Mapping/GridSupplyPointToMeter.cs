@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Data;
+using System.Linq;
 
 namespace MethodLibrary
 {
@@ -11,6 +13,17 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.GridSupplyPointToMeter_Insert, 
                     createdByUserId, sourceId, gridSupplyPointId, meterId);
+            }
+
+            public long GridSupplyPointToMeter_GetGridSupplyPointToMeterIdByGridSupplyPointIdAndMeterId(long gridSupplyPointId, long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.GridSupplyPointToMeter_GetByGridSupplyPointIdAndMeterId, 
+                    gridSupplyPointId, meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("GridSupplyPointToMeterId"))
+                    .FirstOrDefault();
             }
         }
     }

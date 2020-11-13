@@ -17,17 +17,6 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitFlexReferenceVolumeDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.CustomerSchema.Contract.Attribute _customerContractAttributeEnums = new Enums.CustomerSchema.Contract.Attribute();
-        private readonly Enums.CustomerSchema.ReferenceVolume.Attribute _customerReferenceVolumeAttributeEnums = new Enums.CustomerSchema.ReferenceVolume.Attribute();
-        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitFlexReferenceVolumeDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -39,7 +28,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitFlexReferenceVolumeDataAPI, password);
-            commitFlexReferenceVolumeDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitFlexReferenceVolumeDataAPI);
+            commitFlexReferenceVolumeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFlexReferenceVolumeDataAPI);
         }
 
         [HttpPost]
@@ -47,7 +36,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -56,61 +45,66 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
         [Route("CommitFlexReferenceVolumeData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     commitFlexReferenceVolumeDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitFlexReferenceVolumeDataAPI, commitFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitFlexReferenceVolumeDataAPI, commitFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId);
+
+                var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] where CanCommit = 1
                 var flexReferenceVolumeEntities = new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableFlexReferenceVolumeEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(flexReferenceVolumeEntities);
+                var commitableFlexReferenceVolumeEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(flexReferenceVolumeEntities);
 
                 if(!commitableFlexReferenceVolumeEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
                     return;
                 }
 
-                var contractReferenceContractAttributeId = _customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(_customerContractAttributeEnums.ContractReference);
-                var dateFromReferenceVolumeAttributeId = _customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(_customerReferenceVolumeAttributeEnums.DateFrom);
-                var dateToReferenceVolumeAttributeId = _customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(_customerReferenceVolumeAttributeEnums.DateTo);
-                var referenceVolumeReferenceVolumeAttributeId = _customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(_customerReferenceVolumeAttributeEnums.ReferenceVolume);
+                var customerReferenceVolumeAttributeEnums = new Enums.CustomerSchema.ReferenceVolume.Attribute();
+                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.Mapping();
+
+                var contractReferenceContractAttributeId = customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(new Enums.CustomerSchema.Contract.Attribute().ContractReference);
+                var dateFromReferenceVolumeAttributeId = customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(customerReferenceVolumeAttributeEnums.DateFrom);
+                var dateToReferenceVolumeAttributeId = customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(customerReferenceVolumeAttributeEnums.DateTo);
+                var referenceVolumeReferenceVolumeAttributeId = customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(customerReferenceVolumeAttributeEnums.ReferenceVolume);
 
                 var contracts = commitableFlexReferenceVolumeEntities.Select(cfrve => cfrve.ContractReference).Distinct()
-                    .ToDictionary(c => c, c => _customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, c));
+                    .ToDictionary(c => c, c => customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(contractReferenceContractAttributeId, c));
 
                 var fromDates = commitableFlexReferenceVolumeEntities.Select(cfrve => cfrve.DateFrom).Distinct()
-                    .ToDictionary(d => d, d => _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateFromReferenceVolumeAttributeId, d));
+                    .ToDictionary(d => d, d => customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateFromReferenceVolumeAttributeId, d));
 
                 var toDates = commitableFlexReferenceVolumeEntities.Select(cfrve => cfrve.DateTo).Distinct()
-                    .ToDictionary(d => d, d => _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateToReferenceVolumeAttributeId, d));
+                    .ToDictionary(d => d, d => customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(dateToReferenceVolumeAttributeId, d));
 
                 var referenceVolumes = commitableFlexReferenceVolumeEntities.Select(cfrve => cfrve.Volume).Distinct()
-                    .ToDictionary(rv => rv, rv => _customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(referenceVolumeReferenceVolumeAttributeId, rv));
+                    .ToDictionary(rv => rv, rv => customerMethods.ReferenceVolumeDetail_GetReferenceVolumeIdListByReferenceVolumeAttributeIdAndReferenceVolumeDetailDescription(referenceVolumeReferenceVolumeAttributeId, rv));
 
                 foreach(var flexReferenceVolumeEntity in commitableFlexReferenceVolumeEntities.Where(cfrve => contracts[cfrve.ContractReference] > 0))
                 {
@@ -124,27 +118,33 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
 
                     if(referenceVolumeId == 0)
                     {
-                        referenceVolumeId = _customerMethods.InsertNewReferenceVolume(createdByUserId, sourceId);
+                        referenceVolumeId = customerMethods.InsertNewReferenceVolume(createdByUserId, sourceId);
 
                         //Insert into [Customer].[ReferenceVolumeDetail]
-                        _customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, dateFromReferenceVolumeAttributeId, flexReferenceVolumeEntity.DateFrom);
-                        _customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, dateToReferenceVolumeAttributeId, flexReferenceVolumeEntity.DateTo);
-                        _customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, referenceVolumeReferenceVolumeAttributeId, flexReferenceVolumeEntity.Volume);
+                        customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, dateFromReferenceVolumeAttributeId, flexReferenceVolumeEntity.DateFrom);
+                        customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, dateToReferenceVolumeAttributeId, flexReferenceVolumeEntity.DateTo);
+                        customerMethods.ReferenceVolumeDetail_Insert(createdByUserId, sourceId, referenceVolumeId, referenceVolumeReferenceVolumeAttributeId, flexReferenceVolumeEntity.Volume);
                     }
 
-                    //Insert into [Mapping].[ContractToReferenceVolume]
-                    _mappingMethods.ContractToReferenceVolume_Insert(createdByUserId, sourceId, contracts[flexReferenceVolumeEntity.ContractReference], referenceVolumeId);
+                    //Get existing ContractToReferenceVolume mapping
+                    var existingContractToReferenceId = mappingMethods.ContractToReferenceVolume_GetContractToReferenceVolumeIdByContractIdAndReferenceVolumeId(contracts[flexReferenceVolumeEntity.ContractReference], referenceVolumeId);
+
+                    if(existingContractToReferenceId == 0)
+                    {
+                        //Insert into [Mapping].[ContractToReferenceVolume]
+                        mappingMethods.ContractToReferenceVolume_Insert(createdByUserId, sourceId, contracts[flexReferenceVolumeEntity.ContractReference], referenceVolumeId);
+                    }
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

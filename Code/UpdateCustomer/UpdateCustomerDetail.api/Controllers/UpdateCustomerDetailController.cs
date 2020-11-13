@@ -16,12 +16,6 @@ namespace UpdateCustomerDetail.api.Controllers
     {
         #region Variables
         private readonly ILogger<UpdateCustomerDetailController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Int64 updateCustomerDetailAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -33,7 +27,7 @@ namespace UpdateCustomerDetail.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().UpdateCustomerDetailAPI, password);
-            updateCustomerDetailAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.UpdateCustomerDetailAPI);
+            updateCustomerDetailAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI);
         }
 
         [HttpPost]
@@ -41,7 +35,7 @@ namespace UpdateCustomerDetail.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(updateCustomerDetailAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(updateCustomerDetailAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -50,41 +44,42 @@ namespace UpdateCustomerDetail.api.Controllers
         [Route("UpdateCustomerDetail/Update")]
         public void Update([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     updateCustomerDetailAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.UpdateCustomerDetailAPI, updateCustomerDetailAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI, updateCustomerDetailAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, updateCustomerDetailAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, updateCustomerDetailAPIId);
 
                 //Get Customer GUID
-                var customerGUID = _systemMethods.GetCustomerGUIDFromJObject(jsonObject);
+                var customerGUID = systemMethods.GetCustomerGUIDFromJObject(jsonObject);
 
                 //Get Customer Id
-                var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
+                var customerMethods = new Methods.Customer();
+                var customerId = customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
 
                 //Split Customer Data to an array of attribute/value
-                var customerData = new Methods().GetArray(_systemMethods.GetCustomerDataFromJObject(jsonObject), "{", "}");
+                var customerData = new Methods().GetArray(systemMethods.GetCustomerDataFromJObject(jsonObject), "{", "}");
 
                 var customerAttributeId = 0L;
                 for(var dataCount = 0; dataCount < customerData.Count(); dataCount++)
@@ -95,28 +90,25 @@ namespace UpdateCustomerDetail.api.Controllers
 
                     if(type == "attribute")
                     {
-                        customerAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(value);
+                        customerAttributeId = customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(value);
                     }
                     else
                     {
                         if(customerAttributeId != 0)
                         {
-                            var customerDetailDataRow = _customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, customerAttributeId);
-                            if(customerDetailDataRow == null)
+                            var customerDetailEntity = customerMethods.CustomerDetail_GetByCustomerIdAndCustomerAttributeId(customerId, customerAttributeId);
+                            if(customerDetailEntity == null)
                             {
                                 //Attribute does not exist from this customer so insert
-                                _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
+                                customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
                             }
                             else 
                             {
-                                var customerDetailDescription = customerDetailDataRow["CustomerDetailDescription"].ToString();
-                                if(customerDetailDescription != value)
+                                if(customerDetailEntity.CustomerDetailDescription != value)
                                 {
                                     //new value is different to current value so end date current value and insert new value
-                                    var customerDetailId = Convert.ToInt64(customerDetailDataRow["CustomerDetailId"].ToString());
-
-                                    _customerMethods.CustomerDetail_DeleteByCustomerDetailId(customerDetailId);
-                                    _customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
+                                    customerMethods.CustomerDetail_DeleteByCustomerDetailId(customerDetailEntity.CustomerDetailId);
+                                    customerMethods.CustomerDetail_Insert(createdByUserId, sourceId, customerId, customerAttributeId, value);
                                 }
                             }
                         }
@@ -124,14 +116,14 @@ namespace UpdateCustomerDetail.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, updateCustomerDetailAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, updateCustomerDetailAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, updateCustomerDetailAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, updateCustomerDetailAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

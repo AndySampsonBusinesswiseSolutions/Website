@@ -24,6 +24,21 @@ namespace MethodLibrary
                 return GridSupplyPoint_GetGridSupplyPointIdByGridSupplyPointGUID(GUID);
             }
 
+            public long GetGridSupplyPointId(string gridSupplyPoint, long createdByUserId, long sourceId, long gridSupplyPointGroupIdGridSupplyPointAttributeId)
+            {
+                var gridSupplyPointId = GridSupplyPointDetail_GetGridSupplyPointIdByGridSupplyPointAttributeIdAndGridSupplyPointDetailDescription(gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);
+
+                if(gridSupplyPointId == 0)
+                {
+                    gridSupplyPointId = InsertNewGridSupplyPoint(createdByUserId, sourceId);
+
+                    //Insert into [Customer].[GridSupplyPointDetail]
+                    GridSupplyPointDetail_Insert(createdByUserId, sourceId, gridSupplyPointId, gridSupplyPointGroupIdGridSupplyPointAttributeId, gridSupplyPoint);
+                }
+
+                return gridSupplyPointId;
+            }
+
             public long GridSupplyPointAttribute_GetGridSupplyPointAttributeIdByGridSupplyPointAttributeDescription(string gridSupplyPointAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

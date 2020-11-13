@@ -18,15 +18,6 @@ namespace ValidateFixedContractData.api.Controllers
     {
         #region Variables
         private readonly ILogger<ValidateFixedContractDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
-        private static readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 validateFixedContractDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +29,7 @@ namespace ValidateFixedContractData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFixedContractDataAPI, password);
-            validateFixedContractDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateFixedContractDataAPI);
+            validateFixedContractDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFixedContractDataAPI);
         }
 
         [HttpPost]
@@ -46,7 +37,7 @@ namespace ValidateFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(validateFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(validateFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,32 +46,32 @@ namespace ValidateFixedContractData.api.Controllers
         [Route("ValidateFixedContractData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     validateFixedContractDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateFixedContractDataAPI, validateFixedContractDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFixedContractDataAPI, validateFixedContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFixedContractDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFixedContractDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] table
                 var fixedContractEntities = new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_GetByProcessQueueGUID(processQueueGUID);
@@ -88,62 +79,62 @@ namespace ValidateFixedContractData.api.Controllers
                 if(!fixedContractEntities.Any())
                 {
                     //Nothing to validate so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFixedContractDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFixedContractDataAPIId, false, null);
                     return;
                 }
 
                 var methods = new Methods();
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var customerMethods = new Methods.Customer();
 
                 var columns = new List<string>
                     {
-                        _customerDataUploadValidationEntityEnums.ContractReference,
-                        _customerDataUploadValidationEntityEnums.MPXN,
-                        _customerDataUploadValidationEntityEnums.Supplier,
-                        _customerDataUploadValidationEntityEnums.ContractStartDate,
-                        _customerDataUploadValidationEntityEnums.ContractEndDate,
-                        _customerDataUploadValidationEntityEnums.Product,
-                        _customerDataUploadValidationEntityEnums.RateCount,
-                        _customerDataUploadValidationEntityEnums.RateType,
-                        _customerDataUploadValidationEntityEnums.Value,
+                        customerDataUploadValidationEntityEnums.ContractReference,
+                        customerDataUploadValidationEntityEnums.MPXN,
+                        customerDataUploadValidationEntityEnums.Supplier,
+                        customerDataUploadValidationEntityEnums.ContractStartDate,
+                        customerDataUploadValidationEntityEnums.ContractEndDate,
+                        customerDataUploadValidationEntityEnums.Product,
+                        customerDataUploadValidationEntityEnums.RateCount,
+                        customerDataUploadValidationEntityEnums.RateType,
+                        customerDataUploadValidationEntityEnums.Value,
                     };
 
-                var records = _tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractEntities.Select(fce => fce.RowId.Value).Distinct().ToList(), columns);
+                var records = tempCustomerDataUploadMethods.InitialiseRecordsDictionary(fixedContractEntities.Select(fce => fce.RowId.Value).Distinct().ToList(), columns);
 
                 //If any are empty records, store error
                 var requiredColumns = new Dictionary<string, string>
                     {
-                        {_customerDataUploadValidationEntityEnums.ContractReference, "Contract Reference"},
-                        {_customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
-                        {_customerDataUploadValidationEntityEnums.Supplier, _customerDataUploadValidationEntityEnums.Supplier},
-                        {_customerDataUploadValidationEntityEnums.ContractStartDate, "Contract Start Date"},
-                        {_customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"}
+                        {customerDataUploadValidationEntityEnums.ContractReference, "Contract Reference"},
+                        {customerDataUploadValidationEntityEnums.MPXN, "MPAN/MPRN"},
+                        {customerDataUploadValidationEntityEnums.Supplier, customerDataUploadValidationEntityEnums.Supplier},
+                        {customerDataUploadValidationEntityEnums.ContractStartDate, "Contract Start Date"},
+                        {customerDataUploadValidationEntityEnums.ContractEndDate, "Contract End Date"}
                     };
 
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, fixedContractEntities, requiredColumns);
+                tempCustomerDataUploadMethods.GetMissingRecords(records, fixedContractEntities, requiredColumns);
 
                 //If Contract Reference and MPXN doesn't exist then Product, Rate Count, Number of rates and costs are required
-                var newContractMeterEntities = fixedContractEntities.Where(fce => 
-                    !_customerMethods.ContractMeterExists(fce.ContractReference, fce.MPXN))
-                    .ToList();
+                var newContractMeterEntities = fixedContractEntities.Where(fce => !customerMethods.ContractMeterExists(fce.ContractReference, fce.MPXN)).ToList();
 
                 requiredColumns = new Dictionary<string, string>
                     {
-                        {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
-                        {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"},
+                        {customerDataUploadValidationEntityEnums.Product, customerDataUploadValidationEntityEnums.Product},
+                        {customerDataUploadValidationEntityEnums.RateCount, "Rate Count"},
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractMeterEntities, requiredColumns);
+                tempCustomerDataUploadMethods.GetMissingRecords(records, newContractMeterEntities, requiredColumns);
 
                 //Get new contracts
-                var newContractEntities = fixedContractEntities.Where(fce => string.IsNullOrWhiteSpace(fce.ContractReference))
-                    .ToList();
+                var newContractEntities = fixedContractEntities.Where(fce => string.IsNullOrWhiteSpace(fce.ContractReference)).ToList();
 
                 //Product must be populated
                 requiredColumns = new Dictionary<string, string>
                     {
-                        {_customerDataUploadValidationEntityEnums.Product, _customerDataUploadValidationEntityEnums.Product},
-                        {_customerDataUploadValidationEntityEnums.RateCount, "Rate Count"}
+                        {customerDataUploadValidationEntityEnums.Product, customerDataUploadValidationEntityEnums.Product},
+                        {customerDataUploadValidationEntityEnums.RateCount, "Rate Count"}
                     };
-                _tempCustomerDataUploadMethods.GetMissingRecords(records, newContractEntities, requiredColumns);
+                tempCustomerDataUploadMethods.GetMissingRecords(records, newContractEntities, requiredColumns);
 
                 //Validate Supplier
                 var invalidSupplierEntities = fixedContractEntities.Where(fce => !string.IsNullOrWhiteSpace(fce.Supplier)
@@ -151,9 +142,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidSupplierEntity in invalidSupplierEntities)
                 {
-                    if(!records[invalidSupplierEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Supplier].Contains($"Invalid Supplier '{invalidSupplierEntity.Supplier}'"))
+                    if(!records[invalidSupplierEntity.RowId.Value][customerDataUploadValidationEntityEnums.Supplier].Contains($"Invalid Supplier '{invalidSupplierEntity.Supplier}'"))
                     {
-                        records[invalidSupplierEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Supplier].Add($"Invalid Supplier '{invalidSupplierEntity.Supplier}'");
+                        records[invalidSupplierEntity.RowId.Value][customerDataUploadValidationEntityEnums.Supplier].Add($"Invalid Supplier '{invalidSupplierEntity.Supplier}'");
                     }
                 }
 
@@ -163,9 +154,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractStartDateEntity in invalidContractStartDateEntities)
                 {
-                    if(!records[invalidContractStartDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'"))
+                    if(!records[invalidContractStartDateEntity.RowId.Value][customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'"))
                     {
-                        records[invalidContractStartDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'");
+                        records[invalidContractStartDateEntity.RowId.Value][customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Start Date '{invalidContractStartDateEntity.ContractStartDate}'");
                     }
                 }
 
@@ -174,9 +165,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractEndDateEntity in invalidContractEndDateEntities)
                 {
-                    if(!records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractEndDate].Contains($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'"))
+                    if(!records[invalidContractEndDateEntity.RowId.Value][customerDataUploadValidationEntityEnums.ContractEndDate].Contains($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'"))
                     {
-                        records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractEndDate].Add($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'");
+                        records[invalidContractEndDateEntity.RowId.Value][customerDataUploadValidationEntityEnums.ContractEndDate].Add($"Invalid Contract End Date '{invalidContractEndDateEntity.ContractEndDate}'");
                     }
                 }
 
@@ -186,9 +177,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidContractEndDateEntity in invalidContractEndDateEntities)
                 {
-                    if(!records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'"))
+                    if(!records[invalidContractEndDateEntity.RowId.Value][customerDataUploadValidationEntityEnums.ContractStartDate].Contains($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'"))
                     {
-                        records[invalidContractEndDateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'");
+                        records[invalidContractEndDateEntity.RowId.Value][customerDataUploadValidationEntityEnums.ContractStartDate].Add($"Invalid Contract Dates '{invalidContractEndDateEntity.ContractStartDate}' is equal to or later than '{invalidContractEndDateEntity.ContractEndDate}'");
                     }
                 }
 
@@ -199,9 +190,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateEntity in invalidRateEntities)
                 {
-                    if(!records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'"))
+                    if(!records[invalidRateEntity.RowId.Value][customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'"))
                     {
-                        records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'");
+                        records[invalidRateEntity.RowId.Value][customerDataUploadValidationEntityEnums.Value].Add($"Invalid Rate Value '{invalidRateEntity.Value}' for '{invalidRateEntity.RateType}'");
                     }
                 }
 
@@ -211,9 +202,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateEntity in invalidRateEntities)
                 {
-                    if(!records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateEntity.Value}'"))
+                    if(!records[invalidRateEntity.RowId.Value][customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Standing Charge Value '{invalidRateEntity.Value}'"))
                     {
-                        records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateEntity.Value}'");
+                        records[invalidRateEntity.RowId.Value][customerDataUploadValidationEntityEnums.Value].Add($"Invalid Standing Charge Value '{invalidRateEntity.Value}'");
                     }
                 }
 
@@ -223,9 +214,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateEntity in invalidRateEntities)
                 {
-                    if(!records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'"))
+                    if(!records[invalidRateEntity.RowId.Value][customerDataUploadValidationEntityEnums.Value].Contains($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'"))
                     {
-                        records[invalidRateEntity.RowId.Value][_customerDataUploadValidationEntityEnums.Value].Add($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'");
+                        records[invalidRateEntity.RowId.Value][customerDataUploadValidationEntityEnums.Value].Add($"Invalid Capacity Charge Value '{invalidRateEntity.Value}'");
                     }
                 }
 
@@ -235,9 +226,9 @@ namespace ValidateFixedContractData.api.Controllers
 
                 foreach(var invalidRateCountEntity in invalidRateCountEntities)
                 {
-                    if(!records[invalidRateCountEntity.RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Contains($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'"))
+                    if(!records[invalidRateCountEntity.RowId.Value][customerDataUploadValidationEntityEnums.RateCount].Contains($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'"))
                     {
-                        records[invalidRateCountEntity.RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Add($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'");
+                        records[invalidRateCountEntity.RowId.Value][customerDataUploadValidationEntityEnums.RateCount].Add($"Invalid Rate Count Value '{invalidRateCountEntity.RateCount}'");
                     }
                 }
 
@@ -269,24 +260,24 @@ namespace ValidateFixedContractData.api.Controllers
 
                         if(rateCount != validFixedContractEntities.Count().ToString())
                         {
-                            if(!records[validFixedContractEntities.First().RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Contains($"Rate Count '{rateCount}' does not match number of rates provided"))
+                            if(!records[validFixedContractEntities.First().RowId.Value][customerDataUploadValidationEntityEnums.RateCount].Contains($"Rate Count '{rateCount}' does not match number of rates provided"))
                             {
-                                records[validFixedContractEntities.First().RowId.Value][_customerDataUploadValidationEntityEnums.RateCount].Add($"Rate Count '{rateCount}' does not match number of rates provided");
+                                records[validFixedContractEntities.First().RowId.Value][customerDataUploadValidationEntityEnums.RateCount].Add($"Rate Count '{rateCount}' does not match number of rates provided");
                             }
                         }
                     }
                 }
 
                 //Update Process Queue
-                var errorMessage = _tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, _customerDataUploadValidationSheetNameEnums.FixedContract);
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFixedContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
+                var errorMessage = tempCustomerDataUploadMethods.FinaliseValidation(records, processQueueGUID, createdByUserId, sourceId, new Enums.CustomerSchema.DataUploadValidation.SheetName().FixedContract);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFixedContractDataAPIId, !string.IsNullOrWhiteSpace(errorMessage), errorMessage);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFixedContractDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateFixedContractDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

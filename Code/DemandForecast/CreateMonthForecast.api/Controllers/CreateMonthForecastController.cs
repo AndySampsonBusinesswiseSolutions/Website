@@ -62,10 +62,9 @@ namespace CreateMonthForecast.api.Controllers
         [Route("CreateMonthForecast/Create")]
         public void Create([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

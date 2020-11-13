@@ -7,8 +7,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace CommitSubMeterData.api.Controllers
 {
@@ -18,16 +18,6 @@ namespace CommitSubMeterData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitSubMeterDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.CustomerSchema.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
-        private readonly Enums.CustomerSchema.DataUploadValidation.Entity _customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
         private readonly Int64 commitSubMeterDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -39,7 +29,7 @@ namespace CommitSubMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitSubMeterDataAPI, password);
-            commitSubMeterDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitSubMeterDataAPI);
+            commitSubMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -47,7 +37,7 @@ namespace CommitSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -56,78 +46,77 @@ namespace CommitSubMeterData.api.Controllers
         [Route("CommitSubMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-            var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     commitSubMeterDataAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitSubMeterDataAPI, commitSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSubMeterDataAPI, commitSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSubMeterDataAPIId);
+                
+                var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var tempCustomerDataUploadSubMeterMethods = new Methods.Temp.CustomerDataUpload.SubMeter();
-                var subMeterEntities = tempCustomerDataUploadSubMeterMethods.SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableSubMeterEntities = _tempCustomerDataUploadMethods.GetCommitableEntities(subMeterEntities);
+                var subMeterEntities = new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSubMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(subMeterEntities);
 
                 if(!commitableSubMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, false, null);
                     return;
                 }
+
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+                var customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
+                var customerMethods = new Methods.Customer();
 
                 //For each column, get SubMeterAttributeId
                 var attributes = new Dictionary<long, string>
                 {
-                    {_customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier), _customerDataUploadValidationEntityEnums.SubMeterIdentifier},
-                    {_customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SerialNumber), _customerDataUploadValidationEntityEnums.SerialNumber},
+                    {customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(customerSubMeterAttributeEnums.SubMeterIdentifier), customerDataUploadValidationEntityEnums.SubMeterIdentifier},
+                    {customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(customerSubMeterAttributeEnums.SerialNumber), customerDataUploadValidationEntityEnums.SerialNumber},
                 };
 
-                var detailDictionary = new Dictionary<long, string>();
-
-                foreach(var attribute in attributes)
-                {
-                    detailDictionary.Add(attribute.Key, string.Empty);
-                }
+                var subMeterIdList = new List<long>();
 
                 foreach(var subMeterEntity in commitableSubMeterEntities)
                 {
-                    foreach(var attribute in attributes)
-                    {
-                        detailDictionary[attribute.Key] = subMeterEntity.GetType().GetProperty(attribute.Value).GetValue(subMeterEntity).ToString();
-                    }
+                    var detailDictionary = attributes.ToDictionary(
+                        a => a.Key,
+                        a => subMeterEntity.GetType().GetProperty(a.Value).GetValue(subMeterEntity).ToString()
+                    );
 
                     //Get SubMeterId by MPXN
-                    var subMeterId = _customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value);
+                    var subMeterId = customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(detailDictionary.First().Key, detailDictionary.First().Value);
 
                     if(subMeterId == 0)
                     {
-                        subMeterId = _customerMethods.InsertNewSubMeter(createdByUserId, sourceId);
+                        subMeterId = customerMethods.InsertNewSubMeter(createdByUserId, sourceId);
 
                         //Insert into [Customer].[SubMeterDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            _customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
+                            customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
                         }
                     }
                     else
@@ -135,34 +124,38 @@ namespace CommitSubMeterData.api.Controllers
                         //Update [Customer].[SubMeterDetail]
                         foreach(var detail in detailDictionary)
                         {
-                            var currentDetailEntity = _customerMethods.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(subMeterId, detail.Key);
-                            var currentDetail = currentDetailEntity.Field<string>("SubMeterDetailDescription");
+                            var currentDetailEntity = customerMethods.SubMeterDetail_GetBySubMeterIdAndSubMeterAttributeId(subMeterId, detail.Key);
 
-                            if(detail.Value != currentDetail)
+                            if(detail.Value != currentDetailEntity.SubMeterDetailDescription)
                             {
-                                var subMeterDetailId = currentDetailEntity.Field<int>("SubMeterDetailId");
-                                _customerMethods.SubMeterDetail_DeleteBySubMeterDetailId(subMeterDetailId);
-                                _customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
+                                customerMethods.SubMeterDetail_DeleteBySubMeterDetailId(currentDetailEntity.SubMeterDetailId);
+                                customerMethods.SubMeterDetail_Insert(createdByUserId, sourceId, subMeterId, detail.Key, detail.Value);
                             }
                         }
                     }
 
-                    //Create SubMeter tables
-                    var meterType = "SubMeter";
-                    var schemaName = $"Supply.SubMeter{subMeterId}";
-
-                    _supplyMethods.CreateMeterTables(schemaName, subMeterId, meterType);
+                    if(!subMeterIdList.Contains(subMeterId)) 
+                    {
+                        subMeterIdList.Add(subMeterId);
+                    }
                 }
 
+                //Create SubMeter tables
+                var supplyMethods = new Methods.Supply();
+                var meterType = "SubMeter";
+                Parallel.ForEach(subMeterIdList, new ParallelOptions{MaxDegreeOfParallelism = 5}, subMeterId => {
+                    supplyMethods.CreateMeterTables($"Supply.{meterType}{subMeterId}", subMeterId, meterType);
+                });
+
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitSubMeterDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

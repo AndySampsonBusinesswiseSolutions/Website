@@ -43,10 +43,9 @@ namespace Website.api.Controllers
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
@@ -84,10 +83,9 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponse")]
         public IActionResult GetProcessResponse([FromBody] string processQueueGUID)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
@@ -169,13 +167,12 @@ namespace Website.api.Controllers
         [Route("Website/GetPageRequestResult")]
         public IActionResult GetPageRequestResult([FromBody] string processQueueGUID)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get User Email Address
             // var userEmailAddress = _systemMethods.GetEmailAddressFromJObject(jsonObject);
 
             //Get UserId from Email Address
-            var userId = administrationUserMethods.GetSystemUserId();
+            var userId = new Methods.Administration.User().GetSystemUserId();
 
             //Get HTML from Page Request by Process Queue GUID and User Id
             var pageRequestResult = _systemMethods.PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);

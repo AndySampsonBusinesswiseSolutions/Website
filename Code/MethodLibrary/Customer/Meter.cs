@@ -95,13 +95,13 @@ namespace MethodLibrary
                     createdByUserId, sourceId, meterId, meterAttributeId, meterDetailDescription);
             }
 
-            public DataRow MeterDetail_GetByMeterIdAndMeterAttributeId(long meterId, long meterAttributeId)
+            public Entity.Customer.MeterDetail MeterDetail_GetByMeterIdAndMeterAttributeId(long meterId, long meterAttributeId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureCustomerEnums.MeterDetail_GetByMeterIdAndMeterAttributeId, 
                     meterId, meterAttributeId);
 
-                return dataTable.Rows.Cast<DataRow>().FirstOrDefault();
+                return new Entity.Customer.MeterDetail(dataTable.Rows.Cast<DataRow>().FirstOrDefault());
             }
 
             public string MeterDetail_GetMeterDetailDescriptionByMeterIdAndMeterAttributeId(long meterId, long meterAttributeId)

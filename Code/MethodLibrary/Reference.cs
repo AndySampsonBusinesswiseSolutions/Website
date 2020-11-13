@@ -462,14 +462,14 @@ namespace MethodLibrary
             var meterTimeswitchCodeRangeStartAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchCodeRangeStart);
             var meterTimeswitchCodeRangeEndAttributeId = _informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(_informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchCodeRangeEnd);
 
-            var meterTimeswitchCodeRangeStartDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeStartAttributeId);
-            var meterTimeswitchCodeRangeEndDataTable = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeEndAttributeId);
+            var meterTimeswitchCodeRangeStartEntities = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeStartAttributeId);
+            var meterTimeswitchCodeRangeEndEntities = _informationMethods.MeterTimeswitchCodeDetail_GetByMeterTimeswitchCodeAttributeId(meterTimeswitchCodeRangeEndAttributeId);
 
-            var validRangeStartDataRecords = meterTimeswitchCodeRangeStartDataTable.Rows.Cast<DataRow>().Where(r => Convert.ToInt64(r.Field<string>("MeterTimeswitchCodeDetailDescription")) <= meterTimeswitchCodeValue);
-            var validRangeEndDataRecords = meterTimeswitchCodeRangeEndDataTable.Rows.Cast<DataRow>().Where(r => Convert.ToInt64(r.Field<string>("MeterTimeswitchCodeDetailDescription")) >= meterTimeswitchCodeValue);
+            var validRangeStartEntities = meterTimeswitchCodeRangeStartEntities.Where(mtcrse => Convert.ToInt64(mtcrse.MeterTimeswitchCodeDetailDescription) <= meterTimeswitchCodeValue);
+            var validRangeEndEntities = meterTimeswitchCodeRangeEndEntities.Where(mtcree => Convert.ToInt64(mtcree.MeterTimeswitchCodeDetailDescription) >= meterTimeswitchCodeValue);
 
-            var validRangeStartRows = validRangeStartDataRecords.Select(r => r.Field<long>("MeterTimeswitchCodeId"));
-            var validRangeEndRows = validRangeEndDataRecords.Select(r => r.Field<long>("MeterTimeswitchCodeId"));
+            var validRangeStartRows = validRangeStartEntities.Select(vrse => vrse.MeterTimeswitchCodeId);
+            var validRangeEndRows = validRangeEndEntities.Select(vree => vree.MeterTimeswitchCodeId);
 
             var validRangeRows = validRangeStartRows.Intersect(validRangeEndRows);
 

@@ -16,6 +16,17 @@ namespace MethodLibrary
                     createdByUserId, sourceId, meterId, subMeterId);
             }
 
+            public long MeterToSubMeter_GetMeterToSubMeterIdByMeterIdAndSubMeterId(long meterId, long subMeterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.MeterToSubMeter_GetByMeterIdAndSubMeterId,
+                    meterId, subMeterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("MeterToSubMeterId"))
+                    .FirstOrDefault();
+            }
+
             public List<long> MeterToSubMeter_GetSubMeterIdListByMeterId(long meterId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

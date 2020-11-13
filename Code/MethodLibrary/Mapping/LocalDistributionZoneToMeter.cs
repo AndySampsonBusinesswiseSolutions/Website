@@ -1,4 +1,6 @@
 using System.Reflection;
+using System.Data;
+using System.Linq;
 
 namespace MethodLibrary
 {
@@ -11,6 +13,17 @@ namespace MethodLibrary
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),
                     _storedProcedureMappingEnums.LocalDistributionZoneToMeter_Insert, 
                     createdByUserId, sourceId, localDistributionZoneId, meterId);
+            }
+
+            public long LocalDistributionZoneToMeter_GetLocalDistributionZoneToMeterIdByLocalDistributionZoneIdAndMeterId(long localDistributionZoneId, long meterId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.LocalDistributionZoneToMeter_GetByLocalDistributionZoneIdAndMeterId, 
+                    localDistributionZoneId, meterId);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("LocalDistributionZoneToMeterId"))
+                    .FirstOrDefault();
             }
         }
     }

@@ -7,8 +7,6 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 
 namespace CommitPeriodicUsageData.api.Controllers
@@ -19,18 +17,6 @@ namespace CommitPeriodicUsageData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitPeriodicUsageDataController> _logger;
-        private readonly Methods _methods = new Methods();
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
-        private readonly Enums.SystemSchema.Process.GUID _systemProcessGUIDEnums = new Enums.SystemSchema.Process.GUID();
         private readonly Int64 commitPeriodicUsageDataAPIId;
         private long createdByUserId;
         private long sourceId;
@@ -49,8 +35,8 @@ namespace CommitPeriodicUsageData.api.Controllers
             hostEnvironment = configuration["HostEnvironment"];
 
             _logger = logger;
-            _methods.InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitPeriodicUsageDataAPI, password);
-            commitPeriodicUsageDataAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI);
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitPeriodicUsageDataAPI, password);
+            commitPeriodicUsageDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitPeriodicUsageDataAPI);
         }
 
         [HttpPost]
@@ -58,7 +44,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -67,62 +53,68 @@ namespace CommitPeriodicUsageData.api.Controllers
         [Route("CommitPeriodicUsageData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
+            var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+            var informationMethods = new Methods.Information();
+            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.System();
 
             //Get base variables
-            createdByUserId = administrationUserMethods.GetSystemUserId();
-            sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID,
                     createdByUserId,
                     sourceId,
                     commitPeriodicUsageDataAPIId);
 
-                if (!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, commitPeriodicUsageDataAPIId, hostEnvironment, jsonObject))
+                if (!systemAPIMethods.PrerequisiteAPIsAreSuccessful(systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, commitPeriodicUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitPeriodicUsageDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitPeriodicUsageDataAPIId);
+
+                var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
+                var customerMethods = new Methods.Customer();
 
                 //Get MeterType
-                meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                meterType = jsonObject[systemAPIRequiredDataKeyEnums.MeterType].ToString();
 
                 //Get meterId/subMeterId
                 meterId = meterType == "Meter"
-                    ? GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString())
-                    : GetSubMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.SubMeterIdentifier].ToString());
+                    ? customerMethods.GetMeterId(jsonObject[systemAPIRequiredDataKeyEnums.MPXN].ToString())
+                    : customerMethods.GetSubMeterId(jsonObject[systemAPIRequiredDataKeyEnums.SubMeterIdentifier].ToString());
 
                 //Get UsageTypeId
-                usageType = jsonObject[_systemAPIRequiredDataKeyEnums.UsageType].ToString();
+                usageType = jsonObject[systemAPIRequiredDataKeyEnums.UsageType].ToString();
 
                 //Get GranularityId
-                var granularity = jsonObject[_systemAPIRequiredDataKeyEnums.Granularity].ToString();
-                var granularityDescriptionGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDescription);
-                granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
+                var granularity = jsonObject[systemAPIRequiredDataKeyEnums.Granularity].ToString();
+                var granularityDescriptionGranularityAttributeId = informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(new Enums.InformationSchema.Granularity.Attribute().GranularityDescription);
+                granularityId = informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityDescriptionGranularityAttributeId, granularity);
 
                 //Get Date dictionary
-                dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
+                dateDictionary = informationMethods.Date_GetDateDescriptionIdDictionary();
 
                 //Get Periodic Usage
-                var periodicUsageJson = jsonObject[_systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString();
+                var periodicUsageJson = jsonObject[systemAPIRequiredDataKeyEnums.PeriodicUsage].ToString();
                 var periodicUsageDictionary = new Methods().DeserializePeriodicUsageToStringDictionary(periodicUsageJson);
 
                 //Insert periodic usage
-                var latestPeriodicUsageList = InsertPeriodicUsage(periodicUsageDictionary);
+                var latestPeriodicUsageEntities = InsertPeriodicUsage(periodicUsageDictionary);
 
                 //Check to see if full 365days are available
-                var dateIdList = latestPeriodicUsageList.Select(r => r.Field<long>("DateId")).Distinct().ToList();
-                var latestPeriodicUsageDictionary = CreateDictionary(latestPeriodicUsageList, dateIdList, "DateId", "TimePeriodId");
+                var dateIdList = latestPeriodicUsageEntities.Select(lpul => lpul.DateId).Distinct().ToList();
+                var latestPeriodicUsageDictionary = CreateDictionary(latestPeriodicUsageEntities, dateIdList, "DateId", "TimePeriodId");
 
                 var latestPeriodicUsageDate = dateIdList.Max(dateId => Convert.ToDateTime(dateDictionary.First(d => d.Value == dateId).Key));
                 var earliestRequiredPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
@@ -135,82 +127,87 @@ namespace CommitPeriodicUsageData.api.Controllers
                     if(meterType == "SubMeter")
                     {
                         //Update Process Queue
-                        _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
+                        systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
 
                         return;
                     }
 
                     //Call CommitProfiledUsage API and wait for response
-                    var commitProfiledUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CommitProfiledUsageAPI);
-                    var commitProfiledUsageAPI = _systemAPIMethods.PostAsJsonAsync(commitProfiledUsageAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                    var commitProfiledUsageAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitProfiledUsageAPI);
+                    var commitProfiledUsageAPI = systemAPIMethods.PostAsJsonAsync(commitProfiledUsageAPIId, systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
                     var commitProfiledUsageResult = commitProfiledUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
-                    latestPeriodicUsageList = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+                    latestPeriodicUsageEntities = new Methods.Supply().LoadedUsageLatest_GetList(meterType, meterId);
                 }
+
+                var supplyMethods = new Methods.Supply();
 
                 //Create new ProcessQueueGUID
                 var newProcessQueueGUID = Guid.NewGuid().ToString();
 
                 //Map current ProcessQueueGUID to new ProcessQueueGUID
-                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
-                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+                systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
 
                 //Update Process GUID to Create Forecast Usage Process GUID
-                _systemMethods.SetProcessGUIDInJObject(jsonObject, _systemProcessGUIDEnums.CreateForecastUsage);
+                systemMethods.SetProcessGUIDInJObject(jsonObject, new Enums.SystemSchema.Process.GUID().CreateForecastUsage);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
+                var routingAPIId = systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                systemAPIMethods.PostAsJsonAsync(routingAPIId, systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
 
                 if(meterType == "SubMeter")
                 {
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
 
                     return;
                 }
 
                 //Get Existing Estimated Annual Usage
-                var existingEstimatedAnnualUsage = _supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);
+                var existingEstimatedAnnualUsage = supplyMethods.EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage(meterType, meterId);
 
                 //Create Estimated Annual Usage
-                var estimatedAnnualUsage = latestPeriodicUsageList
-                    .Where(r => Convert.ToDateTime(dateDictionary.First(d => d.Value == r.Field<long>("DateId")).Key) >= earliestRequiredPeriodicUsageDate)
-                    .Sum(r => r.Field<decimal>("Usage"));
+                var estimatedAnnualUsage = latestPeriodicUsageEntities
+                    .Where(r => Convert.ToDateTime(dateDictionary.First(d => d.Value == r.DateId).Key) >= earliestRequiredPeriodicUsageDate)
+                    .Sum(r => r.Usage);
 
                 if(estimatedAnnualUsage != existingEstimatedAnnualUsage)
                 {
                     //End date existing Estimated Annual Usage
-                    _supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);
+                    supplyMethods.EstimatedAnnualUsage_Delete(meterType, meterId);
 
                     //Insert new Estimated Annual Usage
-                    _supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
+                    supplyMethods.EstimatedAnnualUsage_Insert(createdByUserId, sourceId, meterType, meterId, estimatedAnnualUsage);
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, false, null);
             }
             catch (Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitPeriodicUsageDataAPIId, true, $"System Error Id {errorId}");
             }
         }
 
         private bool DoesLatestPeriodicUsageRequiresProfiling(Dictionary<long, List<long>> latestPeriodicUsageDictionary, DateTime latestPeriodicUsageDate, DateTime earliestRequiredPeriodicUsageDate)
         {
+            var mappingMethods = new Methods.Mapping();
+
             //Get standard number of time periods for granularity
-            var granularityToTimePeriodStandardDateTimePeriodIdListByGranularityId = GetIdListFromDataRowsByGranularityId(_mappingMethods.GranularityToTimePeriod_StandardDate_GetList(), granularityId, "TimePeriodId");
+            var granularityToTimePeriodStandardDateEntities = mappingMethods.GranularityToTimePeriod_StandardDate_GetList();
+            var granularityToTimePeriodStandardDateTimePeriodIdListByGranularityId = GetIdListFromEntitiesByGranularityId(granularityToTimePeriodStandardDateEntities, granularityId, "TimePeriodId");
 
             //Get dates that have additional number of time periods for granularity
-            var granularityToTimePeriodNonStandardDateList = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetList()
-                .Where(r => r.Field<long>("GranularityId") == granularityId).ToList();
-            var dateIdList = GetIdListFromDataRowsByGranularityId(granularityToTimePeriodNonStandardDateList, granularityId, "DateId");
-            var granularityToTimePeriodNonStandardDateDictionaryByGranularityId = CreateDictionary(granularityToTimePeriodNonStandardDateList, dateIdList, "DateId", "TimePeriodId");
+            var granularityToTimePeriodNonStandardDateEntities = mappingMethods.GranularityToTimePeriod_NonStandardDate_GetList()
+                .Where(r => r.GranularityId == granularityId).ToList();
+            var dateIdList = GetIdListFromEntitiesByGranularityId(granularityToTimePeriodNonStandardDateEntities, granularityId, "DateId");
+            var granularityToTimePeriodNonStandardDateDictionaryByGranularityId = CreateDictionary(granularityToTimePeriodNonStandardDateEntities, dateIdList, "DateId", "TimePeriodId");
 
             //is the earliest date in the usage earlier than 1 year ago
             var latestPeriodicUsageRequiresProfiling = latestPeriodicUsageDictionary
@@ -219,10 +216,11 @@ namespace CommitPeriodicUsageData.api.Controllers
 
             if (!latestPeriodicUsageRequiresProfiling)
             {
+                var methods = new Methods();
                 //does each date between earliestRequiredPeriodicUsageDate and latestPeriodicUsageDate exist in latestPeriodicUsageDictionary
                 var periodicUsageDateIds = Enumerable.Range(0, latestPeriodicUsageDate.Subtract(earliestRequiredPeriodicUsageDate).Days + 1)
                     .Select(offset => earliestRequiredPeriodicUsageDate.AddDays(offset))
-                    .Select(d => dateDictionary[_methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)]);
+                    .Select(d => dateDictionary[methods.ConvertDateTimeToSqlParameter(d).Substring(0, 10)]);
 
                 latestPeriodicUsageRequiresProfiling = periodicUsageDateIds.Any(d => !latestPeriodicUsageDictionary.ContainsKey(d));
 
@@ -251,46 +249,48 @@ namespace CommitPeriodicUsageData.api.Controllers
 
         private Dictionary<string, List<long>> GetTimePeriodListByEndTime()
         {
-            var timePeriodList = _informationMethods.TimePeriod_GetList();
-            var endTimeList = timePeriodList.Select(r => r.Field<TimeSpan>("EndTime").ToString().Substring(0, 5)).Distinct();
-            var timePeriodIdListByEndTime = endTimeList.ToDictionary(r => r, r => new List<long>());
+            var timePeriodEntities = new Methods.Information().TimePeriod_GetList();
+            var endTimeList = timePeriodEntities.Select(tpe => tpe.EndTime.ToString().Substring(0, 5)).Distinct();
+            var timePeriodIdListByEndTime = endTimeList.ToDictionary(etl => etl, etl => new List<long>());
 
-            foreach (var dataRow in timePeriodList)
+            foreach (var timePeriodEntity in timePeriodEntities)
             {
-                timePeriodIdListByEndTime[dataRow.Field<TimeSpan>("EndTime").ToString().Substring(0, 5)].Add(dataRow.Field<long>("TimePeriodId"));
+                timePeriodIdListByEndTime[timePeriodEntity.EndTime.ToString().Substring(0, 5)].Add(timePeriodEntity.TimePeriodId);
             }
 
             return timePeriodIdListByEndTime;
         }
 
-        private static Dictionary<long, List<long>> CreateDictionary(List<DataRow> dataRows, List<long> idList, string keyColumnName, string valueColumnName)
+        private static Dictionary<long, List<long>> CreateDictionary<T>(List<T> entities, List<long> idList, string keyColumnName, string valueColumnName)
         {
-            var dictionary = idList.ToDictionary(r => r, r => new List<long>());
+            var dictionary = idList.ToDictionary(i => i, i => new List<long>());
 
-            foreach (var dataRow in dataRows)
+            foreach (var entity in entities)
             {
-                dictionary[dataRow.Field<long>(keyColumnName)].Add(dataRow.Field<long>(valueColumnName));
+                dictionary[Convert.ToInt64(entity.GetType().GetProperty(keyColumnName).GetValue(entity))].Add(Convert.ToInt64(entity.GetType().GetProperty(valueColumnName).GetValue(entity)));
             }
 
             return dictionary;
         }
 
-        private List<long> GetIdListFromDataRowsByGranularityId(List<DataRow> dataRows, long granularityId, string idColumnName)
+        private List<long> GetIdListFromEntitiesByGranularityId<T>(List<T> entities, long granularityId, string idColumnName)
         {
-            return dataRows.Where(r => r.Field<long>("GranularityId") == granularityId)
-                .Select(r => r.Field<long>(idColumnName))
+            return entities.Where(e => Convert.ToInt64(e.GetType().GetProperty("GranularityId").GetValue(e)) == granularityId)
+                .Select(e => Convert.ToInt64(e.GetType().GetProperty(idColumnName).GetValue(e)))
                 .Distinct().ToList();
         }
 
-        private List<DataRow> InsertPeriodicUsage(Dictionary<string, Dictionary<string, string>> periodicUsageStringDictionary)
+        private List<Entity.Supply.LoadedUsageLatest> InsertPeriodicUsage(Dictionary<string, Dictionary<string, string>> periodicUsageStringDictionary)
         {
+            var methods = new Methods();
             var dates = periodicUsageStringDictionary.Select(u => u.Key)
                 .Distinct()
-                .Select(d => _methods.GetDateTimeSqlParameterFromDateTimeString(d).Substring(0, 10))
+                .Select(d => methods.GetDateTimeSqlParameterFromDateTimeString(d).Substring(0, 10))
                 .ToDictionary(d => d, d => dateDictionary[d]);  
 
             //Get GranularityToTimePeriod Lists by GranularityId
-            var granularityToTimePeriodTimePeriodIdListByGranularityId = GetIdListFromDataRowsByGranularityId(_mappingMethods.GranularityToTimePeriod_GetList(), granularityId, "TimePeriodId");
+            var granularityToTimePeriodEntities = new Methods.Mapping().GranularityToTimePeriod_GetList();
+            var granularityToTimePeriodTimePeriodIdListByGranularityId = GetIdListFromEntitiesByGranularityId(granularityToTimePeriodEntities, granularityId, "TimePeriodId");
 
             //Get TimePeriod List
             var timePeriodIdListByEndTime = GetTimePeriodListByEndTime();
@@ -306,54 +306,12 @@ namespace CommitPeriodicUsageData.api.Controllers
             );
 
             //Insert new Periodic Usage into LoadedUsage tables
-            var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
-            _supplyMethods.InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
+            var supplyMethods = new Methods.Supply();
+            var usageTypeId = new Methods.Information().UsageType_GetUsageTypeIdByUsageTypeDescription(usageType);
+            supplyMethods.InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
             //Return latest periodic usage
-            return _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
-        }
-
-        private List<DataRow> AddDataRows(Dictionary<string, Dictionary<string, string>> periodicUsageDictionary, Dictionary<string, long> dates, Dictionary<string, long> timePeriods, DataTable dataTable)
-        {
-            var dataRows = new List<DataRow>();
-
-            foreach(var periodicUsage in periodicUsageDictionary)
-            {
-                var timePeriodUsage = periodicUsage.Value
-                    .Where(v => !string.IsNullOrWhiteSpace(v.Value))
-                    .ToDictionary(x => timePeriods[x.Key], x => Convert.ToDecimal(x.Value));
-
-                foreach (var timePeriod in timePeriodUsage)
-                {
-                    var dataRow = dataTable.NewRow();
-                    dataRow["DateId"] = dates[periodicUsage.Key];
-                    dataRow["TimePeriodId"] = timePeriod.Key;
-                    dataRow["Usage"] = timePeriod.Value;
-                    dataRows.Add(dataRow);
-                }
-            }
-
-            return dataRows;         
-        }
-
-        private long GetMeterId(string mpxn)
-        {
-            //Get MeterIdentifierMeterAttributeId
-            var _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
-            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
-            //Get MeterId
-            return _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
-        }
-
-        private long GetSubMeterId(string mpxn)
-        {
-            //Get SubMeterIdentifierSubMeterAttributeId
-            var _customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
-            var subMeterIdentifierSubMeterAttributeId = _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier);
-
-            //Get SubMeterId
-            return _customerMethods.SubMeterDetail_GetSubMeterIdListBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, mpxn).FirstOrDefault();
+            return supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);
         }
     }
 }

@@ -24,6 +24,21 @@ namespace MethodLibrary
                 return LocalDistributionZone_GetLocalDistributionZoneIdByLocalDistributionZoneGUID(GUID);
             }
 
+            public long GetLocalDistributionZoneId(string localDistributionZone, long createdByUserId, long sourceId, long localDistributionZoneGroupIdLocalDistributionZoneAttributeId)
+            {
+                var localDistributionZoneId = LocalDistributionZoneDetail_GetLocalDistributionZoneIdByLocalDistributionZoneAttributeIdAndLocalDistributionZoneDetailDescription(localDistributionZoneGroupIdLocalDistributionZoneAttributeId, localDistributionZone);
+
+                if(localDistributionZoneId == 0)
+                {
+                    localDistributionZoneId = InsertNewLocalDistributionZone(createdByUserId, sourceId);
+
+                    //Insert into [Customer].[LocalDistributionZoneDetail]
+                    LocalDistributionZoneDetail_Insert(createdByUserId, sourceId, localDistributionZoneId, localDistributionZoneGroupIdLocalDistributionZoneAttributeId, localDistributionZone);
+                }
+
+                return localDistributionZoneId;
+            }
+
             public long LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(string localDistributionZoneAttributeDescription)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 

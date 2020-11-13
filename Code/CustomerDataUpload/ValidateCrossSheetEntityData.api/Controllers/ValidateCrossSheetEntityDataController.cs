@@ -21,7 +21,6 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         #region Variables
         private readonly ILogger<ValidateCrossSheetEntityDataController> _logger;
         private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-        private static readonly Enums.CustomerSchema.DataUploadValidation.SheetName _customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
         private readonly Int64 validateCrossSheetEntityDataAPIId;
         private readonly string hostEnvironment;
         private Int64 createdByUserId;
@@ -53,12 +52,11 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         [Route("ValidateCrossSheetEntityData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
             var systemMethods = new Methods.System();
             var systemAPIMethods = new Methods.System.API();
 
             //Get base variables
-            createdByUserId = administrationUserMethods.GetSystemUserId();
+            createdByUserId = new Methods.Administration.User().GetSystemUserId();
             sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -83,6 +81,8 @@ namespace ValidateCrossSheetEntityData.api.Controllers
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId);
+
+                var customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
 
                 //TODO: Change to entities
                 var getMethodList = new Dictionary<string, Func<List<DataRow>>>
@@ -114,16 +114,16 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 var basketReferenceBasketAttributeId = customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(new Enums.CustomerSchema.Basket.Attribute().BasketReference);
 
                 var validationTupleList = new List<Tuple<List<DataRow>, List<DataRow>, long, string, string, string, string>>();
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["Site"], dataRowDictionary["Customer"], customerNameCustomerAttributeId, "CustomerName", "Customer Name", _customerDataUploadValidationSheetNameEnums.Site, _customerDataUploadValidationSheetNameEnums.Customer)); //Sites - If Customer Name is populated, check it exists and if not, check it is in the Customers table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["Meter"], dataRowDictionary["Site"], siteNameSiteAttributeId, "SiteName", "Site Name", _customerDataUploadValidationSheetNameEnums.Meter, _customerDataUploadValidationSheetNameEnums.Site)); //Meters - If Site Name is populated, check it exists and if not, check it is in the Sites table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["SubMeter"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.SubMeter, _customerDataUploadValidationSheetNameEnums.Meter)); //SubMeters - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["MeterUsage"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN", _customerDataUploadValidationSheetNameEnums.MeterUsage, _customerDataUploadValidationSheetNameEnums.Meter)); //Meter HH Data - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["MeterExemption"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.MeterExemption, _customerDataUploadValidationSheetNameEnums.Meter)); //Meter Exemptions - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["SubMeterUsage"], dataRowDictionary["SubMeter"], subMeterIdentifierSubMeterAttributeId, "SubMeterIdentifier", "SubMeter Identifier", _customerDataUploadValidationSheetNameEnums.SubMeterUsage, _customerDataUploadValidationSheetNameEnums.SubMeterUsage)); //SubMeter HH Data - If SubMeter Identifier is populated, check it exists and if not, check it is in the SubMeters table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["FixedContract"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FixedContract, _customerDataUploadValidationSheetNameEnums.Meter)); //Fixed Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexContract"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", _customerDataUploadValidationSheetNameEnums.FlexContract, _customerDataUploadValidationSheetNameEnums.Meter)); //Flex Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexReferenceVolume"], dataRowDictionary["FlexContract"], contractReferenceContractAttributeId, "ContractReference", "Contract Reference", _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume, _customerDataUploadValidationSheetNameEnums.FlexContract)); //Flex Reference Volumes - If Contract Reference is populated, check it exists and if not, check it is in the Flex Contracts table
-                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexTrade"], dataRowDictionary["FlexContract"], basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", _customerDataUploadValidationSheetNameEnums.FlexTrade, _customerDataUploadValidationSheetNameEnums.FlexContract)); //Flex Trades - If Basket Reference is populated, check it exists and if not, check it is in the Flex Contracts table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["Site"], dataRowDictionary["Customer"], customerNameCustomerAttributeId, "CustomerName", "Customer Name", customerDataUploadValidationSheetNameEnums.Site, customerDataUploadValidationSheetNameEnums.Customer)); //Sites - If Customer Name is populated, check it exists and if not, check it is in the Customers table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["Meter"], dataRowDictionary["Site"], siteNameSiteAttributeId, "SiteName", "Site Name", customerDataUploadValidationSheetNameEnums.Meter, customerDataUploadValidationSheetNameEnums.Site)); //Meters - If Site Name is populated, check it exists and if not, check it is in the Sites table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["SubMeter"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", customerDataUploadValidationSheetNameEnums.SubMeter, customerDataUploadValidationSheetNameEnums.Meter)); //SubMeters - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["MeterUsage"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN", customerDataUploadValidationSheetNameEnums.MeterUsage, customerDataUploadValidationSheetNameEnums.Meter)); //Meter HH Data - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["MeterExemption"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", customerDataUploadValidationSheetNameEnums.MeterExemption, customerDataUploadValidationSheetNameEnums.Meter)); //Meter Exemptions - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["SubMeterUsage"], dataRowDictionary["SubMeter"], subMeterIdentifierSubMeterAttributeId, "SubMeterIdentifier", "SubMeter Identifier", customerDataUploadValidationSheetNameEnums.SubMeterUsage, customerDataUploadValidationSheetNameEnums.SubMeterUsage)); //SubMeter HH Data - If SubMeter Identifier is populated, check it exists and if not, check it is in the SubMeters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FixedContract"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", customerDataUploadValidationSheetNameEnums.FixedContract, customerDataUploadValidationSheetNameEnums.Meter)); //Fixed Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexContract"], dataRowDictionary["Meter"], meterIdentifierMeterAttributeId, "MPXN", "MPAN/MPRN", customerDataUploadValidationSheetNameEnums.FlexContract, customerDataUploadValidationSheetNameEnums.Meter)); //Flex Contracts - If MPXN is populated, check it exists and if not, check it is in the Meters table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexReferenceVolume"], dataRowDictionary["FlexContract"], contractReferenceContractAttributeId, "ContractReference", "Contract Reference", customerDataUploadValidationSheetNameEnums.FlexReferenceVolume, customerDataUploadValidationSheetNameEnums.FlexContract)); //Flex Reference Volumes - If Contract Reference is populated, check it exists and if not, check it is in the Flex Contracts table
+                validationTupleList.Add(Tuple.Create(dataRowDictionary["FlexTrade"], dataRowDictionary["FlexContract"], basketReferenceBasketAttributeId, "BasketReference", "Basket Reference", customerDataUploadValidationSheetNameEnums.FlexTrade, customerDataUploadValidationSheetNameEnums.FlexContract)); //Flex Trades - If Basket Reference is populated, check it exists and if not, check it is in the Flex Contracts table
 
                 var errorList = new ConcurrentBag<string>();
                 Parallel.ForEach(validationTupleList, new ParallelOptions{MaxDegreeOfParallelism = 5}, vt => {
@@ -160,37 +160,41 @@ namespace ValidateCrossSheetEntityData.api.Controllers
 
         private long GetDetailId(long attributeId, string detailDescription, string sheetName)
         {
+            //TODO: This needs fixing as is badly written
+            //TODO: Maybe move into Dictionary<string, Action>
+            
             var customerMethods = new Methods.Customer();
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.Site)
+            var customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
+            if(sheetName == customerDataUploadValidationSheetNameEnums.Site)
             {
                 return customerMethods.CustomerDetail_GetCustomerDetailIdByCustomerAttributeIdAndCustomerDetailDescription(attributeId, detailDescription);
             }
 
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.Meter)
+            if(sheetName == customerDataUploadValidationSheetNameEnums.Meter)
             {
                 return customerMethods.SiteDetail_GetSiteDetailIdBySiteAttributeIdAndSiteDetailDescription(attributeId, detailDescription);
             }
 
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeter
-                || sheetName == _customerDataUploadValidationSheetNameEnums.MeterUsage
-                || sheetName == _customerDataUploadValidationSheetNameEnums.MeterExemption
-                || sheetName == _customerDataUploadValidationSheetNameEnums.FixedContract
-                || sheetName == _customerDataUploadValidationSheetNameEnums.FlexContract)
+            if(sheetName == customerDataUploadValidationSheetNameEnums.SubMeter
+                || sheetName == customerDataUploadValidationSheetNameEnums.MeterUsage
+                || sheetName == customerDataUploadValidationSheetNameEnums.MeterExemption
+                || sheetName == customerDataUploadValidationSheetNameEnums.FixedContract
+                || sheetName == customerDataUploadValidationSheetNameEnums.FlexContract)
             {
                 return customerMethods.MeterDetail_GetMeterDetailIdByMeterAttributeIdAndMeterDetailDescription(attributeId, detailDescription);
             }
 
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.SubMeterUsage)
+            if(sheetName == customerDataUploadValidationSheetNameEnums.SubMeterUsage)
             {
                 return customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(attributeId, detailDescription);
             }
 
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexReferenceVolume)
+            if(sheetName == customerDataUploadValidationSheetNameEnums.FlexReferenceVolume)
             {
                 return customerMethods.ContractDetail_GetContractDetailIdByContractAttributeIdAndContractDetailDescription(attributeId, detailDescription);
             }
             
-            if(sheetName == _customerDataUploadValidationSheetNameEnums.FlexTrade)
+            if(sheetName == customerDataUploadValidationSheetNameEnums.FlexTrade)
             {
                 return customerMethods.BasketDetail_GetBasketDetailIdByBasketAttributeIdAndBasketDetailDescription(attributeId, detailDescription);
             }

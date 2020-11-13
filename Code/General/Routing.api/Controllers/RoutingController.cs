@@ -53,10 +53,9 @@ namespace Routing.api.Controllers
         [Route("Routing/POST")] //TODO:Change POST route to better name
         public void Route([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
 
             //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
+            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             try
