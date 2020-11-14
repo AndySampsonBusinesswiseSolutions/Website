@@ -19,17 +19,9 @@ namespace CreateDataAnalysisWebpage.api.Controllers
     {
         #region Variables
         private readonly ILogger<CreateDataAnalysisWebpageController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
         private readonly Methods.Information _informationMethods = new Methods.Information();
         private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
-        private readonly Enums.CustomerSchema.Asset.Attribute _customerAssetAttributeEnums = new Enums.CustomerSchema.Asset.Attribute();
-        private readonly Enums.CustomerSchema.SubMeter.Attribute _customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
-        private readonly Enums.SystemSchema.Page.GUID _systemPageGUIDEnums = new Enums.SystemSchema.Page.GUID();
         private readonly Int64 createDataAnalysisWebpageAPIId;
         private string HTML = string.Empty;
         private JObject jsonObject;
@@ -62,7 +54,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateDataAnalysisWebpageAPI, password);
-            createDataAnalysisWebpageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDataAnalysisWebpageAPI);
+            createDataAnalysisWebpageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateDataAnalysisWebpageAPI);
         }
 
         [HttpPost]
@@ -70,7 +62,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(createDataAnalysisWebpageAPIId, hostEnvironment, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createDataAnalysisWebpageAPIId, hostEnvironment, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -79,6 +71,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         [Route("CreateDataAnalysisWebpage/BuildLocationTree")]
         public void BuildLocationTree([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
@@ -86,20 +79,20 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
             //Get Queue GUID
             jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
             filterData = JsonConvert.DeserializeObject<FilterData>(jsonObject["FilterData"].ToString()); 
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createDataAnalysisWebpageAPIId);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDataAnalysisWebpageAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDataAnalysisWebpageAPIId);
 
                 //Setup required Attribute Ids
                 GetRequiredAttributes();
@@ -124,33 +117,33 @@ namespace CreateDataAnalysisWebpage.api.Controllers
                 var baseUl = $"<ul id='siteSelectorList' class='format-listitem listItemWithoutPadding'>{HTML}<ul>";
 
                 //Get Page Id
-                var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.DataAnalysis);
+                var pageId = systemMethods.Page_GetPageIdByGUID(new Enums.SystemSchema.Page.GUID().DataAnalysis);
 
                 //Write HTML to System.PageRequest
-                _systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, baseUl);
+                systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, baseUl);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, false, null);
             }
             catch (Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDataAnalysisWebpageAPIId, true, $"System Error Id {errorId}");
             }
         }
 
         private void GetRequiredAttributes()
         {
             //Get MeterIdentifierMeterAttributeId
-            attributeDictionary.Add("MeterIdentifier", _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier));
+            attributeDictionary.Add("MeterIdentifier", _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier));
 
             //Get AssetNameAssetAttributeId
-            attributeDictionary.Add("AssetName", _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(_customerAssetAttributeEnums.AssetName));
+            attributeDictionary.Add("AssetName", _customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(new Enums.CustomerSchema.Asset.Attribute().AssetName));
 
             //Get SubMeterIdentifierSubMeterAttributeId
-            attributeDictionary.Add("SubMeterIdentifier", _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(_customerSubMeterAttributeEnums.SubMeterIdentifier));
+            attributeDictionary.Add("SubMeterIdentifier", _customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(new Enums.CustomerSchema.SubMeter.Attribute().SubMeterIdentifier));
         }
 
         private void BuildSiteBranch(List<long> siteIds)

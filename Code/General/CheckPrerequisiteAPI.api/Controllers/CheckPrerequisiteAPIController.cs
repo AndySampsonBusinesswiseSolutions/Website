@@ -17,12 +17,6 @@ namespace CheckPrerequisiteAPI.api.Controllers
     {
         #region Variables
         private readonly ILogger<CheckPrerequisiteAPIController> _logger;
-        private readonly Methods _methods = new Methods();
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private readonly Enums.SystemSchema.API.Attribute _systemAPIAttributes = new Enums.SystemSchema.API.Attribute();
         private readonly string hostEnvironment;
         #endregion
 
@@ -40,7 +34,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(_systemAPIMethods.GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(new Methods.System.API().GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -49,24 +43,28 @@ namespace CheckPrerequisiteAPI.api.Controllers
         [Route("CheckPrerequisiteAPI/Check")]
         public List<string> Check([FromBody] object data)
         {
+            var systemAPIAttributes = new Enums.SystemSchema.API.Attribute();
+            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             var prerequisiteAPIGUIDs = new List<string>();
             var completedPrerequisiteAPIGUIDs = new List<string>();
             var erroredPrerequisiteAPIGUIDs = new List<string>();
-            var timeoutSecondsAttributeId = _systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.TimeoutSeconds);
 
             try
             {
+                var timeoutSecondsAttributeId = systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(systemAPIAttributes.TimeoutSeconds);
+
                 //If API list is passed through, then use that otherwise get API list from database
-                var APIGUIDList = _systemMethods.GetAPIGUIDListFromJObject(jsonObject);
+                var APIGUIDList = systemMethods.GetAPIGUIDListFromJObject(jsonObject);
                 if(!string.IsNullOrWhiteSpace(APIGUIDList))
                 {
                     prerequisiteAPIGUIDs = APIGUIDList.Replace("\"","").Replace("[", "").Replace("]", "").Split(',').ToList();
@@ -74,16 +72,16 @@ namespace CheckPrerequisiteAPI.api.Controllers
                 else
                 {
                     //Get prerequisite APIs from database
-                    var callingGUID = _systemMethods.GetCallingGUIDFromJObject(jsonObject);
-                    var prerequisiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(callingGUID);
-                    var prerequisiteAPIGUIDAttributeId = _systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(_systemAPIAttributes.PrerequisiteAPIGUID);
-                    prerequisiteAPIGUIDs = _systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);
+                    var callingGUID = systemMethods.GetCallingGUIDFromJObject(jsonObject);
+                    var prerequisiteAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(callingGUID);
+                    var prerequisiteAPIGUIDAttributeId = systemAPIMethods.APIAttribute_GetAPIAttributeIdByAPIAttributeDescription(systemAPIAttributes.PrerequisiteAPIGUID);
+                    prerequisiteAPIGUIDs = systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIId, prerequisiteAPIGUIDAttributeId);
                 }
 
                 var prerequisiteAPIDictionary = prerequisiteAPIGUIDs
-                    .ToDictionary(api => api, api => _systemAPIMethods.API_GetAPIIdByAPIGUID(api));
+                    .ToDictionary(api => api, api => systemAPIMethods.API_GetAPIIdByAPIGUID(api));
                 var prerequisiteAPITimeoutDictionary = prerequisiteAPIGUIDs
-                    .ToDictionary(api => api, api => Convert.ToDouble(_systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIDictionary[api], timeoutSecondsAttributeId).First()));
+                    .ToDictionary(api => api, api => Convert.ToDouble(systemAPIMethods.APIDetail_GetAPIDetailDescriptionListByAPIIdAndAPIAttributeId(prerequisiteAPIDictionary[api], timeoutSecondsAttributeId).First()));
 
                 //Wait until prerequisite APIs have completed
                 while(prerequisiteAPIDictionary.Any())
@@ -93,7 +91,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
                     {
                         //Get prerequisite API EffectiveToDate from System.ProcessQueue
                         var prerequisiteAPIId = prerequisiteAPIDictionary[prerequisiteAPIGUID];
-                        var processQueueDataRow = _systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, prerequisiteAPIId);
+                        var processQueueDataRow = systemMethods.ProcessQueue_GetByProcessQueueGUIDAndAPIId(processQueueGUID, prerequisiteAPIId);
 
                         if(processQueueDataRow != null)
                         {
@@ -124,14 +122,14 @@ namespace CheckPrerequisiteAPI.api.Controllers
                                     prerequisiteAPIDictionary.Remove(prerequisiteAPIGUID);
                                     erroredPrerequisiteAPIGUIDs.Add(prerequisiteAPIGUID);
 
-                                    var errorId = _systemMethods.InsertSystemError(createdByUserId, 
+                                    var errorId = systemMethods.InsertSystemError(createdByUserId, 
                                         sourceId, 
                                         $"API {prerequisiteAPIId} Timeout",
                                         "API Timeout",
                                         Environment.StackTrace);
 
                                     //Update Process Queue
-                                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, prerequisiteAPIId, true, $"System Error Id {errorId}");
+                                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, prerequisiteAPIId, true, $"System Error Id {errorId}");
                                 }
                             }
                         }    
@@ -143,7 +141,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
             }
             catch(Exception error)
             {
-                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 return prerequisiteAPIGUIDs;
             }

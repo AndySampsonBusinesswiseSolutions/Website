@@ -15,9 +15,6 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
     {
         #region Variables
         private readonly ILogger<ValidateEmailAddressPasswordMappingController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Int64 validateEmailAddressPasswordMappingAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -29,7 +26,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateEmailAddressPasswordMappingAPI, password);
-            validateEmailAddressPasswordMappingAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI);
+            validateEmailAddressPasswordMappingAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI);
         }
 
         [HttpPost]
@@ -37,7 +34,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -47,7 +44,8 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public void Validate([FromBody] object data)
         {
             var administrationUserMethods = new Methods.Administration.User();
-            var informationMethods = new Methods.Information();            
+            var informationMethods = new Methods.Information();
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = administrationUserMethods.GetSystemUserId();
@@ -55,37 +53,34 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     validateEmailAddressPasswordMappingAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId);
 
                 //Get Password Id
-                var password = _systemMethods.GetPasswordFromJObject(jsonObject);
-
-                var administrationPasswordMethods = new Methods.Administration.Password();
-                var passwordId = administrationPasswordMethods.Password_GetPasswordIdByPassword(password);
+                var password = systemMethods.GetPasswordFromJObject(jsonObject);
+                var passwordId = new Methods.Administration.Password().Password_GetPasswordIdByPassword(password);
 
                 //Get User Id
                 var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
 
                 //Validate Password and User combination
-                var mappingMethods = new Methods.Mapping();
-                var mappingId = mappingMethods.PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
+                var mappingId = new Methods.Mapping().PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
                 string errorMessage = null;
 
                 //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error
@@ -95,14 +90,14 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId, mappingId == 0, errorMessage);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId, mappingId == 0, errorMessage);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

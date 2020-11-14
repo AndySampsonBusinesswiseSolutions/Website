@@ -16,15 +16,6 @@ namespace Website.api.Controllers
     {
         #region Variables
         private readonly ILogger<WebsiteController> _logger;
-        private readonly Methods _methods = new Methods();
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        public readonly Methods.Information _informationMethods = new Methods.Information();
-        public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.SystemSchema.ProcessArchive.Attribute();
         private readonly Int64 websiteAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -36,46 +27,49 @@ namespace Website.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().WebsiteAPI, password);
-            websiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.WebsiteAPI);
+            websiteAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().WebsiteAPI);
         }
 
         [HttpPost]
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             try
             {
                 //Get Process Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
-                var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+                var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     websiteAPIId);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, websiteAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, websiteAPIId);
+
+                var systemAPIMethods = new Methods.System.API();
 
                 //Get Routing.API URL
-                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
+                var routingAPIId = systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.WebsiteAPI, hostEnvironment, jsonObject);
+                systemAPIMethods.PostAsJsonAsync(routingAPIId, new Enums.SystemSchema.API.GUID().WebsiteAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, websiteAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, websiteAPIId);
             }
             catch(Exception error)
             {
-                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                systemMethods.InsertSystemError(createdByUserId, sourceId, error);
             }        
         }
 
@@ -83,27 +77,28 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponse")]
         public IActionResult GetProcessResponse([FromBody] string processQueueGUID)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             try
             {
                 //Get Process Archive Id
-                var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+                var processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
                 while(processArchiveId == 0)
                 {
-                    processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+                    processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
                 }
 
                 //Loop until a response record is written into ProcessArchiveDetail
-                var responseAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
-                var response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
+                var responseAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(new Enums.SystemSchema.ProcessArchive.Attribute().Response);
+                var response = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
 
                 while(response == null)
                 {
-                    response = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
+                    response = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
                 }
 
                 //Create return object with response record
@@ -120,7 +115,7 @@ namespace Website.api.Controllers
             }
             catch(Exception error)
             {
-                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 return new BadRequestResult();
             }
@@ -130,34 +125,35 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponseDetail")]
         public IActionResult GetProcessResponseDetail([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
             var jsonObject = JObject.Parse(data.ToString());
 
             //Get Process Queue GUID
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             //Get Process Archive Id
-            var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+            var processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
 
             //Get API Response Process Archive Attribute Id
-            var APIResponseProcesArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.APIResponse);
+            var APIResponseProcesArchiveAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(new Enums.SystemSchema.ProcessArchive.Attribute().APIResponse);
 
             //Get Process Archive Detail Id List By Process Archive Id and Process Archive Attribute Id
-            var processArchiveDetailIdList = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, APIResponseProcesArchiveAttributeId);
+            var processArchiveDetailIdList = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, APIResponseProcesArchiveAttributeId);
 
             //Get API GUID
-            var APIGUID = jsonObject[_systemAPIRequiredDataKeyEnums.APIGUID].ToString();
+            var APIGUID = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().APIGUID].ToString();
 
             //Get API Id
-            var websiteAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(APIGUID);
+            var websiteAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(APIGUID);
 
             //Get Process Archive Detail Id List by API Id
-            var APIProcessArchiveDetailIdList = _mappingMethods.APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);
+            var APIProcessArchiveDetailIdList = new Methods.Mapping().APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);
 
             //Get Process Archive Detail Id that is in both lists
             var processArchiveDetailId = processArchiveDetailIdList.Intersect(APIProcessArchiveDetailIdList).FirstOrDefault();
 
             //Get Process Archive Detail Description by Process Archive Detail Id
-            var processArchiveDetailDescription = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionByProcessArchiveDetailId(processArchiveDetailId);
+            var processArchiveDetailDescription = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionByProcessArchiveDetailId(processArchiveDetailId);
             
             //Return Process Archive Detail Description in message
             return new OkObjectResult(new { message = processArchiveDetailDescription });
@@ -175,7 +171,7 @@ namespace Website.api.Controllers
             var userId = new Methods.Administration.User().GetSystemUserId();
 
             //Get HTML from Page Request by Process Queue GUID and User Id
-            var pageRequestResult = _systemMethods.PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);
+            var pageRequestResult = new Methods.System().PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);
             
             //Return Process Archive Detail Description in message
             return new OkObjectResult(new { message = pageRequestResult });

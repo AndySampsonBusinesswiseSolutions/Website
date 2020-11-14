@@ -16,14 +16,6 @@ namespace ArchiveProcessQueue.api.Controllers
     {
         #region Variables
         private readonly ILogger<ArchiveProcessQueueController> _logger;
-        private readonly Methods _methods = new Methods();
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private readonly Enums.SystemSchema.ProcessArchive.Attribute _systemProcessArchiveAttributeEnums = new Enums.SystemSchema.ProcessArchive.Attribute();
         private readonly Int64 archiveProcessQueueAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -35,7 +27,7 @@ namespace ArchiveProcessQueue.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ArchiveProcessQueueAPI, password);
-            archiveProcessQueueAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.ArchiveProcessQueueAPI);
+            archiveProcessQueueAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ArchiveProcessQueueAPI);
         }
 
         [HttpPost]
@@ -43,7 +35,7 @@ namespace ArchiveProcessQueue.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -52,53 +44,59 @@ namespace ArchiveProcessQueue.api.Controllers
         [Route("ArchiveProcessQueue/Archive")]
         public void Archive([FromBody] object data)
         {
+            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             //Get Process GUID
-            var processGUID = _systemMethods.GetProcessGUIDFromJObject(jsonObject);
+            var processGUID = systemMethods.GetProcessGUIDFromJObject(jsonObject);
 
             try
             {
                 //Get CheckPrerequisiteAPI API Id
-                var checkPrerequisiteAPIAPIId = _systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
+                var checkPrerequisiteAPIAPIId = systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API
-                var API = _systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, _systemAPIGUIDEnums.ArchiveProcessQueueAPI, hostEnvironment, jsonObject);
+                var API = systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, new Enums.SystemSchema.API.GUID().ArchiveProcessQueueAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Get whether there is an error in the API records
-                var hasError = _systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
+                var hasError = systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);
 
                 //If there is an error, check to see if it's a system error
-                var hasSystemError = hasError && _systemMethods.ProcessQueue_GetHasSystemErrorByProcessQueueGUID(processQueueGUID);
+                var hasSystemError = hasError && systemMethods.ProcessQueue_GetHasSystemErrorByProcessQueueGUID(processQueueGUID);
 
                 //Create record in ProcessArchive
-                _systemMethods.ProcessArchive_Insert(createdByUserId,
+                systemMethods.ProcessArchive_Insert(createdByUserId,
                     sourceId,
                     processQueueGUID,
                     hasError);
 
-                var processArchiveId = _systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
-                var processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.APIResponse);
+                var systemProcessArchiveAttributeEnums = new Enums.SystemSchema.ProcessArchive.Attribute();
+                var mappingMethods = new Methods.Mapping();
+                var methods = new Methods();
+
+                var processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+                var processArchiveAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(systemProcessArchiveAttributeEnums.APIResponse);
 
                 //Write record into ProcessToProcessArchive mapping table
-                var processId = _systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
+                var processId = systemMethods.Process_GetProcessIdByProcessGUID(processGUID);
 
                 if(processId != 0)
                 {
-                    _mappingMethods.ProcessToProcessArchive_Insert(createdByUserId, sourceId, processId, processArchiveId);
+                    mappingMethods.ProcessToProcessArchive_Insert(createdByUserId, sourceId, processId, processArchiveId);
                 }
 
                 //Write records for each API into ProcessArchiveDetail
                 //TODO: Make into entities
-                var processQueueDataTable = _systemMethods.ProcessQueue_GetByProcessQueueGUID(processQueueGUID);
+                var processQueueDataTable = systemMethods.ProcessQueue_GetByProcessQueueGUID(processQueueGUID);
                 foreach(DataRow dataRow in processQueueDataTable.Rows)
                 {
                     var effectiveFromDateTime = Convert.ToDateTime(dataRow["EffectiveFromDateTime"]);
@@ -108,7 +106,7 @@ namespace ArchiveProcessQueue.api.Controllers
                         : dataRow["ErrorMessage"].ToString();
                     var APIId = Convert.ToInt64(dataRow["APIId"]);
 
-                    _systemMethods.ProcessArchiveDetail_InsertAll(effectiveFromDateTime,
+                    systemMethods.ProcessArchiveDetail_InsertAll(effectiveFromDateTime,
                         effectiveToDateTime,
                         createdByUserId,
                         sourceId,
@@ -116,33 +114,33 @@ namespace ArchiveProcessQueue.api.Controllers
                         processArchiveAttributeId,
                         processArchiveDetailDescription);
 
-                    var effectiveFromString = _methods.ConvertDateTimeToSqlParameter(effectiveFromDateTime);
-                    var effectiveToString = _methods.ConvertDateTimeToSqlParameter(effectiveToDateTime);
+                    var effectiveFromString = methods.ConvertDateTimeToSqlParameter(effectiveFromDateTime);
+                    var effectiveToString = methods.ConvertDateTimeToSqlParameter(effectiveToDateTime);
 
-                    var processArchiveDetailId = _systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdByEffectiveFromDateTimeAndEffectiveToDateTimeAndProcessArchiveDetailDescription(effectiveFromString,
+                    var processArchiveDetailId = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdByEffectiveFromDateTimeAndEffectiveToDateTimeAndProcessArchiveDetailDescription(effectiveFromString,
                         effectiveToString,
                         processArchiveDetailDescription);
 
-                    _mappingMethods.APIToProcessArchiveDetail_Insert(createdByUserId, sourceId, APIId, processArchiveDetailId);
+                    mappingMethods.APIToProcessArchiveDetail_Insert(createdByUserId, sourceId, APIId, processArchiveDetailId);
                 }
 
                 //Write response into ProcessArchiveDetail
-                processArchiveAttributeId = _systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(_systemProcessArchiveAttributeEnums.Response);
-                _systemMethods.ProcessArchiveDetail_Insert(createdByUserId,
+                processArchiveAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(systemProcessArchiveAttributeEnums.Response);
+                systemMethods.ProcessArchiveDetail_Insert(createdByUserId,
                     sourceId,
                     processArchiveId,
                     processArchiveAttributeId,
                     hasSystemError ? "SYSTEM ERROR" : hasError ? "ERROR" : "OK");
 
                 //Update ProcessArchive
-                _systemMethods.ProcessArchive_Update(processQueueGUID);
+                systemMethods.ProcessArchive_Update(processQueueGUID);
 
                 //Delete GUID from ProcessQueue
-                _systemMethods.ProcessQueue_Delete(processQueueGUID);
+                systemMethods.ProcessQueue_Delete(processQueueGUID);
             }
             catch(Exception error)
             {
-                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                systemMethods.InsertSystemError(createdByUserId, sourceId, error);
             }
         }
     }

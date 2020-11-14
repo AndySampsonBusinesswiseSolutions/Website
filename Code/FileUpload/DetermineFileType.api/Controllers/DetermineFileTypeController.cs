@@ -5,7 +5,6 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace DetermineFileType.api.Controllers
@@ -16,13 +15,6 @@ namespace DetermineFileType.api.Controllers
     {
         #region Variables
         private readonly ILogger<DetermineFileTypeController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private static readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
         private readonly Int64 determineFileTypeAPIId;
         private readonly string hostEnvironment;
         private Int64 fileId;
@@ -35,7 +27,7 @@ namespace DetermineFileType.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().DetermineFileTypeAPI, password);
-            determineFileTypeAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.DetermineFileTypeAPI);
+            determineFileTypeAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().DetermineFileTypeAPI);
         }
 
         [HttpPost]
@@ -43,7 +35,7 @@ namespace DetermineFileType.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -52,49 +44,53 @@ namespace DetermineFileType.api.Controllers
         [Route("DetermineFileType/Determine")]
         public void Determine([FromBody] object data)
         {
+            var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+            var informationMethods = new Methods.Information();
+            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     determineFileTypeAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.DetermineFileTypeAPI, determineFileTypeAPIId, hostEnvironment, jsonObject))
+                if(!systemAPIMethods.PrerequisiteAPIsAreSuccessful(systemAPIGUIDEnums.DetermineFileTypeAPI, determineFileTypeAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, determineFileTypeAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, determineFileTypeAPIId);
 
                 //Get FileId by FileGUID
-                var fileGUID = _systemMethods.GetFileGUIDFromJObject(jsonObject);
-                fileId = _informationMethods.File_GetFileIdByFileGUID(fileGUID);
+                var fileGUID = systemMethods.GetFileGUIDFromJObject(jsonObject);
+                fileId = informationMethods.File_GetFileIdByFileGUID(fileGUID);
 
                 //Check if FileType has been passed through
-                var fileType = _systemMethods.GetFileTypeFromJObject(jsonObject);
+                var fileType = systemMethods.GetFileTypeFromJObject(jsonObject);
                 var fileTypeId = 0L;
 
                 if(!string.IsNullOrWhiteSpace(fileType))
                 {
                     //FileType was passed through so get the FileTypeId
-                    fileTypeId = _informationMethods.FileType_GetFileTypeIdByFileTypeDescription(fileType);
+                    fileTypeId = informationMethods.FileType_GetFileTypeIdByFileTypeDescription(fileType);
 
                     if(fileTypeId == 0)
                     {
                         //An invalid FileType was passed through so error
-                        _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"Invalid FileType {fileType} provided for FileId {fileId}");
+                        systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"Invalid FileType {fileType} provided for FileId {fileId}");
                         return;
                     }
                 }
@@ -104,45 +100,47 @@ namespace DetermineFileType.api.Controllers
                     if(fileTypeId == 0)
                     {
                         //A FileType could not be determined so error
-                        _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"Unable to determine FileType for FileId {fileId}");
+                        systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"Unable to determine FileType for FileId {fileId}");
                         return;
                     }
                 }
 
+                var mappingMethods = new Methods.Mapping();
+
                 //Insert File To FileType Mapping
-                _mappingMethods.FileToFileType_Insert(createdByUserId, sourceId, fileId, fileTypeId);
+                mappingMethods.FileToFileType_Insert(createdByUserId, sourceId, fileId, fileTypeId);
 
                 //Get ProcessGUID related to FileType
-                var processId = _mappingMethods.FileTypeToProcess_GetProcessIdByFileTypeId(fileTypeId);
-                var processGUID = _systemMethods.Process_GetProcessGUIDByProcessId(processId);
+                var processId = mappingMethods.FileTypeToProcess_GetProcessIdByFileTypeId(fileTypeId);
+                var processGUID = systemMethods.Process_GetProcessGUIDByProcessId(processId);
 
                 //Add ProcessGUID into jsonObject
-                jsonObject.Add(_systemAPIRequiredDataKeyEnums.ProcessGUID, processGUID);
+                jsonObject.Add(new Enums.SystemSchema.API.RequiredDataKey().ProcessGUID, processGUID);
 
                 //Create new ProcessQueueGUID
                 var newProcessQueueGUID = Guid.NewGuid().ToString();
 
                 //Link ProcessQueueGUIDs
-                _systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
+                systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
 
                 //Update ProcessQueueGUID in jsonObject
-                _systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
+                systemMethods.SetProcessQueueGUIDInJObject(jsonObject, newProcessQueueGUID);
 
                 //Get Routing.API URL
-                var routingAPIId = _systemAPIMethods.GetRoutingAPIId();
+                var routingAPIId = systemAPIMethods.GetRoutingAPIId();
 
                 //Connect to Routing API and POST data
-                _systemAPIMethods.PostAsJsonAsync(routingAPIId, _systemAPIGUIDEnums.DetermineFileTypeAPI, hostEnvironment, jsonObject);
+                systemAPIMethods.PostAsJsonAsync(routingAPIId, systemAPIGUIDEnums.DetermineFileTypeAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, determineFileTypeAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

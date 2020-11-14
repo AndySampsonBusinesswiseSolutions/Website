@@ -52,8 +52,8 @@ namespace Entity
             private long _ForecastGroupToTimePeriodId;
             public long ForecastGroupToTimePeriodId
             {
-                get { return _ForecastGroupToTimePeriodToProfileId; }
-                set { _ForecastGroupToTimePeriodToProfileId = value; }
+                get { return _ForecastGroupToTimePeriodId; }
+                set { _ForecastGroupToTimePeriodId = value; }
             }
 
             private long _ProfileId;

@@ -15,14 +15,7 @@ namespace Routing.api.Controllers
     {
         #region Variables
         private readonly ILogger<RoutingController> _logger;
-        private readonly Methods _methods = new Methods();
-        private readonly Methods.System _systemMethods = new Methods.System();
         private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly string hostEnvironment;
         #endregion
 
@@ -40,8 +33,8 @@ namespace Routing.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             var jsonObject = JObject.Parse(data.ToString());
-            var routingAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.RoutingAPI);
-            var callingGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CallingGUID].ToString();
+            var routingAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().RoutingAPI);
+            var callingGUID = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().CallingGUID].ToString();
 
             //Launch API process
             _systemAPIMethods.PostAsJsonAsync(routingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
@@ -53,22 +46,24 @@ namespace Routing.api.Controllers
         [Route("Routing/POST")] //TODO:Change POST route to better name
         public void Route([FromBody] object data)
         {
+            var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             try
             {
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
-                var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+                var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
                 
                 //Get ValidateProcessGUID API Id
                 var validateProcessGUIDAPIId = _systemAPIMethods.GetValidateProcessGUIDAPIId();
                 
                 //Call ValidateProcessGUID API
-                var API = _systemAPIMethods.PostAsJsonAsync(validateProcessGUIDAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
+                var API = _systemAPIMethods.PostAsJsonAsync(validateProcessGUIDAPIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                 var processId = 0L;
 
@@ -82,11 +77,11 @@ namespace Routing.api.Controllers
                 catch(Exception error)
                 {
                     //API never started so create record
-                    _systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, validateProcessGUIDAPIId, error.Message);
+                    systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, validateProcessGUIDAPIId, error.Message);
                 }
 
                 //Get APIId list
-                var APIIdList = _mappingMethods.APIToProcess_GetAPIIdListByProcessId(processId);
+                var APIIdList = new Methods.Mapping().APIToProcess_GetAPIIdListByProcessId(processId);
                 var APIGUIDList = new List<string>
                     {
                         _systemAPIMethods.API_GetAPIGUIDByAPIId(validateProcessGUIDAPIId)
@@ -95,7 +90,7 @@ namespace Routing.api.Controllers
                 foreach(var APIId in APIIdList)
                 {
                     //Call API
-                    API = _systemAPIMethods.PostAsJson(APIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
+                    API = _systemAPIMethods.PostAsJson(APIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                     try
                     {
@@ -105,7 +100,7 @@ namespace Routing.api.Controllers
                     catch(Exception error)
                     {
                         //API never started so create record
-                        _systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, APIId, error.Message);
+                        systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, APIId, error.Message);
                     }
                     
                     APIGUIDList.Add(_systemAPIMethods.API_GetAPIGUIDByAPIId(APIId));
@@ -115,11 +110,11 @@ namespace Routing.api.Controllers
                 var archiveAPIId = _systemAPIMethods.GetArchiveProcessQueueAPIId();
 
                 //Create required jsonObject
-                var archiveObject = _systemAPIMethods.GetAPIData(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, jsonObject);
-                archiveObject.Add(_systemAPIRequiredDataKeyEnums.APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
+                var archiveObject = _systemAPIMethods.GetAPIData(archiveAPIId, systemAPIGUIDEnums.RoutingAPI, jsonObject);
+                archiveObject.Add(new Enums.SystemSchema.API.RequiredDataKey().APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
 
                 //Connect to Archive API and POST API list
-                API = _systemAPIMethods.PostAsJson(archiveAPIId, _systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveObject, false);
+                API = _systemAPIMethods.PostAsJson(archiveAPIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveObject, false);
 
                 try
                 {
@@ -129,12 +124,12 @@ namespace Routing.api.Controllers
                 catch(Exception error)
                 {
                     //API never started so create system error record
-                    _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                    systemMethods.InsertSystemError(createdByUserId, sourceId, error);
                 }
             }
             catch(Exception error)
             {
-                _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                systemMethods.InsertSystemError(createdByUserId, sourceId, error);
             }
         }
     }

@@ -17,16 +17,6 @@ namespace CreateManageCustomersWebpage.api.Controllers
     {
         #region Variables
         private readonly ILogger<CreateManageCustomersWebpageController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        public readonly Methods.Customer _customerMethods = new Methods.Customer();
-        public readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.SystemSchema.Page.GUID _systemPageGUIDEnums = new Enums.SystemSchema.Page.GUID();
-        private readonly Enums.CustomerSchema.Customer.Attribute _customerAttributeEnums = new Enums.CustomerSchema.Customer.Attribute();
         private readonly Int64 createManageCustomersWebpageAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -38,7 +28,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateManageCustomersWebpageAPI, password);
-            createManageCustomersWebpageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateManageCustomersWebpageAPI);
+            createManageCustomersWebpageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateManageCustomersWebpageAPI);
         }
 
         [HttpPost]
@@ -46,7 +36,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,49 +45,52 @@ namespace CreateManageCustomersWebpage.api.Controllers
         [Route("CreateManageCustomersWebpage/Create")]
         public void Create([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             //Insert into ProcessQueue
-            _systemMethods.ProcessQueue_Insert(
+            systemMethods.ProcessQueue_Insert(
                 processQueueGUID, 
                 createdByUserId,
                 sourceId,
                 createManageCustomersWebpageAPIId);
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
+            systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
+
+            var customerMethods = new Methods.Customer();
 
             //Get Page Id
-            var pageId = _systemMethods.Page_GetPageIdByGUID(_systemPageGUIDEnums.ManageCustomers);
+            var pageId = systemMethods.Page_GetPageIdByGUID(new Enums.SystemSchema.Page.GUID().ManageCustomers);
 
             //TODO: Get Role
 
             //Get Customer GUID
-            var customerGUID = jsonObject[_systemAPIRequiredDataKeyEnums.CustomerGUID].ToString();
+            var customerGUID = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().CustomerGUID].ToString();
 
             //Get Customer Id
-            var customerId = _customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
+            var customerId = customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
             var customerIds = new List<long>{customerId};
 
             //TODO: If Customer Id is 0, then check Role to load customers
             if(customerId == 0)
             {
                 //Get all customer Ids
-                customerIds = _customerMethods.Customer_GetCustomerIdList();
+                customerIds = customerMethods.Customer_GetCustomerIdList();
             }
 
             //Get Customer Name attribute Id
-            var customerNameAttributeId = _customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(_customerAttributeEnums.CustomerName);
+            var customerNameAttributeId = customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(new Enums.CustomerSchema.Customer.Attribute().CustomerName);
 
             //Get all CustomerToChildCustomer mappings
-            var customerToChildCustomerMappings = _mappingMethods.CustomerToChildCustomer_GetCustomerIdToChildCustomerIdDictionary();
+            var customerToChildCustomerMappings = new Methods.Mapping().CustomerToChildCustomer_GetCustomerIdToChildCustomerIdDictionary();
 
             //Loop though Customer Ids, get Customer Name and add to dictionary
             var customerNames = new Dictionary<string, List<string>>();
@@ -119,7 +112,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
 
                 if(isParent)
                 {
-                    var customerName = _customerMethods.CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(customer, customerNameAttributeId);
+                    var customerName = customerMethods.CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(customer, customerNameAttributeId);
                     customerNames.Add(customerName, new List<string>());
 
                     if(customerToChildCustomerMappings.Select(cc => cc.Key).Any(c => c == customer))
@@ -128,7 +121,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
 
                         foreach(var child in children)
                         {
-                            var childCustomerName = _customerMethods.CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(child, customerNameAttributeId);
+                            var childCustomerName = customerMethods.CustomerDetail_GetCustomerDetailDescriptionByCustomerIdAndCustomerAttributeId(child, customerNameAttributeId);
                             customerNames[customerName].Add(childCustomerName);
                         }
                     }
@@ -173,10 +166,10 @@ namespace CreateManageCustomersWebpage.api.Controllers
             var tree = $"<div class='scrolling-wrapper'>{baseUl}</div>";
             
             //Write HTML to System.PageRequest
-            _systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, tree);
+            systemMethods.PageRequest_Insert(createdByUserId, sourceId, pageId, processQueueGUID, tree);
 
             //Update Process Queue
-            _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
+            systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
         }
     }
 }
