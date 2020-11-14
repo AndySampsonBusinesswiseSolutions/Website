@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using System;
 
 namespace MethodLibrary
 {
@@ -10,29 +9,17 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public List<DataRow> DateToYear_GetList()
+            public List<Entity.Mapping.DateToYear> DateToYear_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.DateToYear_GetList);
 
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.DateToYear(d)).ToList();
             }
 
             public Dictionary<long, long> GetDateToYearDictionary()
             {
-                var dataRows = DateToYear_GetList();
-                var dateToYearTuple = new List<Tuple<long, long>>();
-
-                foreach (DataRow r in dataRows)
-                {
-                    var tup = Tuple.Create((long)r["DateId"], (long)r["YearId"]);
-                    dateToYearTuple.Add(tup);
-                }
-
-                return dateToYearTuple.ToDictionary(
-                    d => d.Item1,
-                    d => d.Item2
-                );
+                return DateToYear_GetList().ToDictionary(d => d.DateId, d => d.YearId);
             }
         }
     }

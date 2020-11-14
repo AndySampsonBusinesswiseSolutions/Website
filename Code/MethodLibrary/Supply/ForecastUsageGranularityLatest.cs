@@ -54,32 +54,14 @@ namespace MethodLibrary
 
             public List<Tuple<long, long, decimal>> ForecastUsageGranularityLatest_GetLatestTuple(string meterType, long meterId, string granularityCode, string mainId, string additionalId)
             {
-                var dataRows = ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
-
-                var tuple = new List<Tuple<long, long, decimal>>();
-
-                foreach (DataRow r in dataRows)
-                {
-                    var tup = Tuple.Create((long)r[mainId], (long)r[additionalId], (decimal)r["Usage"]);
-                    tuple.Add(tup);
-                }
-
-                return tuple;
+                return ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode)
+                    .Select(d => Tuple.Create((long)d[mainId], (long)d[additionalId], (decimal)d["Usage"])).ToList();
             }
 
             public List<Tuple<long, decimal>> ForecastUsageGranularityLatest_GetLatestTuple(string meterType, long meterId, string granularityCode, string mainId)
             {
-                var dataRows = ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode);
-
-                var tuple = new List<Tuple<long, decimal>>();
-
-                foreach (DataRow r in dataRows)
-                {
-                    var tup = Tuple.Create((long)r[mainId], (decimal)r["Usage"]);
-                    tuple.Add(tup);
-                }
-
-                return tuple;
+                return ForecastUsageGranularityLatest_GetLatest(meterType, meterId, granularityCode)
+                    .Select(d => Tuple.Create((long)d[mainId], (decimal)d["Usage"])).ToList();
             }
 
             public void ForecastUsageGranularityLatest_Insert(string meterType, long meterId, string granularityCode, DataTable forecastUsageGranularityLatestDataTable)

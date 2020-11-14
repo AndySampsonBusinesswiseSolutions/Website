@@ -6,7 +6,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Data;
 using Microsoft.Extensions.Configuration;
 
 namespace CreateForecastUsage.api.Controllers
@@ -17,17 +16,6 @@ namespace CreateForecastUsage.api.Controllers
     {
         #region Variables
         private readonly ILogger<CreateForecastUsageController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
         private readonly Int64 createForecastUsageAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -39,7 +27,7 @@ namespace CreateForecastUsage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateForecastUsageAPI, password);
-            createForecastUsageAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateForecastUsageAPI);
+            createForecastUsageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateForecastUsageAPI);
         }
 
         [HttpPost]
@@ -47,7 +35,7 @@ namespace CreateForecastUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -56,54 +44,54 @@ namespace CreateForecastUsage.api.Controllers
         [Route("CreateForecastUsage/Create")]
         public void Create([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     createForecastUsageAPIId);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createForecastUsageAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createForecastUsageAPIId);
+
+                var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+                var systemAPIMethods = new Methods.System.API();
 
                 //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
 
                 //Call GetMappedUsageDateId API and wait for response
-                var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
-                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
 
-                var dateMappings = _supplyMethods.DateMapping_GetLatest(meterType, meterId);
-                var futureDateToUsageDateDictionary = dateMappings.ToDictionary(
-                    d => d.Field<long>("DateId"),
-                    d => d.Field<long>("MappedDateId")
-                );
+                var dateMappings = new Methods.Supply().DateMapping_GetLatestDictionary(meterType, meterId);
 
-                if(!futureDateToUsageDateDictionary.Any() || futureDateToUsageDateDictionary.Any(f => f.Value == 0))
+                if(!dateMappings.Any() || dateMappings.Any(d => d.Value == 0))
                 {
                     //throw error as mapping has failed
-                    var errorMessage = futureDateToUsageDateDictionary.Any() 
-                        ? $"Forecast date ids without mapped usage date id: {string.Join(',', futureDateToUsageDateDictionary.Where(f => f.Value == 0))}"
+                    var errorMessage = dateMappings.Any() 
+                        ? $"Forecast date ids without mapped usage date id: {string.Join(',', dateMappings.Where(d => d.Value == 0))}"
                         : $"No forecast date ids mapped to usage date ids";
-                    var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, errorMessage, "Forecast Date Mapping", Environment.StackTrace);
+                    var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, errorMessage, "Forecast Date Mapping", Environment.StackTrace);
 
                     //Update Process Queue
-                    _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $"System Error Id {errorId}");
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $"System Error Id {errorId}");
                     return;
                 }
 
@@ -111,14 +99,14 @@ namespace CreateForecastUsage.api.Controllers
                 //TODO: if all ok, email customer
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createForecastUsageAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

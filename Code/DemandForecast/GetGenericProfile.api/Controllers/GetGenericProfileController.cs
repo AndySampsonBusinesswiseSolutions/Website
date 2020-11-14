@@ -18,17 +18,7 @@ namespace GetGenericProfile.api.Controllers
     {
         #region Variables
         private readonly ILogger<GetGenericProfileController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
         private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private static readonly Enums.DemandForecastSchema.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecastSchema.Profile.Attribute();
-        private static readonly Enums.DemandForecastSchema.Profile.EntityToMatch _demandForecastProfileEntityToMatchEnums = new Enums.DemandForecastSchema.Profile.EntityToMatch();
         private readonly Int64 getGenericProfileAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -40,7 +30,7 @@ namespace GetGenericProfile.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetGenericProfileAPI, password);
-            getGenericProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetGenericProfileAPI);
+            getGenericProfileAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetGenericProfileAPI);
         }
 
         [HttpPost]
@@ -48,7 +38,7 @@ namespace GetGenericProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -57,38 +47,42 @@ namespace GetGenericProfile.api.Controllers
         [Route("GetGenericProfile/Get")]
         public long Get([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     getGenericProfileAPIId);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getGenericProfileAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getGenericProfileAPIId);
+
+                var demandForecastProfileAttributeEnums = new Enums.DemandForecastSchema.Profile.Attribute();
+                var demandForecastMethods = new Methods.DemandForecast();
 
                 //Get meterId/subMeterId
-                var meterId = GetMeterId(jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString());
+                var meterId = new Methods.Customer().GetMeterId(jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MPXN].ToString());
 
                 //Get Is Generic Profile Attribute Id
-                var isGenericProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.IsGeneric);
+                var isGenericProfileAttributeId = demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(demandForecastProfileAttributeEnums.IsGeneric);
 
                 //Get Entity To Match Profile Attribute Id
-                var entityToMatchProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.EntityToMatch);
+                var entityToMatchProfileAttributeId = demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(demandForecastProfileAttributeEnums.EntityToMatch);
 
                 //Get all generic profiles
-                var genericProfileIds = _demandForecastMethods.ProfileDetail_GetProfileIdListByProfileAttributeIdAndProfileDetailDescription(isGenericProfileAttributeId, "True");
+                var genericProfileIds = demandForecastMethods.ProfileDetail_GetProfileIdListByProfileAttributeIdAndProfileDetailDescription(isGenericProfileAttributeId, "True");
 
                 //Store matched profileIds
                 var matchedProfileIds = new ConcurrentBag<long>();
@@ -96,7 +90,7 @@ namespace GetGenericProfile.api.Controllers
 
                 //For each generic profile, find all the entities to match against
                 Parallel.ForEach(genericProfileIds, parallelOptions, genericProfileId => {
-                    var entitiesToMatchDictionary = _demandForecastMethods.ProfileDetail_GetProfileDetailDescriptionListByProfileIdAndProfileAttributeId(genericProfileId, entityToMatchProfileAttributeId)
+                    var entitiesToMatchDictionary = demandForecastMethods.ProfileDetail_GetProfileDetailDescriptionListByProfileIdAndProfileAttributeId(genericProfileId, entityToMatchProfileAttributeId)
                         .ToDictionary(e => e, e => EntityMatches(e, genericProfileId, meterId));
 
                     if(entitiesToMatchDictionary.Values.All(v => v))
@@ -108,39 +102,31 @@ namespace GetGenericProfile.api.Controllers
                 var profileId = (!matchedProfileIds.Any() || matchedProfileIds.Distinct().Count() > 1) ? 0 : matchedProfileIds.First();
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, false, null);
 
                 return profileId;
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getGenericProfileAPIId, true, $"System Error Id {errorId}");
 
                 return 0;
             }
         }
 
-        private long GetMeterId(string mpxn)
-        {
-            //Get MeterIdentifierMeterAttributeId
-            var _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
-            var meterIdentifierMeterAttributeId = _customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(_customerMeterAttributeEnums.MeterIdentifier);
-
-            //Get MeterId
-            return _customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, mpxn).FirstOrDefault();
-        }
-
         private bool EntityMatches(string entity, long profileId, long meterId)
         {
-            if(entity == _demandForecastProfileEntityToMatchEnums.Commodity)
+            var demandForecastProfileEntityToMatchEnums = new Enums.DemandForecastSchema.Profile.EntityToMatch();
+
+            if(entity == demandForecastProfileEntityToMatchEnums.Commodity)
             {
                 return CommodityMatches(profileId, meterId);
             }
 
-            if(entity == _demandForecastProfileEntityToMatchEnums.ProfileClass)
+            if(entity == demandForecastProfileEntityToMatchEnums.ProfileClass)
             {
                 return ProfileClassMatches(profileId, meterId);
             }

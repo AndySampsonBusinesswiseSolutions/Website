@@ -8,7 +8,7 @@ DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WH
 DECLARE @DailyTimePeriodId BIGINT = (SELECT TimePeriodId FROM [Information].[TimePeriod] WHERE StartTime = '00:00:00.0000000' AND EndTime = '00:00:00.0000000')
 DECLARE @GasGenericProfileId BIGINT = (SELECT ProfileId FROM [DemandForecast].[ProfileDetail] WHERE ProfileDetailDescription = 'Gas Generic Profile')
 DECLARE @ProfileValue DECIMAL(19, 19) = (SELECT 1/CAST(366 AS DECIMAL))
-DECLARE @ProfileValueId BIGINT = (SELECT ProfileValueId FROM [DemandForecast].[ProfileValue] WHERE ProfileValue = @ProfileValue)
+DECLARE @ProfileValueId BIGINT = (SELECT ProfileValueId FROM [DemandForecast].[ProfileValue] WHERE Value = @ProfileValue)
 
 INSERT INTO [Mapping].[ForecastGroupToTimePeriodToProfileToProfileValue]
     (
@@ -31,7 +31,7 @@ INNER JOIN
 WHERE
 	ForecastGroupToTimePeriodToProfile.ProfileId = @GasGenericProfileId
 
-SET @ProfileValueId = (SELECT ProfileValueId FROM [DemandForecast].[ProfileValue] WHERE ProfileValue = (SELECT 1/CAST(17568 AS DECIMAL)))
+SET @ProfileValueId = (SELECT ProfileValueId FROM [DemandForecast].[ProfileValue] WHERE Value = (SELECT 1/CAST(17568 AS DECIMAL)))
 
 INSERT INTO [Mapping].[ForecastGroupToTimePeriodToProfileToProfileValue]
     (

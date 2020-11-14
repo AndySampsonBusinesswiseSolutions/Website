@@ -6,10 +6,10 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Concurrent;
 
 namespace CreateHalfHourForecast.api.Controllers
 {
@@ -19,21 +19,11 @@ namespace CreateHalfHourForecast.api.Controllers
     {
         #region Variables
         private readonly ILogger<CreateHalfHourForecastController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
         private readonly Int64 createHalfHourForecastAPIId;
         private readonly string granularityCode = "HalfHour";
         private List<Tuple<long, long, decimal>> existingHalfHourForecasts;
         private Dictionary<long, Dictionary<long, decimal>> existingHalfHourForecastDictionary;
-        private Dictionary<long, Dictionary<long, decimal>> forecastDictionary;
+        private ConcurrentDictionary<long, Dictionary<long, decimal>> forecastDictionary;
         private readonly string hostEnvironment;
         #endregion
 
@@ -44,7 +34,7 @@ namespace CreateHalfHourForecast.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateHalfHourForecastAPI, password);
-            createHalfHourForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateHalfHourForecastAPI);
+            createHalfHourForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateHalfHourForecastAPI);
         }
 
         [HttpPost]
@@ -52,7 +42,7 @@ namespace CreateHalfHourForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(createHalfHourForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createHalfHourForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -61,37 +51,38 @@ namespace CreateHalfHourForecast.api.Controllers
         [Route("CreateHalfHourForecast/Create")]
         public void Create([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createHalfHourForecastAPIId);
 
-                if(!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateHalfHourForecastAPI, createHalfHourForecastAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CreateHalfHourForecastAPI, createHalfHourForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createHalfHourForecastAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createHalfHourForecastAPIId);
 
                 //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
 
                 Parallel.ForEach(new List<bool>{true, false}, getForecast => {
                     if(getForecast)
@@ -104,11 +95,10 @@ namespace CreateHalfHourForecast.api.Controllers
                     }
                 });
 
-                var newHalfHourForecastTuples = new List<Tuple<long, long, decimal>>();
-                var oldHalfHourForecastTuples = new List<Tuple<long, long, decimal>>();
+                var newHalfHourForecastTuples = new ConcurrentBag<Tuple<long, long, decimal>>();
+                var oldHalfHourForecastTuples = new ConcurrentBag<Tuple<long, long, decimal>>();
 
-                foreach (var forecastDate in forecastDictionary)
-                {
+                Parallel.ForEach(forecastDictionary, new ParallelOptions{MaxDegreeOfParallelism = 5}, forecastDate => {
                     foreach (var forecastTimePeriod in forecastDate.Value)
                     {
                         var isNewPeriod = !existingHalfHourForecastDictionary.ContainsKey(forecastDate.Key)
@@ -127,7 +117,7 @@ namespace CreateHalfHourForecast.api.Controllers
                             newHalfHourForecastTuples.Add(newHalfHourForecastTuple);
                         }
                     }
-                }
+                });
 
                 if (newHalfHourForecastTuples.Any())
                 {
@@ -135,25 +125,25 @@ namespace CreateHalfHourForecast.api.Controllers
                     existingHalfHourForecasts.AddRange(newHalfHourForecastTuples);
 
                     //Insert into history and latest tables
-                    _supplyMethods.CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId", "TimePeriodId" }, newHalfHourForecastTuples, existingHalfHourForecasts);
+                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId", "TimePeriodId" }, newHalfHourForecastTuples.ToList(), existingHalfHourForecasts);
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, false, null);
             }
             catch (Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, true, $"System Error Id {errorId}");
             }
         }
 
         private void GetExistingForecast(string meterType, long meterId)
         {
             //Get existing five minute forecast
-            existingHalfHourForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId", "TimePeriodId");
+            existingHalfHourForecasts = new Methods.Supply().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId", "TimePeriodId");
             existingHalfHourForecastDictionary = existingHalfHourForecasts.Select(f => f.Item1).Distinct()
                 .ToDictionary(
                     d => d,
@@ -166,29 +156,33 @@ namespace CreateHalfHourForecast.api.Controllers
 
         private void GetForecastDictionary(string meterType, long meterId)
         {
+            var supplyMethods = new Methods.Supply();
+            var mappingMethods = new Methods.Mapping();
+            var informationMethods = new Methods.Information();
+
             //Get latest loaded usage
-            var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatestTuple(meterType, meterId);
+            var latestLoadedUsage = supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);
 
             //Get GranularityId
-            var granularityCodeGranularityAttributeId = _informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityCode);
-            var granularityId = _informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityCodeGranularityAttributeId, granularityCode);
+            var granularityCodeGranularityAttributeId = informationMethods.GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(new Enums.InformationSchema.Granularity.Attribute().GranularityCode);
+            var granularityId = informationMethods.GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityCodeGranularityAttributeId, granularityCode);
 
             //Get required time periods
-            var nonStandardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
-            var standardGranularityToTimePeriodDataRows = _mappingMethods.GranularityToTimePeriod_StandardDate_GetListByGranularityId(granularityId);
-            var standardGranularityToTimePeriods = standardGranularityToTimePeriodDataRows.Select(d => d.Field<long>("TimePeriodId")).ToList();
+            var nonStandardGranularityToTimePeriodDataRows = mappingMethods.GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
+            var standardGranularityToTimePeriodDataRows = mappingMethods.GranularityToTimePeriod_StandardDate_GetListByGranularityId(granularityId);
+            var standardGranularityToTimePeriods = standardGranularityToTimePeriodDataRows.Select(d => d.TimePeriodId).ToList();
 
             //Set up forecast dictionary
-            var futureDateToUsageDateDictionary = _supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
+            var futureDateToUsageDateDictionary = supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
 
-            var timePeriodToTimePeriodDictionary = _mappingMethods.TimePeriodToTimePeriod_GetDictionary();
-            var nonStandardGranularityDates = nonStandardGranularityToTimePeriodDataRows.Select(d => d.Field<long>("DateId")).Distinct()
+            var timePeriodToTimePeriodDictionary = mappingMethods.TimePeriodToTimePeriod_GetDictionary();
+            var nonStandardGranularityDates = nonStandardGranularityToTimePeriodDataRows.Select(d => d.DateId).Distinct()
                 .ToDictionary(
                     d => d,
-                    d => nonStandardGranularityToTimePeriodDataRows.Where(n => n.Field<long>("DateId") == d).Select(d => d.Field<long>("TimePeriodId")).ToList()
+                    d => nonStandardGranularityToTimePeriodDataRows.Where(n => n.DateId == d).Select(d => d.TimePeriodId).ToList()
                 );
 
-            forecastDictionary = new Dictionary<long, Dictionary<long, decimal>>(
+            forecastDictionary = new ConcurrentDictionary<long, Dictionary<long, decimal>>(
                 futureDateToUsageDateDictionary.ToDictionary(
                     f => f.Key,
                     f => (nonStandardGranularityDates.ContainsKey(f.Key)
@@ -197,7 +191,7 @@ namespace CreateHalfHourForecast.api.Controllers
                 )
             );
 
-            var forecastFoundDictionary = new Dictionary<long, Dictionary<long, bool>>(
+            var forecastFoundDictionary = new ConcurrentDictionary<long, Dictionary<long, bool>>(
                 futureDateToUsageDateDictionary.ToDictionary(
                     f => f.Key,
                     f => (nonStandardGranularityDates.ContainsKey(f.Key)
@@ -206,7 +200,7 @@ namespace CreateHalfHourForecast.api.Controllers
                 )
             );
 
-            var timePeriodToMappedTimePeriodDictionary = new Dictionary<long, Dictionary<long, List<long>>>(
+            var timePeriodToMappedTimePeriodDictionary = new ConcurrentDictionary<long, Dictionary<long, List<long>>>(
                 timePeriodToTimePeriodDictionary.ToDictionary(
                     t => t.Key,
                     t => t.Value.Select(m => m).Distinct()
@@ -217,13 +211,12 @@ namespace CreateHalfHourForecast.api.Controllers
             );
 
             //Loop through future date ids
-            foreach (var forecast in forecastDictionary)
-            {
+            Parallel.ForEach(forecastDictionary, new ParallelOptions{MaxDegreeOfParallelism = 5}, forecast => {
                 //Get usage date id
                 var usageDateId = futureDateToUsageDateDictionary[forecast.Key];
 
                 //Get usage for date
-                var usageForDateList = latestLoadedUsage.Where(u => u.Item1 == usageDateId).ToList();
+                var usageForDateList = latestLoadedUsage.Where(u => u.DateId == usageDateId).ToList();
                 var timePeriodIds = forecast.Value.Keys.ToList();
                 var forecastFound = forecastFoundDictionary[forecast.Key];
 
@@ -235,30 +228,30 @@ namespace CreateHalfHourForecast.api.Controllers
                     }
                         
                     //Get usage for time period
-                    var usageForTimePeriodList = usageForDateList.Where(u => u.Item2 == timePeriodId).ToList();
+                    var usageForTimePeriodList = usageForDateList.Where(u => u.TimePeriodId == timePeriodId).ToList();
 
                     if (usageForTimePeriodList.Any())
                     {
-                        _supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, usageForTimePeriodList.First().Item3);
+                        supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, usageForTimePeriodList.First().Usage);
                     }
                     else
                     {
                         var mappedTimePeriodDictionary = timePeriodToMappedTimePeriodDictionary[timePeriodId]
-                            .First(t => usageForDateList.Any(u => u.Item2 == t.Key));
+                            .First(t => usageForDateList.Any(u => u.TimePeriodId == t.Key));
 
-                        usageForTimePeriodList = usageForDateList.Where(u => u.Item2 == mappedTimePeriodDictionary.Key).ToList();
+                        usageForTimePeriodList = usageForDateList.Where(u => u.TimePeriodId == mappedTimePeriodDictionary.Key).ToList();
 
                         //Get usage based on usage type priority
-                        var mappedUsage = usageForTimePeriodList.First().Item3;
-                        var mappedTimePeriodIdsWithUsageList = mappedTimePeriodDictionary.Value.Where(v => usageForDateList.Any(u => u.Item2 == v)).ToList();
+                        var mappedUsage = usageForTimePeriodList.First().Usage;
+                        var mappedTimePeriodIdsWithUsageList = mappedTimePeriodDictionary.Value.Where(v => usageForDateList.Any(u => u.TimePeriodId == v)).ToList();
                         var missingTimePeriodIds = mappedTimePeriodDictionary.Value.Except(mappedTimePeriodIdsWithUsageList);
 
                         foreach (var mappedtimePeriodId in mappedTimePeriodIdsWithUsageList)
                         {
                             //Get usage for time period
-                            usageForTimePeriodList = usageForDateList.Where(u => u.Item2 == mappedtimePeriodId).ToList();
+                            usageForTimePeriodList = usageForDateList.Where(u => u.TimePeriodId == mappedtimePeriodId).ToList();
 
-                            _supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, usageForTimePeriodList.First().Item3);
+                            supplyMethods.SetForecastValue(forecast.Value, forecastFound, timePeriodId, usageForTimePeriodList.First().Usage);
                         }
 
                         if (missingTimePeriodIds.Any())
@@ -270,12 +263,12 @@ namespace CreateHalfHourForecast.api.Controllers
 
                             foreach (var missingTimePeriodId in missingTimePeriodIds)
                             {
-                                _supplyMethods.SetForecastValue(forecast.Value, forecastFound, missingTimePeriodId, missingTimePeriodUsage);
+                                supplyMethods.SetForecastValue(forecast.Value, forecastFound, missingTimePeriodId, missingTimePeriodUsage);
                             }
                         }
                     }
                 }
-            }
+            });
         }
     }
 }

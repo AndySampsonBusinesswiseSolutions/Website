@@ -9,12 +9,12 @@ namespace MethodLibrary
     {
         public partial class Mapping
         {
-            public List<DataRow> ForecastGroupToTimePeriod_GetList()
+            public List<Entity.Mapping.ForecastGroupToTimePeriod> ForecastGroupToTimePeriod_GetList()
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.ForecastGroupToTimePeriod_GetList);
 
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.ForecastGroupToTimePeriod(d)).ToList();
             }
         }
     }

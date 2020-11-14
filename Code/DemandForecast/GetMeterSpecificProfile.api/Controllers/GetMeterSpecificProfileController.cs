@@ -5,7 +5,6 @@ using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace GetMeterSpecificProfile.api.Controllers
@@ -16,14 +15,6 @@ namespace GetMeterSpecificProfile.api.Controllers
     {
         #region Variables
         private readonly ILogger<GetMeterSpecificProfileController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-        private static readonly Enums.DemandForecastSchema.Profile.Attribute _demandForecastProfileAttributeEnums = new Enums.DemandForecastSchema.Profile.Attribute();
         private readonly Int64 getMeterSpecificProfileAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -35,7 +26,7 @@ namespace GetMeterSpecificProfile.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetMeterSpecificProfileAPI, password);
-            getMeterSpecificProfileAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMeterSpecificProfileAPI);
+            getMeterSpecificProfileAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetMeterSpecificProfileAPI);
         }
 
         [HttpPost]
@@ -43,7 +34,7 @@ namespace GetMeterSpecificProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(getMeterSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(getMeterSpecificProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -52,47 +43,50 @@ namespace GetMeterSpecificProfile.api.Controllers
         [Route("GetMeterSpecificProfile/Get")]
         public long Get([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     getMeterSpecificProfileAPIId);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getMeterSpecificProfileAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getMeterSpecificProfileAPIId);
+
+                var demandForecastMethods = new Methods.DemandForecast();
 
                 //Get MPXN
-                var mpxn = jsonObject[_systemAPIRequiredDataKeyEnums.MPXN].ToString();
+                var mpxn = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MPXN].ToString();
 
                 //Get Name Profile Attribute Id
-                var nameProfileAttributeId = _demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(_demandForecastProfileAttributeEnums.Name);
+                var nameProfileAttributeId = demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(new Enums.DemandForecastSchema.Profile.Attribute().Name);
 
                 //Get ProfileId from ProfileDetail by MPXN and Name Profile Attribute Id
-                var profileId = _demandForecastMethods.ProfileDetail_GetProfileIdByProfileAttributeIdAndProfileDetailDescription(nameProfileAttributeId, $"{mpxn} Specific Profile");
+                var profileId = demandForecastMethods.ProfileDetail_GetProfileIdByProfileAttributeIdAndProfileDetailDescription(nameProfileAttributeId, $"{mpxn} Specific Profile");
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMeterSpecificProfileAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMeterSpecificProfileAPIId, false, null);
 
                 return profileId;
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMeterSpecificProfileAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMeterSpecificProfileAPIId, true, $"System Error Id {errorId}");
 
                 return 0;
             }

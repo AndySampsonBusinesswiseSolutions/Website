@@ -6,9 +6,10 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
 
 namespace CreateDateForecast.api.Controllers
 {
@@ -18,14 +19,6 @@ namespace CreateDateForecast.api.Controllers
     {
         #region Variables
         private readonly ILogger<CreateDateForecastController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
         private readonly Int64 createDateForecastAPIId;
         private readonly string granularityCode = "Date";
         private List<Tuple<long, decimal>> existingDateForecasts;
@@ -41,7 +34,7 @@ namespace CreateDateForecast.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateDateForecastAPI, password);
-            createDateForecastAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.CreateDateForecastAPI);
+            createDateForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateDateForecastAPI);
         }
 
         [HttpPost]
@@ -49,7 +42,7 @@ namespace CreateDateForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -58,46 +51,54 @@ namespace CreateDateForecast.api.Controllers
         [Route("CreateDateForecast/Create")]
         public void Create([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID,
                     createdByUserId,
                     sourceId,
                     createDateForecastAPIId);
 
-                if (!_systemAPIMethods.PrerequisiteAPIsAreSuccessful(_systemAPIGUIDEnums.CreateDateForecastAPI, createDateForecastAPIId, hostEnvironment, jsonObject))
+                if (!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CreateDateForecastAPI, createDateForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDateForecastAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createDateForecastAPIId);
 
                 //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
 
-                GetForecastDictionary(meterType, meterId);
-                GetExistingForecast(meterType, meterId);
+                Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
+                    if(getForecastDictionary)
+                    {
+                        GetForecastDictionary(meterType, meterId);
+                    }
+                    else
+                    {
+                        GetExistingForecast(meterType, meterId);
+                    }
+                });
 
-                var newDateForecastTuples = new List<Tuple<long, decimal>>();
-                var oldDateForecastTuples = new List<Tuple<long, decimal>>();                
+                var newDateForecastTuples = new ConcurrentBag<Tuple<long, decimal>>();
+                var oldDateForecastTuples = new ConcurrentBag<Tuple<long, decimal>>();
 
-                foreach (var forecastDate in forecastDictionary)
-                {
+                Parallel.ForEach(forecastDictionary, new ParallelOptions{MaxDegreeOfParallelism = 5}, forecastDate => {
                     var addUsageToDataTable = !existingDateForecastDictionary.ContainsKey(forecastDate.Key)
                         || existingDateForecastDictionary[forecastDate.Key] != forecastDate.Value;
 
@@ -105,14 +106,12 @@ namespace CreateDateForecast.api.Controllers
                     {
                         if (existingDateForecastDictionary.ContainsKey(forecastDate.Key))
                         {
-                            var existingDateForecastTuple = existingDateForecasts.First(t => t.Item1 == forecastDate.Key);
-                            oldDateForecastTuples.Add(existingDateForecastTuple);
+                            oldDateForecastTuples.Add(new Tuple<long, decimal>(forecastDate.Key, existingDateForecastDictionary[forecastDate.Key]));
                         }
 
-                        var newDateForecastTuple = new Tuple<long, decimal>(forecastDate.Key, forecastDate.Value);
-                        newDateForecastTuples.Add(newDateForecastTuple);
+                        newDateForecastTuples.Add(new Tuple<long, decimal>(forecastDate.Key, forecastDate.Value));
                     }
-                }
+                });
 
                 if (newDateForecastTuples.Any())
                 {
@@ -120,25 +119,25 @@ namespace CreateDateForecast.api.Controllers
                     existingDateForecasts.AddRange(newDateForecastTuples);
 
                     //Insert into history and latest tables
-                    _supplyMethods.CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId" }, newDateForecastTuples, existingDateForecasts);
+                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId" }, newDateForecastTuples.ToList(), existingDateForecasts);
                 }
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, false, null);
             }
             catch (Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, true, $"System Error Id {errorId}");
             }
         }
 
         private void GetExistingForecast(string meterType, long meterId)
         {
             //Get existing date forecast
-            existingDateForecasts = _supplyMethods.ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
+            existingDateForecasts = new Methods.Supply().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
             existingDateForecastDictionary = existingDateForecasts.ToDictionary(
                     d => d.Item1,
                     d => d.Item2
@@ -147,11 +146,13 @@ namespace CreateDateForecast.api.Controllers
 
         private void GetForecastDictionary(string meterType, long meterId)
         {
+            var supplyMethods = new Methods.Supply();
+
             //Get latest loaded usage
-            var latestLoadedUsage = _supplyMethods.LoadedUsage_GetLatestTuple(meterType, meterId);
+            var latestLoadedUsage = supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);
 
             //Set up forecast dictionary
-            var futureDateToUsageDateDictionary = _supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
+            var futureDateToUsageDateDictionary = supplyMethods.DateMapping_GetLatestDictionary(meterType, meterId);
 
             forecastDictionary = new Dictionary<long, decimal>(futureDateToUsageDateDictionary.ToDictionary(f => f.Key, f => new decimal()));
 
@@ -160,8 +161,8 @@ namespace CreateDateForecast.api.Controllers
             foreach (var futureDateId in forecastDictionaryKeys)
             {
                 forecastDictionary[futureDateId] = latestLoadedUsage
-                    .Where(u => u.Item1 == futureDateToUsageDateDictionary[futureDateId])
-                    .Sum(u => u.Item3);
+                    .Where(u => u.DateId == futureDateToUsageDateDictionary[futureDateId])
+                    .Sum(u => u.Usage);
             }
         }
     }

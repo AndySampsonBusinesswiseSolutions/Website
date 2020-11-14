@@ -34,38 +34,38 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.GranularityToTimePeriod_NonStandardDate(d)).ToList();
             }
 
-            public List<DataRow> GranularityToTimePeriod_StandardDate_GetListByGranularityId(long granularityId)
+            public List<Entity.Mapping.GranularityToTimePeriod_StandardDate> GranularityToTimePeriod_StandardDate_GetListByGranularityId(long granularityId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.GranularityToTimePeriod_StandardDate_GetByGranularityId,
                     granularityId);
 
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.GranularityToTimePeriod_StandardDate(d)).ToList();
             }
 
             public List<long> GranularityToTimePeriod_StandardDate_GetTimePeriodListByGranularityId(long granularityId)
             {
                 return  GranularityToTimePeriod_StandardDate_GetListByGranularityId(granularityId)
-                    .Select(d => d.Field<long>("TimePeriodId")).ToList();
+                    .Select(d => d.TimePeriodId).ToList();
             }
 
-            public List<DataRow> GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(long granularityId)
+            public List<Entity.Mapping.GranularityToTimePeriod_NonStandardDate> GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(long granularityId)
             {
                 var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
                     _storedProcedureMappingEnums.GranularityToTimePeriod_NonStandardDate_GetByGranularityId,
                     granularityId);
 
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.GranularityToTimePeriod_NonStandardDate(d)).ToList();
             }
 
             public List<Tuple<long, long>> GranularityToTimePeriod_NonStandardDate_GetTupleByGranularityId(long granularityId)
             {
-                var dataRows = GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
+                var entities = GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);
                 var granularityToTimePeriodTuple = new List<Tuple<long, long>>();
 
-                foreach (DataRow r in dataRows)
+                foreach (var entity in entities)
                 {
-                    var tup = Tuple.Create((long)r["DateId"], (long)r["TimePeriodId"]);
+                    var tup = Tuple.Create(entity.DateId, entity.TimePeriodId);
                     granularityToTimePeriodTuple.Add(tup);
                 }
 

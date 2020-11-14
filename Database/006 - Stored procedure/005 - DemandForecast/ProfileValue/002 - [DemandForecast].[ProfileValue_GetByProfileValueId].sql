@@ -41,7 +41,7 @@ BEGIN
         CreatedDateTime,
         CreatedByUserId,
         SourceId,
-        ProfileValue
+        Value
     FROM 
         [DemandForecast].[ProfileValue] 
     WHERE 

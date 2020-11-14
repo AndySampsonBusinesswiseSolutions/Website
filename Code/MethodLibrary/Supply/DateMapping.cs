@@ -88,27 +88,35 @@ namespace MethodLibrary
                     processQueueGUID);
             }
 
+            public void InsertDateMapping(string meterType, long meterId, DataTable dateMappingDataTable, string processQueueGUID)
+            {
+                //Bulk Insert new Date Mapping into DateMapping_Temp table
+                DateMappingTemp_Insert(meterType, meterId, dateMappingDataTable);
+
+                //End date existing Date Mapping
+                DateMapping_Delete(meterType, meterId);
+
+                //Insert new Date Mapping into DateMapping table
+                DateMapping_Insert(meterType, meterId, processQueueGUID);
+            }
+
             public void DateMappingTemp_Insert(string meterType, long meterId, DataTable dateMappingDataTable)
             {
                 new Methods().BulkInsert(dateMappingDataTable, $"[Supply.{meterType}{meterId}].[DateMapping_Temp]");
             }
 
-            public List<DataRow> DateMapping_GetLatest(string meterType, long meterId)
+            public List<Entity.Supply.DateMapping> DateMapping_GetLatest(string meterType, long meterId)
             {
                 var dateMappingGetLatestStoredProcedure = string.Format(_storedProcedureSupplyEnums.DateMapping_GetLatest, meterType, meterId);
 
                 var dataTable = GetDataTable(new List<ParameterInfo>().ToArray(), dateMappingGetLatestStoredProcedure);
 
-                return dataTable.Rows.Cast<DataRow>().ToList();
+                return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Supply.DateMapping(d)).ToList();
             }
 
             public Dictionary<long, long> DateMapping_GetLatestDictionary(string meterType, long meterId)
             {
-                var dateMappings = DateMapping_GetLatest(meterType, meterId);
-                return dateMappings.ToDictionary(
-                    d => d.Field<long>("DateId"),
-                    d => d.Field<long>("MappedDateId")
-                );
+                return DateMapping_GetLatest(meterType, meterId).ToDictionary(d => d.DateId, d => d.MappedDateId);
             }
 
             private void DateMapping_GrantExecuteToStoredProcedures(long meterId, string meterType)

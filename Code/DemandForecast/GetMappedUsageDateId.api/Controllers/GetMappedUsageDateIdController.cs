@@ -20,16 +20,6 @@ namespace GetMappedUsageDateId.api.Controllers
     {
         #region Variables
         private readonly ILogger<GetMappedUsageDateIdController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Supply _supplyMethods = new Methods.Supply();
-        private readonly Methods.DemandForecast _demandForecastMethods = new Methods.DemandForecast();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
-        private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-        private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
         private readonly Int64 getMappedUsageDateIdAPIId;
         private Dictionary<long, Dictionary<long, int>> dateToForecastGroupDictionary;
         private Dictionary<string, long> dateDictionary;
@@ -46,7 +36,7 @@ namespace GetMappedUsageDateId.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetMappedUsageDateIdAPI, password);
-            getMappedUsageDateIdAPIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
+            getMappedUsageDateIdAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetMappedUsageDateIdAPI);
         }
 
         [HttpPost]
@@ -54,7 +44,7 @@ namespace GetMappedUsageDateId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -63,41 +53,45 @@ namespace GetMappedUsageDateId.api.Controllers
         [Route("GetMappedUsageDateId/Get")]
         public void Get([FromBody] object data)
         {
+            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.Information();
 
             //Get base variables
             var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
+            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = _systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
             try
             {
                 //Insert into ProcessQueue
-                _systemMethods.ProcessQueue_Insert(
+                systemMethods.ProcessQueue_Insert(
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
                     getMappedUsageDateIdAPIId);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getMappedUsageDateIdAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getMappedUsageDateIdAPIId);
+
+                var mappingMethods = new Methods.Mapping();
 
                 //Get MeterType
-                var meterType = jsonObject[_systemAPIRequiredDataKeyEnums.MeterType].ToString();
+                var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = _customerMethods.GetMeterIdByMeterType(meterType, jsonObject); 
+                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject); 
 
                 //Get latest loaded usage
-                var latestDateMapping = _supplyMethods.LoadedUsage_GetLatest(meterType, meterId);
+                var latestDateMapping = new Methods.Supply().LoadedUsageLatest_GetList(meterType, meterId);
 
                 //Get Date dictionary
-                dateDictionary = _informationMethods.Date_GetDateDescriptionIdDictionary();
+                dateDictionary = informationMethods.Date_GetDateDescriptionIdDictionary();
 
                 //Get Loaded Usage Date Ids
-                var latestDateMappingDateIds = latestDateMapping.Select(d => d.Field<long>("DateId")).ToList();
+                var latestDateMappingDateIds = latestDateMapping.Select(d => d.DateId).ToList();
 
                 loadedUsageDateDictionary = dateDictionary.Where(d => latestDateMappingDateIds.Contains(d.Value))
                     .ToDictionary(d => Convert.ToDateTime(d.Key), d => d.Value);
@@ -108,7 +102,7 @@ namespace GetMappedUsageDateId.api.Controllers
                     .Select(d => d.Value).ToList();
 
                 //Get DateToForecastGroup
-                dateToForecastGroupDictionary = _mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionary();
+                dateToForecastGroupDictionary = mappingMethods.DateToForecastGroup_GetDateForecastGroupDictionary();
                 var futureDateToForecastGroupDictionary = dateToForecastGroupDictionary.Where(d => futureDateIds.Contains(d.Key))
                     .ToDictionary(d => d.Key, d => d.Value);
 
@@ -116,13 +110,12 @@ namespace GetMappedUsageDateId.api.Controllers
                 var futureDateToUsageDateDictionary = new ConcurrentDictionary<long, long>(futureDateToForecastGroupDictionary.ToDictionary(f => f.Key, f => new long()));
 
                 //Get DateToForecastAgent
-                var dateToForecastAgentDictionary = _mappingMethods.DateToForecastAgent_GetDateForecastAgentDictionary();
+                var dateToForecastAgentDictionary = mappingMethods.DateToForecastAgent_GetDateForecastAgentDictionary();
 
                 //Get ForecastAgents
-                var forecastAgentDictionary = _demandForecastMethods.GetForecastAgentDictionary();
-                var parallelOptions = new ParallelOptions{MaxDegreeOfParallelism = 5};
+                var forecastAgentDictionary = new Methods.DemandForecast().GetForecastAgentDictionary();
 
-                Parallel.ForEach(futureDateToForecastGroupDictionary, parallelOptions, futureDateToForecastGroup => {
+                Parallel.ForEach(futureDateToForecastGroupDictionary, new ParallelOptions{MaxDegreeOfParallelism = 5}, futureDateToForecastGroup => {
                     //Order by priority
                     var forecastAgents = dateToForecastAgentDictionary[futureDateToForecastGroup.Key];
                     var forecastAgentList = forecastAgents
@@ -166,25 +159,18 @@ namespace GetMappedUsageDateId.api.Controllers
                     dataTable.Rows.Add(dataRow);
                 }
 
-                //Bulk Insert new Date Mapping into DateMapping_Temp table
-                var supplyMethods = new Methods.Supply();
-                supplyMethods.DateMappingTemp_Insert(meterType, meterId, dataTable);
-
-                //End date existing Date Mapping
-                supplyMethods.DateMapping_Delete(meterType, meterId);
-
-                //Insert new Date Mapping into DateMapping table
-                supplyMethods.DateMapping_Insert(meterType, meterId, processQueueGUID);
+                //Insert new Date Mappings
+                new Methods.Supply().InsertDateMapping(meterType, meterId, dataTable, processQueueGUID);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, false, null);
             }
             catch(Exception error)
             {
-                var errorId = _systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, true, $"System Error Id {errorId}");
             }
         }
 
