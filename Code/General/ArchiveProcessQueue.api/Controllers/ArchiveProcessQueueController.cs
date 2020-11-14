@@ -97,6 +97,7 @@ namespace ArchiveProcessQueue.api.Controllers
                 }
 
                 //Write records for each API into ProcessArchiveDetail
+                //TODO: Make into entities
                 var processQueueDataTable = _systemMethods.ProcessQueue_GetByProcessQueueGUID(processQueueGUID);
                 foreach(DataRow dataRow in processQueueDataTable.Rows)
                 {

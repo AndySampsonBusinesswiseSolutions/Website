@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Concurrent;

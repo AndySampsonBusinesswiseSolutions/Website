@@ -6,7 +6,7 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-using System.Data;
+
 using Microsoft.Extensions.Configuration;
 
 namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers

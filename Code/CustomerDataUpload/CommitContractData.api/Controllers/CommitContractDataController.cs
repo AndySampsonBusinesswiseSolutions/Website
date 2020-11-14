@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Data;
@@ -99,6 +98,7 @@ namespace CommitContractData.api.Controllers
                 var contractDataArray = contractDataJSON.Split(";;", StringSplitOptions.RemoveEmptyEntries);
 
                 //Create DataTable
+                //TODO: Work out how to do this with entities
                 var dataTable = CreateDataTable(contractType);
 
                 //Populate DataTable

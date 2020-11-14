@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data;
+
 using Entity;
 using Microsoft.Extensions.Configuration;
 
