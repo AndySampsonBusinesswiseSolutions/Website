@@ -76,7 +76,7 @@ namespace Entity
                 this.CreatedDateTime = (DateTime)dataRow["CreatedDateTime"];
                 this.CreatedByUserId = (long)dataRow["CreatedByUserId"];
                 this.SourceId = (long)dataRow["SourceId"];
-                this.Value = (long)dataRow["Value"];
+                this.Value = (decimal)dataRow["Value"];
             }
         }
     }
