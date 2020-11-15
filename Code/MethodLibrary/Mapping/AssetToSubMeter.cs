@@ -32,7 +32,7 @@ namespace MethodLibrary
                     assetId, subMeterId);
 
                 return dataTable.AsEnumerable()
-                    .Select(r => r.Field<long>("AssetAndSubMeterId"))
+                    .Select(r => r.Field<long>("AssetToSubMeterId"))
                     .FirstOrDefault();
             }
 

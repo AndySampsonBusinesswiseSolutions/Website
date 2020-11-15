@@ -218,8 +218,7 @@ namespace GetProfile.api.Controllers
 
             var forecastGroupToTimePeriodToProfileToProfileValueDictionary = mappingMethods.ForecastGroupToTimePeriodToProfileToProfileValue_GetDictionary();
 
-            forecastGroupToTimePeriodTuple = new List<Tuple<long, long, long>>();
-            var forecastGroupToTimePeriodEntities = mappingMethods.ForecastGroupToTimePeriod_GetList()
+            forecastGroupToTimePeriodTuple = mappingMethods.ForecastGroupToTimePeriod_GetList()
                 .Select(fgttp => Tuple.Create(fgttp.ForecastGroupId, fgttp.ForecastGroupToTimePeriodId, fgttp.TimePeriodId)).ToList();
 
             var forecastGroupToTimePeriodToProfileDataRowList = mappingMethods.ForecastGroupToTimePeriodToProfile_GetByProfileId(profileId);
