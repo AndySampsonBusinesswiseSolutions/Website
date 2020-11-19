@@ -35,7 +35,7 @@ namespace ArchiveProcessQueue.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -64,8 +64,7 @@ namespace ArchiveProcessQueue.api.Controllers
                 var checkPrerequisiteAPIAPIId = systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API
-                var API = systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, new Enums.SystemSchema.API.GUID().ArchiveProcessQueueAPI, hostEnvironment, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                systemAPIMethods.PostAsJsonAsyncAndAwaitResult(checkPrerequisiteAPIAPIId, new Enums.SystemSchema.API.GUID().ArchiveProcessQueueAPI, hostEnvironment, jsonObject);
 
                 //Get whether there is an error in the API records
                 var hasError = systemMethods.ProcessQueue_GetHasErrorByProcessQueueGUID(processQueueGUID);

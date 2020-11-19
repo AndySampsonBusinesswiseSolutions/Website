@@ -37,7 +37,7 @@ namespace Routing.api.Controllers
             var callingGUID = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().CallingGUID].ToString();
 
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(routingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsyncAndDoNotAwaitResult(routingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -58,28 +58,25 @@ namespace Routing.api.Controllers
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(data.ToString());
                 var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+                var processId = 0L;
                 
                 //Get ValidateProcessGUID API Id
                 var validateProcessGUIDAPIId = _systemAPIMethods.GetValidateProcessGUIDAPIId();
                 
-                //Call ValidateProcessGUID API
-                var API = _systemAPIMethods.PostAsJsonAsync(validateProcessGUIDAPIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
-
-                var processId = 0L;
-
                 try
                 {
-                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                    //Call ValidateProcessGUID API
+                    var validateProcessGUIDAPIResult = _systemAPIMethods.PostAsJsonAsyncAndAwaitResult(validateProcessGUIDAPIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
 
                     //Get processId
-                    processId = Convert.ToInt64(result.Result);
+                    processId = Convert.ToInt64(validateProcessGUIDAPIResult);
                 }
                 catch(Exception error)
                 {
                     //API never started so create record
                     systemMethods.InsertProcessQueueError(processQueueGUID, createdByUserId, sourceId, validateProcessGUIDAPIId, error.Message);
                 }
-
+                
                 //Get APIId list
                 var APIIdList = new Methods.Mapping().APIToProcess_GetAPIIdListByProcessId(processId);
                 var APIGUIDList = new List<string>
@@ -89,13 +86,10 @@ namespace Routing.api.Controllers
 
                 foreach(var APIId in APIIdList)
                 {
-                    //Call API
-                    API = _systemAPIMethods.PostAsJson(APIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
-
                     try
                     {
                         //If this doesn't fail then the API is running
-                        var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                        var result = _systemAPIMethods.PostAsJsonAndAwaitResult(APIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, jsonObject);
                     }
                     catch(Exception error)
                     {
@@ -106,20 +100,17 @@ namespace Routing.api.Controllers
                     APIGUIDList.Add(_systemAPIMethods.API_GetAPIGUIDByAPIId(APIId));
                 }
 
-                //Get Archive.API Id
-                var archiveAPIId = _systemAPIMethods.GetArchiveProcessQueueAPIId();
+                //Get ArchiveProcessQueueAPI Id
+                var archiveProcessQueueAPIId = _systemAPIMethods.GetArchiveProcessQueueAPIId();
 
                 //Create required jsonObject
-                var archiveObject = _systemAPIMethods.GetAPIData(archiveAPIId, systemAPIGUIDEnums.RoutingAPI, jsonObject);
-                archiveObject.Add(new Enums.SystemSchema.API.RequiredDataKey().APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
-
-                //Connect to Archive API and POST API list
-                API = _systemAPIMethods.PostAsJson(archiveAPIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveObject, false);
+                var archiveJsonObject = _systemAPIMethods.GetAPIData(archiveProcessQueueAPIId, systemAPIGUIDEnums.RoutingAPI, jsonObject);
+                archiveJsonObject.Add(new Enums.SystemSchema.API.RequiredDataKey().APIGUIDList, JsonSerializer.Serialize(APIGUIDList));
 
                 try
                 {
                     //If this doesn't fail then the API is running
-                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                    var result = _systemAPIMethods.PostAsJsonAndAwaitResult(archiveProcessQueueAPIId, systemAPIGUIDEnums.RoutingAPI, hostEnvironment, archiveJsonObject, false);
                 }
                 catch(Exception error)
                 {

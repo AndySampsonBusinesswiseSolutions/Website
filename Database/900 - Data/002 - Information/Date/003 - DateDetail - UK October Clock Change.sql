@@ -38,18 +38,3 @@ EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UK
 
 SET @DateId = (SELECT DateId FROM [Information].[Date] WHERE DateDescription = '2025-10-26')
 EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UKOctoberClockChangeId, 'True'
-
-SET @DateId = (SELECT DateId FROM [Information].[Date] WHERE DateDescription = '2026-10-25')
-EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UKOctoberClockChangeId, 'True'
-
-SET @DateId = (SELECT DateId FROM [Information].[Date] WHERE DateDescription = '2027-10-31')
-EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UKOctoberClockChangeId, 'True'
-
-SET @DateId = (SELECT DateId FROM [Information].[Date] WHERE DateDescription = '2028-10-29')
-EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UKOctoberClockChangeId, 'True'
-
-SET @DateId = (SELECT DateId FROM [Information].[Date] WHERE DateDescription = '2029-10-28')
-EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UKOctoberClockChangeId, 'True'
-
-SET @DateId = (SELECT DateId FROM [Information].[Date] WHERE DateDescription = '2030-10-27')
-EXEC [Information].[DateDetail_Insert] @CreatedByUserId, @SourceId, @DateId, @UKOctoberClockChangeId, 'True'

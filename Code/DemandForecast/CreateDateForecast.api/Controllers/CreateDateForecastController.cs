@@ -42,7 +42,7 @@ namespace CreateDateForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(createDateForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

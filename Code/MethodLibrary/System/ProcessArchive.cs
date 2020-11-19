@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using enums;
 
 namespace MethodLibrary
 {
@@ -10,6 +11,27 @@ namespace MethodLibrary
     {
         public partial class System
         {
+            public string GetProcessResponse(string processQueueGUID)
+            {
+                //Get Process Archive Id
+                var processArchiveId = ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+                while (processArchiveId == 0)
+                {
+                    processArchiveId = ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
+                }
+
+                //Loop until a response record is written into ProcessArchiveDetail
+                var responseAttributeId = ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(new Enums.SystemSchema.ProcessArchive.Attribute().Response);
+                var response = ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
+
+                while (response == null)
+                {
+                    response = ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
+                }
+
+                return response;
+            }
+
             public void ProcessArchive_Insert(long createdByUserId, long sourceId, string processArchiveGUID, bool hasError)
             {
                 ExecuteNonQuery(MethodBase.GetCurrentMethod().GetParameters(),

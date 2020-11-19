@@ -44,7 +44,7 @@ namespace CommitProfiledUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsync(commitProfiledUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsyncAndDoNotAwaitResult(commitProfiledUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -73,13 +73,12 @@ namespace CommitProfiledUsage.api.Controllers
 
                 //Launch GetProfile process and wait for response
                 var APIId = _systemAPIMethods.API_GetAPIIdByAPIGUID(_systemAPIGUIDEnums.GetProfileAPI);
-                var API = _systemAPIMethods.PostAsJsonAsync(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var result = _systemAPIMethods.PostAsJsonAsyncAndAwaitResult(APIId, _systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitProfiledUsageAPIId);
 
-                var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
+                var profileString = JsonConvert.DeserializeObject(result).ToString();
 
                 //No profile found so empty dictionary returned
                 if (profileString == "{}")

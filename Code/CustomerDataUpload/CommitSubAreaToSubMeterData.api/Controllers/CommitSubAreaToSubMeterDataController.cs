@@ -36,7 +36,7 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitSubAreaToSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitSubAreaToSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

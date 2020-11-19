@@ -8,7 +8,7 @@ DECLARE @SourceAttributeId BIGINT = (SELECT SourceAttributeId FROM [Information]
 DECLARE @SourceId BIGINT = (SELECT SourceId FROM [Information].[SourceDetail] WHERE SourceAttributeId = @SourceAttributeId AND SourceDetailDescription = @CreatedByUserId)
 
 DECLARE @StartDate DATE = '2015-01-01'
-DECLARE @EndDate DATE = '2030-12-31'
+DECLARE @EndDate DATE = '2025-12-31'
 
 INSERT INTO
 	[Information].[Date]

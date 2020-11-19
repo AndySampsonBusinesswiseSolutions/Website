@@ -2,12 +2,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
-using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
-
-using Microsoft.Extensions.Configuration;
 
 namespace CommitAssetToSubMeterData.api.Controllers
 {
@@ -17,18 +14,13 @@ namespace CommitAssetToSubMeterData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitAssetToSubMeterDataController> _logger;
-        private readonly Int64 commitAssetToSubMeterDataAPIId;
-        private readonly string hostEnvironment;
+        private readonly Entity.System.API.CommitAssetToSubMeterData.Configuration _configuration;
         #endregion
 
-        public CommitAssetToSubMeterDataController(ILogger<CommitAssetToSubMeterDataController> logger, IConfiguration configuration)
+        public CommitAssetToSubMeterDataController(ILogger<CommitAssetToSubMeterDataController> logger, Entity.System.API.CommitAssetToSubMeterData.Configuration configuration)
         {
-            var password = configuration["Password"];
-            hostEnvironment = configuration["HostEnvironment"];
-
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitAssetToSubMeterDataAPI, password);
-            commitAssetToSubMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitAssetToSubMeterDataAPI);
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -36,7 +28,7 @@ namespace CommitAssetToSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitAssetToSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(_configuration.APIId, _configuration.HostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -62,15 +54,15 @@ namespace CommitAssetToSubMeterData.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    commitAssetToSubMeterDataAPIId);
+                    _configuration.APIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitAssetToSubMeterDataAPI, commitAssetToSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(_configuration.APIGUID, _configuration.APIId, _configuration.HostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitAssetToSubMeterDataAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, _configuration.APIId);
                 
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
@@ -81,39 +73,39 @@ namespace CommitAssetToSubMeterData.api.Controllers
                 if(!commitableSubMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitAssetToSubMeterDataAPIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, false, null);
                     return;
                 }
 
                 var customerMethods = new Methods.Customer();
                 var mappingMethods = new Methods.Mapping();
-                var subMeterIdentifierSubMeterAttributeId = customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(new Enums.CustomerSchema.SubMeter.Attribute().SubMeterIdentifier);
-                var assetNameAssetAttributeId = customerMethods.AssetAttribute_GetAssetAttributeIdByAssetAttributeDescription(new Enums.CustomerSchema.Asset.Attribute().AssetName);
 
                 var assets = commitableSubMeterEntities.Select(csme => csme.Asset).Distinct()
-                    .ToDictionary(a => a, a => customerMethods.GetAssetId(a, createdByUserId, sourceId, assetNameAssetAttributeId));
+                    .ToDictionary(a => a, a => customerMethods.GetAssetId(a, createdByUserId, sourceId, _configuration.AssetNameAssetAttributeId));
                 
                 var subMeters = commitableSubMeterEntities.Select(csme => csme.SubMeterIdentifier).Distinct()
-                    .ToDictionary(s => s, s => customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(subMeterIdentifierSubMeterAttributeId, s));
+                    .ToDictionary(s => s, s => customerMethods.SubMeterDetail_GetSubMeterDetailIdBySubMeterAttributeIdAndSubMeterDetailDescription(_configuration.SubMeterIdentifierSubMeterAttributeId, s));
 
                 var newAssetToSubMeterEntities = commitableSubMeterEntities.Where(csme => mappingMethods.AssetToSubMeter_GetAssetToSubMeterIdByAssetIdAndSubMeterId(assets[csme.Asset], subMeters[csme.SubMeterIdentifier]) == 0)
                     .GroupBy(csme => new { csme.Asset, csme.SubMeterIdentifier }).ToList();
 
                 foreach(var subMeterEntity in newAssetToSubMeterEntities)
                 {
+                    //TODO:Delete existing AssetToSubMeter mappings
+
                     //Insert into [Mapping].[AssetToSubMeter]
                     mappingMethods.AssetToSubMeter_Insert(createdByUserId, sourceId, assets[subMeterEntity.Key.Asset], subMeters[subMeterEntity.Key.SubMeterIdentifier]);
                 }
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitAssetToSubMeterDataAPIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitAssetToSubMeterDataAPIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, true, $"System Error Id {errorId}");
             }
         }
     }

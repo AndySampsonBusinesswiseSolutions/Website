@@ -36,7 +36,7 @@ namespace StoreFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(storeFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

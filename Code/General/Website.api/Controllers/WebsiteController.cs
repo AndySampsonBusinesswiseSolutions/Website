@@ -6,7 +6,6 @@ using enums;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 using System;
-using Microsoft.Extensions.Configuration;
 
 namespace Website.api.Controllers
 {
@@ -16,18 +15,13 @@ namespace Website.api.Controllers
     {
         #region Variables
         private readonly ILogger<WebsiteController> _logger;
-        private readonly Int64 websiteAPIId;
-        private readonly string hostEnvironment;
+        private readonly Entity.System.API.Website.Configuration _configuration;
         #endregion
 
-        public WebsiteController(ILogger<WebsiteController> logger, IConfiguration configuration)
+        public WebsiteController(ILogger<WebsiteController> logger, Entity.System.API.Website.Configuration configuration)
         {
-            var password = configuration["Password"];
-            hostEnvironment = configuration["HostEnvironment"];
-
             _logger = logger;
-            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().WebsiteAPI, password);
-            websiteAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().WebsiteAPI);
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -51,21 +45,16 @@ namespace Website.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    websiteAPIId);
+                    _configuration.APIId);
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, websiteAPIId);
-
-                var systemAPIMethods = new Methods.System.API();
-
-                //Get Routing.API URL
-                var routingAPIId = systemAPIMethods.GetRoutingAPIId();
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, _configuration.APIId);
 
                 //Connect to Routing API and POST data
-                systemAPIMethods.PostAsJsonAsync(routingAPIId, new Enums.SystemSchema.API.GUID().WebsiteAPI, hostEnvironment, jsonObject);
+                new Methods.System.API().PostAsJsonAsync(_configuration.RoutingAPIId, _configuration.APIGUID, _configuration.HostEnvironment, jsonObject);
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, websiteAPIId);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId);
             }
             catch(Exception error)
             {
@@ -85,24 +74,10 @@ namespace Website.api.Controllers
 
             try
             {
-                //Get Process Archive Id
-                var processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
-                while(processArchiveId == 0)
-                {
-                    processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
-                }
-
-                //Loop until a response record is written into ProcessArchiveDetail
-                var responseAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(new Enums.SystemSchema.ProcessArchive.Attribute().Response);
-                var response = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
-
-                while(response == null)
-                {
-                    response = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailDescriptionListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, responseAttributeId).FirstOrDefault();
-                }
+                var response = systemMethods.GetProcessResponse(processQueueGUID);
 
                 //Create return object with response record
-                switch(response)
+                switch (response)
                 {
                     case "OK":
                         return new OkObjectResult(new { message = "OK" });
@@ -113,7 +88,7 @@ namespace Website.api.Controllers
                         return new BadRequestResult(); //status = 400
                 }
             }
-            catch(Exception error)
+            catch (Exception error)
             {
                 systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
@@ -135,19 +110,19 @@ namespace Website.api.Controllers
             var processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);
 
             //Get API Response Process Archive Attribute Id
-            var APIResponseProcesArchiveAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(new Enums.SystemSchema.ProcessArchive.Attribute().APIResponse);
+            var APIResponseProcessArchiveAttributeId = systemMethods.ProcessArchiveAttribute_GetProcessArchiveAttributeIdByProcessArchiveAttributeDescription(new Enums.SystemSchema.ProcessArchive.Attribute().APIResponse);
 
             //Get Process Archive Detail Id List By Process Archive Id and Process Archive Attribute Id
-            var processArchiveDetailIdList = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, APIResponseProcesArchiveAttributeId);
+            var processArchiveDetailIdList = systemMethods.ProcessArchiveDetail_GetProcessArchiveDetailIdListByProcessArchiveIDAndProcessArchiveAttributeId(processArchiveId, APIResponseProcessArchiveAttributeId);
 
             //Get API GUID
             var APIGUID = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().APIGUID].ToString();
 
             //Get API Id
-            var websiteAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(APIGUID);
+            var APIId = new Methods.System.API().API_GetAPIIdByAPIGUID(APIGUID);
 
             //Get Process Archive Detail Id List by API Id
-            var APIProcessArchiveDetailIdList = new Methods.Mapping().APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);
+            var APIProcessArchiveDetailIdList = new Methods.Mapping().APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(APIId);
 
             //Get Process Archive Detail Id that is in both lists
             var processArchiveDetailId = processArchiveDetailIdList.Intersect(APIProcessArchiveDetailIdList).FirstOrDefault();

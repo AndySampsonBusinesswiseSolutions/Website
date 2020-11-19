@@ -20,8 +20,21 @@ namespace CommitAreaToMeterData.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var systemAPIGUIDS = new Enums.SystemSchema.API.GUID();
+
             new Methods.System.API.Startup().ConfigureServices(services, Configuration, new Enums.SystemSchema.API.Name().CommitAreaToMeterDataAPI);
             services.AddControllers();
+
+            var APIConfiguration = new Entity.System.API.CommitAreaToMeterData.Configuration
+            (
+                APIId_: new Methods.System.API().API_GetAPIIdByAPIGUID(systemAPIGUIDS.WebsiteAPI),
+                APIGUID_: systemAPIGUIDS.WebsiteAPI,
+                Password_: Configuration.GetValue<string>("Password"),
+                HostEnvironment_: Configuration.GetValue<string>("HostEnvironment"),
+                MeterIdentifierMeterAttributeId_: new Methods.Customer().MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier)
+            );
+
+            services.AddSingleton(APIConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

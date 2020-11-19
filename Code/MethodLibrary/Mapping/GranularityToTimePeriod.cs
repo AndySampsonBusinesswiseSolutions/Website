@@ -58,6 +58,20 @@ namespace MethodLibrary
                 return dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.GranularityToTimePeriod_NonStandardDate(d)).ToList();
             }
 
+            public Dictionary<long, List<long>> GranularityToTimePeriod_NonStandardDate_GetDictionaryByGranularityId(long granularityId)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureMappingEnums.GranularityToTimePeriod_NonStandardDate_GetByGranularityId,
+                    granularityId);
+
+                var nonStandardGranularityToTimePeriodEntities = dataTable.Rows.Cast<DataRow>().Select(d => new Entity.Mapping.GranularityToTimePeriod_NonStandardDate(d)).ToList();
+                return nonStandardGranularityToTimePeriodEntities.Select(d => d.DateId).Distinct()
+                .ToDictionary(
+                    d => d,
+                    d => nonStandardGranularityToTimePeriodEntities.Where(n => n.DateId == d).Select(d => d.TimePeriodId).ToList()
+                );
+            }
+
             public List<Tuple<long, long>> GranularityToTimePeriod_NonStandardDate_GetTupleByGranularityId(long granularityId)
             {
                 var entities = GranularityToTimePeriod_NonStandardDate_GetListByGranularityId(granularityId);

@@ -36,7 +36,7 @@ namespace CommitMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

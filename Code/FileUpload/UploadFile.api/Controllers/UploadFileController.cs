@@ -36,7 +36,7 @@ namespace UploadFile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(uploadFileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(uploadFileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

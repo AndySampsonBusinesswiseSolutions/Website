@@ -34,7 +34,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

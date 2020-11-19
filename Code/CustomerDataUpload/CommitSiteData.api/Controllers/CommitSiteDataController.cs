@@ -36,7 +36,7 @@ namespace CommitSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

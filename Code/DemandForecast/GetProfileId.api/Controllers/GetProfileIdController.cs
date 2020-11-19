@@ -35,7 +35,7 @@ namespace GetProfileId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(getProfileIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(getProfileIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -90,13 +90,12 @@ namespace GetProfileId.api.Controllers
                     var profileAgentId = demandForecastMethods.ProfileAgentDetail_GetProfileAgentIdByProfileAgentAttributeIdAndProfileAgentDetailDescription(priorityProfileAgentAttributeId, priority);
 
                     //Get Profile Agent API GUID
-                    var APIGUID = demandForecastMethods.ProfileAgentDetail_GetProfileAgentDetailDescriptionByProfileAgentIdAndProfileAgentAttributeId(profileAgentId, profileAgentAPIGUIDProfileAgentAttributeId);
+                    var profileAgentAPIGUID = demandForecastMethods.ProfileAgentDetail_GetProfileAgentDetailDescriptionByProfileAgentIdAndProfileAgentAttributeId(profileAgentId, profileAgentAPIGUIDProfileAgentAttributeId);
                     
                     //Call API and wait for response
-                    var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(APIGUID);
-                    var API = systemAPIMethods.PostAsJsonAsync(APIId, getProfileIdAPI, hostEnvironment, jsonObject);
-                    var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
-                    profileId = Convert.ToInt64(result.Result.ToString());
+                    var profileAgentAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(profileAgentAPIGUID);
+                    var result = systemAPIMethods.PostAsJsonAsyncAndAwaitResult(profileAgentAPIId, getProfileIdAPI, hostEnvironment, jsonObject);
+                    profileId = Convert.ToInt64(result);
 
                     if(profileId > 0)
                     {

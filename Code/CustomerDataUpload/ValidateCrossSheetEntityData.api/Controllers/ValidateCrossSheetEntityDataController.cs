@@ -43,7 +43,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -76,8 +76,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 var checkPrerequisiteAPIAPIId = systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
-                var API = systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI, hostEnvironment, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                systemAPIMethods.PostAsJsonAsyncAndAwaitResult(checkPrerequisiteAPIAPIId, new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI, hostEnvironment, jsonObject);
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateCrossSheetEntityDataAPIId);

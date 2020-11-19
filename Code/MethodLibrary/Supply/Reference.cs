@@ -186,11 +186,69 @@ namespace MethodLibrary
                 dataTable.Rows.Add(dataRow);
             }
 
-            public void SetForecastValue(Dictionary<long, decimal> forecast, Dictionary<long, bool> forecastFound, long timePeriodId, decimal usage)
+            public void CreateTimePeriodForecast(KeyValuePair<long, Dictionary<long, decimal?>> forecast, List<Entity.Supply.LoadedUsageLatest> latestLoadedUsage, Dictionary<long, long> futureDateToUsageDateDictionary, Dictionary<long, Dictionary<long, decimal?>> forecastDictionary, Dictionary<long, Dictionary<long, List<long>>> timePeriodToMappedTimePeriodDictionary)
+            {
+                //Get usage date id
+                var usageDateId = futureDateToUsageDateDictionary[forecast.Key];
+
+                //Get usage for date
+                var usageForDateList = latestLoadedUsage.Where(u => u.DateId == usageDateId).ToList();
+                var timePeriodIds = forecast.Value.Keys.ToList();
+
+                foreach (var timePeriodId in timePeriodIds)
+                {
+                    if (forecast.Value[timePeriodId].HasValue)
+                    {
+                        continue;
+                    }
+
+                    //Get usage for time period
+                    var usageForTimePeriodList = usageForDateList.Where(u => u.TimePeriodId == timePeriodId).ToList();
+
+                    if (usageForTimePeriodList.Any())
+                    {
+                        SetForecastValue(forecast.Value, timePeriodId, usageForTimePeriodList.First().Usage);
+                    }
+                    else
+                    {
+                        var mappedTimePeriodDictionary = timePeriodToMappedTimePeriodDictionary[timePeriodId]
+                            .First(t => usageForDateList.Any(u => u.TimePeriodId == t.Key));
+
+                        usageForTimePeriodList = usageForDateList.Where(u => u.TimePeriodId == mappedTimePeriodDictionary.Key).ToList();
+
+                        var mappedUsage = usageForTimePeriodList.First().Usage;
+                        var mappedTimePeriodIdsWithUsageList = mappedTimePeriodDictionary.Value.Where(v => usageForDateList.Any(u => u.TimePeriodId == v)).ToList();
+                        var missingTimePeriodIds = mappedTimePeriodDictionary.Value.Except(mappedTimePeriodIdsWithUsageList);
+
+                        foreach (var mappedtimePeriodId in mappedTimePeriodIdsWithUsageList)
+                        {
+                            //Get usage for time period
+                            usageForTimePeriodList = usageForDateList.Where(u => u.TimePeriodId == mappedtimePeriodId).ToList();
+
+                            SetForecastValue(forecast.Value, timePeriodId, usageForTimePeriodList.First().Usage);
+                        }
+
+                        if (missingTimePeriodIds.Any())
+                        {
+                            var timePeriodUsage = mappedTimePeriodDictionary.Value
+                                .Where(t => forecastDictionary[forecast.Key].ContainsKey(t))
+                                .Where(t => forecastDictionary[forecast.Key][t].HasValue)
+                                .Sum(t => forecastDictionary[forecast.Key][t].Value);
+                            var missingTimePeriodUsage = (mappedUsage - timePeriodUsage) / missingTimePeriodIds.Count();
+
+                            foreach (var missingTimePeriodId in missingTimePeriodIds)
+                            {
+                                SetForecastValue(forecast.Value, missingTimePeriodId, missingTimePeriodUsage);
+                            }
+                        }
+                    }
+                }
+            }
+
+            private void SetForecastValue(Dictionary<long, decimal?> forecast, long timePeriodId, decimal usage)
             {
                 //Add usage to forecast
                 forecast[timePeriodId] = Math.Round(usage, 10);
-                forecastFound[timePeriodId] = true;
             }
         }
     }

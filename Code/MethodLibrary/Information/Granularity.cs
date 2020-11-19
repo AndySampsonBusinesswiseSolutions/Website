@@ -2,6 +2,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using enums;
 
 namespace MethodLibrary
 {
@@ -9,6 +10,11 @@ namespace MethodLibrary
     {
         public partial class Information
         {
+            public long GetGranularityIdByGranularityCode(string granularityCode)
+            {
+                var granularityCodeGranularityAttributeId = GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(new Enums.InformationSchema.Granularity.Attribute().GranularityCode);
+                return GranularityDetail_GetGranularityIdByGranularityAttributeIdAndGranularityDetailDescription(granularityCodeGranularityAttributeId, granularityCode);
+            }
             public string GetGranularityCodeByGranularityDisplayDescription(string granularityDisplayDescription)
             {
                 var granularityDisplayDescriptionGranularityAttributeId = GranularityAttribute_GetGranularityAttributeIdByGranularityAttributeDescription(_informationGranularityAttributeEnums.GranularityDisplayDescription);

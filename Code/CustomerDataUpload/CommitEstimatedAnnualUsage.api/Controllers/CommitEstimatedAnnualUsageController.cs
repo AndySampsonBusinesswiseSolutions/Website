@@ -36,7 +36,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -113,12 +113,11 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 }
 
                 //Launch GetProfile process and wait for response
-                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetProfileAPI);
-                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                var getProfileAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetProfileAPI);
+                var result = systemAPIMethods.PostAsJsonAsyncAndAwaitResult(getProfileAPIId, systemAPIGUIDEnums.CommitProfiledUsageAPI, hostEnvironment, jsonObject);
 
                 //Get profile from Profiling API
-                var profileString = JsonConvert.DeserializeObject(result.Result.ToString()).ToString();
+                var profileString = JsonConvert.DeserializeObject(result).ToString();
                 var periodicUsageDictionary = new Methods().DeserializePeriodicUsage(profileString);
 
                 //Insert new Periodic Usage into LoadedUsage tables

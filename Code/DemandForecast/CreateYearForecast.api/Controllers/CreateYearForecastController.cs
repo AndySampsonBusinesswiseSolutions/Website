@@ -44,7 +44,7 @@ namespace CreateYearForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

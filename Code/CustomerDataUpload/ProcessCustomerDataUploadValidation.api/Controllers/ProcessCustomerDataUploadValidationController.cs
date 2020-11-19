@@ -35,7 +35,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -73,8 +73,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 var checkPrerequisiteAPIAPIId = systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
 
                 //Call CheckPrerequisiteAPI API to wait until prerequisite APIs have finished
-                var API = systemAPIMethods.PostAsJsonAsync(checkPrerequisiteAPIAPIId, systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
-                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
+                systemAPIMethods.PostAsJsonAsyncAndAwaitResult(checkPrerequisiteAPIAPIId, systemAPIGUIDEnums.ProcessCustomerDataUploadValidationAPI, hostEnvironment, jsonObject);
 
                 //Get Routing.API URL
                 var routingAPIId = systemAPIMethods.GetRoutingAPIId();

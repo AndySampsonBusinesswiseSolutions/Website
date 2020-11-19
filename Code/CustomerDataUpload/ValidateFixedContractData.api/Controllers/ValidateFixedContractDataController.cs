@@ -37,7 +37,7 @@ namespace ValidateFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(validateFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
