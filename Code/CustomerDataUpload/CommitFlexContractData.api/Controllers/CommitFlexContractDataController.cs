@@ -37,7 +37,7 @@ namespace CommitFlexContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -100,8 +100,9 @@ namespace CommitFlexContractData.api.Controllers
                 jsonObject.Add(systemAPIRequiredDataKeyEnums.ContractData, commitableEntityJSON);
 
                 //Call CommitContractData API and wait for response
-                var commitContractDataAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitContractDataAPI);
-                systemAPIMethods.PostAsJsonAsyncAndAwaitResult(commitContractDataAPIId, systemAPIGUIDEnums.CommitFlexContractDataAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitContractDataAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.CommitFlexContractDataAPI, hostEnvironment, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFlexContractDataAPIId, false, null);

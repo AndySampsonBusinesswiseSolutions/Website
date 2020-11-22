@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace CreateYearForecast.api.Controllers
 {
@@ -44,7 +46,7 @@ namespace CreateYearForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createYearForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -53,91 +55,107 @@ namespace CreateYearForecast.api.Controllers
         [Route("CreateYearForecast/Create")]
         public void Create([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
-
-            //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
+            if(new Enums.SystemSchema.API.GUID().RunConsoleApps)
             {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID,
-                    createdByUserId,
-                    sourceId,
-                    createYearForecastAPIId);
-
+                var jsonObject = JObject.Parse(data.ToString());
                 if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CreateYearForecastAPI, createYearForecastAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createYearForecastAPIId);
-
-                //Get MeterType
-                var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
-
-                //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
-
-                Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
-                    if(getForecastDictionary)
-                    {
-                        GetForecastDictionary(meterType, meterId);
-                    }
-                    else
-                    {
-                        GetExistingForecast(meterType, meterId);
-                    }
-                });
-
-                var newYearForecastTuples = new ConcurrentBag<Tuple<long, decimal>>();
-                var oldYearForecastTuples = new ConcurrentBag<Tuple<long, decimal>>();
-
-                Parallel.ForEach(forecastYearIds, new ParallelOptions{MaxDegreeOfParallelism = 5}, forecastYearId => {
-                    var dateIdsForYearId = yearToDateDictionary[forecastYearId];
-
-                    var forecast = forecastDictionary.Where(f => dateIdsForYearId.Contains(f.Key))
-                        .Sum(f => f.Value);
-
-                    var addUsageToDataTable = !existingYearForecastDictionary.ContainsKey(forecastYearId)
-                        || existingYearForecastDictionary[forecastYearId] != Math.Round(forecast, 10);
-
-                    if(addUsageToDataTable)
-                    {
-                        if(existingYearForecastDictionary.ContainsKey(forecastYearId))
-                        {
-                            oldYearForecastTuples.Add(new Tuple<long, decimal>(forecastYearId, existingYearForecastDictionary[forecastYearId]));
-                        }
-
-                        newYearForecastTuples.Add(new Tuple<long, decimal>(forecastYearId, forecast));
-                    }
-                });
-
-                if (newYearForecastTuples.Any())
-                {
-                    existingYearForecasts = existingYearForecasts.Except(oldYearForecastTuples).ToList();
-                    existingYearForecasts.AddRange(newYearForecastTuples);
-
-                    //Insert into history and latest tables
-                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId" }, newYearForecastTuples.ToList(), existingYearForecasts);
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, false, null);
+                var fileName = @"C:\wamp64\www\Website\Code\DemandForecast\CreateYearForecastApp\bin\Debug\netcoreapp3.1\CreateYearForecastApp.exe";
+                ProcessStartInfo startInfo = new ProcessStartInfo(fileName);
+                startInfo.Arguments = JsonConvert.SerializeObject(data.ToString());
+                System.Diagnostics.Process.Start(startInfo);
             }
-            catch (Exception error)
+            else
             {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+                var systemMethods = new Methods.System();
 
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, true, $"System Error Id {errorId}");
+                //Get base variables
+                var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+                var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+
+                //Get Queue GUID
+                var jsonObject = JObject.Parse(data.ToString());
+                var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
+
+                try
+                {
+                    //Insert into ProcessQueue
+                    systemMethods.ProcessQueue_Insert(
+                        processQueueGUID,
+                        createdByUserId,
+                        sourceId,
+                        createYearForecastAPIId);
+
+                    if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CreateYearForecastAPI, createYearForecastAPIId, hostEnvironment, jsonObject))
+                    {
+                        return;
+                    }
+
+                    //Update Process Queue
+                    systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createYearForecastAPIId);
+
+                    //Get MeterType
+                    var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
+
+                    //Get MeterId
+                    var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
+
+                    Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
+                        if(getForecastDictionary)
+                        {
+                            GetForecastDictionary(meterType, meterId);
+                        }
+                        else
+                        {
+                            GetExistingForecast(meterType, meterId);
+                        }
+                    });
+
+                    var newYearForecastTuples = new ConcurrentBag<Tuple<long, decimal>>();
+                    var oldYearForecastTuples = new ConcurrentBag<Tuple<long, decimal>>();
+
+                    Parallel.ForEach(forecastYearIds, new ParallelOptions{MaxDegreeOfParallelism = 5}, forecastYearId => {
+                        var dateIdsForYearId = yearToDateDictionary[forecastYearId];
+
+                        var forecast = forecastDictionary.Where(f => dateIdsForYearId.Contains(f.Key))
+                            .Sum(f => f.Value);
+
+                        var addUsageToDataTable = !existingYearForecastDictionary.ContainsKey(forecastYearId)
+                            || existingYearForecastDictionary[forecastYearId] != Math.Round(forecast, 10);
+
+                        if(addUsageToDataTable)
+                        {
+                            if(existingYearForecastDictionary.ContainsKey(forecastYearId))
+                            {
+                                oldYearForecastTuples.Add(new Tuple<long, decimal>(forecastYearId, existingYearForecastDictionary[forecastYearId]));
+                            }
+
+                            newYearForecastTuples.Add(new Tuple<long, decimal>(forecastYearId, forecast));
+                        }
+                    });
+
+                    if (newYearForecastTuples.Any())
+                    {
+                        existingYearForecasts = existingYearForecasts.Except(oldYearForecastTuples).ToList();
+                        existingYearForecasts.AddRange(newYearForecastTuples);
+
+                        //Insert into history and latest tables
+                        new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId" }, newYearForecastTuples.ToList(), existingYearForecasts);
+                    }
+
+                    //Update Process Queue
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, false, null);
+                }
+                catch (Exception error)
+                {
+                    var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
+
+                    //Update Process Queue
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, true, $"System Error Id {errorId}");
+                }
             }
         }
 

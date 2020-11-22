@@ -56,7 +56,7 @@ namespace CommitContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            _systemAPIMethods.PostAsJsonAsyncAndDoNotAwaitResult(commitContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            _systemAPIMethods.PostAsJsonAsync(commitContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

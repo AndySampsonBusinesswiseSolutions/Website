@@ -47,7 +47,7 @@ namespace GetProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -83,13 +83,14 @@ namespace GetProfile.api.Controllers
                 }
 
                 //Launch GetProfileId process and wait for response
-                var getProfileIdAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetProfileIdAPI);
-                var result = systemAPIMethods.PostAsJsonAsyncAndAwaitResult(getProfileIdAPIId, systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetProfileIdAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getProfileAPIId);
 
-                var profileId = Convert.ToInt64(result);
+                var profileId = Convert.ToInt64(result.Result.ToString());
 
                 //If no profile id returned, create system error
                 if(profileId == 0)

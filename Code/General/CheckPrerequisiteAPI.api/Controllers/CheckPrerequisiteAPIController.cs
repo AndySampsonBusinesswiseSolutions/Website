@@ -34,7 +34,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(new Methods.System.API().GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(new Methods.System.API().GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }

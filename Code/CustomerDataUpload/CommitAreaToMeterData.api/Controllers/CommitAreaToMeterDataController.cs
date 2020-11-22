@@ -2,9 +2,12 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
+using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
+
+using Microsoft.Extensions.Configuration;
 
 namespace CommitAreaToMeterData.api.Controllers
 {
@@ -14,13 +17,18 @@ namespace CommitAreaToMeterData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitAreaToMeterDataController> _logger;
-        private readonly Entity.System.API.CommitAreaToMeterData.Configuration _configuration;
+        private readonly Int64 commitAreaToMeterDataAPIId;
+        private readonly string hostEnvironment;
         #endregion
 
-        public CommitAreaToMeterDataController(ILogger<CommitAreaToMeterDataController> logger, Entity.System.API.CommitAreaToMeterData.Configuration configuration)
+        public CommitAreaToMeterDataController(ILogger<CommitAreaToMeterDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _configuration = configuration;
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitAreaToMeterDataAPI, password);
+            commitAreaToMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitAreaToMeterDataAPI);
         }
 
         [HttpPost]
@@ -28,7 +36,7 @@ namespace CommitAreaToMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(_configuration.APIId, _configuration.HostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitAreaToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,15 +63,15 @@ namespace CommitAreaToMeterData.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    _configuration.APIId);
+                    commitAreaToMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(_configuration.APIGUID, _configuration.APIId, _configuration.HostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitAreaToMeterDataAPI, commitAreaToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, _configuration.APIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitAreaToMeterDataAPIId);
                 
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
@@ -74,18 +82,21 @@ namespace CommitAreaToMeterData.api.Controllers
                 if(!commitableMeterEntities.Any())
                 {
                     //Nothing to commit so update Process Queue and exit
-                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, false, null);
+                    systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitAreaToMeterDataAPIId, false, null);
                     return;
                 }
 
                 var mappingMethods = new Methods.Mapping();
                 var customerMethods = new Methods.Customer();
+                var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
+
+                var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 
                 var areas = commitableMeterEntities.Select(cme => cme.Area).Distinct()
                     .ToDictionary(a => a, a => informationMethods.GetAreaId(createdByUserId, sourceId, a));
                 
                 var meters = commitableMeterEntities.Select(cme => cme.MPXN).Distinct()
-                    .ToDictionary(m => m, m => customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(_configuration.MeterIdentifierMeterAttributeId, m).FirstOrDefault());
+                    .ToDictionary(m => m, m => customerMethods.MeterDetail_GetMeterIdListByMeterAttributeIdAndMeterDetailDescription(meterIdentifierMeterAttributeId, m).FirstOrDefault());
 
                 var newAreaToMeterEntities = commitableMeterEntities.Where(cme => mappingMethods.AreaToMeter_GetAreaToMeterIdByAreaIdAndMeterId(areas[cme.Area], meters[cme.MPXN]) == 0)
                     .GroupBy(cme => new { cme.Area, cme.MPXN }).ToList();
@@ -100,14 +111,14 @@ namespace CommitAreaToMeterData.api.Controllers
                 }
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitAreaToMeterDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitAreaToMeterDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

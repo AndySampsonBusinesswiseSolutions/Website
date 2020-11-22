@@ -20,20 +20,8 @@ namespace CleanUpCustomerDataUploadTempData.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var systemAPIGUIDS = new Enums.SystemSchema.API.GUID();
-
             new Methods.System.API.Startup().ConfigureServices(services, Configuration, new Enums.SystemSchema.API.Name().CleanUpCustomerDataUploadTempDataAPI);
             services.AddControllers();
-
-            var APIConfiguration = new Entity.System.API.CleanUpCustomerDataUploadTempData.Configuration
-            (
-                APIId_: new Methods.System.API().API_GetAPIIdByAPIGUID(systemAPIGUIDS.WebsiteAPI),
-                APIGUID_: systemAPIGUIDS.WebsiteAPI,
-                Password_: Configuration.GetValue<string>("Password"),
-                HostEnvironment_: Configuration.GetValue<string>("HostEnvironment")
-            );
-
-            services.AddSingleton(APIConfiguration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

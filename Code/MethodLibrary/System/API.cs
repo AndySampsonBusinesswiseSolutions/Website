@@ -28,7 +28,7 @@ namespace MethodLibrary
                     var checkPrerequisiteAPIAPIId = GetCheckPrerequisiteAPIAPIId();
 
                     //Call CheckPrerequisiteAPI API
-                    var result = PostAsJsonAsyncAndAwaitResult(checkPrerequisiteAPIAPIId, APIGUID, hostEnvironmentName, jsonObject);                    
+                    var result = PostAsJsonAsync(checkPrerequisiteAPIAPIId, APIGUID, hostEnvironmentName, jsonObject).GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.ToString();                    
                     var erroredPrerequisiteAPIs = new Methods().GetArray(result);
 
                     if(erroredPrerequisiteAPIs.Any())
@@ -41,20 +41,14 @@ namespace MethodLibrary
                     return !erroredPrerequisiteAPIs.Any();
                 }
 
-                public string PostAsJsonAndAwaitResult(long APIID, string callingGUID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
+                public Task<HttpResponseMessage> PostAsJson(long APIID, string callingGUID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
                 {
-                    var result = string.Empty;
                     var APIIsRunningRoute = GetAPIIsRunningRouteByAPIId(APIID);
 
-                    using(var API = Post(APIID, callingGUID, APIIsRunningRoute, hostEnvironmentName, jsonObject, buildJSONObject))
-                    {
-                        result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.ToString();
-                    }
-
-                    return result;
+                    return Post(APIID, callingGUID, APIIsRunningRoute, hostEnvironmentName, jsonObject, buildJSONObject);
                 }
 
-                public Task<HttpResponseMessage> PostAsJsonAsyncAndDoNotAwaitResult(long APIID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
+                public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
                 {
                     var callingGUID = new Methods.System().GetCallingGUIDFromJObject(jsonObject);
 
@@ -66,19 +60,6 @@ namespace MethodLibrary
                     var APIPostRoute = GetAPIPOSTRouteByAPIId(APIID);
 
                     return Post(APIID, callingGUID, APIPostRoute, hostEnvironmentName, jsonObject, buildJSONObject);
-                }
-
-                public string PostAsJsonAsyncAndAwaitResult(long APIID, string callingGUID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
-                {
-                    var result = string.Empty;
-                    var APIPostRoute = GetAPIPOSTRouteByAPIId(APIID);
-
-                    using(var API = Post(APIID, callingGUID, APIPostRoute, hostEnvironmentName, jsonObject, buildJSONObject))
-                    {
-                        result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.ToString();
-                    }
-
-                    return result;
                 }
 
                 private Task<HttpResponseMessage> Post(long APIID, string callingGUID, string route, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject)

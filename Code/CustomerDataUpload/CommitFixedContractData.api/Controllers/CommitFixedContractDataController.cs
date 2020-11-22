@@ -37,7 +37,7 @@ namespace CommitFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -100,8 +100,9 @@ namespace CommitFixedContractData.api.Controllers
                 jsonObject.Add(systemAPIRequiredDataKeyEnums.ContractData, commitableEntityJSON);
 
                 //Call CommitContractData API and wait for response
-                var commitContractDataAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitContractDataAPI);
-                systemAPIMethods.PostAsJsonAsyncAndAwaitResult(commitContractDataAPIId, systemAPIGUIDEnums.CommitFixedContractDataAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitContractDataAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.CommitFixedContractDataAPI, hostEnvironment, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitFixedContractDataAPIId, false, null);

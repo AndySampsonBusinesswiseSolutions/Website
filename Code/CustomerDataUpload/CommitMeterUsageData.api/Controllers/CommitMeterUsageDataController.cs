@@ -38,7 +38,7 @@ namespace CommitMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -145,7 +145,7 @@ namespace CommitMeterUsageData.api.Controllers
                     systemMethods.ProcessQueueProgression_Insert(createdByUserId, sourceId, processQueueGUID, newProcessQueueGUID);
                     systemMethods.SetProcessQueueGUIDInJObject(newJsonObject, newProcessQueueGUID);
 
-                    //Update Process GUID to CommitEstimatedAnnualUsage Process GUID
+                    //Update Process GUID to CommitPeriodicUsage Process GUID
                     systemMethods.SetProcessGUIDInJObject(newJsonObject, systemProcessGUIDEnums.CommitEstimatedAnnualUsage);
 
                     //Add mpxn to newJsonObject
@@ -162,11 +162,10 @@ namespace CommitMeterUsageData.api.Controllers
                     //Add HasPeriodicUsage to newJsonObject
                     newJsonObject.Add(systemAPIRequiredDataKeyEnums.HasPeriodicUsage, hasPeriodicUsage);
 
-                    //Connect to Routing API and POST data
-                    systemAPIMethods.PostAsJsonAsync(routingAPIId, systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
-
-                    //Wait for response
-                    var response = systemMethods.GetProcessResponse(newProcessQueueGUID);
+                    //Call CommitEstimatedAnnualUsage API and wait for response
+                    var commitEstimateUsageAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitEstimatedAnnualUsageAPI);
+                    var commitEstimateUsageAPI = systemAPIMethods.PostAsJsonAsync(commitEstimateUsageAPIId, systemAPIGUIDEnums.CommitMeterUsageDataAPI, hostEnvironment, newJsonObject);
+                    var commitEstimateUsageResult = commitEstimateUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     if (hasPeriodicUsage)
                     {

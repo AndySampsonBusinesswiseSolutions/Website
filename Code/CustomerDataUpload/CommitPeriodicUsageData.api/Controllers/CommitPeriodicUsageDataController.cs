@@ -44,7 +44,7 @@ namespace CommitPeriodicUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(commitPeriodicUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -134,7 +134,8 @@ namespace CommitPeriodicUsageData.api.Controllers
 
                     //Call CommitProfiledUsage API and wait for response
                     var commitProfiledUsageAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.CommitProfiledUsageAPI);
-                    var commitProfiledUsageResult = systemAPIMethods.PostAsJsonAsyncAndAwaitResult(commitProfiledUsageAPIId, systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                    var commitProfiledUsageAPI = systemAPIMethods.PostAsJsonAsync(commitProfiledUsageAPIId, systemAPIGUIDEnums.CommitPeriodicUsageDataAPI, hostEnvironment, jsonObject);
+                    var commitProfiledUsageResult = commitProfiledUsageAPI.GetAwaiter().GetResult().Content.ReadAsStringAsync();
 
                     latestPeriodicUsageEntities = new Methods.Supply().LoadedUsageLatest_GetList(meterType, meterId);
                 }

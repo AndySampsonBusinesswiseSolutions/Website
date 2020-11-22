@@ -2,10 +2,12 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
+using enums;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace CleanUpCustomerDataUploadTempData.api.Controllers
 {
@@ -15,13 +17,18 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CleanUpCustomerDataUploadTempDataController> _logger;
-        private readonly Entity.System.API.CleanUpCustomerDataUploadTempData.Configuration _configuration;
+        private readonly Int64 cleanUpCustomerDataUploadTempDataAPIId;
+        private readonly string hostEnvironment;
         #endregion
 
-        public CleanUpCustomerDataUploadTempDataController(ILogger<CleanUpCustomerDataUploadTempDataController> logger, Entity.System.API.CleanUpCustomerDataUploadTempData.Configuration configuration)
+        public CleanUpCustomerDataUploadTempDataController(ILogger<CleanUpCustomerDataUploadTempDataController> logger, IConfiguration configuration)
         {
+            var password = configuration["Password"];
+            hostEnvironment = configuration["HostEnvironment"];
+
             _logger = logger;
-            _configuration = configuration;
+            new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CleanUpCustomerDataUploadTempDataAPI, password);
+            cleanUpCustomerDataUploadTempDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI);
         }
 
         [HttpPost]
@@ -29,7 +36,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(_configuration.APIId, _configuration.HostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -55,15 +62,15 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
                     processQueueGUID, 
                     createdByUserId,
                     sourceId,
-                    _configuration.APIId);
+                    cleanUpCustomerDataUploadTempDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(_configuration.APIGUID, _configuration.APIId, _configuration.HostEnvironment, jsonObject))
+                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, _configuration.APIId);
+                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId);
                 
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
@@ -88,14 +95,14 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
                 });
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, false, null);
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, false, null);
             }
             catch(Exception error)
             {
                 var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
 
                 //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, _configuration.APIId, true, $"System Error Id {errorId}");
+                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, cleanUpCustomerDataUploadTempDataAPIId, true, $"System Error Id {errorId}");
             }
         }
     }

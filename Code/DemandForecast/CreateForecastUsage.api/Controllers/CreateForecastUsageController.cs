@@ -35,7 +35,7 @@ namespace CreateForecastUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsyncAndDoNotAwaitResult(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.System.API().PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -76,8 +76,9 @@ namespace CreateForecastUsage.api.Controllers
                 var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
 
                 //Call GetMappedUsageDateId API and wait for response
-                var getMappedUsageDateIdAPIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
-                systemAPIMethods.PostAsJsonAsyncAndAwaitResult(getMappedUsageDateIdAPIId, systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
+                var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
+                var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
 
                 var dateMappings = new Methods.Supply().DateMapping_GetLatestDictionary(meterType, meterId);
 

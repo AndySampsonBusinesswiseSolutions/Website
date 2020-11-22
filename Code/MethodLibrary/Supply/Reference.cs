@@ -250,6 +250,13 @@ namespace MethodLibrary
                 //Add usage to forecast
                 forecast[timePeriodId] = Math.Round(usage, 10);
             }
+
+            public void SetForecastValue(Dictionary<long, decimal> forecast, Dictionary<long, bool> forecastFound, long timePeriodId, decimal usage)
+            {
+                //Add usage to forecast
+                forecast[timePeriodId] = Math.Round(usage, 10);
+                forecastFound[timePeriodId] = true;
+            }
         }
     }
 }
