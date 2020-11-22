@@ -17,7 +17,6 @@ namespace DetermineFileType.api.Controllers
         private readonly ILogger<DetermineFileTypeController> _logger;
         private readonly Int64 determineFileTypeAPIId;
         private readonly string hostEnvironment;
-        private Int64 fileId;
         #endregion
 
         public DetermineFileTypeController(ILogger<DetermineFileTypeController> logger, IConfiguration configuration)
