@@ -9,12 +9,12 @@ namespace CreateDataAnalysisWebpage.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().CreateDataAnalysisWebpageAPI);
+            new Methods.SystemSchema.API.Program().Main(args, new Enums.SystemSchema.API.Name().CreateDataAnalysisWebpageAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CreateDataAnalysisWebpageAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.SystemSchema.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CreateDataAnalysisWebpageAPI));
     }
 }

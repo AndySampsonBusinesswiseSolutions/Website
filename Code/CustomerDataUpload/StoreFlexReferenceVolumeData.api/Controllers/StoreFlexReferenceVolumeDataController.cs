@@ -26,7 +26,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreFlexReferenceVolumeDataAPI, password);
-            storeFlexReferenceVolumeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFlexReferenceVolumeDataAPI);
+            storeFlexReferenceVolumeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFlexReferenceVolumeDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         [Route("StoreFlexReferenceVolumeData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -62,7 +62,7 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                     sourceId,
                     storeFlexReferenceVolumeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexReferenceVolumeDataAPI, storeFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexReferenceVolumeDataAPI, storeFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -71,11 +71,11 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId);
 
                 var methods = new Methods();
-                var tempCustomerDataUploadFlexReferenceVolumeMethods = new Methods.Temp.CustomerDataUpload.FlexReferenceVolume();
+                var tempCustomerDataUploadFlexReferenceVolumeMethods = new Methods.TempSchema.CustomerDataUpload.FlexReferenceVolume();
 
                 //Get Flex Reference Volume data from Customer Data Upload
                 //TODO: Make into Bulk Insert
-                var flexReferenceVolumeDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
+                var flexReferenceVolumeDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
 
                 foreach(var row in flexReferenceVolumeDictionary.Keys)
                 {

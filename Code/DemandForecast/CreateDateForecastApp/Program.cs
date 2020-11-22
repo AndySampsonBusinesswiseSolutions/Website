@@ -23,14 +23,14 @@ namespace CreateDateForecastApp
                 var hostEnvironment = "Development";
                 var password = "YLtRVcMGf7UUALXU";
 
-                var systemMethods = new Methods.System();
+                var systemMethods = new Methods.SystemSchema();
 
                 new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateDateForecastAPI, password);
-                var createDateForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateDateForecastAPI);
+                var createDateForecastAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateDateForecastAPI);
 
                 //Get base variables
-                var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-                var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+                var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+                var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(args[0]);
@@ -56,7 +56,7 @@ namespace CreateDateForecastApp
                 var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.CustomerSchema().GetMeterIdByMeterType(meterType, jsonObject);
 
                 Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
                     if(getForecastDictionary)
@@ -93,7 +93,7 @@ namespace CreateDateForecastApp
                     existingDateForecasts.AddRange(newDateForecastTuples);
 
                     //Insert into history and latest tables
-                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId" }, newDateForecastTuples.ToList(), existingDateForecasts);
+                    new Methods.SupplySchema().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId" }, newDateForecastTuples.ToList(), existingDateForecasts);
                 }
 
                 //Update Process Queue
@@ -101,7 +101,7 @@ namespace CreateDateForecastApp
             }
             catch (Exception error)
             {
-                var errorId = new Methods.System().InsertSystemError(1, 1, error);
+                var errorId = new Methods.SystemSchema().InsertSystemError(1, 1, error);
 
                 //Update Process Queue
                 //systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createDateForecastAPIId, true, $"System Error Id {errorId}");
@@ -111,7 +111,7 @@ namespace CreateDateForecastApp
         private static void GetExistingForecast(string meterType, long meterId)
         {
             //Get existing date forecast
-            existingDateForecasts = new Methods.Supply().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
+            existingDateForecasts = new Methods.SupplySchema().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId");
             existingDateForecastDictionary = existingDateForecasts.ToDictionary(
                     d => d.Item1,
                     d => d.Item2
@@ -120,7 +120,7 @@ namespace CreateDateForecastApp
 
         private static void GetForecastDictionary(string meterType, long meterId)
         {
-            var supplyMethods = new Methods.Supply();
+            var supplyMethods = new Methods.SupplySchema();
 
             //Get latest loaded usage
             var latestLoadedUsage = supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);

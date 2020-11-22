@@ -28,7 +28,7 @@ namespace CommitSiteData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitSiteDataAPI, password);
-            commitSiteDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSiteDataAPI);
+            commitSiteDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSiteDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitSiteData.api.Controllers
         [Route("CommitSiteData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace CommitSiteData.api.Controllers
                     sourceId,
                     commitSiteDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSiteDataAPI, commitSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,8 +74,8 @@ namespace CommitSiteData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitSiteDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Site] where CanCommit = 1
-                var siteEntities = new Methods.Temp.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableSiteEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(siteEntities);
+                var siteEntities = new Methods.TempSchema.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSiteEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(siteEntities);
 
                 if(!commitableSiteEntities.Any())
                 {
@@ -86,7 +86,7 @@ namespace CommitSiteData.api.Controllers
 
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
                 var customerSiteAttributeEnums = new Enums.CustomerSchema.Site.Attribute();
-                var customerMethods = new Methods.Customer();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var siteNameSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteName);
                 var sitePostCodeSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SitePostCode);

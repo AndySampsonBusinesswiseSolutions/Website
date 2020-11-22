@@ -23,14 +23,14 @@ namespace CreateHalfHourForecastApp
                 var hostEnvironment = "Development";
                 var password = "EqQVsbWULSyW85bU";
 
-                var systemMethods = new Methods.System();
+                var systemMethods = new Methods.SystemSchema();
 
                 new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateHalfHourForecastAPI, password);
-                var createHalfHourForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateHalfHourForecastAPI);
+                var createHalfHourForecastAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateHalfHourForecastAPI);
 
                 //Get base variables
-                var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-                var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+                var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+                var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(args[0]);
@@ -55,7 +55,7 @@ namespace CreateHalfHourForecastApp
                 var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.CustomerSchema().GetMeterIdByMeterType(meterType, jsonObject);
 
                 Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
                     if(getForecastDictionary)
@@ -97,7 +97,7 @@ namespace CreateHalfHourForecastApp
                     existingHalfHourForecasts.AddRange(newHalfHourForecastTuples);
 
                     //Insert into history and latest tables
-                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId", "TimePeriodId" }, newHalfHourForecastTuples.ToList(), existingHalfHourForecasts);
+                    new Methods.SupplySchema().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "DateId", "TimePeriodId" }, newHalfHourForecastTuples.ToList(), existingHalfHourForecasts);
                 }
 
                 //Update Process Queue
@@ -105,7 +105,7 @@ namespace CreateHalfHourForecastApp
             }
             catch (Exception error)
             {
-                var errorId = new Methods.System().InsertSystemError(1, 1, error);
+                var errorId = new Methods.SystemSchema().InsertSystemError(1, 1, error);
 
                 //Update Process Queue
                 //systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createHalfHourForecastAPIId, true, $"System Error Id {errorId}");
@@ -115,7 +115,7 @@ namespace CreateHalfHourForecastApp
         private static void GetExistingForecast(string meterType, long meterId)
         {
             //Get existing five minute forecast
-            existingHalfHourForecasts = new Methods.Supply().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId", "TimePeriodId");
+            existingHalfHourForecasts = new Methods.SupplySchema().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "DateId", "TimePeriodId");
             existingHalfHourForecastDictionary = existingHalfHourForecasts.Select(f => f.Item1).Distinct()
                 .ToDictionary(
                     d => d,
@@ -128,9 +128,9 @@ namespace CreateHalfHourForecastApp
 
         private static void GetForecastDictionary(string meterType, long meterId)
         {
-            var supplyMethods = new Methods.Supply();
-            var mappingMethods = new Methods.Mapping();
-            var informationMethods = new Methods.Information();
+            var supplyMethods = new Methods.SupplySchema();
+            var mappingMethods = new Methods.MappingSchema();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get latest loaded usage
             var latestLoadedUsage = supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);

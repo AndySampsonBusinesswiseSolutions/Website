@@ -9,7 +9,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             private static readonly Enums.StoredProcedure.Supply _storedProcedureSupplyEnums = new Enums.StoredProcedure.Supply();
 

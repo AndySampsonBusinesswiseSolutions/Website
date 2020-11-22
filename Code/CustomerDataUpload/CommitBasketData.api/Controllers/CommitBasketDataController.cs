@@ -28,7 +28,7 @@ namespace CommitBasketData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitBasketDataAPI, password);
-            commitBasketDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitBasketDataAPI);
+            commitBasketDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitBasketDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitBasketData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitBasketDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitBasketDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitBasketData.api.Controllers
         [Route("CommitBasketData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
-            var informationMethods = new Methods.Information();
+            var systemMethods = new Methods.SystemSchema();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace CommitBasketData.api.Controllers
                     sourceId,
                     commitBasketDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitBasketDataAPI, commitBasketDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitBasketDataAPI, commitBasketDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitBasketData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexContract] where CanCommit = 1
-                var flexContractEntities = new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableFlexContractEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(flexContractEntities);
+                var flexContractEntities = new Methods.TempSchema.CustomerDataUpload.FlexContract().FlexContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFlexContractEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(flexContractEntities);
 
                 if(!commitableFlexContractEntities.Any())
                 {
@@ -86,8 +86,8 @@ namespace CommitBasketData.api.Controllers
                     return;
                 }
 
-                var customerMethods = new Methods.Customer();
-                var mappingMethods = new Methods.Mapping();
+                var customerMethods = new Methods.CustomerSchema();
+                var mappingMethods = new Methods.MappingSchema();
 
                 var basketReferenceBasketAttributeId = customerMethods.BasketAttribute_GetBasketAttributeIdByBasketAttributeDescription(new Enums.CustomerSchema.Basket.Attribute().BasketReference);
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);

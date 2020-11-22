@@ -34,7 +34,7 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(new Methods.System.API().GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(new Methods.SystemSchema.API().GetCheckPrerequisiteAPIAPIId(), hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,12 +44,12 @@ namespace CheckPrerequisiteAPI.api.Controllers
         public List<string> Check([FromBody] object data)
         {
             var systemAPIAttributes = new Enums.SystemSchema.API.Attribute();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());

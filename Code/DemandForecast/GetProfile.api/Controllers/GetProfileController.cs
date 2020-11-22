@@ -39,7 +39,7 @@ namespace GetProfile.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetProfileAPI, password);
-            getProfileAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetProfileAPI);
+            getProfileAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetProfileAPI);
         }
 
         [HttpPost]
@@ -47,7 +47,7 @@ namespace GetProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(getProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -57,12 +57,12 @@ namespace GetProfile.api.Controllers
         public string Get([FromBody] object data)
         {
             var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -181,16 +181,16 @@ namespace GetProfile.api.Controllers
 
         private void GetLatestEstimatedAnnualUsage(JObject jsonObject)
         {
-            var meterId = new Methods.Customer().GetMeterId(jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MPXN].ToString());
+            var meterId = new Methods.CustomerSchema().GetMeterId(jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MPXN].ToString());
 
             //Get latest Estimated Annual Usage
-            estimatedAnnualUsage = new Methods.Supply().EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage("Meter", meterId);
+            estimatedAnnualUsage = new Methods.SupplySchema().EstimatedAnnualUsage_GetLatestEstimatedAnnualUsage("Meter", meterId);
         }
 
         private void GetTimePeriodIdList(long profileId)
         {
-            var mappingMethods = new Methods.Mapping();
-            var informationMethods = new Methods.Information();
+            var mappingMethods = new Methods.MappingSchema();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get CommodityId for profileId
             var commodityId = mappingMethods.CommodityToProfile_GetCommodityIdByProfileId(profileId);
@@ -214,7 +214,7 @@ namespace GetProfile.api.Controllers
 
         private void GetProfileValues(long profileId)
         {
-            var mappingMethods = new Methods.Mapping();
+            var mappingMethods = new Methods.MappingSchema();
 
             var forecastGroupToTimePeriodToProfileToProfileValueDictionary = mappingMethods.ForecastGroupToTimePeriodToProfileToProfileValue_GetDictionary();
 
@@ -230,7 +230,7 @@ namespace GetProfile.api.Controllers
             profileValueIdDictionary = forecastGroupToTimePeriodToProfileDictionary.Values.Distinct().ToList()
                 .ToDictionary(f => f, f => forecastGroupToTimePeriodToProfileToProfileValueDictionary[f]);
 
-            var profileValueIdToProfileValueDictionary = new Methods.DemandForecast().ProfileValue_GetDictionary();
+            var profileValueIdToProfileValueDictionary = new Methods.DemandForecastSchema().ProfileValue_GetDictionary();
 
             profileValueDictionary = profileValueIdDictionary
                 .Select(p => p.Value)
@@ -243,7 +243,7 @@ namespace GetProfile.api.Controllers
             var methods = new Methods();
             
             //Get Date dictionary
-            var dateDictionary = new Methods.Information().Date_GetDateDescriptionIdDictionary();
+            var dateDictionary = new Methods.InformationSchema().Date_GetDateDescriptionIdDictionary();
 
             var latestPeriodicUsageDate = DateTime.Today;
             var earliestRequiredPeriodicUsageDate = latestPeriodicUsageDate.AddYears(-1).AddDays(1);
@@ -253,7 +253,7 @@ namespace GetProfile.api.Controllers
                 .ToList();
 
             //Get Date to ForecastGroup with priority 1
-            dateForecastGroupDictionary = new Methods.Mapping().DateToForecastGroup_GetDateForecastGroupDictionaryByPriority(1)
+            dateForecastGroupDictionary = new Methods.MappingSchema().DateToForecastGroup_GetDateForecastGroupDictionaryByPriority(1)
                 .Where(d => periodicUsageDateIds.Contains(d.Key))
                 .ToDictionary(d => d.Key, d=> d.Value);
         }

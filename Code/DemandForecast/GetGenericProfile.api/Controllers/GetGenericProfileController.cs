@@ -18,7 +18,7 @@ namespace GetGenericProfile.api.Controllers
     {
         #region Variables
         private readonly ILogger<GetGenericProfileController> _logger;
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.MappingSchema _mappingMethods = new Methods.MappingSchema();
         private readonly Int64 getGenericProfileAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -30,7 +30,7 @@ namespace GetGenericProfile.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetGenericProfileAPI, password);
-            getGenericProfileAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetGenericProfileAPI);
+            getGenericProfileAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetGenericProfileAPI);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace GetGenericProfile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(getGenericProfileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -47,11 +47,11 @@ namespace GetGenericProfile.api.Controllers
         [Route("GetGenericProfile/Get")]
         public long Get([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -70,10 +70,10 @@ namespace GetGenericProfile.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getGenericProfileAPIId);
 
                 var demandForecastProfileAttributeEnums = new Enums.DemandForecastSchema.Profile.Attribute();
-                var demandForecastMethods = new Methods.DemandForecast();
+                var demandForecastMethods = new Methods.DemandForecastSchema();
 
                 //Get meterId/subMeterId
-                var meterId = new Methods.Customer().GetMeterId(jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MPXN].ToString());
+                var meterId = new Methods.CustomerSchema().GetMeterId(jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MPXN].ToString());
 
                 //Get Is Generic Profile Attribute Id
                 var isGenericProfileAttributeId = demandForecastMethods.ProfileAttribute_GetProfileAttributeIdByProfileAttributeDescription(demandForecastProfileAttributeEnums.IsGeneric);

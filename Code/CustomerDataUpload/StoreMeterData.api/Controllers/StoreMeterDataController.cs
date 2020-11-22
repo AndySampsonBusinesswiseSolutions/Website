@@ -26,7 +26,7 @@ namespace StoreMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreMeterDataAPI, password);
-            storeMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreMeterDataAPI);
+            storeMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreMeterDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace StoreMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace StoreMeterData.api.Controllers
         [Route("StoreMeterData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -62,7 +62,7 @@ namespace StoreMeterData.api.Controllers
                     sourceId,
                     storeMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreMeterDataAPI, storeMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreMeterDataAPI, storeMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -70,11 +70,11 @@ namespace StoreMeterData.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeMeterDataAPIId);
 
-                var tempCustomerDataUploadMeterMethods = new Methods.Temp.CustomerDataUpload.Meter();
+                var tempCustomerDataUploadMeterMethods = new Methods.TempSchema.CustomerDataUpload.Meter();
 
                 //Get Meter data from Customer Data Upload
                 //TODO: Make into Bulk Insert
-                var meterDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Meters");
+                var meterDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Meters");
 
                 foreach(var row in meterDictionary.Keys)
                 {

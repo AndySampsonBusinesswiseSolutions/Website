@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Temp
+        public partial class TempSchema
         {
             public partial class CustomerDataUpload
             {
@@ -26,7 +26,7 @@ namespace MethodLibrary
                             _storedProcedureTempCustomerDataUploadEnums.MeterExemption_GetByProcessQueueGUID, 
                             processQueueGUID);
 
-                        return new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                        return new Methods.TempSchema.CustomerDataUpload().CleanedUpDataTable(dataTable);
                     }
 
                     public List<Entity.Temp.CustomerDataUpload.MeterExemption> MeterExemption_GetByProcessQueueGUID(string processQueueGUID)
@@ -35,7 +35,7 @@ namespace MethodLibrary
                             _storedProcedureTempCustomerDataUploadEnums.MeterExemption_GetByProcessQueueGUID, 
                             processQueueGUID);
 
-                        var dataRows = new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                        var dataRows = new Methods.TempSchema.CustomerDataUpload().CleanedUpDataTable(dataTable);
                         return dataRows.Select(d => new Entity.Temp.CustomerDataUpload.MeterExemption(d)).ToList();
                     }
 

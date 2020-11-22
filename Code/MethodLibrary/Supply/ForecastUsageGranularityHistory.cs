@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             private readonly Enums.InformationSchema.Granularity.Attribute _informationGranularityAttributeEnums = new Enums.InformationSchema.Granularity.Attribute();
 

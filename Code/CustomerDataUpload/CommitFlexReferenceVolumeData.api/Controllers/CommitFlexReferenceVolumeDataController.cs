@@ -28,7 +28,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitFlexReferenceVolumeDataAPI, password);
-            commitFlexReferenceVolumeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFlexReferenceVolumeDataAPI);
+            commitFlexReferenceVolumeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFlexReferenceVolumeDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
         [Route("CommitFlexReferenceVolumeData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -64,7 +64,7 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                     sourceId,
                     commitFlexReferenceVolumeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitFlexReferenceVolumeDataAPI, commitFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitFlexReferenceVolumeDataAPI, commitFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -75,8 +75,8 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] where CanCommit = 1
-                var flexReferenceVolumeEntities = new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableFlexReferenceVolumeEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(flexReferenceVolumeEntities);
+                var flexReferenceVolumeEntities = new Methods.TempSchema.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFlexReferenceVolumeEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(flexReferenceVolumeEntities);
 
                 if(!commitableFlexReferenceVolumeEntities.Any())
                 {
@@ -86,8 +86,8 @@ namespace CommitFlexReferenceVolumeData.api.Controllers
                 }
 
                 var customerReferenceVolumeAttributeEnums = new Enums.CustomerSchema.ReferenceVolume.Attribute();
-                var customerMethods = new Methods.Customer();
-                var mappingMethods = new Methods.Mapping();
+                var customerMethods = new Methods.CustomerSchema();
+                var mappingMethods = new Methods.MappingSchema();
 
                 var contractReferenceContractAttributeId = customerMethods.ContractAttribute_GetContractAttributeIdByContractAttributeDescription(new Enums.CustomerSchema.Contract.Attribute().ContractReference);
                 var dateFromReferenceVolumeAttributeId = customerMethods.ReferenceVolumeAttribute_GetReferenceVolumeAttributeIdByReferenceVolumeAttributeDescription(customerReferenceVolumeAttributeEnums.DateFrom);

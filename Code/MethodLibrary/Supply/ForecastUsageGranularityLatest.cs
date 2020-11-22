@@ -8,7 +8,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             private void CreateForecastUsageGranularityLatestEntities(List<long> granularityIdList, long schemaId, long meterId, string meterType)
             {

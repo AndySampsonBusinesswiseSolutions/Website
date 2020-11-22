@@ -27,7 +27,7 @@ namespace CommitCommodityToMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitCommodityToMeterDataAPI, password);
-            commitCommodityToMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitCommodityToMeterDataAPI);
+            commitCommodityToMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitCommodityToMeterDataAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace CommitCommodityToMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitCommodityToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitCommodityToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitCommodityToMeterData.api.Controllers
         public void Commit([FromBody] object data)
         {
             var methods = new Methods();
-            var systemMethods = new Methods.System();
-            var informationMethods = new Methods.Information();
+            var systemMethods = new Methods.SystemSchema();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace CommitCommodityToMeterData.api.Controllers
                     sourceId,
                     commitCommodityToMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitCommodityToMeterDataAPI, commitCommodityToMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitCommodityToMeterDataAPI, commitCommodityToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitCommodityToMeterData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(meterEntities);
+                var meterEntities = new Methods.TempSchema.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(meterEntities);
 
                 if(!commitableMeterEntities.Any())
                 {
@@ -86,8 +86,8 @@ namespace CommitCommodityToMeterData.api.Controllers
                     return;
                 }
 
-                var customerMethods = new Methods.Customer();
-                var mappingMethods = new Methods.Mapping();
+                var customerMethods = new Methods.CustomerSchema();
+                var mappingMethods = new Methods.MappingSchema();
                 var informationCommodityEnums = new Enums.InformationSchema.Commodity();
 
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);

@@ -43,8 +43,8 @@ namespace MethodLibrary
         private static readonly Enums.CustomerSchema.Contract.Attribute _customerContractAttributeEnums = new Enums.CustomerSchema.Contract.Attribute();
         private static readonly Enums.CustomerSchema.Meter.Attribute _customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
         private static readonly Enums.CustomerSchema.Site.Attribute _customerSiteAttributeEnums = new Enums.CustomerSchema.Site.Attribute();
-        private static readonly Information _informationMethods = new Information();
-        private static readonly Supplier _supplierMethods = new Supplier();
+        private static readonly InformationSchema _informationMethods = new InformationSchema();
+        private static readonly SupplierSchema _supplierMethods = new SupplierSchema();
         private static readonly Enums.SystemSchema.HostEnvironment.Attribute _systemHostEnvironmentAttributeEnums = new Enums.SystemSchema.HostEnvironment.Attribute();
 
         //TODO: Work out how many of these can be moved/integrated with database

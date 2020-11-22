@@ -29,7 +29,7 @@ namespace ValidateFixedContractData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFixedContractDataAPI, password);
-            validateFixedContractDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFixedContractDataAPI);
+            validateFixedContractDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFixedContractDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace ValidateFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace ValidateFixedContractData.api.Controllers
         [Route("ValidateFixedContractData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace ValidateFixedContractData.api.Controllers
                     sourceId,
                     validateFixedContractDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFixedContractDataAPI, validateFixedContractDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFixedContractDataAPI, validateFixedContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace ValidateFixedContractData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFixedContractDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] table
-                var fixedContractEntities = new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_GetByProcessQueueGUID(processQueueGUID);
+                var fixedContractEntities = new Methods.TempSchema.CustomerDataUpload.FixedContract().FixedContract_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!fixedContractEntities.Any())
                 {
@@ -85,8 +85,8 @@ namespace ValidateFixedContractData.api.Controllers
 
                 var methods = new Methods();
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-                var customerMethods = new Methods.Customer();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var columns = new List<string>
                     {

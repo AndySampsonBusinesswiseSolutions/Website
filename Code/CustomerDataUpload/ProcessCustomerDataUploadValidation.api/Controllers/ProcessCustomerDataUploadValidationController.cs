@@ -27,7 +27,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ProcessCustomerDataUploadValidationAPI, password);
-            processCustomerDataUploadValidationAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ProcessCustomerDataUploadValidationAPI);
+            processCustomerDataUploadValidationAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ProcessCustomerDataUploadValidationAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(processCustomerDataUploadValidationAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,11 +44,11 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
         [Route("ProcessCustomerDataUploadValidation/Process")]
         public void Process([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -66,8 +66,8 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
 
                 var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
                 var systemProcessGUIDEnums = new Enums.SystemSchema.Process.GUID();
-                var customerMethods = new Methods.Customer();
-                var systemAPIMethods = new Methods.System.API();
+                var customerMethods = new Methods.CustomerSchema();
+                var systemAPIMethods = new Methods.SystemSchema.API();
 
                 //Get CheckPrerequisiteAPI API Id
                 var checkPrerequisiteAPIAPIId = systemAPIMethods.GetCheckPrerequisiteAPIAPIId();
@@ -116,7 +116,7 @@ namespace ProcessCustomerDataUploadValidation.api.Controllers
                 var fileId = informationMethods.File_GetFileIdByFileGUID(fileGUID);
 
                 //Map DataUploadValidationErrorId To FileId
-                new Methods.Mapping().DataUploadValidationErrorToFile_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, fileId);
+                new Methods.MappingSchema().DataUploadValidationErrorToFile_Insert(createdByUserId, sourceId, dataUploadValidationErrorId, fileId);
 
                 //Create new ProcessQueueGUID
                 newProcessQueueGUID = Guid.NewGuid().ToString();

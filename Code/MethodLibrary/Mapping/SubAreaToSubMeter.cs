@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Mapping
+        public partial class MappingSchema
         {
             public void SubAreaToSubMeter_Insert(long createdByUserId, long sourceId, long subAreaId, long subMeterId)
             {

@@ -29,7 +29,7 @@ namespace ValidateSiteData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateSiteDataAPI, password);
-            validateSiteDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateSiteDataAPI);
+            validateSiteDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateSiteDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace ValidateSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace ValidateSiteData.api.Controllers
         [Route("ValidateSiteData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace ValidateSiteData.api.Controllers
                     sourceId,
                     validateSiteDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateSiteDataAPI, validateSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateSiteDataAPI, validateSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace ValidateSiteData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateSiteDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[Site] table
-                var siteEntities = new Methods.Temp.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(processQueueGUID);
+                var siteEntities = new Methods.TempSchema.CustomerDataUpload.Site().Site_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!siteEntities.Any())
                 {
@@ -85,7 +85,7 @@ namespace ValidateSiteData.api.Controllers
 
                 var methods = new Methods();
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
 
                 var columns = new List<string>
                     {

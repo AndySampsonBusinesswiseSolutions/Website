@@ -28,7 +28,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CleanUpCustomerDataUploadTempDataAPI, password);
-            cleanUpCustomerDataUploadTempDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI);
+            cleanUpCustomerDataUploadTempDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
         [Route("CleanUpCustomerDataUploadTempData/Clean")]
         public void Clean([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -64,7 +64,7 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
                     sourceId,
                     cleanUpCustomerDataUploadTempDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CleanUpCustomerDataUploadTempDataAPI, cleanUpCustomerDataUploadTempDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,17 +76,17 @@ namespace CleanUpCustomerDataUploadTempData.api.Controllers
 
                 var deleteMethodList = new List<Action>
                 {
-                    () => new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.SubMeterUsage().SubMeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.Customer().Customer_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.Meter().Meter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.Site().Site_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
-                    () => new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID)
+                    () => new Methods.TempSchema.CustomerDataUpload.MeterUsage().MeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.SubMeterUsage().SubMeterUsage_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.Customer().Customer_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.FixedContract().FixedContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.FlexContract().FlexContract_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.FlexTrade().FlexTrade_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.Meter().Meter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.MeterExemption().MeterExemption_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.Site().Site_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID),
+                    () => new Methods.TempSchema.CustomerDataUpload.SubMeter().SubMeter_DeleteByProcessQueueGUID(customerDataUploadProcessQueueGUID)
                 };
 
                 //Cleanup temp data

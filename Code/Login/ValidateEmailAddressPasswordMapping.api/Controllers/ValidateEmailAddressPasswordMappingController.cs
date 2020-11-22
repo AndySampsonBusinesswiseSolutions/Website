@@ -26,7 +26,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateEmailAddressPasswordMappingAPI, password);
-            validateEmailAddressPasswordMappingAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI);
+            validateEmailAddressPasswordMappingAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateEmailAddressPasswordMappingAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,9 +43,9 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         [Route("ValidateEmailAddressPasswordMapping/Validate")]
         public void Validate([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.Administration.User();
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var administrationUserMethods = new Methods.AdministrationSchema.User();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
             var createdByUserId = administrationUserMethods.GetSystemUserId();
@@ -64,7 +64,7 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
                     sourceId,
                     validateEmailAddressPasswordMappingAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,13 +74,13 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
 
                 //Get Password Id
                 var password = systemMethods.GetPasswordFromJObject(jsonObject);
-                var passwordId = new Methods.Administration.Password().Password_GetPasswordIdByPassword(password);
+                var passwordId = new Methods.AdministrationSchema.Password().Password_GetPasswordIdByPassword(password);
 
                 //Get User Id
                 var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
 
                 //Validate Password and User combination
-                var mappingId = new Methods.Mapping().PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
+                var mappingId = new Methods.MappingSchema().PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
                 string errorMessage = null;
 
                 //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error

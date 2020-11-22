@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Temp
+        public partial class TempSchema
         {
             public partial class CustomerDataUpload
             {
@@ -19,7 +19,7 @@ namespace MethodLibrary
                             _storedProcedureTempCustomerDataUploadEnums.MeterUsage_GetByProcessQueueGUID, 
                             processQueueGUID);
 
-                        return new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                        return new Methods.TempSchema.CustomerDataUpload().CleanedUpDataTable(dataTable);
                     }
 
                     public List<Entity.Temp.CustomerDataUpload.MeterUsage> MeterUsage_GetByProcessQueueGUID(string processQueueGUID)
@@ -28,7 +28,7 @@ namespace MethodLibrary
                             _storedProcedureTempCustomerDataUploadEnums.MeterUsage_GetByProcessQueueGUID, 
                             processQueueGUID);
 
-                        var dataRows = new Methods.Temp.CustomerDataUpload().CleanedUpDataTable(dataTable);
+                        var dataRows = new Methods.TempSchema.CustomerDataUpload().CleanedUpDataTable(dataTable);
                         return dataRows.Select(d => new Entity.Temp.CustomerDataUpload.MeterUsage(d)).ToList();
                     }
 

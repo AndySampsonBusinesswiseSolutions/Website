@@ -28,7 +28,7 @@ namespace CommitMeterToSiteData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitMeterToSiteDataAPI, password);
-            commitMeterToSiteDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterToSiteDataAPI);
+            commitMeterToSiteDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterToSiteDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitMeterToSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitMeterToSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitMeterToSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitMeterToSiteData.api.Controllers
         [Route("CommitMeterToSiteData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -64,7 +64,7 @@ namespace CommitMeterToSiteData.api.Controllers
                     sourceId,
                     commitMeterToSiteDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterToSiteDataAPI, commitMeterToSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterToSiteDataAPI, commitMeterToSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -75,8 +75,8 @@ namespace CommitMeterToSiteData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterDataRows = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(meterDataRows);
+                var meterDataRows = new Methods.TempSchema.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(meterDataRows);
 
                 if(!commitableMeterEntities.Any())
                 {
@@ -86,8 +86,8 @@ namespace CommitMeterToSiteData.api.Controllers
                 }
 
                 var customerSiteAttributeEnums = new Enums.CustomerSchema.Site.Attribute();
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 var siteNameSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(customerSiteAttributeEnums.SiteName);

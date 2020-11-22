@@ -28,7 +28,7 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitSubAreaToSubMeterDataAPI, password);
-            commitSubAreaToSubMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSubAreaToSubMeterDataAPI);
+            commitSubAreaToSubMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSubAreaToSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitSubAreaToSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitSubAreaToSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
         [Route("CommitSubAreaToSubMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
                     sourceId,
                     commitSubAreaToSubMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSubAreaToSubMeterDataAPI, commitSubAreaToSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSubAreaToSubMeterDataAPI, commitSubAreaToSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var subMeterEntities = new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableSubMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(subMeterEntities);
+                var subMeterEntities = new Methods.TempSchema.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSubMeterEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(subMeterEntities);
 
                 if(!commitableSubMeterEntities.Any())
                 {
@@ -86,8 +86,8 @@ namespace CommitSubAreaToSubMeterData.api.Controllers
                     return;
                 }
 
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var subMeterIdentifierSubMeterAttributeId = customerMethods.SubMeterAttribute_GetSubMeterAttributeIdBySubMeterAttributeDescription(new Enums.CustomerSchema.SubMeter.Attribute().SubMeterIdentifier);
 

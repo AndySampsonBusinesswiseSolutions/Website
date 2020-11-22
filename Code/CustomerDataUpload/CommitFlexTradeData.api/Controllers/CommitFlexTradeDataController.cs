@@ -29,7 +29,7 @@ namespace CommitFlexTradeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitFlexTradeDataAPI, password);
-            commitFlexTradeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFlexTradeDataAPI);
+            commitFlexTradeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFlexTradeDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace CommitFlexTradeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace CommitFlexTradeData.api.Controllers
         [Route("CommitFlexTradeData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -66,7 +66,7 @@ namespace CommitFlexTradeData.api.Controllers
                     sourceId,
                     commitFlexTradeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitFlexTradeDataAPI, commitFlexTradeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitFlexTradeDataAPI, commitFlexTradeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -77,8 +77,8 @@ namespace CommitFlexTradeData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] where CanCommit = 1
-                var flexTradeEntities = new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableFlexTradeEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(flexTradeEntities);
+                var flexTradeEntities = new Methods.TempSchema.CustomerDataUpload.FlexTrade().FlexTrade_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFlexTradeEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(flexTradeEntities);
 
                 if(!commitableFlexTradeEntities.Any())
                 {
@@ -91,8 +91,8 @@ namespace CommitFlexTradeData.api.Controllers
                 var informationRateUnitEnums = new Enums.InformationSchema.RateUnit();
                 var customerTradeAttributeEnums = new Enums.CustomerSchema.Trade.Attribute();
                 var customerBasketAttributeEnums = new Enums.CustomerSchema.Basket.Attribute();
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 //Setup AttributeId Dictionary
                 var attributeIdDictionary = new Dictionary<string, long>

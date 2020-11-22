@@ -27,7 +27,7 @@ namespace CreateForecastUsage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateForecastUsageAPI, password);
-            createForecastUsageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateForecastUsageAPI);
+            createForecastUsageAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateForecastUsageAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace CreateForecastUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(createForecastUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,11 +44,11 @@ namespace CreateForecastUsage.api.Controllers
         [Route("CreateForecastUsage/Create")]
         public void Create([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -67,20 +67,20 @@ namespace CreateForecastUsage.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createForecastUsageAPIId);
 
                 var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-                var systemAPIMethods = new Methods.System.API();
+                var systemAPIMethods = new Methods.SystemSchema.API();
 
                 //Get MeterType
                 var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.CustomerSchema().GetMeterIdByMeterType(meterType, jsonObject);
 
                 //Call GetMappedUsageDateId API and wait for response
                 var APIId = systemAPIMethods.API_GetAPIIdByAPIGUID(systemAPIGUIDEnums.GetMappedUsageDateIdAPI);
                 var API = systemAPIMethods.PostAsJsonAsync(APIId, systemAPIGUIDEnums.GetProfileAPI, hostEnvironment, jsonObject);
                 var result = API.GetAwaiter().GetResult().Content.ReadAsStringAsync().Result.Replace("\"", string.Empty).Replace("\\", string.Empty);
 
-                var dateMappings = new Methods.Supply().DateMapping_GetLatestDictionary(meterType, meterId);
+                var dateMappings = new Methods.SupplySchema().DateMapping_GetLatestDictionary(meterType, meterId);
 
                 if(!dateMappings.Any() || dateMappings.Any(d => d.Value == 0))
                 {

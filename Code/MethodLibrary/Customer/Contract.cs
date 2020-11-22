@@ -8,7 +8,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Customer
+        public partial class CustomerSchema
         {
             public long InsertNewContract(long createdByUserId, long sourceId)
             {

@@ -15,7 +15,7 @@ namespace Routing.api.Controllers
     {
         #region Variables
         private readonly ILogger<RoutingController> _logger;
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
+        private readonly Methods.SystemSchema.API _systemAPIMethods = new Methods.SystemSchema.API();
         private readonly string hostEnvironment;
         #endregion
 
@@ -47,11 +47,11 @@ namespace Routing.api.Controllers
         public void Route([FromBody] object data)
         {
             var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             try
             {
@@ -81,7 +81,7 @@ namespace Routing.api.Controllers
                 }
 
                 //Get APIId list
-                var APIIdList = new Methods.Mapping().APIToProcess_GetAPIIdListByProcessId(processId);
+                var APIIdList = new Methods.MappingSchema().APIToProcess_GetAPIIdListByProcessId(processId);
                 var APIGUIDList = new List<string>
                     {
                         _systemAPIMethods.API_GetAPIGUIDByAPIId(validateProcessGUIDAPIId)

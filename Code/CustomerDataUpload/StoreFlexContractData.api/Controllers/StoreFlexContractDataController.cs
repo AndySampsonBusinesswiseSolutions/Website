@@ -28,7 +28,7 @@ namespace StoreFlexContractData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreFlexContractDataAPI, password);
-            storeFlexContractDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFlexContractDataAPI);
+            storeFlexContractDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFlexContractDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace StoreFlexContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeFlexContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace StoreFlexContractData.api.Controllers
         [Route("StoreFlexContractData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -64,7 +64,7 @@ namespace StoreFlexContractData.api.Controllers
                     sourceId,
                     storeFlexContractDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexContractDataAPI, storeFlexContractDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexContractDataAPI, storeFlexContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -73,10 +73,10 @@ namespace StoreFlexContractData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexContractDataAPIId);
 
                 var methods = new Methods();
-                var tempCustomerDataUploadFlexContract = new Methods.Temp.CustomerDataUpload.FlexContract();
+                var tempCustomerDataUploadFlexContract = new Methods.TempSchema.CustomerDataUpload.FlexContract();
 
                 //Get Flex Contract data from Customer Data Upload
-                var flexContractDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
+                var flexContractDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Contracts']");
                 var columns = new List<string>
                 {
                     "StandingCharge", "ShapeFee", "AdminFee", "ImbalanceFee", "RiskFee", "GreenPremium", "OptimisationBenefit"

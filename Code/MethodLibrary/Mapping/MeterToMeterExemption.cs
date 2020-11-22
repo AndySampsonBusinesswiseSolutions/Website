@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Mapping
+        public partial class MappingSchema
         {
             public void MeterToMeterExemption_Insert(long createdByUserId, long sourceId, long meterId, long meterExemptionId)
             {

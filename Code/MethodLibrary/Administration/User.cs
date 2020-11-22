@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Administration
+        public partial class AdministrationSchema
         {
             public class User
             {
@@ -80,7 +80,7 @@ namespace MethodLibrary
 
                 public long GetUserIdByEmailAddress(JObject jsonObject)
                 {
-                    var emailAddress = new System().GetEmailAddressFromJObject(jsonObject);
+                    var emailAddress = new SystemSchema().GetEmailAddressFromJObject(jsonObject);
                     var userDetailId = UserDetail_GetUserDetailIdByEmailAddress(emailAddress);
                     return User_GetUserIdByUserDetailId(userDetailId);
                 }

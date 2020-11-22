@@ -28,7 +28,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateManageCustomersWebpageAPI, password);
-            createManageCustomersWebpageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateManageCustomersWebpageAPI);
+            createManageCustomersWebpageAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateManageCustomersWebpageAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(createManageCustomersWebpageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CreateManageCustomersWebpage.api.Controllers
         [Route("CreateManageCustomersWebpage/Create")]
         public void Create([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
             //Update Process Queue
             systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, createManageCustomersWebpageAPIId);
 
-            var customerMethods = new Methods.Customer();
+            var customerMethods = new Methods.CustomerSchema();
 
             //Get Page Id
             var pageId = systemMethods.Page_GetPageIdByGUID(new Enums.SystemSchema.Page.GUID().ManageCustomers);
@@ -90,7 +90,7 @@ namespace CreateManageCustomersWebpage.api.Controllers
             var customerNameAttributeId = customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(new Enums.CustomerSchema.Customer.Attribute().CustomerName);
 
             //Get all CustomerToChildCustomer mappings
-            var customerToChildCustomerMappings = new Methods.Mapping().CustomerToChildCustomer_GetCustomerIdToChildCustomerIdDictionary();
+            var customerToChildCustomerMappings = new Methods.MappingSchema().CustomerToChildCustomer_GetCustomerIdToChildCustomerIdDictionary();
 
             //Loop though Customer Ids, get Customer Name and add to dictionary
             var customerNames = new Dictionary<string, List<string>>();

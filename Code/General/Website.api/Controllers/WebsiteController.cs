@@ -27,18 +27,18 @@ namespace Website.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().WebsiteAPI, password);
-            websiteAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().WebsiteAPI);
+            websiteAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().WebsiteAPI);
         }
 
         [HttpPost]
         [Route("Website/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             try
             {
@@ -56,7 +56,7 @@ namespace Website.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, websiteAPIId);
 
-                var systemAPIMethods = new Methods.System.API();
+                var systemAPIMethods = new Methods.SystemSchema.API();
 
                 //Get Routing.API URL
                 var routingAPIId = systemAPIMethods.GetRoutingAPIId();
@@ -77,11 +77,11 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponse")]
         public IActionResult GetProcessResponse([FromBody] string processQueueGUID)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             try
             {
@@ -125,7 +125,7 @@ namespace Website.api.Controllers
         [Route("Website/GetProcessResponseDetail")]
         public IActionResult GetProcessResponseDetail([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
             var jsonObject = JObject.Parse(data.ToString());
 
             //Get Process Queue GUID
@@ -144,10 +144,10 @@ namespace Website.api.Controllers
             var APIGUID = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().APIGUID].ToString();
 
             //Get API Id
-            var websiteAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(APIGUID);
+            var websiteAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(APIGUID);
 
             //Get Process Archive Detail Id List by API Id
-            var APIProcessArchiveDetailIdList = new Methods.Mapping().APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);
+            var APIProcessArchiveDetailIdList = new Methods.MappingSchema().APIToProcessArchiveDetail_GetProcessArchiveDetailIdListByAPIId(websiteAPIId);
 
             //Get Process Archive Detail Id that is in both lists
             var processArchiveDetailId = processArchiveDetailIdList.Intersect(APIProcessArchiveDetailIdList).FirstOrDefault();
@@ -168,10 +168,10 @@ namespace Website.api.Controllers
             // var userEmailAddress = _systemMethods.GetEmailAddressFromJObject(jsonObject);
 
             //Get UserId from Email Address
-            var userId = new Methods.Administration.User().GetSystemUserId();
+            var userId = new Methods.AdministrationSchema.User().GetSystemUserId();
 
             //Get HTML from Page Request by Process Queue GUID and User Id
-            var pageRequestResult = new Methods.System().PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);
+            var pageRequestResult = new Methods.SystemSchema().PageRequest_GetPageRequestResultByProcessQueueGUIDAndUserId(processQueueGUID, userId);
             
             //Return Process Archive Detail Description in message
             return new OkObjectResult(new { message = pageRequestResult });

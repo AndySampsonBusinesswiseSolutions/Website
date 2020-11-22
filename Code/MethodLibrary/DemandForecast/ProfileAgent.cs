@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class DemandForecast
+        public partial class DemandForecastSchema
         {
             public long ProfileAgentAttribute_GetProfileAgentAttributeIdByProfileAgentAttributeDescription(string profileAgentAttributeDescription)
             {

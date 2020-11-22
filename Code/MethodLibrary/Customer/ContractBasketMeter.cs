@@ -4,7 +4,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Customer
+        public partial class CustomerSchema
         {
             public bool ContractBasketMeterExists(string contractReference, string basketReference, string mpxn)
             {
@@ -19,7 +19,7 @@ namespace MethodLibrary
                 }
 
                 //Get ContractMeters from BasketId
-                var contractMeterIdFromBasketId = new Mapping().BasketToContractMeter_GetContractMeterIdListByBasketId(basketId);
+                var contractMeterIdFromBasketId = new MappingSchema().BasketToContractMeter_GetContractMeterIdListByBasketId(basketId);
 
                 //If no ContractMeterIds then not valid
                 if(!contractMeterIdFromBasketId.Any())

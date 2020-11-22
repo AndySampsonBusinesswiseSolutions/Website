@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class DemandForecast
+        public partial class DemandForecastSchema
         {
             public List<Entity.DemandForecast.ProfileValue> ProfileValue_GetList()
             {

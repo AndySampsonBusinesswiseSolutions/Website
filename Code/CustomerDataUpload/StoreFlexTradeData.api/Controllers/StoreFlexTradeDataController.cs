@@ -26,7 +26,7 @@ namespace StoreFlexTradeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreFlexTradeDataAPI, password);
-            storeFlexTradeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFlexTradeDataAPI);
+            storeFlexTradeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFlexTradeDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace StoreFlexTradeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace StoreFlexTradeData.api.Controllers
         [Route("StoreFlexTradeData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -62,7 +62,7 @@ namespace StoreFlexTradeData.api.Controllers
                     sourceId,
                     storeFlexTradeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexTradeDataAPI, storeFlexTradeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexTradeDataAPI, storeFlexTradeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -71,11 +71,11 @@ namespace StoreFlexTradeData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexTradeDataAPIId);
 
                 var methods = new Methods();
-                var tempCustomerDataUploadFlexTradeMethods = new Methods.Temp.CustomerDataUpload.FlexTrade();
+                var tempCustomerDataUploadFlexTradeMethods = new Methods.TempSchema.CustomerDataUpload.FlexTrade();
 
                 //Get Flex Trade data from Customer Data Upload
                 //TODO: Make into Bulk Insert
-                var flexTradeDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Trades']");
+                var flexTradeDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Trades']");
 
                 foreach(var row in flexTradeDictionary.Keys)
                 {

@@ -4,10 +4,8 @@ using Microsoft.AspNetCore.Cors;
 using MethodLibrary;
 using enums;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System;
 using Microsoft.Extensions.Configuration;
-using System.Diagnostics;
 
 namespace CreateWeekForecast.api.Controllers
 {
@@ -28,7 +26,7 @@ namespace CreateWeekForecast.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateWeekForecastAPI, password);
-            createWeekForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI);
+            createWeekForecastAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI);
         }
 
         [HttpPost]
@@ -36,7 +34,7 @@ namespace CreateWeekForecast.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(createWeekForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(createWeekForecastAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,16 +43,14 @@ namespace CreateWeekForecast.api.Controllers
         [Route("CreateWeekForecast/Create")]
         public void Create([FromBody] object data)
         {
-            var jsonObject = JObject.Parse(data.ToString());
-            if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI, createWeekForecastAPIId, hostEnvironment, jsonObject))
-            {
-                return;
-            }
-
             var fileName = @"C:\wamp64\www\Website\Code\DemandForecast\CreateWeekForecastApp\bin\Debug\netcoreapp3.1\CreateWeekForecastApp.exe";
-            ProcessStartInfo startInfo = new ProcessStartInfo(fileName);
-            startInfo.Arguments = JsonConvert.SerializeObject(data.ToString());
-            System.Diagnostics.Process.Start(startInfo);
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI, 
+                createWeekForecastAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

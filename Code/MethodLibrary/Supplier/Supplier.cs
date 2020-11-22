@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supplier
+        public partial class SupplierSchema
         {
             public long SupplierAttribute_GetSupplierAttributeIdBySupplierAttributeDescription(string supplierAttributeDescription)
             {

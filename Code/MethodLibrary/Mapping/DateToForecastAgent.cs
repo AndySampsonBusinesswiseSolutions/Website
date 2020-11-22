@@ -8,7 +8,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Mapping
+        public partial class MappingSchema
         {
             public ConcurrentDictionary<long, Dictionary<long, int>> DateToForecastAgent_GetDateForecastAgentDictionary()
             {

@@ -29,7 +29,7 @@ namespace ValidateSubMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateSubMeterDataAPI, password);
-            validateSubMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateSubMeterDataAPI);
+            validateSubMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace ValidateSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace ValidateSubMeterData.api.Controllers
         [Route("ValidateSubMeterData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace ValidateSubMeterData.api.Controllers
                     sourceId,
                     validateSubMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateSubMeterDataAPI, validateSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateSubMeterDataAPI, validateSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace ValidateSubMeterData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateSubMeterDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] table
-                var subMeterEntities = new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(processQueueGUID);
+                var subMeterEntities = new Methods.TempSchema.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!subMeterEntities.Any())
                 {
@@ -84,8 +84,8 @@ namespace ValidateSubMeterData.api.Controllers
                 }
 
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
-                var customerMethods = new Methods.Customer();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var columns = new List<string>
                     {

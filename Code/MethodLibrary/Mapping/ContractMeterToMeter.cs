@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Mapping
+        public partial class MappingSchema
         {
             public List<long> ContractMeterToMeter_GetContractMeterIdListByMeterId(long meterId)
             {

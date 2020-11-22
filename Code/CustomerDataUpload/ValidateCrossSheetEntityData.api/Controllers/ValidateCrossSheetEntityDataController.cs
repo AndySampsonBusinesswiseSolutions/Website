@@ -20,7 +20,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
     {
         #region Variables
         private readonly ILogger<ValidateCrossSheetEntityDataController> _logger;
-        private readonly Methods.Temp.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+        private readonly Methods.TempSchema.CustomerDataUpload _tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
         private readonly Int64 validateCrossSheetEntityDataAPIId;
         private readonly string hostEnvironment;
         private Int64 createdByUserId;
@@ -35,7 +35,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateCrossSheetEntityDataAPI, password);
-            validateCrossSheetEntityDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI);
+            validateCrossSheetEntityDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateCrossSheetEntityDataAPI);
         }
 
         [HttpPost]
@@ -43,7 +43,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateCrossSheetEntityDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -52,12 +52,12 @@ namespace ValidateCrossSheetEntityData.api.Controllers
         [Route("ValidateCrossSheetEntityData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
-            var systemAPIMethods = new Methods.System.API();
+            var systemMethods = new Methods.SystemSchema();
+            var systemAPIMethods = new Methods.SystemSchema.API();
 
             //Get base variables
-            createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -87,17 +87,17 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                 //TODO: Change to entities
                 var getMethodList = new Dictionary<string, Func<List<DataRow>>>
                 {
-                    {"Customer", () => new Methods.Temp.CustomerDataUpload.Customer().Customer_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"Site", () => new Methods.Temp.CustomerDataUpload.Site().Site_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"Meter", () => new Methods.Temp.CustomerDataUpload.Meter().Meter_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"MeterExemption", () => new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"MeterUsage", () => new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"SubMeter", () => new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"SubMeterUsage", () => new Methods.Temp.CustomerDataUpload.SubMeterUsage().SubMeterUsage_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"FixedContract", () => new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"FlexContract", () => new Methods.Temp.CustomerDataUpload.FlexContract().FlexContract_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"FlexReferenceVolume", () => new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetDataRowsByProcessQueueGUID(processQueueGUID)},
-                    {"FlexTrade", () => new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_GetDataRowsByProcessQueueGUID(processQueueGUID)}
+                    {"Customer", () => new Methods.TempSchema.CustomerDataUpload.Customer().Customer_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"Site", () => new Methods.TempSchema.CustomerDataUpload.Site().Site_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"Meter", () => new Methods.TempSchema.CustomerDataUpload.Meter().Meter_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"MeterExemption", () => new Methods.TempSchema.CustomerDataUpload.MeterExemption().MeterExemption_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"MeterUsage", () => new Methods.TempSchema.CustomerDataUpload.MeterUsage().MeterUsage_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"SubMeter", () => new Methods.TempSchema.CustomerDataUpload.SubMeter().SubMeter_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"SubMeterUsage", () => new Methods.TempSchema.CustomerDataUpload.SubMeterUsage().SubMeterUsage_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"FixedContract", () => new Methods.TempSchema.CustomerDataUpload.FixedContract().FixedContract_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"FlexContract", () => new Methods.TempSchema.CustomerDataUpload.FlexContract().FlexContract_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"FlexReferenceVolume", () => new Methods.TempSchema.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetDataRowsByProcessQueueGUID(processQueueGUID)},
+                    {"FlexTrade", () => new Methods.TempSchema.CustomerDataUpload.FlexTrade().FlexTrade_GetDataRowsByProcessQueueGUID(processQueueGUID)}
                 };
 
                 var dataRowDictionary = new ConcurrentDictionary<string, List<DataRow>>();
@@ -105,7 +105,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
                     dataRowDictionary.TryAdd(getMethod.Key, getMethod.Value());
                 });
 
-                var customerMethods = new Methods.Customer();
+                var customerMethods = new Methods.CustomerSchema();
                 var customerNameCustomerAttributeId = customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(new Enums.CustomerSchema.Customer.Attribute().CustomerName);
                 var siteNameSiteAttributeId = customerMethods.SiteAttribute_GetSiteAttributeIdBySiteAttributeDescription(new Enums.CustomerSchema.Site.Attribute().SiteName);
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
@@ -163,7 +163,7 @@ namespace ValidateCrossSheetEntityData.api.Controllers
             //TODO: This needs fixing as is badly written
             //TODO: Maybe move into Dictionary<string, Action>
             
-            var customerMethods = new Methods.Customer();
+            var customerMethods = new Methods.CustomerSchema();
             var customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
             if(sheetName == customerDataUploadValidationSheetNameEnums.Site)
             {

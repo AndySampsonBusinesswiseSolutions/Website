@@ -15,13 +15,13 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public partial class API
             {
                 public bool PrerequisiteAPIsAreSuccessful(string APIGUID, long APIId, string hostEnvironmentName, JObject jsonObject)
                 {
-                    var systemMethods = new Methods.System();
+                    var systemMethods = new Methods.SystemSchema();
                     var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
 
                     //Get CheckPrerequisiteAPI API Id
@@ -50,7 +50,7 @@ namespace MethodLibrary
 
                 public Task<HttpResponseMessage> PostAsJsonAsync(long APIID, string hostEnvironmentName, JObject jsonObject, bool buildJSONObject = true)
                 {
-                    var callingGUID = new Methods.System().GetCallingGUIDFromJObject(jsonObject);
+                    var callingGUID = new Methods.SystemSchema().GetCallingGUIDFromJObject(jsonObject);
 
                     return PostAsJsonAsync(APIID, callingGUID, hostEnvironmentName, jsonObject, buildJSONObject);
                 }
@@ -170,7 +170,7 @@ namespace MethodLibrary
                     var hostEnvironmentId = new HostEnvironment().GetHostEnvironmentIdByHostEnvironmentName(hostEnvironmentName);
 
                     //Get hostEnvironment to url mappings
-                    var APIDetailToHostEnvironmentMappings = new Mapping.APIDetailToHostEnvironment().APIDetailToHostEnvironment_GetAPIDetailIdListByHostEnvironmentId(hostEnvironmentId);
+                    var APIDetailToHostEnvironmentMappings = new MappingSchema.APIDetailToHostEnvironment().APIDetailToHostEnvironment_GetAPIDetailIdListByHostEnvironmentId(hostEnvironmentId);
 
                     if(APIDetailToHostEnvironmentMappings.Any())
                     {

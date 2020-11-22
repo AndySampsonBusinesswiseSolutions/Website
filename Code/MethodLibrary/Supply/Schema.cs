@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             private void Schema_Create(long meterId, string meterType)
             {

@@ -26,7 +26,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitLineLossFactorClassToMeterDataAPI, password);
-            commitLineLossFactorClassToMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitLineLossFactorClassToMeterDataAPI);
+            commitLineLossFactorClassToMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitLineLossFactorClassToMeterDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
         [Route("CommitLineLossFactorClassToMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
-            var informationMethods = new Methods.Information();
+            var systemMethods = new Methods.SystemSchema();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -63,7 +63,7 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
                     sourceId,
                     commitLineLossFactorClassToMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitLineLossFactorClassToMeterDataAPI, commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitLineLossFactorClassToMeterDataAPI, commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

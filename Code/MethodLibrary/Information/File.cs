@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Information
+        public partial class InformationSchema
         {
             public void File_Insert(long createdByUserId, long sourceId, string fileGUID)
             {

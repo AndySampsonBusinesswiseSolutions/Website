@@ -28,7 +28,7 @@ namespace StoreSubMeterUsageData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreSubMeterUsageDataAPI, password);
-            storeSubMeterUsageDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreSubMeterUsageDataAPI);
+            storeSubMeterUsageDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreSubMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace StoreSubMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeSubMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace StoreSubMeterUsageData.api.Controllers
         [Route("StoreSubMeterUsageData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -64,7 +64,7 @@ namespace StoreSubMeterUsageData.api.Controllers
                     sourceId,
                     storeSubMeterUsageDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSubMeterUsageDataAPI, storeSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSubMeterUsageDataAPI, storeSubMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -75,7 +75,7 @@ namespace StoreSubMeterUsageData.api.Controllers
                 var methods = new Methods();
 
                 //Get SubMeter Usage data from Customer Data Upload
-                var subMeterUsageDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['SubMeter HH Data']");
+                var subMeterUsageDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['SubMeter HH Data']");
 
                 //Create data table
                 var subMeterUsageDataTable = new DataTable();

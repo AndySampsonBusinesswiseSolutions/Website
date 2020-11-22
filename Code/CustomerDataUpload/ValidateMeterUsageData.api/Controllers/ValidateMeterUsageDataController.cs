@@ -30,7 +30,7 @@ namespace ValidateMeterUsageData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateMeterUsageDataAPI, password);
-            validateMeterUsageDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateMeterUsageDataAPI);
+            validateMeterUsageDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace ValidateMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -47,11 +47,11 @@ namespace ValidateMeterUsageData.api.Controllers
         [Route("ValidateMeterUsageData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -66,7 +66,7 @@ namespace ValidateMeterUsageData.api.Controllers
                     sourceId,
                     validateMeterUsageDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateMeterUsageDataAPI, validateMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateMeterUsageDataAPI, validateMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -75,7 +75,7 @@ namespace ValidateMeterUsageData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateMeterUsageDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] table
-                var meterUsageEntities = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(processQueueGUID);
+                var meterUsageEntities = new Methods.TempSchema.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterUsageEntities.Any())
                 {
@@ -87,7 +87,7 @@ namespace ValidateMeterUsageData.api.Controllers
                 var methods = new Methods();
                 var customerDataUploadValidationSheetNameEnums = new Enums.CustomerSchema.DataUploadValidation.SheetName();
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
 
                 string errorMessage = null;
                 var sourceSheetList = new List<string>

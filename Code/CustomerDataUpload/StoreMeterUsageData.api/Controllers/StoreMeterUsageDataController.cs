@@ -18,7 +18,7 @@ namespace StoreMeterUsageData.api.Controllers
     {
         #region Variables
         private readonly ILogger<StoreMeterUsageDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.SystemSchema _systemMethods = new Methods.SystemSchema();
         private readonly Int64 storeMeterUsageDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -30,7 +30,7 @@ namespace StoreMeterUsageData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreMeterUsageDataAPI, password);
-            storeMeterUsageDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreMeterUsageDataAPI);
+            storeMeterUsageDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace StoreMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -49,8 +49,8 @@ namespace StoreMeterUsageData.api.Controllers
         {
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace StoreMeterUsageData.api.Controllers
                     sourceId,
                     storeMeterUsageDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreMeterUsageDataAPI, storeMeterUsageDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreMeterUsageDataAPI, storeMeterUsageDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -105,7 +105,7 @@ namespace StoreMeterUsageData.api.Controllers
                     var dailyTimePeriod = sourceSheet == customerDataUploadValidationSheetNameEnums.DailyMeterUsage ? 1 : 0;
 
                     //Get Meter Usage data from Customer Data Upload
-                    var meterUsageDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, jsonSheet);
+                    var meterUsageDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, jsonSheet);
 
                     foreach(var row in meterUsageDictionary.Keys)
                     {

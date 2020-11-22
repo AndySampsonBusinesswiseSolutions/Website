@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Administration
+        public partial class AdministrationSchema
         {
             public class Login
             {

@@ -27,7 +27,7 @@ namespace StoreLoginAttempt.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreLoginAttemptAPI, password);
-            storeLoginAttemptAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreLoginAttemptAPI);
+            storeLoginAttemptAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreLoginAttemptAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace StoreLoginAttempt.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeLoginAttemptAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeLoginAttemptAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,15 +44,15 @@ namespace StoreLoginAttempt.api.Controllers
         [Route("StoreLoginAttempt/Store")]
         public void Store([FromBody] object data)
         {
-            var administrationLoginMethods = new Methods.Administration.Login();
-            var administrationUserMethods = new Methods.Administration.User();
-            var informationMethods = new Methods.Information();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var administrationLoginMethods = new Methods.AdministrationSchema.Login();
+            var administrationUserMethods = new Methods.AdministrationSchema.User();
+            var informationMethods = new Methods.InformationSchema();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
             var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();                    
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -94,7 +94,7 @@ namespace StoreLoginAttempt.api.Controllers
                     //Store mapping between login attempt and user
                     var systemUserId = administrationUserMethods.GetSystemUserId();
 
-                    var mappingMethods = new Methods.Mapping();
+                    var mappingMethods = new Methods.MappingSchema();
                     mappingMethods.LoginToUser_Insert(systemUserId, 
                         sourceId, 
                         loginId, 

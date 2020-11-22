@@ -4,7 +4,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public void ProcessQueueProgression_Insert(long createdByUserId, long sourceId, string fromProcessQueueGUID, string toProcessQueueGUID)
             {

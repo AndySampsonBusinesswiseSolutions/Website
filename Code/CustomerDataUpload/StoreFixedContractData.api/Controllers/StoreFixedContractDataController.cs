@@ -28,7 +28,7 @@ namespace StoreFixedContractData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreFixedContractDataAPI, password);
-            storeFixedContractDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFixedContractDataAPI);
+            storeFixedContractDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreFixedContractDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace StoreFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace StoreFixedContractData.api.Controllers
         [Route("StoreFixedContractData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -64,7 +64,7 @@ namespace StoreFixedContractData.api.Controllers
                     sourceId,
                     storeFixedContractDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFixedContractDataAPI, storeFixedContractDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFixedContractDataAPI, storeFixedContractDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -73,10 +73,10 @@ namespace StoreFixedContractData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFixedContractDataAPIId);
 
                 var methods = new Methods();
-                var tempCustomerDataUploadFixedContractMethods = new Methods.Temp.CustomerDataUpload.FixedContract();
+                var tempCustomerDataUploadFixedContractMethods = new Methods.TempSchema.CustomerDataUpload.FixedContract();
 
                 //Get Fixed Contract data from Customer Data Upload
-                var fixedContractDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Fixed Contracts']");
+                var fixedContractDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Fixed Contracts']");
                 var columns = new List<string>
                 {
                     "StandingCharge", "CapacityCharge", "Rate1", "Rate2", "Rate3", "Rate4", "Rate5", "Rate6", "Rate7", "Rate8", "Rate9", "Rate10"

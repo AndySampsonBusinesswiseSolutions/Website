@@ -27,7 +27,7 @@ namespace DetermineFileType.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().DetermineFileTypeAPI, password);
-            determineFileTypeAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().DetermineFileTypeAPI);
+            determineFileTypeAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().DetermineFileTypeAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace DetermineFileType.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(determineFileTypeAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,12 +45,12 @@ namespace DetermineFileType.api.Controllers
         public void Determine([FromBody] object data)
         {
             var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-            var informationMethods = new Methods.Information();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -105,7 +105,7 @@ namespace DetermineFileType.api.Controllers
                     }
                 }
 
-                var mappingMethods = new Methods.Mapping();
+                var mappingMethods = new Methods.MappingSchema();
 
                 //Insert File To FileType Mapping
                 mappingMethods.FileToFileType_Insert(createdByUserId, sourceId, fileId, fileTypeId);

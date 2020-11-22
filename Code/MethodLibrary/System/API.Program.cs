@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public partial class API
             {
@@ -27,7 +27,7 @@ namespace MethodLibrary
 
                         webBuilder.UseSetting("Password", password);
                         webBuilder.UseSetting("HostEnvironment", hostEnvironment);
-                        webBuilder.UseUrls(new Methods.System.API().GetAPIStartupURLs(hostEnvironment, APIGUID));
+                        webBuilder.UseUrls(new Methods.SystemSchema.API().GetAPIStartupURLs(hostEnvironment, APIGUID));
                         webBuilder.UseStartup<TStartup>();
                     }
 

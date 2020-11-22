@@ -29,7 +29,7 @@ namespace CommitFixedContractData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitFixedContractDataAPI, password);
-            commitFixedContractDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFixedContractDataAPI);
+            commitFixedContractDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitFixedContractDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace CommitFixedContractData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitFixedContractDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -47,12 +47,12 @@ namespace CommitFixedContractData.api.Controllers
         public void Commit([FromBody] object data)
         {
             var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -78,8 +78,8 @@ namespace CommitFixedContractData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[FixedContract] where CanCommit = 1
-                var fixedContractEntities = new Methods.Temp.CustomerDataUpload.FixedContract().FixedContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableFixedContractEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(fixedContractEntities);
+                var fixedContractEntities = new Methods.TempSchema.CustomerDataUpload.FixedContract().FixedContract_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableFixedContractEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(fixedContractEntities);
 
                 if(!commitableFixedContractEntities.Any())
                 {

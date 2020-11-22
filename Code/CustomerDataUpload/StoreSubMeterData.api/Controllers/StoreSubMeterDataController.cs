@@ -26,7 +26,7 @@ namespace StoreSubMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreSubMeterDataAPI, password);
-            storeSubMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreSubMeterDataAPI);
+            storeSubMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace StoreSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace StoreSubMeterData.api.Controllers
         [Route("StoreSubMeterData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -62,7 +62,7 @@ namespace StoreSubMeterData.api.Controllers
                     sourceId,
                     storeSubMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSubMeterDataAPI, storeSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSubMeterDataAPI, storeSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -70,11 +70,11 @@ namespace StoreSubMeterData.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSubMeterDataAPIId);
 
-                var tempCustomerDataUploadSubMeterMethods = new Methods.Temp.CustomerDataUpload.SubMeter();
+                var tempCustomerDataUploadSubMeterMethods = new Methods.TempSchema.CustomerDataUpload.SubMeter();
 
                 //Get SubMeter data from Customer Data Upload
                 //TODO: Make into Bulk Insert
-                var subMeterDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.SubMeters");
+                var subMeterDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.SubMeters");
 
                 foreach(var row in subMeterDictionary.Keys)
                 {

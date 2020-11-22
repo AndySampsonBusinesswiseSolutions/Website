@@ -5,7 +5,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public partial class API
             {
@@ -17,7 +17,7 @@ namespace MethodLibrary
                         var hostEnvironment = configuration.GetValue<string>("HostEnvironment");
 
                         new Methods().InitialiseDatabaseInteraction(hostEnvironment, APIName, password);
-                        new Methods.System.API().ConfigureAPIStartupServices(services, hostEnvironment);
+                        new Methods.SystemSchema.API().ConfigureAPIStartupServices(services, hostEnvironment);
                     }
                 }
             }

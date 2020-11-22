@@ -28,7 +28,7 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitMeterToMeterTimeswitchCodeDataAPI, password);
-            commitMeterToMeterTimeswitchCodeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterToMeterTimeswitchCodeDataAPI);
+            commitMeterToMeterTimeswitchCodeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterToMeterTimeswitchCodeDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitMeterToMeterTimeswitchCodeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitMeterToMeterTimeswitchCodeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
         [Route("CommitMeterToMeterTimeswitchCodeData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
                     sourceId,
                     commitMeterToMeterTimeswitchCodeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterToMeterTimeswitchCodeDataAPI, commitMeterToMeterTimeswitchCodeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterToMeterTimeswitchCodeDataAPI, commitMeterToMeterTimeswitchCodeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(meterEntities);
+                var meterEntities = new Methods.TempSchema.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(meterEntities);
 
                 if(!commitableMeterEntities.Any())
                 {
@@ -87,8 +87,8 @@ namespace CommitMeterToMeterTimeswitchCodeData.api.Controllers
                 }
 
                 var informationMeterTimeswitchCodeAttributeEnums = new Enums.InformationSchema.MeterTimeswitchCode.Attribute();
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 var meterTimeswitchCodeRangeStartMeterTimeswitchCodeAttributeId = informationMethods.MeterTimeswitchCodeAttribute_GetMeterTimeswitchCodeAttributeIdByMeterTimeswitchCodeAttributeDescription(informationMeterTimeswitchCodeAttributeEnums.MeterTimeswitchCodeRangeStart);

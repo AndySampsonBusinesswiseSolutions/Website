@@ -29,7 +29,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFlexReferenceVolumeDataAPI, password);
-            validateFlexReferenceVolumeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFlexReferenceVolumeDataAPI);
+            validateFlexReferenceVolumeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFlexReferenceVolumeDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateFlexReferenceVolumeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
         [Route("ValidateFlexReferenceVolumeData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                     sourceId,
                     validateFlexReferenceVolumeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFlexReferenceVolumeDataAPI, validateFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFlexReferenceVolumeDataAPI, validateFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFlexReferenceVolumeDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexReferenceVolume] table
-                var flexReferenceVolumeEntities = new Methods.Temp.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
+                var flexReferenceVolumeEntities = new Methods.TempSchema.CustomerDataUpload.FlexReferenceVolume().FlexReferenceVolume_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!flexReferenceVolumeEntities.Any())
                 {
@@ -85,7 +85,7 @@ namespace ValidateFlexReferenceVolumeData.api.Controllers
 
                 var methods = new Methods();
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
 
                 var columns = new List<string>
                     {

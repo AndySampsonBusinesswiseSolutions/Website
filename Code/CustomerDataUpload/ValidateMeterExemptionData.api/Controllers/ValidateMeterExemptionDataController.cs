@@ -29,7 +29,7 @@ namespace ValidateMeterExemptionData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateMeterExemptionDataAPI, password);
-            ValidateMeterExemptionDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateMeterExemptionDataAPI);
+            ValidateMeterExemptionDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateMeterExemptionDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace ValidateMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(ValidateMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(ValidateMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace ValidateMeterExemptionData.api.Controllers
         [Route("ValidateMeterExemptionData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                     sourceId,
                     ValidateMeterExemptionDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateMeterExemptionDataAPI, ValidateMeterExemptionDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateMeterExemptionDataAPI, ValidateMeterExemptionDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace ValidateMeterExemptionData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, ValidateMeterExemptionDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] table
-                var meterExemptionEntities = new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_GetByProcessQueueGUID(processQueueGUID);
+                var meterExemptionEntities = new Methods.TempSchema.CustomerDataUpload.MeterExemption().MeterExemption_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!meterExemptionEntities.Any())
                 {
@@ -85,7 +85,7 @@ namespace ValidateMeterExemptionData.api.Controllers
 
                 var methods = new Methods();
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
 
                 var columns = new List<string>
                     {

@@ -25,14 +25,14 @@ namespace CreateYearForecastApp
                 var hostEnvironment = "Development";
                 var password = "YgK7auZuW5LnxKXB";
 
-                var systemMethods = new Methods.System();
+                var systemMethods = new Methods.SystemSchema();
                 
                 new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateYearForecastAPI, password);
-                var createYearForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateYearForecastAPI);
+                var createYearForecastAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateYearForecastAPI);
 
                 //Get base variables
-                var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-                var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+                var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+                var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(args[0]);
@@ -57,7 +57,7 @@ namespace CreateYearForecastApp
                 var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.CustomerSchema().GetMeterIdByMeterType(meterType, jsonObject);
 
                 Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
                     if(getForecastDictionary)
@@ -99,7 +99,7 @@ namespace CreateYearForecastApp
                     existingYearForecasts.AddRange(newYearForecastTuples);
 
                     //Insert into history and latest tables
-                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId" }, newYearForecastTuples.ToList(), existingYearForecasts);
+                    new Methods.SupplySchema().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId" }, newYearForecastTuples.ToList(), existingYearForecasts);
                 }
 
                 //Update Process Queue
@@ -107,7 +107,7 @@ namespace CreateYearForecastApp
             }
             catch (Exception error)
             {
-                var errorId = new Methods.System().InsertSystemError(1, 1, error);
+                var errorId = new Methods.SystemSchema().InsertSystemError(1, 1, error);
 
                 //Update Process Queue
                 //systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createYearForecastAPIId, true, $"System Error Id {errorId}");
@@ -117,7 +117,7 @@ namespace CreateYearForecastApp
         private static void GetExistingForecast(string meterType, long meterId)
         {
             //Get existing Year forecast
-            existingYearForecasts = new Methods.Supply().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId");
+            existingYearForecasts = new Methods.SupplySchema().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId");
             existingYearForecastDictionary = existingYearForecasts.ToDictionary(
                 d => d.Item1,
                 d => d.Item2
@@ -126,13 +126,13 @@ namespace CreateYearForecastApp
 
         private static void GetForecastDictionary(string meterType, long meterId)
         {
-            var supplyMethods = new Methods.Supply();
+            var supplyMethods = new Methods.SupplySchema();
 
             //Get latest loaded usage
             var latestLoadedUsage = supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);
 
             //Get Date to Year mappings
-            var dateToYearMappings = new Methods.Mapping().DateToYear_GetList();
+            var dateToYearMappings = new Methods.MappingSchema().DateToYear_GetList();
             yearToDateDictionary = dateToYearMappings.Select(d => d.YearId).Distinct()
                 .ToDictionary(
                     y => y,

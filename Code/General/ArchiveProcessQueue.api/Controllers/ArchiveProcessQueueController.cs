@@ -27,7 +27,7 @@ namespace ArchiveProcessQueue.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ArchiveProcessQueueAPI, password);
-            archiveProcessQueueAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ArchiveProcessQueueAPI);
+            archiveProcessQueueAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ArchiveProcessQueueAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace ArchiveProcessQueue.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(archiveProcessQueueAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,12 +44,12 @@ namespace ArchiveProcessQueue.api.Controllers
         [Route("ArchiveProcessQueue/Archive")]
         public void Archive([FromBody] object data)
         {
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Process Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -80,7 +80,7 @@ namespace ArchiveProcessQueue.api.Controllers
                     hasError);
 
                 var systemProcessArchiveAttributeEnums = new Enums.SystemSchema.ProcessArchive.Attribute();
-                var mappingMethods = new Methods.Mapping();
+                var mappingMethods = new Methods.MappingSchema();
                 var methods = new Methods();
 
                 var processArchiveId = systemMethods.ProcessArchive_GetProcessArchiveIdByProcessArchiveGUID(processQueueGUID);

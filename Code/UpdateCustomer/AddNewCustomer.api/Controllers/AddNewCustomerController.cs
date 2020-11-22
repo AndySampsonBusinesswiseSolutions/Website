@@ -27,7 +27,7 @@ namespace AddNewCustomer.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().AddNewCustomerAPI, password);
-            addNewCustomerAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().AddNewCustomerAPI);
+            addNewCustomerAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().AddNewCustomerAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace AddNewCustomer.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(addNewCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(addNewCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,11 +44,11 @@ namespace AddNewCustomer.api.Controllers
         [Route("AddNewCustomer/Add")]
         public void Add([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -63,7 +63,7 @@ namespace AddNewCustomer.api.Controllers
                     sourceId,
                     addNewCustomerAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().AddNewCustomerAPI, addNewCustomerAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().AddNewCustomerAPI, addNewCustomerAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -71,7 +71,7 @@ namespace AddNewCustomer.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, addNewCustomerAPIId);
 
-                var customerMethods = new Methods.Customer();
+                var customerMethods = new Methods.CustomerSchema();
 
                 //Get Customer Name attribute Id
                 var customerNameAttributeId = customerMethods.CustomerAttribute_GetCustomerAttributeIdByCustomerAttributeDescription(new Enums.CustomerSchema.Customer.Attribute().CustomerName);

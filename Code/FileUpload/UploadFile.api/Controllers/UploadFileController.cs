@@ -28,7 +28,7 @@ namespace UploadFile.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().UploadFileAPI, password);
-            uploadFileAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().UploadFileAPI);
+            uploadFileAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().UploadFileAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace UploadFile.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(uploadFileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(uploadFileAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace UploadFile.api.Controllers
         [Route("UploadFile/Upload")]
         public void Upload([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace UploadFile.api.Controllers
                     sourceId,
                     uploadFileAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().UploadFileAPI, uploadFileAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().UploadFileAPI, uploadFileAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }

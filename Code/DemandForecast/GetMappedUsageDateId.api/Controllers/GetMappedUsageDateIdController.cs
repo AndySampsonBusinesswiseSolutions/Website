@@ -36,7 +36,7 @@ namespace GetMappedUsageDateId.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().GetMappedUsageDateIdAPI, password);
-            getMappedUsageDateIdAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetMappedUsageDateIdAPI);
+            getMappedUsageDateIdAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().GetMappedUsageDateIdAPI);
         }
 
         [HttpPost]
@@ -44,7 +44,7 @@ namespace GetMappedUsageDateId.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(getMappedUsageDateIdAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -53,11 +53,11 @@ namespace GetMappedUsageDateId.api.Controllers
         [Route("GetMappedUsageDateId/Get")]
         public void Get([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
-            var informationMethods = new Methods.Information();
+            var systemMethods = new Methods.SystemSchema();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -76,16 +76,16 @@ namespace GetMappedUsageDateId.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, getMappedUsageDateIdAPIId);
 
-                var mappingMethods = new Methods.Mapping();
+                var mappingMethods = new Methods.MappingSchema();
 
                 //Get MeterType
                 var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject); 
+                var meterId = new Methods.CustomerSchema().GetMeterIdByMeterType(meterType, jsonObject); 
 
                 //Get latest loaded usage
-                var latestDateMapping = new Methods.Supply().LoadedUsageLatest_GetList(meterType, meterId);
+                var latestDateMapping = new Methods.SupplySchema().LoadedUsageLatest_GetList(meterType, meterId);
 
                 //Get Date dictionary
                 dateDictionary = informationMethods.Date_GetDateDescriptionIdDictionary();
@@ -113,7 +113,7 @@ namespace GetMappedUsageDateId.api.Controllers
                 var dateToForecastAgentDictionary = mappingMethods.DateToForecastAgent_GetDateForecastAgentDictionary();
 
                 //Get ForecastAgents
-                var forecastAgentDictionary = new Methods.DemandForecast().GetForecastAgentDictionary();
+                var forecastAgentDictionary = new Methods.DemandForecastSchema().GetForecastAgentDictionary();
 
                 Parallel.ForEach(futureDateToForecastGroupDictionary, new ParallelOptions{MaxDegreeOfParallelism = 5}, futureDateToForecastGroup => {
                     //Order by priority
@@ -160,7 +160,7 @@ namespace GetMappedUsageDateId.api.Controllers
                 }
 
                 //Insert new Date Mappings
-                new Methods.Supply().InsertDateMapping(meterType, meterId, dataTable, processQueueGUID);
+                new Methods.SupplySchema().InsertDateMapping(meterType, meterId, dataTable, processQueueGUID);
 
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, getMappedUsageDateIdAPIId, false, null);

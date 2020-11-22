@@ -8,7 +8,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Customer
+        public partial class CustomerSchema
         {
             public long InsertNewContractMeter(long createdByUserId, long sourceId)
             {
@@ -95,7 +95,7 @@ namespace MethodLibrary
                 }
 
                 //Get ContractMeterIds from ContractId
-                var contractMeterIdFromContractId = new Mapping().ContractToContractMeter_GetContractMeterIdListByContractId(contractId);
+                var contractMeterIdFromContractId = new MappingSchema().ContractToContractMeter_GetContractMeterIdListByContractId(contractId);
 
                 //If no ContractMeterIds then not valid
                 if(!contractMeterIdFromContractId.Any())
@@ -104,7 +104,7 @@ namespace MethodLibrary
                 }
 
                 //Get ContractMeterIds from MeterId
-                var contractMeterIdFromMeterId = new Mapping().ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
+                var contractMeterIdFromMeterId = new MappingSchema().ContractMeterToMeter_GetContractMeterIdListByMeterId(meterId);
 
                 //If no ContractMeterIds then not valid
                 if(!contractMeterIdFromMeterId.Any())

@@ -18,9 +18,9 @@ namespace CommitProfiledUsage.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitProfiledUsageController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
+        private readonly Methods.SystemSchema _systemMethods = new Methods.SystemSchema();
+        private readonly Methods.SystemSchema.API _systemAPIMethods = new Methods.SystemSchema.API();
+        private readonly Methods.InformationSchema _informationMethods = new Methods.InformationSchema();
         private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
         private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
@@ -55,7 +55,7 @@ namespace CommitProfiledUsage.api.Controllers
         {
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -102,7 +102,7 @@ namespace CommitProfiledUsage.api.Controllers
 
                 //Insert new Periodic Usage into LoadedUsage tables
                 var usageTypeId = _informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(_informationUsageTypeEnums.Profile);
-                new Methods.Supply().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
+                new Methods.SupplySchema().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
                 //Update Process Queue
                 _systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitProfiledUsageAPIId, false, null);
@@ -119,7 +119,7 @@ namespace CommitProfiledUsage.api.Controllers
         private long GetMeterId(string mpxn)
         {
             //Get MeterIdentifierMeterAttributeId
-            var customerMethods = new Methods.Customer();
+            var customerMethods = new Methods.CustomerSchema();
             var customerMeterAttributeEnums = new Enums.CustomerSchema.Meter.Attribute();
             var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(customerMeterAttributeEnums.MeterIdentifier);
 

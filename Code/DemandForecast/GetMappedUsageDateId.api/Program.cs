@@ -9,12 +9,12 @@ namespace GetMappedUsageDateId.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().GetMappedUsageDateIdAPI);
+            new Methods.SystemSchema.API.Program().Main(args, new Enums.SystemSchema.API.Name().GetMappedUsageDateIdAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().GetMappedUsageDateIdAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.SystemSchema.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().GetMappedUsageDateIdAPI));
     }
 }

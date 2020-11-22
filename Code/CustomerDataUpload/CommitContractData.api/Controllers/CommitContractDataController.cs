@@ -18,12 +18,12 @@ namespace CommitContractData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitContractDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
-        private readonly Methods.System.API _systemAPIMethods = new Methods.System.API();
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
-        private readonly Methods.Supplier _supplierMethods = new Methods.Supplier();
+        private readonly Methods.SystemSchema _systemMethods = new Methods.SystemSchema();
+        private readonly Methods.SystemSchema.API _systemAPIMethods = new Methods.SystemSchema.API();
+        private readonly Methods.InformationSchema _informationMethods = new Methods.InformationSchema();
+        private readonly Methods.CustomerSchema _customerMethods = new Methods.CustomerSchema();
+        private readonly Methods.MappingSchema _mappingMethods = new Methods.MappingSchema();
+        private readonly Methods.SupplierSchema _supplierMethods = new Methods.SupplierSchema();
         private static readonly Enums.SystemSchema.API.Name _systemAPINameEnums = new Enums.SystemSchema.API.Name();
         private static readonly Enums.SystemSchema.API.GUID _systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
         private readonly Enums.SystemSchema.API.RequiredDataKey _systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
@@ -66,7 +66,7 @@ namespace CommitContractData.api.Controllers
         public void Commit([FromBody] object data)
         {
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

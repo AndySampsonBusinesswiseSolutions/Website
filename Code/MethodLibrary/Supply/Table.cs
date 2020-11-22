@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             private long Table_GetTableIdByTableNameAndSchemaId(string tableName, long schemaId)
             {

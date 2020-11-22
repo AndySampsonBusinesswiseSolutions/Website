@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             private void CreateDateMappingEntities(long schemaId, long meterId, string meterType)
             {

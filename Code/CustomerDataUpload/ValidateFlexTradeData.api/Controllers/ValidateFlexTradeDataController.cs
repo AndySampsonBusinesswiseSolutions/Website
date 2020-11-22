@@ -29,7 +29,7 @@ namespace ValidateFlexTradeData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().ValidateFlexTradeDataAPI, password);
-            validateFlexTradeDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFlexTradeDataAPI);
+            validateFlexTradeDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().ValidateFlexTradeDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace ValidateFlexTradeData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(validateFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(validateFlexTradeDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace ValidateFlexTradeData.api.Controllers
         [Route("ValidateFlexTradeData/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace ValidateFlexTradeData.api.Controllers
                     sourceId,
                     validateFlexTradeDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFlexTradeDataAPI, validateFlexTradeDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateFlexTradeDataAPI, validateFlexTradeDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -74,7 +74,7 @@ namespace ValidateFlexTradeData.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateFlexTradeDataAPIId);
 
                 //Get data from [Temp.CustomerDataUpload].[FlexTrade] table
-                var flexTradeEntities = new Methods.Temp.CustomerDataUpload.FlexTrade().FlexTrade_GetByProcessQueueGUID(processQueueGUID);
+                var flexTradeEntities = new Methods.TempSchema.CustomerDataUpload.FlexTrade().FlexTrade_GetByProcessQueueGUID(processQueueGUID);
 
                 if(!flexTradeEntities.Any())
                 {
@@ -85,7 +85,7 @@ namespace ValidateFlexTradeData.api.Controllers
 
                 var methods = new Methods();
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
 
                 var columns = new List<string>
                     {

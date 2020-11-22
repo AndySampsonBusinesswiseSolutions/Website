@@ -20,7 +20,7 @@ namespace ValidateFlexContractData.api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            new Methods.System.API.Startup().ConfigureServices(services, Configuration, new Enums.SystemSchema.API.Name().ValidateFlexContractDataAPI);
+            new Methods.SystemSchema.API.Startup().ConfigureServices(services, Configuration, new Enums.SystemSchema.API.Name().ValidateFlexContractDataAPI);
             services.AddControllers();
         }
 

@@ -26,7 +26,7 @@ namespace StoreCustomerData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreCustomerDataAPI, password);
-            storeCustomerDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreCustomerDataAPI);
+            storeCustomerDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreCustomerDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace StoreCustomerData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeCustomerDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace StoreCustomerData.api.Controllers
         [Route("StoreCustomerData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -62,7 +62,7 @@ namespace StoreCustomerData.api.Controllers
                     sourceId,
                     storeCustomerDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreCustomerDataAPI, storeCustomerDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreCustomerDataAPI, storeCustomerDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -70,10 +70,10 @@ namespace StoreCustomerData.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeCustomerDataAPIId);
 
-                var tempCustomerDataUploadCustomerMethods = new Methods.Temp.CustomerDataUpload.Customer();
+                var tempCustomerDataUploadCustomerMethods = new Methods.TempSchema.CustomerDataUpload.Customer();
 
                 //Get Customer data from Customer Data Upload
-                var customerDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Customers");
+                var customerDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Customers");
 
                 foreach(var row in customerDictionary.Keys)
                 {

@@ -26,14 +26,14 @@ namespace CreateWeekForecastApp
                 var hostEnvironment = "Development";
                 var password = "95hU29J4PpaeQmFV";
 
-                var systemMethods = new Methods.System();
+                var systemMethods = new Methods.SystemSchema();
 
                 new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateWeekForecastAPI, password);
-                var createWeekForecastAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI);
+                var createWeekForecastAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI);
 
                 //Get base variables
-                var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-                var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+                var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+                var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
                 //Get Queue GUID
                 var jsonObject = JObject.Parse(args[0]);
@@ -58,7 +58,7 @@ namespace CreateWeekForecastApp
                 var meterType = jsonObject[new Enums.SystemSchema.API.RequiredDataKey().MeterType].ToString();
 
                 //Get MeterId
-                var meterId = new Methods.Customer().GetMeterIdByMeterType(meterType, jsonObject);
+                var meterId = new Methods.CustomerSchema().GetMeterIdByMeterType(meterType, jsonObject);
 
                 Parallel.ForEach(new List<bool>{true, false}, getForecastDictionary => {
                     if(getForecastDictionary)
@@ -111,7 +111,7 @@ namespace CreateWeekForecastApp
                     existingWeekForecasts.AddRange(newWeekForecastTuples);
 
                     //Insert into history and latest tables
-                    new Methods.Supply().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId", "WeekId" }, newWeekForecastTuples.ToList(), existingWeekForecasts);
+                    new Methods.SupplySchema().CreateGranularSupplyForecastDataTables(meterType, meterId, granularityCode, createdByUserId, sourceId, new List<string> { "YearId", "WeekId" }, newWeekForecastTuples.ToList(), existingWeekForecasts);
                 }
 
                 //Update Process Queue
@@ -119,7 +119,7 @@ namespace CreateWeekForecastApp
             }
             catch (Exception error)
             {
-                var errorId = new Methods.System().InsertSystemError(1, 1, error);
+                var errorId = new Methods.SystemSchema().InsertSystemError(1, 1, error);
 
                 //Update Process Queue
                 //systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, createWeekForecastAPIId, true, $"System Error Id {errorId}");
@@ -129,7 +129,7 @@ namespace CreateWeekForecastApp
         private static void GetExistingForecast(string meterType, long meterId)
         {
             //Get existing Week forecast
-            existingWeekForecasts = new Methods.Supply().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId", "WeekId");
+            existingWeekForecasts = new Methods.SupplySchema().ForecastUsageGranularityLatest_GetLatestTuple(meterType, meterId, granularityCode, "YearId", "WeekId");
             existingWeekForecastDictionary = existingWeekForecasts.Select(f => f.Item1).Distinct()
                 .ToDictionary(
                     d => d,
@@ -142,8 +142,8 @@ namespace CreateWeekForecastApp
 
         private static void GetForecastDictionary(string meterType, long meterId)
         {
-            var supplyMethods = new Methods.Supply();
-            var mappingMethods = new Methods.Mapping();
+            var supplyMethods = new Methods.SupplySchema();
+            var mappingMethods = new Methods.MappingSchema();
 
             //Get latest loaded usage
             var latestLoadedUsage = supplyMethods.LoadedUsageLatest_GetList(meterType, meterId);

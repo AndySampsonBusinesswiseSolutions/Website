@@ -19,9 +19,9 @@ namespace CreateDataAnalysisWebpage.api.Controllers
     {
         #region Variables
         private readonly ILogger<CreateDataAnalysisWebpageController> _logger;
-        private readonly Methods.Information _informationMethods = new Methods.Information();
-        private readonly Methods.Customer _customerMethods = new Methods.Customer();
-        private readonly Methods.Mapping _mappingMethods = new Methods.Mapping();
+        private readonly Methods.InformationSchema _informationMethods = new Methods.InformationSchema();
+        private readonly Methods.CustomerSchema _customerMethods = new Methods.CustomerSchema();
+        private readonly Methods.MappingSchema _mappingMethods = new Methods.MappingSchema();
         private readonly Int64 createDataAnalysisWebpageAPIId;
         private string HTML = string.Empty;
         private JObject jsonObject;
@@ -54,7 +54,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CreateDataAnalysisWebpageAPI, password);
-            createDataAnalysisWebpageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateDataAnalysisWebpageAPI);
+            createDataAnalysisWebpageAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CreateDataAnalysisWebpageAPI);
         }
 
         [HttpPost]
@@ -62,7 +62,7 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(createDataAnalysisWebpageAPIId, hostEnvironment, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(createDataAnalysisWebpageAPIId, hostEnvironment, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -71,10 +71,10 @@ namespace CreateDataAnalysisWebpage.api.Controllers
         [Route("CreateDataAnalysisWebpage/BuildLocationTree")]
         public void BuildLocationTree([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = _informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID

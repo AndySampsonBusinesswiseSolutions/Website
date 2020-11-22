@@ -26,7 +26,7 @@ namespace StoreSiteData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().StoreSiteDataAPI, password);
-            storeSiteDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreSiteDataAPI);
+            storeSiteDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().StoreSiteDataAPI);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace StoreSiteData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(storeSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(storeSiteDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -43,11 +43,11 @@ namespace StoreSiteData.api.Controllers
         [Route("StoreSiteData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -62,7 +62,7 @@ namespace StoreSiteData.api.Controllers
                     sourceId,
                     storeSiteDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSiteDataAPI, storeSiteDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSiteDataAPI, storeSiteDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -70,11 +70,11 @@ namespace StoreSiteData.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSiteDataAPIId);
 
-                var tempCustomerDataUploadSiteMethods = new Methods.Temp.CustomerDataUpload.Site();
+                var tempCustomerDataUploadSiteMethods = new Methods.TempSchema.CustomerDataUpload.Site();
 
                 //Get Site data from Customer Data Upload
                 //TODO: Make into Builk Insert
-                var siteDictionary = new Methods.Temp.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Sites");
+                var siteDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Sites");
 
                 foreach(var row in siteDictionary.Keys)
                 {

@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public void InsertProcessQueueError(string processQueueGUID, long createdByUserId, long sourceId, long APIId, string errorMessage = null)
             {

@@ -8,7 +8,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class DemandForecast
+        public partial class DemandForecastSchema
         {
             public Dictionary<long, string> GetForecastAgentDictionary()
             {

@@ -27,7 +27,7 @@ namespace LockUser.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().LockUserAPI, password);
-            lockUserAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().LockUserAPI);
+            lockUserAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().LockUserAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace LockUser.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(lockUserAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(lockUserAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,13 +44,13 @@ namespace LockUser.api.Controllers
         [Route("LockUser/Lock")]
         public void Lock([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
+            var informationMethods = new Methods.InformationSchema();
             var administrationUserGUIDEnums = new Enums.AdministrationSchema.User.GUID();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -79,7 +79,7 @@ namespace LockUser.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, lockUserAPIId);
 
                 //Get User Id
-                var administrationUserMethods = new Methods.Administration.User();
+                var administrationUserMethods = new Methods.AdministrationSchema.User();
                 var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
                 
                 //Check to see if account is already locked
@@ -96,11 +96,11 @@ namespace LockUser.api.Controllers
                         if(userId != 0)
                         {
                             //Get logins by user id and order by descending
-                            var mappingMethods = new Methods.Mapping();
+                            var mappingMethods = new Methods.MappingSchema();
                             var loginList = mappingMethods.LoginToUser_GetLoginIdListByUserId(userId).OrderByDescending(l => l);
 
                             //Get invalidAttempts count
-                            var administrationLoginMethods = new Methods.Administration.Login();
+                            var administrationLoginMethods = new Methods.AdministrationSchema.Login();
                             var invalidAttempts = administrationLoginMethods.CountInvalidAttempts(loginList);
 
                             //Get maximum attempts allowed before locking

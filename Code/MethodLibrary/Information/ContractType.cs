@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Information
+        public partial class InformationSchema
         {
             public long ContractType_GetContractTypeIdByContractTypeDescription(string contractTypeDescription)
             {

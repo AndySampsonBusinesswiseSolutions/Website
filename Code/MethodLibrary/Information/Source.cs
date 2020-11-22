@@ -6,7 +6,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Information
+        public partial class InformationSchema
         {
             public long SourceAttribute_GetSourceAttributeIdBySourceAttributeDescription(string sourceAttributeDescription)
             {
@@ -21,7 +21,7 @@ namespace MethodLibrary
 
             public long GetSystemUserGeneratedSourceId()
             {
-                var systemUserId = new Administration.User().GetSystemUserId();
+                var systemUserId = new AdministrationSchema.User().GetSystemUserId();
                 var sourceAttributeId = SourceAttribute_GetSourceAttributeIdBySourceAttributeDescription(_informationSourceAttributeEnums.UserGenerated);
 
                 return SourceDetail_GetSourceIdBySourceAttributeIdAndSourceDetailDescription(sourceAttributeId, systemUserId.ToString());

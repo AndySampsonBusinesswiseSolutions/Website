@@ -29,7 +29,7 @@ namespace CommitSubMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitSubMeterDataAPI, password);
-            commitSubMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSubMeterDataAPI);
+            commitSubMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitSubMeterDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace CommitSubMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitSubMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,11 +46,11 @@ namespace CommitSubMeterData.api.Controllers
         [Route("CommitSubMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -65,7 +65,7 @@ namespace CommitSubMeterData.api.Controllers
                     sourceId,
                     commitSubMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSubMeterDataAPI, commitSubMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitSubMeterDataAPI, commitSubMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitSubMeterData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[SubMeter] where CanCommit = 1
-                var subMeterEntities = new Methods.Temp.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableSubMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(subMeterEntities);
+                var subMeterEntities = new Methods.TempSchema.CustomerDataUpload.SubMeter().SubMeter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableSubMeterEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(subMeterEntities);
 
                 if(!commitableSubMeterEntities.Any())
                 {
@@ -88,7 +88,7 @@ namespace CommitSubMeterData.api.Controllers
 
                 var customerDataUploadValidationEntityEnums = new Enums.CustomerSchema.DataUploadValidation.Entity();
                 var customerSubMeterAttributeEnums = new Enums.CustomerSchema.SubMeter.Attribute();
-                var customerMethods = new Methods.Customer();
+                var customerMethods = new Methods.CustomerSchema();
 
                 //For each column, get SubMeterAttributeId
                 var attributes = new Dictionary<long, string>
@@ -141,7 +141,7 @@ namespace CommitSubMeterData.api.Controllers
                 }
 
                 //Create SubMeter tables
-                var supplyMethods = new Methods.Supply();
+                var supplyMethods = new Methods.SupplySchema();
                 var meterType = "SubMeter";
                 Parallel.ForEach(subMeterIdList, new ParallelOptions{MaxDegreeOfParallelism = 5}, subMeterId => {
                     supplyMethods.CreateMeterTables($"Supply.{meterType}{subMeterId}", subMeterId, meterType);

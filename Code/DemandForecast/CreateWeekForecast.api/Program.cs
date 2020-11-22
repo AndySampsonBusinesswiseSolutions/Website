@@ -9,12 +9,12 @@ namespace CreateWeekForecast.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().CreateWeekForecastAPI);
+            new Methods.SystemSchema.API.Program().Main(args, new Enums.SystemSchema.API.Name().CreateWeekForecastAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.SystemSchema.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CreateWeekForecastAPI));
     }
 }

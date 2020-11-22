@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class System
+        public partial class SystemSchema
         {
             public long InsertSystemError(long createdByUserId, long sourceId, Exception error)
             {

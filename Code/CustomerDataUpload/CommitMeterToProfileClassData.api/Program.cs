@@ -9,12 +9,12 @@ namespace CommitMeterToProfileClassData.api
     {
         public static void Main(string[] args)
         {
-            new Methods.System.API.Program().Main(args, new Enums.SystemSchema.API.Name().CommitMeterToProfileClassDataAPI);
+            new Methods.SystemSchema.API.Program().Main(args, new Enums.SystemSchema.API.Name().CommitMeterToProfileClassDataAPI);
             CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => new Methods.System.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CommitMeterToProfileClassDataAPI));
+                .ConfigureWebHostDefaults(webBuilder => new Methods.SystemSchema.API.Program().BuildIWebHostBuilder<Startup>(webBuilder, args, new Enums.SystemSchema.API.GUID().CommitMeterToProfileClassDataAPI));
     }
 }

@@ -30,7 +30,7 @@ namespace CommitMeterUsageData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitMeterUsageDataAPI, password);
-            commitMeterUsageDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterUsageDataAPI);
+            commitMeterUsageDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterUsageDataAPI);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace CommitMeterUsageData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitMeterUsageDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -48,12 +48,12 @@ namespace CommitMeterUsageData.api.Controllers
         public void Commit([FromBody] object data)
         {
             var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-            var informationMethods = new Methods.Information();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -78,14 +78,14 @@ namespace CommitMeterUsageData.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitMeterUsageDataAPIId);
 
-                var tempCustomerDataUploadMethods = new Methods.Temp.CustomerDataUpload();
+                var tempCustomerDataUploadMethods = new Methods.TempSchema.CustomerDataUpload();
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var meterEntities = new Methods.TempSchema.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableMeterEntities = tempCustomerDataUploadMethods.GetCommitableEntities(meterEntities);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterUsage] where CanCommit = 1
-                var meterUsageEntities = new Methods.Temp.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var meterUsageEntities = new Methods.TempSchema.CustomerDataUpload.MeterUsage().MeterUsage_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
                 var commitableMeterUsageEntities = tempCustomerDataUploadMethods.GetCommitableEntities(meterUsageEntities);
 
                 if (!commitableMeterEntities.Any() && !commitableMeterUsageEntities.Any())
@@ -95,7 +95,7 @@ namespace CommitMeterUsageData.api.Controllers
                     return;
                 }
 
-                var customerMethods = new Methods.Customer();
+                var customerMethods = new Methods.CustomerSchema();
 
                 //Get list of mpxns from datasets where Meter Id is not 0
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);

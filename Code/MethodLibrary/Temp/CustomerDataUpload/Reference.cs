@@ -10,7 +10,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Temp
+        public partial class TempSchema
         {
             public partial class CustomerDataUpload
             {
@@ -27,7 +27,7 @@ namespace MethodLibrary
                 public Dictionary<int, List<string>> ConvertCustomerDataUploadToDictionary(JObject jsonObject, string dataType)
                 {
                     //Get File Content JSON
-                    var fileJSON = new Information().FileContent_GetFileContentJSONByFileGUID(jsonObject);
+                    var fileJSON = new InformationSchema().FileContent_GetFileContentJSONByFileGUID(jsonObject);
 
                     //Strip out data not required
                     var sheetJSON = fileJSON.Children().FirstOrDefault(c => c.Path == "Sheets");
@@ -187,7 +187,7 @@ namespace MethodLibrary
                     if(errorRows.Any())
                     {
                         //Insert error records
-                        var customerMethods = new Methods.Customer();
+                        var customerMethods = new Methods.CustomerSchema();
                         customerMethods.InsertDataUploadValidationErrors(
                             processQueueGUID,
                             createdByUserId,

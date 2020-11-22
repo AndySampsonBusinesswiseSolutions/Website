@@ -7,7 +7,7 @@ namespace MethodLibrary
 {
     public partial class Methods
     {
-        public partial class Supply
+        public partial class SupplySchema
         {
             public void CreateMeterTables(string schemaName, long meterId, string meterType)
             {

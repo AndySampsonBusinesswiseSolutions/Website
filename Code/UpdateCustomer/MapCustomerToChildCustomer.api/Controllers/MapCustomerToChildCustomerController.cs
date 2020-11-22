@@ -27,7 +27,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().MapCustomerToChildCustomerAPI, password);
-            mapCustomerToChildCustomerAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().MapCustomerToChildCustomerAPI);
+            mapCustomerToChildCustomerAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().MapCustomerToChildCustomerAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(mapCustomerToChildCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(mapCustomerToChildCustomerAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,11 +44,11 @@ namespace MapCustomerToChildCustomer.api.Controllers
         [Route("MapCustomerToChildCustomer/Map")]
         public void Map([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -63,7 +63,7 @@ namespace MapCustomerToChildCustomer.api.Controllers
                     sourceId,
                     mapCustomerToChildCustomerAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().MapCustomerToChildCustomerAPI, mapCustomerToChildCustomerAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().MapCustomerToChildCustomerAPI, mapCustomerToChildCustomerAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -71,8 +71,8 @@ namespace MapCustomerToChildCustomer.api.Controllers
                 //Update Process Queue
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, mapCustomerToChildCustomerAPIId);
 
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 //Get Customer GUID
                 var customerGUID = systemMethods.GetCustomerGUIDFromJObject(jsonObject);

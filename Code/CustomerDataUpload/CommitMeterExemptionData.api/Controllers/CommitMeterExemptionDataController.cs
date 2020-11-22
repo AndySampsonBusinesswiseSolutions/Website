@@ -28,7 +28,7 @@ namespace CommitMeterExemptionData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitMeterExemptionDataAPI, password);
-            commitMeterExemptionDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterExemptionDataAPI);
+            commitMeterExemptionDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitMeterExemptionDataAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitMeterExemptionData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitMeterExemptionDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -45,11 +45,11 @@ namespace CommitMeterExemptionData.api.Controllers
         [Route("CommitMeterExemptionData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace CommitMeterExemptionData.api.Controllers
                     sourceId,
                     commitMeterExemptionDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterExemptionDataAPI, commitMeterExemptionDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitMeterExemptionDataAPI, commitMeterExemptionDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitMeterExemptionData.api.Controllers
                 var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[MeterExemption] where CanCommit = 1
-                var meterExemptionEntities = new Methods.Temp.CustomerDataUpload.MeterExemption().MeterExemption_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableMeterExemptionEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(meterExemptionEntities);
+                var meterExemptionEntities = new Methods.TempSchema.CustomerDataUpload.MeterExemption().MeterExemption_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterExemptionEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(meterExemptionEntities);
 
                 if(!commitableMeterExemptionEntities.Any())
                 {
@@ -88,8 +88,8 @@ namespace CommitMeterExemptionData.api.Controllers
 
                 var informationMeterExemptionAttributeEnums = new Enums.InformationSchema.MeterExemption.Attribute();
                 var customerMeterExemptionAttributeEnums = new Enums.CustomerSchema.MeterExemption.Attribute();
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 var meterExemptionProductMeterExemptionAttributeId = informationMethods.MeterExemptionAttribute_GetMeterExemptionAttributeIdByMeterExemptionAttributeDescription(informationMeterExemptionAttributeEnums.MeterExemptionProduct);

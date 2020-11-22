@@ -28,7 +28,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitEstimatedAnnualUsageAPI, password);
-            commitEstimatedAnnualUsageAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitEstimatedAnnualUsageAPI);
+            commitEstimatedAnnualUsageAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitEstimatedAnnualUsageAPI);
         }
 
         [HttpPost]
@@ -36,7 +36,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitEstimatedAnnualUsageAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,12 +46,12 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
         public void Commit([FromBody] object data)
         {
             var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
-            var informationMethods = new Methods.Information();
-            var systemAPIMethods = new Methods.System.API();
-            var systemMethods = new Methods.System();
+            var informationMethods = new Methods.InformationSchema();
+            var systemAPIMethods = new Methods.SystemSchema.API();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -76,8 +76,8 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
                 systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitEstimatedAnnualUsageAPIId);
 
                 var systemAPIRequiredDataKeyEnums = new Enums.SystemSchema.API.RequiredDataKey();
-                var supplyMethods = new Methods.Supply();
-                var customerMethods = new Methods.Customer();
+                var supplyMethods = new Methods.SupplySchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 //Get mpxn
                 var mpxn = jsonObject[systemAPIRequiredDataKeyEnums.MPXN].ToString();
@@ -123,7 +123,7 @@ namespace CommitEstimatedAnnualUsage.api.Controllers
 
                 //Insert new Periodic Usage into LoadedUsage tables
                 var usageTypeId = informationMethods.UsageType_GetUsageTypeIdByUsageTypeDescription(new Enums.InformationSchema.UsageType().CustomerEstimated);
-                new Methods.Supply().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
+                new Methods.SupplySchema().InsertLoadedUsage(createdByUserId, sourceId, meterId, meterType, usageTypeId, periodicUsageDictionary);
 
                 //Create new ProcessQueueGUID
                 var newProcessQueueGUID = Guid.NewGuid().ToString();

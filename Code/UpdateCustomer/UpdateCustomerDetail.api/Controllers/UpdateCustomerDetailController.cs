@@ -27,7 +27,7 @@ namespace UpdateCustomerDetail.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().UpdateCustomerDetailAPI, password);
-            updateCustomerDetailAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI);
+            updateCustomerDetailAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI);
         }
 
         [HttpPost]
@@ -35,7 +35,7 @@ namespace UpdateCustomerDetail.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(updateCustomerDetailAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(updateCustomerDetailAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -44,11 +44,11 @@ namespace UpdateCustomerDetail.api.Controllers
         [Route("UpdateCustomerDetail/Update")]
         public void Update([FromBody] object data)
         {
-            var systemMethods = new Methods.System();
+            var systemMethods = new Methods.SystemSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
-            var sourceId = new Methods.Information().GetSystemUserGeneratedSourceId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
+            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
             var jsonObject = JObject.Parse(data.ToString());
@@ -63,7 +63,7 @@ namespace UpdateCustomerDetail.api.Controllers
                     sourceId,
                     updateCustomerDetailAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI, updateCustomerDetailAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().UpdateCustomerDetailAPI, updateCustomerDetailAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -75,7 +75,7 @@ namespace UpdateCustomerDetail.api.Controllers
                 var customerGUID = systemMethods.GetCustomerGUIDFromJObject(jsonObject);
 
                 //Get Customer Id
-                var customerMethods = new Methods.Customer();
+                var customerMethods = new Methods.CustomerSchema();
                 var customerId = customerMethods.Customer_GetCustomerIdByCustomerGUID(customerGUID);
 
                 //Split Customer Data to an array of attribute/value

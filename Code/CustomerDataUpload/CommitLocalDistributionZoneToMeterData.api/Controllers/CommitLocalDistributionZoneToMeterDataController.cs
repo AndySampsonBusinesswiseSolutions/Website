@@ -17,7 +17,7 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
     {
         #region Variables
         private readonly ILogger<CommitLocalDistributionZoneToMeterDataController> _logger;
-        private readonly Methods.System _systemMethods = new Methods.System();
+        private readonly Methods.SystemSchema _systemMethods = new Methods.SystemSchema();
         private readonly Int64 commitLocalDistributionZoneToMeterDataAPIId;
         private readonly string hostEnvironment;
         #endregion
@@ -29,7 +29,7 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
 
             _logger = logger;
             new Methods().InitialiseDatabaseInteraction(hostEnvironment, new Enums.SystemSchema.API.Name().CommitLocalDistributionZoneToMeterDataAPI, password);
-            commitLocalDistributionZoneToMeterDataAPIId = new Methods.System.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitLocalDistributionZoneToMeterDataAPI);
+            commitLocalDistributionZoneToMeterDataAPIId = new Methods.SystemSchema.API().API_GetAPIIdByAPIGUID(new Enums.SystemSchema.API.GUID().CommitLocalDistributionZoneToMeterDataAPI);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
         public bool IsRunning([FromBody] object data)
         {
             //Launch API process
-            new Methods.System.API().PostAsJsonAsync(commitLocalDistributionZoneToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
+            new Methods.SystemSchema.API().PostAsJsonAsync(commitLocalDistributionZoneToMeterDataAPIId, hostEnvironment, JObject.Parse(data.ToString()));
 
             return true;
         }
@@ -46,10 +46,10 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
         [Route("CommitLocalDistributionZoneToMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var informationMethods = new Methods.Information();
+            var informationMethods = new Methods.InformationSchema();
 
             //Get base variables
-            var createdByUserId = new Methods.Administration.User().GetSystemUserId();
+            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
             var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
 
             //Get Queue GUID
@@ -65,7 +65,7 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
                     sourceId,
                     commitLocalDistributionZoneToMeterDataAPIId);
 
-                if(!new Methods.System.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitLocalDistributionZoneToMeterDataAPI, commitLocalDistributionZoneToMeterDataAPIId, hostEnvironment, jsonObject))
+                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitLocalDistributionZoneToMeterDataAPI, commitLocalDistributionZoneToMeterDataAPIId, hostEnvironment, jsonObject))
                 {
                     return;
                 }
@@ -76,8 +76,8 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
                 var customerDataUploadProcessQueueGUID = _systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
 
                 //Get data from [Temp.CustomerDataUpload].[Meter] where CanCommit = 1
-                var meterEntities = new Methods.Temp.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
-                var commitableMeterEntities = new Methods.Temp.CustomerDataUpload().GetCommitableEntities(meterEntities);
+                var meterEntities = new Methods.TempSchema.CustomerDataUpload.Meter().Meter_GetByProcessQueueGUID(customerDataUploadProcessQueueGUID);
+                var commitableMeterEntities = new Methods.TempSchema.CustomerDataUpload().GetCommitableEntities(meterEntities);
 
                 if(!commitableMeterEntities.Any())
                 {
@@ -86,8 +86,8 @@ namespace CommitLocalDistributionZoneToMeterData.api.Controllers
                     return;
                 }
 
-                var mappingMethods = new Methods.Mapping();
-                var customerMethods = new Methods.Customer();
+                var mappingMethods = new Methods.MappingSchema();
+                var customerMethods = new Methods.CustomerSchema();
 
                 var meterIdentifierMeterAttributeId = customerMethods.MeterAttribute_GetMeterAttributeIdByMeterAttributeDescription(new Enums.CustomerSchema.Meter.Attribute().MeterIdentifier);
                 var localDistributionZoneLocalDistributionZoneAttributeId = informationMethods.LocalDistributionZoneAttribute_GetLocalDistributionZoneAttributeIdByLocalDistributionZoneAttributeDescription(new Enums.InformationSchema.LocalDistributionZone.Attribute().LocalDistributionZone);
