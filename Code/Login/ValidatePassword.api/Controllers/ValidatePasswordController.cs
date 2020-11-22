@@ -43,56 +43,14 @@ namespace ValidatePassword.api.Controllers
         [Route("ValidatePassword/Validate")]
         public void Validate([FromBody] object data)
         {
-            var systemMethods = new Methods.SystemSchema();         
-
-            //Get base variables
-            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
-            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    validatePasswordAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidatePasswordAPI, validatePasswordAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validatePasswordAPIId);
-
-                //Get Password
-                var password = systemMethods.GetPasswordFromJObject(jsonObject);
-
-                //Validate Password
-                var passwordId = new Methods.AdministrationSchema.Password().Password_GetPasswordIdByPassword(password);
-                string errorMessage = null;
-
-                //If passwordId == 0 then the password provided isn't valid so create an error
-                if(passwordId == 0)
-                {
-                    errorMessage = $"Password {password} does not exist in [Administration.User].[Password] table";
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validatePasswordAPIId, passwordId == 0, errorMessage);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validatePasswordAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\Login\ValidatePasswordApp\bin\Debug\netcoreapp3.1\ValidatePasswordApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().ValidatePasswordAPI, 
+                validatePasswordAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

@@ -43,62 +43,14 @@ namespace ValidateEmailAddressPasswordMapping.api.Controllers
         [Route("ValidateEmailAddressPasswordMapping/Validate")]
         public void Validate([FromBody] object data)
         {
-            var administrationUserMethods = new Methods.AdministrationSchema.User();
-            var informationMethods = new Methods.InformationSchema();
-            var systemMethods = new Methods.SystemSchema();
-
-            //Get base variables
-            var createdByUserId = administrationUserMethods.GetSystemUserId();
-            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    validateEmailAddressPasswordMappingAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI, validateEmailAddressPasswordMappingAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId);
-
-                //Get Password Id
-                var password = systemMethods.GetPasswordFromJObject(jsonObject);
-                var passwordId = new Methods.AdministrationSchema.Password().Password_GetPasswordIdByPassword(password);
-
-                //Get User Id
-                var userId = administrationUserMethods.GetUserIdByEmailAddress(jsonObject);
-
-                //Validate Password and User combination
-                var mappingId = new Methods.MappingSchema().PasswordToUser_GetPasswordFromJObjectToUserIdByPasswordIdAndUserId(passwordId, userId);
-                string errorMessage = null;
-
-                //If mappingId == 0 then the combination of email address and password provided isn't valid so create an error
-                if(mappingId == 0)
-                {
-                    errorMessage = $"UserId/PasswordId combination {userId}/{passwordId} does not exist in [Mapping].[PasswordToUser] table";
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId, mappingId == 0, errorMessage);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, validateEmailAddressPasswordMappingAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\Login\ValidateEmailAddressPasswordMappingApp\bin\Debug\netcoreapp3.1\ValidateEmailAddressPasswordMappingApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().ValidateEmailAddressPasswordMappingAPI, 
+                validateEmailAddressPasswordMappingAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }
