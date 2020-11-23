@@ -43,57 +43,14 @@ namespace StoreCustomerData.api.Controllers
         [Route("StoreCustomerData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.SystemSchema();
-
-            //Get base variables
-            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
-            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    storeCustomerDataAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreCustomerDataAPI, storeCustomerDataAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeCustomerDataAPIId);
-
-                var tempCustomerDataUploadCustomerMethods = new Methods.TempSchema.CustomerDataUpload.Customer();
-
-                //Get Customer data from Customer Data Upload
-                var customerDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Customers");
-
-                foreach(var row in customerDictionary.Keys)
-                {
-                    var values = customerDictionary[row];
-
-                    //Insert customer data into [Temp.CustomerDataUpload].[Customer]
-                    //TODO: Make into BulkInsert
-                    tempCustomerDataUploadCustomerMethods.Customer_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3]);
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeCustomerDataAPIId, false, null);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeCustomerDataAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\CustomerDataUpload\StoreCustomerDataApp\bin\Debug\netcoreapp3.1\StoreCustomerDataApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().StoreCustomerDataAPI, 
+                storeCustomerDataAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

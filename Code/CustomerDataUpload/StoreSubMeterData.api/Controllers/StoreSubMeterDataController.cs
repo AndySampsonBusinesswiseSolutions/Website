@@ -43,57 +43,14 @@ namespace StoreSubMeterData.api.Controllers
         [Route("StoreSubMeterData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.SystemSchema();
-
-            //Get base variables
-            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
-            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    storeSubMeterDataAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSubMeterDataAPI, storeSubMeterDataAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSubMeterDataAPIId);
-
-                var tempCustomerDataUploadSubMeterMethods = new Methods.TempSchema.CustomerDataUpload.SubMeter();
-
-                //Get SubMeter data from Customer Data Upload
-                //TODO: Make into Bulk Insert
-                var subMeterDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.SubMeters");
-
-                foreach(var row in subMeterDictionary.Keys)
-                {
-                    var values = subMeterDictionary[row];
-
-                    //Insert submeter data into [Temp.CustomerDataUpload].[SubMeter]
-                    tempCustomerDataUploadSubMeterMethods.SubMeter_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4]);
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSubMeterDataAPIId, false, null);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSubMeterDataAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSubMeterDataApp\bin\Debug\netcoreapp3.1\StoreSubMeterDataApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().StoreSubMeterDataAPI, 
+                storeSubMeterDataAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

@@ -43,60 +43,14 @@ namespace StoreFlexReferenceVolumeData.api.Controllers
         [Route("StoreFlexReferenceVolumeData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.SystemSchema();
-
-            //Get base variables
-            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
-            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    storeFlexReferenceVolumeDataAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreFlexReferenceVolumeDataAPI, storeFlexReferenceVolumeDataAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId);
-
-                var methods = new Methods();
-                var tempCustomerDataUploadFlexReferenceVolumeMethods = new Methods.TempSchema.CustomerDataUpload.FlexReferenceVolume();
-
-                //Get Flex Reference Volume data from Customer Data Upload
-                //TODO: Make into Bulk Insert
-                var flexReferenceVolumeDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets['Flex Reference Volumes']");
-
-                foreach(var row in flexReferenceVolumeDictionary.Keys)
-                {
-                    var values = flexReferenceVolumeDictionary[row];
-                    var dateFrom = methods.GetDateTimeSqlParameterFromDateTimeString(values[1]);
-                    var dateTo = methods.GetDateTimeSqlParameterFromDateTimeString(values[2]);
-
-                    //Insert flex reference volume data into [Temp.CustomerDataUpload].[FlexReferenceVolume]
-                    tempCustomerDataUploadFlexReferenceVolumeMethods.FlexReferenceVolume_Insert(processQueueGUID, row, values[0], dateFrom, dateTo, values[3]);
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId, false, null);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeFlexReferenceVolumeDataAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\CustomerDataUpload\StoreFlexReferenceVolumeDataApp\bin\Debug\netcoreapp3.1\StoreFlexReferenceVolumeDataApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().StoreFlexReferenceVolumeDataAPI, 
+                storeFlexReferenceVolumeDataAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

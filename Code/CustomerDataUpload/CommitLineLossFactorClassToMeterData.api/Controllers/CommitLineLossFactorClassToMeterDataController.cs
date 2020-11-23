@@ -43,48 +43,14 @@ namespace CommitLineLossFactorClassToMeterData.api.Controllers
         [Route("CommitLineLossFactorClassToMeterData/Commit")]
         public void Commit([FromBody] object data)
         {
-            var systemMethods = new Methods.SystemSchema();
-            var informationMethods = new Methods.InformationSchema();
-
-            //Get base variables
-            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
-            var sourceId = informationMethods.GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    commitLineLossFactorClassToMeterDataAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().CommitLineLossFactorClassToMeterDataAPI, commitLineLossFactorClassToMeterDataAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId);
-                
-                var customerDataUploadProcessQueueGUID = systemMethods.GetCustomerDataUploadProcessQueueGUIDFromJObject(jsonObject);
-
-                //TODO: Build once LLF process is built
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, false, null);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, commitLineLossFactorClassToMeterDataAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\CustomerDataUpload\CommitLineLossFactorClassToMeterDataApp\bin\Debug\netcoreapp3.1\CommitLineLossFactorClassToMeterDataApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().CommitLineLossFactorClassToMeterDataAPI, 
+                commitLineLossFactorClassToMeterDataAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

@@ -43,57 +43,14 @@ namespace StoreSiteData.api.Controllers
         [Route("StoreSiteData/Store")]
         public void Store([FromBody] object data)
         {
-            var systemMethods = new Methods.SystemSchema();
-
-            //Get base variables
-            var createdByUserId = new Methods.AdministrationSchema.User().GetSystemUserId();
-            var sourceId = new Methods.InformationSchema().GetSystemUserGeneratedSourceId();
-
-            //Get Queue GUID
-            var jsonObject = JObject.Parse(data.ToString());
-            var processQueueGUID = systemMethods.GetProcessQueueGUIDFromJObject(jsonObject);
-
-            try
-            {
-                //Insert into ProcessQueue
-                systemMethods.ProcessQueue_Insert(
-                    processQueueGUID, 
-                    createdByUserId,
-                    sourceId,
-                    storeSiteDataAPIId);
-
-                if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(new Enums.SystemSchema.API.GUID().StoreSiteDataAPI, storeSiteDataAPIId, hostEnvironment, jsonObject))
-                {
-                    return;
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveFromDateTime(processQueueGUID, storeSiteDataAPIId);
-
-                var tempCustomerDataUploadSiteMethods = new Methods.TempSchema.CustomerDataUpload.Site();
-
-                //Get Site data from Customer Data Upload
-                //TODO: Make into Builk Insert
-                var siteDictionary = new Methods.TempSchema.CustomerDataUpload().ConvertCustomerDataUploadToDictionary(jsonObject, "Sheets.Sites");
-
-                foreach(var row in siteDictionary.Keys)
-                {
-                    var values = siteDictionary[row];
-
-                    //Insert site data into [Temp.CustomerDataUpload].[Site]
-                    tempCustomerDataUploadSiteMethods.Site_Insert(processQueueGUID, row, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8], values[9], values[10]);
-                }
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSiteDataAPIId, false, null);
-            }
-            catch(Exception error)
-            {
-                var errorId = systemMethods.InsertSystemError(createdByUserId, sourceId, error);
-
-                //Update Process Queue
-                systemMethods.ProcessQueue_UpdateEffectiveToDateTime(processQueueGUID, storeSiteDataAPIId, true, $"System Error Id {errorId}");
-            }
+            var fileName = @"C:\wamp64\www\Website\Code\CustomerDataUpload\StoreSiteDataApp\bin\Debug\netcoreapp3.1\StoreSiteDataApp.exe";
+            new Methods.SystemSchema.Application().LaunchApplication(
+                data, 
+                new Enums.SystemSchema.API.GUID().StoreSiteDataAPI, 
+                storeSiteDataAPIId, 
+                hostEnvironment, 
+                fileName
+            );
         }
     }
 }

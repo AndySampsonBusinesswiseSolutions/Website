@@ -43,7 +43,7 @@ namespace UploadFile.api.Controllers
         [Route("UploadFile/Upload")]
         public void Upload([FromBody] object data)
         {
-            var fileName = @"C:\wamp64\www\Website\Code\Login\UploadFileApp\bin\Debug\netcoreapp3.1\UploadFileApp.exe";
+            var fileName = @"C:\wamp64\www\Website\Code\FileUpload\UploadFileApp\bin\Debug\netcoreapp3.1\UploadFileApp.exe";
             new Methods.SystemSchema.Application().LaunchApplication(
                 data, 
                 new Enums.SystemSchema.API.GUID().UploadFileAPI, 

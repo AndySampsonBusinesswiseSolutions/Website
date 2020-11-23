@@ -43,7 +43,7 @@ namespace DetermineFileType.api.Controllers
         [Route("DetermineFileType/Determine")]
         public void Determine([FromBody] object data)
         {
-            var fileName = @"C:\wamp64\www\Website\Code\Login\DetermineFileTypeApp\bin\Debug\netcoreapp3.1\DetermineFileTypeApp.exe";
+            var fileName = @"C:\wamp64\www\Website\Code\FileUpload\DetermineFileTypeApp\bin\Debug\netcoreapp3.1\DetermineFileTypeApp.exe";
             new Methods.SystemSchema.Application().LaunchApplication(
                 data, 
                 new Enums.SystemSchema.API.GUID().DetermineFileTypeAPI, 
