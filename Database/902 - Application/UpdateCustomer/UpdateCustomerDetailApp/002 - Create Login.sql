@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'UpdateCustomerDetailApp')
+    BEGIN
+        CREATE LOGIN [UpdateCustomerDetailApp] WITH PASSWORD=N'7QJyVNc4+K74F67V', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

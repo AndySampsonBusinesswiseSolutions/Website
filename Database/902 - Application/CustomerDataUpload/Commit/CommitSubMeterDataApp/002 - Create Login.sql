@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CommitSubMeterDataApp')
+    BEGIN
+       CREATE LOGIN [CommitSubMeterDataApp] WITH PASSWORD=N'nZYGJvSe4Ej3dzFH', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO
