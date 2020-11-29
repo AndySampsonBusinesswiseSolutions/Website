@@ -4,6 +4,7 @@
     <ProjectReference Include="..\databaseInteraction\databaseInteraction.csproj" />
     <ProjectReference Include="..\enums\enums.csproj" />
     <ProjectReference Include="..\Entity\Entity.csproj" />
+    <!-- <ProjectReference Include="..\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\UploadFileAppProgram.csproj" /> -->
   </ItemGroup>
 
   <ItemGroup>

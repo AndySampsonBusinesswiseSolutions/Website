@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System.Diagnostics;
+using enums;
 
 namespace MethodLibrary
 {
@@ -8,19 +8,48 @@ namespace MethodLibrary
     {
         public partial class SystemSchema
         {
-            public partial class Application
+            public class Application
             {
-                public void LaunchApplication(object data, string APIGUID, long APIId, string hostEnvironment, string fileName)
+                public void LaunchApplication(object data, string applicationGUID, long applicationId, string hostEnvironment, string fileName)
                 {
                     var jsonObject = JObject.Parse(data.ToString());
-                    if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(APIGUID, APIId, hostEnvironment, jsonObject))
+                    if(!new Methods.SystemSchema.API().PrerequisiteAPIsAreSuccessful(applicationGUID, applicationId, hostEnvironment, jsonObject))
                     {
                         return;
                     }
 
-                    ProcessStartInfo startInfo = new ProcessStartInfo(fileName);
-                    startInfo.Arguments = JsonConvert.SerializeObject(data.ToString());
-                    System.Diagnostics.Process.Start(startInfo);
+                    //Create new ApplicationRun entry
+                    var applicationRunId = 0L;
+
+                    if(hostEnvironment.Contains("Debug"))
+                    {
+                        DebugApplication(applicationGUID, applicationRunId.ToString());
+                    }
+                    else
+                    {
+                        //Get base folder of ConsoleApplications
+                        //var consoleApplicationBaseFolder = string.Empty;
+
+                        //Get additional folder of specific application
+                        //var applicationLocation = string.Empty;
+                        //var applicationLocationApplicationAttributeId = 0L;
+                        
+                        //Pass ApplicationRun Id through to the application as an argument
+                        ProcessStartInfo startInfo = new ProcessStartInfo(fileName);
+                        startInfo.Arguments = applicationRunId.ToString();
+                        System.Diagnostics.Process.Start(startInfo);
+                    }
+                }
+
+                private void DebugApplication(string applicationGUID, string arguments)
+                {
+                    var systemAPIGUIDEnums = new Enums.SystemSchema.API.GUID();
+                    
+                    if(applicationGUID == systemAPIGUIDEnums.UploadFileAPI)
+                    {
+                        // var program = new UploadFileAppProgram.Program();
+                        // program.Main(arguments);
+                    }
                 }
             }
         }
