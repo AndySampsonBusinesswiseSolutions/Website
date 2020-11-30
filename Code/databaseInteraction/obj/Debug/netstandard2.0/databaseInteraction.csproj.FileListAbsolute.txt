@@ -1,0 +1,9 @@
+C:\wamp64\www\Website\Code\databaseInteraction\bin\Debug\netstandard2.0\databaseInteraction.deps.json
+C:\wamp64\www\Website\Code\databaseInteraction\bin\Debug\netstandard2.0\databaseInteraction.dll
+C:\wamp64\www\Website\Code\databaseInteraction\bin\Debug\netstandard2.0\databaseInteraction.pdb
+C:\wamp64\www\Website\Code\databaseInteraction\obj\Debug\netstandard2.0\databaseInteraction.csprojAssemblyReference.cache
+C:\wamp64\www\Website\Code\databaseInteraction\obj\Debug\netstandard2.0\databaseInteraction.csproj.CoreCompileInputs.cache
+C:\wamp64\www\Website\Code\databaseInteraction\obj\Debug\netstandard2.0\databaseInteraction.AssemblyInfoInputs.cache
+C:\wamp64\www\Website\Code\databaseInteraction\obj\Debug\netstandard2.0\databaseInteraction.AssemblyInfo.cs
+C:\wamp64\www\Website\Code\databaseInteraction\obj\Debug\netstandard2.0\databaseInteraction.dll
+C:\wamp64\www\Website\Code\databaseInteraction\obj\Debug\netstandard2.0\databaseInteraction.pdb

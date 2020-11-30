@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\MethodLibrary\MethodLibrary.csproj" />
+    <ProjectReference Include="..\..\..\..\enums\enums.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="newtonsoft.json" Version="12.0.3" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>

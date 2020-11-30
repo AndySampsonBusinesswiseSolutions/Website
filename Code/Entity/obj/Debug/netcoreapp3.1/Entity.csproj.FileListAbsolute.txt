@@ -1,0 +1,9 @@
+C:\wamp64\www\Website\Code\Entity\bin\Debug\netcoreapp3.1\Entity.deps.json
+C:\wamp64\www\Website\Code\Entity\bin\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\Entity\bin\Debug\netcoreapp3.1\Entity.pdb
+C:\wamp64\www\Website\Code\Entity\obj\Debug\netcoreapp3.1\Entity.csprojAssemblyReference.cache
+C:\wamp64\www\Website\Code\Entity\obj\Debug\netcoreapp3.1\Entity.AssemblyInfoInputs.cache
+C:\wamp64\www\Website\Code\Entity\obj\Debug\netcoreapp3.1\Entity.AssemblyInfo.cs
+C:\wamp64\www\Website\Code\Entity\obj\Debug\netcoreapp3.1\Entity.csproj.CoreCompileInputs.cache
+C:\wamp64\www\Website\Code\Entity\obj\Debug\netcoreapp3.1\Entity.dll
+C:\wamp64\www\Website\Code\Entity\obj\Debug\netcoreapp3.1\Entity.pdb

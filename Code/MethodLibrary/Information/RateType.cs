@@ -1,0 +1,23 @@
+using System.Data;
+using System.Linq;
+using System.Reflection;
+
+namespace MethodLibrary
+{
+    public partial class Methods
+    {
+        public partial class InformationSchema
+        {
+            public long RateType_GetRateTypeIdByRateTypeCode(string rateTypeCode)
+            {
+                var dataTable = GetDataTable(MethodBase.GetCurrentMethod().GetParameters(), 
+                    _storedProcedureInformationEnums.RateType_GetByRateTypeCode, 
+                    rateTypeCode);
+
+                return dataTable.AsEnumerable()
+                    .Select(r => r.Field<long>("RateTypeId"))
+                    .FirstOrDefault();
+            }
+        }
+    }
+}

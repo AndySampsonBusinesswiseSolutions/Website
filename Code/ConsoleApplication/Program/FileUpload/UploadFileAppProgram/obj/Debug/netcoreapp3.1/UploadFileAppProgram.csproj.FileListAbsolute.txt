@@ -1,0 +1,9 @@
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\bin\Debug\netcoreapp3.1\UploadFileAppProgram.deps.json
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\bin\Debug\netcoreapp3.1\UploadFileAppProgram.dll
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\bin\Debug\netcoreapp3.1\UploadFileAppProgram.pdb
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\obj\Debug\netcoreapp3.1\UploadFileAppProgram.csprojAssemblyReference.cache
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\obj\Debug\netcoreapp3.1\UploadFileAppProgram.AssemblyInfoInputs.cache
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\obj\Debug\netcoreapp3.1\UploadFileAppProgram.AssemblyInfo.cs
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\obj\Debug\netcoreapp3.1\UploadFileAppProgram.csproj.CoreCompileInputs.cache
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\obj\Debug\netcoreapp3.1\UploadFileAppProgram.dll
+C:\wamp64\www\Website\Code\ConsoleApplication\Program\FileUpload\UploadFileAppProgram\obj\Debug\netcoreapp3.1\UploadFileAppProgram.pdb

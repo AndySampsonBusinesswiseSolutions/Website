@@ -1,0 +1,1795 @@
+{
+   // Use IntelliSense to find out which attributes exist for C# debugging
+   // Use hover for the description of the existing attributes
+   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+   "version": "0.2.0",
+   "configurations": [
+        {"name": "DataAnalysisWebpageGetForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Webpage/DataAnalysis/DataAnalysisWebpageGetForecast.api/bin/Debug/netcoreapp3.1/DataAnalysisWebpageGetForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Webpage/DataAnalysis/DataAnalysisWebpageGetForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Webpage/DataAnalysis/DataAnalysisWebpageGetForecast.api/Views"
+            }
+        },
+        {"name": "CreateDataAnalysisWebpage.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Webpage/CreateDataAnalysisWebpage.api/bin/Debug/netcoreapp3.1/CreateDataAnalysisWebpage.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Webpage/CreateDataAnalysisWebpage.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Webpage/CreateDataAnalysisWebpage.api/Views"
+            }
+        },
+        {"name": "CreateManageCustomersWebpage.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Webpage/CreateManageCustomersWebpage.api/bin/Debug/netcoreapp3.1/CreateManageCustomersWebpage.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Webpage/CreateManageCustomersWebpage.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Webpage/CreateManageCustomersWebpage.api/Views"
+            }
+        },
+        {"name": "CreateYearForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateYearForecast.api/bin/Debug/netcoreapp3.1/CreateYearForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateYearForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateYearForecast.api/Views"
+            }
+        },
+        {"name": "CreateQuarterForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateQuarterForecast.api/bin/Debug/netcoreapp3.1/CreateQuarterForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateQuarterForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateQuarterForecast.api/Views"
+            }
+        },
+        {"name": "CreateMonthForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateMonthForecast.api/bin/Debug/netcoreapp3.1/CreateMonthForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateMonthForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateMonthForecast.api/Views"
+            }
+        },
+        {"name": "CreateWeekForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateWeekForecast.api/bin/Debug/netcoreapp3.1/CreateWeekForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateWeekForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateWeekForecast.api/Views"
+            }
+        },
+        {"name": "CreateDateForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateDateForecast.api/bin/Debug/netcoreapp3.1/CreateDateForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateDateForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateDateForecast.api/Views"
+            }
+        },
+        {"name": "CreateHalfHourForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateHalfHourForecast.api/bin/Debug/netcoreapp3.1/CreateHalfHourForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateHalfHourForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateHalfHourForecast.api/Views"
+            }
+        },
+        {"name": "CreateFiveMinuteForecast.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateFiveMinuteForecast.api/bin/Debug/netcoreapp3.1/CreateFiveMinuteForecast.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateFiveMinuteForecast.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateFiveMinuteForecast.api/Views"
+            }
+        },
+        {"name": "GetMappedUsageDateId.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/GetMappedUsageDateId.api/bin/Debug/netcoreapp3.1/GetMappedUsageDateId.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/GetMappedUsageDateId.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/GetMappedUsageDateId.api/Views"
+            }
+        },
+        {"name": "CreateForecastUsage.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CreateForecastUsage.api/bin/Debug/netcoreapp3.1/CreateForecastUsage.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CreateForecastUsage.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CreateForecastUsage.api/Views"
+            }
+        },
+        {"name": "GetGenericProfile.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/GetGenericProfile.api/bin/Debug/netcoreapp3.1/GetGenericProfile.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/GetGenericProfile.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/GetGenericProfile.api/Views"
+            }
+        },
+        {"name": "GetFlexSpecificProfile.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/GetFlexSpecificProfile.api/bin/Debug/netcoreapp3.1/GetFlexSpecificProfile.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/GetFlexSpecificProfile.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/GetFlexSpecificProfile.api/Views"
+            }
+        },
+        {"name": "GetMeterSpecificProfile.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/GetMeterSpecificProfile.api/bin/Debug/netcoreapp3.1/GetMeterSpecificProfile.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/GetMeterSpecificProfile.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/GetMeterSpecificProfile.api/Views"
+            }
+        },
+        {"name": "GetProfileId.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/GetProfileId.api/bin/Debug/netcoreapp3.1/GetProfileId.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/GetProfileId.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/GetProfileId.api/Views"
+            }
+        },
+        {"name": "GetProfile.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/GetProfile.api/bin/Debug/netcoreapp3.1/GetProfile.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/GetProfile.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/GetProfile.api/Views"
+            }
+        },
+        {"name": "CommitProfiledUsage.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/DemandForecast/CommitProfiledUsage.api/bin/Debug/netcoreapp3.1/CommitProfiledUsage.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/DemandForecast/CommitProfiledUsage.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/DemandForecast/CommitProfiledUsage.api/Views"
+            }
+        },
+        {"name": "CleanUpCustomerDataUploadTempData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CleanUpCustomerDataUploadTempData.api/bin/Debug/netcoreapp3.1/CleanUpCustomerDataUploadTempData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CleanUpCustomerDataUploadTempData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CleanUpCustomerDataUploadTempData.api/Views"
+            }
+        },
+        {"name": "CommitEstimatedAnnualUsage.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitEstimatedAnnualUsage.api/bin/Debug/netcoreapp3.1/CommitEstimatedAnnualUsage.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitEstimatedAnnualUsage.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitEstimatedAnnualUsage.api/Views"
+            }
+        },
+        {"name": "CommitPeriodicUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitPeriodicUsageData.api/bin/Debug/netcoreapp3.1/CommitPeriodicUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitPeriodicUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitPeriodicUsageData.api/Views"
+            }
+        },
+        {"name": "CommitMeterToMeterTimeswitchCodeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterToMeterTimeswitchCodeData.api/bin/Debug/netcoreapp3.1/CommitMeterToMeterTimeswitchCodeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterToMeterTimeswitchCodeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterToMeterTimeswitchCodeData.api/Views"
+            }
+        },
+        {"name": "CommitMeterToProfileClassData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterToProfileClassData.api/bin/Debug/netcoreapp3.1/CommitMeterToProfileClassData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterToProfileClassData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterToProfileClassData.api/Views"
+            }
+        },
+        {"name": "CommitLocalDistributionZoneToMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitLocalDistributionZoneToMeterData.api/bin/Debug/netcoreapp3.1/CommitLocalDistributionZoneToMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitLocalDistributionZoneToMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitLocalDistributionZoneToMeterData.api/Views"
+            }
+        },
+        {"name": "CommitLineLossFactorClassToMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitLineLossFactorClassToMeterData.api/bin/Debug/netcoreapp3.1/CommitLineLossFactorClassToMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitLineLossFactorClassToMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitLineLossFactorClassToMeterData.api/Views"
+            }
+        },
+        {"name": "CommitGridSupplyPointToMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitGridSupplyPointToMeterData.api/bin/Debug/netcoreapp3.1/CommitGridSupplyPointToMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitGridSupplyPointToMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitGridSupplyPointToMeterData.api/Views"
+            }
+        },
+        {"name": "CommitBasketData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitBasketData.api/bin/Debug/netcoreapp3.1/CommitBasketData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitBasketData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitBasketData.api/Views"
+            }
+        },
+        {"name": "CommitContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitContractData.api/bin/Debug/netcoreapp3.1/CommitContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitContractData.api/Views"
+            }
+        },
+        {"name": "CommitSubAreaToSubMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitSubAreaToSubMeterData.api/bin/Debug/netcoreapp3.1/CommitSubAreaToSubMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitSubAreaToSubMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitSubAreaToSubMeterData.api/Views"
+            }
+        },
+        {"name": "CommitAssetToSubMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitAssetToSubMeterData.api/bin/Debug/netcoreapp3.1/CommitAssetToSubMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitAssetToSubMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitAssetToSubMeterData.api/Views"
+            }
+        },
+        {"name": "CommitCommodityToMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitCommodityToMeterData.api/bin/Debug/netcoreapp3.1/CommitCommodityToMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitCommodityToMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitCommodityToMeterData.api/Views"
+            }
+        },
+        {"name": "CommitAreaToMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitAreaToMeterData.api/bin/Debug/netcoreapp3.1/CommitAreaToMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitAreaToMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitAreaToMeterData.api/Views"
+            }
+        },
+        {"name": "CommitMeterToSubMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterToSubMeterData.api/bin/Debug/netcoreapp3.1/CommitMeterToSubMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterToSubMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterToSubMeterData.api/Views"
+            }
+        },
+        {"name": "CommitMeterToSiteData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterToSiteData.api/bin/Debug/netcoreapp3.1/CommitMeterToSiteData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterToSiteData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterToSiteData.api/Views"
+            }
+        },
+        {"name": "CommitCustomerToSiteData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitCustomerToSiteData.api/bin/Debug/netcoreapp3.1/CommitCustomerToSiteData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitCustomerToSiteData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitCustomerToSiteData.api/Views"
+            }
+        },
+        {"name": "CommitSubMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterUsageData.api/bin/Debug/netcoreapp3.1/CommitSubMeterUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterUsageData.api/Views"
+            }
+        },
+        {"name": "CommitMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterUsageData.api/bin/Debug/netcoreapp3.1/CommitMeterUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterUsageData.api/Views"
+            }
+        },
+        {"name": "CommitFlexTradeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitFlexTradeData.api/bin/Debug/netcoreapp3.1/CommitFlexTradeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitFlexTradeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitFlexTradeData.api/Views"
+            }
+        },
+        {"name": "CommitFlexReferenceVolumeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/CommitFlexReferenceVolumeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitFlexReferenceVolumeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitFlexReferenceVolumeData.api/Views"
+            }
+        },
+        {"name": "CommitFlexContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitFlexContractData.api/bin/Debug/netcoreapp3.1/CommitFlexContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitFlexContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitFlexContractData.api/Views"
+            }
+        },
+        {"name": "CommitFixedContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitFixedContractData.api/bin/Debug/netcoreapp3.1/CommitFixedContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitFixedContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitFixedContractData.api/Views"
+            }
+        },
+        {"name": "CommitMeterExemptionData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterExemptionData.api/bin/Debug/netcoreapp3.1/CommitMeterExemptionData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterExemptionData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterExemptionData.api/Views"
+            }
+        },
+        {"name": "CommitSubMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterData.api/bin/Debug/netcoreapp3.1/CommitSubMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitSubMeterData.api/Views"
+            }
+        },
+        {"name": "CommitMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitMeterData.api/bin/Debug/netcoreapp3.1/CommitMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitMeterData.api/Views"
+            }
+        },
+        {"name": "CommitSiteData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitSiteData.api/bin/Debug/netcoreapp3.1/CommitSiteData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitSiteData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitSiteData.api/Views"
+            }
+        },
+        {"name": "CommitCustomerData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/CommitCustomerData.api/bin/Debug/netcoreapp3.1/CommitCustomerData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/CommitCustomerData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/CommitCustomerData.api/Views"
+            }
+        },
+        {"name": "ProcessCustomerDataUploadValidation.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ProcessCustomerDataUploadValidation.api/bin/Debug/netcoreapp3.1/ProcessCustomerDataUploadValidation.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ProcessCustomerDataUploadValidation.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ProcessCustomerDataUploadValidation.api/Views"
+            }
+        },
+        {"name": "ValidateCrossSheetEntityData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateCrossSheetEntityData.api/bin/Debug/netcoreapp3.1/ValidateCrossSheetEntityData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateCrossSheetEntityData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateCrossSheetEntityData.api/Views"
+            }
+        },
+        {"name": "ValidateFlexTradeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFlexTradeData.api/bin/Debug/netcoreapp3.1/ValidateFlexTradeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFlexTradeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFlexTradeData.api/Views"
+            }
+        },
+        {"name": "ValidateFlexReferenceVolumeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/ValidateFlexReferenceVolumeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFlexReferenceVolumeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFlexReferenceVolumeData.api/Views"
+            }
+        },
+        {"name": "ValidateFlexContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFlexContractData.api/bin/Debug/netcoreapp3.1/ValidateFlexContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFlexContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFlexContractData.api/Views"
+            }
+        },
+        {"name": "ValidateFixedContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api/bin/Debug/netcoreapp3.1/ValidateFixedContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateFixedContractData.api/Views"
+            }
+        },
+        {"name": "ValidateMeterExemptionData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExemptionData.api/bin/Debug/netcoreapp3.1/ValidateMeterExemptionData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExemptionData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterExemptionData.api/Views"
+            }
+        },
+        {"name": "ValidateCustomerData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateCustomerData.api/bin/Debug/netcoreapp3.1/ValidateCustomerData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateCustomerData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateCustomerData.api/Views"
+            }
+        },
+        {"name": "StoreFlexTradeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFlexTradeData.api/bin/Debug/netcoreapp3.1/StoreFlexTradeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFlexTradeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFlexTradeData.api/Views"
+            }
+        },
+        {"name": "StoreFlexReferenceVolumeData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFlexReferenceVolumeData.api/bin/Debug/netcoreapp3.1/StoreFlexReferenceVolumeData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFlexReferenceVolumeData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFlexReferenceVolumeData.api/Views"
+            }
+        },
+        {"name": "StoreFlexContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFlexContractData.api/bin/Debug/netcoreapp3.1/StoreFlexContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFlexContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFlexContractData.api/Views"
+            }
+        },
+        {"name": "StoreFixedContractData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreFixedContractData.api/bin/Debug/netcoreapp3.1/StoreFixedContractData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreFixedContractData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreFixedContractData.api/Views"
+            }
+        },
+        {"name": "StoreMeterExemptionData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreMeterExemptionData.api/bin/Debug/netcoreapp3.1/StoreMeterExemptionData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreMeterExemptionData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreMeterExemptionData.api/Views"
+            }
+        },
+        {"name": "StoreCustomerData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreCustomerData.api/bin/Debug/netcoreapp3.1/StoreCustomerData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreCustomerData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreCustomerData.api/Views"
+            }
+        },
+        {"name": "ValidateSubMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterUsageData.api/bin/Debug/netcoreapp3.1/ValidateSubMeterUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterUsageData.api/Views"
+            }
+        },
+        {"name": "ValidateMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterUsageData.api/bin/Debug/netcoreapp3.1/ValidateMeterUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterUsageData.api/Views"
+            }
+        },
+        {"name": "ValidateSubMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterData.api/bin/Debug/netcoreapp3.1/ValidateSubMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateSubMeterData.api/Views"
+            }
+        },
+        {"name": "ValidateMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateMeterData.api/bin/Debug/netcoreapp3.1/ValidateMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateMeterData.api/Views"
+            }
+        },
+        {"name": "ValidateSiteData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/ValidateSiteData.api/bin/Debug/netcoreapp3.1/ValidateSiteData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/ValidateSiteData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/ValidateSiteData.api/Views"
+            }
+        },
+        {"name": "StoreSubMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterUsageData.api/bin/Debug/netcoreapp3.1/StoreSubMeterUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterUsageData.api/Views"
+            }
+        },
+        {"name": "StoreMeterUsageData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreMeterUsageData.api/bin/Debug/netcoreapp3.1/StoreMeterUsageData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreMeterUsageData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreMeterUsageData.api/Views"
+            }
+        },
+        {"name": "StoreSubMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterData.api/bin/Debug/netcoreapp3.1/StoreSubMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreSubMeterData.api/Views"
+            }
+        },
+        {"name": "StoreMeterData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreMeterData.api/bin/Debug/netcoreapp3.1/StoreMeterData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreMeterData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreMeterData.api/Views"
+            }
+        },
+        {"name": "StoreSiteData.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/CustomerDataUpload/StoreSiteData.api/bin/Debug/netcoreapp3.1/StoreSiteData.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/CustomerDataUpload/StoreSiteData.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/CustomerDataUpload/StoreSiteData.api/Views"
+            }
+        },
+        {"name": "DetermineFileType.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/FileUpload/DetermineFileType.api/bin/Debug/netcoreapp3.1/DetermineFileType.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/FileUpload/DetermineFileType.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/FileUpload/DetermineFileType.api/Views"
+            }
+        },
+        {"name": "UploadFile.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/FileUpload/UploadFile.api/bin/Debug/netcoreapp3.1/UploadFile.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/FileUpload/UploadFile.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/FileUpload/UploadFile.api/Views"
+            }
+        },
+        {"name": "AddNewCustomer.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/UpdateCustomer/AddNewCustomer.api/bin/Debug/netcoreapp3.1/AddNewCustomer.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/UpdateCustomer/AddNewCustomer.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/UpdateCustomer/AddNewCustomer.api/Views"
+            }
+        },
+        {"name": "ArchiveProcessQueue.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/General/ArchiveProcessQueue.api/bin/Debug/netcoreapp3.1/ArchiveProcessQueue.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/General/ArchiveProcessQueue.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/General/ArchiveProcessQueue.api/Views"
+            }
+        },
+        {"name": "CheckPrerequisiteAPI.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/General/CheckPrerequisiteAPI.api/bin/Debug/netcoreapp3.1/CheckPrerequisiteAPI.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/General/CheckPrerequisiteAPI.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/General/CheckPrerequisiteAPI.api/Views"
+            }
+        },
+        {"name": "LockUser.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Login/LockUser.api/bin/Debug/netcoreapp3.1/LockUser.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Login/LockUser.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Login/LockUser.api/Views"
+            }
+        },
+        {"name": "MapCustomerToChildCustomer.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/UpdateCustomer/MapCustomerToChildCustomer.api/bin/Debug/netcoreapp3.1/MapCustomerToChildCustomer.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/UpdateCustomer/MapCustomerToChildCustomer.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/UpdateCustomer/MapCustomerToChildCustomer.api/Views"
+            }
+        },
+        {"name": "Routing.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/General/Routing.api/bin/Debug/netcoreapp3.1/Routing.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/General/Routing.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/General/Routing.api/Views"
+            }
+        },
+        {"name": "StoreLoginAttempt.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Login/StoreLoginAttempt.api/bin/Debug/netcoreapp3.1/StoreLoginAttempt.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Login/StoreLoginAttempt.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Login/StoreLoginAttempt.api/Views"
+            }
+        },
+        {"name": "UpdateCustomerDetail.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/UpdateCustomer/UpdateCustomerDetail.api/bin/Debug/netcoreapp3.1/UpdateCustomerDetail.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/UpdateCustomer/UpdateCustomerDetail.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/UpdateCustomer/UpdateCustomerDetail.api/Views"
+            }
+        },
+        {"name": "ValidateEmailAddress.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Login/ValidateEmailAddress.api/bin/Debug/netcoreapp3.1/ValidateEmailAddress.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Login/ValidateEmailAddress.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Login/ValidateEmailAddress.api/Views"
+            }
+        },
+        {"name": "ValidateEmailAddressPasswordMapping.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Login/ValidateEmailAddressPasswordMapping.api/bin/Debug/netcoreapp3.1/ValidateEmailAddressPasswordMapping.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Login/ValidateEmailAddressPasswordMapping.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Login/ValidateEmailAddressPasswordMapping.api/Views"
+            }
+        },
+        {"name": "ValidatePageGUID.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/General/ValidatePageGUID.api/bin/Debug/netcoreapp3.1/ValidatePageGUID.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/General/ValidatePageGUID.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/General/ValidatePageGUID.api/Views"
+            }
+        },
+        {"name": "ValidatePassword.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/Login/ValidatePassword.api/bin/Debug/netcoreapp3.1/ValidatePassword.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/Login/ValidatePassword.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Login/ValidatePassword.api/Views"
+            }
+        },
+        {"name": "ValidateProcessGUID.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/General/ValidateProcessGUID.api/bin/Debug/netcoreapp3.1/ValidateProcessGUID.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/General/ValidateProcessGUID.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/General/ValidateProcessGUID.api/Views"
+            }
+        },
+        {"name": "Website.api",
+            "type": "coreclr",
+            "request": "launch",
+            // "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/General/Website.api/bin/Debug/netcoreapp3.1/Website.api.dll",
+            "args": [
+                "HostEnvironment:Development"
+            ],
+            "cwd": "${workspaceFolder}/General/Website.api",
+            "stopAtEntry": false,
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/General/Website.api/Views"
+            }
+        }
+    ],
+    "compounds": [
+        {"name": "------------------------------------------------------------",
+            "configurations": [
+                "Website.api",
+            ]
+        },
+        {"name": "All Projects",
+            "configurations": [
+                "DataAnalysisWebpageGetForecast.api",
+                "CreateDataAnalysisWebpage.api",
+                "CreateManageCustomersWebpage.api",
+                "CreateYearForecast.api",
+                "CreateQuarterForecast.api",
+                "CreateMonthForecast.api",
+                "CreateWeekForecast.api",
+                "CreateDateForecast.api",
+                "CreateHalfHourForecast.api",
+                "CreateFiveMinuteForecast.api",
+                "GetMappedUsageDateId.api",
+                "CreateForecastUsage.api",
+                "GetGenericProfile.api",
+                "GetFlexSpecificProfile.api",
+                "GetMeterSpecificProfile.api",
+                "GetProfileId.api",
+                "GetProfile.api",
+                "CommitProfiledUsage.api",
+                "CleanUpCustomerDataUploadTempData.api",
+                "CommitEstimatedAnnualUsage.api",
+                "CommitPeriodicUsageData.api",
+                "CommitMeterToMeterTimeswitchCodeData.api",
+                "CommitMeterToProfileClassData.api",
+                "CommitLocalDistributionZoneToMeterData.api",
+                "CommitLineLossFactorClassToMeterData.api",
+                "CommitGridSupplyPointToMeterData.api",
+                "CommitBasketData.api",
+                "CommitContractData.api",
+                "CommitSubAreaToSubMeterData.api",
+                "CommitAssetToSubMeterData.api",
+                "CommitCommodityToMeterData.api",
+                "CommitAreaToMeterData.api",
+                "CommitMeterToSubMeterData.api",
+                "CommitMeterToSiteData.api",
+                "CommitCustomerToSiteData.api",
+                "CommitSubMeterUsageData.api",
+                "CommitMeterUsageData.api",
+                "CommitFlexTradeData.api",
+                "CommitFlexReferenceVolumeData.api",
+                "CommitFlexContractData.api",
+                "CommitFixedContractData.api",
+                "CommitMeterExemptionData.api",
+                "CommitSubMeterData.api",
+                "CommitMeterData.api",
+                "CommitSiteData.api",
+                "CommitCustomerData.api",
+                "Website.api",
+                "ProcessCustomerDataUploadValidation.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "ValidateEmailAddress.api",
+                "ValidatePassword.api",
+                "ValidateEmailAddressPasswordMapping.api",
+                "LockUser.api",
+                "StoreLoginAttempt.api",
+                "UploadFile.api",
+                "DetermineFileType.api",
+                "AddNewCustomer.api",
+                "UpdateCustomerDetail.api",
+                "MapCustomerToChildCustomer.api",
+                "StoreSiteData.api",
+                "StoreMeterData.api",
+                "StoreSubMeterData.api",
+                "StoreMeterUsageData.api",
+                "StoreSubMeterUsageData.api",
+                "ValidateSiteData.api",
+                "ValidateMeterData.api",
+                "ValidateSubMeterData.api",
+                "ValidateMeterUsageData.api",
+                "ValidateSubMeterUsageData.api",
+                "StoreCustomerData.api",
+                "StoreMeterExemptionData.api",
+                "StoreFixedContractData.api",
+                "StoreFlexContractData.api",
+                "StoreFlexReferenceVolumeData.api",
+                "StoreFlexTradeData.api",
+                "ValidateCustomerData.api",
+                "ValidateMeterExemptionData.api",
+                "ValidateFixedContractData.api",
+                "ValidateFlexContractData.api",
+                "ValidateFlexReferenceVolumeData.api",
+                "ValidateFlexTradeData.api",
+                "ValidateCrossSheetEntityData.api",
+            ]
+        },
+        {"name": "Login",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "ValidateEmailAddress.api",
+                "ValidatePassword.api",
+                "ValidateEmailAddressPasswordMapping.api",
+                "LockUser.api",
+                "StoreLoginAttempt.api",
+            ]
+        },
+        {"name": "File Upload",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "UploadFile.api",
+                "DetermineFileType.api",
+            ]
+        },
+        {"name": "Add New Customer",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "AddNewCustomer.api",
+                "UpdateCustomerDetail.api",
+                "MapCustomerToChildCustomer.api",
+            ]
+        },
+        {"name": "Demand Forecast",
+            "configurations": [
+                "CreateYearForecast.api",
+                "CreateQuarterForecast.api",
+                "CreateMonthForecast.api",
+                "CreateWeekForecast.api",
+                "CreateDateForecast.api",
+                "CreateHalfHourForecast.api",
+                "CreateFiveMinuteForecast.api",
+                "GetMappedUsageDateId.api",
+                "CreateForecastUsage.api",
+                "GetGenericProfile.api",
+                "GetFlexSpecificProfile.api",
+                "GetMeterSpecificProfile.api",
+                "GetProfileId.api",
+                "GetProfile.api",
+                "CommitProfiledUsage.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidateProcessGUID.api",
+            ]
+        },
+        {"name": "Customer Data Upload",
+            "configurations": [
+                "CleanUpCustomerDataUploadTempData.api",
+                "CommitEstimatedAnnualUsage.api",
+                "CommitPeriodicUsageData.api",
+                "CommitMeterToMeterTimeswitchCodeData.api",
+                "CommitMeterToProfileClassData.api",
+                "CommitLocalDistributionZoneToMeterData.api",
+                "CommitLineLossFactorClassToMeterData.api",
+                "CommitGridSupplyPointToMeterData.api",
+                "CommitBasketData.api",
+                "CommitContractData.api",
+                "CommitSubAreaToSubMeterData.api",
+                "CommitAssetToSubMeterData.api",
+                "CommitCommodityToMeterData.api",
+                "CommitAreaToMeterData.api",
+                "CommitMeterToSubMeterData.api",
+                "CommitMeterToSiteData.api",
+                "CommitCustomerToSiteData.api",
+                "CommitSubMeterUsageData.api",
+                "CommitMeterUsageData.api",
+                "CommitFlexTradeData.api",
+                "CommitFlexReferenceVolumeData.api",
+                "CommitFlexContractData.api",
+                "CommitFixedContractData.api",
+                "CommitMeterExemptionData.api",
+                "CommitSubMeterData.api",
+                "CommitMeterData.api",
+                "CommitSiteData.api",
+                "CommitCustomerData.api",
+                "ProcessCustomerDataUploadValidation.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidateProcessGUID.api",
+                "StoreSiteData.api",
+                "StoreMeterData.api",
+                "StoreSubMeterData.api",
+                "StoreMeterUsageData.api",
+                "StoreSubMeterUsageData.api",
+                "ValidateSiteData.api",
+                "ValidateMeterData.api",
+                "ValidateSubMeterData.api",
+                "ValidateMeterUsageData.api",
+                "ValidateSubMeterUsageData.api",
+                "StoreCustomerData.api",
+                "StoreMeterExemptionData.api",
+                "StoreFixedContractData.api",
+                "StoreFlexContractData.api",
+                "StoreFlexReferenceVolumeData.api",
+                "StoreFlexTradeData.api",
+                "ValidateCustomerData.api",
+                "ValidateMeterExemptionData.api",
+                "ValidateFixedContractData.api",
+                "ValidateFlexContractData.api",
+                "ValidateFlexReferenceVolumeData.api",
+                "ValidateFlexTradeData.api",
+                "ValidateCrossSheetEntityData.api",
+            ]
+        },
+        {"name": "Demand Forecast Date Mapping",
+            "configurations": [
+                "GetMappedUsageDateId.api",
+                "CreateForecastUsage.api",
+            ]
+        },
+        {"name": "Website",
+            "configurations": [
+                "Website.api",
+                "Routing.api",
+                "ArchiveProcessQueue.api",
+                "CheckPrerequisiteAPI.api",
+                "ValidatePageGUID.api",
+                "ValidateProcessGUID.api",
+                "CreateManageCustomersWebpage.api",
+                "CreateDataAnalysisWebpage.api",
+                "DataAnalysisWebpageGetForecast.api",
+            ]
+        },
+    ]
+}
