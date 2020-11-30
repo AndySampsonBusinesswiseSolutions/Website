@@ -1,0 +1,204 @@
+.btn {
+    width: calc(100% - 10px); 
+    margin: 5px;
+}
+.middle {
+    float: left;
+    width: 2%;
+    min-height: 10px;
+}
+.contact-popup {
+    display: none;
+    position: fixed; /* Stay in place */
+    left: 0;
+    top: 0;
+    width: 125%; /* Full width */
+    height: 135%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    z-index: 100001;
+}
+.popup {
+    z-index: 100000;
+}
+.modal-content-wide {
+    margin-top: 75px;
+    margin-left: 12%;
+    width: 60%;
+}
+.requiredMessage {
+    position: relative;
+    margin-bottom: 10px;
+    max-width: calc(100%);
+    text-align: center;
+    display: none;
+    background: #b62a51;
+    color: white;
+    font-size: 15px;
+    font-weight:bold;
+}
+  
+.requiredMessage::after {
+    content: '';
+    position: absolute;
+    top: 90%;
+    left: 0px;
+    background: #b62a51;
+    width: 15px;
+    height: 10px;
+    
+    /* The points are: (left top: x y, right top: x y, center bottom: x y) */
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/*
+jQuery.ganttView v.0.8.0
+Copyright (c) 2010 JC Grubbs - jc.grubbs@devmynd.com
+MIT License Applies
+*/
+
+div.ganttview-hzheader-month,
+div.ganttview-hzheader-day,
+div.ganttview-vtheader,
+div.ganttview-vtheader-item-name,
+div.ganttview-vtheader-series,
+div.ganttview-grid,
+div.ganttview-grid-row-cell {
+	float: left;
+}
+
+div.ganttview-hzheader-month,
+div.ganttview-hzheader-day {
+	text-align: center;
+}
+
+div.ganttview-grid-row-cell.last,
+div.ganttview-hzheader-day.last,
+div.ganttview-hzheader-month.last {
+	border-right: none;
+}
+
+div.ganttview {
+	border: 1px solid #999;
+}
+
+
+/* Horizontal Header */
+
+div.ganttview-hzheader-month {
+	border-left: 1px solid #d0d0d0;
+}
+
+div.ganttview-hzheader{
+	height: 20px;
+	border-left: 1px solid #d0d0d0;
+	line-height: 20px;
+}
+
+div.ganttview-hzheader-day {
+	width: 20px;
+	height: 20px;
+	border-right: 1px solid #f0f0f0;
+	border-top: 1px solid #d0d0d0;
+	line-height: 20px;
+	color: #777;
+}
+
+/* Vertical Header */
+
+div.ganttview-vtheader {
+	margin-top: 41px;
+	width: 280px;
+	overflow: hidden;
+	background-color: #fff;
+}
+
+div.ganttview-vtheader-item {
+	overflow: hidden;
+	color: #666;
+}
+
+div.ganttview-vtheader-item-name {
+	width: 150px;
+	padding-left: 5px;
+	border-top: 1px solid #d0d0d0;
+	border-bottom: 1px solid #d0d0d0;
+    line-height: 16px;
+    overflow: auto;
+}
+
+div.ganttview-vtheader-series-name {
+	width: 130px;
+	height: 50px;
+	border-top: 1px solid #d0d0d0;
+	border-left: 1px solid #d0d0d0;
+	border-bottom: 1px solid #d0d0d0;
+	line-height: 16px;
+    padding-left: 5px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+
+/* Slider */
+
+div.ganttview-slide-container {
+	overflow: auto;
+	border-left: 1px solid #999;
+}
+
+
+/* Grid */
+
+div.ganttview-grid-row-cell {
+	width: 20px;
+	height: 50px;
+	border-right: 1px solid #f0f0f0;
+	border-top: 1px solid #f0f0f0;
+}
+
+div.ganttview-grid-row-cell.ganttview-weekend {
+	background-color: #fafafa;
+}
+
+div.ganttview-grid-row-cell.ganttview-today {
+	background-color: lightcoral;
+}
+
+
+/* Blocks */
+
+div.ganttview-blocks {
+	margin-top: 20px;
+}
+
+div.ganttview-block-container {
+	height: 50px;
+	padding-top: 4px;
+}
+
+div.ganttview-block {
+	position: relative;
+	height: 40px;
+	background-color: #E5ECF9;
+	border: 1px solid #c0c0c0;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+div.ganttview-block-text {
+	position: absolute;
+	height: 12px;
+	font-size: 0.8em;
+	color: black;
+	padding: 2px 3px;
+}
+
+
+/* Adjustments for jQuery UI Styling */
+
+div.ganttview-block div.ui-resizable-handle.ui-resizable-s {
+	bottom: -0;
+}

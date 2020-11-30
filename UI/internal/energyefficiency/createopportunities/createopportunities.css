@@ -1,0 +1,9 @@
+.middle {
+    float: left;
+    width: 1%;
+    min-height: 100px;
+}
+.tree-div {
+    min-height: 183px;
+    max-height: 183px;
+}

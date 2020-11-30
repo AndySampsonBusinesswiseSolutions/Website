@@ -1,0 +1,206 @@
+var billvalidation = [
+    {
+        "GUID" : 13,
+        "Attributes" : [
+            {"Period" : "Jan 2020"}
+        ],
+        "Sites": [
+            {
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 14,
+                        "Identifier": 1234567890123,
+                        "Bills": [
+                            {
+                                "GUID": 15,
+                                "BillNumber": "???",
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Bill expected by 17th Feb 2020 but not received"},
+                                    {"Date Bill Expected": "17/02/2020"},
+                                    {"Date Bill Received": "Not Yet Received"},
+                                    {"Expected Payment Date": "02/03/2020"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 16,
+                        "Identifier": 1234567890124,
+                        "Bills": [
+                            {
+                                "GUID": 17,
+                                "BillNumber": "???",
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Bill expected by 18th Feb 2020 but not received"},
+                                    {"Date Bill Expected": "18/02/2020"},
+                                    {"Date Bill Received": "Not Yet Received"},
+                                    {"Expected Payment Date": "02/03/2020"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 18,
+                        "Identifier": 1234567890125,
+                        "Bills": [
+                            {
+                                "GUID": 19,
+                                "BillNumber": "???",
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Status Reason": "Bill expected by 19th Feb 2020 but not received"},
+                                    {"Date Bill Expected": "19/02/2020"},
+                                    {"Date Bill Received": "Not Yet Received"},
+                                    {"Expected Payment Date": "02/03/2020"},
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 0,
+        "Attributes" : [
+            {"Period" : "Dec 2019"}
+        ],
+        "Sites": [
+            {
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 0,
+                        "Identifier": 1234567890123,
+                        "Bills": [
+                            {
+                                "GUID": 3,
+                                "BillNumber": "00004",
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"},
+                                    {"Date Bill Expected": "17/01/2020"},
+                                    {"Date Bill Received": "17/01/2020"},
+                                    {"Estimated Validation Competion Date": "29/02/2020"},
+                                    {"Actual Validation Competion Date": "27/02/2020"},
+                                    {"Expected Payment Date": "31/01/2020"},
+                                    {"Expected Usage": 5000},
+                                    {"Actual Usage": 4900},
+                                    {"Expected Spend": 500},
+                                    {"Actual Spend": 490}
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 1,
+                        "Identifier": 1234567890124,
+                        "Bills": [
+                            {
+                                "GUID": 4,
+                                "BillNumber": "00005",
+                                "Status": "Investigation",
+                                "Details": [
+                                    {"Status": "Investigation"},
+                                    {"Date Bill Expected": "17/01/2020"},
+                                    {"Date Bill Received": "17/01/2020"},
+                                    {"Status Reason": "DUoS higher than expected"},
+                                    {"Estimated Validation Competion Date": "29/02/2020"},
+                                    {"Expected Payment Date": "31/01/2020"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 2,
+                        "Identifier": 1234567890125,
+                        "Bills": [
+                            {
+                                "GUID": 5,
+                                "BillNumber": "00006",
+                                "Status": "Invalid",
+                                "Details": [
+                                    {"Status": "Invalid"},
+                                    {"Date Bill Expected": "17/01/2020"},
+                                    {"Date Bill Received": "17/01/2020"},
+                                    {"Status Reason": "Usage exceeded tolerances"},
+                                    {"Expected Payment Date": "31/01/2020"},
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 6,
+        "Attributes" : [
+            {"Period" : "Nov 2019"}
+        ],
+        "Sites": [
+            {
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 7,
+                        "Identifier": 1234567890123,
+                        "Bills": [
+                            {
+                                "GUID": 8,
+                                "BillNumber": "00001",
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"},
+                                    {"Date Bill Expected": "17/12/2020"},
+                                    {"Date Bill Received": "17/12/2020"},
+                                    {"Expected Payment Date": "31/12/2020"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 9,
+                        "Identifier": 1234567890124,
+                        "Bills": [
+                            {
+                                "GUID": 10,
+                                "BillNumber": "00002",
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"},
+                                    {"Date Bill Expected": "17/12/2020"},
+                                    {"Date Bill Received": "17/12/2020"},
+                                    {"Expected Payment Date": "31/12/2020"},
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "GUID": 11,
+                        "Identifier": 1234567890125,
+                        "Bills": [
+                            {
+                                "GUID": 12,
+                                "BillNumber": "00003",
+                                "Status": "Valid",
+                                "Details": [
+                                    {"Status": "Valid"},
+                                    {"Date Bill Expected": "17/12/2020"},
+                                    {"Date Bill Received": "17/12/2020"},
+                                    {"Expected Payment Date": "31/12/2020"},
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+]

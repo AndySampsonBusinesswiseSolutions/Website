@@ -1,0 +1,246 @@
+var ooccontracts = [
+    {
+        "Supplier" : "Haven",
+        "Contract" : [
+            {
+                "ContractReference" : "Haven0001",
+                "MPXN" : [
+                    {
+                        "Identifier" : "987654",
+                        "ContractStartDate" : "01/12/2019",
+                        "ContractEndDate" : "",
+                        "ProductType" : "Out Of Contract",
+                        "IsBusinesswiseContract" : "Yes",
+                        "Rates" : [
+                            {
+                                "RateName" : "Unit Rate 1",
+                                "Rate" : "7p/kWh"
+                            },
+                            {
+                                "RateName" : "Standing Charge",
+                                "Rate" : "£5/day"
+                            }
+                        ]
+                    }
+                ]  
+            },
+            {
+                "ContractReference" : "Haven0002",
+                "MPXN" : [
+                    {
+                        "Identifier" : "1200050469869",
+                        "ContractStartDate" : "02/12/2019",
+                        "ContractEndDate" : "31/12/2019",
+                        "ProductType" : "Out Of Contract",
+                        "ProductStatus" : "Out Of Contract",
+                        "IsBusinesswiseContract" : "No",
+                        "Rates" : [
+                            {
+                                "RateName" : "Unit Rate 1",
+                                "Rate" : "20p/kWh"
+                            },
+                            {
+                                "RateName" : "Unit Rate 2",
+                                "Rate" : "10p/kWh"
+                            },
+                            {
+                                "RateName" : "Capacity Charge",
+                                "Rate" : "5.5p/kVa/day"
+                            },
+                            {
+                                "RateName" : "Standing Charge",
+                                "Rate" : "£5/day"
+                            }
+                        ]
+                    }
+                ]  
+            }
+        ]              
+    }
+];
+
+var finishedcontracts = [
+    {
+        "Supplier" : "Haven",
+        "Contract" : [
+            {
+                "ContractReference" : "Haven0002",
+                "MPXN" : [
+                    {
+                        "Identifier" : "1234567890124",
+                        "ContractStartDate" : "01/12/2019",
+                        "ContractEndDate" : "30/12/2019",
+                        "ProductType" : "Two Rate Fixed",
+                        "ProductStatus" : "Finished",
+                        "IsBusinesswiseContract" : "No",
+                        "Rates" : [
+                            {
+                                "RateName" : "Unit Rate 1",
+                                "Rate" : "15p/kWh"
+                            },
+                            {
+                                "RateName" : "Unit Rate 2",
+                                "Rate" : "8p/kWh"
+                            },
+                            {
+                                "RateName" : "Capacity Charge",
+                                "Rate" : "2.5p/kVa/day"
+                            },
+                            {
+                                "RateName" : "Standing Charge",
+                                "Rate" : "£2.5/day"
+                            }
+                        ]
+                    }
+                ]  
+            }
+        ]              
+    }
+];
+
+var activecontracts = [];
+var pendingcontracts = [];
+
+var data = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"BaseName" : "39-41 Buckingham Palace Road, London"},
+            {"lat" : 51.4981763},
+            {"lng" : -0.1435512},
+            {"GoogleAddress" : "39-41 Buckingham Palace Rd, Westminster, London SW1W 0PS, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "1",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200050469869"},
+                        {"DeviceType" : "Mains"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "2",
+        "Attributes" : 
+        [
+            {"BaseName" : "35 Charles Street, London"},
+            {"lat" : 51.507668},
+            {"lng" : -0.1470636},
+            {"GoogleAddress" : "35 Charles St, Mayfair, London W1J 5EB, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "3",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010064476"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            },
+            {
+                "GUID" : "4",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200051256079"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "5",
+        "Attributes" : 
+        [
+            {"BaseName" : "Montague Street, London"},
+            {"lat" : 51.5201642},
+            {"lng" : -0.1258781},
+            {"GoogleAddress" : "Montague St, Holborn, London WC1B 5BJ, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "6",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200050071348"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "7",
+        "Attributes" : 
+        [
+            {"BaseName" : "1-3 1-2 Kensington Court, London"},
+            {"lat" : 51.5020072},
+            {"lng" : -0.1866267},
+            {"GoogleAddress" : "1-3 Kensington Ct, Kensington, London W8 5DL, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "8",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010015159"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "9",
+        "Attributes" : 
+        [
+            {"BaseName" : "9 Fore Street, Evershot, Dorchester"},
+            {"lat" : 50.8382807},
+            {"lng" : -2.6056457},
+            {"GoogleAddress" : "9 Fore St, Evershot, Dorchester DT2 0JR, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "10",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "2000027480903"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "11",
+        "Attributes" : 
+        [
+            {"BaseName" : "17-19 Egerton Terrace, London"},
+            {"lat" : 51.4968423},
+            {"lng" : -0.167588},
+            {"GoogleAddress" : "17-19 Egerton Terrace, Chelsea, London SW3 2BX, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "12",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1200010016808"},
+                        {"DeviceType" : "Lighting"},
+                        {"Commodity" : "Electricity"},
+                    ]
+            }
+        ]
+    }
+]

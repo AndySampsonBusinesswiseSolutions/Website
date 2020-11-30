@@ -1,0 +1,133 @@
+var documents = [
+    {
+        "GUID" : "0",
+        "Attributes" : {
+            "DocumentType" : "Letters Of Authority",
+            "Headers" :[
+                "LOA End Date",
+                "LOA Signed By"
+            ],
+            "Documents" :
+            [
+                {
+                    "Attributes" : 
+                    [
+                        {"Name": "Document Name", "Value": "Businesswise Solutions LOA 2019.pdf"},
+                        {"Name": "LOA End Date", "Value": "31/01/2020"},
+                        {"Name": "LOA Signed By", "Value": "Mo Money (Finance Director)"},
+                        {"Name": "Uploaded By", "Value": "Sys Tem"},
+                        {"Name": "Uploaded Date", "Value": "02/02/2019"},
+                    ],
+                },
+                {
+                    "Attributes" : 
+                    [
+                        {"Name": "Document Name", "Value": "Businesswise Solutions LOA 2018.pdf"},
+                        {"Name": "LOA End Date", "Value": "31/01/2019"},
+                        {"Name": "LOA Signed By", "Value": "Les Money (Finance Director)"},
+                        {"Name": "Uploaded By", "Value": "Sys Tem"},
+                        {"Name": "Uploaded Date", "Value": "02/02/2018"},
+                    ],
+                },
+            ]
+        },
+    },
+    {
+        "GUID" : "1",
+        "Attributes" : {
+            "DocumentType" : "Supplier Contracts",
+            "Headers" :[
+                "Supplier",
+                "Contract Number(s)",
+                "Earliest Start Date",
+                "Latest End Date",
+                "Number Of Meters",
+                "Contract Signed By",
+            ],
+            "Documents" :
+            [
+                {
+                    "Attributes" : 
+                    [
+                        {"Name": "Document Name", "Value": "Haven 2020 Contract.pdf"},
+                        {"Name": "Supplier", "Value": "Haven"},
+                        {"Name": "Contract Number", "Value": "Haven0002"},
+                        {"Name": "Earliest Start Date", "Value": "01/01/2020"},
+                        {"Name": "Latest End Date", "Value": "31/12/2020"},
+                        {"Name": "Number Of Meters", "Value": "4"},
+                        {"Name": "Contract Signed By", "Value": "Mo Money (Finance Director)"},
+                        {"Name": "Uploaded By", "Value": "Sys Tem"},
+                        {"Name": "Uploaded Date", "Value": "02/02/2019"},
+                    ],
+                },
+                {
+                    "Attributes" : 
+                    [
+                        {"Name": "Document Name", "Value": "Haven 2019 Contract.pdf"},
+                        {"Name": "Supplier", "Value": "Haven"},
+                        {"Name": "Contract Number", "Value": "Haven0001"},
+                        {"Name": "Earliest Start Date", "Value": "01/01/2019"},
+                        {"Name": "Latest End Date", "Value": "31/12/2019"},
+                        {"Name": "Number Of Meters", "Value": "4"},
+                        {"Name": "Contract Signed By", "Value": "Les Money (Finance Director)"},
+                        {"Name": "Uploaded By", "Value": "Sys Tem"},
+                        {"Name": "Uploaded Date", "Value": "02/02/2018"},
+                    ],
+                },
+            ]
+        },
+    },
+    {
+        "GUID" : "2",
+        "Attributes" : {
+            "DocumentType" : "EMaaS Contracts",
+            "Headers" :[
+                "Supplier",
+                "Contract Number(s)",
+                "Earliest Start Date",
+                "Latest End Date",
+                "Number Of Meters",
+                "Contract Signed By",
+            ]
+        },
+    },
+    {
+        "GUID" : "3",
+        "Attributes" : {
+            "DocumentType" : "Flex Contracts",
+            "Headers" :[
+                "Supplier",
+                "Contract Number(s)",
+                "Earliest Start Date",
+                "Latest End Date",
+                "Number Of Meters",
+                "Contract Signed By",
+            ]
+        },
+    },
+    {
+        "GUID" : "4",
+        "Attributes" : {
+            "DocumentType" : "Invoices",
+            "Headers" :[
+                "Invoice Number",
+                "Start Date",
+                "End Date",
+            ]
+        },
+    },
+    {
+        "GUID" : "5",
+        "Attributes" : {
+            "DocumentType" : "Supplier Bills",
+            "Headers" :[
+                "Supplier",
+                "Bill Number",
+                "Start Date",
+                "End Date",
+                "Number Of Meters",
+                "Contract Signed By",
+            ]
+        },
+    }
+]

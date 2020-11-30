@@ -1,0 +1,8 @@
+.chart {
+    width: calc(49.85%);
+    float: left;
+}
+
+.fa-file-excel {
+    color: green!important;
+}

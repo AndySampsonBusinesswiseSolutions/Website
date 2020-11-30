@@ -1,0 +1,46 @@
+.requiredMessage {
+    position: relative;
+    margin-bottom: 10px;
+    max-width: calc(100%);
+    text-align: center;
+    display: none;
+    background: #b62a51;
+    color: white;
+    font-size: 15px;
+    font-weight:bold;
+}
+
+.requiredMessage::after {
+    content: '';
+    position: absolute;
+    top: 90%;
+    left: 0px;
+    background: #b62a51;
+    width: 15px;
+    height: 10px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.divcolumn {
+    float: left;
+    max-height: 500px;
+    width: calc((100% - 18px) / 2);
+}
+.divider-column {
+    float: left;
+    width: 2%;
+    min-height: 1px;
+}
+.opportunity-column {
+    float: left;
+    width: 30%;
+    min-height: 1px;
+}
+.dashboard-item-small {
+    height: 200px; 
+    width: calc((100% - 27px) / 4); 
+    float: left;
+    color: white;
+}
+.approve, .reject {
+    width: 45%; 
+}

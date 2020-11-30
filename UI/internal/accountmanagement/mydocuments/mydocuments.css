@@ -1,0 +1,6 @@
+.table-header, .table-cell {
+    border: solid black 1px;
+}
+.table-cell {
+    text-align: center;
+}

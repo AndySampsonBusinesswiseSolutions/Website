@@ -1,0 +1,96 @@
+var activeopportunity = [
+    {
+        "GUID" : 13,
+        "Attributes" : [
+            {"ProjectName" : "LED Lighting"}
+        ],
+        "Sites": [
+			{
+                "GUID" : 4,
+                "SiteName": "Site A",
+                "Meters":[
+                    {
+                        "GUID": 22,
+                        "Identifier": 1234567890120
+					},
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 2013,
+        "Attributes" : [
+            {"ProjectName" : "LED Lighting 2"}
+        ],
+        "Sites": [
+            {
+                "GUID" : 201,
+                "SiteName": "Site X",
+                "Meters":[
+                    {
+                        "GUID": 14,
+                        "Identifier": 1234567890123
+                    }
+                ]
+			},
+			{
+                "GUID" : 202,
+                "SiteName": "Site Y",
+                "Meters":[
+                    {
+                        "GUID": 16,
+                        "Identifier": 1234567890124
+                    }
+                ]
+			},
+			{
+                "GUID" : 203,
+                "SiteName": "Site Z",
+                "Meters":[
+					{
+                        "GUID": 18,
+                        "Identifier": 1234567890125
+					},
+					{
+                        "GUID": 20,
+                        "Identifier": 1234567890126
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+var ganttData = [
+	{
+		id: 1, name: "LED Lighting 2", status: "Pending",
+		sites: [
+			{name: "Site X", meters: [{identifier: 1234567890123}]},
+			{name: "Site Y", meters: [{identifier: 1234567890124}]},
+			{name: "Site Z", meters: [
+					{identifier: 1234567890125},
+					{identifier: 1234567890126}
+				]}
+		], 
+		series: [
+			{ name: "Purchase Sub Meter", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Purchase LED Lights", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Install Sub Meter", start: new Date(2020,03,05), end: new Date(2020,03,05) },
+			{ name: "Receive Base Sub Meter Readings", start: new Date(2020,03,06), end: new Date(2020,04,05) },
+			{ name: "Install LED Lights", start: new Date(2020,04,06), end: new Date(2020,04,09) },
+		]
+    },
+    {
+		id: 2, name: "LED Lighting",  status: "Active",
+		sites: [
+			{name: "Site A", meters: [{identifier: 1234567890120}]},
+		], 
+		series: [
+			{ name: "Purchase Sub Meter", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Purchase LED Lights", start: new Date(2020,03,01), end: new Date(2020,03,04) },
+			{ name: "Install Sub Meter", start: new Date(2020,03,05), end: new Date(2020,03,05) },
+			{ name: "Receive Base Sub Meter Readings", start: new Date(2020,03,06), end: new Date(2020,04,05) },
+			{ name: "Install LED Lights", start: new Date(2020,04,06), end: new Date(2020,04,09) },
+		]
+	}
+];

@@ -1,0 +1,90 @@
+var data = [
+    {
+        "GUID" : 1,
+        "SiteName": "Site X",
+        "Meters":[
+            {
+                "GUID": 18,
+                "Identifier": 1234567890125,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 101,
+                        "Identifier": "Sub Meter 2",
+                    },
+                    {
+                        "GUID": 102,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            },
+            {
+                "GUID": 20,
+                "Identifier": 1234567890126,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 103,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            }
+            
+        ]
+    },
+    {
+        "GUID" : 2,
+        "SiteName": "Site Y",
+        "Meters":[
+            {
+                "GUID": 16,
+                "Identifier": 1234567890124,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 104,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 3,
+        "SiteName": "Site Z",
+        "Meters":[
+            {
+                "GUID": 14,
+                "Identifier": 1234567890123,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 105,
+                        "Identifier": "Sub Meter 1",
+                    },
+                    {
+                        "GUID": 106,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "GUID" : 4,
+        "SiteName": "Site A",
+        "Meters":[
+            {
+                "GUID": 22,
+                "Identifier": 1234567890120,
+                "Commodity": "Electricity",
+                "SubMeters": [
+                    {
+                        "GUID": 107,
+                        "Identifier": "New Sub Meter Required",
+                    }
+                ]
+            },
+        ]
+    }
+];

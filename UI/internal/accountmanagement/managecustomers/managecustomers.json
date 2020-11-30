@@ -1,0 +1,90 @@
+var managecustomers = [
+    {
+        "GUID" : "1",
+        "Attributes" : 
+        [
+            {"Customer Name" : "DFS Trading"},
+            {"Address Lines" : "32, The Havens"},
+            {"Address Town" : "Ipswich"},
+            {"Address County" : "Suffolk"},
+            {"Address PostCode" : "IP3 9SJ"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "01473 277556"},
+            {"Contact Email Address" : "contact.us@havenpower.com"}
+        ],
+        "ChildCustomers" :[
+            {"Customer Name" : "DFS Trading - North East"},
+            {"Customer Name" : "DFS Trading - North West"}
+        ]
+    },
+    {
+        "GUID" : "2",
+        "Attributes" : 
+        [
+            {"Customer Name" : "Businesswise Solutions"},
+            {"Address Lines" : "3rd floor, Elder House, 586-592 Elder Gate"},
+            {"Address Town" : "Milton Keynes"},
+            {"Address County" : "Buckinghamshire"},
+            {"Address PostCode" : "MK9 1LR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0330 088 2679"},
+            {"Contact Email Address" : "Sales@HudsonEnergy.co.uk"}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    },
+    {
+        "GUID" : "3",
+        "Attributes" : 
+        [
+            {"Customer Name" : "DFS Trading - North East"},
+            {"Address Lines" : "3rd floor, Elder House, 586-592 Elder Gate"},
+            {"Address Town" : "Milton Keynes"},
+            {"Address County" : "Buckinghamshire"},
+            {"Address PostCode" : "MK9 1LR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0330 088 2679"},
+            {"Contact Email Address" : "Sales@HudsonEnergy.co.uk"},
+            {"IsChildCustomer" : true}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    },
+    {
+        "GUID" : "4",
+        "Attributes" : 
+        [
+            {"Customer Name" : "DFS Trading - North West"},
+            {"Address Lines" : "3rd floor, Elder House, 586-592 Elder Gate"},
+            {"Address Town" : "Milton Keynes"},
+            {"Address County" : "Buckinghamshire"},
+            {"Address PostCode" : "MK9 1LR"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Telephone Number" : "0330 088 2679"},
+            {"Contact Email Address" : "Sales@HudsonEnergy.co.uk"},
+            {"IsChildCustomer" : true}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    },
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"Customer Name" : "Add New Customer"},
+            {"Address Lines" : ""},
+            {"Address Town" : ""},
+            {"Address County" : ""},
+            {"Address PostCode" : ""},
+            {"Contact Name" : ""},
+            {"Contact Telephone Number" : ""},
+            {"Contact Email Address" : ""}
+        ]
+        ,
+        "ChildCustomers" :[
+        ]
+    }
+]

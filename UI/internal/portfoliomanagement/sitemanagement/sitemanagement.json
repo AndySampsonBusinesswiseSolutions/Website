@@ -1,0 +1,207 @@
+var data = [
+    {
+        "GUID" : "0",
+        "Attributes" : 
+        [
+            {"Name" : "39-41 Buckingham Palace Road, London"},
+            {"Address Line 1" : "39-41"},
+            {"Address Line 2" : "Buckingham Palace Rd"},
+            {"Address Line 3" : "Westminster"},
+            {"Address Line 4" : "London"},
+            {"Postcode" : "SW1W 0PS"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Type" : "Site"},
+            {"Contact Telephone Number" : "0113 270 1244"},
+            {"Sq. ft" : "100"},
+            {"lat" : 51.4981763},
+            {"lng" : -0.1435512},
+            {"GoogleAddress" : "39-41 Buckingham Palace Rd, Westminster, London SW1W 0PS, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "1",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987654"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Gas"}
+                    ],
+            },
+            {
+                "GUID" : "2",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890123"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                "SubMeters" :
+                [
+                    {
+                        "GUID" : "3",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "4",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "104",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Add New Sub Meter"},
+                            {"Commodity" : "Electricity"}
+                        ]
+                    }
+                ],
+            },
+            {
+                "GUID" : "5",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890124"},
+                        {"DeviceType" : "Lighting"},
+                        {"DeviceSubType" : "Unknown"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Electricity"}
+                    ],
+            },
+            {
+                "GUID" : "102",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "Add New Meter"},
+                        {"DeviceType" : "Unknown"},
+                        {"DeviceSubType" : ""},
+                        {"Zone" : ""},
+                        {"Panel" : ""},
+                        {"SensorType" : ""},
+                        {"Commodity" : ""}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "6",
+        "Attributes" : 
+        [
+            {"Name" : "35 Charles St, Mayfair, London"},
+            {"Address Line 1" : "35"},
+            {"Address Line 2" : "Charles St"},
+            {"Address Line 3" : "Mayfair"},
+            {"Address Line 4" : "London"},
+            {"Postcode" : "W1J 5EB"},
+            {"Contact Name" : "David Ford"},
+            {"Contact Type" : "Site"},
+            {"Contact Telephone Number" : "0113 270 1244"},
+            {"Sq. ft" : "100"},
+            {"lat" : 51.507668},
+            {"lng" : -0.1470636},
+            {"GoogleAddress" : "35 Charles St, Mayfair, London W1J 5EB, UK"},
+        ],
+        "Meters" :
+        [
+            {
+                "GUID" : "7",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "987650"},
+                        {"DeviceType" : "Mains"},
+                        {"DeviceSubType" : "Mains"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Test Sensor Type 1"},
+                        {"Commodity" : "Gas"}
+                    ],
+            },
+            {
+                "GUID" : "8",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "1234567890120"},
+                        {"DeviceType" : "Lighting"},
+                        {"DeviceSubType" : "Security Light"},
+                        {"Zone" : "Test Zone 1"},
+                        {"Panel" : "Test Panel 1"},
+                        {"SensorType" : "Unknown"},
+                        {"Commodity" : "Electricity"}
+                    ],
+                "SubMeters" :
+                [
+                    {
+                        "GUID" : "9",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 1"},
+                            {"Commodity" : "Electricity"}
+                        ],
+                    },
+                    {
+                        "GUID" : "10",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Sub Meter 2"},
+                            {"Commodity" : "Electricity"}
+                        ]
+                    },
+                    {
+                        "GUID" : "103",
+                        "Attributes" : 
+                        [
+                            {"Identifier" : "Add New Sub Meter"},
+                            {"Commodity" : "Electricity"}
+                        ]
+                    }
+                ],
+            },
+            {
+                "GUID" : "101",
+                "Attributes" : 
+                    [
+                        {"Identifier" : "Add New Meter"},
+                        {"DeviceType" : "Unknown"},
+                        {"DeviceSubType" : ""},
+                        {"Zone" : ""},
+                        {"Panel" : ""},
+                        {"SensorType" : ""},
+                        {"Commodity" : ""}
+                    ]
+            }
+        ]
+    },
+    {
+        "GUID" : "100",
+        "Attributes" : 
+        [
+            {"Name" : "Add New Site"},
+            {"Address Line 1" : ""},
+            {"Address Line 2" : ""},
+            {"Address Line 3" : ""},
+            {"Address Line 4" : ""},
+            {"Postcode" : ""},
+            {"Contact Name" : ""},
+            {"Contact Type" : ""},
+            {"Contact Telephone Number" : ""},
+            {"Sq. ft" : ""}
+        ]
+    }
+]
