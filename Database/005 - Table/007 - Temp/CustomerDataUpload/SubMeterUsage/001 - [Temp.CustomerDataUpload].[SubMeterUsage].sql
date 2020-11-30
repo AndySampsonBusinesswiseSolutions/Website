@@ -1,0 +1,34 @@
+USE [EMaaS]
+GO
+
+BEGIN TRANSACTION
+SET QUOTED_IDENTIFIER ON
+SET ARITHABORT ON
+SET NUMERIC_ROUNDABORT OFF
+SET CONCAT_NULL_YIELDS_NULL ON
+SET ANSI_NULLS ON
+SET ANSI_PADDING ON
+SET ANSI_WARNINGS ON
+COMMIT
+BEGIN TRANSACTION
+GO
+IF  EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[Temp.CustomerDataUpload].[SubMeterUsage]') AND type in (N'U'))
+DROP TABLE [Temp.CustomerDataUpload].[SubMeterUsage]
+GO
+CREATE TABLE [Temp.CustomerDataUpload].[SubMeterUsage]
+	(
+	ProcessQueueGUID UNIQUEIDENTIFIER,
+	RowId INT,
+	SubMeterIdentifier VARCHAR(255),
+	Date VARCHAR(255),
+	TimePeriod VARCHAR(255),
+	Value VARCHAR(255),
+	CanCommit BIT
+	)  ON [Temp]
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[SubMeterUsage] ADD CONSTRAINT
+	DF_SubMeterUsage_CanCommit DEFAULT 0 FOR CanCommit
+GO
+ALTER TABLE [Temp.CustomerDataUpload].[SubMeterUsage] SET (LOCK_ESCALATION = TABLE)
+GO
+COMMIT
