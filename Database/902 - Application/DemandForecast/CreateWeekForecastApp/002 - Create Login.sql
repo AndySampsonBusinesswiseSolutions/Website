@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CreateWeekForecastApp')
+    BEGIN
+       CREATE LOGIN [CreateWeekForecastApp] WITH PASSWORD=N'95hU29J4PpaeQmFV', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

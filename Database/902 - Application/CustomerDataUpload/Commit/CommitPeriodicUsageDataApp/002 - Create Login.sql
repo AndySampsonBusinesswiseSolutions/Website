@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CommitPeriodicUsageDataApp')
+    BEGIN
+       CREATE LOGIN [CommitPeriodicUsageDataApp] WITH PASSWORD=N'8pSATRRftgLbJ5Zm', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

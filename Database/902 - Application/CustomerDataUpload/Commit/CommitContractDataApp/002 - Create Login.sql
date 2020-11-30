@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CommitContractDataApp')
+    BEGIN
+       CREATE LOGIN [CommitContractDataApp] WITH PASSWORD=N'wsxbn8B2jTb9bDFM', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'LockUserApp')
+    BEGIN
+        CREATE LOGIN [LockUserApp] WITH PASSWORD=N'JM7!?q#g#uTyM^!v', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO
