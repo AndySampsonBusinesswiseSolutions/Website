@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'GetProfile.api')
+    BEGIN
+       CREATE LOGIN [GetProfile.api] WITH PASSWORD=N'fZMnsF6B5kUkPV3J', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

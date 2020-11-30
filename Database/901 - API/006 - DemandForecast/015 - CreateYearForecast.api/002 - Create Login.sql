@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CreateYearForecast.api')
+    BEGIN
+       CREATE LOGIN [CreateYearForecast.api] WITH PASSWORD=N'YgK7auZuW5LnxKXB', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

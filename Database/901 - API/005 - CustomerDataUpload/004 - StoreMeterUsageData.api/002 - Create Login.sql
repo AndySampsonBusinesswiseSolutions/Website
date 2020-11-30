@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'StoreMeterUsageData.api')
+    BEGIN
+       CREATE LOGIN [StoreMeterUsageData.api] WITH PASSWORD=N'Xrx7E74XsVQeMqy7', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO

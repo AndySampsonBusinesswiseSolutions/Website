@@ -1,0 +1,8 @@
+USE [master]
+GO
+
+IF NOT EXISTS(SELECT TOP 1 1 FROM syslogins WHERE loginname = 'CreateDateForecast.api')
+    BEGIN
+       CREATE LOGIN [CreateDateForecast.api] WITH PASSWORD=N'YLtRVcMGf7UUALXU', DEFAULT_DATABASE=[EMaaS], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+    END
+GO
